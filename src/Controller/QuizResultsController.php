@@ -1,0 +1,105 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+/**
+ * QuizResults Controller
+ *
+ * @property \App\Model\Table\QuizResultsTable $QuizResults
+ * @method \App\Model\Entity\QuizResult[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ */
+class QuizResultsController extends AppController
+{
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function index()
+    {
+        $quizResults = $this->paginate($this->QuizResults);
+
+        $this->set(compact('quizResults'));
+    }
+
+    /**
+     * View method
+     *
+     * @param string|null $id Quiz Result id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
+    {
+        $quizResult = $this->QuizResults->get($id, [
+            'contain' => [],
+        ]);
+
+        $this->set(compact('quizResult'));
+    }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $quizResult = $this->QuizResults->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $quizResult = $this->QuizResults->patchEntity($quizResult, $this->request->getData());
+            if ($this->QuizResults->save($quizResult)) {
+                $this->Flash->success(__('The quiz result has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The quiz result could not be saved. Please, try again.'));
+        }
+        $this->set(compact('quizResult'));
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Quiz Result id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($id = null)
+    {
+        $quizResult = $this->QuizResults->get($id, [
+            'contain' => [],
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $quizResult = $this->QuizResults->patchEntity($quizResult, $this->request->getData());
+            if ($this->QuizResults->save($quizResult)) {
+                $this->Flash->success(__('The quiz result has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The quiz result could not be saved. Please, try again.'));
+        }
+        $this->set(compact('quizResult'));
+    }
+
+    /**
+     * Delete method
+     *
+     * @param string|null $id Quiz Result id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $quizResult = $this->QuizResults->get($id);
+        if ($this->QuizResults->delete($quizResult)) {
+            $this->Flash->success(__('The quiz result has been deleted.'));
+        } else {
+            $this->Flash->error(__('The quiz result could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+}

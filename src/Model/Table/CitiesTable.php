@@ -1,0 +1,121 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Cities Model
+ *
+ * @method \App\Model\Entity\City newEmptyEntity()
+ * @method \App\Model\Entity\City newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\City[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\City get($primaryKey, $options = [])
+ * @method \App\Model\Entity\City findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\City patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\City[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\City|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\City saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class CitiesTable extends Table
+{
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('cities');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('city')
+            ->maxLength('city', 128)
+            ->requirePresence('city', 'create')
+            ->notEmptyString('city');
+
+        $validator
+            ->scalar('state')
+            ->maxLength('state', 2)
+            ->requirePresence('state', 'create')
+            ->notEmptyString('state');
+
+        $validator
+            ->scalar('zip')
+            ->maxLength('zip', 5)
+            ->requirePresence('zip', 'create')
+            ->notEmptyString('zip');
+
+        $validator
+            ->scalar('country')
+            ->maxLength('country', 2)
+            ->requirePresence('country', 'create')
+            ->notEmptyString('country');
+
+        $validator
+            ->numeric('lon')
+            ->notEmptyString('lon');
+
+        $validator
+            ->numeric('lat')
+            ->notEmptyString('lat');
+
+        $validator
+            ->integer('population')
+            ->notEmptyString('population');
+
+        $validator
+            ->boolean('is_near_location')
+            ->notEmptyString('is_near_location');
+
+        $validator
+            ->boolean('is_featured')
+            ->notEmptyString('is_featured');
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['city', 'state', 'country']), ['errorField' => 'city']);
+
+        return $rules;
+    }
+}

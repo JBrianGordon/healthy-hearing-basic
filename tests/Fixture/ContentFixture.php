@@ -1,0 +1,64 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
+
+/**
+ * ContentFixture
+ */
+class ContentFixture extends TestFixture
+{
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    public $table = 'content';
+    /**
+     * Init method
+     *
+     * @return void
+     */
+    public function init(): void
+    {
+        $this->records = [
+            [
+                'id' => 1,
+                'id_brafton' => 1,
+                'user_id' => 1,
+                'type' => 'Lorem ipsum do',
+                'date' => '2021-12-10',
+                'created' => '2021-12-10 21:23:57',
+                'modified' => '2021-12-10 21:23:57',
+                'last_modified' => '2021-12-10 21:23:57',
+                'title' => 'Lorem ipsum dolor sit amet',
+                'alt_title' => 'Lorem ipsum dolor sit amet',
+                'title_head' => 'Lorem ipsum dolor sit amet',
+                'slug' => 'Lorem ipsum dolor sit amet',
+                'short' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+                'body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+                'meta_description' => 'Lorem ipsum dolor sit amet',
+                'bodyclass' => 'Lorem ipsum dolor sit amet',
+                'is_active' => 1,
+                'is_library_item' => 1,
+                'library_share_text' => 'Lorem ipsum dolor sit amet',
+                'is_gone' => 1,
+                'facebook_title' => 'Lorem ipsum dolor sit amet',
+                'facebook_description' => 'Lorem ipsum dolor sit amet',
+                'facebook_image' => 'Lorem ipsum dolor sit amet',
+                'facebook_image_width' => 1,
+                'facebook_image_width_override' => 1,
+                'facebook_image_height' => 1,
+                'facebook_image_alt' => 'Lorem ipsum dolor sit amet',
+                'comment_count' => 1,
+                'like_count' => 1,
+                'old_url' => 1,
+                'id_draft_parent' => 1,
+                'is_frozen' => 1,
+            ],
+        ];
+        parent::init();
+    }
+}
