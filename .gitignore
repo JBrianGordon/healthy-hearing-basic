@@ -5,6 +5,7 @@
 /logs/*
 /tmp/*
 /vendor/*
+webroot/debug_kit
 
 # OS generated files #
 ######################
