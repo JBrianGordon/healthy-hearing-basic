@@ -75,4 +75,56 @@ class ContentTableTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * @dataProvider findLatestProvider
+     * @return void
+     * @test
+     * @testdox Requesting the latest n articles/reports/Content items returns n items
+     */
+    public function findLatest(array $input, array $expected): void
+    {
+        $latestArticleIds = $this->Content->find('latest', $input)
+            ->disableHydration()
+            ->all()
+            ->extract('id')
+            ->toArray();
+        $this->assertEquals($expected, $latestArticleIds);
+    }
+
+    public function findLatestProvider(): array
+    {
+        return [
+            [
+                ['numArticles' => 4], [6, 5, 4, 3]
+            ],
+            [
+                ['numArticles' => 2], [6, 5]
+            ],
+            [
+                ['numArticles' => 0], []
+            ],
+            [
+                ['numArticles' => 10], [6, 5, 4, 3, 2, 1] // only 6 content/article fixtures
+            ]
+        ];
+    }
+
+    /**
+     * @return void
+     * @test
+     * @testdox Requesting the latest articles/reports/Content items returns the default value of 4 items
+     */
+    public function findLatestDefault(): void
+    {
+        $latestArticleIds = $this->Content->find('latest')
+            ->disableHydration()
+            ->all()
+            ->extract('id')
+            ->toArray();
+        $expected = [6, 5, 4, 3];
+        $this->assertEquals($expected, $latestArticleIds);
+    }
+
+
 }

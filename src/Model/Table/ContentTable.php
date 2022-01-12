@@ -229,4 +229,17 @@ class ContentTable extends Table
 
         return $rules;
     }
+
+
+    /**
+     * Returns a query for the latest N articles/reports/Content items
+     *
+     * @param \Cake\ORM\Query $query The query object to be modified
+     * @param array $options List of options to pass to the finder
+     */
+    public function findLatest(Query $query, array $options) {
+        return $query
+            ->limit($options['numArticles'] ?? 4)
+            ->order(['last_modified' => 'DESC']);
+    }
 }
