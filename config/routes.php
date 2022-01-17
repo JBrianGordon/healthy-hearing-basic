@@ -73,6 +73,11 @@ return static function (RouteBuilder $routes) {
         $builder->fallbacks();
     });
 
+    // Content routes
+    $routes->scope('/report', function (RouteBuilder $builder) {
+        $builder->connect('/', 'Content::report_index');
+    });
+
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

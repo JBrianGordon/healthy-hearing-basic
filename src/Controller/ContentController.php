@@ -11,6 +11,45 @@ namespace App\Controller;
  */
 class ContentController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+    }
+
+    public $paginate = [
+        'limit' => 50,
+        'order' => [
+            'Content.modified' => 'DESC'
+        ],
+        'fields' => [
+            'Content.title',
+            'Content.slug',
+            'Content.short',
+            'Content.date',
+            'Content.created',
+            'Content.modified',
+            'Content.last_modified',
+            'Content.id',
+            'Content.type',
+            'Content.is_active'
+        ]
+    ];
+
+    public function reportIndex()
+    {
+        $reports = $this->Content
+            ->find('all')
+            ->where(['is_active' => 1]);
+        $this->set('reports', $this->paginate($reports));
+        // $reports = $this->paginate(
+        //     $this->Content
+        //         ->find('all')
+        //         ->where(['is_active' => 1])
+        // );
+        // $this->set(compact('reports'));
+    }
+
+
     /**
      * Index method
      *
