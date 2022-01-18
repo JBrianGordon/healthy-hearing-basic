@@ -8,7 +8,7 @@
     <?php foreach ($reports as $report): ?>
     <tr>
         <td>
-            <?= $this->Html->link($report->title, ['action' => 'view', $report->slug]) ?>
+            <?= $this->Html->link($report->title, $report->hh_url) ?>
         </td>
         <td>
             <?= $report->modified ?>

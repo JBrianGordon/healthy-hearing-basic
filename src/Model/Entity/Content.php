@@ -92,4 +92,16 @@ class Content extends Entity
         'locations' => true,
         'tags' => true,
     ];
+
+    protected $_virtual = ['hh_url'];
+
+    protected function _getHhUrl()
+    {
+        return [
+            'controller' => 'Content',
+            'action' => 'report_view',
+            'id' => $this->id,
+            'slug' => $this->slug,
+        ];
+    }
 }

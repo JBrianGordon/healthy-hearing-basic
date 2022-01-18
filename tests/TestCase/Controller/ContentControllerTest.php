@@ -85,4 +85,20 @@ class ContentControllerTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test reportIndex method
+     *
+     * @return void
+     * @uses \App\Controller\ContentController::reportIndex()
+     * @test
+     * @testdox /reportIndex returns 2xx/OK response code, response contains 'Reports', and 'report_index' template is rendered
+     */
+    public function reportIndexIsOk(): void
+    {
+        $this->get('/report');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Reports');
+        $this->assertTemplate('report_index');
+    }
 }
