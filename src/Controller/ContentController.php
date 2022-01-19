@@ -35,18 +35,18 @@ class ContentController extends AppController
         ]
     ];
 
+    /**
+     * ReportIndex method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     * @todo Create custom finder for is_active and published articles
+     */
     public function reportIndex()
     {
         $reports = $this->Content
             ->find('all')
             ->where(['is_active' => 1]);
         $this->set('reports', $this->paginate($reports));
-        // $reports = $this->paginate(
-        //     $this->Content
-        //         ->find('all')
-        //         ->where(['is_active' => 1])
-        // );
-        // $this->set(compact('reports'));
     }
 
 
@@ -65,11 +65,11 @@ class ContentController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Content id.
+     * @param int|null $id Content id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(int $id = null)
     {
         $content = $this->Content->get($id, [
             'contain' => ['Users', 'Locations', 'Tags'],

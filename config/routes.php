@@ -76,9 +76,9 @@ return static function (RouteBuilder $routes) {
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
         $builder->connect('/', 'Content::report_index');
-        $builder->connect('/{id}-{slug}', 'Content::report_view')
+        $builder->connect('/{id}-{slug}', 'Content::view')
             ->setPass(['id', 'slug'])
-            ->setPatterns(['id' => '[0-9]+']);
+            ->setPatterns(['id' => '\d+']);
     });
 
     /*

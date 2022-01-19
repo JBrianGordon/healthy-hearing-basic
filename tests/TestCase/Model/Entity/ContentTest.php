@@ -54,7 +54,7 @@ class ContentTest extends TestCase
         $this->assertEquals(
             [
                 'controller' => 'Content',
-                'action' => 'report_view',
+                'action' => 'view',
                 'id' => 1,
                 'slug' => "test slug",
             ],

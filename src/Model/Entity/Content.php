@@ -99,7 +99,7 @@ class Content extends Entity
     {
         return [
             'controller' => 'Content',
-            'action' => 'report_view',
+            'action' => 'view',
             'id' => $this->id,
             'slug' => $this->slug,
         ];
