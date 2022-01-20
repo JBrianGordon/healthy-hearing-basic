@@ -47,10 +47,18 @@ class ContentControllerTest extends TestCase
      *
      * @return void
      * @uses \App\Controller\ContentController::view()
+     * @test
+     * @testdox /report/reportId-reportSlug returns 2xx/OK response code, response contains report title, and 'view' template is rendered
      */
-    public function testView(): void
+    public function viewIsOk(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->Content = $this->getTableLocator()->get('Content');
+        $report = $this->Content->get(1);
+        $reportUrl = $report->hh_url;
+        $this->get($reportUrl);
+        $this->assertResponseOk();
+        $this->assertResponseContains($report->title);
+        $this->assertTemplate('view');
     }
 
     /**
