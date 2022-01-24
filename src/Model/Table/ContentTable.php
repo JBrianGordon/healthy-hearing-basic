@@ -78,140 +78,146 @@ class ContentTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->integer('id_brafton')
-            ->allowEmptyString('id_brafton');
+        // $validator
+        //     ->integer('id_brafton')
+        //     ->allowEmptyString('id_brafton');
 
         $validator
             ->scalar('type')
-            ->maxLength('type', 16)
-            ->requirePresence('type', 'create')
-            ->notEmptyString('type');
+            ->requirePresence('type', true, 'Type is a required field')
+            ->notEmptyString('type', 'Type cannot be left blank');
 
-        $validator
-            ->date('date')
-            ->allowEmptyDate('date');
+        // $validator
+        //     ->date('date')
+        //     ->allowEmptyDate('date');
 
         $validator
             ->dateTime('last_modified')
             ->allowEmptyDateTime('last_modified');
 
         $validator
+            ->requirePresence('title', true, 'Title is a required field')
             ->scalar('title')
-            ->maxLength('title', 128)
-            ->notEmptyString('title');
+            // ->maxLength('title', 128)
+            ->notEmptyString('title', 'Title cannot be left blank');
 
-        $validator
-            ->scalar('alt_title')
-            ->maxLength('alt_title', 128)
-            ->requirePresence('alt_title', 'create')
-            ->notEmptyString('alt_title');
+        // $validator
+        //     ->scalar('alt_title')
+        //     ->maxLength('alt_title', 128)
+        //     ->requirePresence('alt_title', 'create')
+        //     ->notEmptyString('alt_title');
 
-        $validator
-            ->scalar('title_head')
-            ->maxLength('title_head', 128)
-            ->requirePresence('title_head', 'create')
-            ->notEmptyString('title_head');
+        // $validator
+        //     ->scalar('title_head')
+        //     ->maxLength('title_head', 128)
+        //     ->requirePresence('title_head', 'create')
+        //     ->notEmptyString('title_head');
 
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 128)
-            ->notEmptyString('slug');
+        // $validator
+        //     ->scalar('slug')
+        //     ->maxLength('slug', 128)
+        //     ->notEmptyString('slug');
 
-        $validator
-            ->scalar('short')
-            ->requirePresence('short', 'create')
-            ->notEmptyString('short');
+        // $validator
+        //     ->scalar('short')
+        //     ->requirePresence('short', 'create')
+        //     ->notEmptyString('short');
 
         $validator
             ->scalar('body')
-            ->requirePresence('body', 'create')
-            ->notEmptyString('body');
+            ->requirePresence('body', true, 'Main content section (body) is a required field')
+            ->notEmptyString('body', 'Main content section (body) cannot be left blank');
 
-        $validator
-            ->scalar('meta_description')
-            ->maxLength('meta_description', 255)
-            ->notEmptyString('meta_description');
+        // $validator
+        //     ->scalar('meta_description')
+        //     ->maxLength('meta_description', 255)
+        //     ->notEmptyString('meta_description');
 
-        $validator
-            ->scalar('bodyclass')
-            ->maxLength('bodyclass', 64)
-            ->requirePresence('bodyclass', 'create')
-            ->notEmptyString('bodyclass');
+        // $validator
+        //     ->scalar('bodyclass')
+        //     ->maxLength('bodyclass', 64)
+        //     ->requirePresence('bodyclass', 'create')
+        //     ->notEmptyString('bodyclass');
 
-        $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
+        // $validator
+        //     ->boolean('is_active')
+        //     ->notEmptyString('is_active');
 
-        $validator
-            ->boolean('is_library_item')
-            ->notEmptyString('is_library_item');
+        // $validator
+        //     ->boolean('is_library_item')
+        //     ->notEmptyString('is_library_item');
 
-        $validator
-            ->scalar('library_share_text')
-            ->maxLength('library_share_text', 250)
-            ->requirePresence('library_share_text', 'create')
-            ->notEmptyString('library_share_text');
+        // $validator
+        //     ->scalar('library_share_text')
+        //     ->maxLength('library_share_text', 250)
+        //     ->requirePresence('library_share_text', 'create')
+        //     ->notEmptyString('library_share_text');
 
-        $validator
-            ->boolean('is_gone')
-            ->notEmptyString('is_gone');
+        // $validator
+        //     ->boolean('is_gone')
+        //     ->notEmptyString('is_gone');
 
-        $validator
-            ->scalar('facebook_title')
-            ->maxLength('facebook_title', 100)
-            ->allowEmptyString('facebook_title');
+        // $validator
+        //     ->scalar('facebook_title')
+        //     ->maxLength('facebook_title', 100)
+        //     ->allowEmptyString('facebook_title');
 
-        $validator
-            ->scalar('facebook_description')
-            ->maxLength('facebook_description', 255)
-            ->allowEmptyString('facebook_description');
+        // $validator
+        //     ->scalar('facebook_description')
+        //     ->maxLength('facebook_description', 255)
+        //     ->allowEmptyString('facebook_description');
+////////
+        // // TO-DO
+        // $validator
+        //     ->scalar('facebook_image')
+        //     ->maxLength('facebook_image', 100)
+        //     ->allowEmptyFile('facebook_image');
 
-        $validator
-            ->scalar('facebook_image')
-            ->maxLength('facebook_image', 100)
-            ->allowEmptyFile('facebook_image');
+        // // TO-DO
+        // $validator
+        //     ->integer('facebook_image_width')
+        //     ->notEmptyFile('facebook_image_width');
+////////
+        // $validator
+        //     ->boolean('facebook_image_width_override')
+        //     ->allowEmptyFile('facebook_image_width_override');
 
-        $validator
-            ->integer('facebook_image_width')
-            ->notEmptyFile('facebook_image_width');
-
-        $validator
-            ->boolean('facebook_image_width_override')
-            ->allowEmptyFile('facebook_image_width_override');
-
-        $validator
-            ->integer('facebook_image_height')
-            ->notEmptyFile('facebook_image_height');
+        // $validator
+        //     ->integer('facebook_image_height')
+        //     ->notEmptyFile('facebook_image_height');
 
         $validator
             ->scalar('facebook_image_alt')
-            ->maxLength('facebook_image_alt', 255)
-            ->allowEmptyFile('facebook_image_alt');
+            // ->maxLength('facebook_image_alt', 255)
+            ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
+            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
-        $validator
-            ->integer('comment_count')
-            ->notEmptyString('comment_count');
+        // $validator
+        //     ->integer('comment_count')
+        //     ->notEmptyString('comment_count');
 
-        $validator
-            ->integer('like_count')
-            ->notEmptyString('like_count');
+        // $validator
+        //     ->integer('like_count')
+        //     ->notEmptyString('like_count');
 
-        $validator
-            ->boolean('old_url')
-            ->notEmptyString('old_url');
+        // $validator
+        //     ->boolean('old_url')
+        //     ->notEmptyString('old_url');
 
-        $validator
-            ->integer('id_draft_parent')
-            ->notEmptyString('id_draft_parent');
+        // $validator
+        //     ->integer('id_draft_parent')
+        //     ->notEmptyString('id_draft_parent');
 
-        $validator
-            ->boolean('is_frozen')
-            ->allowEmptyString('is_frozen');
+        // $validator
+        //     ->boolean('is_frozen')
+        //     ->allowEmptyString('is_frozen');
+
+        // // TO-DO
+        // $validator for 'user_id' in addition to rules checker
 
         return $validator;
     }

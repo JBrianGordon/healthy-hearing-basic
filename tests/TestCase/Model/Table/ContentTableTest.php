@@ -55,14 +55,56 @@ class ContentTableTest extends TestCase
     }
 
     /**
-     * Test validationDefault method
-     *
+     * Test validationDefault method with passing data
      * @return void
+     * @test
      * @uses \App\Model\Table\ContentTable::validationDefault()
+     * @testdox Test that Content validation rules are working with passing data
      */
-    public function testValidationDefault(): void
+    public function validationDefaultWithPassingData(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'type' => 'article',
+            'title' => 'A great Healthy Hearing report',
+            'body' => 'This is the report body',
+            'facebook_image_alt' => 'Facebook image alt text',
+        ];
+
+        $report = $this->Content->newEntity($data);
+        $this->assertEmpty($report->getErrors());
+    }
+
+    /**
+     * Test validationDefault method with missing data
+     * @return void
+     * @test
+     * @uses \App\Model\Table\ContentTable::validationDefault()
+     * @testdox Test that Content validation rules are working with missing data
+     */
+    public function validationDefaultWithMissingData(): void
+    {
+        $data = [];
+        $report = $this->Content->newEntity($data);
+        $this->assertCount(4, $report->getErrors());
+    }
+
+    /**
+     * Test validationDefault method with empty string data
+     * @return void
+     * @test
+     * @uses \App\Model\Table\ContentTable::validationDefault()
+     * @testdox Test that Content validation rules are working with empty string data
+     */
+    public function validationDefaultWithEmptyStringData(): void
+    {
+        $data = [
+            'type' => '',
+            'title' => '',
+            'body' => '',
+            'facebook_image_alt' => '',
+        ];
+        $report = $this->Content->newEntity($data);
+        $this->assertCount(4, $report->getErrors());
     }
 
     /**
