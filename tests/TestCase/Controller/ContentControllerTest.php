@@ -32,17 +32,6 @@ class ContentControllerTest extends TestCase
     ];
 
     /**
-     * Test index method
-     *
-     * @return void
-     * @uses \App\Controller\ContentController::index()
-     */
-    public function testIndex(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test view method
      *
      * @return void
@@ -59,39 +48,6 @@ class ContentControllerTest extends TestCase
         $this->assertResponseOk();
         $this->assertResponseContains($report->title);
         $this->assertTemplate('view');
-    }
-
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\ContentController::add()
-     */
-    public function testAdd(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\ContentController::edit()
-     */
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\ContentController::delete()
-     */
-    public function testDelete(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
     }
 
     /**

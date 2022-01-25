@@ -17,7 +17,7 @@ class ContentController extends AppController
     }
 
     public $paginate = [
-        'limit' => 50,
+        'limit' => 15,
         'order' => [
             'Content.modified' => 'DESC'
         ],
@@ -49,19 +49,6 @@ class ContentController extends AppController
         $this->set('reports', $this->paginate($reports));
     }
 
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $content = $this->paginate($this->Content);
-
-        $this->set(compact('content'));
-    }
-
     /**
      * View method
      *
@@ -76,75 +63,5 @@ class ContentController extends AppController
         ]);
 
         $this->set(compact('content'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $content = $this->Content->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $content = $this->Content->patchEntity($content, $this->request->getData());
-            if ($this->Content->save($content)) {
-                $this->Flash->success(__('The content has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The content could not be saved. Please, try again.'));
-        }
-        $users = $this->Content->Users->find('list', ['limit' => 200])->all();
-        $locations = $this->Content->Locations->find('list', ['limit' => 200])->all();
-        $tags = $this->Content->Tags->find('list', ['limit' => 200])->all();
-        $this->set(compact('content', 'users', 'locations', 'tags'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Content id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $content = $this->Content->get($id, [
-            'contain' => ['Users', 'Locations', 'Tags'],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $content = $this->Content->patchEntity($content, $this->request->getData());
-            if ($this->Content->save($content)) {
-                $this->Flash->success(__('The content has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The content could not be saved. Please, try again.'));
-        }
-        $users = $this->Content->Users->find('list', ['limit' => 200])->all();
-        $locations = $this->Content->Locations->find('list', ['limit' => 200])->all();
-        $tags = $this->Content->Tags->find('list', ['limit' => 200])->all();
-        $this->set(compact('content', 'users', 'locations', 'tags'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Content id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $content = $this->Content->get($id);
-        if ($this->Content->delete($content)) {
-            $this->Flash->success(__('The content has been deleted.'));
-        } else {
-            $this->Flash->error(__('The content could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 }
