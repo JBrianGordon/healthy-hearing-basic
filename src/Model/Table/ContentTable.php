@@ -48,7 +48,10 @@ class ContentTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors([
+            'Timestamp',
+            'Draft'
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -243,8 +246,10 @@ class ContentTable extends Table
      * @param \Cake\ORM\Query $query The query object to be modified
      * @param array $options List of options to pass to the finder
      */
-    public function findLatest(Query $query, array $options) {
+    public function findLatest(Query $query, array $options) 
+    {
         return $query
+            ->where(['is_active' => 1])
             ->limit($options['numArticles'] ?? 4)
             ->order(['last_modified' => 'DESC']);
     }
