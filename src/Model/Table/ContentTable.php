@@ -48,7 +48,7 @@ class ContentTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors('Timestamp');
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
