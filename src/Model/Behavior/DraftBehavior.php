@@ -1,0 +1,76 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Behavior;
+
+use Cake\ORM\Behavior;
+use Cake\ORM\Table;
+
+/**
+ * Draft behavior
+ */
+class DraftBehavior extends Behavior
+{
+    /**
+     * Default configuration.
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [];
+
+
+    /**
+     * Check for existing draft item
+     *
+     * @param int $id Primary key/id
+     * @return int ID of existing draft or 0 for non-existing draft
+     *
+     */
+    public function checkForDraft(int $id): int
+    {
+        $draftQuery = $this->_table->find('all', [
+            'conditions' => ['id_draft_parent' => $id],
+            'fields' => ['id']
+        ]);
+        $draft = $draftQuery->first();
+        if (is_null($draft)) {
+            return 0;
+        }
+        return $draft->id;
+    }
+
+    public function copy($id)
+    {
+        $draft = $this->_table->duplicate($id);
+        // DuplicatableBehavior unsets original entity ID so we set it here
+        $draft->id_draft_parent = $id;
+
+        return $this->_table->save($draft);
+    }
+
+    public function publish(int $draftId): bool
+    {
+        $draftReport = $this->_table->get($draftId);
+        $draftReportId = $draftReport->id;
+        $draftReportArray = $draftReport->toArray();
+
+        $originalReport = $this->_table->get($draftReport->id_draft_parent);
+
+        // Unset fields that we don't want to update in the original
+        unset($draftReportArray['id']);
+        unset($draftReportArray['is_active']);
+        unset($draftReportArray['id_draft_parent']);
+
+        $updatedArticle = $this->_table->patchEntity($originalReport, $draftReportArray);
+        if ($updatedArticle->getErrors()) {
+            return false;
+        }
+
+        $this->_table->save($updatedArticle);
+        $this->_table->delete($draftReport);
+
+        return true;
+    }
+
+
+}

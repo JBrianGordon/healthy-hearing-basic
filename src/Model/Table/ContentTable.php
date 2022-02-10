@@ -48,7 +48,15 @@ class ContentTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors([
+            'Timestamp',
+            'Draft'
+        ]);
+        $this->addBehavior('Duplicatable.Duplicatable', [
+            'set' => [
+                'is_active' => 0
+            ]
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -231,7 +239,7 @@ class ContentTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }

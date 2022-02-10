@@ -6,6 +6,7 @@
 /tmp/*
 /vendor/*
 webroot/debug_kit
+webroot/coverage
 
 # OS generated files #
 ######################

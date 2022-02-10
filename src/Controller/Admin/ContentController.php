@@ -110,4 +110,36 @@ class ContentController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Draft method
+     *
+     * @param int $id Content id.
+     * @return \Cake\Http\Response|null|void Redirects to existing or newly-created Content draft.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function draft(int $id = null)
+    {
+        $this->request->allowMethod(['post']);
+        $this->autoRender = false;
+
+        $draftId = $this->Content->checkForDraft($id);
+
+        if ($draftId > 0) {
+            $this->Flash->success('This report has an existing draft below.');
+            return $this->redirect(['action' => 'edit', $draftId]);
+        }
+
+        $newDraft = $this->Content->copy($id);
+        return $this->redirect(['action' => 'edit', $newDraft->id]);
+    }
+
+    public function publish(int $id)
+    {
+        $this->request->allowMethod(['post']);
+        $this->autoRender = false;
+
+        $this->Flash->success('Republish successful!');
+        return $this->redirect(['action' => 'edit', 1]);
+    }
 }

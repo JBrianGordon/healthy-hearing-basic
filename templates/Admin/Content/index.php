@@ -80,6 +80,7 @@
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $content->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $content->id]) ?>
+                        <?= $this->Form->postLink(__('Draft'), ['action' => 'draft', $content->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id)]) ?>
                     </td>
                 </tr>

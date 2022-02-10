@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0448fb81a6bb245db4cd10653e11b0c",
+    "content-hash": "4c1ce8d91fabc8cbe5a096297f1bf02f",
     "packages": [
         {
             "name": "cakephp/cakephp",
@@ -1157,6 +1157,56 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "riesenia/cakephp-duplicatable",
+            "version": "4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/riesenia/cakephp-duplicatable.git",
+                "reference": "c3e68b811334f336e373edb0bb52040665d1794a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/riesenia/cakephp-duplicatable/zipball/c3e68b811334f336e373edb0bb52040665d1794a",
+                "reference": "c3e68b811334f336e373edb0bb52040665d1794a",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/orm": "^4.0"
+            },
+            "require-dev": {
+                "cakephp/cakephp": "^4.0",
+                "phpunit/phpunit": "^8.5.0"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Duplicatable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomas Saghy",
+                    "email": "segy@riesenia.com"
+                }
+            ],
+            "description": "CakePHP ORM plugin for duplicating entities (including related entities)",
+            "keywords": [
+                "cakephp",
+                "copy",
+                "duplicate",
+                "orm"
+            ],
+            "support": {
+                "issues": "https://github.com/riesenia/cakephp-duplicatable/issues",
+                "source": "https://github.com/riesenia/cakephp-duplicatable/tree/4.0.1"
+            },
+            "time": "2021-05-06T03:40:23+00:00"
         },
         {
             "name": "robmorgan/phinx",

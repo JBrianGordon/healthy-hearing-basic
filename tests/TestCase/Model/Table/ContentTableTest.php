@@ -167,6 +167,4 @@ class ContentTableTest extends TestCase
         $expected = [6, 5, 4, 3];
         $this->assertEquals($expected, $latestArticleIds);
     }
-
-
 }
