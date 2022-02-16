@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  * Wikis Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\ConsumerGuidesTable&\Cake\ORM\Association\BelongsTo $ConsumerGuides
  * @property \App\Model\Table\TagWikisTable&\Cake\ORM\Association\HasMany $TagWikis
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
  *
@@ -48,13 +47,18 @@ class WikisTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors([
+            'Timestamp',
+            'Draft'
+        ]);
+        $this->addBehavior('Duplicatable.Duplicatable', [
+            'set' => [
+                'is_active' => 0
+            ]
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-        ]);
-        $this->belongsTo('ConsumerGuides', [
-            'foreignKey' => 'consumer_guide_id',
         ]);
         $this->hasMany('TagWikis', [
             'foreignKey' => 'wiki_id',
@@ -81,102 +85,115 @@ class WikisTable extends Table
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->requirePresence('name', true, 'Name is a required field')
+            ->notEmptyString('name', 'Name cannot be left blank');
 
         $validator
             ->scalar('slug')
             ->maxLength('slug', 255)
-            ->requirePresence('slug', 'create')
-            ->notEmptyString('slug');
+            ->requirePresence('slug', true, 'Slug is a required field')
+            ->notEmptyString('slug', 'Slug cannot be left blank');
 
-        $validator
-            ->scalar('responsive_body')
-            ->allowEmptyString('responsive_body');
+        // $validator
+        //     ->scalar('responsive_body')
+        //     ->allowEmptyString('responsive_body');
 
         $validator
             ->scalar('body')
-            ->allowEmptyString('body');
+            ->requirePresence('body', true, 'Main content section (body) is a required field')
+            ->notEmptyString('body', 'Main content section (body) cannot be left blank');
 
-        $validator
-            ->scalar('short')
-            ->allowEmptyString('short');
+        // $validator
+        //     ->scalar('short')
+        //     ->allowEmptyString('short');
 
         $validator
             ->boolean('is_active')
             ->notEmptyString('is_active');
 
-        $validator
-            ->integer('id_draft_parent')
-            ->notEmptyString('id_draft_parent');
+        // $validator
+        //     ->integer('id_draft_parent')
+        //     ->notEmptyString('id_draft_parent');
 
         $validator
-            ->integer('order')
-            ->notEmptyString('order');
+            ->integer('priority')
+            ->notEmptyString('priority');
 
         $validator
             ->scalar('title_head')
             ->maxLength('title_head', 255)
-            ->requirePresence('title_head', 'create')
-            ->notEmptyString('title_head');
+            ->requirePresence('title_head', true, 'Title head is a required field')
+            ->notEmptyString('title_head', 'Title head cannot be left blank');
 
         $validator
             ->scalar('title_h1')
             ->maxLength('title_h1', 255)
-            ->requirePresence('title_h1', 'create')
-            ->notEmptyString('title_h1');
+            ->requirePresence('title_h1', true, 'Title H1 is a required field')
+            ->notEmptyString('title_h1', 'Title H1 cannot be left blank');
 
-        $validator
-            ->scalar('background_file')
-            ->maxLength('background_file', 255)
-            ->allowEmptyFile('background_file');
+        // $validator
+        //     ->scalar('background_file')
+        //     ->maxLength('background_file', 255)
+        //     ->allowEmptyFile('background_file');
 
-        $validator
-            ->scalar('meta_description')
-            ->maxLength('meta_description', 255)
-            ->allowEmptyString('meta_description');
+        // $validator
+        //     ->scalar('meta_description')
+        //     ->maxLength('meta_description', 255)
+        //     ->allowEmptyString('meta_description');
 
-        $validator
-            ->scalar('facebook_title')
-            ->maxLength('facebook_title', 255)
-            ->allowEmptyString('facebook_title');
+        // $validator
+        //     ->scalar('facebook_title')
+        //     ->maxLength('facebook_title', 255)
+        //     ->allowEmptyString('facebook_title');
 
         $validator
             ->scalar('facebook_image')
             ->maxLength('facebook_image', 255)
-            ->allowEmptyFile('facebook_image');
+            ->notEmptyFile('facebook_image');
+            // ADD MIME TYPE CHECKING
 
-        $validator
-            ->boolean('facebook_image_bypass')
-            ->allowEmptyFile('facebook_image_bypass');
+        // $validator
+        //     ->boolean('facebook_image_bypass')
+        //     ->allowEmptyFile('facebook_image_bypass');
 
         $validator
             ->integer('facebook_image_width')
-            ->notEmptyFile('facebook_image_width');
+            ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
+                'rule' => function ($width) {
+                    if ($width >= 800) {
+                        return true;
+                    }
+                    return false;
+                }
+            ]);
+            // ->minLength('facebook_image_width', 800, 'Facebook image must be at least 800 px wide');
 
-        $validator
-            ->integer('facebook_image_height')
-            ->notEmptyFile('facebook_image_height');
+        // $validator
+        //     ->integer('facebook_image_height')
+        //     ->notEmptyFile('facebook_image_height');
 
         $validator
             ->scalar('facebook_image_alt')
             ->maxLength('facebook_image_alt', 255)
-            ->allowEmptyFile('facebook_image_alt');
+            ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
+            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
-        $validator
-            ->scalar('facebook_description')
-            ->maxLength('facebook_description', 255)
-            ->allowEmptyString('facebook_description');
+        // $validator
+        //     ->scalar('facebook_description')
+        //     ->maxLength('facebook_description', 255)
+        //     ->allowEmptyString('facebook_description');
 
         $validator
             ->dateTime('last_modified')
-            ->allowEmptyDateTime('last_modified');
+            ->allowEmptyDateTime('last_modified')
+            ->requirePresence('last_modified', true, 'Last modified is a required field')
+            ->notEmptyString('last_modified', 'Last modified cannot be left blank');
 
-        $validator
-            ->scalar('background_alt')
-            ->maxLength('background_alt', 150)
-            ->requirePresence('background_alt', 'create')
-            ->notEmptyString('background_alt');
+        // $validator
+        //     ->scalar('background_alt')
+        //     ->maxLength('background_alt', 150)
+        //     ->requirePresence('background_alt', 'create')
+        //     ->notEmptyString('background_alt');
 
         return $validator;
     }
@@ -190,8 +207,7 @@ class WikisTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
-        $rules->add($rules->existsIn('consumer_guide_id', 'ConsumerGuides'), ['errorField' => 'consumer_guide_id']);
+        // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }

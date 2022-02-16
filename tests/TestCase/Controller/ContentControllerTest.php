@@ -56,7 +56,7 @@ class ContentControllerTest extends TestCase
      * @return void
      * @uses \App\Controller\ContentController::reportIndex()
      * @test
-     * @testdox /reportIndex returns 2xx/OK response code, response contains 'Reports', and 'report_index' template is rendered
+     * @testdox /report returns 2xx/OK response code, response contains 'Reports', and 'report_index' template is rendered
      */
     public function reportIndexIsOk(): void
     {

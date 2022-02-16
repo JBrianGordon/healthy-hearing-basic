@@ -2,18 +2,13 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki $wiki
- * @var string[]|\Cake\Collection\CollectionInterface $users
+ * @var \Cake\Collection\CollectionInterface|string[] $users
  */
 ?>
 <div class="row">
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $wiki->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $wiki->id), 'class' => 'side-nav-item']
-            ) ?>
             <?= $this->Html->link(__('List Wikis'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
@@ -21,12 +16,11 @@
         <div class="wikis form content">
             <?= $this->Form->create($wiki) ?>
             <fieldset>
-                <legend><?= __('Edit Wiki') ?></legend>
+                <legend><?= __('Add Wiki') ?></legend>
                 <?php
                     echo $this->Form->control('name');
                     echo $this->Form->control('slug');
                     echo $this->Form->control('user_id');
-                    echo $this->Form->control('consumer_guide_id');
                     echo $this->Form->control('responsive_body');
                     echo $this->Form->control('body');
                     echo $this->Form->control('short');

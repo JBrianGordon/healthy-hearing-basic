@@ -18,15 +18,18 @@ class DraftBehaviorTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'app.Content'
+        'app.Content',
+        'app.Wikis'
     ];
 
     /**
      * Test subject
      *
      * @var \App\Model\Table\ContentTable
+     * @var \App\Model\Table\WikisTable
      */
     protected $Content;
+    protected $Wikis;
 
     /**
      * setUp method
@@ -37,6 +40,7 @@ class DraftBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->Content = $this->getTableLocator()->get('Content');
+        $this->Wikis = $this->getTableLocator()->get('Wikis');
     }
 
     /**
@@ -47,15 +51,18 @@ class DraftBehaviorTest extends TestCase
     public function tearDown(): void
     {
         unset($this->Content);
+        unset($this->Wikis);
         parent::tearDown();
     }
+
+    //--------- Content Table Draft Behavior tests ---------/
 
     /**
      * Test that ModelTables have 'Draft' behavior
      *
      * @return void
      * @test
-     * @testdox Test that ContentTable has 'Draft' behavior
+     * @testdox ContentTable has 'Draft' behavior
      */
     public function contentTableHasDraftBehavior(): void
     {
@@ -67,7 +74,7 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Test that checkForDraft() method works
+     * @testdox ContentTable checkForDraft() method works
      */
     public function canCheckForDraftContent(): void
     {
@@ -85,7 +92,7 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Test that copy() method works
+     * @testdox ContentTable copy() method works
      */
     public function canCopyAndCreateContentDraft(): void
     {
@@ -100,9 +107,9 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Test that publish method returns true after draft is published
+     * @testdox ContentTable publish method returns true after draft is published
      */
-    public function publishReturnsTrueWhenSuccessful(): void
+    public function contentPublishReturnsTrueWhenSuccessful(): void
     {
         $this->assertEquals(true, $this->Content->publish(7));
     }
@@ -111,21 +118,20 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Test that publish method returns FALSE after draft is published
+     * @testdox ContentTable publish method returns FALSE for non-validating draft is published
      */
-    public function publishReturnsFalseWhenValidation(): void
+    public function contentPublishReturnsFalseWhenValidationFails(): void
     {
         $this->assertEquals(false, $this->Content->publish(8));
     }
-
 
     /**
      *
      * @return void
      * @test
-     * @testdox Publish method decreases total Content count by one item
+     * @testdox ContentTable publish method decreases total Content count by one item
      */
-    public function publishDecreasesContentCountByOne(): void
+    public function contentPublishDecreasesCountByOne(): void
     {
         $this->Content->publish(7);
         $this->assertEquals(
@@ -138,9 +144,9 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Publish method replaces original Content with draft properties - title is updated
+     * @testdox ContentTable publish method replaces original Content with draft properties - title is updated
      */
-    public function publishReplacesOriginalContentWithDraftCheckTitle(): void
+    public function contentPublishReplacesOriginalWithDraftCheckTitle(): void
     {
         $this->Content->publish(7);
         $this->assertEquals(
@@ -153,9 +159,9 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Publish method replaces original Content with draft properties - last_modified is updated
+     * @testdox ContentTable publish method replaces original Content with draft properties - last_modified is updated
      */
-    public function publishReplacesOriginalContentWithDraftCheckLastModified(): void
+    public function contentPublishReplacesOriginalWithDraftCheckLastModified(): void
     {
         $this->Content->publish(7);
         $this->assertEquals(
@@ -168,9 +174,9 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox Publish method replaces original Content with draft properties - id_draft_parent is 0
+     * @testdox ContentTable publish method replaces original Content with draft properties - id_draft_parent is 0
      */
-    public function publishReplacesOriginalContentWithDraftCheckIdDraftParent(): void
+    public function contentPublishReplacesOriginalWithDraftCheckIdDraftParent(): void
     {
         $this->Content->publish(7);
         $this->assertEquals(
@@ -179,5 +185,133 @@ class DraftBehaviorTest extends TestCase
         );
     }
 
+    //--------- Wikis Table Draft Behavior tests ---------/
+    /**
+     * Test that WikisTable has 'Draft' behavior
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable has 'Draft' behavior
+     */
+    public function wikisTableHasDraftBehavior(): void
+    {
+        $this->assertTrue($this->Wikis->behaviors()->has('Draft'));
+    }
 
+    /**
+     * Test checkForDraft() method
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable checkForDraft() method works
+     */
+    public function canCheckForDraftWiki(): void
+    {
+        $wikiWithDraft = $this->Wikis->checkForDraft(1);
+        $this->assertIsInt($wikiWithDraft);
+        $this->assertEquals(4, $wikiWithDraft);
+
+        $wikiWithoutDraft = $this->Wikis->checkForDraft(3);
+        $this->assertIsInt($wikiWithoutDraft);
+        $this->assertEquals(0, $wikiWithoutDraft);
+    }
+
+    /**
+     * Test copy() method
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable copy() method works
+     */
+    public function canCopyAndCreateWikiDraft(): void
+    {
+        // debug($this->Wikis->get(2));
+        $result = $this->Wikis->copy(2);
+        $this->assertInstanceOf('Cake\Datasource\EntityInterface', $result);
+        $this->assertEquals(6, $result->id);
+        $this->assertEquals(0, $result->is_active);
+        $this->assertEquals(2, $result->id_draft_parent);
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method returns true after draft is published
+     */
+    public function wikiPublishReturnsTrueWhenSuccessful(): void
+    {
+        $this->assertEquals(true, $this->Wikis->publish(4));
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method returns FALSE after draft is published
+     */
+    public function wikiPublishReturnsFalseWhenValidationFails(): void
+    {
+        $this->assertEquals(false, $this->Wikis->publish(5));
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method decreases total Wiki count by one item
+     */
+    public function wikiPublishDecreasesCountByOne(): void
+    {
+        $this->Wikis->publish(4);
+        $this->assertEquals(
+            4,
+            $this->Wikis->find()->all()->count()
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method replaces original Wiki with draft properties - title_head is updated
+     */
+    public function wikiPublishReplacesOriginalWithDraftCheckTitleHead(): void
+    {
+        $this->Wikis->publish(4);
+        $this->assertEquals(
+            'This is the draft wiki',
+            $this->Wikis->get(1)->title_head
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method replaces original Wiki with draft properties - last_modified is updated
+     */
+    public function wikiPublishReplacesOriginalWithDraftCheckLastModified(): void
+    {
+        $this->Wikis->publish(4);
+        $this->assertEquals(
+            'Apr 3, 2022, 1:14 PM',
+            $this->Wikis->get(1)->last_modified->nice()
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox WikisTable publish method replaces original Wiki with draft properties - id_draft_parent is 0
+     */
+    public function wikiPublishReplacesOriginalWithDraftCheckIdDraftParent(): void
+    {
+        $this->Wikis->publish(4);
+        $this->assertEquals(
+            0,
+            $this->Wikis->get(1)->id_draft_parent
+        );
+    }
 }

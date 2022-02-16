@@ -12,13 +12,12 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string $slug
  * @property int|null $user_id
- * @property string|null $consumer_guide_id
  * @property string|null $responsive_body
  * @property string|null $body
  * @property string|null $short
  * @property bool $is_active
  * @property int $id_draft_parent
- * @property int $order
+ * @property int $priority
  * @property string $title_head
  * @property string $title_h1
  * @property string|null $background_file
@@ -36,7 +35,6 @@ use Cake\ORM\Entity;
  * @property string $background_alt
  *
  * @property \App\Model\Entity\User[] $users
- * @property \App\Model\Entity\ConsumerGuide $consumer_guide
  * @property \App\Model\Entity\TagWiki[] $tag_wikis
  */
 class Wiki extends Entity
@@ -54,13 +52,12 @@ class Wiki extends Entity
         'name' => true,
         'slug' => true,
         'user_id' => true,
-        'consumer_guide_id' => true,
         'responsive_body' => true,
         'body' => true,
         'short' => true,
         'is_active' => true,
         'id_draft_parent' => true,
-        'order' => true,
+        'priority' => true,
         'title_head' => true,
         'title_h1' => true,
         'background_file' => true,
@@ -77,7 +74,17 @@ class Wiki extends Entity
         'created' => true,
         'background_alt' => true,
         'users' => true,
-        'consumer_guide' => true,
         'tag_wikis' => true,
     ];
+
+    protected $_virtual = ['hh_url'];
+
+    protected function _getHhUrl()
+    {
+        return [
+            'controller' => 'Wikis',
+            'action' => 'view',
+            'slug' => $this->slug,
+        ];
+    }
 }
