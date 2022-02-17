@@ -27,10 +27,6 @@
                     <td><?= h($wiki->slug) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Consumer Guide Id') ?></th>
-                    <td><?= h($wiki->consumer_guide_id) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Title Head') ?></th>
                     <td><?= h($wiki->title_head) ?></td>
                 </tr>

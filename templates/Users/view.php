@@ -383,7 +383,6 @@
                             <th><?= __('Name') ?></th>
                             <th><?= __('Slug') ?></th>
                             <th><?= __('User Id') ?></th>
-                            <th><?= __('Consumer Guide Id') ?></th>
                             <th><?= __('Responsive Body') ?></th>
                             <th><?= __('Body') ?></th>
                             <th><?= __('Short') ?></th>
@@ -413,7 +412,6 @@
                             <td><?= h($wikis->name) ?></td>
                             <td><?= h($wikis->slug) ?></td>
                             <td><?= h($wikis->user_id) ?></td>
-                            <td><?= h($wikis->consumer_guide_id) ?></td>
                             <td><?= h($wikis->responsive_body) ?></td>
                             <td><?= h($wikis->body) ?></td>
                             <td><?= h($wikis->short) ?></td>
