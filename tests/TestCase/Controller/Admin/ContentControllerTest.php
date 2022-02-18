@@ -93,12 +93,12 @@ class ContentControllerTest extends TestCase
     // * * * * *
 
     /**
-     * Test draft method with unnallowed GET request
+     * Draft method with unnallowed GET request
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test draft method with unallowed GET request
+     * @testdox Draft method with unallowed GET request FAILS
      */
     public function draftWithUnallowedGetRequest(): void
     {
@@ -107,12 +107,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test draft method with unnallowed PUT request
+     * Draft method with unnallowed PUT request
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test draft method with unallowed PUT request
+     * @testdox Draft method with unallowed PUT request FAILS
      */
     public function draftWithUnallowedPutRequest(): void
     {
@@ -121,12 +121,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test draft method with unnallowed DELETE request
+     * Draft method with unnallowed DELETE request
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test draft method with unallowed DELETE request
+     * @testdox Draft method with unallowed DELETE request FAILS
      */
     public function draftWithUnallowedDeleteRequest(): void
     {
@@ -135,12 +135,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test draft method with unnallowed PATCH request
+     * Draft method with unnallowed PATCH request
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test draft method with unallowed PATCH request
+     * @testdox Draft method with unallowed PATCH request FAILS
      */
     public function draftWithUnallowedPatchRequest(): void
     {
@@ -149,12 +149,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test that draft method can create new Content draft
+     * Draft method can create new Content draft
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test that draft method can create new Content draft
+     * @testdox Draft method can create new Content draft
      */
     public function draftToCreateNewContentDraft(): void
     {
@@ -165,12 +165,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test that draft method can redirect to existing Content draft
+     * Draft method can redirect to existing Content draft
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::draft()
      * @test
-     * @testdox Test that draft method can redirect to existing Content draft
+     * @testdox Draft method can redirect to existing Content draft
      */
     public function draftToRedirectToExistingContentDraft(): void
     {
@@ -190,12 +190,12 @@ class ContentControllerTest extends TestCase
     // * * * * *
 
     /**
-     * Test publish method with unnallowed GET request
+     * Publish method with unnallowed GET request FAILS
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::publish()
      * @test
-     * @testdox Test publish method with unallowed GET request
+     * @testdox Publish method with unallowed GET request FAILS
      */
     public function publishWithUnallowedGetRequest(): void
     {
@@ -204,12 +204,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test publish method with unnallowed PUT request
+     * Publish method with unnallowed PUT request FAILS
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::publish()
      * @test
-     * @testdox Test publish method with unallowed PUT request
+     * @testdox Publish method with unallowed PUT request FAILS
      */
     public function publishWithUnallowedPutRequest(): void
     {
@@ -218,12 +218,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test publish method with unnallowed DELETE request
+     * Publish method with unnallowed DELETE request FAILS
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::publish()
      * @test
-     * @testdox Test publish method with unallowed DELETE request
+     * @testdox Publish method with unallowed DELETE request FAILS
      */
     public function publishWithUnallowedDeleteRequest(): void
     {
@@ -232,12 +232,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test publish method with unnallowed PATCH request
+     * Publish method with unnallowed PATCH request FAILS
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::publish()
      * @test
-     * @testdox Test publish method with unallowed PATCH request
+     * @testdox Publish method with unallowed PATCH request FAILS
      */
     public function publishWithUnallowedPatchRequest(): void
     {
@@ -246,12 +246,12 @@ class ContentControllerTest extends TestCase
     }
 
     /**
-     * Test that draft method can redirect to existing Content draft
+     * Publish method can publish a Content draft by updating and existing report
      *
      * @return void
      * @uses \App\Controller\Admin\ContentController::publish()
      * @test
-     * @testdox Test that publish method can publish a Content draft by updating and existing report
+     * @testdox Publish method can publish a Content draft by updating and existing report
      */
     public function publishContentDraftByUpdatingExistingReport(): void
     {

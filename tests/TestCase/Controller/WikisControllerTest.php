@@ -24,7 +24,6 @@ class WikisControllerTest extends TestCase
     protected $fixtures = [
         'app.Wikis',
         'app.Users',
-        'app.ConsumerGuides',
         'app.TagWikis',
         'app.UsersWikis',
     ];
@@ -47,39 +46,6 @@ class WikisControllerTest extends TestCase
      * @uses \App\Controller\WikisController::view()
      */
     public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test add method
-     *
-     * @return void
-     * @uses \App\Controller\WikisController::add()
-     */
-    public function testAdd(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     * @uses \App\Controller\WikisController::edit()
-     */
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     * @uses \App\Controller\WikisController::delete()
-     */
-    public function testDelete(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

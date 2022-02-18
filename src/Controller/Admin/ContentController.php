@@ -134,6 +134,7 @@ class ContentController extends AppController
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }
 
+    // DO WE NEED A PUBLISH CONTROLLER ACTION - ONLY PUBLISH BY CRON JOB/SCRIPT?
     public function publish(int $id)
     {
         $this->request->allowMethod(['post']);
