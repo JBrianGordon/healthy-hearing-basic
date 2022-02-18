@@ -48,7 +48,15 @@ class CorpsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors([
+            'Timestamp',
+            'Draft'
+        ]);
+        $this->addBehavior('Duplicatable.Duplicatable', [
+            'set' => [
+                'is_active' => 0
+            ]
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -74,148 +82,149 @@ class CorpsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->scalar('type')
-            ->maxLength('type', 16)
-            ->requirePresence('type', 'create')
-            ->notEmptyString('type');
+        // $validator
+        //     ->scalar('type')
+        //     ->maxLength('type', 16)
+        //     ->requirePresence('type', 'create')
+        //     ->notEmptyString('type');
 
-        $validator
-            ->dateTime('last_modified')
-            ->allowEmptyDateTime('last_modified');
+        // $validator
+        //     ->dateTime('last_modified')
+        //     ->allowEmptyDateTime('last_modified');
 
-        $validator
-            ->integer('modified_by')
-            ->notEmptyString('modified_by');
+        // $validator
+        //     ->integer('modified_by')
+        //     ->notEmptyString('modified_by');
 
         $validator
             ->scalar('title')
             ->maxLength('title', 128)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->requirePresence('title', true, 'Title is a required field')
+            ->notEmptyString('title', 'Title cannot be left blank');
+
+        // $validator
+        //     ->scalar('title_long')
+        //     ->maxLength('title_long', 255)
+        //     ->requirePresence('title_long', 'create')
+        //     ->notEmptyString('title_long');
+
+        // $validator
+        //     ->scalar('slug')
+        //     ->maxLength('slug', 128)
+        //     ->requirePresence('slug', 'create')
+        //     ->notEmptyString('slug');
+
+        // $validator
+        //     ->scalar('abbr')
+        //     ->maxLength('abbr', 3)
+        //     ->requirePresence('abbr', 'create')
+        //     ->notEmptyString('abbr');
+
+        // $validator
+        //     ->scalar('short')
+        //     ->allowEmptyString('short');
+
+        // $validator
+        //     ->scalar('description')
+        //     ->allowEmptyString('description');
+
+        // $validator
+        //     ->scalar('notify_email')
+        //     ->maxLength('notify_email', 128)
+        //     ->allowEmptyString('notify_email');
+
+        // $validator
+        //     ->scalar('approval_email')
+        //     ->maxLength('approval_email', 128)
+        //     ->allowEmptyString('approval_email');
+
+        // $validator
+        //     ->scalar('phone')
+        //     ->maxLength('phone', 64)
+        //     ->allowEmptyString('phone');
+
+        // $validator
+        //     ->scalar('website_url')
+        //     ->maxLength('website_url', 255)
+        //     ->requirePresence('website_url', 'create')
+        //     ->notEmptyString('website_url');
+
+        // $validator
+        //     ->scalar('website_url_description')
+        //     ->maxLength('website_url_description', 255)
+        //     ->allowEmptyString('website_url_description');
+
+        // $validator
+        //     ->scalar('pdf_all_url')
+        //     ->maxLength('pdf_all_url', 128)
+        //     ->allowEmptyString('pdf_all_url');
+
+        // $validator
+        //     ->scalar('favicon')
+        //     ->maxLength('favicon', 128)
+        //     ->allowEmptyString('favicon');
+
+        // $validator
+        //     ->scalar('address')
+        //     ->maxLength('address', 255)
+        //     ->allowEmptyString('address');
+
+        // $validator
+        //     ->scalar('thumb_url')
+        //     ->maxLength('thumb_url', 128)
+        //     ->allowEmptyString('thumb_url');
+
+        // $validator
+        //     ->scalar('facebook_title')
+        //     ->maxLength('facebook_title', 100)
+        //     ->allowEmptyString('facebook_title');
+
+        // $validator
+        //     ->scalar('facebook_description')
+        //     ->maxLength('facebook_description', 255)
+        //     ->allowEmptyString('facebook_description');
+
+        // $validator
+        //     ->scalar('facebook_image')
+        //     ->maxLength('facebook_image', 100)
+        //     ->allowEmptyFile('facebook_image');
+
+        // $validator
+        //     ->dateTime('date_approved')
+        //     ->allowEmptyDateTime('date_approved');
+
+        // $validator
+        //     ->integer('id_old')
+        //     ->notEmptyString('id_old');
+
+        // $validator
+        //     ->integer('is_approvalrequired')
+        //     ->notEmptyString('is_approvalrequired');
+
+        // $validator
+        //     ->boolean('is_active')
+        //     ->notEmptyString('is_active');
+
+        // $validator
+        //     ->boolean('is_featured')
+        //     ->notEmptyString('is_featured');
+
+        // $validator
+        //     ->integer('id_draft_parent')
+        //     ->notEmptyString('id_draft_parent');
+
+        // $validator
+        //     ->scalar('wbc_config')
+        //     ->allowEmptyString('wbc_config');
 
         $validator
-            ->scalar('title_long')
-            ->maxLength('title_long', 255)
-            ->requirePresence('title_long', 'create')
-            ->notEmptyString('title_long');
-
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 128)
-            ->requirePresence('slug', 'create')
-            ->notEmptyString('slug');
-
-        $validator
-            ->scalar('abbr')
-            ->maxLength('abbr', 3)
-            ->requirePresence('abbr', 'create')
-            ->notEmptyString('abbr');
-
-        $validator
-            ->scalar('short')
-            ->allowEmptyString('short');
-
-        $validator
-            ->scalar('description')
-            ->allowEmptyString('description');
-
-        $validator
-            ->scalar('notify_email')
-            ->maxLength('notify_email', 128)
-            ->allowEmptyString('notify_email');
-
-        $validator
-            ->scalar('approval_email')
-            ->maxLength('approval_email', 128)
-            ->allowEmptyString('approval_email');
-
-        $validator
-            ->scalar('phone')
-            ->maxLength('phone', 64)
-            ->allowEmptyString('phone');
-
-        $validator
-            ->scalar('website_url')
-            ->maxLength('website_url', 255)
-            ->requirePresence('website_url', 'create')
-            ->notEmptyString('website_url');
-
-        $validator
-            ->scalar('website_url_description')
-            ->maxLength('website_url_description', 255)
-            ->allowEmptyString('website_url_description');
-
-        $validator
-            ->scalar('pdf_all_url')
-            ->maxLength('pdf_all_url', 128)
-            ->allowEmptyString('pdf_all_url');
-
-        $validator
-            ->scalar('favicon')
-            ->maxLength('favicon', 128)
-            ->allowEmptyString('favicon');
-
-        $validator
-            ->scalar('address')
-            ->maxLength('address', 255)
-            ->allowEmptyString('address');
-
-        $validator
-            ->scalar('thumb_url')
-            ->maxLength('thumb_url', 128)
-            ->allowEmptyString('thumb_url');
-
-        $validator
-            ->scalar('facebook_title')
-            ->maxLength('facebook_title', 100)
-            ->allowEmptyString('facebook_title');
-
-        $validator
-            ->scalar('facebook_description')
-            ->maxLength('facebook_description', 255)
-            ->allowEmptyString('facebook_description');
-
-        $validator
-            ->scalar('facebook_image')
-            ->maxLength('facebook_image', 100)
-            ->allowEmptyFile('facebook_image');
-
-        $validator
-            ->dateTime('date_approved')
-            ->allowEmptyDateTime('date_approved');
-
-        $validator
-            ->integer('id_old')
-            ->notEmptyString('id_old');
-
-        $validator
-            ->integer('is_approvalrequired')
-            ->notEmptyString('is_approvalrequired');
-
-        $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
-
-        $validator
-            ->boolean('is_featured')
-            ->notEmptyString('is_featured');
-
-        $validator
-            ->integer('id_draft_parent')
-            ->notEmptyString('id_draft_parent');
-
-        $validator
-            ->scalar('wbc_config')
-            ->allowEmptyString('wbc_config');
-
-        $validator
-            ->integer('order')
-            ->notEmptyString('order');
+            ->integer('priority')
+            ->requirePresence('priority', true, 'Priority is a required field')
+            ->notEmptyString('priority', 'Priority cannot be left blank');
 
         return $validator;
     }
@@ -229,7 +238,7 @@ class CorpsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }

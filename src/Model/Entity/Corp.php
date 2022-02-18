@@ -40,7 +40,7 @@ use Cake\ORM\Entity;
  * @property bool $is_featured
  * @property int $id_draft_parent
  * @property string|null $wbc_config
- * @property int $order
+ * @property int $priority
  *
  * @property \App\Model\Entity\User[] $users
  * @property \App\Model\Entity\Advertisement[] $advertisements
@@ -88,8 +88,19 @@ class Corp extends Entity
         'is_featured' => true,
         'id_draft_parent' => true,
         'wbc_config' => true,
-        'order' => true,
+        'priority' => true,
         'users' => true,
         'advertisements' => true,
     ];
+
+    protected $_virtual = ['hh_url'];
+
+    protected function _getHhUrl()
+    {
+        return [
+            'controller' => 'Corps',
+            'action' => 'view',
+            'slug' => $this->slug,
+        ];
+    }
 }

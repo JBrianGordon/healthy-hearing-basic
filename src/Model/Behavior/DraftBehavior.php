@@ -50,24 +50,24 @@ class DraftBehavior extends Behavior
 
     public function publish(int $draftId): bool
     {
-        $draftReport = $this->_table->get($draftId);
-        $draftReportId = $draftReport->id;
-        $draftReportArray = $draftReport->toArray();
+        $draftItem = $this->_table->get($draftId);
+        $draftItemId = $draftItem->id;
+        $draftItemArray = $draftItem->toArray();
 
-        $originalReport = $this->_table->get($draftReport->id_draft_parent);
+        $originalItem = $this->_table->get($draftItem->id_draft_parent);
 
         // Unset fields that we don't want to update in the original
-        unset($draftReportArray['id']);
-        unset($draftReportArray['is_active']);
-        unset($draftReportArray['id_draft_parent']);
+        unset($draftItemArray['id']);
+        unset($draftItemArray['is_active']);
+        unset($draftItemArray['id_draft_parent']);
 
-        $updatedArticle = $this->_table->patchEntity($originalReport, $draftReportArray);
+        $updatedArticle = $this->_table->patchEntity($originalItem, $draftItemArray);
         if ($updatedArticle->getErrors()) {
             return false;
         }
 
         $this->_table->save($updatedArticle);
-        $this->_table->delete($draftReport);
+        $this->_table->delete($draftItem);
 
         return true;
     }

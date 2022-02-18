@@ -19,6 +19,7 @@ class DraftBehaviorTest extends TestCase
      */
     protected $fixtures = [
         'app.Content',
+        'app.Corps',
         'app.Wikis'
     ];
 
@@ -26,9 +27,11 @@ class DraftBehaviorTest extends TestCase
      * Test subject
      *
      * @var \App\Model\Table\ContentTable
+     * @var \App\Model\Table\CorpsTable
      * @var \App\Model\Table\WikisTable
      */
     protected $Content;
+    protected $Corps;
     protected $Wikis;
 
     /**
@@ -40,6 +43,7 @@ class DraftBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->Content = $this->getTableLocator()->get('Content');
+        $this->Corps = $this->getTableLocator()->get('Corps');
         $this->Wikis = $this->getTableLocator()->get('Wikis');
     }
 
@@ -118,7 +122,7 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox ContentTable publish method returns FALSE for non-validating draft is published
+     * @testdox ContentTable publish method returns FALSE when non-validating draft is published
      */
     public function contentPublishReturnsFalseWhenValidationFails(): void
     {
@@ -225,7 +229,6 @@ class DraftBehaviorTest extends TestCase
      */
     public function canCopyAndCreateWikiDraft(): void
     {
-        // debug($this->Wikis->get(2));
         $result = $this->Wikis->copy(2);
         $this->assertInstanceOf('Cake\Datasource\EntityInterface', $result);
         $this->assertEquals(6, $result->id);
@@ -248,7 +251,7 @@ class DraftBehaviorTest extends TestCase
      *
      * @return void
      * @test
-     * @testdox WikisTable publish method returns FALSE after draft is published
+     * @testdox WikisTable publish method returns FALSE when non-validating draft is published
      */
     public function wikiPublishReturnsFalseWhenValidationFails(): void
     {
@@ -312,6 +315,135 @@ class DraftBehaviorTest extends TestCase
         $this->assertEquals(
             0,
             $this->Wikis->get(1)->id_draft_parent
+        );
+    }
+
+    //--------- Corps Table Draft Behavior tests ---------/
+    /**
+     * Test that CorpsTable has 'Draft' behavior
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable has 'Draft' behavior
+     */
+    public function corpsTableHasDraftBehavior(): void
+    {
+        $this->assertTrue($this->Corps->behaviors()->has('Draft'));
+    }
+
+    /**
+     * Test checkForDraft() method
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable checkForDraft() method works
+     */
+    public function canCheckForDraftCorp(): void
+    {
+        $corpWithDraft = $this->Corps->checkForDraft(1);
+        $this->assertIsInt($corpWithDraft);
+        $this->assertEquals(4, $corpWithDraft);
+
+        $corpWithoutDraft = $this->Corps->checkForDraft(3);
+        $this->assertIsInt($corpWithoutDraft);
+        $this->assertEquals(0, $corpWithoutDraft);
+    }
+
+    /**
+     * Test copy() method
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable copy() method works
+     */
+    public function canCopyAndCreateCorpDraft(): void
+    {
+        $result = $this->Corps->copy(2);
+        $this->assertInstanceOf('Cake\Datasource\EntityInterface', $result);
+        $this->assertEquals(6, $result->id);
+        $this->assertEquals(0, $result->is_active);
+        $this->assertEquals(2, $result->id_draft_parent);
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method returns true after draft is published
+     */
+    public function corpPublishReturnsTrueWhenSuccessful(): void
+    {
+        $this->assertEquals(true, $this->Corps->publish(4));
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method returns FALSE when non-validating draft is published
+     */
+    public function corpPublishReturnsFalseWhenValidationFails(): void
+    {
+        $this->assertEquals(false, $this->Corps->publish(5));
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method decreases total Corp count by one item
+     */
+    public function corpPublishDecreasesCountByOne(): void
+    {
+        $this->Corps->publish(4);
+        $this->assertEquals(
+            4,
+            $this->Corps->find()->all()->count()
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method replaces original Corp with draft properties - title is updated
+     */
+    public function corpPublishReplacesOriginalWithDraftCheckTitle(): void
+    {
+        $this->Corps->publish(4);
+        $this->assertEquals(
+            'Corp 1 - DRAFT',
+            $this->Corps->get(1)->title
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method replaces original Corp with draft properties - last_modified is updated
+     */
+    public function corpPublishReplacesOriginalWithDraftCheckLastModified(): void
+    {
+        $this->Corps->publish(4);
+        $this->assertEquals(
+            'Apr 3, 2022, 1:14 PM',
+            $this->Corps->get(1)->last_modified->nice()
+        );
+    }
+
+    /**
+     *
+     * @return void
+     * @test
+     * @testdox CorpsTable publish method replaces original Corp with draft properties - id_draft_parent is 0
+     */
+    public function corpPublishReplacesOriginalWithDraftCheckIdDraftParent(): void
+    {
+        $this->Corps->publish(4);
+        $this->assertEquals(
+            0,
+            $this->Corps->get(1)->id_draft_parent
         );
     }
 }
