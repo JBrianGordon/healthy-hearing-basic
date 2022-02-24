@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -14,7 +13,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\TagWikisTable&\Cake\ORM\Association\HasMany $TagWikis
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
- *
  * @method \App\Model\Entity\Wiki newEmptyEntity()
  * @method \App\Model\Entity\Wiki newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Wiki[] newEntities(array $data, array $options = [])
@@ -28,7 +26,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class WikisTable extends Table
@@ -49,12 +46,12 @@ class WikisTable extends Table
 
         $this->addBehaviors([
             'Timestamp',
-            'Draft'
+            'Draft',
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
-                'is_active' => 0
-            ]
+                'is_active' => 0,
+            ],
         ]);
 
         $this->belongsTo('Users', [
@@ -163,8 +160,9 @@ class WikisTable extends Table
                     if ($width >= 800) {
                         return true;
                     }
+
                     return false;
-                }
+                },
             ]);
             // ->minLength('facebook_image_width', 800, 'Facebook image must be at least 800 px wide');
 

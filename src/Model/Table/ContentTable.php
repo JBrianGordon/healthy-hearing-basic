@@ -15,7 +15,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\LocationsTable&\Cake\ORM\Association\BelongsToMany $Locations
  * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsToMany $Tags
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
- *
  * @method \App\Model\Entity\Content newEmptyEntity()
  * @method \App\Model\Entity\Content newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Content[] newEntities(array $data, array $options = [])
@@ -29,7 +28,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ContentTable extends Table
@@ -50,12 +48,12 @@ class ContentTable extends Table
 
         $this->addBehaviors([
             'Timestamp',
-            'Draft'
+            'Draft',
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
-                'is_active' => 0
-            ]
+                'is_active' => 0,
+            ],
         ]);
 
         $this->belongsTo('Users', [
@@ -244,12 +242,12 @@ class ContentTable extends Table
         return $rules;
     }
 
-
     /**
      * Returns a query for the latest N articles/reports/Content items
      *
-     * @param \Cake\ORM\Query $query The query object to be modified
+     * @param \Cake\ORM\Query $query The Query object to be modified
      * @param array $options List of options to pass to the finder
+     * @return \Cake\ORM\Query Modified Query object
      */
     public function findLatest(Query $query, array $options)
     {
