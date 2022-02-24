@@ -11,15 +11,10 @@ namespace App\Controller;
  */
 class ContentController extends AppController
 {
-    public function initialize(): void
-    {
-        parent::initialize();
-    }
-
     public $paginate = [
         'limit' => 15,
         'order' => [
-            'Content.modified' => 'DESC'
+            'Content.modified' => 'DESC',
         ],
         'fields' => [
             'Content.title',
@@ -31,8 +26,8 @@ class ContentController extends AppController
             'Content.last_modified',
             'Content.id',
             'Content.type',
-            'Content.is_active'
-        ]
+            'Content.is_active',
+        ],
     ];
 
     /**
@@ -56,7 +51,7 @@ class ContentController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view(int $id = null)
+    public function view(?int $id = null)
     {
         $content = $this->Content->get($id, [
             'contain' => ['Users', 'Locations', 'Tags'],
