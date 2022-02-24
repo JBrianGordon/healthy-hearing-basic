@@ -95,6 +95,11 @@ class Corp extends Entity
 
     protected $_virtual = ['hh_url'];
 
+    /**
+     * Generate routing array for 'HH URL'
+     *
+     * @return array CakePHP routing array
+     */
     protected function _getHhUrl()
     {
         return [
