@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Model\Behavior;
 
 use Cake\ORM\Behavior;
-use Cake\ORM\Table;
 
 /**
  * Draft behavior
@@ -18,28 +17,33 @@ class DraftBehavior extends Behavior
      */
     protected $_defaultConfig = [];
 
-
     /**
      * Check for existing draft item
      *
      * @param int $id Primary key/id
      * @return int ID of existing draft or 0 for non-existing draft
-     *
      */
     public function checkForDraft(int $id): int
     {
         $draftQuery = $this->_table->find('all', [
             'conditions' => ['id_draft_parent' => $id],
-            'fields' => ['id']
+            'fields' => ['id'],
         ]);
         $draft = $draftQuery->first();
         if (is_null($draft)) {
             return 0;
         }
+
         return $draft->id;
     }
 
-    public function copy($id)
+    /**
+     * Copy method
+     *
+     * @param int $id Model entity id.
+     * @return \Cake\Datasource\EntityInterface|false
+     */
+    public function copy(int $id)
     {
         $draft = $this->_table->duplicate($id);
         // DuplicatableBehavior unsets original entity ID so we set it here
@@ -48,6 +52,12 @@ class DraftBehavior extends Behavior
         return $this->_table->save($draft);
     }
 
+    /**
+     * Publish method
+     *
+     * @param int $draftId Model draft id.
+     * @return bool
+     */
     public function publish(int $draftId): bool
     {
         $draftItem = $this->_table->get($draftId);
@@ -71,6 +81,4 @@ class DraftBehavior extends Behavior
 
         return true;
     }
-
-
 }

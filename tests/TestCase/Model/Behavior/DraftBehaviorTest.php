@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Behavior;
 
-use App\Model\Behavior\DraftBehavior;
-use Cake\ORM\Table;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -20,7 +18,7 @@ class DraftBehaviorTest extends TestCase
     protected $fixtures = [
         'app.Content',
         'app.Corps',
-        'app.Wikis'
+        'app.Wikis',
     ];
 
     /**
@@ -108,7 +106,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method returns true after draft is published
@@ -119,7 +116,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method returns FALSE when non-validating draft is published
@@ -130,7 +126,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method decreases total Content count by one item
@@ -145,7 +140,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method replaces original Content with draft properties - title is updated
@@ -160,7 +154,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method replaces original Content with draft properties - last_modified is updated
@@ -175,7 +168,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox ContentTable publish method replaces original Content with draft properties - id_draft_parent is 0
@@ -190,6 +182,7 @@ class DraftBehaviorTest extends TestCase
     }
 
     //--------- Wikis Table Draft Behavior tests ---------/
+
     /**
      * Test that WikisTable has 'Draft' behavior
      *
@@ -237,7 +230,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method returns true after draft is published
@@ -248,7 +240,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method returns FALSE when non-validating draft is published
@@ -259,7 +250,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method decreases total Wiki count by one item
@@ -274,7 +264,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method replaces original Wiki with draft properties - title_head is updated
@@ -289,7 +278,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method replaces original Wiki with draft properties - last_modified is updated
@@ -304,7 +292,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox WikisTable publish method replaces original Wiki with draft properties - id_draft_parent is 0
@@ -319,6 +306,7 @@ class DraftBehaviorTest extends TestCase
     }
 
     //--------- Corps Table Draft Behavior tests ---------/
+
     /**
      * Test that CorpsTable has 'Draft' behavior
      *
@@ -366,7 +354,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method returns true after draft is published
@@ -377,7 +364,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method returns FALSE when non-validating draft is published
@@ -388,7 +374,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method decreases total Corp count by one item
@@ -403,7 +388,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method replaces original Corp with draft properties - title is updated
@@ -418,7 +402,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method replaces original Corp with draft properties - last_modified is updated
@@ -433,7 +416,6 @@ class DraftBehaviorTest extends TestCase
     }
 
     /**
-     *
      * @return void
      * @test
      * @testdox CorpsTable publish method replaces original Corp with draft properties - id_draft_parent is 0
