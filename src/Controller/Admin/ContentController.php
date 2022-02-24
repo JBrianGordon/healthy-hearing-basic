@@ -118,7 +118,7 @@ class ContentController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to existing or newly-created Content draft.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function draft(int $id = null)
+    public function draft(?int $id = null)
     {
         $this->request->allowMethod(['post']);
         $this->autoRender = false;
@@ -127,20 +127,29 @@ class ContentController extends AppController
 
         if ($draftId > 0) {
             $this->Flash->success('This report has an existing draft below.');
+
             return $this->redirect(['action' => 'edit', $draftId]);
         }
 
         $newDraft = $this->Content->copy($id);
+
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }
 
-    // DO WE NEED A PUBLISH CONTROLLER ACTION - ONLY PUBLISH BY CRON JOB/SCRIPT?
+    /** DO WE NEED A PUBLISH CONTROLLER ACTION - ONLY PUBLISH BY CRON JOB/SCRIPT? **/
+    /**
+     * Publish method
+     *
+     * @param int $id Content draft id.
+     * @return \Cake\Http\Response|null|void Redirects to existing or newly-created Content draft.
+     */
     public function publish(int $id)
     {
         $this->request->allowMethod(['post']);
         $this->autoRender = false;
 
         $this->Flash->success('Republish successful!');
+
         return $this->redirect(['action' => 'edit', 1]);
     }
 }

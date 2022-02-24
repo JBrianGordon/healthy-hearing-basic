@@ -114,7 +114,7 @@ class WikisController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to existing or newly-created Wikis draft.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function draft(int $id = null)
+    public function draft(?int $id = null)
     {
         $this->request->allowMethod(['post']);
         $this->autoRender = false;
@@ -123,10 +123,12 @@ class WikisController extends AppController
 
         if ($draftId > 0) {
             $this->Flash->success('This report has an existing draft below.');
+
             return $this->redirect(['action' => 'edit', $draftId]);
         }
 
         $newDraft = $this->Wikis->copy($id);
+
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }
 }
