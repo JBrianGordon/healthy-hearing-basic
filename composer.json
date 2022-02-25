@@ -13,11 +13,14 @@
         "riesenia/cakephp-duplicatable": "^4.0"
     },
     "require-dev": {
+        "cakedc/cakephp-phpstan": "^2.0",
         "cakephp/bake": "^2.6",
-        "cakephp/repl": "^0.1",
         "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.5",
+        "cakephp/repl": "^0.1",
         "josegonzalez/dotenv": "^3.2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "~8.5.0 || ^9.3"
     },
     "suggest": {
@@ -46,6 +49,7 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse",
+        "stan-rebuild-baseline": "phpstan analyse --level 7 --configuration phpstan.neon src/ --generate-baseline",
         "test": "phpunit --colors=always"
     },
     "prefer-stable": true,

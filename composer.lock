@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c1ce8d91fabc8cbe5a096297f1bf02f",
+    "content-hash": "b8eabb1888b63e10de314fc8803b0ef1",
     "packages": [
         {
             "name": "cakephp/cakephp",
@@ -2380,6 +2380,61 @@
             "time": "2021-02-10T13:53:07+00:00"
         },
         {
+            "name": "cakedc/cakephp-phpstan",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CakeDC/cakephp-phpstan.git",
+                "reference": "850f4b2ab375c89962260096c924c11b56dbce00"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CakeDC/cakephp-phpstan/zipball/850f4b2ab375c89962260096c924c11b56dbce00",
+                "reference": "850f4b2ab375c89962260096c924c11b56dbce00",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^4.0.0",
+                "php": ">=7.2.0",
+                "phpstan/phpstan": "^1.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^8.5",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CakeDC\\PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CakeDC",
+                    "homepage": "http://www.cakedc.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "CakePHP 4 plugin extension for PHPStan.",
+            "support": {
+                "issues": "https://github.com/CakeDC/cakephp-phpstan/issues",
+                "source": "https://github.com/CakeDC/cakephp-phpstan/tree/2.0.1"
+            },
+            "time": "2021-12-27T17:20:02+00:00"
+        },
+        {
             "name": "cakephp/bake",
             "version": "2.6.1",
             "source": {
@@ -4037,6 +4092,51 @@
             "time": "2021-12-08T12:19:24+00:00"
         },
         {
+            "name": "phpstan/extension-installer",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/extension-installer.git",
+                "reference": "66c7adc9dfa38b6b5838a9fb728b68a7d8348051"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/66c7adc9dfa38b6b5838a9fb728b68a7d8348051",
+                "reference": "66c7adc9dfa38b6b5838a9fb728b68a7d8348051",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": ">=0.11.6"
+            },
+            "require-dev": {
+                "composer/composer": "^1.8",
+                "phing/phing": "^2.16.3",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
+                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\ExtensionInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "support": {
+                "issues": "https://github.com/phpstan/extension-installer/issues",
+                "source": "https://github.com/phpstan/extension-installer/tree/1.1.0"
+            },
+            "time": "2020-12-13T13:06:13+00:00"
+        },
+        {
             "name": "phpstan/phpdoc-parser",
             "version": "1.2.0",
             "source": {
@@ -4084,6 +4184,70 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/1.2.0"
             },
             "time": "2021-09-16T20:46:02+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8a7761f1c520e0dad6e04d862fdc697445457cfe",
+                "reference": "8a7761f1c520e0dad6e04d862fdc697445457cfe",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.4.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-02-06T12:56:13+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
