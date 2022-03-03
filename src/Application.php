@@ -27,6 +27,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Middlewares\TrailingSlash;
 
 /**
  * Application setup class.
@@ -84,6 +85,10 @@ class Application extends BaseApplication
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
+
+            // Remove trailing slashes from URIs
+            // TO-DO: Thoroughly check SEO implications of this
+            ->add((new TrailingSlash())->redirect())
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes
