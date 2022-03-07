@@ -83,6 +83,14 @@ try {
     exit($e->getMessage() . "\n");
 }
 
+if (file_exists(CONFIG . 'hhConfigs/config_us.php')) {
+    Configure::load('hhConfigs/config_us', 'default');
+}
+
+if (file_exists(CONFIG . 'hhConfigs/config_routes.php')) {
+    Configure::load('hhConfigs/config_routes', 'default');
+}
+
 /*
  * Load an environment local configuration file to provide overrides to your configuration.
  * Notice: For security reasons app_local.php **should not** be included in your git repo.

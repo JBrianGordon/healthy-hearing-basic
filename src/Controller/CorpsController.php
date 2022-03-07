@@ -18,7 +18,7 @@ class CorpsController extends AppController
      */
     public function index()
     {
-        $corps = $this->paginate($this->Corps);
+        $corps = $this->paginate($this->Corps->findByIsActive(1));
 
         $this->set(compact('corps'));
     }
@@ -26,15 +26,17 @@ class CorpsController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Corp id.
+     * @param string|null $slug Corp slug.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($slug = null)
     {
-        $corp = $this->Corps->get($id, [
-            'contain' => ['Users', 'Advertisements'],
-        ]);
+        $corp = $this->Corps->findBySlug($slug)->first();
+
+        if (!$corp) {
+            return $this->redirect(['controller' => 'Corps', 'action' => 'index']);
+        }
 
         $this->set(compact('corp'));
     }

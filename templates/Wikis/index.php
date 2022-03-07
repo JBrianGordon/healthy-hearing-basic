@@ -14,7 +14,7 @@
     <?php foreach ($wikis as $wiki): ?>
     <tr>
         <td>
-            <?= $this->Html->link($wiki->title, $wiki->hh_url) ?>
+            <?= $this->Html->link($wiki->name, $wiki->hh_url) ?>
         </td>
         <td>
             <?= $wiki->modified ?>

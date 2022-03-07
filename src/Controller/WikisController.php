@@ -18,7 +18,7 @@ class WikisController extends AppController
      */
     public function index()
     {
-        $wikis = $this->paginate($this->Wikis);
+        $wikis = $this->paginate($this->Wikis->findByIsActive(1));
 
         $this->set(compact('wikis'));
     }
@@ -26,15 +26,17 @@ class WikisController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Wiki id.
+     * @param string|null $slug Wiki slug.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($slug = null)
     {
-        $wiki = $this->Wikis->get($id, [
-            'contain' => ['Users', 'TagWikis'],
-        ]);
+        $wiki = $this->Wikis->findBySlug($slug)->first();
+
+        if (!$wiki) {
+            return $this->redirect('/help');
+        }
 
         $this->set(compact('wiki'));
     }

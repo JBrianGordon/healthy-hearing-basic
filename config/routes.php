@@ -21,6 +21,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Core\Configure;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
@@ -57,6 +58,10 @@ return static function (RouteBuilder $routes) {
          */
         $builder->connect('/pages/*', 'Pages::display');
 
+        // Corp/manufacturer pages
+        $builder->connect('/{corp}', 'Corps::view')
+            ->setPass(['corp'])
+            ->setPatterns(['corp' => Configure::read('corpsRegex').'.*']);
         /*
          * Connect catchall routes for all controllers.
          *
@@ -79,6 +84,18 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/{id}-{slug}', 'Content::view')
             ->setPass(['id', 'slug'])
             ->setPatterns(['id' => '\d+']);
+    });
+
+    // Corps/manufacturers index page
+    // Individual corp/manufacturer routes defined in base path scope above
+    $routes->connect('/hearing-aid-manufacturers', 'Corps::index');
+
+    // Wikis routes
+    $routes->scope('/help', function (RouteBuilder $builder) {
+        $builder->connect('/', 'Wikis::index');
+        $builder->connect('/{slug}', 'Wikis::view')
+            ->setPass(['slug'])
+            ->setPatterns(['slug' => Configure::read('wikiCategoriesRegex').'.*']);
     });
 
     // Admin-prefixed routes
