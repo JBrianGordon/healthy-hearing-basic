@@ -20,9 +20,11 @@
         "cakephp/debug_kit": "^4.5",
         "cakephp/repl": "^0.1",
         "josegonzalez/dotenv": "^3.2",
+        "lordsimal/cakephp-psalm": "@dev",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.4",
-        "phpunit/phpunit": "~8.5.0 || ^9.3"
+        "phpunit/phpunit": "~8.5.0 || ^9.3",
+        "vimeo/psalm": "^4.22"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
@@ -49,6 +51,8 @@
         ],
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
+        "psalm": "psalm --show-info=false src/",
+        "psalm-rebuild-baseline": "psalm --show-info=false  --set-baseline=psalm-baseline.xml  src/",
         "stan": "phpstan analyse",
         "stan-rebuild-baseline": "phpstan analyse --level 7 --configuration phpstan.neon src/ --generate-baseline",
         "test": "phpunit --colors=always"
