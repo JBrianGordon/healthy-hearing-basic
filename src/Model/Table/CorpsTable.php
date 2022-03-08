@@ -28,6 +28,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Corp[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Corp[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @mixin \App\Model\Behavior\DraftBehavior
+ * @mixin \Duplicatable\Model\Behavior\DuplicatableBehavior
  */
 class CorpsTable extends Table
 {
