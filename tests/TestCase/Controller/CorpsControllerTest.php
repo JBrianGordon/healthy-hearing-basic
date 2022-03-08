@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\CorpsController;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -18,7 +17,6 @@ class CorpsControllerTest extends TestCase
     use IntegrationTestTrait;
 
     /**
-     *
      * @var \App\Model\Table\CorpsTable
      */
     protected $Corps;
@@ -50,7 +48,7 @@ class CorpsControllerTest extends TestCase
         $testCorpSlugs = $this->Corps->find()->all()->extract('slug')->toArray();
         $allCorpSlugs = array_merge($corpSlugsFromConfig, $testCorpSlugs);
 
-        Configure::write('corpsRegex', '(?i:'.implode("|", $allCorpSlugs).')');
+        Configure::write('corpsRegex', '(?i:' . implode('|', $allCorpSlugs) . ')');
     }
 
     /**
@@ -64,7 +62,6 @@ class CorpsControllerTest extends TestCase
 
         parent::tearDown();
     }
-
 
     /**
      * Test index method - /hearing-aid-manufacturers returns correct number of is_active Corps
@@ -108,7 +105,7 @@ class CorpsControllerTest extends TestCase
     public function viewReturns2xxAtGoodUrlWithTrailingSlash(): void
     {
         $corp = $this->Corps->get(1);
-        $this->get($corp->slug.'/');
+        $this->get($corp->slug . '/');
         $this->assertRedirect($corp->slug);
     }
 

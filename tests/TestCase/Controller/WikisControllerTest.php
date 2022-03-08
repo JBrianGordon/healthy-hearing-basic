@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\WikisController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -55,7 +54,7 @@ class WikisControllerTest extends TestCase
     {
         $this->Wikis = $this->getTableLocator()->get('Wikis');
         $wiki = $this->Wikis->get(1);
-        $this->get('/help/'.$wiki->slug);
+        $this->get('/help/' . $wiki->slug);
         $this->assertResponseOk();
     }
 
@@ -71,8 +70,8 @@ class WikisControllerTest extends TestCase
     {
         $this->Wikis = $this->getTableLocator()->get('Wikis');
         $wiki = $this->Wikis->get(1);
-        $this->get('/help/'.$wiki->slug.'/');
-        $this->assertRedirect('/help/'.$wiki->slug);
+        $this->get('/help/' . $wiki->slug . '/');
+        $this->assertRedirect('/help/' . $wiki->slug);
     }
 
     /**
@@ -87,7 +86,7 @@ class WikisControllerTest extends TestCase
     {
         $this->Wikis = $this->getTableLocator()->get('Wikis');
         $wiki = $this->Wikis->get(1);
-        $this->get('/help/'.$wiki->slug);
+        $this->get('/help/' . $wiki->slug);
         $this->assertResponseContains($wiki->title_h1);
     }
 
