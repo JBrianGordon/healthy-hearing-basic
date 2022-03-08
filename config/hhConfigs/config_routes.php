@@ -13,7 +13,7 @@ if (Configure::read('showTinnitus')) {
 if (Configure::read('showAssistiveListening')) {
     $wikiCategories[] = 'assistive-listening-devices';
 }
-$wikiCategoriesRegex = '(?i:'.implode("|", $wikiCategories).')';
+$wikiCategoriesRegex = '(?i:' . implode('|', $wikiCategories) . ')';
 
 // Corp/manufacturer slugs
 $corps = [
@@ -46,14 +46,13 @@ $corps = [
     'signia',
     'sonic-innovations',
     'sonic',
-    'advanced-bionics'
+    'advanced-bionics',
 ];
-$corpsRegex = '(?i:'.implode("|", $corps).')';
-
+$corpsRegex = '(?i:' . implode('|', $corps) . ')';
 
 return [
     'corps' => $corps,
     'corpsRegex' => $corpsRegex,
-	'wikiCategories' => $wikiCategories,
-	'wikiCategoriesRegex' => $wikiCategoriesRegex,
+    'wikiCategories' => $wikiCategories,
+    'wikiCategoriesRegex' => $wikiCategoriesRegex,
 ];

@@ -61,7 +61,7 @@ return static function (RouteBuilder $routes) {
         // Corp/manufacturer pages
         $builder->connect('/{corp}', 'Corps::view')
             ->setPass(['corp'])
-            ->setPatterns(['corp' => Configure::read('corpsRegex').'.*']);
+            ->setPatterns(['corp' => Configure::read('corpsRegex') . '.*']);
         /*
          * Connect catchall routes for all controllers.
          *
@@ -95,7 +95,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/', 'Wikis::index');
         $builder->connect('/{slug}', 'Wikis::view')
             ->setPass(['slug'])
-            ->setPatterns(['slug' => Configure::read('wikiCategoriesRegex').'.*']);
+            ->setPatterns(['slug' => Configure::read('wikiCategoriesRegex') . '.*']);
     });
 
     // Admin-prefixed routes
