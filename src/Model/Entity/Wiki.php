@@ -36,6 +36,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\User[] $users
  * @property \App\Model\Entity\TagWiki[] $tag_wikis
+ * @property-read array $hh_url
  */
 class Wiki extends Entity
 {
