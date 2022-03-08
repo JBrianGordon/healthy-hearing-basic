@@ -63,9 +63,8 @@ class Application extends BaseApplication
         if (Configure::read('debug')) {
             Configure::write('DebugKit.safeTld', ['com']);
             $this->addPlugin('DebugKit');
+            $this->addPlugin('IdeHelper');
         }
-
-        // Load more plugins here
     }
 
     /**
@@ -136,7 +135,6 @@ class Application extends BaseApplication
         $this->addOptionalPlugin('Bake');
 
         $this->addPlugin('Migrations');
-
-        // Load more plugins here
+        $this->addPlugin('IdeHelper');
     }
 }
