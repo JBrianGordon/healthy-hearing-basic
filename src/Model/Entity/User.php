@@ -76,7 +76,7 @@ class User extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array
+     * @var array<bool>
      */
     protected $_accessible = [
         'username' => true,
