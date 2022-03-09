@@ -107,4 +107,15 @@ class PagesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Homepage
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function home()
+    {
+        $content = $this->Pages->findByTitle('home')->first()->content;
+        $this->set('content', $content);
+    }
 }
