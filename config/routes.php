@@ -60,9 +60,9 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/pages/*', 'Pages::display');
 
         // Corp/manufacturer pages
-        $builder->connect('/{corp}', 'Corps::view')
-            ->setPass(['corp'])
-            ->setPatterns(['corp' => Configure::read('corpsRegex') . '.*']);
+        $builder->connect('/{slug}', 'Corps::view')
+            ->setPass(['slug'])
+            ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
         /*
          * Connect catchall routes for all controllers.
          *
