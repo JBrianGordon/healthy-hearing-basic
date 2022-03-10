@@ -57,7 +57,7 @@
         "stan": "phpstan analyse",
         "stan-rebuild-baseline": "phpstan analyse --level 7 --configuration phpstan.neon src/ --generate-baseline",
         "test": "phpunit --colors=always",
-        "test-working": "phpunit --testdox --testsuite working"
+        "test-working": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html webroot/coverage --testdox --testsuite working"
     },
     "prefer-stable": true,
     "config": {

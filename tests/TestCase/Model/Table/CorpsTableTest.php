@@ -74,4 +74,55 @@ class CorpsTableTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test validationDefault method with passing data
+     *
+     * @return void
+     * @test
+     * @uses \App\Model\Table\CorpsTable::validationDefault()
+     * @testdox Test that Corps validation rules are working with passing data
+     */
+    public function validationDefaultWithPassingData(): void
+    {
+        $data = [
+            'title' => 'Corp name',
+            'priority' => '10',
+        ];
+
+        $report = $this->Corps->newEntity($data);
+        $this->assertEmpty($report->getErrors());
+    }
+
+    /**
+     * Test validationDefault method with missing data
+     * @return void
+     * @test
+     * @uses \App\Model\Table\CorpsTable::validationDefault()
+     * @testdox Test that Corps validation rules are working with missing data
+     */
+    public function validationDefaultWithMissingData(): void
+    {
+        $data = [];
+        $report = $this->Corps->newEntity($data);
+        $this->assertCount(2, $report->getErrors());
+    }
+
+    /**
+     * Test validationDefault method with empty string data
+     *
+     * @return void
+     * @test
+     * @uses \App\Model\Table\CorpsTable::validationDefault()
+     * @testdox Test that Corps validation rules are working with empty string data
+     */
+    public function validationDefaultWithEmptyStringData(): void
+    {
+        $data = [
+            'title' => '',
+            'priority' => '',
+        ];
+        $report = $this->Corps->newEntity($data);
+        $this->assertCount(2, $report->getErrors());
+    }
 }
