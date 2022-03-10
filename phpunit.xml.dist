@@ -15,6 +15,18 @@
         <testsuite name="app">
             <directory>tests/TestCase/</directory>
         </testsuite>
+        <testsuite name="working">
+            <directory>tests/TestCase/Model/Behavior/</directory>
+            <directory>tests/TestCase/Model/Entity/</directory>
+            <directory>tests/TestCase/Controller/Admin/</directory>
+            <!-- <file>tests/TestCase/ApplicationTest.php</file> -->
+            <file>tests/TestCase/Controller/ContentControllerTest.php</file>
+            <file>tests/TestCase/Controller/CorpsControllerTest.php</file>
+            <file>tests/TestCase/Controller/WikisControllerTest.php</file>
+            <file>tests/TestCase/Model/Table/ContentTableTest.php</file>
+            <file>tests/TestCase/Model/Table/CorpsTableTest.php</file>
+            <file>tests/TestCase/Model/Table/WikisTableTest.php</file>
+        </testsuite>
         <!-- Add plugin test suites here. -->
     </testsuites>
 

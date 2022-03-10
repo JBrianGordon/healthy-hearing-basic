@@ -54,6 +54,7 @@ class DraftBehaviorTest extends TestCase
     {
         unset($this->Content);
         unset($this->Wikis);
+        unset($this->Corps);
         parent::tearDown();
     }
 

@@ -56,7 +56,8 @@
         "psalm-rebuild-baseline": "psalm --show-info=false  --set-baseline=psalm-baseline.xml  src/",
         "stan": "phpstan analyse",
         "stan-rebuild-baseline": "phpstan analyse --level 7 --configuration phpstan.neon src/ --generate-baseline",
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "test-working": "phpunit --testdox --testsuite working"
     },
     "prefer-stable": true,
     "config": {

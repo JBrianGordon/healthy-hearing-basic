@@ -23,6 +23,7 @@ use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\IntegrationTestCase;
 use InvalidArgumentException;
+use Middlewares\TrailingSlash;
 
 /**
  * ApplicationTest class
@@ -40,11 +41,13 @@ class ApplicationTest extends IntegrationTestCase
         $app->bootstrap();
         $plugins = $app->getPlugins();
 
-        $this->assertCount(4, $plugins);
+        $this->assertCount(5, $plugins);
         $this->assertSame('Cake/Repl', $plugins->get('Cake/Repl')->getName());
         $this->assertSame('Bake', $plugins->get('Bake')->getName());
         $this->assertSame('DebugKit', $plugins->get('DebugKit')->getName());
         $this->assertSame('Migrations', $plugins->get('Migrations')->getName());
+        $this->assertSame('IdeHelper', $plugins->get('IdeHelper')->getName());
+        $this->assertSame('Cake/TwigView', $plugins->get('Cake/TwigView')->getName());
     }
 
     /**
@@ -83,6 +86,15 @@ class ApplicationTest extends IntegrationTestCase
         $middleware->seek(1);
         $this->assertInstanceOf(AssetMiddleware::class, $middleware->current());
         $middleware->seek(2);
+        debug($middleware->current());
+        debug(TrailingSlash::class);
+        debug(get_class($middleware->current()));
+        $this->assertInstanceOf(TrailingSlash::class, $middleware->current());
+        $middleware->seek(3);
         $this->assertInstanceOf(RoutingMiddleware::class, $middleware->current());
+        $middleware->seek(4);
+        $this->assertInstanceOf(BodyParserMiddleware::class, $middleware->current());
+        $middleware->seek(5);
+        $this->assertInstanceOf(CsrfProtectionMiddleware::class, $middleware->current());
     }
 }
