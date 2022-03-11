@@ -54,7 +54,7 @@ class ContentController extends AppController
     public function view(?int $id = null)
     {
         $content = $this->Content->get($id, [
-            'contain' => ['Users', 'Locations', 'Tags'],
+            'contain' => ['PrimaryAuthor'],
         ]);
 
         $this->set(compact('content'));

@@ -6,5 +6,5 @@
 ?>
 
 <h1><?= $content->title ?></h1>
-<p><em>Contributed by AUTHOR</em></p>
+<p><em>Contributed by <?= $content->primary_author->full_name ?></em></p>
 <p><?= $content->body ?></p>

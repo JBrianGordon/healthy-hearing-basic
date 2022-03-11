@@ -58,24 +58,28 @@ class ContentTable extends Table
             ],
         ]);
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-        ]);
-        $this->belongsToMany('Locations', [
-            'foreignKey' => 'content_id',
-            'targetForeignKey' => 'location_id',
-            'joinTable' => 'content_locations',
-        ]);
-        $this->belongsToMany('Tags', [
-            'foreignKey' => 'content_id',
-            'targetForeignKey' => 'tag_id',
-            'joinTable' => 'content_tags',
-        ]);
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'content_id',
-            'targetForeignKey' => 'user_id',
-            'joinTable' => 'content_users',
-        ]);
+        // Associations
+        $this->belongsTo('PrimaryAuthor', [
+                'className' => 'Users'
+            ])
+            ->setForeignKey('user_id')
+            ->setProperty('primary_author');
+
+        // $this->belongsToMany('Users', [
+        //     'foreignKey' => 'content_id',
+        //     'targetForeignKey' => 'user_id',
+        //     'joinTable' => 'content_users',
+        // ]);
+        // $this->belongsToMany('Locations', [
+        //     'foreignKey' => 'content_id',
+        //     'targetForeignKey' => 'location_id',
+        //     'joinTable' => 'content_locations',
+        // ]);
+        // $this->belongsToMany('Tags', [
+        //     'foreignKey' => 'content_id',
+        //     'targetForeignKey' => 'tag_id',
+        //     'joinTable' => 'content_tags',
+        // ]);
     }
 
     /**

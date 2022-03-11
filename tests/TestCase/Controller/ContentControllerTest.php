@@ -41,11 +41,14 @@ class ContentControllerTest extends TestCase
     public function viewIsOk(): void
     {
         $this->Content = $this->getTableLocator()->get('Content');
-        $report = $this->Content->get(1);
+        $report = $this->Content->get(1, [
+            'contain' => ['PrimaryAuthor']
+        ]);
         $reportUrl = $report->hh_url;
         $this->get($reportUrl);
         $this->assertResponseOk();
         $this->assertResponseContains($report->title);
+        $this->assertResponseContains($report->primary_author->full_name);
         $this->assertTemplate('view');
     }
 

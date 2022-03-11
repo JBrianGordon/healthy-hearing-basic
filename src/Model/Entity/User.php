@@ -145,4 +145,16 @@ class User extends Entity
     protected $_hidden = [
         'password',
     ];
+
+    protected $_virtual = ['full_name'];
+
+    /**
+     * Get full name of User
+     *
+     * @return string Full name of user
+     */
+    protected function _getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }
