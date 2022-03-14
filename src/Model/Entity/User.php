@@ -146,7 +146,10 @@ class User extends Entity
         'password',
     ];
 
-    protected $_virtual = ['full_name'];
+    protected $_virtual = [
+        'full_name',
+        'full_personal_info'
+    ];
 
     /**
      * Get full name of User
@@ -156,5 +159,25 @@ class User extends Entity
     protected function _getFullName()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
+     * Get all information about a User
+     * to include full name, degrees, credentials,
+     * job title, and company
+     *
+     * @return string Full personal information for User
+     */
+    protected function _getFullPersonalInfo()
+    {
+        $fullPersonalInfo = array_filter([
+            $this->full_name,
+            $this->degrees,
+            $this->credentials,
+            $this->title_dept_company,
+            $this->company,
+        ], 'strlen');
+
+        return implode(', ', $fullPersonalInfo);
     }
 }

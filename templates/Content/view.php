@@ -6,5 +6,7 @@
 ?>
 
 <h1><?= $content->title ?></h1>
-<p><em>Contributed by <?= $content->primary_author->full_name ?></em></p>
+<p><em>Contributed by <?= $content->primary_author->full_personal_info ?></em></p>
 <p><?= $content->body ?></p>
+
+<?= $this->element('schema/person', ['author' => $content->primary_author]) ?>
