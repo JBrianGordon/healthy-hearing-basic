@@ -59,17 +59,18 @@ class ContentTable extends Table
         ]);
 
         // Associations
-        $this->belongsTo('PrimaryAuthor', [
-                'className' => 'Users'
-            ])
+        $this->belongsTo('PrimaryAuthor')
+            ->setClassName('Users')
             ->setForeignKey('user_id')
             ->setProperty('primary_author');
 
-        // $this->belongsToMany('Users', [
-        //     'foreignKey' => 'content_id',
-        //     'targetForeignKey' => 'user_id',
-        //     'joinTable' => 'content_users',
-        // ]);
+        $this->belongsToMany('Contributors')
+            ->setClassName('Users')
+            ->setForeignKey('content_id')
+            ->setTargetForeignKey('user_id')
+            ->setProperty('contributors')
+            ->setThrough('ContentUsers');
+
         // $this->belongsToMany('Locations', [
         //     'foreignKey' => 'content_id',
         //     'targetForeignKey' => 'location_id',
