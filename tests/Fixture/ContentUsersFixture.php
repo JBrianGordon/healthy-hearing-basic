@@ -21,7 +21,7 @@ class ContentUsersFixture extends TestFixture
             [
                 'id' => 1,
                 'content_id' => 1,
-                'user_id' => 1,
+                'user_id' => 2,
             ],
         ];
         parent::init();

@@ -24,7 +24,7 @@ class EditorialHelper extends Helper
      * @param \App\Model\Entity\User[] $contributors Contributors
      * @return array Author(s) of item
      */
-    public function getAuthors($primaryAuthor, $contributors)
+    public function getAuthorsArray($primaryAuthor, $contributors)
     {
         $contributors = $contributors ?? [];
 
@@ -43,7 +43,7 @@ class EditorialHelper extends Helper
      */
     public function getAuthorsByline($primaryAuthor, $contributors)
     {
-        $authors = $this->getAuthors($primaryAuthor, $contributors);
+        $authors = $this->getAuthorsArray($primaryAuthor, $contributors);
 
         $authorsInfo = array_column($authors, 'full_personal_info');
 
