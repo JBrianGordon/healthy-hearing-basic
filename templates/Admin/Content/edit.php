@@ -2,9 +2,6 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content $content
- * @var string[]|\Cake\Collection\CollectionInterface $users
- * @var string[]|\Cake\Collection\CollectionInterface $locations
- * @var string[]|\Cake\Collection\CollectionInterface $tags
  */
 ?>
 <div class="row">
@@ -54,9 +51,6 @@
                     echo $this->Form->control('old_url');
                     echo $this->Form->control('id_draft_parent');
                     echo $this->Form->control('is_frozen');
-                    echo $this->Form->control('users._ids', ['options' => $users]);
-                    echo $this->Form->control('locations._ids', ['options' => $locations]);
-                    echo $this->Form->control('tags._ids', ['options' => $tags]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

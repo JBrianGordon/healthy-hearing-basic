@@ -18,7 +18,7 @@ class CorpsController extends AppController
      */
     public function index()
     {
-        $corps = $this->paginate($this->Corps->findByIsActive(1));
+        $corps = $this->paginate($this->Corps->findByIsActiveAndIdDraftParent(1, 0));
 
         $this->set(compact('corps'));
     }

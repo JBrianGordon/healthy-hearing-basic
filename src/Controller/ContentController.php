@@ -38,10 +38,9 @@ class ContentController extends AppController
      */
     public function reportIndex()
     {
-        $reports = $this->Content
-            ->find('all')
-            ->where(['is_active' => 1]);
-        $this->set('reports', $this->paginate($reports));
+        $reports = $this->paginate($this->Content->findByIsActiveAndIdDraftParent(1, 0));
+
+        $this->set(compact('reports'));
     }
 
     /**

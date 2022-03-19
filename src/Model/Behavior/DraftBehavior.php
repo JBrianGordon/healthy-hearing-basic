@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Behavior;
 
 use Cake\ORM\Behavior;
+use Cake\ORM\Query;
 
 /**
  * Draft behavior
@@ -50,6 +51,23 @@ class DraftBehavior extends Behavior
         $draft->id_draft_parent = $id;
 
         return $this->_table->save($draft);
+    }
+
+    /**
+     * FindPublishableItems method
+     *
+     * @param \Cake\ORM\Query $query The Query object to be modified
+     * @param array $options List of options to pass to the finder
+     * @return \Cake\ORM\Query Modified Query object
+     */
+    public function findPublishableItems(Query $query, array $options): Query
+    {
+        return $query
+            ->where([
+                'id_draft_parent >' => 0,
+                'is_active' => 1,
+                'last_modified < NOW()',
+            ]);
     }
 
     /**

@@ -74,7 +74,7 @@ class ContentController extends AppController
     public function edit($id = null)
     {
         $content = $this->Content->get($id, [
-            'contain' => ['Users', 'Locations', 'Tags'],
+            'contain' => ['PrimaryAuthor', 'Contributors'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $content = $this->Content->patchEntity($content, $this->request->getData());
@@ -85,10 +85,7 @@ class ContentController extends AppController
             }
             $this->Flash->error(__('The content could not be saved. Please, try again.'));
         }
-        $users = $this->Content->Users->find('list', ['limit' => 200])->all();
-        $locations = $this->Content->Locations->find('list', ['limit' => 200])->all();
-        $tags = $this->Content->Tags->find('list', ['limit' => 200])->all();
-        $this->set(compact('content', 'users', 'locations', 'tags'));
+        $this->set(compact('content'));
     }
 
     /**

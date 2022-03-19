@@ -18,7 +18,7 @@ class WikisController extends AppController
      */
     public function index()
     {
-        $wikis = $this->paginate($this->Wikis->findByIsActive(1));
+        $wikis = $this->paginate($this->Wikis->findByIsActiveAndIdDraftParent(1, 0));
 
         $this->set(compact('wikis'));
     }

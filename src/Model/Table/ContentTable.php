@@ -259,7 +259,10 @@ class ContentTable extends Table
     public function findLatest(Query $query, array $options)
     {
         return $query
-            ->where(['is_active' => 1])
+            ->where([
+                'is_active' => 1,
+                'id_draft_parent' => 0,
+            ])
             ->limit($options['numArticles'] ?? 4)
             ->order(['last_modified' => 'DESC']);
     }

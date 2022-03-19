@@ -26,6 +26,7 @@
             <file>tests/TestCase/Model/Table/ContentTableTest.php</file>
             <file>tests/TestCase/Model/Table/CorpsTableTest.php</file>
             <file>tests/TestCase/Model/Table/WikisTableTest.php</file>
+            <file>tests/TestCase/View/Helper/EditorialHelperTest.php</file>
         </testsuite>
         <!-- Add plugin test suites here. -->
     </testsuites>

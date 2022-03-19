@@ -109,6 +109,16 @@ class DraftBehaviorTest extends TestCase
     /**
      * @return void
      * @test
+     * @testdox ContentTable findPublishableItems method returns correct number of publishable drafts
+     */
+    public function contentFindPublishableItems(): void
+    {
+        $this->assertCount(1, $this->Content->find('publishableItems')->all());
+    }
+
+    /**
+     * @return void
+     * @test
      * @testdox ContentTable publish method returns true after draft is published
      */
     public function contentPublishReturnsTrueWhenSuccessful(): void
@@ -163,7 +173,7 @@ class DraftBehaviorTest extends TestCase
     {
         $this->Content->publish(7);
         $this->assertEquals(
-            'Apr 3, 2022, 1:14 PM',
+            'Mar 3, 2022, 1:14 PM',
             $this->Content->get(1)->last_modified->nice()
         );
     }
@@ -233,6 +243,16 @@ class DraftBehaviorTest extends TestCase
     /**
      * @return void
      * @test
+     * @testdox WikisTable findPublishableItems method returns correct number of publishable drafts
+     */
+    public function wikiFindPublishableItems(): void
+    {
+        $this->assertCount(1, $this->Wikis->find('publishableItems')->all());
+    }
+
+    /**
+     * @return void
+     * @test
      * @testdox WikisTable publish method returns true after draft is published
      */
     public function wikiPublishReturnsTrueWhenSuccessful(): void
@@ -287,7 +307,7 @@ class DraftBehaviorTest extends TestCase
     {
         $this->Wikis->publish(4);
         $this->assertEquals(
-            'Apr 3, 2022, 1:14 PM',
+            'Mar 3, 2022, 1:14 PM',
             $this->Wikis->get(1)->last_modified->nice()
         );
     }
@@ -357,6 +377,16 @@ class DraftBehaviorTest extends TestCase
     /**
      * @return void
      * @test
+     * @testdox CorpsTable findPublishableItems method returns correct number of publishable drafts
+     */
+    public function corpFindPublishableItems(): void
+    {
+        $this->assertCount(1, $this->Corps->find('publishableItems')->all());
+    }
+
+    /**
+     * @return void
+     * @test
      * @testdox CorpsTable publish method returns true after draft is published
      */
     public function corpPublishReturnsTrueWhenSuccessful(): void
@@ -411,7 +441,7 @@ class DraftBehaviorTest extends TestCase
     {
         $this->Corps->publish(4);
         $this->assertEquals(
-            'Apr 3, 2022, 1:14 PM',
+            'Mar 3, 2022, 1:14 PM',
             $this->Corps->get(1)->last_modified->nice()
         );
     }

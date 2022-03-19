@@ -31,6 +31,37 @@ class ContentControllerTest extends TestCase
     ];
 
     /**
+     * Test reportIndex method - returns 2xx/OK response, contains 'Reports', and uses correct 'report_index' template
+     *
+     * @return void
+     * @uses \App\Controller\ContentController::reportIndex()
+     * @test
+     * @testdox /report returns 2xx/OK response code, response contains 'Reports', and 'report_index' template is rendered
+     */
+    public function reportIndexIsOk(): void
+    {
+        $this->get('/report');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Reports');
+        $this->assertTemplate('report_index');
+    }
+
+    /**
+     * Test reportIndex method - /report returns correct number of is_active Content items
+     *
+     * @return void
+     * @uses \App\Controller\ContentController::reportIndex()
+     * @test
+     * @testdox /report returns correct number of is_active Content items
+     */
+    public function index(): void
+    {
+        $this->get('/report');
+        $reports = $this->viewVariable('reports');
+        $this->assertCount(6, $reports);
+    }
+
+    /**
      * Test view method
      *
      * @return void
@@ -50,21 +81,5 @@ class ContentControllerTest extends TestCase
         $this->assertResponseContains($report->title);
         $this->assertResponseContains($report->primary_author->full_name);
         $this->assertTemplate('view');
-    }
-
-    /**
-     * Test reportIndex method
-     *
-     * @return void
-     * @uses \App\Controller\ContentController::reportIndex()
-     * @test
-     * @testdox /report returns 2xx/OK response code, response contains 'Reports', and 'report_index' template is rendered
-     */
-    public function reportIndexIsOk(): void
-    {
-        $this->get('/report');
-        $this->assertResponseOk();
-        $this->assertResponseContains('Reports');
-        $this->assertTemplate('report_index');
     }
 }
