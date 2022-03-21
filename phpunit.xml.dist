@@ -20,6 +20,7 @@
             <directory>tests/TestCase/Model/Entity/</directory>
             <directory>tests/TestCase/Controller/Admin/</directory>
             <!-- <file>tests/TestCase/ApplicationTest.php</file> -->
+            <file>tests/TestCase/Command/EditorialPublishCommandTest.php</file>
             <file>tests/TestCase/Controller/ContentControllerTest.php</file>
             <file>tests/TestCase/Controller/CorpsControllerTest.php</file>
             <file>tests/TestCase/Controller/WikisControllerTest.php</file>
