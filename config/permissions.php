@@ -127,12 +127,31 @@ return [
                 return false;
             }
         ],
-        //all roles allowed to Pages/display
+        // Pages - no auth required
         [
-            'role' => '*',
             'controller' => 'Pages',
-            'action' => 'display',
+            'action' => 'home',
+            'bypassAuth' => true,
         ],
+        // Content - no auth required
+        [
+            'controller' => 'Content',
+            'action' => ['reportIndex', 'view'],
+            'bypassAuth' => true,
+        ],
+        // Corps - no auth required
+        [
+            'controller' => 'Corps',
+            'action' => ['index', 'view'],
+            'bypassAuth' => true,
+        ],
+        // Wikis - no auth required
+        [
+            'controller' => 'Wikis',
+            'action' => ['index', 'view'],
+            'bypassAuth' => true,
+        ],
+        // DebugKit
         [
             'role' => '*',
             'plugin' => 'DebugKit',
