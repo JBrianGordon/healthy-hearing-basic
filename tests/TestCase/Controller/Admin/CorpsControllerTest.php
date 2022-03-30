@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\CorpsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -27,6 +26,40 @@ class CorpsControllerTest extends TestCase
         'app.Advertisements',
         'app.CorpsUsers',
     ];
+
+    /**
+     * login method to set session Auth
+     *
+     * @return void
+     */
+    protected function login($userId = 1): void
+    {
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get($userId);
+        $this->session(['Auth' => $user]);
+    }
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->cleanup();
+        parent::tearDown();
+    }
 
     /**
      * Test index method
@@ -99,6 +132,7 @@ class CorpsControllerTest extends TestCase
      */
     public function draftWithUnallowedGetRequest(): void
     {
+        //$this->login();
         $this->get('/admin/corps/draft/1');
         $this->assertResponseError();
     }
@@ -155,6 +189,7 @@ class CorpsControllerTest extends TestCase
      */
     public function draftToCreateNewCorpDraft(): void
     {
+        //$this->login();
         $this->enableCsrfToken();
         $this->enableSecurityToken();
         $this->post('/admin/corps/draft/3');
@@ -171,6 +206,7 @@ class CorpsControllerTest extends TestCase
      */
     public function draftToRedirectToExistingCorpDraft(): void
     {
+        //$this->login();
         $this->enableRetainFlashMessages();
         $this->enableCsrfToken();
         $this->enableSecurityToken();
@@ -178,5 +214,6 @@ class CorpsControllerTest extends TestCase
         $this->assertRedirect('admin/corps/edit/4');
         $this->assertFlashMessage('This report has an existing draft below.', 'flash');
     }
+
     // * * * * *
 }

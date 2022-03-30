@@ -64,6 +64,7 @@ class UsersFixture extends TestFixture
                 'clinic_password' => 'Lorem ip',
                 'timezone_offset' => 1,
                 'timezone' => 'L',
+                'role' => 'admin'
             ],
             [
                 'id' => 2,

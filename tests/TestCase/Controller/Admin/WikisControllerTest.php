@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\WikisController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -27,6 +26,40 @@ class WikisControllerTest extends TestCase
         'app.TagWikis',
         'app.UsersWikis',
     ];
+
+    /**
+     * login method to set session Auth
+     *
+     * @return void
+     */
+    protected function login($userId = 1): void
+    {
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get($userId);
+        $this->session(['Auth' => $user]);
+    }
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->cleanup();
+        parent::tearDown();
+    }
 
     /**
      * Test index method
@@ -178,5 +211,6 @@ class WikisControllerTest extends TestCase
         $this->assertRedirect('admin/wikis/edit/4');
         $this->assertFlashMessage('This report has an existing draft below.', 'flash');
     }
+
     // * * * * *
 }

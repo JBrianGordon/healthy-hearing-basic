@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\ContentController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -30,6 +29,40 @@ class ContentControllerTest extends TestCase
         'app.ContentLocations',
         'app.ContentTags',
     ];
+
+    /**
+     * login method to set session Auth
+     *
+     * @return void
+     */
+    protected function login($userId = 1): void
+    {
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get($userId);
+        $this->session(['Auth' => $user]);
+    }
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->cleanup();
+        parent::tearDown();
+    }
 
     /**
      * Test index method
@@ -181,6 +214,7 @@ class ContentControllerTest extends TestCase
         $this->assertRedirect('admin/content/edit/7');
         $this->assertFlashMessage('This report has an existing draft below.', 'flash');
     }
+
     // * * * * *
 
     // * * * * *
@@ -262,5 +296,6 @@ class ContentControllerTest extends TestCase
         $this->assertRedirect('admin/content/edit/1');
         $this->assertFlashMessage('Republish successful!', 'flash');
     }
+
     // * * * * *
 }
