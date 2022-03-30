@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class RenameOriginalUsersTable extends AbstractMigration
+class RenameIsActiveAndLastLoginOnUsers extends AbstractMigration
 {
     /**
      * Change Method.
@@ -15,7 +15,8 @@ class RenameOriginalUsersTable extends AbstractMigration
     public function change()
     {
         $this->table('users')
-            ->rename('users_original')
-            ->save();
+            ->renameColumn('is_active', 'active')
+            ->renameColumn('lastlogin', 'last_login')
+            ->update();
     }
 }

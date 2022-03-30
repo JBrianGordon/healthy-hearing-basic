@@ -106,6 +106,15 @@ return [
             'controller' => '*',
             'action' => '*',
         ],
+        // admin prefix roles
+        [
+            'role' => 'admin',
+            'prefix' => 'Admin',
+            'extension' => '*',
+            'plugin' => '*',
+            'controller' => '*',
+            'action' => '*',
+        ],
         //specific actions allowed for the all roles in Users plugin
         [
             'role' => '*',
@@ -141,12 +150,14 @@ return [
         ],
         // Corps - no auth required
         [
+            'prefix' => false,
             'controller' => 'Corps',
             'action' => ['index', 'view'],
             'bypassAuth' => true,
         ],
         // Wikis - no auth required
         [
+            'prefix' => false,
             'controller' => 'Wikis',
             'action' => ['index', 'view'],
             'bypassAuth' => true,

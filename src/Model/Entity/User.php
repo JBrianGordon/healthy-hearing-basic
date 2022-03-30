@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use CakeDC\Users\Model\Entity\User as CakeDcUser;
 
 /**
  * User Entity
@@ -67,7 +68,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\QueueTask[] $queue_tasks
  * @property \App\Model\Entity\Wiki[] $wikis
  */
-class User extends Entity
+class User extends CakeDcUser
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
