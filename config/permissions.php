@@ -109,7 +109,7 @@ return [
         // admin prefix roles
         [
             'role' => 'admin',
-            'prefix' => 'Admin',
+            'prefix' => 'admin',
             'extension' => '*',
             'plugin' => '*',
             'controller' => '*',
