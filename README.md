@@ -41,8 +41,8 @@ hhadmin@vagrant:/var/www/hh$ composer install
 ```
 When asked about folder permissions, select/enter the _yes_ option.
 
-### Set up local development database
-Update `config/app_local.php` to include the username, password, and database name for your local application database:
+### Set up local development database connections
+Update `config/app_local.php` to include the username, password, and database name for your local application database and test database:
 ```php
     /*
      * Connection information used by the ORM to connect
@@ -68,6 +68,16 @@ Update `config/app_local.php` to include the username, password, and database na
             'database' => '*****',
         ],
 ```
+
+### Check status of and run database migrations
+It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
+```bash
+hhadmin@vagrant:/var/www/hh$ bin/cake migrations status
+hhadmin@vagrant:/var/www/hh$ bin/cake migrations migrate
+```
+
+### Set up MySQL Workbench connection to your VM
+
 
 ### Add local SMTP server settings
 Update `config/app_local.php` to include the following `use` statement and settings for your local SMTP server (MailHog):
@@ -105,13 +115,6 @@ This SMTP server/email inbox can be accessed from your browser at the VM's IP ad
 192.168.56.10 local.mailbox (access mailbox with http://local.mailbox:8025)
 ```
 Whatever you decide, bookmarking your local mailbox's URL is a good idea.
-
-### Check status of and run database migrations
-It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
-```bash
-hhadmin@vagrant:/var/www/hh$ bin/cake migrations status
-hhadmin@vagrant:/var/www/hh$ bin/cake migrations migrate
-```
 
 ### Add symlink for DebugKit plugin
 You will likely need to add a `webroot` symlink to see the CakePHP DebugKit plugin toolbar. You can add this symlink with the following command:
