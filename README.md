@@ -33,3 +33,38 @@ After creating those two directories, re-run the Vagrant "`shell`" provisioner _
 Your-Computer-Name:HH-CakePHP4x-DevEnv user.name$ vagrant provision --provision-with shell
 ```
 This will set the proper permissions on the newly created directories.
+
+### Install composer-defined dependencies
+From within your VM and as the `hhadmin` user, run the following command:
+```bash
+hhadmin@vagrant:/var/www/hh$ composer install
+```
+When asked about folder permissions, select/enter the _yes_ option.
+
+### Set up local development database
+Update `config/app_local.php` to include the username, password, and database name for your local application database:
+```php
+    /*
+     * Connection information used by the ORM to connect
+     * to your application's datastores.
+     *
+     * See app.php for more configuration options.
+     */
+    'Datasources' => [
+        'default' => [
+            'host' => 'localhost',
+            'username' => '***',
+            'password' => '*****',
+            'database' => '*****',
+        ],
+
+        /*
+         * The test connection is used during the test suite.
+         */
+        'test' => [
+            'host' => 'localhost',
+            'username' => '***',
+            'password' => '*****',
+            'database' => '*****',
+        ],
+```
