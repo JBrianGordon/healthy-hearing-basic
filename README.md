@@ -75,3 +75,9 @@ It's possible that you will need to run migrations after importing a copy of the
 hhadmin@vagrant:/var/www/hh$ bin/cake migrations status
 hhadmin@vagrant:/var/www/hh$ bin/cake migrations migrate
 ```
+
+### Add symlink for DebugKit plugin
+You will likely need to add a `webroot` symlink to see the CakePHP DebugKit plugin toolbar. You can add this symlink with the following command:
+```bash
+hhadmin@vagrant:/var/www/hh$ bin/cake plugin assets symlink
+```
