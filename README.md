@@ -98,6 +98,12 @@ Click _Test Connection_; hopefully you get a positive result (MySQL Workbench ca
 
 If you have made a successful connection, you should now be able to access the MySQL server from the main _MySQL Connections_ list.
 
+### Import a copy of the database
+**Note:** This will be updated in the future when we upgrade our database importing process
+Once you access the MySQL server on your VM with MySQL Workbench, you should be able to import a copy of the HH database using the _Data Import/Restore_ function from the _MANAGEMENT_ section of the _Administration_ tab.
+
+You only have to select the `.sql` file you would like to import and the _Default Target Schema_ as a target.
+
 ### Check status of and run database migrations
 It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
 ```bash
