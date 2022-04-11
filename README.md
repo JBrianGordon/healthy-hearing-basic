@@ -23,3 +23,13 @@ remote: Total 1481 (delta 456), reused 542 (delta 225), pack-reused 699
 Receiving objects: 100% (1481/1481), 641.23 KiB | 282.00 KiB/s, done.
 Resolving deltas: 100% (1052/1052), done.
 ```
+
+### Make `tmp` and `logs` directories in `hh` directory
+```bash
+hhadmin@vagrant:/var/www/hh$ mkdir tmp logs
+```
+After creating those two directories, re-run the Vagrant "`shell`" provisioner _from your computer_ in the directory where your environment files are located:
+```bash
+Your-Computer-Name:HH-CakePHP4x-DevEnv user.name$ vagrant provision --provision-with shell
+```
+This will set the proper permissions on the newly created directories.
