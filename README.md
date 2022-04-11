@@ -68,3 +68,10 @@ Update `config/app_local.php` to include the username, password, and database na
             'database' => '*****',
         ],
 ```
+
+### Check status of and run database migrations
+It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
+```bash
+hhadmin@vagrant:/var/www/hh$ bin/cake migrations status
+hhadmin@vagrant:/var/www/hh$ bin/cake migrations migrate
+```
