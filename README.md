@@ -69,15 +69,33 @@ Update `config/app_local.php` to include the username, password, and database na
         ],
 ```
 
+
+### Set up MySQL Workbench connection to your VM
+This has been tested with MySQL Workbench version 8.0.27.
+
+Beside _MySQL Connections_, click the plus sign button.
+
+Add/modify the following settings:
+_Connection Name_: `Vagrant - CakePHP 4.x`
+_Connection Method_ to: `Standard TCP/IP over SSH`
+_SSH Hostname_ to: `127.0.0.1:2223`
+_SSH Username_: `vagrant`
+_SSH Password_: Select _Store in Keychain..._ and add the vagrant ssh password (`vagrant`)
+_MySQL Hostname_: 127.0.0.1
+_MySQL Server Port_: 3307
+_Username_: `root`
+_Password_: Select _Store in Keychain..._ and add the MySQL password (hidden in our Ansible vault, `hhvault`)
+
+Click _Test Connection_; hopefully you get a positive result (MySQL Workbench can be finicky)!
+
+If you have made a successful connection, you should now be able to access the MySQL server from the main _MySQL Connections_ list.
+
 ### Check status of and run database migrations
 It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
 ```bash
 hhadmin@vagrant:/var/www/hh$ bin/cake migrations status
 hhadmin@vagrant:/var/www/hh$ bin/cake migrations migrate
 ```
-
-### Set up MySQL Workbench connection to your VM
-
 
 ### Add local SMTP server settings
 Update `config/app_local.php` to include the following `use` statement and settings for your local SMTP server (MailHog):
