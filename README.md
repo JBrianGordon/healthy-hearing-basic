@@ -69,6 +69,43 @@ Update `config/app_local.php` to include the username, password, and database na
         ],
 ```
 
+### Add local SMTP server settings
+Update `config/app_local.php` to include the following `use` statement and settings for your local SMTP server (MailHog):
+```php
+<?php
+/*
+ * Local configuration file to provide any overrides to your app.php configuration.
+ * Copy and save this file as app_local.php and make changes as required.
+ * Note: It is not recommended to commit files with credentials such as app_local.php
+ * into source code version control.
+ */
+use Cake\Mailer\Transport\SmtpTransport;
+
+return [
+.
+.
+.
+    /*
+     * Email configuration.
+     *
+     * Host and credential configuration in case you are using SmtpTransport
+     *
+     * See app.php for more configuration options.
+     */
+    'EmailTransport' => [
+        'default' => [
+            'className' => SmtpTransport::class,
+            'host' => 'localhost',
+            'port' => 1025,
+        ],
+    ],
+```
+This SMTP server/email inbox can be accessed from your browser at the VM's IP address at port 8025 (e.g. `http://192.168.56.10:8025`). You can also add a custom URL in your development machine's `/etc/hosts` file if you like:
+```bash
+192.168.56.10 local.mailbox (access mailbox with http://local.mailbox:8025)
+```
+Whatever you decide, bookmarking your local mailbox's URL is a good idea.
+
 ### Check status of and run database migrations
 It's possible that you will need to run migrations after importing a copy of the database. You can check the status of and run database migrations with the following commands:
 ```bash
