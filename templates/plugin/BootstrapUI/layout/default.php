@@ -25,21 +25,21 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake']) ?>
+    <?= $this->Html->css('BootstrapUI.bootstrap.min'); ?>
+    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
+    <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-nav">
-        <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Healthy</span>Hearing</a>
-        </div>
-        <div class="top-nav-links">
-            <a href="/help">Wikis</a>
-            <a href="/report">Reports</a>
-        </div>
+    <nav class="navbar navbar-light bg-light sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="/img/hh-logo.svg" alt="" width="198" height="40">
+        </a>
+      </div>
     </nav>
     <main class="main">
         <div class="container">
