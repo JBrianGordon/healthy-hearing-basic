@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48f6fe85adf1f08c33f2ea17b900b69d",
+    "content-hash": "d573dbc1e9129dde7f41d9fabf92bcfd",
     "packages": [
         {
             "name": "cakedc/auth",
@@ -642,16 +642,16 @@
         },
         {
             "name": "friendsofcake/bootstrap-ui",
-            "version": "3.1.2",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfCake/bootstrap-ui.git",
-                "reference": "8fca5c21105899698f29ec1dd00689e05b4822be"
+                "reference": "6924ce44d72af0346998054f715907682210ffd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/8fca5c21105899698f29ec1dd00689e05b4822be",
-                "reference": "8fca5c21105899698f29ec1dd00689e05b4822be",
+                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/6924ce44d72af0346998054f715907682210ffd7",
+                "reference": "6924ce44d72af0346998054f715907682210ffd7",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "issues": "http://github.com/friendsofcake/bootstrap-ui/issues",
                 "source": "http://github.com/friendsofcake/bootstrap-ui"
             },
-            "time": "2022-02-23T13:02:28+00:00"
+            "time": "2022-04-04T15:57:25+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
