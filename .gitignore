@@ -6,6 +6,7 @@
 /node_modules/*
 /tmp/*
 /vendor/*
+webroot/css/*
 webroot/debug_kit
 webroot/coverage
 
