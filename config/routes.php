@@ -100,11 +100,13 @@ return static function (RouteBuilder $routes) {
     });
 
     // Admin-prefixed routes
-    $routes->prefix('Admin', function (RouteBuilder $routes) {
+    $routes->prefix('Admin', function (RouteBuilder $adminBuilder) {
+        $adminBuilder->connect('/', 'Utils::panel');
+
         // All routes here will be prefixed with `/admin`, and
         // have the `'prefix' => 'Admin'` route element added that
         // will be required when generating URLs for these routes
-        $routes->fallbacks(DashedRoute::class);
+        $adminBuilder->fallbacks(DashedRoute::class);
     });
 
     /*
