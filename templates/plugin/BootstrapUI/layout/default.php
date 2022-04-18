@@ -34,7 +34,7 @@
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid mx-5">
         <a class="navbar-brand" href="#">
           <img src="/img/hh-logo.svg" alt="" width="198" height="40">
