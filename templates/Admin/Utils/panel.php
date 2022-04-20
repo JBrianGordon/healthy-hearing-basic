@@ -22,11 +22,15 @@ $adminMenu = Configure::read('adminMenu');
                 <div class="col dropdown">
                   <button class="btn btn-outline-secondary dropdown-toggle w-100 rounded-pill" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><?= $itemTitle ?></button>
                   <?php if (!empty($itemContents['items'])): ?>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <?php foreach ($itemContents['items'] as $subItemTitle => $subItem): ?>
-                    <li><a class="dropdown-item" href="<?= $subItem['url'] ?>"><?= $subItemTitle ?></a></li>
-                    <?php endforeach; ?>
-                  </ul>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <?php foreach ($itemContents['items'] as $subItemTitle => $subItem): ?>
+                        <?php if ($subItemTitle == 'divider' && $subItem === true): ?>
+                          <li><hr class="dropdown-divider"></li>
+                        <?php else: ?>
+                          <li><a class="dropdown-item" href="<?= $subItem['url'] ?>"><?= $subItemTitle ?></a></li>
+                        <?php endif; ?>
+                      <?php endforeach; ?>
+                    </ul>
                   <?php endif; ?>
                 </div>
               <?php else: ?>

@@ -2,7 +2,9 @@
 
 use Cake\Utility\Inflector;
 
-// Settings for Admin Menu
+/*******************************
+********** Admin Menu **********
+********************************/
 
 /*******************************
 * Admin - Editorial
@@ -262,19 +264,194 @@ $utilitiesMenu = [
     'items' => $utilitiesItems,
 ];
 
-$adminSection = [
-    'Admin' => [
-        'Editorial' => $editorialMenu,
-        'Locations - FAC' => $locationsMenu,
-        'Imports' => $importsMenu,
-        'Reviews' => $reviewsMenu,
-        'Call Concierge' => $callAssistMenu,
-        'Call Tracking' => $callTrackingMenu,
-        'SEO Tools' => $seoToolsMenu,
-        'Utilities' => $utilitiesMenu,
-    ]
+/**********************************
+********** IT Admin Menu **********
+***********************************/
+
+/*******************************
+* IT - Utilities
+********************************/
+$itUtilitiesItems = [];
+$itUtilitiesItems['Quiz results'] = [
+    'url' => '/admin/quiz_results',
+];
+$itUtilitiesItems['SEO Blacklists'] = [
+    'url' => '/admin/seo/seo_blacklists',
+];
+$itUtilitiesItems['SEO URIs'] = [
+    'url' => '/admin/seo/seo_uris',
+];
+$itUtilitiesItems['Sitemap URLs'] = [
+    'url' => '/admin/sitemap_urls',
+];
+$itUtilitiesItems['Cloud assets'] = [
+    'url' => '/admin/cloud_assets',
+];
+$itUtilitiesItems['Fix cache permissions'] = [
+    'url' => '/admin/utils/cache_permissions',
+];
+$itUtilitiesMenu = [
+    'items' => $itUtilitiesItems,
 ];
 
+/*******************************
+* IT - Call Concierge (Legacy)
+********************************/
+$itConciergeLegacyItems = [];
+$itConciergeLegacyItems['Survey Calls'] = [
+    'url' => '/admin/ca_call_groups/surveys',
+    'icon' => 'glyphicon glyphicon-bullhorn',
+];
+$itConciergeLegacyItems['Survey Metrics'] = [
+    'url' => '/admin/ca_call_groups/survey_metrics',
+    'icon' => 'glyphicon glyphicon-stats',
+];
+$itConciergeLegacyMenu = [
+    'items' => $itConciergeLegacyItems,
+];
+
+
+/********************************
+********** Writer Menu **********
+*********************************/
+
+/*******************************
+* Writer - Editorial
+********************************/
+$writerEditorialMenu = $editorialMenu;
+unset($writerEditorialMenu['items']['Browse ads']);
+unset($writerEditorialMenu['items']['Misc. pages']);
+
+/****************************************************
+********** Customer Support Assistant Menu **********
+*****************************************************/
+
+/*******************************
+* CSA - Locations / FAC
+********************************/
+$csaLocationsMenu = $locationsMenu;
+
+/*******************************
+* CSA - Imports
+********************************/
+$csaImportsMenu = $importsMenu;
+
+/*******************************
+* CSA - Reviews
+********************************/
+$csaReviewsMenu = $reviewsMenu;
+
+/**********************************************
+********** Call Concierge Agent Menu **********
+***********************************************/
+
+/*******************************
+* CCA - Outbound Calls
+********************************/
+$outboundCalls = [
+    'url' => '/admin/ca_call_groups/outbound',
+    'icon' => 'glyphicon glyphicon-bullhorn',
+];
+
+/*******************************
+* CCA - Add Inbound Call
+********************************/
+$addInboundCall = [
+    'url' => '/admin/ca_calls/edit',
+    'icon' => 'glyphicon glyphicon-plus',
+];
+
+/*******************************
+* CCA - Return Call From Clinic
+********************************/
+$returnCallFromClinic = [
+    'url' => '/admin/ca_calls/clinic_lookup',
+    'icon' => 'glyphicon glyphicon-plus',
+];
+
+/*******************************
+* CCA - Activation Dashboard
+********************************/
+$activationDashboard = [
+    'url' => '/admin/locations/activation_dashboard',
+    'icon' => 'glyphicon glyphicon-check',
+];
+
+/***************************************************
+********** Call Concierge Supervisor Menu **********
+****************************************************/
+
+/*******************************
+* CCS - Browse Call Groups
+********************************/
+$browseCallGroups = [
+    'url' => '/admin/ca_call_groups',
+    'icon' => 'glyphicon glyphicon-list',
+];
+
+/*******************************
+* CCS - Browse Calls
+********************************/
+$browseCalls = [
+    'url' => '/admin/ca_calls',
+    'icon' => 'glyphicon glyphicon-list',
+];
+
+/*******************************
+* CCS - Metrics (Calls)
+********************************/
+$callMetrics = [
+    'url' => '/admin/ca_call_groups/metrics',
+    'icon' => 'glyphicon glyphicon-stats',
+];
+
+/*******************************
+* CCS - Metrics (Forms)
+********************************/
+$metricsRequestForm = [
+    'url' => '/admin/ca_call_groups/request_form_metrics',
+    'icon' => 'glyphicon glyphicon-stats',
+];
+
+/*****************************************
+********** Complete Admin Panel **********
+******************************************/
+
 return [
-    'adminMenu' => $adminSection
+    'adminMenu' => [
+        'Admin' => [
+            'Editorial'                 => $editorialMenu,
+            'Locations - FAC'           => $locationsMenu,
+            'Imports'                   => $importsMenu,
+            'Reviews'                   => $reviewsMenu,
+            'Call Concierge'            => $callAssistMenu,
+            'Call Tracking'             => $callTrackingMenu,
+            'SEO Tools'                 => $seoToolsMenu,
+            'Utilities'                 => $utilitiesMenu,
+        ],
+        'IT Admin' => [
+            'IT - Utilities'            => $itUtilitiesMenu,
+            'IT - Call Concierge'       => $itConciergeLegacyMenu,
+        ],
+        'Writer' => [
+            'Editorial'                 => $writerEditorialMenu
+        ],
+        'Customer Support Assistant' => [
+            'Locations - FAC'           => $csaLocationsMenu,
+            'Imports'                   => $csaImportsMenu,
+            'Reviews'                   => $csaReviewsMenu,
+        ],
+        'Call Concierge Agent' => [
+            'Outbound Calls'            => $outboundCalls,
+            'Add Inbound Call'          => $addInboundCall,
+            'Return Call From Clinic'   => $returnCallFromClinic,
+            'Activation Dashboard'      => $activationDashboard,
+        ],
+        'Call Concierge Supervisor' => [
+            'Browse Call Groups'        => $browseCallGroups,
+            'Browse Calls'              => $browseCalls,
+            'Metrics (Calls)'           => $callMetrics,
+            'Metrics (Forms)'           => $metricsRequestForm,
+        ],
+    ]
 ];
