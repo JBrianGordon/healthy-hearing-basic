@@ -20,7 +20,12 @@ class ContentController extends AppController
      */
     public function index()
     {
-        $content = $this->paginate($this->Content);
+        $content = $this->paginate($this->Content,[
+            'contain' => ['PrimaryAuthor'],
+            'order' => [
+                'Content.last_modified' => 'desc'
+            ]
+        ]);
 
         $this->set(compact('content'));
     }
