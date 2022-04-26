@@ -69,6 +69,7 @@ class Application extends BaseApplication
             $this->addPlugin('IdeHelper');
         }
         $this->addPlugin('BootstrapUI');
+        $this->addPlugin('Search');
     }
 
     /**
