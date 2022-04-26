@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Content[]|\Cake\Collection\CollectionInterface $content
  */
 ?>
-<div class="content index content">
+<div class="content index">
     <?= $this->Html->link(__('New Content'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Content') ?></h3>
     <div class="table-responsive">
