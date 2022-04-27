@@ -56,7 +56,7 @@ class Application extends BaseApplication
             );
         }
 
-        $this->addPlugin(\CakeDC\Users\Plugin::class);
+        $this->addPlugin(\CakeDC\Users\Plugin::class, ['routes' => true, 'bootstrap' => true]);
         Configure::write('Users.config', ['users']);
 
         /*
