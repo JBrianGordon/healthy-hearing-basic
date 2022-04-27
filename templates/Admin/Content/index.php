@@ -7,6 +7,15 @@
 <div class="content index">
     <?= $this->Html->link(__('New Content'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Content') ?></h3>
+
+    <?php
+        echo $this->Form->create(null, ['valueSources' => 'query']);
+        echo $this->Form->control('q', ['label' => 'Query']);
+        echo $this->Form->button('Filter', ['type' => 'submit']);
+        echo $this->Html->link('Reset', ['action' => 'index']);
+        echo $this->Form->end();
+    ?>
+
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>

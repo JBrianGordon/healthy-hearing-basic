@@ -13,6 +13,15 @@ use App\Controller\AppController;
  */
 class ContentController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
     /**
      * Index method
      *
@@ -20,14 +29,19 @@ class ContentController extends AppController
      */
     public function index()
     {
-        $content = $this->paginate($this->Content,[
-            'contain' => ['PrimaryAuthor'],
-            'order' => [
-                'Content.last_modified' => 'desc'
-            ]
-        ]);
+        // $content = $this->paginate($this->Content,[
+        //     'contain' => ['PrimaryAuthor'],
+        //     'order' => [
+        //         'Content.last_modified' => 'desc'
+        //     ]
+        // ]);
 
-        $this->set(compact('content'));
+        $query = $this->Content
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['PrimaryAuthor'])
+            ->order(['Content.last_modified' => 'desc']);
+
+        $this->set('content', $this->paginate($query));
     }
 
     /**

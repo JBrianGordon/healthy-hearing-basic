@@ -49,8 +49,9 @@ class ContentTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors([
-            'Timestamp',
             'Draft',
+            'Search.Search',
+            'Timestamp',
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
@@ -81,6 +82,18 @@ class ContentTable extends Table
         //     'targetForeignKey' => 'tag_id',
         //     'joinTable' => 'content_tags',
         // ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title', 'short'],
+            ]);
     }
 
     /**
