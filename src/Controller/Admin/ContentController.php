@@ -13,6 +13,12 @@ use App\Controller\AppController;
  */
 class ContentController extends AppController
 {
+    public $paginate = [
+        'order' => [
+            'Content.last_modified' => 'desc'
+        ]
+    ];
+
     public function initialize(): void
     {
         parent::initialize();
@@ -42,14 +48,13 @@ class ContentController extends AppController
             ])
             ->toArray();
 
-        $query = $this->Content
+        $contentQuery = $this->Content
             ->find('search', [
                 'search' => $this->request->getQueryParams()
             ])
-            ->contain(['PrimaryAuthor'])
-            ->order(['Content.last_modified' => 'desc']);
+            ->contain(['PrimaryAuthor']);
 
-        $this->set('content', $this->paginate($query));
+        $this->set('content', $this->paginate($contentQuery));
         $this->set('typeOptions', $this->Content->typeOptions);
         $this->set('users', $users);
     }
