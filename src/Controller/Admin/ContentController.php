@@ -29,19 +29,29 @@ class ContentController extends AppController
      */
     public function index()
     {
-        // $content = $this->paginate($this->Content,[
-        //     'contain' => ['PrimaryAuthor'],
-        //     'order' => [
-        //         'Content.last_modified' => 'desc'
-        //     ]
-        // ]);
+        $users = $this->fetchTable('Users')
+            ->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'full_name'
+            ])
+            ->where([
+                'OR' => [
+                    'is_author' => 1,
+                    'is_writer' => 1
+                ]
+            ])
+            ->toArray();
 
         $query = $this->Content
-            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->find('search', [
+                'search' => $this->request->getQueryParams()
+            ])
             ->contain(['PrimaryAuthor'])
             ->order(['Content.last_modified' => 'desc']);
 
         $this->set('content', $this->paginate($query));
+        $this->set('typeOptions', $this->Content->typeOptions);
+        $this->set('users', $users);
     }
 
     /**

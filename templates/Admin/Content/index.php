@@ -10,6 +10,49 @@
 
     <?php
         echo $this->Form->create(null, ['valueSources' => 'query']);
+        echo $this->Form->control('id', ['label' => 'Content ID']);
+        echo $this->Form->control('user_id', ['label' => 'Primary Author', 'empty' => '(select one)']);
+        echo $this->Form->control('type', ['type' => 'select', 'options' => $typeOptions, 'empty' => '(select one)']);
+        echo $this->Form->control('title');
+        echo $this->Form->control('short');
+        echo $this->Form->control('body');
+        echo $this->Form->control('is_active', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
+        echo $this->Form->control('is_library_item', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
+        echo $this->Form->control('library_share_text');
+        echo $this->Form->control('is_gone', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
+        echo $this->Form->control('facebook_image', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
+        echo $this->Form->control('facebook_image_width_override', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
+        echo $this->Form->control('id_draft_parent', [
+            'type' => 'select',
+            'options' =>
+                [1 => 'Yes', 0 => 'No'],
+                'empty' => '(select one)'
+            ]);
         echo $this->Form->control('q', ['label' => 'Query']);
         echo $this->Form->button('Filter', ['type' => 'submit']);
         echo $this->Html->link('Reset', ['action' => 'index']);

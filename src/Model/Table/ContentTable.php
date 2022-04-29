@@ -34,6 +34,14 @@ use Cake\Validation\Validator;
  */
 class ContentTable extends Table
 {
+    public array $typeOptions = [
+        'article'   =>  'Articles',
+        'faq'       =>  'FAQs',
+        'interview' =>  'Interviews',
+        'news'      =>  'News',
+        'hearingcenterint' => 'HearingCenterInts',
+    ];
+
     /**
      * Initialize method
      *
@@ -85,6 +93,33 @@ class ContentTable extends Table
 
         // Setup search filter using search manager
         $this->searchManager()
+            ->value('id')
+            ->value('user_id')
+            ->value('type')
+            ->like('title', [
+                'before' => true,
+                'after' => true
+            ])
+            ->like('short', [
+                'before' => true,
+                'after' => true
+            ])
+            ->like('body', [
+                'before' => true,
+                'after' => true
+            ])
+            ->boolean('is_active')
+            ->boolean('is_library_item')
+            ->like('library_share_text', [
+                'before' => true,
+                'after' => true
+            ])
+            ->boolean('is_gone')
+            ->boolean('facebook_image')
+            ->boolean('facebook_image_width_override')
+            ->exists('id_draft_parent', [
+                'nullValue' => '0'
+            ])
             ->add('q', 'Search.Like', [
                 'before' => true,
                 'after' => true,
