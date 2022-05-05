@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -119,6 +120,26 @@ class ContentTable extends Table
             ->boolean('facebook_image_width_override')
             ->exists('id_draft_parent', [
                 'nullValue' => '0'
+            ])
+            ->add('last_mod_date_range', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    list($start, $end) = explode(',', $args['last_mod_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) use ($startDate, $endDate) {
+                        return $exp->between('last_modified', $startDate, $endDate, 'date');
+                    });
+                }
+            ])
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    list($start, $end) = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Content.created', $startDate, $endDate, 'date');
+                    });
+                }
             ])
             ->add('q', 'Search.Like', [
                 'before' => true,

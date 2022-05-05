@@ -3,15 +3,32 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content[]|\Cake\Collection\CollectionInterface $content
  */
+
+$this->loadHelper('Search.Search', [
+    'additionalBlacklist'=> [
+        'created_start_date',
+        'created_end_date',
+        'last_mod_start_date',
+        'last_mod_end_date'
+    ]
+]);
 ?>
 
 <div class="content index">
     <?= $this->Html->link(__('New Content'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Content') ?></h3>
-    <div class="d-grid justify-content-end">
-        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
-            + Advanced
-        </button>
+    <div class="row justify-content-end">
+        <?php if ($this->Search->isSearch()): ?>
+            <div class="col col-md-auto">
+                <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
+            </div>
+        <?php endif; ?>
+        <div class="col col-md-auto">
+            <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
+                + Advanced
+            </button>
+        </div>
+
     </div>
 
     <div class="collapse" id="advancedSearch">
@@ -88,11 +105,16 @@
                 'empty' => '(select one)'
             ]);
             echo $this->Form->control('q', ['label' => 'Query']);
+            echo $this->Form->control('last_mod_start_date', ['type' => 'date','label' => 'Lastmod Start Date']);
+            echo $this->Form->control('last_mod_end_date', ['type' => 'date','label' => 'Lastmod End Date']);
+            echo $this->Form->control('created_start_date', ['type' => 'date','label' => 'Created Start Date']);
+            echo $this->Form->control('created_end_date', ['type' => 'date','label' => 'Created End Date']);
+
             echo $this->Form->button('Filter', [
                 'type' => 'submit',
                 'class' => 'me-3'
             ]);
-            echo $this->Html->link('Reset', ['action' => 'index']);
+            // echo $this->Html->link('Reset', ['action' => 'index']);
             echo $this->Form->end();
         ?>
     </div>

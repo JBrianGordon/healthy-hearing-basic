@@ -48,9 +48,31 @@ class ContentController extends AppController
             ])
             ->toArray();
 
+        $requestParams = $this->request->getQueryParams();
+
+        // Last modified date range
+        $hasLastmodDateRange =
+            array_key_exists('last_mod_start_date', $requestParams) &&
+            array_key_exists('last_mod_end_date', $requestParams);
+
+        if ($hasLastmodDateRange) {
+            $requestParams['last_mod_date_range'] =
+                $requestParams['last_mod_start_date'] . ',' . $requestParams['last_mod_end_date'];
+        }
+
+        // Created date range
+        $hasCreatedDateRange =
+            array_key_exists('created_start_date', $requestParams) &&
+            array_key_exists('created_end_date', $requestParams);
+
+        if ($hasCreatedDateRange) {
+            $requestParams['created_date_range'] =
+                $requestParams['created_start_date'] . ',' . $requestParams['created_end_date'];
+        }
+
         $contentQuery = $this->Content
             ->find('search', [
-                'search' => $this->request->getQueryParams()
+                'search' => $requestParams
             ])
             ->contain(['PrimaryAuthor']);
 
