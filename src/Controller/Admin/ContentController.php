@@ -48,6 +48,12 @@ class ContentController extends AppController
             ])
             ->toArray();
 
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()
+            ->where([
+                'model' => 'Content'
+            ])->toArray();
+
         $requestParams = $this->request->getQueryParams();
 
         // Last modified date range
@@ -79,6 +85,7 @@ class ContentController extends AppController
         $this->set('content', $this->paginate($contentQuery));
         $this->set('typeOptions', $this->Content->typeOptions);
         $this->set('users', $users);
+        $this->set('crmSearches', $crmSearches);
     }
 
     /**

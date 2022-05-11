@@ -58,7 +58,7 @@ $locationsItems['CRM'] = [
     'url' => '/admin/locations/index',
 ];
 $locationsItems['CRM searches'] = [
-    'url' => '/admin/crm_searches',
+    'url' => '/admin/crm-searches',
 ];
 if (true) {
     $locationsItems['CallSource numbers'] = [

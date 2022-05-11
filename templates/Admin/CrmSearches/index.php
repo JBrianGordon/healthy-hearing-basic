@@ -16,7 +16,7 @@
                     <th><?= $this->Paginator->sort('model') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
                     <th><?= $this->Paginator->sort('is_public') ?></th>
-                    <th><?= $this->Paginator->sort('order') ?></th>
+                    <th><?= $this->Paginator->sort('priority') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -30,7 +30,7 @@
                     <td><?= h($crmSearch->model) ?></td>
                     <td><?= h($crmSearch->title) ?></td>
                     <td><?= h($crmSearch->is_public) ?></td>
-                    <td><?= $this->Number->format($crmSearch->order) ?></td>
+                    <td><?= $this->Number->format($crmSearch->priority) ?></td>
                     <td><?= h($crmSearch->created) ?></td>
                     <td><?= h($crmSearch->modified) ?></td>
                     <td class="actions">

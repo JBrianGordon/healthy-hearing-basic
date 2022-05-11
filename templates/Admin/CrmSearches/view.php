@@ -35,8 +35,8 @@
                     <td><?= $this->Number->format($crmSearch->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Order') ?></th>
-                    <td><?= $this->Number->format($crmSearch->order) ?></td>
+                    <th><?= __('Priority') ?></th>
+                    <td><?= $this->Number->format($crmSearch->priority) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Created') ?></th>

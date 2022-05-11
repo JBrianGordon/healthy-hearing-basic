@@ -14,7 +14,7 @@ use Cake\ORM\Entity;
  * @property string $title
  * @property string|null $search
  * @property bool $is_public
- * @property int $order
+ * @property int $priority
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
@@ -37,7 +37,7 @@ class CrmSearch extends Entity
         'title' => true,
         'search' => true,
         'is_public' => true,
-        'order' => true,
+        'priority' => true,
         'created' => true,
         'modified' => true,
         'user' => true,

@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
+
+use App\Controller\AppController;
 
 /**
  * CrmSearches Controller
@@ -75,15 +77,21 @@ class CrmSearchesController extends AppController
         $crmSearch = $this->CrmSearches->get($id, [
             'contain' => [],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $crmSearch = $this->CrmSearches->patchEntity($crmSearch, $this->request->getData());
             if ($this->CrmSearches->save($crmSearch)) {
                 $this->Flash->success(__('The crm search has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect([
+                    'controller' => $crmSearch->model,
+                    'prefix' => 'Admin',
+                    'action' => 'index',
+                ]);
             }
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
         }
+
         $users = $this->CrmSearches->Users->find('list', ['limit' => 200])->all();
         $this->set(compact('crmSearch', 'users'));
     }
@@ -98,13 +106,19 @@ class CrmSearchesController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+
         $crmSearch = $this->CrmSearches->get($id);
+
         if ($this->CrmSearches->delete($crmSearch)) {
             $this->Flash->success(__('The crm search has been deleted.'));
         } else {
             $this->Flash->error(__('The crm search could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect([
+            'controller' => $crmSearch->model,
+            'prefix' => 'Admin',
+            'action' => 'index',
+        ]);
     }
 }

@@ -17,6 +17,7 @@ $this->loadHelper('Search.Search', [
 <div class="content index">
     <?= $this->Html->link(__('New Content'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Content') ?></h3>
+    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="row justify-content-end">
         <?php if ($this->Search->isSearch()): ?>
             <div class="col col-md-auto">
