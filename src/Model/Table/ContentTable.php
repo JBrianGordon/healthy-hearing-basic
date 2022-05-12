@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
  * Content Model
@@ -36,10 +38,10 @@ use Cake\Validation\Validator;
 class ContentTable extends Table
 {
     public array $typeOptions = [
-        'article'   =>  'Articles',
-        'faq'       =>  'FAQs',
-        'interview' =>  'Interviews',
-        'news'      =>  'News',
+        'article' => 'Articles',
+        'faq' => 'FAQs',
+        'interview' => 'Interviews',
+        'news' => 'News',
         'hearingcenterint' => 'HearingCenterInts',
     ];
 
@@ -99,47 +101,47 @@ class ContentTable extends Table
             ->value('type')
             ->like('title', [
                 'before' => true,
-                'after' => true
+                'after' => true,
             ])
             ->like('short', [
                 'before' => true,
-                'after' => true
+                'after' => true,
             ])
             ->like('body', [
                 'before' => true,
-                'after' => true
+                'after' => true,
             ])
             ->boolean('is_active')
             ->boolean('is_library_item')
             ->like('library_share_text', [
                 'before' => true,
-                'after' => true
+                'after' => true,
             ])
             ->boolean('is_gone')
             ->boolean('facebook_image')
             ->boolean('facebook_image_width_override')
             ->exists('id_draft_parent', [
-                'nullValue' => '0'
+                'nullValue' => '0',
             ])
             ->add('last_mod_date_range', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    list($start, $end) = explode(',', $args['last_mod_date_range']);
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['last_mod_date_range']);
                     $startDate = (new FrozenTime($start));
                     $endDate = (new FrozenTime($end));
-                    $query->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) use ($startDate, $endDate) {
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
                         return $exp->between('last_modified', $startDate, $endDate, 'date');
                     });
-                }
+                },
             ])
             ->add('created_date_range', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    list($start, $end) = explode(',', $args['created_date_range']);
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
                     $startDate = (new FrozenTime($start));
                     $endDate = (new FrozenTime($end));
-                    $query->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) use ($startDate, $endDate) {
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
                         return $exp->between('Content.created', $startDate, $endDate, 'date');
                     });
-                }
+                },
             ])
             ->add('q', 'Search.Like', [
                 'before' => true,
