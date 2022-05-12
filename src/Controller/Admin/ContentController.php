@@ -76,6 +76,13 @@ class ContentController extends AppController
                 $requestParams['created_start_date'] . ',' . $requestParams['created_end_date'];
         }
 
+        if (array_key_exists('saved_search', $requestParams)) {
+            $this->set('savedSearch', true);
+        } else {
+            $this->set('savedSearch', false);
+            $this->set('currentModel', 'Content');
+        }
+
         $contentQuery = $this->Content
             ->find('search', [
                 'search' => $requestParams

@@ -46,4 +46,27 @@
             ?>
         </div>
     <?php endforeach; ?>
+    <?php if ($_isSearch === true && $savedSearch === false): ?>
+        <div class="btn-group btn-group-sm m-1" role="group">
+            <?php
+                echo $this->Form->postLink('<i class="bi bi-plus"></i> Save This Search',
+                    [
+                        'controller' => 'CrmSearches',
+                        'prefix' => 'Admin',
+                        'action' => 'save'
+                    ],
+                    [
+                        'class' => 'btn btn-warning btn-sm rounded',
+                        'data' => [
+                            'searchData' => $_searchParams,
+                            'model' => $currentModel,
+                            'userId' => $this->Identity->getId()
+                        ],
+                        'escape' => false
+                    ]
+                );
+
+            ?>
+        </div>
+    <?php endif; ?>
 </div>

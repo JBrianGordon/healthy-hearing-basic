@@ -9,7 +9,8 @@ $this->loadHelper('Search.Search', [
         'created_start_date',
         'created_end_date',
         'last_mod_start_date',
-        'last_mod_end_date'
+        'last_mod_end_date',
+        'saved_search'
     ]
 ]);
 ?>

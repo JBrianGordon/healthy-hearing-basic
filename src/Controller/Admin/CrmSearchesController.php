@@ -121,4 +121,34 @@ class CrmSearchesController extends AppController
             'action' => 'index',
         ]);
     }
+
+    public function save()
+    {
+        $data = $this->request->getData();
+        $data['searchData']['saved_search'] = true;
+
+        $saveData = [
+             'search' => json_encode($data['searchData']),
+             'title' => 'Saved Query',
+             'user_id' => $data['userId'],
+             'is_public' => true,
+             'model' => $data['model']
+        ];
+
+        $crmSearch = $this->CrmSearches->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $crmSearch = $this->CrmSearches->patchEntity($crmSearch, $saveData);
+            if ($this->CrmSearches->save($crmSearch)) {
+                $this->Flash->success(__('The crm search has been saved.'));
+
+                return $this->redirect([
+                    'controller' => $crmSearch->model,
+                    'prefix' => 'Admin',
+                    'action' => 'index',
+                ]);
+            }
+            $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
+        }
+    }
+
 }

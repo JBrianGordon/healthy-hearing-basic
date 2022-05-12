@@ -39,5 +39,6 @@ class AppView extends UIView
     {
         parent::initialize();
         $this->loadHelper('Editorial');
+        $this->loadHelper('Authentication.Identity');
     }
 }
