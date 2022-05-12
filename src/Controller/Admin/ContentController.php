@@ -15,8 +15,8 @@ class ContentController extends AppController
 {
     public $paginate = [
         'order' => [
-            'Content.last_modified' => 'desc'
-        ]
+            'Content.last_modified' => 'desc',
+        ],
     ];
 
     public function initialize(): void
@@ -38,20 +38,20 @@ class ContentController extends AppController
         $users = $this->fetchTable('Users')
             ->find('list', [
                 'keyField' => 'id',
-                'valueField' => 'full_name'
+                'valueField' => 'full_name',
             ])
             ->where([
                 'OR' => [
                     'is_author' => 1,
-                    'is_writer' => 1
-                ]
+                    'is_writer' => 1,
+                ],
             ])
             ->toArray();
 
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()
             ->where([
-                'model' => 'Content'
+                'model' => 'Content',
             ])->toArray();
 
         $requestParams = $this->request->getQueryParams();
@@ -85,7 +85,7 @@ class ContentController extends AppController
 
         $contentQuery = $this->Content
             ->find('search', [
-                'search' => $requestParams
+                'search' => $requestParams,
             ])
             ->contain(['PrimaryAuthor']);
 
