@@ -39,7 +39,11 @@
         <a class="navbar-brand" href="#">
           <img src="/img/hh-logo.svg" alt="" width="198" height="40">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggler" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarMenuToggler" aria-controls="navbarTogglerDemo03"
+          aria-expanded="false" aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMenuToggler">
