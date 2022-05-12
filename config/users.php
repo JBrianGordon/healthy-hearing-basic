@@ -315,4 +315,3 @@ $config = [
 ];
 
 return $config;
-
