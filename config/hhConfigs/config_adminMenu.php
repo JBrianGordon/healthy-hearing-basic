@@ -234,7 +234,7 @@ $seoToolsMenu = [
 * Admin - Utilities
 ********************************/
 $utilitiesItems = [];
-$hhUsers = 'HH'.' Users';
+$hhUsers = 'HH' . ' Users';
 $utilitiesItems[$hhUsers] = [
     'url' => '/admin/users',
     'icon' => 'glyphicon glyphicon-user',
@@ -309,7 +309,6 @@ $itConciergeLegacyItems['Survey Metrics'] = [
 $itConciergeLegacyMenu = [
     'items' => $itConciergeLegacyItems,
 ];
-
 
 /********************************
 ********** Writer Menu **********
@@ -420,38 +419,38 @@ $metricsRequestForm = [
 return [
     'adminMenu' => [
         'Admin' => [
-            'Editorial'                 => $editorialMenu,
-            'Locations - FAC'           => $locationsMenu,
-            'Imports'                   => $importsMenu,
-            'Reviews'                   => $reviewsMenu,
-            'Call Concierge'            => $callAssistMenu,
-            'Call Tracking'             => $callTrackingMenu,
-            'SEO Tools'                 => $seoToolsMenu,
-            'Utilities'                 => $utilitiesMenu,
+            'Editorial' => $editorialMenu,
+            'Locations - FAC' => $locationsMenu,
+            'Imports' => $importsMenu,
+            'Reviews' => $reviewsMenu,
+            'Call Concierge' => $callAssistMenu,
+            'Call Tracking' => $callTrackingMenu,
+            'SEO Tools' => $seoToolsMenu,
+            'Utilities' => $utilitiesMenu,
         ],
         'IT Admin' => [
-            'IT - Utilities'            => $itUtilitiesMenu,
-            'IT - Call Concierge'       => $itConciergeLegacyMenu,
+            'IT - Utilities' => $itUtilitiesMenu,
+            'IT - Call Concierge' => $itConciergeLegacyMenu,
         ],
         'Writer' => [
-            'Editorial'                 => $writerEditorialMenu
+            'Editorial' => $writerEditorialMenu,
         ],
         'Customer Support Assistant' => [
-            'Locations - FAC'           => $csaLocationsMenu,
-            'Imports'                   => $csaImportsMenu,
-            'Reviews'                   => $csaReviewsMenu,
+            'Locations - FAC' => $csaLocationsMenu,
+            'Imports' => $csaImportsMenu,
+            'Reviews' => $csaReviewsMenu,
         ],
         'Call Concierge Agent' => [
-            'Outbound Calls'            => $outboundCalls,
-            'Add Inbound Call'          => $addInboundCall,
-            'Return Call From Clinic'   => $returnCallFromClinic,
-            'Activation Dashboard'      => $activationDashboard,
+            'Outbound Calls' => $outboundCalls,
+            'Add Inbound Call' => $addInboundCall,
+            'Return Call From Clinic' => $returnCallFromClinic,
+            'Activation Dashboard' => $activationDashboard,
         ],
         'Call Concierge Supervisor' => [
-            'Browse Call Groups'        => $browseCallGroups,
-            'Browse Calls'              => $browseCalls,
-            'Metrics (Calls)'           => $callMetrics,
-            'Metrics (Forms)'           => $metricsRequestForm,
+            'Browse Call Groups' => $browseCallGroups,
+            'Browse Calls' => $browseCalls,
+            'Metrics (Calls)' => $callMetrics,
+            'Metrics (Forms)' => $metricsRequestForm,
         ],
-    ]
+    ],
 ];
