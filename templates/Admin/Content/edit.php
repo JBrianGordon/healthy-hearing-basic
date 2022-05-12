@@ -35,13 +35,22 @@
                 ?>
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="content-tab" data-bs-toggle="tab" data-bs-target="#content" type="button" role="tab" aria-controls="content" aria-selected="true">Content</button>
+                        <button class="nav-link active" id="content-tab"
+                            data-bs-toggle="tab" data-bs-target="#content"
+                            type="button" role="tab"
+                            aria-controls="content" aria-selected="true">Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false">Details</button>
+                        <button class="nav-link" id="details-tab"
+                            data-bs-toggle="tab" data-bs-target="#details"
+                            type="button" role="tab"
+                            aria-controls="details" aria-selected="false">Details</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" aria-controls="admin" aria-selected="false">Admin</button>
+                        <button class="nav-link" id="admin-tab"
+                            data-bs-toggle="tab" data-bs-target="#admin"
+                            type="button" role="tab"
+                            aria-controls="admin" aria-selected="false">Admin</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
