@@ -27,7 +27,7 @@ use Cake\Core\Configure;
             echo $this->Form->control(Configure::read('Users.Key.Data.rememberMe'), [
                 'type' => 'checkbox',
                 'label' => __d('cake_d_c/users', 'Remember me'),
-                'checked' => Configure::read('Users.RememberMe.checked')
+                'checked' => Configure::read('Users.RememberMe.checked'),
             ]);
         }
         ?>
