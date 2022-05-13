@@ -7,62 +7,67 @@
 ?>
 
 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-    <?php foreach ($crmSearches as $crmSearch): ?>
+    <?php foreach ($crmSearches as $crmSearch) : ?>
         <div class="btn-group btn-group-sm m-1" role="group">
             <?php
-                echo $this->Form->postLink('<i class="bi bi-trash"></i>',
+                echo $this->Form->postLink(
+                    '<i class="bi bi-trash"></i>',
                     [
                         'controller' => 'CrmSearches',
                         'prefix' => 'Admin',
                         'action' => 'delete',
-                        $crmSearch['id']
+                        $crmSearch['id'],
                     ],
                     [
                         'class' => 'btn btn-danger rounded-start',
                         'confirm' => 'Are you sure?',
-                        'escape' => false
+                        'escape' => false,
                     ]
                 );
-                echo $this->Html->link('<i class="bi bi-pencil"></i>',
+                echo $this->Html->link(
+                    '<i class="bi bi-pencil"></i>',
                     [
                         'controller' => 'CrmSearches',
                         'prefix' => 'Admin',
                         'action' => 'edit',
-                        $crmSearch['id']
+                        $crmSearch['id'],
                     ],
                     [
                         'class' => 'btn btn-outline-secondary',
-                        'escape' => false
+                        'escape' => false,
                     ]
                 );
-                echo $this->Html->link($crmSearch['title'], [
+                echo $this->Html->link(
+                    $crmSearch['title'],
+                    [
                         'controller' => 'Content',
                         'prefix' => 'Admin',
                         'action' => 'index',
-                        '?' => json_decode($crmSearch['search'])
+                        '?' => json_decode($crmSearch['search']),
                     ],
                     ['class' => 'btn btn-outline-secondary']
                 );
             ?>
         </div>
     <?php endforeach; ?>
-    <?php if ($_isSearch === true && $savedSearch === false): ?>
+    <?php if ($_isSearch === true && $savedSearch === false) : ?>
         <div class="btn-group btn-group-sm m-1" role="group">
             <?php
-                echo $this->Form->postLink('<i class="bi bi-plus"></i> Save This Search',
+                echo $this->Form->postLink(
+                    '<i class="bi bi-plus"></i> Save This Search',
                     [
                         'controller' => 'CrmSearches',
                         'prefix' => 'Admin',
-                        'action' => 'save'
+                        'action' => 'save',
                     ],
                     [
                         'class' => 'btn btn-warning btn-sm rounded',
                         'data' => [
                             'searchData' => $_searchParams,
                             'model' => $currentModel,
-                            'userId' => $this->Identity->getId()
+                            'userId' => $this->Identity->getId(),
                         ],
-                        'escape' => false
+                        'escape' => false,
                     ]
                 );
 

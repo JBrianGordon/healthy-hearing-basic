@@ -8,10 +8,37 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Crm Search'), ['action' => 'edit', $crmSearch->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Crm Search'), ['action' => 'delete', $crmSearch->id], ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Crm Searches'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Crm Search'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            <?=
+            $this->Html->link(
+                __('Edit Crm Search'),
+                ['action' => 'edit', $crmSearch->id],
+                ['class' => 'side-nav-item']
+            )
+            ?>
+            <?=
+            $this->Form->postLink(
+                __('Delete Crm Search'),
+                ['action' => 'delete', $crmSearch->id],
+                [
+                    'confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id),
+                    'class' => 'side-nav-item',
+                ]
+            )
+            ?>
+            <?=
+            $this->Html->link(
+                __('List Crm Searches'),
+                ['action' => 'index'],
+                ['class' => 'side-nav-item'],
+            )
+            ?>
+            <?=
+            $this->Html->link(
+                __('New Crm Search'),
+                ['action' => 'add'],
+                ['class' => 'side-nav-item']
+            )
+            ?>
         </div>
     </aside>
     <div class="column-responsive column-80">
@@ -20,7 +47,19 @@
             <table>
                 <tr>
                     <th><?= __('User') ?></th>
-                    <td><?= $crmSearch->has('user') ? $this->Html->link($crmSearch->user->id, ['controller' => 'Users', 'action' => 'view', $crmSearch->user->id]) : '' ?></td>
+                    <td>
+                        <?=
+                        $crmSearch->has('user') ?
+                        $this->Html->link(
+                            $crmSearch->user->id,
+                            [
+                                'controller' => 'Users',
+                                'action' => 'view',
+                                $crmSearch->user->id,
+                            ]
+                        ) : ''
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <th><?= __('Model') ?></th>
