@@ -122,8 +122,15 @@ class CrmSearchesController extends AppController
         ]);
     }
 
+    /**
+     * Save method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful or unsucessful save.
+     */
     public function save()
     {
+        $this->disableAutoRender();
+
         $data = $this->request->getData();
         $data['searchData']['saved_search'] = true;
 
@@ -132,7 +139,7 @@ class CrmSearchesController extends AppController
              'title' => 'Saved Query',
              'user_id' => $data['userId'],
              'is_public' => true,
-             'model' => $data['model']
+             'model' => $data['model'],
         ];
 
         $crmSearch = $this->CrmSearches->newEmptyEntity();
@@ -148,7 +155,12 @@ class CrmSearchesController extends AppController
                 ]);
             }
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
+
+            return $this->redirect([
+                'controller' => $crmSearch->model,
+                'prefix' => 'Admin',
+                'action' => 'index',
+            ]);
         }
     }
-
 }
