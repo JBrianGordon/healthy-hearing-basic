@@ -36,7 +36,7 @@
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid mx-5">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <img src="/img/hh-logo.svg" alt="" width="198" height="40">
         </a>
         <button
@@ -59,6 +59,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase" href="#">News</a>
+            </li>
+            <li>
+              <?php echo $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
             </li>
           </ul>
         </div>

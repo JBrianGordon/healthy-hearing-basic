@@ -8,14 +8,12 @@
     <?= $this->Html->link(__('New State'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('States') ?></h3>
     <div class="table-responsive">
-        <table>
+        <table class="table table-striped table-bordered table-sm">
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('is_active') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -24,13 +22,33 @@
                 <tr>
                     <td><?= $this->Number->format($state->id) ?></td>
                     <td><?= h($state->name) ?></td>
-                    <td><?= h($state->is_active) ?></td>
-                    <td><?= h($state->created) ?></td>
-                    <td><?= h($state->modified) ?></td>
+                    <td>
+                        <?= $this->Html->badge(
+                            $state->is_active ? '<i class="bi bi-check-lg"></i> Active' : '<i class="bi bi-x-lg"></i> Inactive',
+                            [
+                                'class' => $state->is_active ? 'success' : 'danger',
+                            ]
+                        ); ?>
+                    </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $state->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $state->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $state->id], ['confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) ?>
+                        <div class="btn-group-vertical">
+                            <?= $this->Html->link(__('View'),
+                                [
+                                    'prefix' => false,
+                                    'controller' => 'locations',
+                                    'action' => 'cities',
+                                    'region' => $state->name,
+                                    // TODO:
+                                    //'region' =>  $this->Clinic->stateSlug($state->name)
+                                ],
+                                ['class' => 'btn btn-outline-secondary']) ?>
+                            <?= $this->Html->link(__('Edit'),
+                                ['action' => 'edit', $state->id],
+                                ['class' => 'btn btn-outline-secondary']) ?>
+                            <?= $this->Form->postLink(__('Delete'),
+                                ['action' => 'delete', $state->id],
+                                ['class' => 'btn btn-outline-secondary', 'confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) ?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
