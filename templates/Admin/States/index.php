@@ -7,11 +7,11 @@
 <div class="states index content">
     <?= $this->Html->link(__('New State'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('States') ?></h3>
+    <?= $this->element('pagination') ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('is_active') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -20,8 +20,16 @@
             <tbody>
                 <?php foreach ($states as $state): ?>
                 <tr>
-                    <td><?= $this->Number->format($state->id) ?></td>
-                    <td><?= h($state->name) ?></td>
+                    <td>
+                        <?= $this->Html->link(h($state->name), [
+                            'prefix' => false,
+                            'controller' => 'locations',
+                            'action' => 'cities',
+                            'region' => $state->name,
+                            // TODO:
+                            //'region' =>  $this->Clinic->stateSlug($state->name)
+                        ]) ?>
+                    </td>
                     <td>
                         <?= $this->Html->badge(
                             $state->is_active ? '<i class="bi bi-check-lg"></i> Active' : '<i class="bi bi-x-lg"></i> Inactive',
@@ -55,14 +63,5 @@
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <?= $this->element('pagination') ?>
 </div>
