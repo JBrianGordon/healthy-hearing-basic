@@ -37,17 +37,6 @@ class StatesControllerTest extends TestCase
     }
 
     /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\Admin\StatesController::view()
-     */
-    public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test add method
      *
      * @return void

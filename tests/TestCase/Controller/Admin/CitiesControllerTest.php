@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\CitiesController;
+use App\Controller\Admin\CitiesController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\CitiesController Test Case
+ * App\Controller\Admin\CitiesController Test Case
  *
- * @uses \App\Controller\CitiesController
+ * @uses \App\Controller\Admin\CitiesController
  */
 class CitiesControllerTest extends TestCase
 {
@@ -29,20 +29,9 @@ class CitiesControllerTest extends TestCase
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\CitiesController::index()
+     * @uses \App\Controller\Admin\CitiesController::index()
      */
     public function testIndex(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\CitiesController::view()
-     */
-    public function testView(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -51,7 +40,7 @@ class CitiesControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\CitiesController::add()
+     * @uses \App\Controller\Admin\CitiesController::add()
      */
     public function testAdd(): void
     {
@@ -62,7 +51,7 @@ class CitiesControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\CitiesController::edit()
+     * @uses \App\Controller\Admin\CitiesController::edit()
      */
     public function testEdit(): void
     {
@@ -73,7 +62,7 @@ class CitiesControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\CitiesController::delete()
+     * @uses \App\Controller\Admin\CitiesController::delete()
      */
     public function testDelete(): void
     {

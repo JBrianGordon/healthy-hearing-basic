@@ -26,22 +26,6 @@ class StatesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id State id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $state = $this->States->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('state'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.

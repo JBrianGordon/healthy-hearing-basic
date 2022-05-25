@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
  * Cities Model
@@ -43,7 +44,30 @@ class CitiesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->like('city', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->value('state')
+            ->value('zip')
+            ->value('country')
+            ->value('lat')
+            ->value('lon')
+            ->boolean('is_near_location')
+            ->boolean('is_featured')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title', 'short', 'body'],
+            ]);
     }
 
     /**

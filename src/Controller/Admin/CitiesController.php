@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
+
+use App\Controller\AppController;
 
 /**
  * Cities Controller
@@ -11,6 +13,26 @@ namespace App\Controller;
  */
 class CitiesController extends AppController
 {
+    public $paginate = [
+        'order' => [
+            'City.state' => 'asc',
+        ],
+    ];
+
+    /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
     /**
      * Index method
      *
@@ -18,25 +40,22 @@ class CitiesController extends AppController
      */
     public function index()
     {
-        $cities = $this->paginate($this->Cities);
+        $requestParams = $this->request->getQueryParams();
+        if (array_key_exists('saved_search', $requestParams)) {
+            $this->set('savedSearch', true);
+        } else {
+            $this->set('savedSearch', false);
+            $this->set('currentModel', 'Content');
+        }
+        $citiesQuery = $this->Cities
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
 
-        $this->set(compact('cities'));
-    }
+        //$cities = $this->paginate($this->Cities);
+        $this->set('cities', $this->paginate($citiesQuery));
 
-    /**
-     * View method
-     *
-     * @param string|null $id City id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $city = $this->Cities->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('city'));
+//        $this->set(compact('cities'));
     }
 
     /**
