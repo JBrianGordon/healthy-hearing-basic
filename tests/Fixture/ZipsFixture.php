@@ -6,10 +6,16 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * ZipcodesFixture
+ * ZipsFixture
  */
-class ZipcodesFixture extends TestFixture
+class ZipsFixture extends TestFixture
 {
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    public $table = 'zipcodes';
     /**
      * Init method
      *
@@ -19,7 +25,7 @@ class ZipcodesFixture extends TestFixture
     {
         $this->records = [
             [
-                'zip' => 'd3fe29f9-b954-4ccb-8be6-7361f367b4a2',
+                'zip' => '98801',
                 'lat' => 1,
                 'lon' => 1,
                 'city' => '',

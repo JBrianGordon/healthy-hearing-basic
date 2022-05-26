@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\ZipcodesController;
+use App\Controller\Admin\ZipsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\ZipcodesController Test Case
+ * App\Controller\Admin\ZipsController Test Case
  *
- * @uses \App\Controller\ZipcodesController
+ * @uses \App\Controller\Admin\ZipsController
  */
-class ZipcodesControllerTest extends TestCase
+class ZipsControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,27 +22,16 @@ class ZipcodesControllerTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'app.Zipcodes',
+        'app.Zips',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\ZipcodesController::index()
+     * @uses \App\Controller\Admin\ZipsController::index()
      */
     public function testIndex(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\ZipcodesController::view()
-     */
-    public function testView(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -51,7 +40,7 @@ class ZipcodesControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\ZipcodesController::add()
+     * @uses \App\Controller\Admin\ZipsController::add()
      */
     public function testAdd(): void
     {
@@ -62,7 +51,7 @@ class ZipcodesControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\ZipcodesController::edit()
+     * @uses \App\Controller\Admin\ZipsController::edit()
      */
     public function testEdit(): void
     {
@@ -73,7 +62,7 @@ class ZipcodesControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\ZipcodesController::delete()
+     * @uses \App\Controller\Admin\ZipsController::delete()
      */
     public function testDelete(): void
     {

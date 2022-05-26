@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ZipcodesTable;
+use App\Model\Table\ZipsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ZipcodesTable Test Case
+ * App\Model\Table\ZipsTable Test Case
  */
-class ZipcodesTableTest extends TestCase
+class ZipsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ZipcodesTable
+     * @var \App\Model\Table\ZipsTable
      */
-    protected $Zipcodes;
+    protected $Zips;
 
     /**
      * Fixtures
@@ -24,7 +24,7 @@ class ZipcodesTableTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'app.Zipcodes',
+        'app.Zips',
     ];
 
     /**
@@ -35,8 +35,8 @@ class ZipcodesTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Zipcodes') ? [] : ['className' => ZipcodesTable::class];
-        $this->Zipcodes = $this->getTableLocator()->get('Zipcodes', $config);
+        $config = $this->getTableLocator()->exists('Zips') ? [] : ['className' => ZipsTable::class];
+        $this->Zips = $this->getTableLocator()->get('Zips', $config);
     }
 
     /**
@@ -46,7 +46,7 @@ class ZipcodesTableTest extends TestCase
      */
     public function tearDown(): void
     {
-        unset($this->Zipcodes);
+        unset($this->Zips);
 
         parent::tearDown();
     }
@@ -55,7 +55,7 @@ class ZipcodesTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\ZipcodesTable::validationDefault()
+     * @uses \App\Model\Table\ZipsTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -66,7 +66,7 @@ class ZipcodesTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\ZipcodesTable::buildRules()
+     * @uses \App\Model\Table\ZipsTable::buildRules()
      */
     public function testBuildRules(): void
     {

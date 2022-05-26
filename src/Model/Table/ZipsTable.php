@@ -7,25 +7,26 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
- * Zipcodes Model
+ * Zips Model
  *
- * @method \App\Model\Entity\Zipcode newEmptyEntity()
- * @method \App\Model\Entity\Zipcode newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Zipcode[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Zipcode get($primaryKey, $options = [])
- * @method \App\Model\Entity\Zipcode findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Zipcode patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Zipcode[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Zipcode|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Zipcode saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Zipcode[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Zipcode[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Zipcode[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Zipcode[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Zip newEmptyEntity()
+ * @method \App\Model\Entity\Zip newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Zip[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Zip get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Zip findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Zip patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Zip[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Zip|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Zip saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
-class ZipcodesTable extends Table
+class ZipsTable extends Table
 {
     /**
      * Initialize method
@@ -40,6 +41,30 @@ class ZipcodesTable extends Table
         $this->setTable('zipcodes');
         $this->setDisplayField('zip');
         $this->setPrimaryKey('zip');
+
+        $this->addBehaviors(['Search.Search']);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->like('city', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->value('state')
+            ->value('zip')
+            ->value('country_code')
+            ->value('lat')
+            ->value('lon')
+            ->value('areacode')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title', 'short', 'body'],
+            ]);
     }
 
     /**
