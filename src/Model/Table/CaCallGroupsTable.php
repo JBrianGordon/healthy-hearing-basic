@@ -171,14 +171,6 @@ class CaCallGroupsTable extends Table
             ->notEmptyString('topic_tinnitus');
 
         $validator
-            ->boolean('topic_hearing_previously_tested')
-            ->notEmptyString('topic_hearing_previously_tested');
-
-        $validator
-            ->boolean('topic_aids_previously_worn')
-            ->notEmptyString('topic_aids_previously_worn');
-
-        $validator
             ->boolean('topic_medical_inquiry')
             ->notEmptyString('topic_medical_inquiry');
 

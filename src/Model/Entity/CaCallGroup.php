@@ -33,8 +33,6 @@ use Cake\ORM\Entity;
  * @property bool $topic_appt_followup
  * @property bool $topic_medical_records
  * @property bool $topic_tinnitus
- * @property bool $topic_hearing_previously_tested
- * @property bool $topic_aids_previously_worn
  * @property bool $topic_medical_inquiry
  * @property bool $topic_solicitor
  * @property bool $topic_personal_call
@@ -92,7 +90,7 @@ class CaCallGroup extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array
      */
     protected $_accessible = [
         'location_id' => true,
@@ -119,8 +117,6 @@ class CaCallGroup extends Entity
         'topic_appt_followup' => true,
         'topic_medical_records' => true,
         'topic_tinnitus' => true,
-        'topic_hearing_previously_tested' => true,
-        'topic_aids_previously_worn' => true,
         'topic_medical_inquiry' => true,
         'topic_solicitor' => true,
         'topic_personal_call' => true,
