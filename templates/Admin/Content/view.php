@@ -31,6 +31,10 @@
                     <td><?= h($content->alt_title) ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Subtitle') ?></th>
+                    <td><?= h($content->subtitle) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Title Head') ?></th>
                     <td><?= h($content->title_head) ?></td>
                 </tr>
@@ -85,14 +89,6 @@
                 <tr>
                     <th><?= __('Facebook Image Height') ?></th>
                     <td><?= $this->Number->format($content->facebook_image_height) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Comment Count') ?></th>
-                    <td><?= $this->Number->format($content->comment_count) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Like Count') ?></th>
-                    <td><?= $this->Number->format($content->like_count) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id Draft Parent') ?></th>

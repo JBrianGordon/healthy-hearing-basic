@@ -18,6 +18,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $last_modified
  * @property string $title
  * @property string $alt_title
+ * @property string|null $subtitle
  * @property string $title_head
  * @property string $slug
  * @property string $short
@@ -35,8 +36,6 @@ use Cake\ORM\Entity;
  * @property bool|null $facebook_image_width_override
  * @property int $facebook_image_height
  * @property string|null $facebook_image_alt
- * @property int $comment_count
- * @property int $like_count
  * @property bool $old_url
  * @property int $id_draft_parent
  * @property bool|null $is_frozen
@@ -67,6 +66,7 @@ class Content extends Entity
         'last_modified' => true,
         'title' => true,
         'alt_title' => true,
+        'subtitle' => true,
         'title_head' => true,
         'slug' => true,
         'short' => true,
@@ -84,8 +84,6 @@ class Content extends Entity
         'facebook_image_width_override' => true,
         'facebook_image_height' => true,
         'facebook_image_alt' => true,
-        'comment_count' => true,
-        'like_count' => true,
         'old_url' => true,
         'id_draft_parent' => true,
         'is_frozen' => true,

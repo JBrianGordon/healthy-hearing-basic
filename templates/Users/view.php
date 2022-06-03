@@ -340,6 +340,7 @@
                             <td><?= h($content->last_modified) ?></td>
                             <td><?= h($content->title) ?></td>
                             <td><?= h($content->alt_title) ?></td>
+                            <td><?= h($content->subtitle) ?></td>
                             <td><?= h($content->title_head) ?></td>
                             <td><?= h($content->slug) ?></td>
                             <td><?= h($content->short) ?></td>
@@ -357,8 +358,6 @@
                             <td><?= h($content->facebook_image_width_override) ?></td>
                             <td><?= h($content->facebook_image_height) ?></td>
                             <td><?= h($content->facebook_image_alt) ?></td>
-                            <td><?= h($content->comment_count) ?></td>
-                            <td><?= h($content->like_count) ?></td>
                             <td><?= h($content->old_url) ?></td>
                             <td><?= h($content->id_draft_parent) ?></td>
                             <td><?= h($content->is_frozen) ?></td>

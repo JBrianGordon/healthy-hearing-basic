@@ -27,6 +27,7 @@
                     echo $this->Form->control('last_modified', ['empty' => true]);
                     echo $this->Form->control('title');
                     echo $this->Form->control('alt_title');
+                    echo $this->Form->control('subtitle');
                     echo $this->Form->control('title_head');
                     echo $this->Form->control('slug');
                     echo $this->Form->control('short');
@@ -44,8 +45,6 @@
                     echo $this->Form->control('facebook_image_width_override');
                     echo $this->Form->control('facebook_image_height');
                     echo $this->Form->control('facebook_image_alt');
-                    echo $this->Form->control('comment_count');
-                    echo $this->Form->control('like_count');
                     echo $this->Form->control('old_url');
                     echo $this->Form->control('id_draft_parent');
                     echo $this->Form->control('is_frozen');

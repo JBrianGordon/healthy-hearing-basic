@@ -103,6 +103,10 @@ class ContentTable extends Table
                 'before' => true,
                 'after' => true,
             ])
+            ->like('subtitle', [
+                'before' => true,
+                'after' => true,
+            ])
             ->like('short', [
                 'before' => true,
                 'after' => true,
@@ -150,7 +154,7 @@ class ContentTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'short', 'body'],
+                'fields' => ['title', 'subtitle', 'short', 'body'],
             ]);
     }
 
@@ -194,6 +198,12 @@ class ContentTable extends Table
         //     ->maxLength('alt_title', 128)
         //     ->requirePresence('alt_title', 'create')
         //     ->notEmptyString('alt_title');
+
+        // $validator
+        //     ->scalar('subtitle')
+        //     ->maxLength('subtitle', 128)
+        //     ->requirePresence('subtitle', 'create')
+        //     ->notEmptyString('subtitle');
 
         // $validator
         //     ->scalar('title_head')
@@ -279,14 +289,6 @@ class ContentTable extends Table
             // ->maxLength('facebook_image_alt', 255)
             ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
             ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
-
-        // $validator
-        //     ->integer('comment_count')
-        //     ->notEmptyString('comment_count');
-
-        // $validator
-        //     ->integer('like_count')
-        //     ->notEmptyString('like_count');
 
         // $validator
         //     ->boolean('old_url')
