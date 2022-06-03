@@ -135,6 +135,10 @@ class ImportLocationsTable extends Table
             ->boolean('is_new')
             ->notEmptyString('is_new');
 
+        $validator
+            ->scalar('notes')
+            ->allowEmptyString('notes');
+
         return $validator;
     }
 

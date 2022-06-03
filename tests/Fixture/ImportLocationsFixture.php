@@ -24,6 +24,8 @@ class ImportLocationsFixture extends TestFixture
                 'id_external' => 'Lorem ipsum dolor sit amet',
                 'location_id' => 1,
                 'id_oticon' => 'Lorem ipsum dolor sit amet',
+                'cqp_practice_id' => 'Lorem ipsum dolor sit amet',
+                'cqp_office_id' => 'Lorem ipsum dolor sit amet',
                 'title' => 'Lorem ipsum dolor sit amet',
                 'subtitle' => 'Lorem ipsum dolor sit amet',
                 'email' => 'Lorem ipsum dolor sit amet',
@@ -36,6 +38,7 @@ class ImportLocationsFixture extends TestFixture
                 'match_type' => 1,
                 'is_retail' => 1,
                 'is_new' => 1,
+                'notes' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
             ],
         ];
         parent::init();

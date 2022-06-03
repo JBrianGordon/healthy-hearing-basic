@@ -38,6 +38,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate|null $frozen_expiration
  * @property int $oticon_tier
  * @property int $yhn_tier
+ * @property int $cqp_tier
  * @property string $listing_type
  * @property bool $is_ida_verified
  * @property string $location_segment
@@ -75,6 +76,7 @@ use Cake\ORM\Entity;
  * @property bool $badge_balance
  * @property bool $badge_home
  * @property bool $badge_remote
+ * @property bool $badge_mask
  * @property bool $badge_spanish
  * @property bool $badge_french
  * @property bool $badge_russian
@@ -90,6 +92,7 @@ use Cake\ORM\Entity;
  * @property float $average_rating
  * @property int $reviews_approved
  * @property string $review_status
+ * @property \Cake\I18n\FrozenDate|null $last_review_date
  * @property string|null $last_xml
  * @property int|null $last_note_status
  * @property int|null $last_import_status
@@ -103,6 +106,8 @@ use Cake\ORM\Entity;
  * @property int $email_status
  * @property bool $is_email_ignore
  * @property string $id_yhn_location
+ * @property string|null $cqp_practice_id
+ * @property string|null $cqp_office_id
  * @property int|null $review_needed
  * @property bool $is_retail
  * @property string $direct_book_type
@@ -110,8 +115,9 @@ use Cake\ORM\Entity;
  * @property string $direct_book_iframe
  * @property bool $is_yhn
  * @property bool $is_hh
- * @property bool $is_cyhn
- * @property bool $is_earq
+ * @property bool $is_cqp
+ * @property bool $is_cq_premier
+ * @property bool $is_iris_plus
  * @property bool $is_bypassed
  * @property bool $is_call_assist
  * @property string $timezone
@@ -148,7 +154,7 @@ class Location extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array
      */
     protected $_accessible = [
         'id_oticon' => true,
@@ -180,6 +186,7 @@ class Location extends Entity
         'frozen_expiration' => true,
         'oticon_tier' => true,
         'yhn_tier' => true,
+        'cqp_tier' => true,
         'listing_type' => true,
         'is_ida_verified' => true,
         'location_segment' => true,
@@ -217,6 +224,7 @@ class Location extends Entity
         'badge_balance' => true,
         'badge_home' => true,
         'badge_remote' => true,
+        'badge_mask' => true,
         'badge_spanish' => true,
         'badge_french' => true,
         'badge_russian' => true,
@@ -232,6 +240,7 @@ class Location extends Entity
         'average_rating' => true,
         'reviews_approved' => true,
         'review_status' => true,
+        'last_review_date' => true,
         'last_xml' => true,
         'last_note_status' => true,
         'last_import_status' => true,
@@ -245,6 +254,8 @@ class Location extends Entity
         'email_status' => true,
         'is_email_ignore' => true,
         'id_yhn_location' => true,
+        'cqp_practice_id' => true,
+        'cqp_office_id' => true,
         'review_needed' => true,
         'is_retail' => true,
         'direct_book_type' => true,
@@ -252,8 +263,9 @@ class Location extends Entity
         'direct_book_iframe' => true,
         'is_yhn' => true,
         'is_hh' => true,
-        'is_cyhn' => true,
-        'is_earq' => true,
+        'is_cqp' => true,
+        'is_cq_premier' => true,
+        'is_iris_plus' => true,
         'is_bypassed' => true,
         'is_call_assist' => true,
         'timezone' => true,

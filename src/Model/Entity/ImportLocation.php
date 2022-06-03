@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property string $id_external
  * @property int|null $location_id
  * @property string|null $id_oticon
+ * @property string|null $cqp_practice_id
+ * @property string|null $cqp_office_id
  * @property string|null $title
  * @property string|null $subtitle
  * @property string|null $email
@@ -25,6 +27,7 @@ use Cake\ORM\Entity;
  * @property int|null $match_type
  * @property bool $is_retail
  * @property bool $is_new
+ * @property string|null $notes
  *
  * @property \App\Model\Entity\Import $import
  * @property \App\Model\Entity\Location $location
@@ -39,13 +42,15 @@ class ImportLocation extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array
      */
     protected $_accessible = [
         'import_id' => true,
         'id_external' => true,
         'location_id' => true,
         'id_oticon' => true,
+        'cqp_practice_id' => true,
+        'cqp_office_id' => true,
         'title' => true,
         'subtitle' => true,
         'email' => true,
@@ -58,6 +63,7 @@ class ImportLocation extends Entity
         'match_type' => true,
         'is_retail' => true,
         'is_new' => true,
+        'notes' => true,
         'import' => true,
         'location' => true,
         'import_location_providers' => true,

@@ -266,6 +266,10 @@ class LocationsTable extends Table
             ->notEmptyString('yhn_tier');
 
         $validator
+            ->integer('cqp_tier')
+            ->notEmptyString('cqp_tier');
+
+        $validator
             ->scalar('listing_type')
             ->maxLength('listing_type', 20)
             ->requirePresence('listing_type', 'create')
@@ -420,6 +424,10 @@ class LocationsTable extends Table
             ->notEmptyString('badge_remote');
 
         $validator
+            ->boolean('badge_mask')
+            ->notEmptyString('badge_mask');
+
+        $validator
             ->boolean('badge_spanish')
             ->notEmptyString('badge_spanish');
 
@@ -480,6 +488,10 @@ class LocationsTable extends Table
             ->maxLength('review_status', 50)
             ->requirePresence('review_status', 'create')
             ->notEmptyString('review_status');
+
+        $validator
+            ->date('last_review_date')
+            ->allowEmptyDate('last_review_date');
 
         $validator
             ->scalar('last_xml')
@@ -574,12 +586,16 @@ class LocationsTable extends Table
             ->notEmptyString('is_hh');
 
         $validator
-            ->boolean('is_cyhn')
-            ->notEmptyString('is_cyhn');
+            ->boolean('is_cqp')
+            ->notEmptyString('is_cqp');
 
         $validator
-            ->boolean('is_earq')
-            ->notEmptyString('is_earq');
+            ->boolean('is_cq_premier')
+            ->notEmptyString('is_cq_premier');
+
+        $validator
+            ->boolean('is_iris_plus')
+            ->notEmptyString('is_iris_plus');
 
         $validator
             ->boolean('is_bypassed')
