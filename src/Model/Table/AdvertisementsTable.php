@@ -11,8 +11,6 @@ use Cake\Validation\Validator;
 /**
  * Advertisements Model
  *
- * @property \App\Model\Table\CorpsTable&\Cake\ORM\Association\BelongsTo $Corps
- *
  * @method \App\Model\Entity\Advertisement newEmptyEntity()
  * @method \App\Model\Entity\Advertisement newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Advertisement[] newEntities(array $data, array $options = [])
@@ -46,11 +44,6 @@ class AdvertisementsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-
-        $this->belongsTo('Corps', [
-            'foreignKey' => 'corp_id',
-            'joinType' => 'INNER',
-        ]);
     }
 
     /**
@@ -66,18 +59,9 @@ class AdvertisementsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->integer('modified_by')
-            ->notEmptyString('modified_by');
-
-        $validator
             ->scalar('title')
             ->maxLength('title', 128)
             ->notEmptyString('title');
-
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 128)
-            ->notEmptyString('slug');
 
         $validator
             ->scalar('type')
@@ -115,58 +99,6 @@ class AdvertisementsTable extends Table
             ->notEmptyString('alt');
 
         $validator
-            ->scalar('class')
-            ->maxLength('class', 128)
-            ->notEmptyString('class');
-
-        $validator
-            ->scalar('style')
-            ->maxLength('style', 32)
-            ->notEmptyString('style');
-
-        $validator
-            ->scalar('onclick')
-            ->maxLength('onclick', 32)
-            ->notEmptyString('onclick');
-
-        $validator
-            ->scalar('onmouseover')
-            ->maxLength('onmouseover', 32)
-            ->notEmptyString('onmouseover');
-
-        $validator
-            ->integer('weight')
-            ->notEmptyString('weight');
-
-        $validator
-            ->date('active_expires')
-            ->allowEmptyDate('active_expires');
-
-        $validator
-            ->scalar('restrict_path')
-            ->allowEmptyString('restrict_path');
-
-        $validator
-            ->scalar('notes')
-            ->allowEmptyString('notes');
-
-        $validator
-            ->boolean('is_ao')
-            ->notEmptyString('is_ao');
-
-        $validator
-            ->boolean('is_hh')
-            ->notEmptyString('is_hh');
-
-        $validator
-            ->boolean('is_sp')
-            ->notEmptyString('is_sp');
-
-        $validator
-            ->boolean('is_ei')
-            ->notEmptyString('is_ei');
-
-        $validator
             ->boolean('is_active')
             ->notEmptyString('is_active');
 
@@ -179,19 +111,5 @@ class AdvertisementsTable extends Table
             ->notEmptyString('tag_basic');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        $rules->add($rules->existsIn('corp_id', 'Corps'), ['errorField' => 'corp_id']);
-
-        return $rules;
     }
 }
