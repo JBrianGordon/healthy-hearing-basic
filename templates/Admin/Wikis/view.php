@@ -108,12 +108,6 @@
                 </tr>
             </table>
             <div class="text">
-                <strong><?= __('Responsive Body') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($wiki->responsive_body)); ?>
-                </blockquote>
-            </div>
-            <div class="text">
                 <strong><?= __('Body') ?></strong>
                 <blockquote>
                     <?= $this->Text->autoParagraph(h($wiki->body)); ?>

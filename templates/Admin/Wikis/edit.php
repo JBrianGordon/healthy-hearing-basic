@@ -26,7 +26,6 @@
                     echo $this->Form->control('name');
                     echo $this->Form->control('slug');
                     echo $this->Form->control('user_id');
-                    echo $this->Form->control('responsive_body');
                     echo $this->Form->control('body');
                     echo $this->Form->control('short');
                     echo $this->Form->control('is_active');

@@ -12,7 +12,6 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string $slug
  * @property int|null $user_id
- * @property string|null $responsive_body
  * @property string|null $body
  * @property string|null $short
  * @property bool $is_active
@@ -53,7 +52,6 @@ class Wiki extends Entity
         'name' => true,
         'slug' => true,
         'user_id' => true,
-        'responsive_body' => true,
         'body' => true,
         'short' => true,
         'is_active' => true,

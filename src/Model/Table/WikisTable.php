@@ -93,10 +93,6 @@ class WikisTable extends Table
             ->requirePresence('slug', true, 'Slug is a required field')
             ->notEmptyString('slug', 'Slug cannot be left blank');
 
-        // $validator
-        //     ->scalar('responsive_body')
-        //     ->allowEmptyString('responsive_body');
-
         $validator
             ->scalar('body')
             ->requirePresence('body', true, 'Main content section (body) is a required field')

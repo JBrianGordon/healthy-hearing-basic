@@ -7,4 +7,4 @@
 
 <h1><?= $wiki->title_h1 ?></h1>
 <p><em>Contributed by AUTHOR</em></p>
-<p><?= $wiki->responsive_body ?></p>
+<p><?= $wiki->body ?></p>

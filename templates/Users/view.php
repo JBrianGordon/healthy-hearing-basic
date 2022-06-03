@@ -383,7 +383,6 @@
                             <th><?= __('Name') ?></th>
                             <th><?= __('Slug') ?></th>
                             <th><?= __('User Id') ?></th>
-                            <th><?= __('Responsive Body') ?></th>
                             <th><?= __('Body') ?></th>
                             <th><?= __('Short') ?></th>
                             <th><?= __('Is Active') ?></th>
@@ -412,7 +411,6 @@
                             <td><?= h($wikis->name) ?></td>
                             <td><?= h($wikis->slug) ?></td>
                             <td><?= h($wikis->user_id) ?></td>
-                            <td><?= h($wikis->responsive_body) ?></td>
                             <td><?= h($wikis->body) ?></td>
                             <td><?= h($wikis->short) ?></td>
                             <td><?= h($wikis->is_active) ?></td>
