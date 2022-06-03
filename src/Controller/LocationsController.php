@@ -33,7 +33,7 @@ class LocationsController extends AppController
     public function view($id = null)
     {
         $location = $this->Locations->get($id, [
-            'contain' => ['Content', 'CaCallGroups', 'CallSources', 'CsCalls', 'ImportLocations', 'ImportStatus', 'LocationAds', 'LocationEmails', 'LocationHours', 'LocationLinks', 'LocationNotes', 'LocationPhotos', 'LocationProviders', 'LocationUsers', 'LocationVideos', 'LocationVidscrips', 'Reviews'],
+            'contain' => ['CaCallGroups', 'CallSources', 'CsCalls', 'ImportLocations', 'ImportStatus', 'LocationAds', 'LocationEmails', 'LocationHours', 'LocationLinks', 'LocationNotes', 'LocationPhotos', 'LocationProviders', 'LocationUsers', 'LocationVideos', 'LocationVidscrips', 'Reviews'],
         ]);
 
         $this->set(compact('location'));
@@ -56,8 +56,7 @@ class LocationsController extends AppController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $content = $this->Locations->Content->find('list', ['limit' => 200])->all();
-        $this->set(compact('location', 'content'));
+        $this->set(compact('location'));
     }
 
     /**
@@ -70,7 +69,7 @@ class LocationsController extends AppController
     public function edit($id = null)
     {
         $location = $this->Locations->get($id, [
-            'contain' => ['Content'],
+            'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
@@ -81,8 +80,7 @@ class LocationsController extends AppController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $content = $this->Locations->Content->find('list', ['limit' => 200])->all();
-        $this->set(compact('location', 'content'));
+        $this->set(compact('location'));
     }
 
     /**

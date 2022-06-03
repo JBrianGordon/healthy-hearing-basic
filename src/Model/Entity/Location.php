@@ -143,7 +143,6 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\LocationVideo[] $location_videos
  * @property \App\Model\Entity\LocationVidscrip[] $location_vidscrips
  * @property \App\Model\Entity\Review[] $reviews
- * @property \App\Model\Entity\Content[] $content
  */
 class Location extends Entity
 {
@@ -290,6 +289,5 @@ class Location extends Entity
         'location_videos' => true,
         'location_vidscrips' => true,
         'reviews' => true,
-        'content' => true,
     ];
 }

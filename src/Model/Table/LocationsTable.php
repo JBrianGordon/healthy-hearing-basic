@@ -27,7 +27,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\LocationVideosTable&\Cake\ORM\Association\HasMany $LocationVideos
  * @property \App\Model\Table\LocationVidscripsTable&\Cake\ORM\Association\HasMany $LocationVidscrips
  * @property \App\Model\Table\ReviewsTable&\Cake\ORM\Association\HasMany $Reviews
- * @property \App\Model\Table\ContentTable&\Cake\ORM\Association\BelongsToMany $Content
  *
  * @method \App\Model\Entity\Location newEmptyEntity()
  * @method \App\Model\Entity\Location newEntity(array $data, array $options = [])
@@ -110,11 +109,6 @@ class LocationsTable extends Table
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
-        ]);
-        $this->belongsToMany('Content', [
-            'foreignKey' => 'location_id',
-            'targetForeignKey' => 'content_id',
-            'joinTable' => 'content_locations',
         ]);
     }
 

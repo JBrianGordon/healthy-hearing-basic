@@ -41,7 +41,6 @@ use Cake\ORM\Entity;
  * @property bool|null $is_frozen
  *
  * @property \App\Model\Entity\User[] $users
- * @property \App\Model\Entity\Location[] $locations
  * @property \App\Model\Entity\Tag[] $tags
  * @property-read array $hh_url
  */
@@ -88,7 +87,6 @@ class Content extends Entity
         'id_draft_parent' => true,
         'is_frozen' => true,
         'users' => true,
-        'locations' => true,
         'tags' => true,
     ];
 
