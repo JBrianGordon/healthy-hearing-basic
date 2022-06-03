@@ -40,7 +40,6 @@ class LocationsControllerTest extends TestCase
         'app.LocationVidscrips',
         'app.Reviews',
         'app.Content',
-        'app.ContentLocations',
     ];
 
     /**

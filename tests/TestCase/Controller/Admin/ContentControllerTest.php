@@ -26,7 +26,6 @@ class ContentControllerTest extends TestCase
         'app.Locations',
         'app.Tags',
         'app.ContentUsers',
-        'app.ContentLocations',
         'app.ContentTags',
     ];
 
