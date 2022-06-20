@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
  * Locations Model
@@ -60,7 +61,7 @@ class LocationsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->hasMany('CaCallGroups', [
             'foreignKey' => 'location_id',
@@ -110,6 +111,107 @@ class LocationsTable extends Table
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('id_oticon')
+            ->value('id_parent')
+            ->value('id_sf')
+            ->value('state')
+            ->value('zip')
+            ->value('phone')
+            ->value('email')
+            ->value('oticon_tier')
+            ->value('yhn_tier')
+            ->value('cqp_tier')
+            ->value('listing_type')
+            ->value('notes')
+            ->value('full_name')
+            ->value('location_segment')
+            ->value('entity_segment')
+            ->value('priority')
+            ->value('id_yhn_location')
+            ->value('cqp_practice_id')
+            ->value('cqp_office_id')
+            ->value('timezone')
+            ->value('covid19_statement')
+            ->value('average_rating')
+            ->value('reviews_approved')
+            ->value('review_status')
+            ->value('modified')
+            ->value('last_contact_date')
+            ->value('last_edit_by_owner_date')
+            ->value('completeness')
+            ->value('last_note_status')
+            ->value('last_import_status')
+            ->value('grace_period_end')
+            ->value('review_needed')
+            ->value('email_status')
+            ->value('phone_status')
+            ->value('address_status')
+            ->value('title_status')
+            ->boolean('is_mobile')
+            ->boolean('is_listing_type_frozen')
+            ->boolean('is_ida_verified')
+            ->boolean('is_active')
+            ->boolean('is_show')
+            ->boolean('filter_has_photo')
+            ->boolean('filter_insurance')
+            ->boolean('is_oticon')
+            ->boolean('is_retail')
+            ->boolean('is_hh')
+            ->boolean('is_cqp')
+            ->boolean('is_cq_premier')
+            ->boolean('is_iris_plus')
+            ->boolean('is_bypassed')
+            ->boolean('is_call_assist')
+            ->boolean('is_service_agreement_signed')
+            ->boolean('is_last_edit_by_owner')
+            ->boolean('is_grace_period')
+            ->boolean('is_title_ignore')
+            ->boolean('is_address_ignore')
+            ->boolean('is_phone_ignore')
+            ->boolean('is_email_ignore')
+            ->boolean('feature_content_library')
+            ->boolean('feature_special_announcement')
+            ->boolean('badge_coffee')
+            ->boolean('badge_wifi')
+            ->boolean('badge_parking')
+            ->boolean('badge_curbside')
+            ->boolean('badge_wheelchair')
+            ->boolean('badge_service_pets')
+            ->boolean('badge_cochlear_implants')
+            ->boolean('badge_ald')
+            ->boolean('badge_pediatrics')
+            ->boolean('badge_mobile_clinic')
+            ->boolean('badge_financing')
+            ->boolean('badge_telehearing')
+            ->boolean('badge_asl')
+            ->boolean('badge_tinnitus')
+            ->boolean('badge_balance')
+            ->boolean('badge_home')
+            ->boolean('badge_remote')
+            ->boolean('badge_mask')
+            ->boolean('badge_spanish')
+            ->boolean('badge_french')
+            ->boolean('badge_russian')
+            ->boolean('badge_chinese')
+            ->boolean('using_logo')
+            ->boolean('using_photos')
+            ->boolean('using_videos')
+            ->boolean('using_badges')
+            ->boolean('using_flex_space')
+            ->boolean('using_linked_locations')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title', 'subtitle','city', 'address', 'address_2'],
+            ]);
     }
 
     /**

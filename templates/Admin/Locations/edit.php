@@ -2,21 +2,25 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Location $location
- * @var \Cake\Collection\CollectionInterface|string[] $content
  */
 ?>
 <div class="row">
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', $location->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $location->id), 'class' => 'side-nav-item']
+            ) ?>
             <?= $this->Html->link(__('List Locations'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
     <div class="column-responsive column-80">
-        <div class="locations form content">
+        <div class="locations form">
             <?= $this->Form->create($location) ?>
             <fieldset>
-                <legend><?= __('Add Location') ?></legend>
+                <legend><?= __('Edit Location') ?></legend>
                 <?php
                     echo $this->Form->control('id_oticon');
                     echo $this->Form->control('id_parent');
@@ -45,6 +49,7 @@
                     echo $this->Form->control('frozen_expiration', ['empty' => true]);
                     echo $this->Form->control('oticon_tier');
                     echo $this->Form->control('yhn_tier');
+                    echo $this->Form->control('cqp_tier');
                     echo $this->Form->control('listing_type');
                     echo $this->Form->control('is_ida_verified');
                     echo $this->Form->control('location_segment');
@@ -82,6 +87,7 @@
                     echo $this->Form->control('badge_balance');
                     echo $this->Form->control('badge_home');
                     echo $this->Form->control('badge_remote');
+                    echo $this->Form->control('badge_mask');
                     echo $this->Form->control('badge_spanish');
                     echo $this->Form->control('badge_french');
                     echo $this->Form->control('badge_russian');
@@ -97,6 +103,7 @@
                     echo $this->Form->control('average_rating');
                     echo $this->Form->control('reviews_approved');
                     echo $this->Form->control('review_status');
+                    echo $this->Form->control('last_review_date', ['empty' => true]);
                     echo $this->Form->control('last_xml');
                     echo $this->Form->control('last_note_status');
                     echo $this->Form->control('last_import_status');
@@ -110,6 +117,8 @@
                     echo $this->Form->control('email_status');
                     echo $this->Form->control('is_email_ignore');
                     echo $this->Form->control('id_yhn_location');
+                    echo $this->Form->control('cqp_practice_id');
+                    echo $this->Form->control('cqp_office_id');
                     echo $this->Form->control('review_needed');
                     echo $this->Form->control('is_retail');
                     echo $this->Form->control('direct_book_type');
@@ -117,8 +126,9 @@
                     echo $this->Form->control('direct_book_iframe');
                     echo $this->Form->control('is_yhn');
                     echo $this->Form->control('is_hh');
-                    echo $this->Form->control('is_cyhn');
-                    echo $this->Form->control('is_earq');
+                    echo $this->Form->control('is_cqp');
+                    echo $this->Form->control('is_cq_premier');
+                    echo $this->Form->control('is_iris_plus');
                     echo $this->Form->control('is_bypassed');
                     echo $this->Form->control('is_call_assist');
                     echo $this->Form->control('timezone');
@@ -127,7 +137,6 @@
                     echo $this->Form->control('is_junk');
                     echo $this->Form->control('id_coupon');
                     echo $this->Form->control('is_email_allowed');
-                    echo $this->Form->control('content._ids', ['options' => $content]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

@@ -223,3 +223,82 @@ TypeFactory::map('time', StringType::class);
 //Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
+
+/**
+  * Format the phone number
+  */
+function formatPhoneNumber($sPhone){
+    $extOffset = strpos($sPhone, "x");
+    if ($extOffset) {
+        // Pull out extensions after 'x' or 'ext'
+        $extension = substr($sPhone,$extOffset+1);
+        $extension = preg_replace("/[^0-9]/",'',$extension);
+        $sPhone = substr($sPhone,0,$extOffset);
+    }
+    $sPhone = preg_replace("/[^0-9]/",'',$sPhone);
+    if (strlen($sPhone) > 10) {
+        $firstDigit = substr($sPhone, 0, 1);
+        if ($firstDigit == '1') {
+            // US and Canada both use country code 1
+            $sCountry = '1';
+            $sPhone = substr($sPhone, 1);
+        }
+    }
+    if (strlen($sPhone) > 10) {
+        // Assume the first 10 digits are phone and the rest is extension
+        $extension = substr($sPhone, 10);
+        $sPhone = substr($sPhone, 0, 10);
+    }
+    $sArea = substr($sPhone,0,3);
+    $sPrefix = substr($sPhone,3,3);
+    $sNumber = substr($sPhone,6,4);
+    $retval = "($sArea) $sPrefix-$sNumber";
+    if (!empty($sCountry)) {
+        $retval = "$sCountry $retval";
+    }
+    if (!empty($extension)) {
+        $retval .= " x$extension";
+    }
+    return $retval;
+}
+
+/**
+* Inserts a new key/value after the key in the array.
+*
+* @param $key - key to insert after
+* @param $array - array to insert into
+* @param $newKey - key to insert
+* @param $newValue - value to insert
+*
+* @return - new array if the key exists, false otherwise.
+*/
+function arrayInsertAfter($key, array $array, $newKey, $newValue) {
+    if (array_key_exists($key, $array)) {
+        $newArray = [];
+        foreach ($array as $k => $value) {
+            $newArray[$k] = $value;
+            if ($k == $key) {
+                $newArray[$newKey] = $newValue;
+            }
+        }
+        return $newArray;
+    }
+    return false;
+}
+
+// Recursively parses through an array and filters out null values.
+// Does not filter out value=0.
+function arrayFilterRecursive($array) {
+    if (!is_array($array)) {
+        return $array;
+    }
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $array[$key] = arrayFilterRecursive($array[$key]);
+        }
+        if ($array[$key] == null) {
+            unset($array[$key]);
+        }
+    }
+    return $array;
+}

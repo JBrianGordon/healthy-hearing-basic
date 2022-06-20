@@ -147,6 +147,72 @@ use Cake\ORM\Entity;
 class Location extends Entity
 {
     /**
+    * Enum - Listing Type
+    */
+    const LISTING_TYPE_BASIC = 'Basic';
+    const LISTING_TYPE_ENHANCED = 'Enhanced';
+    const LISTING_TYPE_PREMIER = 'Premier';
+    const LISTING_TYPE_NONE = 'None';
+    static $listingTypes = [
+        self::LISTING_TYPE_BASIC => 'Basic',
+        self::LISTING_TYPE_ENHANCED => 'Enhanced',
+        self::LISTING_TYPE_PREMIER => 'Premier',
+        self::LISTING_TYPE_NONE => 'None (not shown in directory)'
+    ];
+    static $preferredListingTypes = [self::LISTING_TYPE_ENHANCED, self::LISTING_TYPE_PREMIER];
+
+    /**
+    * Enum - Status of address, phone, title, and email fields. Comparing Oticon import values
+    *        to what we have stored in our database. Are they new, same, or different?
+    */
+    const CHANGE_STATUS_NO_DIFFERENCE = 0;
+    const CHANGE_STATUS_DIFFERENT = 1;
+    const CHANGE_STATUS_NEW = 2;
+    static $changeStatuses = [
+        self::CHANGE_STATUS_NO_DIFFERENCE => 'No Difference',
+        self::CHANGE_STATUS_DIFFERENT => 'Different',
+        self::CHANGE_STATUS_NEW => 'New',
+    ];
+
+    /**
+    * Enum - clinic description status (completeness)
+    */
+    const COMPLETENESS_COMPLETE = 'Complete';
+    const COMPLETENESS_BASIC_INFO = 'BasicInfo';
+    const COMPLETENESS_PROFILE_PIC = 'ProfilePic';
+    const COMPLETENESS_INCOMPLETE = 'Incomplete';
+    static $completenessFields = [
+        self::COMPLETENESS_COMPLETE => 'Complete',
+        self::COMPLETENESS_BASIC_INFO => 'BasicInfo (missing provider data)',
+        self::COMPLETENESS_PROFILE_PIC => 'ProfilePic (missing basic clinic info)',
+        self::COMPLETENESS_INCOMPLETE => 'Incomplete',
+    ];
+
+    /**
+    * Enum - review status
+    */
+    const REVIEW_STATUS_5_PLUS = 'Review5Plus';
+    const REVIEW_STATUS_4_LESS = 'Review4Less';
+    static $reviewStatuses = [
+        self::REVIEW_STATUS_5_PLUS => 'Review5Plus (5 or more active reviews)',
+        self::REVIEW_STATUS_4_LESS => 'Review4Less (4 or less active reviews)',
+    ];
+
+    /**
+    * Enum - Direct Book
+    */
+    const DIRECT_BOOK_NONE = 'None';
+    const DIRECT_BOOK_DM = 'DM';
+    const DIRECT_BOOK_BLUEPRINT = 'Blueprint';
+    const DIRECT_BOOK_EARQ = 'EarQ';
+    static $directBookTypes = [
+        self::DIRECT_BOOK_NONE => 'None (call clinic)',
+        self::DIRECT_BOOK_DM => 'Diary Management',
+        self::DIRECT_BOOK_BLUEPRINT => 'Blueprint',
+        self::DIRECT_BOOK_EARQ => 'EarQ'
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to
