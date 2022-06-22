@@ -130,7 +130,7 @@ $this->loadHelper('Search.Search', [
                         ?>
                     </td>
                     <td class="actions">
-                        <div class="btn-group-vertical">
+                        <div class="btn-group-vertical btn-group-sm">
                             <?= $this->Html->link(__('Edit'),
                                 ['action' => 'edit', $city->id],
                                 ['class' => 'btn btn-outline-secondary']) ?>

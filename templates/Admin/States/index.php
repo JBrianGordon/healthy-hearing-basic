@@ -39,7 +39,7 @@
                         ); ?>
                     </td>
                     <td class="actions">
-                        <div class="btn-group-vertical">
+                        <div class="btn-group-vertical btn-group-sm">
                             <?= $this->Html->link(__('View'),
                                 [
                                     'prefix' => false,
