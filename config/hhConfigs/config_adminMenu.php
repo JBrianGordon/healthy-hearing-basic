@@ -62,12 +62,12 @@ $locationsItems['CRM searches'] = [
 ];
 if (true) {
     $locationsItems['CallSource numbers'] = [
-        'url' => '/admin/call_sources',
+        'url' => '/admin/call-sources',
     ];
 }
 if (true) {
     $locationsItems['Call tracking numbers'] = [
-        'url' => '/admin/call_sources',
+        'url' => '/admin/call-sources',
     ];
 }
 $locationsItems['Clinic portal'] = [
@@ -75,7 +75,7 @@ $locationsItems['Clinic portal'] = [
     'icon' => 'glyphicon glyphicon-log-in',
 ];
 $locationsItems['Clinic users'] = [
-    'url' => '/admin/location_users',
+    'url' => '/admin/location-users',
     'icon' => 'glyphicon glyphicon-user',
 ];
 $locationsItems['Cities'] = [
@@ -114,7 +114,7 @@ if (true) {
 }
 if (true) {
     $importsItems['Tier status change report'] = [
-        'url' => '/admin/locations/tier_status_report',
+        'url' => '/admin/locations/tier-status-report',
     ];
 }
 $importsMenu = [
@@ -136,44 +136,44 @@ $reviewsMenu = [
 if (true) {
     $callAssistItems = [];
     $callAssistItems['Outbound calls'] = [
-        'url' => '/admin/ca_call_groups/outbound',
+        'url' => '/admin/ca-call-groups/outbound',
         'icon' => 'glyphicon glyphicon-bullhorn',
     ];
     $callAssistItems['Add inbound call'] = [
-        'url' => '/admin/ca_calls/edit',
+        'url' => '/admin/ca-calls/edit',
         'icon' => 'glyphicon glyphicon-plus',
     ];
     $callAssistItems['Return call from clinic'] = [
-        'url' => '/admin/ca_calls/clinic_lookup',
+        'url' => '/admin/ca-calls/clinic-lookup',
         'icon' => 'glyphicon glyphicon-plus',
     ];
     $callAssistItems['Activation dashboard'] = [
-        'url' => '/admin/locations/activation_dashboard',
+        'url' => '/admin/locations/activation-dashboard',
         'icon' => 'glyphicon glyphicon-check',
     ];
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
-        'url' => '/admin/ca_call_groups',
+        'url' => '/admin/ca-call-groups',
         'icon' => 'glyphicon glyphicon-list',
     ];
     $callAssistItems['Browse calls'] = [
-        'url' => '/admin/ca_calls',
+        'url' => '/admin/ca-calls',
         'icon' => 'glyphicon glyphicon-list',
     ];
     $callAssistItems['Metrics - Calls'] = [
-        'url' => '/admin/ca_call_groups/metrics',
+        'url' => '/admin/ca-call-groups/metrics',
         'icon' => 'glyphicon glyphicon-stats',
     ];
     $callAssistItems['Metrics - Appt request forms'] = [
-        'url' => '/admin/ca_call_groups/request_form_metrics',
+        'url' => '/admin/ca-call-groups/request-form-metrics',
         'icon' => 'glyphicon glyphicon-stats',
     ];
     $callAssistItems['Metrics - Appts by state'] = [
-        'url' => '/admin/ca_call_groups/appts_by_state_metrics',
+        'url' => '/admin/ca-call-groups/appts-by-state-metrics',
         'icon' => 'glyphicon glyphicon-stats',
     ];
     $callAssistItems['Metrics - Calls and appts for clinics by date range'] = [
-        'url' => '/admin/ca_call_groups/calls_and_appts_by_date',
+        'url' => '/admin/ca-call-groups/calls-and-appts-by-date',
         'icon' => 'glyphicon glyphicon-stats',
     ];
     $callAssistMenu = [
@@ -189,11 +189,11 @@ if (true) {
 ********************************/
 $callTrackingItems = [];
 $callTrackingItems['Browse Calls'] = [
-    'url' => '/admin/cs_calls',
+    'url' => '/admin/cs-calls',
     'icon' => 'glyphicon glyphicon-list',
 ];
 $callTrackingItems['Metrics'] = [
-    'url' => '/admin/cs_calls/metrics',
+    'url' => '/admin/cs-calls/metrics',
     'icon' => 'glyphicon glyphicon-stats',
 ];
 $callTrackingMenu = [
@@ -206,23 +206,23 @@ $callTrackingMenu = [
 ********************************/
 $seoItems = [];
 $seoItems['Canonicals'] = [
-    'url' => '/admin/seo/seo_canonicals',
+    'url' => '/admin/seo/seo-canonicals',
 ];
 $seoItems['Meta tags'] = [
-    'url' => '/admin/seo/seo_meta_tags',
+    'url' => '/admin/seo/seo-meta-tags',
 ];
 $seoItems['Redirects'] = [
-    'url' => '/admin/seo/seo_redirects',
+    'url' => '/admin/seo/seo-redirects',
 ];
 $seoItems['Status codes'] = [
-    'url' => '/admin/seo/seo_status_codes',
+    'url' => '/admin/seo/seo-status-codes',
 ];
 $seoItems['Titles'] = [
-    'url' => '/admin/seo/seo_titles',
+    'url' => '/admin/seo/seo-titles',
 ];
 if (true) {
     $seoItems['Image sitemap'] = [
-        'url' => '/admin/sitemaps/image_sitemap',
+        'url' => '/admin/sitemaps/image-sitemap',
     ];
 }
 $seoToolsMenu = [
@@ -243,13 +243,13 @@ $utilitiesItems['View cache'] = [
     'url' => '/admin/utils/cache',
 ];
 $utilitiesItems['Clear cache'] = [
-    'url' => '/admin/utils/clear_cache',
+    'url' => '/admin/utils/clear-cache',
 ];
 $utilitiesItems['Clear session'] = [
-    'url' => '/admin/utils/clear_session',
+    'url' => '/admin/utils/clear-session',
 ];
 $utilitiesItems['Queues'] = [
-    'url' => '/admin/queue/queue_tasks',
+    'url' => '/admin/queue/queue-tasks',
 ];
 if (true) {
     $utilitiesItems['Rsync'] = [
@@ -273,22 +273,22 @@ $utilitiesMenu = [
 ********************************/
 $itUtilitiesItems = [];
 $itUtilitiesItems['Quiz results'] = [
-    'url' => '/admin/quiz_results',
+    'url' => '/admin/quiz-results',
 ];
 $itUtilitiesItems['SEO Blacklists'] = [
-    'url' => '/admin/seo/seo_blacklists',
+    'url' => '/admin/seo/seo-blacklists',
 ];
 $itUtilitiesItems['SEO URIs'] = [
-    'url' => '/admin/seo/seo_uris',
+    'url' => '/admin/seo/seo-uris',
 ];
 $itUtilitiesItems['Sitemap URLs'] = [
-    'url' => '/admin/sitemap_urls',
+    'url' => '/admin/sitemap-urls',
 ];
 $itUtilitiesItems['Cloud assets'] = [
-    'url' => '/admin/cloud_assets',
+    'url' => '/admin/cloud-assets',
 ];
 $itUtilitiesItems['Fix cache permissions'] = [
-    'url' => '/admin/utils/cache_permissions',
+    'url' => '/admin/utils/cache-permissions',
 ];
 $itUtilitiesMenu = [
     'items' => $itUtilitiesItems,
@@ -299,11 +299,11 @@ $itUtilitiesMenu = [
 ********************************/
 $itConciergeLegacyItems = [];
 $itConciergeLegacyItems['Survey Calls'] = [
-    'url' => '/admin/ca_call_groups/surveys',
+    'url' => '/admin/ca-call-groups/surveys',
     'icon' => 'glyphicon glyphicon-bullhorn',
 ];
 $itConciergeLegacyItems['Survey Metrics'] = [
-    'url' => '/admin/ca_call_groups/survey_metrics',
+    'url' => '/admin/ca-call-groups/survey-metrics',
     'icon' => 'glyphicon glyphicon-stats',
 ];
 $itConciergeLegacyMenu = [
@@ -348,7 +348,7 @@ $csaReviewsMenu = $reviewsMenu;
 * CCA - Outbound Calls
 ********************************/
 $outboundCalls = [
-    'url' => '/admin/ca_call_groups/outbound',
+    'url' => '/admin/ca-call-groups/outbound',
     'icon' => 'glyphicon glyphicon-bullhorn',
 ];
 
@@ -356,7 +356,7 @@ $outboundCalls = [
 * CCA - Add Inbound Call
 ********************************/
 $addInboundCall = [
-    'url' => '/admin/ca_calls/edit',
+    'url' => '/admin/ca-calls/edit',
     'icon' => 'glyphicon glyphicon-plus',
 ];
 
@@ -364,7 +364,7 @@ $addInboundCall = [
 * CCA - Return Call From Clinic
 ********************************/
 $returnCallFromClinic = [
-    'url' => '/admin/ca_calls/clinic_lookup',
+    'url' => '/admin/ca-calls/clinic-lookup',
     'icon' => 'glyphicon glyphicon-plus',
 ];
 
@@ -372,7 +372,7 @@ $returnCallFromClinic = [
 * CCA - Activation Dashboard
 ********************************/
 $activationDashboard = [
-    'url' => '/admin/locations/activation_dashboard',
+    'url' => '/admin/locations/activation-dashboard',
     'icon' => 'glyphicon glyphicon-check',
 ];
 
@@ -384,7 +384,7 @@ $activationDashboard = [
 * CCS - Browse Call Groups
 ********************************/
 $browseCallGroups = [
-    'url' => '/admin/ca_call_groups',
+    'url' => '/admin/ca-call-groups',
     'icon' => 'glyphicon glyphicon-list',
 ];
 
@@ -392,7 +392,7 @@ $browseCallGroups = [
 * CCS - Browse Calls
 ********************************/
 $browseCalls = [
-    'url' => '/admin/ca_calls',
+    'url' => '/admin/ca-calls',
     'icon' => 'glyphicon glyphicon-list',
 ];
 
@@ -400,7 +400,7 @@ $browseCalls = [
 * CCS - Metrics (Calls)
 ********************************/
 $callMetrics = [
-    'url' => '/admin/ca_call_groups/metrics',
+    'url' => '/admin/ca-call-groups/metrics',
     'icon' => 'glyphicon glyphicon-stats',
 ];
 
@@ -408,7 +408,7 @@ $callMetrics = [
 * CCS - Metrics (Forms)
 ********************************/
 $metricsRequestForm = [
-    'url' => '/admin/ca_call_groups/request_form_metrics',
+    'url' => '/admin/ca-call-groups/request-form-metrics',
     'icon' => 'glyphicon glyphicon-stats',
 ];
 

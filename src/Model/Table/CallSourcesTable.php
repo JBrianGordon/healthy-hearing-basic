@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
  * CallSources Model
@@ -45,12 +46,35 @@ class CallSourcesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'INNER',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('customer_name')
+            ->value('location_id')
+            ->value('notes')
+            ->value('phone_number')
+            ->value('target_number')
+            ->value('clinic_number')
+            ->value('start_date')
+            ->value('end_date')
+            ->boolean('is_active')
+            ->boolean('is_ivr_enabled')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title', 'subtitle','city', 'address', 'address_2'],
+            ]);
     }
 
     /**
