@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Utility\Inflector;
+use Cake\Core\Configure;
 
 /*******************************
 ********** Admin Menu **********
@@ -10,7 +11,7 @@ use Cake\Utility\Inflector;
 * Admin - Editorial
 ********************************/
 $editorialItems = [];
-if (true) {
+if (Configure::read('showReports')) {
     $editorialItems['Browse reports'] = [
         'url' => '/admin/content',
         'icon' => 'glyphicon glyphicon-font',
@@ -20,19 +21,19 @@ $editorialItems['Browse help pages'] = [
     'url' => '/admin/wikis',
     'icon' => 'glyphicon glyphicon-tasks',
 ];
-if (true) {
+if (Configure::read('showManufacturers')) {
     $editorialItems['Browse companies'] = [
         'url' => '/admin/corps',
         'icon' => 'glyphicon glyphicon-flag',
     ];
 }
-if (true) {
+if (Configure::read('showAds')) {
     $editorialItems['Browse ads'] = [
         'url' => '/admin/ad',
         'icon' => 'glyphicon glyphicon-picture',
     ];
 }
-if (true) {
+if (Configure::read('showReports')) {
     $editorialItems['Add article'] = [
         'url' => '/admin/content/edit/type:article',
         'icon' => 'glyphicon glyphicon-plus',
@@ -60,12 +61,12 @@ $locationsItems['CRM'] = [
 $locationsItems['CRM searches'] = [
     'url' => '/admin/crm-searches',
 ];
-if (true) {
+if (Configure::read('isCallAssistEnabled')) {
     $locationsItems['CallSource numbers'] = [
         'url' => '/admin/call-sources',
     ];
 }
-if (true) {
+if (Configure::read('isCallTrackingEnabled')) {
     $locationsItems['Call tracking numbers'] = [
         'url' => '/admin/call-sources',
     ];
@@ -97,22 +98,13 @@ $locationsMenu = [
 * Admin - Imports
 ********************************/
 $importsItems = [];
-if (true) {
-    $importsItems['YHN import dashboard'] = [
-        'url' => '/admin/imports',
-    ];
-    $importsItems['YHN import stats'] = [
-        'url' => '/admin/imports/stats',
-    ];
-} else {
-    $importsItems['Import dashboard'] = [
-        'url' => '/admin/imports',
-    ];
-    $importsItems['Import stats'] = [
-        'url' => '/admin/imports/stats',
-    ];
-}
-if (true) {
+$importsItems['Import dashboard'] = [
+    'url' => '/admin/imports',
+];
+$importsItems['Import stats'] = [
+    'url' => '/admin/imports/stats',
+];
+if (Configure::read('isTieringEnabled')) {
     $importsItems['Tier status change report'] = [
         'url' => '/admin/locations/tier-status-report',
     ];
@@ -133,7 +125,7 @@ $reviewsMenu = [
 /*******************************
 * Admin - Call Concierge
 ********************************/
-if (true) {
+if (Configure::read('isCallAssistEnabled')) {
     $callAssistItems = [];
     $callAssistItems['Outbound calls'] = [
         'url' => '/admin/ca-call-groups/outbound',
@@ -220,7 +212,7 @@ $seoItems['Status codes'] = [
 $seoItems['Titles'] = [
     'url' => '/admin/seo/seo-titles',
 ];
-if (true) {
+if (Configure::read('showImageSitemap')) {
     $seoItems['Image sitemap'] = [
         'url' => '/admin/sitemaps/image-sitemap',
     ];
@@ -234,7 +226,7 @@ $seoToolsMenu = [
 * Admin - Utilities
 ********************************/
 $utilitiesItems = [];
-$hhUsers = 'HH' . ' Users';
+$hhUsers = Configure::read('siteNameAbbr').' Users';
 $utilitiesItems[$hhUsers] = [
     'url' => '/admin/users',
     'icon' => 'glyphicon glyphicon-user',
@@ -251,7 +243,7 @@ $utilitiesItems['Clear session'] = [
 $utilitiesItems['Queues'] = [
     'url' => '/admin/queue/queue-tasks',
 ];
-if (true) {
+if (Configure::read('isLoadBalanced')) {
     $utilitiesItems['Rsync'] = [
         'url' => '/admin/utils/rsync',
     ];
