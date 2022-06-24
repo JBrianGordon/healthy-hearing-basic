@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
+use Search\Model\Filter\Base;
 
 /**
  * Users Model
@@ -26,6 +29,7 @@ use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
  * @property \App\Model\Table\ContentTable&\Cake\ORM\Association\BelongsToMany $Content
  * @property \App\Model\Table\CorpsTable&\Cake\ORM\Association\BelongsToMany $Corps
  * @property \App\Model\Table\WikisTable&\Cake\ORM\Association\BelongsToMany $Wikis
+ *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -39,6 +43,7 @@ use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends CakeDcUsersTable
@@ -57,7 +62,7 @@ class UsersTable extends CakeDcUsersTable
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Corps', [
             'foreignKey' => 'corp_id',
@@ -113,6 +118,36 @@ class UsersTable extends CakeDcUsersTable
             'targetForeignKey' => 'wiki_id',
             'joinTable' => 'users_wikis',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('username')
+            ->value('first_name')
+            ->value('last_name')
+            ->value('email')
+            ->value('company')
+            ->value('role')
+            ->value('created')
+            ->value('modified')
+            ->boolean('active')
+            ->boolean('is_admin')
+            ->boolean('is_it_admin')
+            ->boolean('is_agent')
+            ->boolean('is_call_supervisor')
+            ->boolean('is_author')
+            ->boolean('is_csa')
+            ->boolean('is_writer')
+            ->boolean('is_superuser')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['username', 'first_name', 'last_name'],
+            ]);
     }
 
     /**
@@ -253,12 +288,12 @@ class UsersTable extends CakeDcUsersTable
             ->notEmptyString('modified_by');
 
         $validator
-            ->dateTime('lastlogin')
-            ->allowEmptyDateTime('lastlogin');
+            ->dateTime('last_login')
+            ->allowEmptyDateTime('last_login');
 
         $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
+            ->boolean('active')
+            ->notEmptyString('active');
 
         $validator
             ->boolean('is_hardened_password')
@@ -318,6 +353,49 @@ class UsersTable extends CakeDcUsersTable
             ->scalar('timezone')
             ->maxLength('timezone', 3)
             ->allowEmptyString('timezone');
+
+        $validator
+            ->scalar('token')
+            ->maxLength('token', 255)
+            ->allowEmptyString('token');
+
+        $validator
+            ->dateTime('token_expires')
+            ->allowEmptyDateTime('token_expires');
+
+        $validator
+            ->scalar('api_token')
+            ->maxLength('api_token', 255)
+            ->allowEmptyString('api_token');
+
+        $validator
+            ->dateTime('activation_date')
+            ->allowEmptyDateTime('activation_date');
+
+        $validator
+            ->scalar('secret')
+            ->maxLength('secret', 32)
+            ->allowEmptyString('secret');
+
+        $validator
+            ->boolean('secret_verified')
+            ->allowEmptyString('secret_verified');
+
+        $validator
+            ->dateTime('tos_date')
+            ->allowEmptyDateTime('tos_date');
+
+        $validator
+            ->boolean('is_superuser')
+            ->notEmptyString('is_superuser');
+
+        $validator
+            ->scalar('role')
+            ->maxLength('role', 255)
+            ->allowEmptyString('role');
+
+        $validator
+            ->allowEmptyString('additional_data');
 
         return $validator;
     }

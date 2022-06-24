@@ -37,8 +37,8 @@ use CakeDC\Users\Model\Entity\User as CakeDcUser;
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property int $modified_by
- * @property \Cake\I18n\FrozenTime|null $lastlogin
- * @property bool $is_active
+ * @property \Cake\I18n\FrozenTime|null $last_login
+ * @property bool $active
  * @property bool $is_hardened_password
  * @property bool $is_admin
  * @property bool $is_it_admin
@@ -54,7 +54,18 @@ use CakeDC\Users\Model\Entity\User as CakeDcUser;
  * @property string|null $clinic_password
  * @property int $timezone_offset
  * @property string|null $timezone
+ * @property string|null $token
+ * @property \Cake\I18n\FrozenTime|null $token_expires
+ * @property string|null $api_token
+ * @property \Cake\I18n\FrozenTime|null $activation_date
+ * @property string|null $secret
+ * @property bool|null $secret_verified
+ * @property \Cake\I18n\FrozenTime|null $tos_date
+ * @property bool $is_superuser
+ * @property string|null $role
+ * @property array|null $additional_data
  *
+ * @property \CakeDC\Users\Model\Entity\SocialAccount[] $social_accounts
  * @property \App\Model\Entity\Corp[] $corps
  * @property \App\Model\Entity\CaCallGroupNote[] $ca_call_group_notes
  * @property \App\Model\Entity\CaCall[] $ca_calls
@@ -77,7 +88,7 @@ class User extends CakeDcUser
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array
      */
     protected $_accessible = [
         'username' => true,
@@ -107,8 +118,8 @@ class User extends CakeDcUser
         'created' => true,
         'modified' => true,
         'modified_by' => true,
-        'lastlogin' => true,
-        'is_active' => true,
+        'last_login' => true,
+        'active' => true,
         'is_hardened_password' => true,
         'is_admin' => true,
         'is_it_admin' => true,
@@ -124,6 +135,17 @@ class User extends CakeDcUser
         'clinic_password' => true,
         'timezone_offset' => true,
         'timezone' => true,
+        'token' => true,
+        'token_expires' => true,
+        'api_token' => true,
+        'activation_date' => true,
+        'secret' => true,
+        'secret_verified' => true,
+        'tos_date' => true,
+        'is_superuser' => true,
+        'role' => true,
+        'additional_data' => true,
+        'social_accounts' => true,
         'corps' => true,
         'ca_call_group_notes' => true,
         'ca_calls' => true,
@@ -145,6 +167,7 @@ class User extends CakeDcUser
      */
     protected $_hidden = [
         'password',
+        'token',
     ];
 
     protected $_virtual = [

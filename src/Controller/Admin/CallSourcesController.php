@@ -37,9 +37,17 @@ class CallSourcesController extends AppController
         $this->paginate = [
             'contain' => ['Locations'],
         ];
-        $callSources = $this->paginate($this->CallSources);
-
-        $this->set(compact('callSources'));
+        $requestParams = $this->request->getQueryParams();
+        if (array_key_exists('saved_search', $requestParams)) {
+            $this->set('savedSearch', true);
+        } else {
+            $this->set('savedSearch', false);
+        }
+        $callSourcesQuery = $this->CallSources
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
+        $this->set('callSources', $this->paginate($callSourcesQuery));
         $this->set('fields', $this->CallSources->getSchema()->typeMap());
     }
 }
