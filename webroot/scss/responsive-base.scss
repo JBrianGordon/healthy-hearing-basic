@@ -1,0 +1,17 @@
+.btn-xs {
+  @include button-size(3px, 5px, 12px, 0.2rem);
+}
+.btn-group-xs > .btn { @extend .btn-xs; }
+.btn-default {
+  @extend .btn-light;
+  border-color: #333;
+  &:hover {
+    background-color: #e6e6e6;
+    border-color: #333;
+  }
+}
+.bg-default {
+  background: #fff;
+  border: solid 1px #7b7e80;
+  color: #7b7380;
+}

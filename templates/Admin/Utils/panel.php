@@ -20,10 +20,13 @@ $adminMenu = Configure::read('adminMenu');
             <?php foreach ($menuContents as $itemTitle => $itemContents) : ?>
                 <?php if (array_key_exists('items', $itemContents)) : ?>
                   <div class="col dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100 rounded-pill"
+                    <button class="btn btn-default dropdown-toggle w-100 rounded-pill"
                       type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
+                      <?php if (!empty($itemContents['icon'])): ?>
+                        <?= '<i class="'.$itemContents['icon'].'"></i> ' ?>
+                      <?php endif; ?>
                       <?= $itemTitle ?>
                     </button>
                     <?php if (!empty($itemContents['items'])) : ?>
@@ -32,7 +35,14 @@ $adminMenu = Configure::read('adminMenu');
                             <?php if ($subItemTitle == 'divider' && $subItem === true) : ?>
                               <li><hr class="dropdown-divider"></li>
                             <?php else : ?>
-                              <li><a class="dropdown-item" href="<?= $subItem['url'] ?>"><?= $subItemTitle ?></a></li>
+                              <li>
+                                <a class="dropdown-item" href="<?= $subItem['url'] ?>">
+                                  <?php if (!empty($subItem['icon'])): ?>
+                                    <?= '<i class="'.$subItem['icon'].'"></i> ' ?>
+                                  <?php endif; ?>
+                                  <?= $subItemTitle ?>
+                                </a>
+                              </li>
                             <?php endif; ?>
                         <?php endforeach; ?>
                       </ul>
@@ -40,10 +50,13 @@ $adminMenu = Configure::read('adminMenu');
                   </div>
                 <?php else : ?>
                   <div class="col">
-                    <a class="btn btn-outline-secondary w-100 rounded-pill"
+                    <a class="btn btn-default w-100 rounded-pill"
                       href="<?= $itemContents['url'] ?>"
                       role="button"
                     >
+                      <?php if (!empty($itemContents['icon'])): ?>
+                        <?= '<i class="'.$itemContents['icon'].'"></i> ' ?>
+                      <?php endif; ?>
                       <?= $itemTitle ?>
                     </a>
                   </div>

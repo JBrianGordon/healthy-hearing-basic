@@ -14,40 +14,40 @@ $editorialItems = [];
 if (Configure::read('showReports')) {
     $editorialItems['Browse reports'] = [
         'url' => '/admin/content',
-        'icon' => 'glyphicon glyphicon-font',
+        'icon' => 'bi bi-font',
     ];
 }
 $editorialItems['Browse help pages'] = [
     'url' => '/admin/wikis',
-    'icon' => 'glyphicon glyphicon-tasks',
+    'icon' => 'bi bi-tasks',
 ];
 if (Configure::read('showManufacturers')) {
     $editorialItems['Browse companies'] = [
         'url' => '/admin/corps',
-        'icon' => 'glyphicon glyphicon-flag',
+        'icon' => 'bi bi-flag',
     ];
 }
 if (Configure::read('showAds')) {
     $editorialItems['Browse ads'] = [
         'url' => '/admin/ad',
-        'icon' => 'glyphicon glyphicon-picture',
+        'icon' => 'bi bi-picture',
     ];
 }
 if (Configure::read('showReports')) {
     $editorialItems['Add article'] = [
         'url' => '/admin/content/edit/type:article',
-        'icon' => 'glyphicon glyphicon-plus',
+        'icon' => 'bi bi-plus',
     ];
 }
 $editorialItems['Misc. pages'] = [
     'url' => '/admin/pages',
-    'icon' => 'glyphicon glyphicon-book',
+    'icon' => 'bi bi-book',
 ];
 $editorialItems['Tags'] = [
     'url' => '/admin/tags',
 ];
 $editorialMenu = [
-    'icon' => 'glyphicon glyphicon-font',
+    'icon' => 'bi bi-font',
     'items' => $editorialItems,
 ];
 
@@ -73,11 +73,11 @@ if (Configure::read('isCallTrackingEnabled')) {
 }
 $locationsItems['Clinic portal'] = [
     'url' => '/clinic/login',
-    'icon' => 'glyphicon glyphicon-log-in',
+    'icon' => 'bi bi-log-in',
 ];
 $locationsItems['Clinic users'] = [
     'url' => '/admin/location-users',
-    'icon' => 'glyphicon glyphicon-user',
+    'icon' => 'bi bi-user',
 ];
 $locationsItems['Cities'] = [
     'url' => '/admin/cities',
@@ -90,7 +90,7 @@ $locationsItems[$zipCodes] = [
     'url' => '/admin/zips',
 ];
 $locationsMenu = [
-    'icon' => 'glyphicon glyphicon-map-marker',
+    'icon' => 'bi bi-geo-alt-fill',
     'items' => $locationsItems,
 ];
 
@@ -110,7 +110,7 @@ if (Configure::read('isTieringEnabled')) {
     ];
 }
 $importsMenu = [
-    'icon' => 'glyphicon glyphicon-import',
+    'icon' => 'bi bi-import',
     'items' => $importsItems,
 ];
 
@@ -119,7 +119,7 @@ $importsMenu = [
 ********************************/
 $reviewsMenu = [
     'url' => '/admin/reviews',
-    'icon' => 'glyphicon glyphicon-star',
+    'icon' => 'bi bi-star-fill',
 ];
 
 /*******************************
@@ -129,47 +129,47 @@ if (Configure::read('isCallAssistEnabled')) {
     $callAssistItems = [];
     $callAssistItems['Outbound calls'] = [
         'url' => '/admin/ca-call-groups/outbound',
-        'icon' => 'glyphicon glyphicon-bullhorn',
+        'icon' => 'bi bi-bullhorn',
     ];
     $callAssistItems['Add inbound call'] = [
         'url' => '/admin/ca-calls/edit',
-        'icon' => 'glyphicon glyphicon-plus',
+        'icon' => 'bi bi-plus',
     ];
     $callAssistItems['Return call from clinic'] = [
         'url' => '/admin/ca-calls/clinic-lookup',
-        'icon' => 'glyphicon glyphicon-plus',
+        'icon' => 'bi bi-plus',
     ];
     $callAssistItems['Activation dashboard'] = [
         'url' => '/admin/locations/activation-dashboard',
-        'icon' => 'glyphicon glyphicon-check',
+        'icon' => 'bi bi-check',
     ];
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
         'url' => '/admin/ca-call-groups',
-        'icon' => 'glyphicon glyphicon-list',
+        'icon' => 'bi bi-list',
     ];
     $callAssistItems['Browse calls'] = [
         'url' => '/admin/ca-calls',
-        'icon' => 'glyphicon glyphicon-list',
+        'icon' => 'bi bi-list',
     ];
     $callAssistItems['Metrics - Calls'] = [
         'url' => '/admin/ca-call-groups/metrics',
-        'icon' => 'glyphicon glyphicon-stats',
+        'icon' => 'bi bi-stats',
     ];
     $callAssistItems['Metrics - Appt request forms'] = [
         'url' => '/admin/ca-call-groups/request-form-metrics',
-        'icon' => 'glyphicon glyphicon-stats',
+        'icon' => 'bi bi-stats',
     ];
     $callAssistItems['Metrics - Appts by state'] = [
         'url' => '/admin/ca-call-groups/appts-by-state-metrics',
-        'icon' => 'glyphicon glyphicon-stats',
+        'icon' => 'bi bi-stats',
     ];
     $callAssistItems['Metrics - Calls and appts for clinics by date range'] = [
         'url' => '/admin/ca-call-groups/calls-and-appts-by-date',
-        'icon' => 'glyphicon glyphicon-stats',
+        'icon' => 'bi bi-stats',
     ];
     $callAssistMenu = [
-        'icon' => 'glyphicon glyphicon-earphone',
+        'icon' => 'bi bi-earphone',
         'items' => $callAssistItems,
     ];
 } else {
@@ -182,14 +182,14 @@ if (Configure::read('isCallAssistEnabled')) {
 $callTrackingItems = [];
 $callTrackingItems['Browse Calls'] = [
     'url' => '/admin/cs-calls',
-    'icon' => 'glyphicon glyphicon-list',
+    'icon' => 'bi bi-list',
 ];
 $callTrackingItems['Metrics'] = [
     'url' => '/admin/cs-calls/metrics',
-    'icon' => 'glyphicon glyphicon-stats',
+    'icon' => 'bi bi-stats',
 ];
 $callTrackingMenu = [
-    'icon' => 'glyphicon glyphicon-earphone',
+    'icon' => 'bi bi-earphone',
     'items' => $callTrackingItems,
 ];
 
@@ -218,7 +218,7 @@ if (Configure::read('showImageSitemap')) {
     ];
 }
 $seoToolsMenu = [
-    'icon' => 'glyphicon glyphicon-briefcase',
+    'icon' => 'bi bi-briefcase',
     'items' => $seoItems,
 ];
 
@@ -229,7 +229,7 @@ $utilitiesItems = [];
 $hhUsers = Configure::read('siteNameAbbr').' Users';
 $utilitiesItems[$hhUsers] = [
     'url' => '/admin/users',
-    'icon' => 'glyphicon glyphicon-user',
+    'icon' => 'bi bi-user',
 ];
 $utilitiesItems['View cache'] = [
     'url' => '/admin/utils/cache',
@@ -252,7 +252,7 @@ $utilitiesItems['Settings'] = [
     'url' => '/admin/configurations',
 ];
 $utilitiesMenu = [
-    'icon' => 'glyphicon glyphicon-wrench',
+    'icon' => 'bi bi-wrench',
     'items' => $utilitiesItems,
 ];
 
@@ -292,11 +292,11 @@ $itUtilitiesMenu = [
 $itConciergeLegacyItems = [];
 $itConciergeLegacyItems['Survey Calls'] = [
     'url' => '/admin/ca-call-groups/surveys',
-    'icon' => 'glyphicon glyphicon-bullhorn',
+    'icon' => 'bi bi-bullhorn',
 ];
 $itConciergeLegacyItems['Survey Metrics'] = [
     'url' => '/admin/ca-call-groups/survey-metrics',
-    'icon' => 'glyphicon glyphicon-stats',
+    'icon' => 'bi bi-stats',
 ];
 $itConciergeLegacyMenu = [
     'items' => $itConciergeLegacyItems,
@@ -341,7 +341,7 @@ $csaReviewsMenu = $reviewsMenu;
 ********************************/
 $outboundCalls = [
     'url' => '/admin/ca-call-groups/outbound',
-    'icon' => 'glyphicon glyphicon-bullhorn',
+    'icon' => 'bi bi-bullhorn',
 ];
 
 /*******************************
@@ -349,7 +349,7 @@ $outboundCalls = [
 ********************************/
 $addInboundCall = [
     'url' => '/admin/ca-calls/edit',
-    'icon' => 'glyphicon glyphicon-plus',
+    'icon' => 'bi bi-plus',
 ];
 
 /*******************************
@@ -357,7 +357,7 @@ $addInboundCall = [
 ********************************/
 $returnCallFromClinic = [
     'url' => '/admin/ca-calls/clinic-lookup',
-    'icon' => 'glyphicon glyphicon-plus',
+    'icon' => 'bi bi-plus',
 ];
 
 /*******************************
@@ -365,7 +365,7 @@ $returnCallFromClinic = [
 ********************************/
 $activationDashboard = [
     'url' => '/admin/locations/activation-dashboard',
-    'icon' => 'glyphicon glyphicon-check',
+    'icon' => 'bi bi-check',
 ];
 
 /***************************************************
@@ -377,7 +377,7 @@ $activationDashboard = [
 ********************************/
 $browseCallGroups = [
     'url' => '/admin/ca-call-groups',
-    'icon' => 'glyphicon glyphicon-list',
+    'icon' => 'bi bi-list',
 ];
 
 /*******************************
@@ -385,7 +385,7 @@ $browseCallGroups = [
 ********************************/
 $browseCalls = [
     'url' => '/admin/ca-calls',
-    'icon' => 'glyphicon glyphicon-list',
+    'icon' => 'bi bi-list',
 ];
 
 /*******************************
@@ -393,7 +393,7 @@ $browseCalls = [
 ********************************/
 $callMetrics = [
     'url' => '/admin/ca-call-groups/metrics',
-    'icon' => 'glyphicon glyphicon-stats',
+    'icon' => 'bi bi-stats',
 ];
 
 /*******************************
@@ -401,7 +401,7 @@ $callMetrics = [
 ********************************/
 $metricsRequestForm = [
     'url' => '/admin/ca-call-groups/request-form-metrics',
-    'icon' => 'glyphicon glyphicon-stats',
+    'icon' => 'bi bi-stats',
 ];
 
 /*****************************************

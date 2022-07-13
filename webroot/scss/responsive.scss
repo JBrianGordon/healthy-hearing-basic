@@ -1,1 +1,4 @@
+@import "theme-colors.scss"; // Load before bootstrap
 @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "responsive-base.scss";
+@import "admin/responsive-admin.scss";

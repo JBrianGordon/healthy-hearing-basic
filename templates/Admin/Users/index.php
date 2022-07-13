@@ -16,9 +16,6 @@ foreach ($fields as $field => $type) {
         unset($fields[$field]);
     }
 }
-//pr($this->Search);
-//pr($this->Search->isSearch());
-//pr($this->request);
 ?>
 <div class="users index content">
     <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
