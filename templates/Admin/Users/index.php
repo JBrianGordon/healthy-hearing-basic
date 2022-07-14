@@ -3,7 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
-
+use App\Model\Entity\User;
 $this->loadHelper('Search.Search', [
     'additionalBlacklist' => [
         'saved_search',
@@ -45,15 +45,27 @@ foreach ($fields as $field => $type) {
         ?>
         <?php $column = 1; ?>
         <?php foreach ($fields as $field => $type): ?>
+            <?php
+            $label = '';
+            $options = false;
+            $empty = false;
+            switch ($field) {
+                case 'role':
+                    $type = 'select';
+                    $options = User::$roles;
+                    $empty = '(All roles)';
+                    break;
+            }
+            ?>
             <?php if ($column == 1): ?>
                 <div class="row" style="min-height: 74px;">
                     <div class="col-md-6">
-                        <?php echo $this->Admin->formInput($field, $type); ?>
+                        <?php echo $this->Admin->formInput($field, $type, $label, $options, $empty); ?>
                         <?php $column = 2; ?>
                     </div> <!-- end col -->
             <?php else: // column 2 ?>
                     <div class="col-md-6">
-                        <?php echo $this->Admin->formInput($field, $type); ?>
+                        <?php echo $this->Admin->formInput($field, $type, $label, $options, $empty); ?>
                         <?php $column = 1; ?>
                     </div> <!-- end col -->
                 </div> <!-- end row -->
@@ -89,7 +101,7 @@ foreach ($fields as $field => $type) {
                     <tr>
                         <td><?= h($user->id) ?></td>
                         <td><?php echo '<strong>'.$user->first_name.' '.$user->last_name.'</strong><br>'.
-                            '<span class="badge bg-secondary">'.$user->username.'</span><br>'.
+                            '<span class="badge bg-info">'.$user->username.'</span><br>'.
                             $user->email; ?></td>
                         <td><?= h($user->company) ?></td>
                         <td><?= $this->Html->badge(
@@ -105,10 +117,10 @@ foreach ($fields as $field => $type) {
                             <div class="btn-group-vertical btn-group-sm">
                                 <?= $this->Html->link(__('Edit'),
                                     ['action' => 'edit', $user->id],
-                                    ['class' => 'btn btn-outline-secondary']) ?>
+                                    ['class' => 'btn btn-default']) ?>
                                 <?= $this->Form->postLink(__('Delete'),
                                     ['action' => 'delete', $user->id],
-                                    ['class' => 'btn btn-outline-secondary', 'confirm' => __('Are you sure you want to delete {0}?', $user->username)]) ?>
+                                    ['class' => 'btn btn-default', 'confirm' => __('Are you sure you want to delete {0}?', $user->username)]) ?>
                             </div>
                         </td>
                     </tr>

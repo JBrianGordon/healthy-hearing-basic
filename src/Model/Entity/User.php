@@ -82,6 +82,16 @@ use CakeDC\Users\Model\Entity\User as CakeDcUser;
 class User extends CakeDcUser
 {
     /**
+    * Enum - role
+    */
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
+    static $roles = [
+        self::ROLE_USER => 'User',
+        self::ROLE_ADMIN => 'Admin',
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to
