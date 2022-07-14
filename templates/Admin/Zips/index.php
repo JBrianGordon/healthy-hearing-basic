@@ -105,10 +105,10 @@ $this->loadHelper('Search.Search', [
                         <div class="btn-group-vertical btn-group-sm">
                             <?= $this->Html->link(__('Edit'),
                                 ['action' => 'edit', $zip->zip],
-                                ['class' => 'btn btn-outline-secondary']) ?>
+                                ['class' => 'btn btn-default']) ?>
                             <?= $this->Form->postLink(__('Delete'),
                                 ['action' => 'delete', $zip->zip],
-                                ['class' => 'btn btn-outline-secondary', 'confirm' => __('Are you sure you want to delete {0}?', $zip->zip)]) ?>
+                                ['class' => 'btn btn-default', 'confirm' => __('Are you sure you want to delete {0}?', $zip->zip)]) ?>
                         </div>
                     </td>
                 </tr>

@@ -49,13 +49,13 @@
                                     // TODO:
                                     //'region' =>  $this->Clinic->stateSlug($state->name)
                                 ],
-                                ['class' => 'btn btn-outline-secondary']) ?>
+                                ['class' => 'btn btn-default']) ?>
                             <?= $this->Html->link(__('Edit'),
                                 ['action' => 'edit', $state->id],
-                                ['class' => 'btn btn-outline-secondary']) ?>
+                                ['class' => 'btn btn-default']) ?>
                             <?= $this->Form->postLink(__('Delete'),
                                 ['action' => 'delete', $state->id],
-                                ['class' => 'btn btn-outline-secondary', 'confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) ?>
+                                ['class' => 'btn btn-default', 'confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) ?>
                         </div>
                     </td>
                 </tr>

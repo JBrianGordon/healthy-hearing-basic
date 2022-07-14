@@ -93,7 +93,7 @@ $siteNameAbbr = Configure::read('siteNameAbbr');
                             <?php endif; ?>
                         <?php endif; ?>
                         <?php if ($location->is_oticon): ?>
-                            <span class='badge bg-secondary label-oticon'>OTI
+                            <span class='badge bg-oticon label-oticon'>OTI
                             <?php if (Configure::read('isTieringEnabled')): ?>
                                 <?php echo $location->oticon_tier; ?>
                             <?php endif; ?>
@@ -145,13 +145,13 @@ $siteNameAbbr = Configure::read('siteNameAbbr');
                         <div class="btn-group-vertical btn-group-sm">
                             <?= $this->Html->link("<i class='bi bi-wrench'></i> Manage",
                                 ['action' => 'edit', $location->id],
-                                ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
+                                ['class' => 'btn btn-default', 'escape' => false]) ?>
                             <?= $this->Html->link(__('View'),
                                 ['action' => 'view', 'prefix' => false, $location->id],
-                                ['class' => 'btn btn-outline-secondary']) ?>
+                                ['class' => 'btn btn-default']) ?>
                             <?php /*= $this->Html->link(__('Clinic Edit'),
                                 ['action' => 'edit', 'prefix' => 'clinic', $location->id],
-                                ['class' => 'btn btn-outline-secondary']) */ ?>
+                                ['class' => 'btn btn-default']) */ ?>
                         </div>
                     </td>
                 </tr>

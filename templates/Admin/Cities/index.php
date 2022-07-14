@@ -133,10 +133,10 @@ $this->loadHelper('Search.Search', [
                         <div class="btn-group-vertical btn-group-sm">
                             <?= $this->Html->link(__('Edit'),
                                 ['action' => 'edit', $city->id],
-                                ['class' => 'btn btn-outline-secondary']) ?>
+                                ['class' => 'btn btn-default']) ?>
                             <?= $this->Form->postLink(__('Delete'),
                                 ['action' => 'delete', $city->id],
-                                ['class' => 'btn btn-outline-secondary', 'confirm' => __('Are you sure you want to delete {0}?', $city->city)]) ?>
+                                ['class' => 'btn btn-default', 'confirm' => __('Are you sure you want to delete {0}?', $city->city)]) ?>
                         </div>
                     </td>
                 </tr>
