@@ -302,3 +302,48 @@ function arrayFilterRecursive($array) {
     }
     return $array;
 }
+
+/**
+* Returns a datetime formatted to display in the specified timezone
+*/
+function getDateTime($datetime, $timezone='America/New_York', $format='m/d/Y g:i a T') {
+    $date = new DateTime($datetime, new DateTimeZone($timezone));
+    return $date->format($format);
+}
+
+/**
+* Returns a datetime formatted to display as eastern time (EST or EDT depending on date)
+*/
+function dateTimeEastern($datetime, $format='m/d/Y g:i a T') {
+    return getDateTime($datetime, 'America/New_York', $format);
+}
+
+/**
+* Takes a date/time saved in Central timezone (server time).
+* Returns a time converted to Eastern timezone and formatted.
+*/
+function dateTimeCentralToEastern($datetime, $format='M. d Y, H:i T') {
+    $datetime .= ' +1 hour';
+    return getDateTime($datetime, 'America/New_York', $format);
+}
+
+/**
+* Get the eastern timezone abbreviation (EST/EDT)
+*/
+function getEasternTimezone() {
+    return date('I') ? 'EDT' : 'EST';
+}
+
+/**
+* Get the eastern timezone offset in hours from UTC (4/5)
+*/
+function getEasternTimezoneOffset() {
+    return date('I') ? 4 : 5;
+}
+
+/**
+* Get the current datetime in eastern (Y-m-d H:i:s format)
+*/
+function getCurrentEasternTime($format = 'Y-m-d H:i:s') {
+    return dateTimeEastern('now', $format);
+}

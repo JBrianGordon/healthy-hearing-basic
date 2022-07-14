@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Core\Configure;
 
 /**
  * Location Entity
@@ -146,6 +147,8 @@ use Cake\ORM\Entity;
  */
 class Location extends Entity
 {
+    protected $_virtual = ['is_oticon'];
+
     /**
     * Enum - Listing Type
     */
@@ -211,6 +214,18 @@ class Location extends Entity
         self::DIRECT_BOOK_BLUEPRINT => 'Blueprint',
         self::DIRECT_BOOK_EARQ => 'EarQ'
     ];
+
+    protected function _getIsOticon()
+    {
+        $country = Configure::read('International.country');
+        if ($country == 'US') {
+            return (empty($this->last_xml)) ? false : true;
+        } elseif ($country == 'CA') {
+            return ($this->is_retail == false) ? true : false;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -355,5 +370,6 @@ class Location extends Entity
         'location_videos' => true,
         'location_vidscrips' => true,
         'reviews' => true,
+        'is_oticon' => true,
     ];
 }

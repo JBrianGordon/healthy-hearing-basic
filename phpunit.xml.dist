@@ -23,9 +23,11 @@
             <file>tests/TestCase/Command/EditorialPublishCommandTest.php</file>
             <file>tests/TestCase/Controller/ContentControllerTest.php</file>
             <file>tests/TestCase/Controller/CorpsControllerTest.php</file>
+            <file>tests/TestCase/Controller/ReviewsControllerTest.php</file>
             <file>tests/TestCase/Controller/WikisControllerTest.php</file>
             <file>tests/TestCase/Model/Table/ContentTableTest.php</file>
             <file>tests/TestCase/Model/Table/CorpsTableTest.php</file>
+            <file>tests/TestCase/Model/Table/ReviewsTableTest.php</file>
             <file>tests/TestCase/Model/Table/WikisTableTest.php</file>
             <file>tests/TestCase/View/Helper/EditorialHelperTest.php</file>
         </testsuite>

@@ -7,6 +7,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
+use App\Model\Entity\Review;
 
 /**
  * Reviews Model
@@ -45,12 +47,55 @@ class ReviewsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->hasOne('Zips', [
+            'foreignKey' => 'zip',
+            'bindingKey' => 'zip',
+            'propertyName' => 'reviewer_zip',
+        ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('location_id')
+            ->value('body')
+            ->value('first_name')
+            ->value('last_name')
+            ->value('zip')
+            ->value('rating')
+            ->value('status')
+            ->value('origin')
+            ->value('response')
+            ->value('response_status')
+            ->value('created')
+            ->value('modified')
+            ->value('denied_date')
+            ->value('ip')
+            ->value('character_count')
+            ->boolean('is_spam')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['body','first_name','last_name','response'],
+            ])
+            ->add('listing_type', 'Search.Callback', [
+                'callback' => function ($query, $args, $filter) {
+                    $listingType = $args['listing_type'];
+                    $query->matching('Locations', function ($q) use($listingType) {
+                        return $q->where(['Locations.listing_type LIKE' => '%'.$listingType.'%']);
+                    });
+                }
+            ]);
     }
 
     /**
@@ -136,5 +181,26 @@ class ReviewsTable extends Table
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;
+    }
+
+    /**
+    * Set the status of a review, quickly
+    */
+    function setStatus($id = null, $status = null){
+        if ($this->exists($id) && in_array($status, array_keys(Review::$statuses))){
+            $review = $this->get($id);
+            $review = $this->patchEntity($review, ['status' => $status]);
+            return $this->save($review);
+        }
+        return false;
+    }
+
+    /**
+    * Shortcut function ignore
+    * @param int id
+    * @return result of status setting
+    */
+    function ignore($id = null){
+        return $this->setStatus($id, Review::STATUS_IGNORED);
     }
 }
