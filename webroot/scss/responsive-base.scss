@@ -1,3 +1,12 @@
+.tar {
+  text-align: right !important;
+}
+.tal {
+  text-align: left !important;
+}
+.tac {
+  text-align: center !important;
+}
 .btn-xs {
   @include button-size(3px, 5px, 12px, 0.2rem);
 }

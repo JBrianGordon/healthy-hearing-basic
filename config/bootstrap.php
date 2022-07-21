@@ -83,8 +83,18 @@ try {
     exit($e->getMessage() . "\n");
 }
 
-if (file_exists(CONFIG . 'hhConfigs/config_us.php')) {
-    Configure::load('hhConfigs/config_us', 'default');
+if (file_exists(CONFIG . 'hhConfigs/config_core.php')) {
+    Configure::load('hhConfigs/config_core', 'default');
+}
+
+if (Configure::read('country') == 'CA') {
+    if (file_exists(CONFIG . 'hhConfigs/config_ca.php')) {
+        Configure::load('hhConfigs/config_ca', 'default');
+    }
+} else {
+    if (file_exists(CONFIG . 'hhConfigs/config_us.php')) {
+        Configure::load('hhConfigs/config_us', 'default');
+    }
 }
 
 if (file_exists(CONFIG . 'hhConfigs/config_routes.php')) {

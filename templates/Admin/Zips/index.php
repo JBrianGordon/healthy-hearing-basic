@@ -9,61 +9,26 @@ $this->loadHelper('Search.Search', [
         'saved_search',
     ],
 ]);
+// Advanced search details
+$advancedSearchFields = [];
+foreach ($fields as $field => $type) {
+    $label = '';
+    $options = false;
+    $empty = false;
+    $advancedSearchFields[] = [
+        'field' => $field,
+        'type' => $type,
+        'label' => $label,
+        'options' => $options,
+        'empty' => $empty
+    ];
+}
 ?>
 <div class="zips index content">
     <?= $this->Html->link(__('New Zip'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Zips') ?></h3>
     <?= $this->element('pagination') ?>
-    <div class="row justify-content-end">
-        <?php if ($this->Search->isSearch()) : ?>
-            <div class="col col-md-auto">
-                <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
-            </div>
-        <?php endif; ?>
-        <div class="col col-md-auto">
-            <button class="btn btn-primary mb-3" type="button"
-                data-bs-toggle="collapse" data-bs-target="#advancedSearch"
-                aria-expanded="false" aria-controls="advancedSearch"
-            >
-                + Advanced
-            </button>
-        </div>
-    </div>
-    <div class="collapse" id="advancedSearch">
-        <?php
-            echo $this->Form->create(null, [
-                'class' => 'bg-light mb-3 p-5',
-                'valueSources' => 'query',
-            ]);
-            echo $this->Form->control('zip', [
-                'type' => 'text',
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('city', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('state', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('country_code', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('lat', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('lon', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('areacode', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->button('Filter', [
-                'type' => 'submit',
-                'class' => 'me-3',
-            ]);
-            echo $this->Form->end();
-            ?>
-    </div>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>

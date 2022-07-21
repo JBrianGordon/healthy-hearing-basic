@@ -68,4 +68,5 @@ $adminMenu = Configure::read('adminMenu');
       </div>
     <?php endforeach; ?>
   </div>
+  <div class="tac mt-3"><?= Configure::read('tagVersion') ?></div>
 </div>

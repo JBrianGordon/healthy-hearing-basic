@@ -45,6 +45,7 @@ class CitiesController extends AppController
                 'search' => $requestParams,
             ]);
         $this->set('cities', $this->paginate($citiesQuery));
+        $this->set('fields', $this->Cities->getSchema()->typeMap());
     }
 
     /**

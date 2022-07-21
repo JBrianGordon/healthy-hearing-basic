@@ -35,7 +35,7 @@
 </head>
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid mx-5">
+      <div class="container">
         <a class="navbar-brand" href="/">
           <img src="/img/hh-logo.svg" alt="" width="198" height="40">
         </a>

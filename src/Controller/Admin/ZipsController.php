@@ -44,6 +44,7 @@ class ZipsController extends AppController
                 'search' => $requestParams,
             ]);
         $this->set('zips', $this->paginate($zipsQuery));
+        $this->set('fields', $this->Zips->getSchema()->typeMap());
     }
 
     /**

@@ -16,92 +16,60 @@ $this->loadHelper('Search.Search', [
 $filter ??= null;
 // Add additional search fields
 $fields['listing_type'] = 'string';
+// Advanced search details
+$advancedSearchFields = [];
+foreach ($fields as $field => $type) {
+    $label = '';
+    $options = false;
+    $empty = false;
+    switch ($field) {
+        case 'status':
+            $type = 'select';
+            $options = Review::$statuses;
+            $empty = '(All statuses)';
+            break;
+        case 'response_status':
+            $type = 'select';
+            $options = Review::$responseStatuses;
+            $empty = '(All response statuses)';
+            break;
+        case 'origin': 
+            $type = 'select';
+            $options = Review::$origins;
+            $empty = '(All origins)';
+            break;
+        case 'rating': 
+            $type = 'select';
+            $options = Review::$ratings;
+            $empty = '(All ratings)';
+            break;
+        case 'listing_type': 
+            $type = 'select';
+            $options = Location::$listingTypes;
+            $empty = '(All listing types)';
+            break;
+    }
+    $advancedSearchFields[] = [
+        'field' => $field,
+        'type' => $type,
+        'label' => $label,
+        'options' => $options,
+        'empty' => $empty
+    ];
+}
 ?>
 <div class="reviews index content">
-    <?= $this->Html->link(__('New Review'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <div class="btn-group btn-group-sm pt-2 mb-3">
+        <?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'export'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-check-lg'></i> To Publish", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-search'></i> Find Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-x-lg'></i> Clear Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+    </div>
     <h3><?= __('Reviews') ?></h3>
     <?= $this->element('pagination') ?>
-    <div class="row justify-content-end">
-        <?php if ($this->Search->isSearch()) : ?>
-            <div class="col col-md-auto">
-                <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
-            </div>
-        <?php endif; ?>
-        <div class="col col-md-auto">
-            <button class="btn btn-primary mb-3" type="button"
-                data-bs-toggle="collapse" data-bs-target="#advancedSearch"
-                aria-expanded="false" aria-controls="advancedSearch"
-            >
-                + Advanced
-            </button>
-        </div>
-    </div>
-    <div class="collapse" id="advancedSearch">
-        <?php
-        echo $this->Form->create(null, [
-            'class' => 'bg-light mb-3 p-5',
-            'valueSources' => 'query',
-        ]);
-        ?>
-        <?php $column = 1; ?>
-        <?php foreach ($fields as $field => $type): ?>
-            <?php
-            $label = '';
-            $options = false;
-            $empty = false;
-            switch ($field) {
-                case 'status':
-                    $type = 'select';
-                    $options = Review::$statuses;
-                    $empty = '(All statuses)';
-                    break;
-                case 'response_status':
-                    $type = 'select';
-                    $options = Review::$responseStatuses;
-                    $empty = '(All response statuses)';
-                    break;
-                case 'origin': 
-                    $type = 'select';
-                    $options = Review::$origins;
-                    $empty = '(All origins)';
-                    break;
-                case 'rating': 
-                    $type = 'select';
-                    $options = Review::$ratings;
-                    $empty = '(All ratings)';
-                    break;
-                case 'listing_type': 
-                    $type = 'select';
-                    $options = Location::$listingTypes;
-                    $empty = '(All listing types)';
-                    break;
-            }
-            ?>
-            <?php if ($column == 1): ?>
-                <div class="row" style="min-height: 74px;">
-                    <div class="col-md-6">
-                        <?php echo $this->Admin->formInput($field, $type, $label, $options, $empty); ?>
-                        <?php $column = 2; ?>
-                    </div> <!-- end col -->
-            <?php else: // column 2 ?>
-                    <div class="col-md-6">
-                        <?php echo $this->Admin->formInput($field, $type, $label, $options, $empty); ?>
-                        <?php $column = 1; ?>
-                    </div> <!-- end col -->
-                </div> <!-- end row -->
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <?php if ($column==2): ?>
-            </div> <!-- end row -->
-        <?php endif; ?>
-        <?php
-        echo $this->Form->button('Filter', [
-            'type' => 'submit',
-            'class' => 'me-3 btn btn-default',
-        ]);
-        echo $this->Form->end();
-        ?>
-    </div>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>
