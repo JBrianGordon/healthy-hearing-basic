@@ -73,11 +73,11 @@ if (Configure::read('isCallTrackingEnabled')) {
 }
 $locationsItems['Clinic portal'] = [
     'url' => '/clinic/login',
-    'icon' => 'bi bi-log-in',
+    'icon' => 'bi bi-person-workspace',
 ];
 $locationsItems['Clinic users'] = [
     'url' => '/admin/location-users',
-    'icon' => 'bi bi-user',
+    'icon' => 'bi bi-person-fill',
 ];
 $locationsItems['Cities'] = [
     'url' => '/admin/cities',
@@ -129,19 +129,19 @@ if (Configure::read('isCallAssistEnabled')) {
     $callAssistItems = [];
     $callAssistItems['Outbound calls'] = [
         'url' => '/admin/ca-call-groups/outbound',
-        'icon' => 'bi bi-bullhorn',
+        'icon' => 'bi bi-telephone-outbound',
     ];
     $callAssistItems['Add inbound call'] = [
         'url' => '/admin/ca-calls/edit',
-        'icon' => 'bi bi-plus',
+        'icon' => 'bi bi-telephone-inbound-fill',
     ];
     $callAssistItems['Return call from clinic'] = [
         'url' => '/admin/ca-calls/clinic-lookup',
-        'icon' => 'bi bi-plus',
+        'icon' => 'bi bi-telephone-inbound-fill',
     ];
     $callAssistItems['Activation dashboard'] = [
         'url' => '/admin/locations/activation-dashboard',
-        'icon' => 'bi bi-check',
+        'icon' => 'bi bi-check2-square',
     ];
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
@@ -154,19 +154,19 @@ if (Configure::read('isCallAssistEnabled')) {
     ];
     $callAssistItems['Metrics - Calls'] = [
         'url' => '/admin/ca-call-groups/metrics',
-        'icon' => 'bi bi-stats',
+        'icon' => 'bi bi-bar-chart-fill',
     ];
     $callAssistItems['Metrics - Appt request forms'] = [
         'url' => '/admin/ca-call-groups/request-form-metrics',
-        'icon' => 'bi bi-stats',
+        'icon' => 'bi bi-bar-chart-fill',
     ];
     $callAssistItems['Metrics - Appts by state'] = [
         'url' => '/admin/ca-call-groups/appts-by-state-metrics',
-        'icon' => 'bi bi-stats',
+        'icon' => 'bi bi-bar-chart-fill',
     ];
     $callAssistItems['Metrics - Calls and appts for clinics by date range'] = [
         'url' => '/admin/ca-call-groups/calls-and-appts-by-date',
-        'icon' => 'bi bi-stats',
+        'icon' => 'bi bi-bar-chart-fill',
     ];
     $callAssistMenu = [
         'icon' => 'bi bi-earphone',
@@ -229,7 +229,7 @@ $utilitiesItems = [];
 $hhUsers = Configure::read('siteNameAbbr').' Users';
 $utilitiesItems[$hhUsers] = [
     'url' => '/admin/users',
-    'icon' => 'bi bi-user',
+    'icon' => 'bi bi-person-fill',
 ];
 $utilitiesItems['View cache'] = [
     'url' => '/admin/utils/cache',
@@ -341,7 +341,7 @@ $csaReviewsMenu = $reviewsMenu;
 ********************************/
 $outboundCalls = [
     'url' => '/admin/ca-call-groups/outbound',
-    'icon' => 'bi bi-bullhorn',
+    'icon' => 'bi bi-megaphone-fill',
 ];
 
 /*******************************
@@ -349,7 +349,7 @@ $outboundCalls = [
 ********************************/
 $addInboundCall = [
     'url' => '/admin/ca-calls/edit',
-    'icon' => 'bi bi-plus',
+    'icon' => 'bi bi-telephone-inbound-fill',
 ];
 
 /*******************************
@@ -357,7 +357,7 @@ $addInboundCall = [
 ********************************/
 $returnCallFromClinic = [
     'url' => '/admin/ca-calls/clinic-lookup',
-    'icon' => 'bi bi-plus',
+    'icon' => 'bi bi-telephone-inbound-fill',
 ];
 
 /*******************************
@@ -365,7 +365,7 @@ $returnCallFromClinic = [
 ********************************/
 $activationDashboard = [
     'url' => '/admin/locations/activation-dashboard',
-    'icon' => 'bi bi-check',
+    'icon' => 'bi bi-check2-square',
 ];
 
 /***************************************************

@@ -97,4 +97,14 @@ class AdminHelper extends Helper
         }
         return $formInput;
     }
+
+    /**
+    * Return Yes or No text based on boolean input
+    * This is helpful when asking is_active
+    * @param boolean
+    * @return string of Yes or No
+    */
+    public function yesNo($boolean) {
+        return $boolean ? "<span class='badge bg-success'><i class='bi bi-check-lg'></i> Yes</span>" : "<span class='badge bg-danger'><i class='bi bi-x-lg'></i> No</span>";
+    }
 }

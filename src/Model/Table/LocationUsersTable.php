@@ -46,7 +46,7 @@ class LocationUsersTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
@@ -55,6 +55,32 @@ class LocationUsersTable extends Table
         $this->hasMany('LocationUserLogins', [
             'foreignKey' => 'location_user_id',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('username')
+            ->value('password')
+            ->value('first_name')
+            ->value('last_name')
+            ->value('email')
+            ->value('created')
+            ->value('modified')
+            ->value('lastlogin')
+            ->boolean('is_active')
+            ->value('reset_url')
+            ->value('reset_expiration_date')
+            ->value('clinic_password')
+            ->value('location_id')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['username', 'first_name', 'last_name'],
+            ]);
     }
 
     /**
