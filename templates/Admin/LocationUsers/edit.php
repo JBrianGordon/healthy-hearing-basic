@@ -2,7 +2,6 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\LocationUser $locationUser
- * @var string[]|\Cake\Collection\CollectionInterface $locations
  */
 ?>
 <div class="row">
@@ -33,7 +32,7 @@
                     echo $this->Form->control('reset_url');
                     echo $this->Form->control('reset_expiration_date', ['empty' => true]);
                     echo $this->Form->control('clinic_password');
-                    echo $this->Form->control('location_id', ['options' => $locations]);
+                    echo $this->Form->control('location_id', ['type' => 'text', 'default' => '']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

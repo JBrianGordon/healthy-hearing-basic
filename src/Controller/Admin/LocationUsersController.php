@@ -70,8 +70,7 @@ class LocationUsersController extends AppController
             }
             $this->Flash->error(__('The location user could not be saved. Please, try again.'));
         }
-        $locations = $this->LocationUsers->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('locationUser', 'locations'));
+        $this->set(compact('locationUser'));
     }
 
     /**
@@ -91,7 +90,6 @@ class LocationUsersController extends AppController
             }
             $this->Flash->error(__('The location user could not be saved. Please, try again.'));
         }
-        $locations = $this->LocationUsers->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('locationUser', 'locations'));
+        $this->set(compact('locationUser'));
     }
 }

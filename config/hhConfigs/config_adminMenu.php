@@ -146,11 +146,11 @@ if (Configure::read('isCallAssistEnabled')) {
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
         'url' => '/admin/ca-call-groups',
-        'icon' => 'bi bi-list',
+        'icon' => 'bi bi-list-ul',
     ];
     $callAssistItems['Browse calls'] = [
         'url' => '/admin/ca-calls',
-        'icon' => 'bi bi-list',
+        'icon' => 'bi bi-list-ul',
     ];
     $callAssistItems['Metrics - Calls'] = [
         'url' => '/admin/ca-call-groups/metrics',
@@ -182,11 +182,11 @@ if (Configure::read('isCallAssistEnabled')) {
 $callTrackingItems = [];
 $callTrackingItems['Browse Calls'] = [
     'url' => '/admin/cs-calls',
-    'icon' => 'bi bi-list',
+    'icon' => 'bi bi-list-ul',
 ];
 $callTrackingItems['Metrics'] = [
     'url' => '/admin/cs-calls/metrics',
-    'icon' => 'bi bi-stats',
+    'icon' => 'bi bi-bar-chart-fill',
 ];
 $callTrackingMenu = [
     'icon' => 'bi bi-earphone',
@@ -296,7 +296,7 @@ $itConciergeLegacyItems['Survey Calls'] = [
 ];
 $itConciergeLegacyItems['Survey Metrics'] = [
     'url' => '/admin/ca-call-groups/survey-metrics',
-    'icon' => 'bi bi-stats',
+    'icon' => 'bi bi-bar-chart-fill',
 ];
 $itConciergeLegacyMenu = [
     'items' => $itConciergeLegacyItems,
@@ -341,7 +341,7 @@ $csaReviewsMenu = $reviewsMenu;
 ********************************/
 $outboundCalls = [
     'url' => '/admin/ca-call-groups/outbound',
-    'icon' => 'bi bi-megaphone-fill',
+    'icon' => 'bi bi-telephone-outbound',
 ];
 
 /*******************************
@@ -377,7 +377,7 @@ $activationDashboard = [
 ********************************/
 $browseCallGroups = [
     'url' => '/admin/ca-call-groups',
-    'icon' => 'bi bi-list',
+    'icon' => 'bi bi-list-ul',
 ];
 
 /*******************************
@@ -385,7 +385,7 @@ $browseCallGroups = [
 ********************************/
 $browseCalls = [
     'url' => '/admin/ca-calls',
-    'icon' => 'bi bi-list',
+    'icon' => 'bi bi-list-ul',
 ];
 
 /*******************************
@@ -393,7 +393,7 @@ $browseCalls = [
 ********************************/
 $callMetrics = [
     'url' => '/admin/ca-call-groups/metrics',
-    'icon' => 'bi bi-stats',
+    'icon' => 'bi bi-bar-chart-fill',
 ];
 
 /*******************************
@@ -401,7 +401,7 @@ $callMetrics = [
 ********************************/
 $metricsRequestForm = [
     'url' => '/admin/ca-call-groups/request-form-metrics',
-    'icon' => 'bi bi-stats',
+    'icon' => 'bi bi-bar-chart-fill',
 ];
 
 /*****************************************
