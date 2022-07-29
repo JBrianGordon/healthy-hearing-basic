@@ -219,14 +219,6 @@
                     <td><?= $caCallGroup->topic_tinnitus ? __('Yes') : __('No'); ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Topic Hearing Previously Tested') ?></th>
-                    <td><?= $caCallGroup->topic_hearing_previously_tested ? __('Yes') : __('No'); ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Topic Aids Previously Worn') ?></th>
-                    <td><?= $caCallGroup->topic_aids_previously_worn ? __('Yes') : __('No'); ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Topic Medical Inquiry') ?></th>
                     <td><?= $caCallGroup->topic_medical_inquiry ? __('Yes') : __('No'); ?></td>
                 </tr>

@@ -44,6 +44,22 @@ class AdminHelper extends Helper
     }
 
     /**
+    * Create a group of checkbox inputs
+    * @param string 'checkboxGroupName'
+    * @param array 'fields'
+    */
+    public function checkboxGroup($checkboxGroupName, $checkboxFields=[]) {
+        $formInput = '<div class="border mb-3 p-2">';
+        $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
+        $formInput .= '<div>';
+        foreach ($checkboxFields as $field => $label) {
+            $formInput .= $this->formInput($field, 'checkbox', $label, false, false);
+        }
+        $formInput .= '</div></div>';
+        return $formInput;
+    }
+
+    /**
     * Create a custom form control based on type
     * @param string 'field'
     * @param string 'type'
@@ -59,8 +75,40 @@ class AdminHelper extends Helper
                     'options' => $options,
                     'empty' => $empty,
                     'label' => ['text' => $label, 'floating' => true],
+                    'multiple' => null,
+                    'secure' => true,
                 ]);
                 break;
+            case 'checkbox':
+            /*
+                $formInput = $this->Form->control($field, [
+                    'type' => 'checkbox',
+                    'inline' => true,
+                    'label' => $label,
+                    'escape' => false,
+                    'spacing' => '',
+                    'empty' => true
+                ]);
+                break;*/
+            case 'multiCheckbox':
+//                $formInput .= '<div class="border mb-3 p-2">';
+//                $formInput .= '<label class="mb-2"><strong>'.$label.'</strong></label>';
+//                $formInput .= '<div>';
+//                $formInput .= $this->Form->multiCheckbox($field, $options, [
+//                    'inline' => true,
+//                ]);
+            /*
+                $formInput = $this->Form->control($field, [
+                    'type' => 'select',
+                    'options' => $options,
+                    'empty' => $empty,
+                    'label' => ['text' => $label],
+                    'multiple' => true,
+                    'secure' => true,
+                    'hiddenField' => null,
+                ]);
+//                $formInput .= '</div></div>';
+                break;*/
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
                 $formInput .= '<label class="col-md-4">'.$label.'</label>';
@@ -71,7 +119,7 @@ class AdminHelper extends Helper
                 $formInput .= '<label class="btn btn-lg btn-outline-danger">';
                 $formInput .= '<input type="radio" value="0" name="'.$field.'" id="'.$fieldSlug.'0" '.$checked0.'>&nbsp;';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-lg btn-outline-secondary">';
+                $formInput .= '<label class="btn btn-lg btn-outline-info">';
                 $formInput .= '<input type="radio" value="" name="'.$field.'" id="'.$fieldSlug.'All" '.$checkedAll.'>&nbsp;';
                 $formInput .= '</label>';
                 $formInput .= '<label class="btn btn-lg btn-outline-success">';

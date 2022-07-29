@@ -10,6 +10,18 @@ $fields = [
         'options',
         'empty'
     ],
+    '1' => [
+        'checkboxGroupName',
+        'checkboxFields' => [
+            '0' => [
+                'field',
+                'type',
+                'label',
+                'options',
+                'empty'
+            ],
+        ]
+    ]
     ...
 ];
 $groupedFields = [
@@ -94,7 +106,11 @@ $this->loadHelper('Search.Search', [
     <?php if (!empty($fields)): ?>
         <?php $column = 1; ?>
         <?php foreach ($fields as $field): ?>
-            <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
+            <?php if (!empty($field['checkboxGroupName'])): ?>
+                <?php $formInput = $this->Admin->checkboxGroup($field['checkboxGroupName'], $field['checkboxFields']); ?>
+            <?php else: ?>
+                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
+            <?php endif; ?>
             <?php if ($column == 1): ?>
                 <div class="row" style="min-height: 74px;">
                     <div class="col-md-6">

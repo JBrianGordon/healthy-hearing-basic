@@ -84,6 +84,236 @@ use Cake\ORM\Entity;
 class CaCallGroup extends Entity
 {
     /**
+    * Enum - is prospect
+    */
+    const PROSPECT_YES = 'prospect';
+    const PROSPECT_NO = 'non_prospect';
+    const PROSPECT_UNKNOWN = 'prospect_unknown';
+    const PROSPECT_DISCONNECTED = 'disconnected';
+    static $prospectOptions = array(
+        self::PROSPECT_YES => 'Yes',
+        self::PROSPECT_NO => 'No',
+        self::PROSPECT_UNKNOWN => 'Unknown',
+        self::PROSPECT_DISCONNECTED => 'Caller disconnected',
+    );
+
+    /**
+    * Enum - score
+    */
+    const SCORE_DISCONNECTED = 'disconnected';
+    const SCORE_MISSED_OPPORTUNITY = 'missed_opportunity';
+    const SCORE_APPT_SET = 'appt_set';
+    const SCORE_TENTATIVE_APPT = 'tentative_appt';
+    const SCORE_APPT_SET_DIRECT = 'appt_set_direct';
+    const SCORE_NOT_REACHED = 'clinic_not_reached';
+    static $scores = array(
+        self::SCORE_DISCONNECTED => 'Caller disconnected or hung up',
+        self::SCORE_MISSED_OPPORTUNITY => 'Clinic missed opportunity',
+        self::SCORE_APPT_SET => 'Clinic set appointment',
+        self::SCORE_TENTATIVE_APPT => 'Tentative appointment',
+        self::SCORE_APPT_SET_DIRECT => 'Appointment set via direct booking',
+        self::SCORE_NOT_REACHED => 'Not able to reach clinic',
+    );
+
+    /*
+    * Enum - status
+    */
+    const STATUS_NEW = 'new';
+    const STATUS_WRONG_NUMBER = 'wrong_number';
+    const STATUS_INCOMPLETE = 'incomplete';
+    const STATUS_VM_NEEDS_CALLBACK = 'vm_needs_callback';
+    const STATUS_VM_CALLBACK_ATTEMPTED = 'vm_callback_attempted';
+    const STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS = 'vm_callback_too_many_attempts';
+    const STATUS_FOLLOWUP_SET_APPT = 'needs_followup';
+    const STATUS_FOLLOWUP_NO_ANSWER = 'needs_followup_no_answer';
+    const STATUS_FOLLOWUP_APPT_REQUEST_FORM = 'followup_appt_request_form';
+    const STATUS_APPT_SET = 'appt_set';
+    const STATUS_TENTATIVE_APPT = 'tentative_appt';
+    const STATUS_MISSED_OPPORTUNITY = 'missed_opportunity';
+    const STATUS_MO_NO_ANSWER = 'mo_clinic_no_answer';
+    const STATUS_NON_PROSPECT = 'non_prospect';
+    const STATUS_OUTBOUND_CLINIC_ATTEMPTED = 'outbound_clinic_attempted';
+    const STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS = 'outbound_clinic_too_many_attempts';
+    const STATUS_OUTBOUND_CLINIC_DECLINED = 'outbound_clinic_declined';
+    const STATUS_OUTBOUND_CLINIC_COMPLETE = 'outbound_clinic_complete';
+    const STATUS_OUTBOUND_CUST_ATTEMPTED = 'outbound_cust_attempted';
+    const STATUS_OUTBOUND_CUST_DECLINED = 'outbound_cust_declined';
+    const STATUS_OUTBOUND_CUST_SURVEY_COMPLETE = 'outbound_cust_complete';
+    const STATUS_OUTBOUND_CUST_TOO_MANY_ATTEMPTS = 'outbound_cust_too_many_attempts';
+    const STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS = 'quick_pick_refused_name';
+    const STATUS_QUICK_PICK_CALLER_REFUSED_HELP = 'quick_pick_caller_refused_help';
+    static $statuses = [
+        self::STATUS_NEW => 'New',
+        self::STATUS_WRONG_NUMBER => 'Wrong number / never connected',
+        self::STATUS_INCOMPLETE => 'Incomplete / Disconnected',
+        self::STATUS_VM_NEEDS_CALLBACK => 'Voicemail needs callback',
+        self::STATUS_VM_CALLBACK_ATTEMPTED => 'Voicemail callback attempted',
+        self::STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS => 'Voicemail callback - too many attempts',
+        self::STATUS_FOLLOWUP_SET_APPT => 'Needs followup to set appt',
+        self::STATUS_FOLLOWUP_NO_ANSWER => 'Needs followup to consumer - clinic did not answer',
+        self::STATUS_FOLLOWUP_APPT_REQUEST_FORM => 'Needs followup to set appt (appt request form)',
+        self::STATUS_APPT_SET => 'Appointment Set',
+        self::STATUS_TENTATIVE_APPT => 'Tentative appointment',
+        self::STATUS_MISSED_OPPORTUNITY => 'Complete (missed opportunity)',
+        self::STATUS_MO_NO_ANSWER => 'Complete (MO - Clinic no answer)',
+        self::STATUS_NON_PROSPECT => 'Complete (non-prospect)',
+        self::STATUS_OUTBOUND_CLINIC_ATTEMPTED => 'Clinic survey attempted',
+        self::STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS => 'Clinic survey - too many attempts',
+        self::STATUS_OUTBOUND_CLINIC_DECLINED => 'Clinic survey declined',
+        self::STATUS_OUTBOUND_CLINIC_COMPLETE => 'Clinic survey complete',
+        self::STATUS_OUTBOUND_CUST_ATTEMPTED => 'Consumer survey attempted',
+        self::STATUS_OUTBOUND_CUST_DECLINED => 'Consumer survey declined',
+        self::STATUS_OUTBOUND_CUST_SURVEY_COMPLETE => 'Consumer survey complete',
+        self::STATUS_OUTBOUND_CUST_TOO_MANY_ATTEMPTS => 'Consumer survey - too many attempts',
+        self::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS => 'Quick Pick - Refused Name/Address',
+        self::STATUS_QUICK_PICK_CALLER_REFUSED_HELP => 'Quick Pick - Caller Refused Help'
+    ];
+
+    /*
+    * Enum - topics
+    */
+    const TOPIC_WANTS_APPT = 'topic_wants_appt';
+    const TOPIC_CLINIC_HOURS = 'topic_clinic_hours';
+    const TOPIC_INSURANCE = 'topic_insurance';
+    const TOPIC_CLINIC_INQUIRY = 'topic_clinic_inquiry';
+    const TOPIC_AID_LOST_OLD = 'topic_aid_lost_old';
+    const TOPIC_AID_LOST_NEW = 'topic_aid_lost_new';
+    const TOPIC_WARRANTY_OLD = 'topic_warranty_old';
+    const TOPIC_WARRANTY_NEW = 'topic_warranty_new';
+    const TOPIC_CANCEL_APPT = 'topic_cancel_appt';
+    const TOPIC_RESCHEDULE_APPT = 'topic_reschedule_appt';
+    const TOPIC_APPT_FOLLOWUP = 'topic_appt_followup';
+    const TOPIC_BATTERIES = 'topic_batteries';
+    const TOPIC_PARTS = 'topic_parts';
+    const TOPIC_MEDICAL_RECORDS = 'topic_medical_records';
+    const TOPIC_TINNITUS = 'topic_tinnitus';
+    const TOPIC_MEDICAL_INQUIRY = 'topic_medical_inquiry';
+    const TOPIC_SOLICITOR = 'topic_solicitor';
+    const TOPIC_PERSONAL_CALL = 'topic_personal_call';
+    const TOPIC_REQUEST_FAX = 'topic_request_fax';
+    const TOPIC_REQUEST_NAME = 'topic_request_name';
+    const TOPIC_REMOVE_FROM_LIST = 'topic_remove_from_list';
+    const TOPIC_FOREIGN_LANGUAGE = 'topic_foreign_language';
+    const TOPIC_OTHER = 'topic_other';
+    const TOPIC_DECLINED = 'topic_declined';
+    static $col1Topics = [
+        self::TOPIC_WANTS_APPT => 'Hearing test / hearing aid consultation',
+        self::TOPIC_CLINIC_HOURS => 'Clinic hours / directions',
+        self::TOPIC_INSURANCE => 'Insurance inquiry',
+        self::TOPIC_CLINIC_INQUIRY => 'General inquiry <small>(hearing loss, products)</small>',
+        self::TOPIC_AID_LOST_OLD => 'Hearing aid lost/broken - Hearing aid is 3 years or older',
+        self::TOPIC_AID_LOST_NEW => 'Hearing aid lost/broken - Hearing aid is less than 3 years old',
+        self::TOPIC_WARRANTY_OLD => 'Hearing aid warranty question - Hearing aid is 3 years or older',
+        self::TOPIC_WARRANTY_NEW => 'Hearing aid warranty question - Hearing aid is less than 3 years old',
+        self::TOPIC_CANCEL_APPT => 'Cancel appointment / Confirm appointment',
+        self::TOPIC_RESCHEDULE_APPT => 'Reschedule appointment',
+        self::TOPIC_APPT_FOLLOWUP => 'Followup after recent appointment or fitting',
+        self::TOPIC_BATTERIES => 'Need to buy batteries',
+        self::TOPIC_PARTS => 'Need to buy parts <small>(domes, earmolds, wax guards)</small>',
+    ];
+    static $col2Topics = [
+        self::TOPIC_MEDICAL_RECORDS => 'Request medical records',
+        self::TOPIC_TINNITUS => 'Ringing in ear / Tinnitus',
+        self::TOPIC_MEDICAL_INQUIRY => 'Medical inquiry <small>(APD, wax removal, dizziness, ear infection)</small>',
+        self::TOPIC_SOLICITOR => 'Solicitor',
+        self::TOPIC_PERSONAL_CALL => 'Personal call',
+        self::TOPIC_REQUEST_FAX => 'Request fax number',
+        self::TOPIC_REQUEST_NAME => 'Request person in clinic by name',
+        self::TOPIC_REMOVE_FROM_LIST => 'Remove from marketing list',
+        self::TOPIC_FOREIGN_LANGUAGE => 'Foreign language',
+        self::TOPIC_OTHER => 'Other',
+        self::TOPIC_DECLINED => 'Caller refused to answer question',
+    ];
+    /* These are the prospect topic fields */
+    static $prospectTopics = [
+        'CaCallGroupTopicWantsAppt',
+        'CaCallGroupTopicClinicHours',
+        'CaCallGroupTopicInsurance',
+        'CaCallGroupTopicClinicInquiry',
+        'CaCallGroupTopicAidLostOld',
+        'CaCallGroupTopicWarrantyOld',
+        'CaCallGroupTopicRescheduleAppt',
+        'CaCallGroupTopicTinnitus',
+    ];
+
+    /**
+    * Enum - Question: Did patient make it to appt?
+    */
+    const Q_VISIT_CLINIC_YES = 'yes';
+    const Q_VISIT_CLINIC_NO_RESCHEDULED = 'no_rescheduled';
+    const Q_VISIT_CLINIC_NO_CANCELLED = 'no_cancelled';
+    const Q_VISIT_CLINIC_DECLINED = 'declined';
+    static $questionVisitClinicAnswers = array(
+        self::Q_VISIT_CLINIC_YES => 'Yes',
+        self::Q_VISIT_CLINIC_NO_RESCHEDULED => 'No, appt is coming up',
+        self::Q_VISIT_CLINIC_NO_CANCELLED => 'No, cancelled appt and did not reschedule',
+        self::Q_VISIT_CLINIC_DECLINED => 'Refused to answer question',
+    );
+    /**
+    * Enum - Question: What did patient have done at appt?
+    */
+    const Q_WHAT_FOR_HEARING_TEST = 'hearing_test';
+    const Q_WHAT_FOR_HEARING_AID_CONSULT = 'hearing_aid_consultation';
+    const Q_WHAT_FOR_HEARING_AID_REPAIR = 'hearing_aid_checkup_repair';
+    const Q_WHAT_FOR_OTHER_DR = 'other_doctors_appt';
+    const Q_WHAT_FOR_DECLINED = 'declined';
+    static $questionWhatForAnswers = array(
+        self::Q_WHAT_FOR_HEARING_TEST => 'Hearing Test',
+        self::Q_WHAT_FOR_HEARING_AID_CONSULT => 'Hearing Aid Consultation',
+        self::Q_WHAT_FOR_HEARING_AID_REPAIR => 'Hearing Aid Checkup/Repair',
+        self::Q_WHAT_FOR_OTHER_DR => 'Other Doctor\'s Appointment',
+        self::Q_WHAT_FOR_DECLINED => 'Refused to answer question',
+    );
+    /**
+    * Enum - Question: Did patient purchase a hearing aid?
+    */
+    const Q_PURCHASE_YES = 'Yes';
+    const Q_PURCHASE_NO = 'No';
+    const Q_PURCHASE_DECLINED = 'declined';
+    static $questionPurchaseAnswers = array(
+        self::Q_PURCHASE_YES => 'Yes',
+        self::Q_PURCHASE_NO => 'No',
+        self::Q_PURCHASE_DECLINED => 'Refused to answer question',
+    );
+    /**
+    * Enum - Question: What brand of hearing aid did they purchase?
+    */
+    const Q_BRAND_OTICON = 'Oticon';
+    const Q_BRAND_AGXO = 'AGXO';
+    const Q_BRAND_RESOUND = 'Resound';
+    const Q_BRAND_STARKEY = 'Starkey';
+    const Q_BRAND_PHONAK = 'Phonak';
+    const Q_BRAND_WIDEX = 'Widex';
+    const Q_BRAND_UNITRON = 'Unitron';
+    const Q_BRAND_SIEMENS = 'Siemens';
+    const Q_BRAND_UNKNOWN = 'unknown';
+    const Q_BRAND_OTHER = 'Other';
+    const Q_BRAND_DECLINED = 'declined';
+    static $questionBrandAnswers = array(
+        self::Q_BRAND_OTICON => 'Oticon',
+        self::Q_BRAND_AGXO => 'AGXO',
+        self::Q_BRAND_RESOUND => 'Resound',
+        self::Q_BRAND_STARKEY => 'Starkey',
+        self::Q_BRAND_PHONAK => 'Phonak',
+        self::Q_BRAND_WIDEX => 'Widex',
+        self::Q_BRAND_UNITRON => 'Unitron',
+        self::Q_BRAND_SIEMENS => 'Sivantos / Siemens / Signia',
+        self::Q_BRAND_UNKNOWN => 'Can\'t remember',
+        self::Q_BRAND_OTHER => 'Other brand',
+        self::Q_BRAND_DECLINED => 'Refused to answer question',
+    );
+    /**
+    * Maximum outbound call attempts allowed
+    */
+    const MAX_VM_OUTBOUND_ATTEMPTS = 3;
+    // Appointments
+    const MAX_CLINIC_FOLLOWUP_ATTEMPTS = 6;
+    const MAX_PATIENT_FOLLOWUP_ATTEMPTS = 3;
+    // Surveys
+    const MAX_CLINIC_OUTBOUND_ATTEMPTS = 4;
+    const MAX_PATIENT_OUTBOUND_ATTEMPTS = 4;
+    
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

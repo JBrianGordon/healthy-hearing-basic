@@ -83,7 +83,6 @@ foreach ($fields as $field => $type) {
                     <td>
                         <?php
                             if (!empty($locationUser->created)) {
-                                //pr($locationUser->created);
                                 echo date('Y-m-d', strtotime($locationUser->created));
                             }
                             echo '<br>';
