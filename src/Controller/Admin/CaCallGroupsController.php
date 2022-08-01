@@ -44,6 +44,7 @@ class CaCallGroupsController extends AppController
             ->find('search', [
                 'search' => $requestParams,
                 'contain' => ['Locations', 'CaCalls'],
+                'order' => 'CaCallGroups.id DESC'
             ]);
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
