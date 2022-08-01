@@ -51,9 +51,12 @@ class AdminHelper extends Helper
     public function checkboxGroup($checkboxGroupName, $checkboxFields=[]) {
         $formInput = '<div class="border mb-3 p-2">';
         $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
-        $formInput .= '<div>';
+        $formInput .= '<div class="row">';
         foreach ($checkboxFields as $field => $label) {
-            $formInput .= $this->formInput($field, 'checkbox', $label, false, false);
+            $formInput .= '<div class="mb-1 col-md-6">';
+            $label = ['text' => $label, 'class' => 'small'];
+            $formInput .= $this->formInput($field, 'boolean', $label, false, false);
+            $formInput .= '</div>';
         }
         $formInput .= '</div></div>';
         return $formInput;
@@ -66,6 +69,8 @@ class AdminHelper extends Helper
     */
     public function formInput($field, $type, $label=null, $options=false, $empty=false) {
         $fieldSlug = mb_strtolower(Text::slug($field, '-'));
+        $labelClass = isset($label['class']) ? $label['class'] : "";
+        $label = isset($label['text']) ? $label['text'] : $label;
         $label = $label ?: ucfirst(strtolower(Inflector::humanize($field)));
         $formInput = '';
         switch ($type) {
@@ -76,53 +81,31 @@ class AdminHelper extends Helper
                     'empty' => $empty,
                     'label' => ['text' => $label, 'floating' => true],
                     'multiple' => null,
-                    'secure' => true,
                 ]);
                 break;
-            case 'checkbox':
-            /*
-                $formInput = $this->Form->control($field, [
-                    'type' => 'checkbox',
-                    'inline' => true,
-                    'label' => $label,
-                    'escape' => false,
-                    'spacing' => '',
-                    'empty' => true
-                ]);
-                break;*/
-            case 'multiCheckbox':
-//                $formInput .= '<div class="border mb-3 p-2">';
-//                $formInput .= '<label class="mb-2"><strong>'.$label.'</strong></label>';
-//                $formInput .= '<div>';
-//                $formInput .= $this->Form->multiCheckbox($field, $options, [
-//                    'inline' => true,
-//                ]);
-            /*
+            case 'selectMultiple':
                 $formInput = $this->Form->control($field, [
                     'type' => 'select',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label],
+                    'label' => $label,
                     'multiple' => true,
-                    'secure' => true,
-                    'hiddenField' => null,
                 ]);
-//                $formInput .= '</div></div>';
-                break;*/
+                break;
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
-                $formInput .= '<label class="col-md-4">'.$label.'</label>';
+                $formInput .= '<label class="float-start '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
                 $checked0 = (isset($queryParams[$field]) && empty($queryParams[$field])) ? 'checked' : '';
                 $checked1 = (isset($queryParams[$field]) && !empty($queryParams[$field])) ? 'checked' : '';
                 $checkedAll = (!isset($queryParams[$field])) ? 'checked' : '';
-                $formInput .= '<div class="btn-group">';
-                $formInput .= '<label class="btn btn-lg btn-outline-danger">';
+                $formInput .= '<div class="btn-group float-end">';
+                $formInput .= '<label class="btn btn-outline-danger">';
                 $formInput .= '<input type="radio" value="0" name="'.$field.'" id="'.$fieldSlug.'0" '.$checked0.'>&nbsp;';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-lg btn-outline-info">';
+                $formInput .= '<label class="btn btn-outline-info">';
                 $formInput .= '<input type="radio" value="" name="'.$field.'" id="'.$fieldSlug.'All" '.$checkedAll.'>&nbsp;';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-lg btn-outline-success">';
+                $formInput .= '<label class="btn btn-outline-success">';
                 $formInput .= '<input type="radio" value="1" name="'.$field.'" id="'.$fieldSlug.'1" '.$checked1.'>&nbsp;';
                 $formInput .= '</label>';
                 $formInput .= '</div>';

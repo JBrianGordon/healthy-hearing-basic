@@ -21,12 +21,37 @@ foreach ($fields as $field => $type) {
         $empty = false;
         switch ($field) {
             case 'score':
-                $type = 'multiCheckbox';
+                $type = 'selectMultiple';
                 $options = CaCallGroup::$scores;
                 break;
             case 'status':
-                $type = 'multiCheckbox';
+                $type = 'selectMultiple';
                 $options = CaCallGroup::$statuses;
+                break;
+            case 'prospect':
+                $type = 'select';
+                $options = CaCallGroup::$prospectOptions;
+                $empty = '(select one)';
+                break;
+            case 'question_visit_clinic':
+                $type = 'select';
+                $options = CaCallGroup::$questionVisitClinicAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_brand':
+                $type = 'select';
+                $options = CaCallGroup::$questionBrandAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_purchase':
+                $type = 'select';
+                $options = CaCallGroup::$questionPurchaseAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_what_for':
+                $type = 'select';
+                $options = CaCallGroup::$questionWhatForAnswers;
+                $empty = '(select one)';
                 break;
         }
         $advancedSearchFields[] = [
@@ -81,33 +106,41 @@ $advancedSearchFields[] = [
                     <td><?= $caCallGroup->id ?></td>
                     <td><?= $caCallGroup->has('location') ? $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', $caCallGroup->location->id]) : '' ?></td>
                     <td><?= h($caCallGroup->caller_phone) ?></td>
-                    <td><?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
-                        <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?></td>
-                    <td><?= h($caCallGroup->prospect) ?></td>
-                    <td><?= h($caCallGroup->is_prospect_override) ?></td>
+                    <td>
+                        <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
+                        <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
+                    </td>
+                    <td>
+                        <?php if (isset($caCallGroup->ca_calls[0])): ?>
+                            <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
+                            <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
+                        <?php else: ?>
+                            <span class="badge bg-danger">No calls</span>
+                        <?php endif; ?>
+                    </td>
                     <td><?= h($caCallGroup->score) ?></td>
-                    <td><?= h($caCallGroup->status) ?></td>
-                    <td><?= h($caCallGroup->is_review_needed) ?></td>
-                    <td><?= h($caCallGroup->created) ?></td>
-                    <td><?= h($caCallGroup->is_spam) ?></td>
+                    <td><span class="badge bg-info"><?= h($caCallGroup->prospect) ?></span><br><?= h($caCallGroup->status) ?></td>
+                    <td>
+                        <?php if ($caCallGroup->is_review_needed): ?>
+                            <span class="badge bg-danger">Review Needed</span>
+                        <?php endif; ?>
+                        <?php if ($caCallGroup->is_prospect_override): ?>
+                            <span class="badge bg-warning">Prospect Override</span>
+                        <?php endif; ?>
+                        <?php if ($caCallGroup->is_spam): ?>
+                            <span class="badge bg-danger">Spam</span>
+                        <?php endif; ?>
+                    </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $caCallGroup->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id)]) ?>
+                        <div class="btn-group-vertical btn-group-sm">
+                            <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <?= $this->element('pagination') ?>
 </div>
