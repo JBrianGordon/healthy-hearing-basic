@@ -1,0 +1,146 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\CaCallGroup[]|\Cake\Collection\CollectionInterface $caCallGroups
+ */
+use App\Model\Entity\CaCallGroup;
+$this->loadHelper('Search.Search', [
+    'additionalBlacklist' => [
+        'saved_search',
+    ],
+]);
+$topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
+// Fields to ignore
+$ignoreFields = array_keys($topics);
+// Advanced search details
+$advancedSearchFields = [];
+foreach ($fields as $field => $type) {
+    if (!in_array($field, $ignoreFields)) {
+        $label = '';
+        $options = false;
+        $empty = false;
+        switch ($field) {
+            case 'score':
+                $type = 'selectMultiple';
+                $options = CaCallGroup::$scores;
+                break;
+            case 'status':
+                $type = 'selectMultiple';
+                $options = CaCallGroup::$statuses;
+                break;
+            case 'prospect':
+                $type = 'select';
+                $options = CaCallGroup::$prospectOptions;
+                $empty = '(select one)';
+                break;
+            case 'question_visit_clinic':
+                $type = 'select';
+                $options = CaCallGroup::$questionVisitClinicAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_brand':
+                $type = 'select';
+                $options = CaCallGroup::$questionBrandAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_purchase':
+                $type = 'select';
+                $options = CaCallGroup::$questionPurchaseAnswers;
+                $empty = '(select one)';
+                break;
+            case 'question_what_for':
+                $type = 'select';
+                $options = CaCallGroup::$questionWhatForAnswers;
+                $empty = '(select one)';
+                break;
+        }
+        $advancedSearchFields[] = [
+            'field' => $field,
+            'type' => $type,
+            'label' => $label,
+            'options' => $options,
+            'empty' => $empty
+        ];
+    }
+}
+// Add 'Topics' as a group of checkboxes
+$topicFields = [];
+foreach ($topics as $field => $label) {
+    $topicFields[] = [
+        'field' => $field,
+        'type' => 'checkbox',
+        'label' => $label,
+        'options' => false,
+        'empty' => false
+    ];
+}
+$advancedSearchFields[] = [
+    'checkboxGroupName' => 'Topics',
+    'checkboxFields' => $topics
+];
+?>
+<div class="caCallGroups index content">
+    <?= $this->Html->link(__('New Ca Call Group'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <h3><?= __('Call Groups') ?></h3>
+    <?= $this->element('pagination') ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th><?= $this->Paginator->sort('id', 'Group ID') ?></th>
+                    <th><?= $this->Paginator->sort('location_id', 'Clinic') ?></th>
+                    <th><?= $this->Paginator->sort('caller_phone') ?></th>
+                    <th><?= $this->Paginator->sort('caller_last_name', 'Caller name') ?><br><?= $this->Paginator->sort('patient_last_name', 'Patient name') ?></th>
+                    <th><?= $this->Paginator->sort('created', 'Initial call time') ?></th>
+                    <th><?= $this->Paginator->sort('score') ?></th>
+                    <th><?= $this->Paginator->sort('prospect') ?><br><?= $this->Paginator->sort('status') ?></th>
+                    <th>Flags: <?= $this->Paginator->sort('is_review_needed', 'RN') ?>/<?= $this->Paginator->sort('is_prospect_override', 'PO') ?>/<br>
+                        <?= $this->Paginator->sort('is_spam', 'Spam') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($caCallGroups as $caCallGroup): ?>
+                <tr>
+                    <td><?= $caCallGroup->id ?></td>
+                    <td><?= $caCallGroup->has('location') ? $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', $caCallGroup->location->id]) : '' ?></td>
+                    <td><?= h($caCallGroup->caller_phone) ?></td>
+                    <td>
+                        <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
+                        <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
+                    </td>
+                    <td>
+                        <?php if (isset($caCallGroup->ca_calls[0])): ?>
+                            <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
+                            <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
+                        <?php else: ?>
+                            <span class="badge bg-danger">No calls</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= h($caCallGroup->score) ?></td>
+                    <td><span class="badge bg-info"><?= h($caCallGroup->prospect) ?></span><br><?= h($caCallGroup->status) ?></td>
+                    <td>
+                        <?php if ($caCallGroup->is_review_needed): ?>
+                            <span class="badge bg-danger">Review Needed</span>
+                        <?php endif; ?>
+                        <?php if ($caCallGroup->is_prospect_override): ?>
+                            <span class="badge bg-warning">Prospect Override</span>
+                        <?php endif; ?>
+                        <?php if ($caCallGroup->is_spam): ?>
+                            <span class="badge bg-danger">Spam</span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="actions">
+                        <div class="btn-group-vertical btn-group-sm">
+                            <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?= $this->element('pagination') ?>
+</div>

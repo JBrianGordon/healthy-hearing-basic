@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\CaCallGroup;
 
 /**
  * CaCallGroups Model
@@ -47,7 +48,7 @@ class CaCallGroupsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
@@ -59,6 +60,62 @@ class CaCallGroupsTable extends Table
         $this->hasMany('CaCalls', [
             'foreignKey' => 'ca_call_group_id',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('location_id')
+            ->value('caller_phone')
+            ->value('caller_first_name')
+            ->value('caller_last_name')
+            ->boolean('is_patient')
+            ->value('patient_first_name')
+            ->value('patient_last_name')
+            ->boolean('refused_name')
+            ->value('email')
+            ->boolean('wants_hearing_test')
+            ->value('prospect')
+            ->boolean('is_prospect_override')
+            ->value('front_desk_name')
+            ->boolean('is_bringing_third_party')
+            ->boolean('is_review_needed')
+            ->value('ca_call_count')
+            ->value('clinic_followup_count')
+            ->value('patient_followup_count')
+            ->value('clinic_outbound_count')
+            ->value('patient_outbound_count')
+            ->value('vm_outbound_count')
+            ->boolean('is_locked')
+            ->value('question_visit_clinic')
+            ->value('question_what_for')
+            ->value('question_purchase')
+            ->value('question_brand')
+            ->value('question_brand_other')
+            ->boolean('did_they_want_help')
+            ->value('traffic_source')
+            ->value('traffic_medium')
+            ->boolean('is_appt_request_form')
+            ->boolean('is_spam')
+            ->value('id_xml_file')
+            ->value('appt_date')
+            ->value('scheduled_call_date')
+            ->value('created')
+            ->value('final_score_date')
+            ->value('score', ['multiValue' => true])
+            ->value('status', ['multiValue' => true])
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['caller_first_name', 'caller_last_name', 'patient_first_name', 'patient_last_name', 'front_desk_name'],
+            ]);
+            $topics = array_merge(array_keys(CaCallGroup::$col1Topics), array_keys(CaCallGroup::$col2Topics));
+            foreach ($topics as $topic) {
+                $this->searchManager()->boolean($topic);
+            }
     }
 
     /**

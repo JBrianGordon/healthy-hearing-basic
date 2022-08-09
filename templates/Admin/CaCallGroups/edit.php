@@ -2,13 +2,18 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\CaCallGroup $caCallGroup
- * @var \Cake\Collection\CollectionInterface|string[] $locations
+ * @var string[]|\Cake\Collection\CollectionInterface $locations
  */
 ?>
 <div class="row">
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', $caCallGroup->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'side-nav-item']
+            ) ?>
             <?= $this->Html->link(__('List Ca Call Groups'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
@@ -16,7 +21,7 @@
         <div class="caCallGroups form content">
             <?= $this->Form->create($caCallGroup) ?>
             <fieldset>
-                <legend><?= __('Add Ca Call Group') ?></legend>
+                <legend><?= __('Edit Ca Call Group') ?></legend>
                 <?php
                     echo $this->Form->control('location_id', ['options' => $locations]);
                     echo $this->Form->control('caller_phone');
@@ -42,8 +47,6 @@
                     echo $this->Form->control('topic_appt_followup');
                     echo $this->Form->control('topic_medical_records');
                     echo $this->Form->control('topic_tinnitus');
-                    echo $this->Form->control('topic_hearing_previously_tested');
-                    echo $this->Form->control('topic_aids_previously_worn');
                     echo $this->Form->control('topic_medical_inquiry');
                     echo $this->Form->control('topic_solicitor');
                     echo $this->Form->control('topic_personal_call');

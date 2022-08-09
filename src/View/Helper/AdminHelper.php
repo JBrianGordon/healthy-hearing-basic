@@ -44,12 +44,33 @@ class AdminHelper extends Helper
     }
 
     /**
+    * Create a group of checkbox inputs
+    * @param string 'checkboxGroupName'
+    * @param array 'fields'
+    */
+    public function checkboxGroup($checkboxGroupName, $checkboxFields=[]) {
+        $formInput = '<div class="border mb-3 p-2">';
+        $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
+        $formInput .= '<div class="row">';
+        foreach ($checkboxFields as $field => $label) {
+            $formInput .= '<div class="mb-1 col-md-6">';
+            $label = ['text' => $label, 'class' => 'small'];
+            $formInput .= $this->formInput($field, 'boolean', $label, false, false);
+            $formInput .= '</div>';
+        }
+        $formInput .= '</div></div>';
+        return $formInput;
+    }
+
+    /**
     * Create a custom form control based on type
     * @param string 'field'
     * @param string 'type'
     */
     public function formInput($field, $type, $label=null, $options=false, $empty=false) {
         $fieldSlug = mb_strtolower(Text::slug($field, '-'));
+        $labelClass = isset($label['class']) ? $label['class'] : "";
+        $label = isset($label['text']) ? $label['text'] : $label;
         $label = $label ?: ucfirst(strtolower(Inflector::humanize($field)));
         $formInput = '';
         switch ($type) {
@@ -59,22 +80,32 @@ class AdminHelper extends Helper
                     'options' => $options,
                     'empty' => $empty,
                     'label' => ['text' => $label, 'floating' => true],
+                    'multiple' => null,
+                ]);
+                break;
+            case 'selectMultiple':
+                $formInput = $this->Form->control($field, [
+                    'type' => 'select',
+                    'options' => $options,
+                    'empty' => $empty,
+                    'label' => $label,
+                    'multiple' => true,
                 ]);
                 break;
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
-                $formInput .= '<label class="col-md-4">'.$label.'</label>';
+                $formInput .= '<label class="float-start '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
                 $checked0 = (isset($queryParams[$field]) && empty($queryParams[$field])) ? 'checked' : '';
                 $checked1 = (isset($queryParams[$field]) && !empty($queryParams[$field])) ? 'checked' : '';
                 $checkedAll = (!isset($queryParams[$field])) ? 'checked' : '';
-                $formInput .= '<div class="btn-group">';
-                $formInput .= '<label class="btn btn-lg btn-outline-danger">';
+                $formInput .= '<div class="btn-group float-end">';
+                $formInput .= '<label class="btn btn-outline-danger">';
                 $formInput .= '<input type="radio" value="0" name="'.$field.'" id="'.$fieldSlug.'0" '.$checked0.'>&nbsp;';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-lg btn-outline-secondary">';
+                $formInput .= '<label class="btn btn-outline-info">';
                 $formInput .= '<input type="radio" value="" name="'.$field.'" id="'.$fieldSlug.'All" '.$checkedAll.'>&nbsp;';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-lg btn-outline-success">';
+                $formInput .= '<label class="btn btn-outline-success">';
                 $formInput .= '<input type="radio" value="1" name="'.$field.'" id="'.$fieldSlug.'1" '.$checked1.'>&nbsp;';
                 $formInput .= '</label>';
                 $formInput .= '</div>';

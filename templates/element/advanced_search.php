@@ -10,6 +10,18 @@ $fields = [
         'options',
         'empty'
     ],
+    '1' => [
+        'checkboxGroupName',
+        'checkboxFields' => [
+            '0' => [
+                'field',
+                'type',
+                'label',
+                'options',
+                'empty'
+            ],
+        ]
+    ]
     ...
 ];
 $groupedFields = [
@@ -94,19 +106,33 @@ $this->loadHelper('Search.Search', [
     <?php if (!empty($fields)): ?>
         <?php $column = 1; ?>
         <?php foreach ($fields as $field): ?>
-            <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
-            <?php if ($column == 1): ?>
+            <?php if (!empty($field['checkboxGroupName'])): ?>
+                <!-- Checkbox groups will span whole row, so always start on column 1 -->
+                <?php if ($column==2): ?>
+                    </div> <!-- end row -->
+                <?php endif; ?>
+                <?php $formInput = $this->Admin->checkboxGroup($field['checkboxGroupName'], $field['checkboxFields']); ?>
                 <div class="row" style="min-height: 74px;">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <?= $formInput ?>
-                        <?php $column = 2; ?>
-                    </div> <!-- end col -->
-            <?php else: // column 2 ?>
-                    <div class="col-md-6">
-                        <?= $formInput ?>
-                        <?php $column = 1; ?>
+                        <?php $column==1; ?>
                     </div> <!-- end col -->
                 </div> <!-- end row -->
+            <?php else: ?>
+                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
+                <?php if ($column == 1): ?>
+                    <div class="row" style="min-height: 74px;">
+                        <div class="col-md-6">
+                            <?= $formInput ?>
+                            <?php $column = 2; ?>
+                        </div> <!-- end col -->
+                <?php else: // column 2 ?>
+                        <div class="col-md-6">
+                            <?= $formInput ?>
+                            <?php $column = 1; ?>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
         <?php if ($column==2): ?>
