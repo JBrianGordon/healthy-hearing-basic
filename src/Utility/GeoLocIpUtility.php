@@ -40,8 +40,16 @@ class GeoLocIpUtility
 
     public function byIp($ip)
     {
-        $address = $this->geocoder->geocodeQuery(GeocodeQuery::create($ip))->first();
+        $geoLocRaw = $this->geocoder->geocodeQuery(GeocodeQuery::create($ip))->first();
+        $geoLocInfo = [
+            'zip' => $geoLocRaw->getPostalCode(),
+            'city' => $geoLocRaw->getLocality(),
+            'state' => $geoLocRaw->getAdminLevels()->first()->getCode(),
+            'country' => $geoLocRaw->getCountry()->getCode(),
+            'latitude' => $geoLocRaw->getCoordinates()->getLatitude(),
+            'longitude' => $geoLocRaw->getCoordinates()->getLongitude(),
+        ];
 
-        return $address;
+        return $geoLocInfo;
     }
 }
