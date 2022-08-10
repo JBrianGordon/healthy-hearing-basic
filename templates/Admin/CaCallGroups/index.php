@@ -4,11 +4,13 @@
  * @var \App\Model\Entity\CaCallGroup[]|\Cake\Collection\CollectionInterface $caCallGroups
  */
 use App\Model\Entity\CaCallGroup;
+use Cake\Routing\Router;
 $this->loadHelper('Search.Search', [
     'additionalBlacklist' => [
         'saved_search',
     ],
 ]);
+$exportUrl = Router::url(['action' => 'export', '?' => $this->request->getQueryParams()]);
 $topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
 // Fields to ignore
 $ignoreFields = array_keys($topics);
@@ -80,8 +82,11 @@ $advancedSearchFields[] = [
 ];
 ?>
 <div class="caCallGroups index content">
-    <?= $this->Html->link(__('New Ca Call Group'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Call Groups') ?></h3>
+    <div class="btn-group btn-group-sm pt-2 mb-3">
+        <?= $this->element('ca_calls/action_bar', ['spamCount' => $spamCount]) ?>
+        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
+    </div>
+    <h3>Call Groups</h3>
     <?= $this->element('pagination') ?>
     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
     <div class="table-responsive">
@@ -144,3 +149,23 @@ $advancedSearchFields[] = [
     </div>
     <?= $this->element('pagination') ?>
 </div>
+<?php
+// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
+echo '<script type="text/javascript">
+    function exportBtnClick() {
+        var count = '.$count.';
+        var exportUrl = "'.$exportUrl.'";
+        if (count < 100000) {
+            // Small file. Download immediately.
+            if (confirm("Downloading export file with "+count.toLocaleString("en-US")+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
+                window.location.replace(exportUrl);
+            }
+        } else {
+            // Large file
+            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
+            alert("Export is too large. Please narrow your results to 100,000 or less.");
+        }
+    }
+    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
+</script>';
+?>
