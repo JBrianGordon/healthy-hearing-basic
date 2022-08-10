@@ -9,18 +9,21 @@ $this->loadHelper('Search.Search', [
         'saved_search',
     ],
 ]);
+$queryParams = $this->request->getQueryParams();
 // Advanced search details
 $advancedSearchFields = [];
 foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
     $empty = false;
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     $advancedSearchFields[] = [
         'field' => $field,
         'type' => $type,
         'label' => $label,
         'options' => $options,
-        'empty' => $empty
+        'empty' => $empty,
+        'value' => $value
     ];
 }
 ?>

@@ -10,6 +10,7 @@ use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 
 $siteNameAbbr = Configure::read('siteNameAbbr');
+$queryParams = $this->request->getQueryParams();
 
 /*
 TODO: add search functionality for has_url, using_logo, using_photos, etc...
@@ -57,6 +58,7 @@ foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
     $empty = false;
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     switch ($field) {
         case 'id_parent':
             $label = 'Oticon parent id';
@@ -113,7 +115,8 @@ foreach ($fields as $field => $type) {
         'type' => $type,
         'label' => $label,
         'options' => $options,
-        'empty' => $empty
+        'empty' => $empty,
+        'value' => $value
     ];
     if (in_array($field, $generalFieldList)) {
         $key = array_search($field, $generalFieldList);

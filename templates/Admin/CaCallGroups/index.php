@@ -11,7 +11,7 @@ $this->loadHelper('Search.Search', [
     ],
 ]);
 $queryParams = $this->request->getQueryParams();
-$exportUrl = Router::url(['action' => 'export', '?' => $this->request->getQueryParams()]);
+$exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 $topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
 // Fields to ignore
 $ignoreFields = array_keys($topics);
@@ -22,6 +22,7 @@ foreach ($fields as $field => $type) {
         $label = '';
         $options = false;
         $empty = false;
+        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
         switch ($field) {
             case 'score':
                 $type = 'selectMultiple';
@@ -57,7 +58,6 @@ foreach ($fields as $field => $type) {
                 $empty = '(select one)';
                 break;
         }
-        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
         $advancedSearchFields[] = [
             'field' => $field,
             'type' => $type,

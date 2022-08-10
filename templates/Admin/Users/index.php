@@ -10,6 +10,7 @@ $this->loadHelper('Search.Search', [
         'saved_search',
     ],
 ]);
+$queryParams = $this->request->getQueryParams();
 // Only include these fields in advanced search
 $includeFields = ['id', 'username', 'first_name', 'last_name', 'email', 'company', 'active', 'role', 'created', 'modified', 'is_admin', 'is_it_admin', 'is_agent', 'is_call_supervisor', 'is_author', 'is_csa', 'is_writer', 'is_superuser'];
 // Advanced search details
@@ -19,6 +20,7 @@ foreach ($fields as $field => $type) {
         $label = '';
         $options = false;
         $empty = false;
+        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
         switch ($field) {
             case 'role':
                 $type = 'select';
@@ -31,7 +33,8 @@ foreach ($fields as $field => $type) {
             'type' => $type,
             'label' => $label,
             'options' => $options,
-            'empty' => $empty
+            'empty' => $empty,
+            'value' => $value
         ];
     }
 }
