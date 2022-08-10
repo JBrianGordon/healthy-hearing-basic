@@ -10,6 +10,7 @@ $this->loadHelper('Search.Search', [
         'saved_search',
     ],
 ]);
+$queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $this->request->getQueryParams()]);
 $topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
 // Fields to ignore
@@ -56,29 +57,33 @@ foreach ($fields as $field => $type) {
                 $empty = '(select one)';
                 break;
         }
+        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
         $advancedSearchFields[] = [
             'field' => $field,
             'type' => $type,
             'label' => $label,
             'options' => $options,
-            'empty' => $empty
+            'empty' => $empty,
+            'value' => $value
         ];
     }
 }
 // Add 'Topics' as a group of checkboxes
 $topicFields = [];
 foreach ($topics as $field => $label) {
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     $topicFields[] = [
         'field' => $field,
         'type' => 'checkbox',
         'label' => $label,
         'options' => false,
-        'empty' => false
+        'empty' => false,
+        'value' => $value
     ];
 }
 $advancedSearchFields[] = [
     'checkboxGroupName' => 'Topics',
-    'checkboxFields' => $topics
+    'checkboxFields' => $topicFields
 ];
 ?>
 <div class="caCallGroups index content">
