@@ -50,11 +50,11 @@ class CaCallGroupNotesTable extends Table
 
         $this->belongsTo('CaCallGroups', [
             'foreignKey' => 'ca_call_group_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

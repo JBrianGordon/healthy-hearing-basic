@@ -46,11 +46,11 @@ class CorpsUsersTable extends Table
 
         $this->belongsTo('Corps', [
             'foreignKey' => 'corp_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

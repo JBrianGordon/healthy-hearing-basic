@@ -49,7 +49,7 @@ class SeoTitlesTable extends Table
 
         $this->belongsTo('SeoUris', [
             'foreignKey' => 'seo_uri_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

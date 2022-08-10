@@ -46,11 +46,11 @@ class CsCallsTable extends Table
 
         $this->belongsTo('Calls', [
             'foreignKey' => 'call_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

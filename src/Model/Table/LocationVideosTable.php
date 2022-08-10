@@ -49,7 +49,7 @@ class LocationVideosTable extends Table
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 
