@@ -65,6 +65,7 @@ return [
             'plugins' => [ROOT . DS . 'plugins' . DS],
             'templates' => [ROOT . DS . 'templates' . DS],
             'locales' => [RESOURCES . 'locales' . DS],
+            'ipDatabase' => [RESOURCES . 'ipDatabase' . DS . 'GeoIP2-City-North-America.mmdb'],
         ],
     ],
 
