@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Middleware\GeoLocSessionMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -89,6 +90,10 @@ class Application extends BaseApplication
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
+
+            // Geolocation
+            // Save geolcation info about vistors in session.
+            ->add(new GeoLocSessionMiddleware())
 
             // Remove trailing slashes from URIs
             // TO-DO: Thoroughly check SEO implications of this

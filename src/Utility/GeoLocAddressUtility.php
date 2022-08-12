@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Utility;
 
 use Cake\Core\Configure;
-use Geo\Geocoder\Geocoder;
+use Geocoder\Provider\GoogleMaps\GoogleMaps;
+use Geocoder\Query\GeocodeQuery;
+use GuzzleHttp\Client;
 
 class GeoLocAddressUtility
 {
@@ -20,16 +22,20 @@ class GeoLocAddressUtility
 
     public function __construct()
     {
-        $this->defaultConfig = [
-            'allowInconclusive' => true,
-            'minAccuracy' => Geocoder::TYPE_POSTAL,
-            'apiKey' => Configure::read('GoogleMap.key'),
-        ];
-        $this->geocoder = new Geocoder($this->defaultConfig);
+        $this->httpClient = new Client();
+
+        $this->provider = new GoogleMaps($this->httpClient, null, Configure::read('GoogleMap.key'));
     }
 
     public function byAddress($address)
     {
-        return $this->geocoder->geocode($address);
+        $geoLocRaw = $this->provider->geocodeQuery(GeocodeQuery::create($address))->first();
+
+        $latLon = [
+            $geoLocRaw->getCoordinates()->getLatitude(),
+            $geoLocRaw->getCoordinates()->getLongitude(),
+        ];
+
+        return $latLon;
     }
 }
