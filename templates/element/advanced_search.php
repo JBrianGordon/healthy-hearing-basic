@@ -47,7 +47,6 @@ $this->loadHelper('Search.Search', [
     ],
 ]);
 ?>
-
 <div class="row justify-content-end">
     <?php if ($this->Search->isSearch()) : ?>
         <div class="col col-md-auto">
@@ -80,7 +79,7 @@ $this->loadHelper('Search.Search', [
                 <div class="collapse mb-3" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
                     <?php $column = 1; ?>
                     <?php foreach ($groupFields as $field): ?>
-                        <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
+                        <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
                         <?php if ($column == 1): ?>
                             <div class="row" style="min-height: 74px;">
                                 <div class="col-md-6">
@@ -119,7 +118,7 @@ $this->loadHelper('Search.Search', [
                     </div> <!-- end col -->
                 </div> <!-- end row -->
             <?php else: ?>
-                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty']); ?>
+                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
                 <?php if ($column == 1): ?>
                     <div class="row" style="min-height: 74px;">
                         <div class="col-md-6">

@@ -25,6 +25,14 @@ class CaCallGroupsController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('Export', [
+            'actions' => ['export']
+        ]);
+
+        $this->paginate = [
+            'order' => ['CaCallGroups.id' => 'DESC']
+        ];
     }
 
     /**
@@ -40,14 +48,15 @@ class CaCallGroupsController extends AppController
         } else {
             $this->set('savedSearch', false);
         }
-        $caCallGroupsQuery = $this->CaCallGroups
-            ->find('search', [
-                'search' => $requestParams,
-                'contain' => ['Locations', 'CaCalls'],
-                'order' => 'CaCallGroups.id DESC'
-            ]);
+        $caCallGroupsQuery = $this->CaCallGroups->find('search', [
+            'search' => $requestParams,
+            'contain' => ['Locations', 'CaCalls'],
+        ]);
+        $spamCount = $this->CaCallGroups->find()->where(['is_spam' => true])->count();
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
+        $this->set('count', $caCallGroupsQuery->count());
+        $this->set('spamCount', $spamCount);
     }
 
     /**
@@ -109,5 +118,14 @@ class CaCallGroupsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+    * Export a list of call groups to CSV
+    */
+    function export(){
+        $this->autoRender = false;
+        $this->Export->exportCsv('export_call_groups.csv');
+        die();
     }
 }

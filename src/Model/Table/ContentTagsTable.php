@@ -46,11 +46,11 @@ class ContentTagsTable extends Table
 
         $this->belongsTo('Contents', [
             'foreignKey' => 'content_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Tags', [
             'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

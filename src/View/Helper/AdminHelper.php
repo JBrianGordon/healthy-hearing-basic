@@ -52,10 +52,10 @@ class AdminHelper extends Helper
         $formInput = '<div class="border mb-3 p-2">';
         $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
         $formInput .= '<div class="row">';
-        foreach ($checkboxFields as $field => $label) {
+        foreach ($checkboxFields as $field) {
             $formInput .= '<div class="mb-1 col-md-6">';
-            $label = ['text' => $label, 'class' => 'small'];
-            $formInput .= $this->formInput($field, 'boolean', $label, false, false);
+            $label = ['text' => $field['label'], 'class' => 'small'];
+            $formInput .= $this->formInput($field['field'], 'boolean', $field['label'], false, false, $field['value']);
             $formInput .= '</div>';
         }
         $formInput .= '</div></div>';
@@ -67,7 +67,7 @@ class AdminHelper extends Helper
     * @param string 'field'
     * @param string 'type'
     */
-    public function formInput($field, $type, $label=null, $options=false, $empty=false) {
+    public function formInput($field, $type, $label=null, $options=false, $empty=false, $value=null) {
         $fieldSlug = mb_strtolower(Text::slug($field, '-'));
         $labelClass = isset($label['class']) ? $label['class'] : "";
         $label = isset($label['text']) ? $label['text'] : $label;
@@ -95,9 +95,9 @@ class AdminHelper extends Helper
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
                 $formInput .= '<label class="float-start '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
-                $checked0 = (isset($queryParams[$field]) && empty($queryParams[$field])) ? 'checked' : '';
-                $checked1 = (isset($queryParams[$field]) && !empty($queryParams[$field])) ? 'checked' : '';
-                $checkedAll = (!isset($queryParams[$field])) ? 'checked' : '';
+                $checked0 = ($value == 0) ? 'checked' : '';
+                $checked1 = ($value == 1) ? 'checked' : '';
+                $checkedAll = ($value == null) ? 'checked' : '';
                 $formInput .= '<div class="btn-group float-end">';
                 $formInput .= '<label class="btn btn-outline-danger">';
                 $formInput .= '<input type="radio" value="0" name="'.$field.'" id="'.$fieldSlug.'0" '.$checked0.'>&nbsp;';

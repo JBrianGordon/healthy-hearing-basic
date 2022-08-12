@@ -46,11 +46,11 @@ class UsersWikisTable extends Table
 
         $this->belongsTo('Wikis', [
             'foreignKey' => 'wiki_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

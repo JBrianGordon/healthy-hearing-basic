@@ -13,6 +13,7 @@ $this->loadHelper('Search.Search', [
         'saved_search',
     ],
 ]);
+$queryParams = $this->request->getQueryParams();
 $filter ??= null;
 // Add additional search fields
 $fields['listing_type'] = 'string';
@@ -22,6 +23,7 @@ foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
     $empty = false;
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     switch ($field) {
         case 'status':
             $type = 'select';
@@ -54,7 +56,8 @@ foreach ($fields as $field => $type) {
         'type' => $type,
         'label' => $label,
         'options' => $options,
-        'empty' => $empty
+        'empty' => $empty,
+        'value' => $value
     ];
 }
 ?>

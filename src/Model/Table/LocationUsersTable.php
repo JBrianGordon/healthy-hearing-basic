@@ -50,7 +50,7 @@ class LocationUsersTable extends Table
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->hasMany('LocationUserLogins', [
             'foreignKey' => 'location_user_id',

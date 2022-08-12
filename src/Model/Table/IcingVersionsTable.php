@@ -50,7 +50,7 @@ class IcingVersionsTable extends Table
 
         $this->belongsTo('Models', [
             'foreignKey' => 'model_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

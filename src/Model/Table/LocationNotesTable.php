@@ -50,11 +50,11 @@ class LocationNotesTable extends Table
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

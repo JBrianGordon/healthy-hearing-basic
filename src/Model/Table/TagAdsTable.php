@@ -46,11 +46,11 @@ class TagAdsTable extends Table
 
         $this->belongsTo('Ads', [
             'foreignKey' => 'ad_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->belongsTo('Tags', [
             'foreignKey' => 'tag_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
     }
 

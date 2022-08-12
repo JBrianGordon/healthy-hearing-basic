@@ -71,6 +71,7 @@
         <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
+            <?= $this->fetch('bs-modals') ?>
         </div>
     </main>
     <footer>
