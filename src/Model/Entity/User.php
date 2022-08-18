@@ -204,14 +204,13 @@ class User extends CakeDcUser
      */
     protected function _getFullPersonalInfo()
     {
-        $fullPersonalInfo = array_filter([
-            $this->full_name,
-            $this->degrees,
-            $this->credentials,
-            $this->title_dept_company,
-            $this->company,
-        ], 'strlen');
-
+        $fields = ['full_name', 'degrees', 'credentials', 'title_dept_company', 'company'];
+        $fullPersonalInfo = [];
+        foreach ($fields as $field) {
+            if (!empty($this->$field)) {
+                $fullPersonalInfo[] = $this->$field;
+            }
+        }
         return implode(', ', $fullPersonalInfo);
     }
 }
