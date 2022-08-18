@@ -112,42 +112,55 @@ $advancedSearchFields[] = [
             </thead>
             <tbody>
                 <?php foreach ($caCallGroups as $caCallGroup): ?>
-                <tr>
-                    <td><?= $caCallGroup->id ?></td>
-                    <td><?= $caCallGroup->has('location') ? $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', $caCallGroup->location->id]) : '' ?></td>
-                    <td><?= h($caCallGroup->caller_phone) ?></td>
-                    <td>
-                        <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
-                        <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
-                    </td>
-                    <td>
-                        <?php if (isset($caCallGroup->ca_calls[0])): ?>
-                            <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
-                            <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
-                        <?php else: ?>
-                            <span class="badge bg-danger">No calls</span>
-                        <?php endif; ?>
-                    </td>
-                    <td><?= h($caCallGroup->score) ?></td>
-                    <td><span class="badge bg-info"><?= h($caCallGroup->prospect) ?></span><br><?= h($caCallGroup->status) ?></td>
-                    <td>
-                        <?php if ($caCallGroup->is_review_needed): ?>
-                            <span class="badge bg-danger">Review Needed</span>
-                        <?php endif; ?>
-                        <?php if ($caCallGroup->is_prospect_override): ?>
-                            <span class="badge bg-warning">Prospect Override</span>
-                        <?php endif; ?>
-                        <?php if ($caCallGroup->is_spam): ?>
-                            <span class="badge bg-danger">Spam</span>
-                        <?php endif; ?>
-                    </td>
-                    <td class="actions">
-                        <div class="btn-group-vertical btn-group-sm">
-                            <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
-                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= $caCallGroup->id ?></td>
+                        <td>
+                            <?php if (!empty($caCallGroup->location)): ?>
+                                <!-- TODO: hh_url -->
+                                <?= $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', 'prefix' => false, $caCallGroup->location_id]) ?><br>
+                                <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?><br>
+                                <?= $this->Html->link('All Call Groups', ['controller' => 'CaCallGroups', 'action' => 'index', '?' => ['location_id' => $caCallGroup->location_id]], ['class' => 'btn btn-default btn-xs']) ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?= h($caCallGroup->caller_phone) ?></td>
+                        <td>
+                            <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
+                            <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
+                        </td>
+                        <td>
+                            <?php if (isset($caCallGroup->ca_calls[0])): ?>
+                                <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
+                                <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
+                            <?php else: ?>
+                                <span class="badge bg-danger">No calls</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($caCallGroup->score)): ?>
+                                <?= CaCallGroup::$scores[$caCallGroup->score] ?>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <span class="badge bg-info"><?= $caCallGroup->prospect ?></span><br>
+                            <?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
+                        <td>
+                            <?php if ($caCallGroup->is_review_needed): ?>
+                                <span class="badge bg-danger">Review Needed</span>
+                            <?php endif; ?>
+                            <?php if ($caCallGroup->is_prospect_override): ?>
+                                <span class="badge bg-warning">Prospect Override</span>
+                            <?php endif; ?>
+                            <?php if ($caCallGroup->is_spam): ?>
+                                <span class="badge bg-danger">Spam</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="actions">
+                            <div class="btn-group-vertical btn-group-xs">
+                                <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
+                            </div>
+                        </td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -159,10 +172,11 @@ $advancedSearchFields[] = [
 echo '<script type="text/javascript">
     function exportBtnClick() {
         var count = '.$count.';
+        var readableCount = "'.number_format($count).'";
         var exportUrl = "'.$exportUrl.'";
         if (count < 100000) {
             // Small file. Download immediately.
-            if (confirm("Downloading export file with "+count.toLocaleString("en-US")+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
+            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
                 window.location.replace(exportUrl);
             }
         } else {

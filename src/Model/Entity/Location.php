@@ -5,6 +5,8 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 
 /**
  * Location Entity
@@ -147,7 +149,8 @@ use Cake\Core\Configure;
  */
 class Location extends Entity
 {
-    protected $_virtual = ['is_oticon'];
+    protected $_virtual = ['is_oticon', 'state_full', 'hh_url', 'slug'];
+    protected $__oticonPrefix = '81190';
 
     /**
     * Enum - Listing Type
@@ -217,7 +220,7 @@ class Location extends Entity
 
     protected function _getIsOticon()
     {
-        $country = Configure::read('International.country');
+        $country = Configure::read('country');
         if ($country == 'US') {
             return (empty($this->last_xml)) ? false : true;
         } elseif ($country == 'CA') {
@@ -225,6 +228,72 @@ class Location extends Entity
         } else {
             return false;
         }
+    }
+
+    protected function _getStateFull()
+    {
+        $stateFull = empty($this->state) ? '' : $this->__stateFull($this->state);
+        return $stateFull;
+    }
+
+    protected function _getHhUrl()
+    {
+        // TODO
+        if (!empty($this->title)) {
+            $hhUrl = Router::url([
+                'prefix' => false,
+                'plugin' => false,
+                'controller' => 'locations',
+                'action' => 'view_by_id',
+                'id' => preg_replace('/^'. $this->__oticonPrefix .'/', '', (string)$this->id),
+                'title' => Inflector::dasherize(Inflector::camelize($this->title)),
+            ]);
+            return $hhUrl;
+        } else {
+            return '';
+        }
+    }
+
+    protected function _getSlug()
+    {
+        $slug = empty($this->title) ? '' : Inflector::dasherize(Inflector::camelize($this->title));
+        return $slug;
+    }
+
+    /**
+    * Handy shortcut function to return a full/abbr state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    private function __state($get,$stateInput) {
+        $stateInput = trim($stateInput);
+        $states = Configure::read('states');
+        foreach ($states as $state => $stateFull) {
+            if (strtoupper($stateInput) == strtoupper($state) || strtoupper($stateInput)==strtoupper($stateFull)) {
+                if ($get=='full') {
+                    return $stateFull;
+                } else {
+                    return $state;
+                }
+            }
+        }
+        return null;
+    }
+    /**
+    * Handy shortcut function to return a full state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    private function __stateFull($state_input) {
+        return $this->__state('full',$state_input);
+    }
+    /**
+    * Handy shortcut function to return a abbr state by searching through the states array
+    * @param string $state_input
+    * @return string $state_abbr
+    */
+    private function __stateAbbr($state_input) {
+        return $this->__state('abbr',$state_input);
     }
 
     /**
