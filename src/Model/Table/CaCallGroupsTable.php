@@ -112,10 +112,10 @@ class CaCallGroupsTable extends Table
                 'wildcardOne' => '?',
                 'fields' => ['caller_first_name', 'caller_last_name', 'patient_first_name', 'patient_last_name', 'front_desk_name'],
             ]);
-            $topics = array_merge(array_keys(CaCallGroup::$col1Topics), array_keys(CaCallGroup::$col2Topics));
-            foreach ($topics as $topic) {
-                $this->searchManager()->boolean($topic);
-            }
+        $topics = array_merge(array_keys(CaCallGroup::$col1Topics), array_keys(CaCallGroup::$col2Topics));
+        foreach ($topics as $topic) {
+            $this->searchManager()->boolean($topic);
+        }
     }
 
     /**

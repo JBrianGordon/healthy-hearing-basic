@@ -46,6 +46,7 @@ class CaCallsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
         $this->addBehavior('CounterCache', [
             'CaCallGroups' => ['ca_call_count'],
         ]);
@@ -58,6 +59,19 @@ class CaCallsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'LEFT',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('ca_call_group_id')
+            ->value('user_id', ['multiValue' => true])
+            ->value('start_time')
+            ->value('duration')
+            ->value('call_type', ['multiValue' => true])
+            ->value('recording_url')
+            ->value('recording_duration')
+            ->value('CaCallGroups.status', ['multiValue' => true])
+            ->value('CaCallGroups.score', ['multiValue' => true]);
     }
 
     /**
