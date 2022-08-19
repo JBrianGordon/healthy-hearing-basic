@@ -71,7 +71,7 @@ class Application extends BaseApplication
         }
         $this->addPlugin('BootstrapUI');
         $this->addPlugin('Search');
-        $this->addPlugin('Sitemap');
+        $this->addPlugin('Sitemap', ['routes' => true]);
     }
 
     /**

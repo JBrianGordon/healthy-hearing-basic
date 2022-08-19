@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Sitemap;
 
+use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
-use Cake\Console\CommandCollection;
 
 /**
  * Plugin for Sitemap
@@ -42,10 +43,22 @@ class Plugin extends BasePlugin
         $routes->plugin(
             'Sitemap',
             ['path' => '/sitemap'],
-            function (RouteBuilder $builder) {
-                // Add custom routes here
+            function ($routes) {
+                $routes->setExtensions(['xml']);
 
-                $builder->fallbacks();
+                // sitemap.xml - Sitemap Index
+                $routes->scope('/', function (RouteBuilder $builder) {
+                    $builder->connect('/', 'Sitemaps::index');
+                });
+
+                // sitemap_{table}.xml - Model/Table Sitemaps
+                $routes->scope('_{table}', function (RouteBuilder $builder) {
+                    $builder->connect('/', 'Sitemaps::view')
+                        ->setPass(['table'])
+                        ->setPatterns([
+                            'table' => '(?:' . implode('|', Configure::read('Sitemap.tables')) . ')',
+                        ]);
+                });
             }
         );
         parent::routes($routes);
@@ -70,7 +83,7 @@ class Plugin extends BasePlugin
      * @param \Cake\Console\CommandCollection $commands The command collection to update.
      * @return \Cake\Console\CommandCollection
      */
-    public function console(CommandCollection $commands) : CommandCollection
+    public function console(CommandCollection $commands): CommandCollection
     {
         // Add your commands here
 

@@ -56,6 +56,14 @@ class CorpsTable extends Table
                 'is_active' => 0,
             ],
         ]);
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+            ],
+            'fields' => ['id', 'priority', 'slug', 'title'],
+            'order' => ['priority' => 'ASC', 'title' => 'ASC'],
+            'priority' => 0.7,
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

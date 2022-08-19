@@ -134,4 +134,8 @@ return [
         'direct_book_type',
         'is_service_agreement_signed',
     ],
+    'Sitemap.tables' => [
+        'Content',
+        'Corps',
+    ],
 ];

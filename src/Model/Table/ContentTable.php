@@ -68,6 +68,16 @@ class ContentTable extends Table
                 'is_active' => 0,
             ],
         ]);
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+                'is_gone' => false,
+                'date <=' => date('Y-m-d'),
+            ],
+            'fields' => ['id', 'slug'],
+            'order' => ['date' => 'DESC'],
+            'priority' => 0.8,
+        ]);
 
         // Associations
         $this->belongsTo('PrimaryAuthor')
