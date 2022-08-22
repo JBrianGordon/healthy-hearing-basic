@@ -31,6 +31,10 @@ class ContentController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('Export', [
+            'actions' => ['export']
+        ]);
     }
 
     /**
@@ -95,8 +99,9 @@ class ContentController extends AppController
             ->contain(['PrimaryAuthor']);
 
         $this->set('content', $this->paginate($contentQuery));
-        $this->set('typeOptions', $this->Content->typeOptions);
+        $this->set('count', $contentQuery->count());
         $this->set('users', $users);
+        $this->set('fields', $this->Content->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
     }
 
@@ -223,5 +228,18 @@ class ContentController extends AppController
         $this->Flash->success('Republish successful!');
 
         return $this->redirect(['action' => 'edit', 1]);
+    }
+
+    /**
+    * Export content data to CSV
+    */
+    function export() {
+        $this->autoRender = false;
+        $requestParams = $this->request->getQueryParams();
+
+        $this->Export->setIgnoreFields(['body', 'bodyclass']);
+        $this->Export->setAdditionalFields(['hh_url']);
+        $this->Export->exportCsv('export_reports.csv');
+        die();
     }
 }

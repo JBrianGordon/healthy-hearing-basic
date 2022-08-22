@@ -14,29 +14,29 @@ $editorialItems = [];
 if (Configure::read('showReports')) {
     $editorialItems['Browse reports'] = [
         'url' => '/admin/content',
-        'icon' => 'bi bi-font',
+        'icon' => 'bi bi-file-richtext',
     ];
 }
 $editorialItems['Browse help pages'] = [
     'url' => '/admin/wikis',
-    'icon' => 'bi bi-tasks',
+    'icon' => 'bi bi-file-medical',
 ];
 if (Configure::read('showManufacturers')) {
     $editorialItems['Browse companies'] = [
         'url' => '/admin/corps',
-        'icon' => 'bi bi-flag',
+        'icon' => 'bi bi-building',
     ];
 }
 if (Configure::read('showAds')) {
     $editorialItems['Browse ads'] = [
         'url' => '/admin/ad',
-        'icon' => 'bi bi-picture',
+        'icon' => 'bi bi-card-image',
     ];
 }
 if (Configure::read('showReports')) {
     $editorialItems['Add article'] = [
         'url' => '/admin/content/edit/type:article',
-        'icon' => 'bi bi-plus',
+        'icon' => 'bi bi-plus-lg',
     ];
 }
 $editorialItems['Misc. pages'] = [

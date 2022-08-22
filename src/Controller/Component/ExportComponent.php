@@ -5,6 +5,7 @@ namespace Cake\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Utility\Inflector;
 use Cake\Datasource\ConnectionManager;
+use Cake\Routing\Router;
 
 class ExportComponent extends Component
 {
@@ -109,13 +110,18 @@ class ExportComponent extends Component
             foreach ($fields as $field) {
                 if ($offset = strpos($field, '.')) {
                     // Data from another table
-                    $associatedTable = substr($field, 0, $offset);
-                    $table = Inflector::singularize($model->$associatedTable->getTable());
+                    $associatedModel = substr($field, 0, $offset);
+                    $table = Inflector::singularize($model->$associatedModel->getTable());
                     $field = substr($field, $offset+1);
-                    $row[] = $data->$table->$field;
+                    $value = $data->$table->$field;
                 } else {
-                    $row[] = $data->$field;
+                    $value = $data->$field;
                 }
+                if (is_array($value) && isset($value['action'])) {
+                    // Value is a URL array
+                    $value = Router::url($value);
+                }
+                $row[] = $value;
             }
             fputcsv($output, $row);
         }

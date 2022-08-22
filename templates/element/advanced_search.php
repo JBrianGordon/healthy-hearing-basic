@@ -49,12 +49,12 @@ $this->loadHelper('Search.Search', [
 ?>
 <div class="row justify-content-end">
     <?php if ($this->Search->isSearch()) : ?>
-        <div class="col col-md-auto">
-            <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
+        <div class="col col-md-auto p-0">
+            <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-sm btn-info text-light', 'role' => 'button']) ?>
         </div>
     <?php endif; ?>
     <div class="col col-md-auto">
-        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
+        <button class="btn btn-sm btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
             + Advanced
         </button>
     </div>
