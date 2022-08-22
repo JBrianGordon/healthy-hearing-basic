@@ -49,7 +49,10 @@ class CaCallsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'CaCalls');
         }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'CaCall'])->toArray();
         $contain = [];
         if (isset($requestParams['CaCallGroups'])) {
             // Only contain CaCallGroups if we are searching by CallGroup data. Page loads slower.
@@ -65,6 +68,7 @@ class CaCallsController extends AppController
             $this->CaCalls->loadInto($caCalls, ['CaCallGroups', 'CaCallGroups.Locations', 'Users']);
         }
         $this->set('caCalls', $caCalls);
+        $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCalls->getSchema()->typeMap());
         $this->set('count', $caCallsQuery->count());
         $this->set('agents', $this->CaCalls->Users->findAgents());
@@ -141,8 +145,7 @@ class CaCallsController extends AppController
     /**
     * Export a list of calls to CSV
     */
-    function export(){
-        // TODO: add additional fields for CaCallGroup.status, etc..
+    function export() {
         $this->autoRender = false;
         $requestParams = $this->request->getQueryParams();
 

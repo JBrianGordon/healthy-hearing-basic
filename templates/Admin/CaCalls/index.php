@@ -65,6 +65,7 @@ foreach ($fields as $field => $type) {
     <h3>Calls</h3>
     <?= $this->element('pagination') ?>
     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
+    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>
