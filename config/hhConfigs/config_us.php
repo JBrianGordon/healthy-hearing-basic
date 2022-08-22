@@ -132,6 +132,7 @@ return [
         'is_service_agreement_signed',
     ],
     'Sitemap.tables' => [
+        'Main',
         'Content',
         'Corps',
     ],

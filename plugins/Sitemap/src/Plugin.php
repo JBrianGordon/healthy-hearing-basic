@@ -51,6 +51,11 @@ class Plugin extends BasePlugin
                     $builder->connect('/', 'Sitemaps::index');
                 });
 
+                // sitemap_Main.xml - Main Sitemap
+                $routes->scope('_Main', function (RouteBuilder $builder) {
+                    $builder->connect('/', 'Sitemaps::main');
+                });
+
                 // sitemap_{table}.xml - Model/Table Sitemaps
                 $routes->scope('_{table}', function (RouteBuilder $builder) {
                     $builder->connect('/', 'Sitemaps::view')

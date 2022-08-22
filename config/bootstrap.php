@@ -102,8 +102,14 @@ if ($country = Configure::read('country')) {
     }
 }
 
+/* Route configuration */
 if (file_exists(CONFIG . 'hhConfigs/config_routes.php')) {
     Configure::load('hhConfigs/config_routes', 'default');
+}
+
+/* Sitemap configuration for sitemap_Main.xml */
+if (file_exists(CONFIG . 'hhConfigs/config_sitemapMain.php')) {
+    Configure::load('hhConfigs/config_sitemapMain', 'default');
 }
 
 /*

@@ -50,15 +50,42 @@ class SitemapsController extends AppController
         ]);
     }
 
+    public function main()
+    {
+        $mainSitemapUrlInfo = [];
+        $mainSitemapUrls = [];
+
+        if (Configure::check('Sitemap.mainUrls')) {
+            $mainSitemapUrlInfo = Configure::read('Sitemap.mainUrls');
+        }
+
+        foreach ($mainSitemapUrlInfo as $url => $priority) {
+            $mainSitemapUrls[] = [
+                'loc' => Router::url($url, true),
+                'priority' => $priority,
+            ];
+        }
+
+        // Define a custom root node in the generated document.
+        $this->viewBuilder()
+            ->setOption('rootNode', 'urlset')
+            ->setOption('serialize', ['@xmlns', 'url']);
+        $this->set([
+            // Define an attribute on the root node.
+            '@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+            'url' => $mainSitemapUrls,
+        ]);
+    }
+
     public function view($table)
     {
-        $itemUrls = [];
+        $tableSitemapUrls = [];
         $tableToSitemap = $this->fetchTable($table);
 
         $tableItemsForSitemap = $tableToSitemap->find('forSitemap');
 
         foreach ($tableItemsForSitemap as $item) {
-            $itemUrls[] = [
+            $tableSitemapUrls[] = [
                 'loc' => $item['loc'],
                 'priority' => $item['priority'],
             ];
@@ -71,7 +98,7 @@ class SitemapsController extends AppController
         $this->set([
             // Define an attribute on the root node.
             '@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'url' => $itemUrls,
+            'url' => $tableSitemapUrls,
         ]);
     }
 }
