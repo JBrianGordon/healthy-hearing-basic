@@ -118,6 +118,17 @@ class ContentControllerTest extends TestCase
         $this->markTestIncomplete('Not implemented yet.');
     }
 
+    /**
+     * Test export method
+     *
+     * @return void
+     * @uses \App\Controller\Admin\ContentController::export()
+     */
+    public function testExport(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
     // * * * * *
     //
     // draft() test methods

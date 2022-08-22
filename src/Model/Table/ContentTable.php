@@ -36,14 +36,6 @@ use Search\Model\Filter\Base;
  */
 class ContentTable extends Table
 {
-    public array $typeOptions = [
-        'article' => 'Articles',
-        'faq' => 'FAQs',
-        'interview' => 'Interviews',
-        'news' => 'News',
-        'hearingcenterint' => 'HearingCenterInts',
-    ];
-
     /**
      * Initialize method
      *

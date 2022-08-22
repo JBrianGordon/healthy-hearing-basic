@@ -46,6 +46,14 @@ use Cake\ORM\Entity;
  */
 class Content extends Entity
 {
+    static $typeOptions = array(
+        'article'   =>  'Articles',
+        'faq'       =>  'FAQs',
+        'interview' =>  'Interviews',
+        'news'      =>  'News',
+        'hearingcenterint' => 'HearingCenterInts',
+    );
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

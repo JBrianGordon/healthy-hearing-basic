@@ -6,9 +6,9 @@
 // use Cake\View\Helper\FormHelper;
 ?>
 
-<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+<div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
     <?php foreach ($crmSearches as $crmSearch) : ?>
-        <div class="btn-group btn-group-sm m-1" role="group">
+        <div class="btn-group btn-group-xs m-1" role="group">
             <?php
                 echo $this->Form->postLink(
                     '<i class="bi bi-trash"></i>',
@@ -33,7 +33,7 @@
                         $crmSearch['id'],
                     ],
                     [
-                        'class' => 'btn btn-outline-secondary',
+                        'class' => 'btn btn-default',
                         'escape' => false,
                     ]
                 );
@@ -45,23 +45,23 @@
                         'action' => 'index',
                         '?' => json_decode($crmSearch['search']),
                     ],
-                    ['class' => 'btn btn-outline-secondary']
+                    ['class' => 'btn btn-default']
                 );
             ?>
         </div>
     <?php endforeach; ?>
     <?php if ($_isSearch === true && $savedSearch === false) : ?>
-        <div class="btn-group btn-group-sm m-1" role="group">
+        <div class="btn-group btn-group-xs m-1" role="group">
             <?php
                 echo $this->Form->postLink(
-                    '<i class="bi bi-plus"></i> Save This Search',
+                    '+ Save This Search',
                     [
                         'controller' => 'CrmSearches',
                         'prefix' => 'Admin',
                         'action' => 'save',
                     ],
                     [
-                        'class' => 'btn btn-warning btn-sm rounded',
+                        'class' => 'btn btn-primary rounded',
                         'data' => [
                             'searchData' => $_searchParams,
                             'model' => $currentModel,
@@ -70,7 +70,6 @@
                         'escape' => false,
                     ]
                 );
-
             ?>
         </div>
     <?php endif; ?>

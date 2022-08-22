@@ -3,7 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content[]|\Cake\Collection\CollectionInterface $content
  */
-
+use Cake\Routing\Router;
+use App\Model\Entity\Content;
+/* TODO - do I need this?
 $this->loadHelper('Search.Search', [
     'additionalBlacklist' => [
         'created_start_date',
@@ -12,116 +14,65 @@ $this->loadHelper('Search.Search', [
         'last_mod_end_date',
         'saved_search',
     ],
-]);
+]);*/
+$queryParams = $this->request->getQueryParams();
+$exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
+// Advanced search details
+$advancedSearchFields = [];
+$ignoreFields = ['is_frozen', 'id_brafton', 'date', 'modified', 'alt_title', 'title_head', 'meta_description', 'bodyclass', 'facebook_title', 'facebook_image_width', 'facebook_image_height', 'facebook_image_alt', 'old_url', 'slug', 'facebook_description'];
+$fields = array_diff_key($fields, array_flip($ignoreFields));
+// Add additional fields
+$fields['q'] = 'string';
+foreach ($fields as $field => $type) {
+    $label = '';
+    $options = false;
+    $empty = false;
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
+    switch ($field) {
+        case 'user_id':
+            $label = 'Primary Author';
+            $type = 'select';
+            $options = $users;
+            $empty = '(select one)';
+            break;
+        case 'type':
+            $type = 'select';
+            $options = Content::$typeOptions;
+            $empty = '(select one)';
+            break;
+        case 'facebook_image':
+            $type = 'boolean';
+            break;
+        case 'id_draft_parent':
+            $label = 'Is draft';
+            $type = 'boolean';
+            break;
+        case 'q':
+            $label = 'Query';
+            break;
+    }
+    $advancedSearchFields[] = [
+        'field' => $field,
+        'type' => $type,
+        'label' => $label,
+        'options' => $options,
+        'empty' => $empty,
+        'value' => $value
+    ];
+}
 ?>
 
 <div class="content index">
-    <?= $this->Html->link(__('New Content'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Content') ?></h3>
+    <div class="btn-group btn-group-sm pt-2 mb-3">
+        <?= $this->Html->link("+ Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-arrow-repeat'></i> Sync photos", ['action' => 'rsync'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+    </div>
+    <h3><?= __('Reports') ?></h3>
+    <?= $this->element('pagination') ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
-    <div class="row justify-content-end">
-        <?php if ($this->Search->isSearch()) : ?>
-            <div class="col col-md-auto">
-                <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
-            </div>
-        <?php endif; ?>
-        <div class="col col-md-auto">
-            <button class="btn btn-primary mb-3" type="button"
-                data-bs-toggle="collapse" data-bs-target="#advancedSearch"
-                aria-expanded="false" aria-controls="advancedSearch"
-            >
-                + Advanced
-            </button>
-        </div>
 
-    </div>
-
-    <div class="collapse" id="advancedSearch">
-        <?php
-            echo $this->Form->create(null, [
-                'class' => 'bg-light mb-3 p-5',
-                'valueSources' => 'query',
-            ]);
-            echo $this->Form->control('id', [
-                'label' => [
-                    'text' => 'Content ID',
-                    'floating' => true,
-                ],
-            ]);
-            echo $this->Form->control('user_id', [
-                'label' => [
-                    'text' => 'Primary Author',
-                    'floating' => true,
-                ],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('type', [
-                'type' => 'select',
-                'options' => $typeOptions,
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('title', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('short', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('body', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('is_active', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('is_library_item', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('library_share_text', [
-                'label' => ['floating' => true],
-            ]);
-            echo $this->Form->control('is_gone', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('facebook_image', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('facebook_image_width_override', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('id_draft_parent', [
-                'type' => 'select',
-                'options' => [1 => 'Yes', 0 => 'No'],
-                'label' => ['floating' => true],
-                'empty' => '(select one)',
-            ]);
-            echo $this->Form->control('q', ['label' => 'Query']);
-            echo $this->Form->control('last_mod_start_date', ['type' => 'date','label' => 'Lastmod Start Date']);
-            echo $this->Form->control('last_mod_end_date', ['type' => 'date','label' => 'Lastmod End Date']);
-            echo $this->Form->control('created_start_date', ['type' => 'date','label' => 'Created Start Date']);
-            echo $this->Form->control('created_end_date', ['type' => 'date','label' => 'Created End Date']);
-
-            echo $this->Form->button('Filter', [
-                'type' => 'submit',
-                'class' => 'me-3',
-            ]);
-            echo $this->Form->end();
-            ?>
-    </div>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>
@@ -169,19 +120,19 @@ $this->loadHelper('Search.Search', [
                     <td><?= h($content->last_modified) ?></td>
                     <td><?= h($content->date) ?></td>
                     <td class="actions">
-                        <div class="btn-group-vertical">
+                        <div class="btn-group-vertical btn-group-sm">
                             <?=
                                 $this->Html->link(
                                     __('View'),
                                     array_merge(['prefix' => false], $content->hh_url),
-                                    ['class' => 'btn btn-outline-secondary']
+                                    ['class' => 'btn btn-default']
                                 )
                             ?>
                             <?=
                                 $this->Html->link(
                                     __('Edit'),
                                     ['action' => 'edit', $content->id],
-                                    ['class' => 'btn btn-outline-secondary']
+                                    ['class' => 'btn btn-default']
                                 )
                             ?>
                         </div>
@@ -208,3 +159,24 @@ $this->loadHelper('Search.Search', [
         </p>
     </div>
 </div>
+<?php
+// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
+echo '<script type="text/javascript">
+    function exportBtnClick() {
+        var count = '.$count.';
+        var readableCount = "'.number_format($count).'";
+        var exportUrl = "'.$exportUrl.'";
+        if (count < 100000) {
+            // Small file. Download immediately.
+            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
+                window.location.replace(exportUrl);
+            }
+        } else {
+            // Large file
+            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
+            alert("Export is too large. Please narrow your results to 100,000 or less.");
+        }
+    }
+    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
+</script>';
+?>
