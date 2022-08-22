@@ -82,4 +82,15 @@ class CaCallGroupsControllerTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test export method
+     *
+     * @return void
+     * @uses \App\Controller\Admin\CaCallGroupsController::export()
+     */
+    public function testExport(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

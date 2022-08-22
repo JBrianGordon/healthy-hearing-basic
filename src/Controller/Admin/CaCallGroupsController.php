@@ -47,13 +47,17 @@ class CaCallGroupsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'CaCallGroups');
         }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'CaCallGroup'])->toArray();
         $caCallGroupsQuery = $this->CaCallGroups->find('search', [
             'search' => $requestParams,
             'contain' => ['Locations', 'CaCalls'],
         ]);
         $spamCount = $this->CaCallGroups->find()->where(['is_spam' => true])->count();
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
+        $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
         $this->set('count', $caCallGroupsQuery->count());
         $this->set('spamCount', $spamCount);
@@ -123,7 +127,7 @@ class CaCallGroupsController extends AppController
     /**
     * Export a list of call groups to CSV
     */
-    function export(){
+    function export() {
         $this->autoRender = false;
         $this->Export->exportCsv('export_call_groups.csv');
         die();

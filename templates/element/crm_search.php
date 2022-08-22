@@ -40,7 +40,6 @@
                 echo $this->Html->link(
                     $crmSearch['title'],
                     [
-                        'controller' => 'Content',
                         'prefix' => 'Admin',
                         'action' => 'index',
                         '?' => json_decode($crmSearch['search']),
