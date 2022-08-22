@@ -112,11 +112,13 @@ class AdminHelper extends Helper
                 break;
             case 'datetime':
             case 'date':
+                $startValue = isset($value['start']) ? $value['start'] : null;
+                $endValue = isset($value['end']) ? $value['end'] : null;
                 $formInput .= '<div class="input-group">';
                 $formInput .= '<label class="form-check-label col-md-4" for="'.$fieldSlug.'">'.$label.'</label>';
-                $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-start">';
+                $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
                 $formInput .= '<span>&nbsp; - &nbsp;</span>';
-                $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-end">';
+                $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
                 $formInput .= '</div>';
                 break;
             default: //string, integer, biginteger
