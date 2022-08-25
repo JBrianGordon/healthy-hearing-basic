@@ -39,6 +39,7 @@ class LocationsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'Location');
         }
         $locationsQuery = $this->Locations
             ->find('search', [

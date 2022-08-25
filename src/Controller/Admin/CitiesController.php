@@ -39,6 +39,7 @@ class CitiesController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'City');
         }
         $citiesQuery = $this->Cities
             ->find('search', [

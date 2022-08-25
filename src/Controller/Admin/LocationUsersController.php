@@ -39,6 +39,7 @@ class LocationUsersController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'LocationUser');
         }
         $locationUsersQuery = $this->LocationUsers
             ->find('search', [

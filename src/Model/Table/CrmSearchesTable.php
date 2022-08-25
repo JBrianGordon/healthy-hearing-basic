@@ -45,12 +45,42 @@ class CrmSearchesTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'LEFT',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('user_id')
+            ->value('model')
+            ->like('title')
+            ->like('search')
+            ->boolean('is_public')
+            ->value('order')
+            ->add('created_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["created >=" => $args['created_start']]);
+                }
+            ])
+            ->add('created_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["created <=" => $args['created_end']]);
+                }
+            ])
+            ->add('modified_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["modified >=" => $args['modified_start']]);
+                }
+            ])
+            ->add('modified_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["modified <=" => $args['modified_end']]);
+                }
+            ]);
     }
 
     /**
@@ -103,5 +133,17 @@ class CrmSearchesTable extends Table
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    /**
+    * Find a list of all users that have saved a crm search
+    */
+    public function findCrmSearchUsers() {
+        $crmSearchUsersQuery = $this->find('list', [
+            'keyField' => 'user_id',
+            'valueField' => 'user.username'
+        ])
+        ->contain(['Users']);
+        return $crmSearchUsersQuery->toArray();
     }
 }

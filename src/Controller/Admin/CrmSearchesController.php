@@ -14,34 +14,44 @@ use App\Controller\AppController;
 class CrmSearchesController extends AppController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users'],
-        ];
-        $crmSearches = $this->paginate($this->CrmSearches);
-
-        $this->set(compact('crmSearches'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Crm Search id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $crmSearch = $this->CrmSearches->get($id, [
-            'contain' => ['Users'],
+        $requestParams = $this->request->getQueryParams();
+        if (array_key_exists('saved_search', $requestParams)) {
+            $this->set('savedSearch', true);
+        } else {
+            $this->set('savedSearch', false);
+            $this->set('currentModel', 'CrmSearch');
+        }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'CrmSearch'])->toArray();
+        $crmSearchQuery = $this->CrmSearches->find('search', [
+            'search' => $requestParams,
+            'contain' => ['Users']
         ]);
 
-        $this->set(compact('crmSearch'));
+        $this->set('allCrmSearches', $this->paginate($crmSearchQuery));
+        $this->set('crmSearches', $crmSearches);
+        $this->set('fields', $this->CrmSearches->getSchema()->typeMap());
+        $this->set('users', $this->CrmSearches->findCrmSearchUsers());
     }
 
     /**
@@ -149,7 +159,7 @@ class CrmSearchesController extends AppController
                 $this->Flash->success(__('The crm search has been saved.'));
 
                 return $this->redirect([
-                    'controller' => $crmSearch->model,
+//                    'controller' => $crmSearch->model,
                     'prefix' => 'Admin',
                     'action' => 'index',
                 ]);
@@ -157,7 +167,7 @@ class CrmSearchesController extends AppController
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
 
             return $this->redirect([
-                'controller' => $crmSearch->model,
+//                'controller' => $crmSearch->model,
                 'prefix' => 'Admin',
                 'action' => 'index',
             ]);

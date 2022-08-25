@@ -38,17 +38,6 @@ class CrmSearchesControllerTest extends TestCase
     }
 
     /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\Admin\CrmSearchesController::view()
-     */
-    public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test add method
      *
      * @return void

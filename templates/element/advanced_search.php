@@ -41,10 +41,10 @@ use Cake\Core\Configure;
 use App\Model\Entity\Location;
 use Cake\Utility\Inflector;
 
+$additionalBlacklist = isset($additionalBlacklist) ? $additionalBlacklist : [];
+$additionalBlacklist[] = 'saved_search';
 $this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
+    'additionalBlacklist' => $additionalBlacklist,
 ]);
 ?>
 <div class="row justify-content-end">

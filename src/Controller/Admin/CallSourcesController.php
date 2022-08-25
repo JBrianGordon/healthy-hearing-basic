@@ -42,6 +42,7 @@ class CallSourcesController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'CallSource');
         }
         $callSourcesQuery = $this->CallSources
             ->find('search', [

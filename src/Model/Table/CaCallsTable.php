@@ -65,13 +65,22 @@ class CaCallsTable extends Table
             ->value('id')
             ->value('ca_call_group_id')
             ->value('user_id', ['multiValue' => true])
-            ->value('start_time')
             ->value('duration')
             ->value('call_type', ['multiValue' => true])
             ->value('recording_url')
             ->value('recording_duration')
             ->value('CaCallGroups.status', ['multiValue' => true])
-            ->value('CaCallGroups.score', ['multiValue' => true]);
+            ->value('CaCallGroups.score', ['multiValue' => true])
+            ->add('start_time_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["start_time >=" => $args['start_time_start']]);
+                }
+            ])
+            ->add('start_time_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["start_time <=" => $args['start_time_end']]);
+                }
+            ]);
     }
 
     /**

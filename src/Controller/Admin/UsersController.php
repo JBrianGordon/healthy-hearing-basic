@@ -39,6 +39,7 @@ class UsersController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
+            $this->set('currentModel', 'User');
         }
         $usersQuery = $this->Users
             ->find('search', [

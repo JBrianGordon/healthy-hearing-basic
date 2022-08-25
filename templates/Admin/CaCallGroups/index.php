@@ -5,11 +5,8 @@
  */
 use App\Model\Entity\CaCallGroup;
 use Cake\Routing\Router;
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
+
+$additionalBlacklist = [];
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 $topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
@@ -97,7 +94,7 @@ $advancedSearchFields[] = [
     </div>
     <h3>Call Groups</h3>
     <?= $this->element('pagination') ?>
-    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">

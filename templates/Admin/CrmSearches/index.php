@@ -1,81 +1,97 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\CrmSearch[]|\Cake\Collection\CollectionInterface $crmSearches
+ * @var \App\Model\Entity\CrmSearch[]|\Cake\Collection\CollectionInterface $allCrmSearches
  */
+$queryParams = $this->request->getQueryParams();
+// Advanced search details
+$advancedSearchFields = [];
+$ignoreFields = [];
+$additionalBlacklist = [];
+foreach ($fields as $field => $type) {
+    if (!in_array($field, $ignoreFields)) {
+        $label = '';
+        $options = false;
+        $empty = false;
+        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
+        if (in_array($type, ['date', 'datetime'])) {
+            $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
+            $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
+        }
+        switch ($field) {
+            case 'user_id':
+                $label = 'User';
+                $type = 'select';
+                $options = $users;
+                $empty = '(select one)';
+                break;
+        }
+        $advancedSearchFields[] = [
+            'field' => $field,
+            'type' => $type,
+            'label' => $label,
+            'options' => $options,
+            'empty' => $empty,
+            'value' => $value
+        ];
+    }
+}
 ?>
 <div class="crmSearches index content">
-    <?= $this->Html->link(__('New Crm Search'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <div class="btn-group btn-group-sm pt-2 mb-3">
+        <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+    </div>
     <h3><?= __('Crm Searches') ?></h3>
+    <?= $this->element('pagination') ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
+    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="table-responsive">
-        <table>
+        <table class="table table-striped table-bordered table-sm">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('user_id') ?></th>
-                    <th><?= $this->Paginator->sort('model') ?></th>
-                    <th><?= $this->Paginator->sort('title') ?></th>
+                    <th><?= $this->Paginator->sort('id') ?><br><?= $this->Paginator->sort('order') ?></th>
                     <th><?= $this->Paginator->sort('is_public') ?></th>
-                    <th><?= $this->Paginator->sort('priority') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
+                    <th><?= $this->Paginator->sort('model') ?></th>
+                    <th><?= $this->Paginator->sort('title') ?><br><?= 'Search' ?></th>
+                    <th><?= $this->Paginator->sort('user_id', 'User') ?></th>
+                    <th><?= $this->Paginator->sort('created') ?><br><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($crmSearches as $crmSearch) : ?>
+                <?php foreach ($allCrmSearches as $crmSearch) : ?>
                 <tr>
-                    <td><?= $this->Number->format($crmSearch->id) ?></td>
+                    <td><span class="badge bg-info"><?= $crmSearch->id ?></span><br><?= $crmSearch->order ?></td>
+                    <td><?= $this->Admin->yesNo($crmSearch->is_public) ?></td>
+                    <td><?= h($crmSearch->model) ?></td>
+                    <td style="word-wrap: break-word; max-width: 500px;"><?= h($crmSearch->title) ?><br><small><?= h($crmSearch->search) ?></small></td>
                     <td>
                         <?=
                             $crmSearch->has('user') ?
-                            $this->Html->link($crmSearch->user->id, [
+                            $this->Html->link($crmSearch->user->username, [
                                 'controller' => 'Users',
                                 'action' => 'view',
                                 $crmSearch->user->id,
                             ]) : ''
                         ?>     
                     </td>
-                    <td><?= h($crmSearch->model) ?></td>
-                    <td><?= h($crmSearch->title) ?></td>
-                    <td><?= h($crmSearch->is_public) ?></td>
-                    <td><?= $this->Number->format($crmSearch->priority) ?></td>
-                    <td><?= h($crmSearch->created) ?></td>
-                    <td><?= h($crmSearch->modified) ?></td>
+                    <td nowrap><?= date('Y-m-d, H:i', strtotime($crmSearch->created)) ?><br><?= date('Y-m-d, H:i', strtotime($crmSearch->modified))  ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $crmSearch->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $crmSearch->id]) ?>
-                        <?=
-                            $this->Form->postLink(
-                                __('Delete'),
-                                [
-                                    'action' => 'delete',
-                                    $crmSearch->id,
-                                ],
-                                [
-                                    'confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id),
-                                ]
-                            )
-                        ?>
+                        <div class="btn-group-vertical btn-group-xs">
+                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-default']) ?>
+                            <?=
+                                $this->Form->postLink(
+                                    __('Delete'),
+                                    ['action' => 'delete', $crmSearch->id],
+                                    ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'btn btn-danger']
+                                )
+                            ?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p>
-            <?=
-                $this->Paginator
-                    ->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total'))
-            ?>
-        </p>
-    </div>
+    <?= $this->element('pagination') ?>
 </div>

@@ -6,11 +6,7 @@
 use App\Model\Entity\CaCall;
 use App\Model\Entity\CaCallGroup;
 use Cake\Routing\Router;
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
+
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
@@ -19,6 +15,7 @@ $ignoreFields = [];
 // Add additional fields
 $fields['CaCallGroups.status'] = 'string';
 $fields['CaCallGroups.score'] = 'string';
+$additionalBlacklist = ['CaCallGroups'];
 foreach ($fields as $field => $type) {
     if (!in_array($field, $ignoreFields)) {
         $label = '';
@@ -68,7 +65,7 @@ foreach ($fields as $field => $type) {
     </div>
     <h3>Calls</h3>
     <?= $this->element('pagination') ?>
-    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">

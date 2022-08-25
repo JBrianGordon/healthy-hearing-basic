@@ -417,7 +417,7 @@ class UsersTable extends CakeDcUsersTable
     }
 
     /**
-    * find a list of all users that are call center agents
+    * Find a list of all users that are call center agents
     */
     public function findAgents() {
         $agentsQuery = $this->find('list', [
@@ -431,6 +431,6 @@ class UsersTable extends CakeDcUsersTable
                 'is_call_supervisor' => true,
             ]
         ]);
-        return $agentsQuery;
+        return $agentsQuery->toArray();
     }
 }

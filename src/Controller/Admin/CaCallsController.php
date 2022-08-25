@@ -49,7 +49,7 @@ class CaCallsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'CaCalls');
+            $this->set('currentModel', 'CaCall');
         }
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()->where(['model' => 'CaCall'])->toArray();
