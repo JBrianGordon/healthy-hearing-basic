@@ -39,10 +39,10 @@ class CrmSearchesController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'CrmSearch');
+            $this->set('currentModel', 'CrmSearches');
         }
         $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'CrmSearch'])->toArray();
+            ->find()->where(['model' => 'CrmSearches'])->toArray();
         $crmSearchQuery = $this->CrmSearches->find('search', [
             'search' => $requestParams,
             'contain' => ['Users']
@@ -157,9 +157,8 @@ class CrmSearchesController extends AppController
             $crmSearch = $this->CrmSearches->patchEntity($crmSearch, $saveData);
             if ($this->CrmSearches->save($crmSearch)) {
                 $this->Flash->success(__('The crm search has been saved.'));
-
                 return $this->redirect([
-//                    'controller' => $crmSearch->model,
+                    'controller' => $crmSearch->model,
                     'prefix' => 'Admin',
                     'action' => 'index',
                 ]);
@@ -167,7 +166,7 @@ class CrmSearchesController extends AppController
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
 
             return $this->redirect([
-//                'controller' => $crmSearch->model,
+                'controller' => $crmSearch->model,
                 'prefix' => 'Admin',
                 'action' => 'index',
             ]);

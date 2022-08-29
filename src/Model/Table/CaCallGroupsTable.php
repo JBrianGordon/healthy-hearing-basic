@@ -66,17 +66,19 @@ class CaCallGroupsTable extends Table
             ->value('id')
             ->value('location_id')
             ->value('caller_phone')
-            ->value('caller_first_name')
-            ->value('caller_last_name')
+            ->like('caller_first_name')
+            ->like('caller_last_name')
             ->boolean('is_patient')
-            ->value('patient_first_name')
-            ->value('patient_last_name')
+            ->like('patient_first_name')
+            ->like('patient_last_name')
             ->boolean('refused_name')
             ->value('email')
             ->boolean('wants_hearing_test')
             ->value('prospect')
             ->boolean('is_prospect_override')
-            ->value('front_desk_name')
+            ->like('front_desk_name')
+            ->value('score', ['multiValue' => true])
+            ->value('status', ['multiValue' => true])
             ->boolean('is_bringing_third_party')
             ->boolean('is_review_needed')
             ->value('ca_call_count')
@@ -96,21 +98,60 @@ class CaCallGroupsTable extends Table
             ->value('traffic_medium')
             ->boolean('is_appt_request_form')
             ->boolean('is_spam')
-            ->value('id_xml_file')
-            ->value('appt_date')
-            ->value('scheduled_call_date')
-            ->value('created')
-            ->value('final_score_date')
-            ->value('score', ['multiValue' => true])
-            ->value('status', ['multiValue' => true])
-            ->add('q', 'Search.Like', [
-                'before' => true,
-                'after' => true,
-                'fieldMode' => 'OR',
-                'comparison' => 'LIKE',
-                'wildcardAny' => '*',
-                'wildcardOne' => '?',
-                'fields' => ['caller_first_name', 'caller_last_name', 'patient_first_name', 'patient_last_name', 'front_desk_name'],
+            // appt_date
+            ->add('appt_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["appt_date >=" => $args['appt_date_start']]);
+                }
+            ])
+            ->add('appt_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["appt_date <=" => $args['appt_date_end']]);
+                }
+            ])
+            // scheduled_call_date
+            ->add('scheduled_call_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["scheduled_call_date >=" => $args['scheduled_call_date_start']]);
+                }
+            ])
+            ->add('scheduled_call_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["scheduled_call_date <=" => $args['scheduled_call_date_end']]);
+                }
+            ])
+            // final_score_date
+            ->add('final_score_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["final_score_date >=" => $args['final_score_date_start']]);
+                }
+            ])
+            ->add('final_score_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["final_score_date <=" => $args['final_score_date_end']]);
+                }
+            ])
+            // created
+            ->add('created_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["CaCallGroups.created >=" => $args['created_start']]);
+                }
+            ])
+            ->add('created_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["CaCallGroups.created <=" => $args['created_end']]);
+                }
+            ])
+            // modified
+            ->add('modified_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["CaCallGroups.modified >=" => $args['modified_start']]);
+                }
+            ])
+            ->add('modified_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["CaCallGroups.modified <=" => $args['modified_end']]);
+                }
             ]);
         $topics = array_merge(array_keys(CaCallGroup::$col1Topics), array_keys(CaCallGroup::$col2Topics));
         foreach ($topics as $topic) {

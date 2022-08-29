@@ -49,10 +49,10 @@ class CaCallsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'CaCall');
+            $this->set('currentModel', 'CaCalls');
         }
         $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'CaCall'])->toArray();
+            ->find()->where(['model' => 'CaCalls'])->toArray();
         $contain = [];
         if (isset($requestParams['CaCallGroups'])) {
             // Only contain CaCallGroups if we are searching by CallGroup data. Page loads slower.

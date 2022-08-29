@@ -24,3 +24,11 @@
   border: solid 1px #7b7e80;
   color: #7b7380;
 }
+.btn-info {
+  color: #fff;
+  border-color: #333;
+  &:hover {
+    color: #fff;
+    border-color: #333;
+  }
+}

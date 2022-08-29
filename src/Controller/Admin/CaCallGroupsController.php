@@ -47,10 +47,10 @@ class CaCallGroupsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'CaCallGroup');
+            $this->set('currentModel', 'CaCallGroups');
         }
         $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'CaCallGroup'])->toArray();
+            ->find()->where(['model' => 'CaCallGroups'])->toArray();
         $caCallGroupsQuery = $this->CaCallGroups->find('search', [
             'search' => $requestParams,
             'contain' => ['Locations', 'CaCalls'],

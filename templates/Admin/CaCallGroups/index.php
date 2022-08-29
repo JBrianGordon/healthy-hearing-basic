@@ -11,7 +11,8 @@ $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 $topics = array_merge(CaCallGroup::$col1Topics, CaCallGroup::$col2Topics);
 // Fields to ignore
-$ignoreFields = array_keys($topics);
+$ignoreFields = ['lock_time', 'id_locked_by_user', 'outbound_priority', 'id_xml_file'];
+$ignoreFields = array_merge($ignoreFields, array_keys($topics));
 // Advanced search details
 $advancedSearchFields = [];
 foreach ($fields as $field => $type) {
@@ -102,7 +103,6 @@ $advancedSearchFields[] = [
                 <tr>
                     <th><?= $this->Paginator->sort('id', 'Group ID') ?></th>
                     <th><?= $this->Paginator->sort('location_id', 'Clinic') ?></th>
-                    <th><?= $this->Paginator->sort('caller_phone') ?></th>
                     <th><?= $this->Paginator->sort('caller_last_name', 'Caller name') ?><br><?= $this->Paginator->sort('patient_last_name', 'Patient name') ?></th>
                     <th><?= $this->Paginator->sort('created', 'Initial call time') ?></th>
                     <th><?= $this->Paginator->sort('score') ?></th>
@@ -124,7 +124,6 @@ $advancedSearchFields[] = [
                                 <?= $this->Html->link('All Call Groups', ['controller' => 'CaCallGroups', 'action' => 'index', '?' => ['location_id' => $caCallGroup->location_id]], ['class' => 'btn btn-default btn-xs']) ?>
                             <?php endif; ?>
                         </td>
-                        <td><?= h($caCallGroup->caller_phone) ?></td>
                         <td>
                             <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
                             <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
@@ -157,7 +156,7 @@ $advancedSearchFields[] = [
                             <?php endif; ?>
                         </td>
                         <td class="actions">
-                            <div class="btn-group-vertical btn-group-xs">
+                            <div class="btn-group-vertical btn-group-sm">
                                 <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
                                 <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
                             </div>

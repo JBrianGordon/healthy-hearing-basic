@@ -45,7 +45,7 @@ class ReviewsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'Review');
+            $this->set('currentModel', 'Reviews');
         }
         $reviewsQuery = $this->Reviews
             ->find('search', [
