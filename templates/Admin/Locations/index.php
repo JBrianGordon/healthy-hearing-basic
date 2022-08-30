@@ -164,7 +164,7 @@ $groupedFields = [
     <h3><?= __('Locations CRM') ?></h3>
     <?= $this->element('pagination') ?>
     <?= $this->element('advanced_search', ['groupedFields' => $groupedFields, 'fields' => $otherFields]) ?>
-
+    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>

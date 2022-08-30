@@ -41,11 +41,14 @@ class LocationsController extends AppController
             $this->set('savedSearch', false);
             $this->set('currentModel', 'Locations');
         }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'CaCallGroups'])->toArray();
         $locationsQuery = $this->Locations
             ->find('search', [
                 'search' => $requestParams,
             ]);
         $this->set('locations', $this->paginate($locationsQuery));
+        $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->Locations->getSchema()->typeMap());
     }
 

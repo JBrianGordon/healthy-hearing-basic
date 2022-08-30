@@ -2,11 +2,8 @@
 /**
  * @var \App\View\AppView $this
  */
-
-// use Cake\View\Helper\FormHelper;
 $userId = $this->Identity->getId();
 ?>
-
 <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
     <?php foreach ($crmSearches as $crmSearch) : ?>
         <?php if ($crmSearch->is_public): ?>
