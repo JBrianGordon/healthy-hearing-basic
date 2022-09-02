@@ -8,6 +8,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
+use App\Model\Entity\Location;
 
 /**
  * Locations Model
@@ -139,9 +140,6 @@ class LocationsTable extends Table
             ->value('average_rating')
             ->value('reviews_approved')
             ->value('review_status')
-            ->value('modified')
-            ->value('last_contact_date')
-            ->value('last_edit_by_owner_date')
             ->value('completeness')
             ->value('last_note_status')
             ->value('last_import_status')
@@ -210,7 +208,223 @@ class LocationsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'subtitle','city', 'address', 'address_2'],
+                'fields' => ['title', 'city', 'state', 'zip'],
+            ])
+            // frozen_expiration
+            ->add('frozen_expiration_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["frozen_expiration >=" => strtotime($args['frozen_expiration_start'])]);
+                }
+            ])
+            ->add('frozen_expiration_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["frozen_expiration <=" => strtotime($args['frozen_expiration_end'])]);
+                }
+            ])
+            // grace_period_end
+            ->add('grace_period_end_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["grace_period_end >=" => strtotime($args['grace_period_end_start'])]);
+                }
+            ])
+            ->add('grace_period_end_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["grace_period_end <=" => strtotime($args['grace_period_end_end'])]);
+                }
+            ])
+            // content_library_expiration
+            ->add('content_library_expiration_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["content_library_expiration >=" => strtotime($args['content_library_expiration_start'])]);
+                }
+            ])
+            ->add('content_library_expiration_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["content_library_expiration <=" => strtotime($args['content_library_expiration_end'])]);
+                }
+            ])
+            // special_announcement_expiration
+            ->add('special_announcement_expiration_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["special_announcement_expiration >=" => strtotime($args['special_announcement_expiration_start'])]);
+                }
+            ])
+            ->add('special_announcement_expiration_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["special_announcement_expiration <=" => strtotime($args['special_announcement_expiration_end'])]);
+                }
+            ])
+            // last_review_date
+            ->add('last_review_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_review_date >=" => strtotime($args['last_review_date_start'])]);
+                }
+            ])
+            ->add('last_review_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_review_date <=" => strtotime($args['last_review_date_end'])]);
+                }
+            ])
+            // modified
+            ->add('modified_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["Locations.modified >=" => strtotime($args['modified_start'])]);
+                }
+            ])
+            ->add('modified_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["Locations.modified <=" => strtotime($args['modified_end'])]);
+                }
+            ])
+            // last_contact_date
+            ->add('last_contact_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_contact_date >=" => strtotime($args['last_contact_date_start'])]);
+                }
+            ])
+            ->add('last_contact_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_contact_date <=" => strtotime($args['last_contact_date_end'])]);
+                }
+            ])
+            // last_edit_by_owner_date
+            ->add('last_edit_by_owner_date_start', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_edit_by_owner_date >=" => strtotime($args['last_edit_by_owner_date_start'])]);
+                }
+            ])
+            ->add('last_edit_by_owner_date_end', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end'])]);
+                }
+            ])
+            ->add('using_logo', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['using_logo']) {
+                        $query->andWhere([
+                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'Locations.logo_url IS NOT NULL']);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.logo_url IS NULL'
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('using_photos', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $locationList = $this->LocationPhotos->find('list', ['valueField' => 'location_id'])->toArray();
+                    $uniqueList = array_unique($locationList);
+                    if ($args['using_photos']) {
+                        $query->andWhere([
+                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'Locations.id IN' => $uniqueList]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.id NOT IN' => $uniqueList,
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('using_videos', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $locationList = $this->LocationVideos->find('list', ['valueField' => 'location_id'])->toArray();
+                    $uniqueList = array_unique($locationList);
+                    if ($args['using_videos']) {
+                        $query->andWhere([
+                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'Locations.id IN' => $uniqueList]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.id NOT IN' => $uniqueList,
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('using_badges', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['using_badges']) {
+                        $arrayBadgeFieldsTrue = [];
+                        foreach (Location::$badgeFields as $badgeField) {
+                            $arrayBadgeFieldsTrue['Locations.'.$badgeField] = true;
+                        }
+                        $query->andWhere([
+                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'OR' => $arrayBadgeFieldsTrue]);
+                    } else {
+                        $arrayBadgeFieldsFalse = [];
+                        foreach (Location::$badgeFields as $badgeField) {
+                            $arrayBadgeFieldsFalse['Locations.'.$badgeField] = false;
+                        }
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'AND' => $arrayBadgeFieldsFalse,
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('using_flex_space', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $locationList = $this->LocationAds->find('list', ['valueField' => 'location_id'])->toArray();
+                    $uniqueList = array_unique($locationList);
+                    if ($args['using_flex_space']) {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.feature_special_announcement' => true,
+                            ]
+                        ]);
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.id_coupon IS NOT NULL',
+                                'Locations.id IN' => $uniqueList
+                            ]
+                        ]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                '0' => [
+                                    'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                    'Locations.feature_special_announcement' => false,
+                                ],
+                                '1' => [
+                                    'Locations.id_coupon IS NULL',
+                                    'Locations.id NOT IN' => $uniqueList
+                                ],
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('using_linked_locations', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    $locationList = $this->LocationLinks->find('list', ['valueField' => 'location_id'])->toArray();
+                    $uniqueList = array_unique($locationList);
+                    if ($args['using_linked_locations']) {
+                        $query->andWhere([
+                            'Locations.listing_type IN' => [Location::LISTING_TYPE_ENHANCED, Location::LISTING_TYPE_PREMIER],
+                            'Locations.id IN' => $uniqueList
+                        ]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.listing_type NOT IN' => [Location::LISTING_TYPE_ENHANCED, Location::LISTING_TYPE_PREMIER],
+                                'Locations.id NOT IN' => $uniqueList
+                            ]
+                        ]);
+                    }
+                }
             ]);
     }
 

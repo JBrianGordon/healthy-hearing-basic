@@ -52,13 +52,13 @@
               <a class="nav-link text-uppercase" href="#">Find a clinic</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">Hearing loss help</a>
+              <?php echo $this->AuthLink->link('Hearing loss help', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">Hearing aids help</a>
+              <?php echo $this->AuthLink->link('Hearing aids help', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">News</a>
+              <?php echo $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
             </li>
             <li>
               <?php echo $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>

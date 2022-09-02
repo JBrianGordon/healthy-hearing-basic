@@ -218,6 +218,8 @@ class Location extends Entity
         self::DIRECT_BOOK_EARQ => 'EarQ'
     ];
 
+    static $badgeFields = ['badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese'];
+
     protected function _getIsOticon()
     {
         $country = Configure::read('country');

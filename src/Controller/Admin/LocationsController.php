@@ -42,7 +42,7 @@ class LocationsController extends AppController
             $this->set('currentModel', 'Locations');
         }
         $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'CaCallGroups'])->toArray();
+            ->find()->where(['model' => 'Locations'])->toArray();
         $locationsQuery = $this->Locations
             ->find('search', [
                 'search' => $requestParams,

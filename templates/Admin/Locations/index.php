@@ -28,6 +28,7 @@ $fields['using_videos'] = 'boolean';
 $fields['using_flex_space'] = 'boolean';
 $fields['using_badges'] = 'boolean';
 $fields['using_linked_locations'] = 'boolean';
+$fields['q'] = 'string';
 // Fields to ignore
 $ignore_fields = ['last_xml','lat','lon','facebook','twitter','youtube','slogan','about_us','payment','services','is_geocoded','filter_evening_weekend','filter_adult_hearing_test','filter_hearing_aid_fitting','redirect','landmarks','url','country','direct_book_url','direct_book_iframe','content_library_expiration','special_announcement_expiration','logo_url','id_coupon','mobile_text','radius','created'];
 if (!Configure::read('isCallAssistEnabled')) {
@@ -48,7 +49,7 @@ foreach ($fields as $field => $type) {
     }
 }
 // Group fields into sections
-$generalFieldList = ['id', 'id_oticon', 'id_parent', 'id_sf', 'id_yhn_location', 'cqp_practice_id', 'cqp_office_id', 'title', 'subtitle', 'address', 'address_2', 'city', 'state', 'zip', 'is_mobile', 'phone', 'email', 'priority', 'is_active', 'is_show', 'is_listing_type_frozen', 'oticon_tier', 'yhn_tier', 'cqp_tier', 'listing_type', 'is_oticon', 'is_retail', 'is_yhn', 'is_cqp', 'is_hh', 'is_cq_premier', 'is_iris_plus', 'notes', 'full_name', 'is_bypassed', 'filter_has_photo', 'filter_insurance', 'is_call_assist', 'timezone', 'has_url', 'npi_number', 'location_segment', 'entity_segment', 'direct_book_type', 'frozen_expiration', 'is_ida_verified', 'is_service_agreement_signed', 'covid19_statement', 'is_junk', 'is_email_allowed'];
+$generalFieldList = ['q', 'id', 'id_oticon', 'id_parent', 'id_sf', 'id_yhn_location', 'cqp_practice_id', 'cqp_office_id', 'title', 'subtitle', 'address', 'address_2', 'city', 'state', 'zip', 'is_mobile', 'phone', 'email', 'priority', 'is_active', 'is_show', 'is_listing_type_frozen', 'oticon_tier', 'yhn_tier', 'cqp_tier', 'listing_type', 'is_oticon', 'is_retail', 'is_yhn', 'is_cqp', 'is_hh', 'is_cq_premier', 'is_iris_plus', 'notes', 'full_name', 'is_bypassed', 'filter_has_photo', 'filter_insurance', 'is_call_assist', 'timezone', 'has_url', 'npi_number', 'location_segment', 'entity_segment', 'direct_book_type', 'frozen_expiration', 'is_ida_verified', 'is_service_agreement_signed', 'covid19_statement', 'is_junk', 'is_email_allowed'];
 $reviewFieldList = ['reviews_approved', 'review_status', 'average_rating', 'last_review_date'];
 $changeMgmtFieldList = ['modified', 'last_contact_date', 'is_last_edit_by_owner', 'last_edit_by_owner_date', 'completeness', 'last_note_status', 'last_import_status', 'is_grace_period', 'grace_period_end', 'review_needed', 'email_status', 'phone_status', 'address_status', 'title_status', 'is_title_ignore', 'is_address_ignore', 'is_phone_ignore', 'is_email_ignore'];
 $upgradeFieldList = ['feature_content_library', 'feature_special_announcement', 'logo_url', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'using_logo', 'using_photos', 'using_videos', 'using_badges', 'using_flex_space', 'using_linked_locations'];
@@ -110,6 +111,9 @@ foreach ($fields as $field => $type) {
             break;
         case 'is_email_allowed':
             $label = 'Is profile update email allowed';
+            break;
+        case 'q':
+            $label = 'Location search';
             break;
         // TODO: options for last_note_status (after baking LocationNotes)
         // TODO: options for last_import_status (after baking Import)
