@@ -65,7 +65,7 @@ class Application extends BaseApplication
          * Debug Kit should not be installed on a production system
          */
         if (Configure::read('debug')) {
-            Configure::write('DebugKit.safeTld', ['com']);
+            Configure::write('DebugKit.safeTld', ['com', 'loc']);
             $this->addPlugin('DebugKit');
             $this->addPlugin('IdeHelper');
         }
