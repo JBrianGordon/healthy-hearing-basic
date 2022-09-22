@@ -25,6 +25,10 @@ class LocationsController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('Export', [
+            'actions' => ['export']
+        ]);
     }
 
     /**
@@ -50,6 +54,7 @@ class LocationsController extends AppController
         $this->set('locations', $this->paginate($locationsQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->Locations->getSchema()->typeMap());
+        $this->set('count', $locationsQuery->count());
     }
 
     /**
@@ -114,5 +119,17 @@ class LocationsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+    * Export a list of calls to CSV
+    */
+    function export() {
+        $this->autoRender = false;
+        $requestParams = $this->request->getQueryParams();
+
+        // TODO: set ignore fields, additional fields, and overwrite fields. See CaCallsController for example.
+        $this->Export->exportCsv('export_locations.csv');
+        die();
     }
 }
