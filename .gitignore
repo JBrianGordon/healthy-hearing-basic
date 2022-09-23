@@ -9,6 +9,7 @@
 webroot/css/*
 webroot/debug_kit
 webroot/coverage
+webroot/bootstrap_u_i
 tests.sqlite
 
 # OS generated files #
