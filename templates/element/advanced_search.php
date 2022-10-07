@@ -48,9 +48,9 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php if ($this->Search->isSearch()) : ?>
+    <?php if (!empty($this->request->getQueryParams())) : ?>
         <div class="col col-md-auto p-0">
-            <?= $this->Search->resetLink(__('Reset'), ['class' => 'btn btn-sm btn-info text-light', 'role' => 'button']) ?>
+            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-sm btn-info text-light', 'role' => 'button']) ?>
         </div>
     <?php endif; ?>
     <div class="col col-md-auto">
