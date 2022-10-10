@@ -100,11 +100,11 @@ $locationsMenu = [
 $importsItems = [];
 $importsItems['Import dashboard'] = [
     'icon' => 'bi bi-speedometer',
-    'url' => '/admin/imports',
+    'url' => '/admin/import-locations',
 ];
 $importsItems['Import stats'] = [
     'icon' => 'bi bi-bar-chart-fill',
-    'url' => '/admin/imports/stats',
+    'url' => '/admin/imports',
 ];
 if (Configure::read('isTieringEnabled')) {
     $importsItems['Tier status change report'] = [

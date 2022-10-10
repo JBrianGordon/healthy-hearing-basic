@@ -26,6 +26,16 @@ use Cake\ORM\Entity;
 class Import extends Entity
 {
     /**
+    * Enum - is prospect
+    */
+    const IMPORT_YHN = 'yhn';
+    const IMPORT_CQP = 'cqp';
+    static $importTypes = [
+        self::IMPORT_YHN => 'YHN',
+        self::IMPORT_CQP => 'CQP',
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

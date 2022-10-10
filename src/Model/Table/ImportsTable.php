@@ -129,4 +129,22 @@ class ImportsTable extends Table
 
         return $validator;
     }
+
+    public function getLatestImportId() {
+        $latestImport = $this->find('all', [
+            'contain' => [],
+            'conditions' => ['type !=' => 'cqp'],
+            'order' => ['Imports.created' => 'DESC']
+        ])->first();
+        return $latestImport->id;
+    }
+
+    public function getLatestCqpImportId() {
+        $latestCqpImport = $this->find('all', [
+            'contain' => [],
+            'conditions' => ['type' => 'cqp'],
+            'order' => ['Imports.created' => 'DESC']
+        ])->first();
+        return !empty($latestCqpImport->id) ? $latestCqpImport->id : null;
+    }
 }

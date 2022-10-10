@@ -45,6 +45,8 @@ class ImportLocationsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Search.Search');
+
         $this->belongsTo('Imports', [
             'foreignKey' => 'import_id',
         ]);
@@ -54,6 +56,33 @@ class ImportLocationsTable extends Table
         $this->hasMany('ImportLocationProviders', [
             'foreignKey' => 'import_location_id',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('import_id', ['multiValue' => true])
+            ->value('id_external')
+            ->value('location_id')
+            ->value('id_oticon')
+            ->value('cqp_practice_id')
+            ->value('cqp_office_id')
+            ->like('title')
+            ->like('subtitle')
+            ->like('email')
+            ->like('address')
+            ->like('address_2')
+            ->like('city')
+            ->value('state')
+            ->value('zip')
+            ->value('phone')
+            ->value('match_type')
+            ->boolean('is_retail')
+            ->boolean('is_new')
+            ->value('notes')
+            ->value('Imports.type')
+            ->exists('location_exists', ['fields' => 'location_id'])
+            ->value('Locations.is_junk')
+            ->value('Locations.review_needed');
     }
 
     /**
@@ -155,5 +184,29 @@ class ImportLocationsTable extends Table
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;
+    }
+
+    public function typeSearch($type)
+    {
+        $type = !empty($type) ? $type : 'all';
+        $requestParams = [];
+        if ($type == 'unlinked') {
+            $requestParams['location_exists'] = 0;
+        }
+        if ($type == 'review-needed') {
+            $requestParams['location_exists'] = 1;
+            $requestParams['Locations']['review_needed'] = 1;
+            $requestParams['Locations']['is_junk'] = 0;
+        }
+        if ($type == 'reviewed') {
+            $requestParams['location_exists'] = 1;
+            $requestParams['Locations']['review_needed'] = 0;
+            $requestParams['Locations']['is_junk'] = 0;
+        }
+        if ($type == 'junk') {
+            $requestParams['location_exists'] = 1;
+            $requestParams['Locations']['is_junk'] = 1;
+        }
+        return $requestParams;
     }
 }

@@ -1,0 +1,250 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\ImportLocation[]|\Cake\Collection\CollectionInterface $importLocations
+ */
+use Cake\Core\Configure;
+use App\Model\Entity\Import;
+
+$queryParams = $this->request->getQueryParams();
+// Advanced search details
+$advancedSearchFields = [];
+$ignoreFields = [];
+// Add additional fields
+$fields['Imports.type'] = 'string';
+$fields['Locations[is_junk]'] = 'boolean';
+$fields['Locations[review_needed]'] = 'boolean';
+$additionalBlacklist = ['Imports', 'Locations'];
+foreach ($fields as $field => $type) {
+    if (!in_array($field, $ignoreFields)) {
+        $label = '';
+        $options = false;
+        $empty = false;
+        $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
+        if (in_array($type, ['date', 'datetime'])) {
+            $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
+            $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
+        }
+        switch ($field) {
+            case 'Imports.type':
+                $label = 'Import Type';
+                $type = 'select';
+                $empty = '(select one)';
+                $options = Import::$importTypes;
+                break;
+            case 'Locations[is_junk]':
+                $label = 'Is junk';
+                $value = isset($queryParams['Locations']['is_junk']) ? $queryParams['Locations']['is_junk'] : null;
+                break;
+            case 'Locations[review_needed]':
+                $label = 'Review needed';
+                $value = isset($queryParams['Locations']['review_needed']) ? $queryParams['Locations']['review_needed'] : null;
+                break;
+        }
+        $advancedSearchFields[] = [
+            'field' => $field,
+            'type' => $type,
+            'label' => $label,
+            'options' => $options,
+            'empty' => $empty,
+            'value' => $value
+        ];
+    }
+}
+?>
+<div class="importLocations index content">
+    <div class="btn-group btn-group-sm pt-2 mb-3">
+        <?= $this->Html->link("<i class='bi bi-bar-chart-fill'></i> Import Stats", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+        <?= $this->Html->link("<i class='bi bi-bar-chart-fill'></i> Tier Status", ['controller' => 'imports', 'action' => 'tier_status_report'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+    </div>
+    <h3>Import Dashboard</h3>
+    <?= $this->element('pagination') ?>
+    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
+    <!-- Overwrite _searchParams here so it doesn't save the current import_id -->
+    <?= $this->element('crm_search', ['crmSearches' => $crmSearches, '_searchParams' => $queryParams]) ?>
+    <?php
+        if (Configure::read('isCqpImportEnabled')) {
+            $importTypes = ['all', 'yhn', 'cqp'];
+            $importTypeLinks = [];
+            foreach ($importTypes as $importType) {
+                $newQuery = $queryParams;
+                $newQuery['Imports']['type'] = $importType;
+                $friendlyType = strtoupper($importType);
+                if ($importType == 'all') {
+                    unset($newQuery['Imports']['type']);
+                    $friendlyType = 'All';
+                }
+                if ($selectedImportType == $importType) {
+                    $importTypeLinks[] = $friendlyType;
+                } else {
+                    $importTypeLinks[] = $this->Html->link(
+                        $friendlyType,
+                        [
+                            'controller' => 'import-locations',
+                            'action' => 'index',
+                            '?' => $newQuery,
+                        ]
+                    );
+                }
+            }
+            echo 'Import type: '.implode(' &bull; ', $importTypeLinks).'<br>';
+        }
+        $filters = ['all', 'unlinked', 'review-needed', 'reviewed', 'junk'];
+        $filterLinks = [];
+        foreach ($filters as $filter) {
+            $newQuery = $queryParams;
+            $newQuery['filter'] = $filter;
+            if ($filter == 'all') {
+                unset($newQuery['filter']);
+            }
+            $friendlyFilter = ucfirst(str_replace('-', ' ', $filter));
+            if ($selectedFilter == $filter) {
+                $filterLinks[] = $friendlyFilter;
+            } else {
+                $filterLinks[] = $this->Html->link(
+                    $friendlyFilter,
+                    [
+                        'controller' => 'import-locations',
+                        'action' => 'index',
+                        '?' => $newQuery,
+                    ]
+                );
+            }
+        }
+        echo 'Filter: '.implode(' &bull; ', $filterLinks);
+    ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th><?= $this->Paginator->sort('import_id') ?><br>Type<br>Created</th>
+                    <th style="min-width:300px"><?= $this->Paginator->sort('title') ?></th>
+                    <th nowrap>
+                        <?php if (Configure::read('isCqpImportEnabled')): ?>
+                            Linked HH ID<br>External IDs
+                        <?php else: ?>
+                            Oticon ID /<br><?php echo $externalIdLabel; ?>
+                        <?php endif; ?>
+                    </th>
+                    <th><?= $this->Paginator->sort('address') ?></th>
+                    <th><?= $this->Paginator->sort('city') ?>, <?= $this->Paginator->sort('state', ucwords($stateLabel)) ?></th>
+                    <th><?php echo ucwords($zipShort); ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($importLocations as $importLocation): ?>
+                    <?php
+                    $trId = 'YHN'.$importLocation->id;
+                    if (!empty($importLocation->location->is_junk)) {
+                        $trClass = 'status-junk';
+                    } else if (!empty($importLocation->location->review_needed)) {
+                        $trClass = 'status-review-needed';
+                    } else if (!empty($importLocation->location_id)) {
+                        $trClass = 'status-reviewed';
+                    } else {
+                        $trClass = 'status-unlinked';
+                    }
+                    ?>
+                    <tr id="<?= $trId ?>" class="<?= $trClass ?>">
+                        <td>
+                            <span class="badge bg-primary"><?php echo $importLocation->import_id; ?></span>
+                            <?php if (Configure::read('isCqpImportEnabled')): ?>
+                                <?php $badgeType = ($importLocation->import->type == 'cqp') ? 'bg-cqp' : 'bg-yhn'; ?>
+                                    <span class="badge <?php echo $badgeType; ?>"><?php echo strtoupper($importLocation->import->type); ?></span>
+                            <?php endif; ?>
+                            <br>
+                            <?php echo date('m/d/Y', strtotime($importLocation->import->created)); ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($importLocation->location_id)): ?>
+                                <a target="_blank" href="/admin/locations/edit/<?php echo $importLocation->location_id; ?>">
+                                    <?php echo $importLocation->title; ?><br>
+                                    <?php echo $importLocation->subtitle; ?>
+                                </a>
+                            <?php else: ?>
+                                <?php if ($importLocation->is_new): ?>
+                                    <span class="badge bg-success"><span class="glyphicon glyphicon-leaf"></span> New</span>
+                                <?php endif; ?>
+                                <?php echo $importLocation->title; ?><br>
+                                <?php echo $importLocation->subtitle; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($importLocation->location_id)): ?>
+                                <span class="badge bg-hh"><?php echo $importLocation->location_id; ?></span><br>
+                            <?php endif; ?>
+                            <?php if (!empty($importLocation->oticon_id)): ?>
+                                <span class="badge bg-oticon"><?php echo $importLocation->oticon_id; ?></span><br>
+                            <?php endif; ?>
+                            <?php if (!empty($importLocation->external_id)): ?>
+                                <span class="badge bg-yhn"><?php echo $importLocation->external_id; ?></span><br>
+                            <?php endif; ?>
+                            <?php if (!empty($importLocation->cqp_practice_id)): ?>
+                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_practice_id; ?></span><br>
+                            <?php endif; ?>
+                            <?php if (!empty($importLocation->cqp_office_id)): ?>
+                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_office_id; ?></span><br>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $importLocation->address; ?></td>
+                        <td><?php echo $importLocation->city . ', ' . $importLocation->state; ?></td>
+                        <td><?php echo $importLocation->zip; ?></td>
+                        <td class="actions">
+                            <?php if (!empty($importLocation->location->is_junk)): ?>
+                                <div class="btn-group-xs btn-group-vertical">
+                                    <?php echo $this->Html->link(
+                                        'Not Junk',
+                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
+                                        ['escape' => false, 'class' => 'btn btn-default'],
+                                        'Are you sure you want to remove this location from junk?'
+                                    ); ?>
+                                </div>
+                            <?php elseif (!empty($importLocation->location_id)): ?>
+                                <div class="btn-group-xs btn-group-vertical">
+                                    <a href="/admin/imports/location_review/<?php echo $importLocation->location_id; ?>/<?php echo $importLocation->id; ?>" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-eye-open"></span> Review
+                                    </a>                            
+                                    <a href="/admin/imports/location_unlink/<?php echo $importLocation->id; ?>" class="btn btn-default js-unlink">
+                                        <span class="glyphicon glyphicon-remove-circle"></span> Unlink
+                                    </a>
+                                    <?php echo $this->Html->link(
+                                        '<span class="glyphicon glyphicon-ban-circle"></span> Junk',
+                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+                                        ['escape' => false, 'class' => 'btn btn-default'],
+                                        'Are you sure you want to mark this location as junk?'
+                                    ); ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="btn-group-xs btn-group-vertical">
+                                    <a href="/admin/imports/location_add/<?php echo $importLocation->id; ?>" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Add
+                                    </a>
+                                    <a href="/admin/imports/location_link/<?php echo $importLocation->id; ?>" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-link"></span> Link
+                                    </a>
+                                    <?php echo $this->Html->link(
+                                        '<span class="glyphicon glyphicon-ban-circle"></span> Junk',
+                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+                                        ['escape' => false, 'class' => 'btn btn-default'],
+                                        'Are you sure you want to mark this location as junk?'
+                                    ); ?>
+                                </div>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="paginator">
+        <ul class="pagination">
+            <?= $this->Paginator->first('<< ' . __('first')) ?>
+            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->numbers() ?>
+            <?= $this->Paginator->next(__('next') . ' >') ?>
+            <?= $this->Paginator->last(__('last') . ' >>') ?>
+        </ul>
+        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+    </div>
+</div>
