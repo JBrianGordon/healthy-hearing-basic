@@ -48,7 +48,7 @@ class ImportsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehaviors(['Timestamp', 'Search.Search']);
+        $this->addBehavior('Timestamp');
 
         $this->hasMany('ImportDiffs', [
             'foreignKey' => 'import_id',
@@ -62,28 +62,6 @@ class ImportsTable extends Table
         $this->hasMany('ImportProviders', [
             'foreignKey' => 'import_id',
         ]);
-
-        // Setup search filter using search manager
-        $this->searchManager()
-            ->value('id')
-            ->value('ca_call_group_id')
-            ->value('user_id', ['multiValue' => true])
-            ->value('duration')
-            ->value('call_type', ['multiValue' => true])
-            ->value('recording_url')
-            ->value('recording_duration')
-            ->value('CaCallGroups.status', ['multiValue' => true])
-            ->value('CaCallGroups.score', ['multiValue' => true])
-            ->add('start_time_start', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["start_time >=" => $args['start_time_start']]);
-                }
-            ])
-            ->add('start_time_end', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["start_time <=" => $args['start_time_end']]);
-                }
-            ]);
     }
 
     /**

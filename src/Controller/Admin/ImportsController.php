@@ -21,11 +21,6 @@ class ImportsController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
-        $this->loadComponent('Search.Search', [
-            'actions' => ['index'],
-        ]);
-
         $this->paginate = [
             'order' => ['Imports.id' => 'DESC']
         ];
@@ -37,15 +32,7 @@ class ImportsController extends AppController
      */
     public function index()
     {
-        $requestParams = $this->request->getQueryParams();
-        if (array_key_exists('saved_search', $requestParams)) {
-            $this->set('savedSearch', true);
-        } else {
-            $this->set('savedSearch', false);
-            $this->set('currentModel', 'Imports');
-        }
-        $importsQuery = $this->Imports->find('search', [
-            'search' => $requestParams,
+        $importsQuery = $this->Imports->find('all', [
             'contain' => []
         ]);
         $imports = $this->paginate($importsQuery);
