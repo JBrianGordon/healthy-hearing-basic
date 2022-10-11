@@ -25,6 +25,10 @@ class ImportsController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->paginate = [
+            'order' => ['Imports.id' => 'DESC']
+        ];
     }
     /**
      * Index method
@@ -40,15 +44,12 @@ class ImportsController extends AppController
             $this->set('savedSearch', false);
             $this->set('currentModel', 'Imports');
         }
-        $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'Imports'])->toArray();
-        $importsQuery = $this->ImportLocations->find('search', [
+        $importsQuery = $this->Imports->find('search', [
             'search' => $requestParams,
             'contain' => []
         ]);
         $imports = $this->paginate($importsQuery);
         $this->set('imports', $imports);
-        $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->Imports->getSchema()->typeMap());
         $this->set('count', $importsQuery->count());
     }
