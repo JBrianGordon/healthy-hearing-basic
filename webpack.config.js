@@ -33,6 +33,9 @@ module.exports = {
             jquery: "jquery/src/jquery"
         }
 	},
+	 performance: {
+	    hints: false
+	},
     plugins: [
 		//new CleanWebpackPlugin(),
 		new webpack.ProvidePlugin({

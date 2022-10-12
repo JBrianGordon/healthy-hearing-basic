@@ -1,8 +1,8 @@
 import './common';
 import '../../../node_modules/jquery-ui/ui/widgets/datepicker';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
 import '../admin/nav_tabs';
 
 $('[data-toggle=\"popover\"]').popover();

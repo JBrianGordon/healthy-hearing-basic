@@ -1,5 +1,5 @@
 import '../jquery/jquery.class.min';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
 
 var LocationReview = jQuery.Class.create({
 		initialize: function(){

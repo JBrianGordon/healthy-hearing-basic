@@ -4,7 +4,7 @@
 // firstName, lastName, hearingResult
 import './common';
 import '../jquery/jquery.class.min';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
 
 var OnlineHearingTest = jQuery.Class.create({
 	initialize: function(results, mobile, responsive) {
