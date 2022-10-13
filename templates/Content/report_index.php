@@ -1,3 +1,4 @@
+<?php $this->Html->script('dist/content.min', ['block' => true]); ?>
 <h1>Reports</h1>
 <table>
     <tr>
