@@ -1,0 +1,24 @@
+blockquote {
+  border-left-color: $blockquote-border-color;
+  color: $blockquote;
+
+  &.blockquote-darker {
+    border-left-color: darken($blockquote-border-color, 20%);
+  }
+
+  &.blockquote-primary {
+    border-left-color: $brand-primary;
+  }
+
+  &.blockquote-light {
+    border-left-color: $brand-light;
+  }
+
+  &.blockquote-secondary {
+    border-left-color: $brand-secondary;
+  }
+
+  &.blockquote-neutral {
+    border-left-color: $gray;
+  }
+}

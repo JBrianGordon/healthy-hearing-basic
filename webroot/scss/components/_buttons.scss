@@ -1,0 +1,182 @@
+.btn {
+  @include button-size(6px, 1.25em, 1.4, $btn-border-radius);
+  @include box-shadow(rgba(0,0,0,0.15) 0px 1px 2px);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.btn-default {
+  @include button-variant($gray-dark, $btn-light-color, $btn-default-border);
+}
+
+.btn-secondary {
+  @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border);
+}
+
+.btn-light {
+  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+}
+
+.btn-neutral {
+  @include button-variant($btn-neutral-color, $btn-neutral-bg, $btn-neutral-border);
+}
+
+.btn-lg {
+  // line-height: ensure even-numbered height of button next to large input
+  @include button-size(10px, 22px, 1.4, $btn-border-radius-large);
+}
+.btn-sm {
+  // line-height: ensure proper height of button next to small input
+  @include button-size(5px, 12px, 1.5, $btn-border-radius);
+  
+  &.group-toggle {
+	  float: right;
+  }
+}
+.btn-xs {
+  @include button-size(3px, 6px, 1.5, $btn-border-radius);
+}
+
+.btn-print{
+	margin:10px 0;
+	text-transform: none;
+	
+	.hh-icon-printer{
+		font-size: 16px;
+	}
+	
+	&:focus{
+		outline: 0;
+	}
+}
+
+.btn-group.show{
+	display: inline-block!important;
+	
+	ul.dropdown-menu.show {
+	    transform: none!important;
+	    top:100%!important;
+	}
+}
+
+.btn-group-vertical {
+  & > .btn:first-child:not(:last-child) {
+    border-top-left-radius: $border-radius-base;
+    border-top-right-radius: $border-radius-base;
+  }
+
+  & > .btn:last-child:not(:first-child) {
+    border-bottom-left-radius: $border-radius-base;
+    border-bottom-right-radius: $border-radius-base;
+  }
+}
+
+.btn-set {
+  .btn {
+    display: block;
+    margin: 1em 0;
+    width: 100%;
+  }
+
+  @media only screen and (min-width: $screen-sm-min) {
+
+    .btn {
+      display: inline-block;
+      width: auto;
+    }
+  }
+
+  @media only screen and (min-width: $screen-lg-min) {
+    & > .btn + .btn {
+      margin-left: 1em;
+    }
+  }
+}
+
+.btn-share {
+  background: $brand-primary;
+  border-radius: 18px;
+  color: $body-bg;
+  height: 35px;
+  line-height: 30px;
+  padding: 3px 1.5em;
+  text-transform: none;
+
+  &:hover, &:focus, &:active {
+    color: $white;
+  }
+
+  [class*="hh-icon-"] {
+    font-size: 16px;
+  }
+
+  .badge {
+    background: $white;
+    border-radius: 18px;
+    color: tint($text-color, 45%);
+    height: 100%;
+    line-height: 16px;
+    margin-left: 0.75em;
+    min-width: 27px;
+  }
+}
+
+.btn-badge {
+  padding: 3px 3px 3px 1em;
+}
+
+.btn-facebook {
+  background: $color-facebook;
+}
+
+.btn-twitter {
+  background: $color-twitter;
+}
+
+.btn-linkedin {
+  background: $color-linkedin;
+}
+
+.btn-pinterest {
+  background: $color-pinterest;
+}
+
+.btn-google-plus {
+  background: $color-google-plus;
+}
+
+.directions-link{
+    margin: 10px auto 0;
+    display: block;
+    max-width: 220px;
+}
+
+#fewer-reviews-button {
+	display: none;
+}
+
+span#exportClose {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#exportSubmit {
+	display: block;
+	clear: both;
+	margin: 0 auto;	
+}
+
+#floatingSave {
+    position: fixed;
+    right: 20px;
+    bottom: 0px;
+    padding: 10px 20px;
+    border-radius: 20px 20px 0 0;
+    border: 5px solid $btn-secondary-border;
+    background: #fff;
+    color: $text-color;
+    z-index: 2;
+}

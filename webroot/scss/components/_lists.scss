@@ -1,0 +1,15 @@
+ul.no-bullets {
+  list-style-type: none!important;
+  padding-left: 0;
+
+  li {
+    margin-bottom: 0.5em;
+  }
+}
+
+//Custom SCSS for jQuery UI dropdown lists
+.ui-state-active,
+ul.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+	border: 1px solid #fff;
+}

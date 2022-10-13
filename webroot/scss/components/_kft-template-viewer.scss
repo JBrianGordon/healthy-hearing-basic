@@ -1,0 +1,90 @@
+$kft-switcher-height: 48px;
+
+.kft-template-frame {
+  padding-bottom: $kft-switcher-height;
+}
+
+.kft-template-switcher {
+  background: $text-color;
+  bottom: 0;
+  font-size: 14px;
+  overflow-x: hidden;
+  position: fixed;
+  width: 100%;
+  z-index: 900;
+
+  ul {
+    height: $kft-switcher-height;
+    margin: 0;
+    padding: 0 $kft-switcher-height / 2;
+    overflow-x: auto;
+    @include transition(all 0.4s ease-in-out);
+    width: 100vw;
+
+    &.has-arrows {
+      padding: 0 $kft-switcher-height;
+    }
+  }
+
+  ul li {
+    display: inline-block;
+    list-style: none;
+    line-height: $kft-switcher-height;
+    margin: 0 -0.25em 0 0;
+
+    a {
+      color: darken($body-bg, 30%);
+      cursor: pointer;
+      display: block;
+      padding: 0 1em;
+      @include transition(color 0.1s ease-out);
+    }
+
+    &:hover a,
+    &.active a {
+      color: $body-bg;
+      text-decoration: none;
+    }
+
+    &:first-child a {
+      padding-left: 0;
+    }
+
+    &:last-child a {
+      padding-right: 0;
+    }
+  }
+}
+
+.kft-switcher-left-arrow, .kft-switcher-right-arrow {
+  color: $body-bg;
+  cursor: pointer;
+  display: block;
+  height: $kft-switcher-height;
+  line-height: $kft-switcher-height;
+  position: fixed;
+  text-align: center;
+  width: $kft-switcher-height;
+}
+
+.kft-switcher-left-arrow {
+  @include background-image( linear-gradient(to right, $text-color 0%, $text-color 50%, transparentize($text-color, 1) 100%) );
+  bottom: 0;
+  left: 0;
+
+  &:before {
+    display: block;
+    content: '\00ab';
+  }
+}
+
+.kft-switcher-right-arrow {
+  @include background-image( linear-gradient(to left, $text-color 0%, $text-color 50%, transparentize($text-color, 1) 100%) );
+  bottom: 0;
+  right: 0;
+
+  &:before {
+    display: block;
+    content: '\00bb';
+  }
+}

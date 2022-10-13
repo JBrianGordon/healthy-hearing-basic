@@ -1,0 +1,26 @@
+.aside {
+  display: block;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  width: 100%;
+
+  aside {
+    margin: 20px 0;
+    position: relative;
+    right: 0;
+    width: 100%;
+
+    img {
+      max-width: 100%;
+      margin-bottom: 1em;
+    }
+
+    @media only screen and (min-width: $screen-md-min) {
+      position: absolute;
+      width: 40%;
+      right: calc(-40% - 60px);
+      top: 0;
+    }
+  }
+}

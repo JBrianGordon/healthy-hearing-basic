@@ -1,0 +1,28 @@
+.about {
+  .about-intro .panel-section {
+    padding: 40px 90px;
+  }
+
+  .about-bios .panel-section {
+    padding: 40px 70px;
+  }
+
+  .about-commitment .panel-section {
+    padding: 40px 90px;
+  }
+
+  .bio-heading {
+    margin-bottom: 20px;
+  }
+
+  a.anchor {
+    display: block;
+    position: relative;
+    top: -100px;
+    visibility: hidden;
+  }
+}
+
+.bio {
+  /*margin-bottom: 20px;*/
+}

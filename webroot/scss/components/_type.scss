@@ -1,0 +1,175 @@
+body, html {
+  @include font($font-family-primary, 'normal', "400");
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5
+h6, .h6 {
+  margin-top: 0;
+  margin-bottom: $line-height-computed;
+}
+
+h2, .h2 {
+  margin-top: 1em;
+  margin-bottom: 15px;
+}
+
+h3 {
+	line-height: 1.5;
+	
+	&.crm-group-header {
+		display:inline-block;
+	}
+}
+
+h4, .h4{
+	font-size: 2.2rem;
+	line-height: 1.5
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5 {
+  @include font($font-family-secondary, 'normal', "500");
+}
+
+h6 {
+	line-height: 1.5
+}
+
+@media only screen and (max-width: $screen-sm-max) {
+  h1, .h1 {
+    font-size: $font-size-h1 * 0.8;
+  }
+
+  h2, .h2 {
+    font-size: $font-size-h2 * 0.8;
+  }
+
+  h3, .h3 {
+    font-size: $font-size-h3 * 0.8;
+  }
+}
+
+
+p, .container p {
+  margin-bottom: 1em;
+}
+
+a.text-link {
+  border-bottom: dotted 1px $link-color;
+  text-decoration: none;
+
+  &:hover {
+    border-bottom-color: $link-hover-color;
+    text-decoration: none;
+  }
+}
+
+a.print-link {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 40px;
+  padding: 8px 0;
+
+  .icon {
+    display: inline-block;
+    font-size: 140%;
+    margin: -4% 0.5em 0 0;
+    vertical-align: middle;
+  }
+}
+
+.text-primary {
+  color: $brand-primary;
+  
+  &.name {
+    line-height: 33px;
+    font-size: 30px;
+  }
+}
+
+.text-secondary {
+  color: $brand-secondary;
+}
+
+.text-light {
+  color: $brand-light;
+}
+
+.text-small {
+  font-size: 87.5%;
+}
+
+.lead {
+  @include font($font-family-secondary, normal, normal);
+  font-size: 112%;
+
+  @media only screen and (min-width: $screen-sm-min) {
+    font-size: 128%;
+  }
+}
+
+.text-large {
+  font-size: 115%;
+}
+
+.text-xs-center {
+  @media only screen and (max-width: $screen-xs-max) {
+    text-align: center;
+  }
+}
+
+.text-xs-left {
+  @media only screen and (max-width: $screen-xs-max) {
+    text-align: left;
+  }
+}
+
+.text-xs-right {
+  @media only screen and (max-width: $screen-xs-max) {
+    text-align: right;
+  }
+}
+
+.subtitle {
+  @include font($font-family-primary, normal, "400");
+  color: $text-color;
+  font-size: 80%;
+  text-transform: uppercase;
+
+  &.text-primary {
+    color: $brand-primary;
+  }
+
+  &.text-secondary {
+    color: $brand-secondary;
+  }
+
+  &.text-light {
+    color: $brand-light;
+  }
+}
+
+.text-caption {
+	@include font($font-family-serif, 'normal', 'normal');
+	font-size: 87.5%;
+  
+  	span[itemprop] {
+		display: none;
+	}
+	
+	.popover-content {
+		color: #2b2c2d;
+	}
+}
+
+blockquote {
+  @include font($font-family-secondary, 'italic', "500");
+}

@@ -1,0 +1,13 @@
+.blog-well {
+  @media screen and (max-width: $screen-xs-max){
+    [class*="col-"] + [class*="col-"] {
+      margin-top: 20px;
+    }
+  }
+  [class*="col-"] {
+    display: inline-block;
+    float: none;
+    margin-right: -0.25em;
+    vertical-align: middle;
+  }
+}

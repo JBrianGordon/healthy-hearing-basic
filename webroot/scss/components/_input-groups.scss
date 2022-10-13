@@ -1,0 +1,7 @@
+.input-group-btn:last-child > .btn {
+  border-top-right-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+  font-size: $font-size-base * 0.857;
+  font-weight: bold;
+  height: $input-height-base;
+}

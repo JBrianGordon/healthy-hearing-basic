@@ -1,0 +1,412 @@
+.site-footer {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+//Firefox margin fix
+@-moz-document url-prefix() {
+	.site-footer {
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+
+	input[type="radio"]:not(.col-md-1), .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+		margin-left: -30px;
+	}
+}
+//ie margin fix
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.site-footer {
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+}
+
+//====================================
+// GENERAL
+//====================================
+
+@font-face {
+	font-family: "Roboto";
+	src: url("/fonts/roboto-v20-latin-regular.woff") format("woff");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Lato";
+	src: url("/fonts/lato-v17-latin-regular.woff") format("woff");
+	font-display: swap;
+}
+
+th a.asc:after { content: ' ⇣'; }
+th a.desc:after { content: ' ⇡'; }
+.pull-center {
+	margin: auto;
+}
+.tar {
+	text-align: right !important;
+}
+.tal {
+	text-align: left !important;
+}
+.tac {
+	text-align: center !important;
+}
+.block {
+	display:block;
+}
+.modal-dialog {
+	margin-top: 100px;
+}
+.btn-link {
+	text-decoration: underline;
+}
+
+
+//Hide logo unless getting printed
+.print-link{
+	text-align: center;
+	height: 20px;
+}
+.print-logo{
+	display: block;
+	margin: 0 auto;
+	width: 200px;
+}
+summary {
+	display: revert;
+	cursor: pointer;
+}
+table {
+	&.print-wrapper {
+		display: block;
+		
+		thead {
+			&.print-head{
+				display: none;
+			} 
+		}
+		
+		> tbody {
+			display: block;
+			
+			> tr {
+				display: block;
+					
+				> td {
+					display: block;
+				}
+			}
+		}
+	}
+}
+
+//Make pages printer friendly
+@media print {
+	.site-body, .container{
+		width:100vw;
+		
+		&.content-body, &.blog {
+			width: 95vw;
+			padding-left: 4vw;
+			padding-right: 1vw;
+		}
+	}
+	.site-body, .panel-section{
+		padding: 0;
+	}
+	.panel-body, blockquote{
+		border: 0;
+	}
+    .noprint, iframe, .navbar {display:none !important;}
+    a:link:after, a:visited:after {
+      display: none;
+      content: "";
+    }
+    a{
+	    border-bottom: 0 !important;
+	    color: #000;
+    }
+    .wistia_responsive_padding {
+	    padding: 0!important
+	}
+	table {
+		&.print-wrapper {
+			display: table;
+			
+			thead {
+				&.print-head{
+					display: table-header-group;
+				} 
+			}
+			
+			> tbody {
+				display: table-row-group;
+				
+				> tr {
+					display: table-row;
+					
+					> td {
+						display: table-cell;
+					}
+				}
+			}
+		}
+	}
+	
+	.card-row {
+		width: 8.5in;
+		padding-bottom: 5px;
+		margin-left: -20px;
+		display: block!important;
+		
+		&:nth-child(2) {
+			padding-bottom: 35px;
+		}
+		
+		.review-card {
+			width: 3.8in;
+			height: 4.3in;
+			padding: 0.2in;
+			display: inline-block;
+			float: left;
+			transform: rotate(90deg);
+			
+			&:first-child {
+				margin-left: 10px;
+			}
+			
+			.review-border {
+				border: 4px solid $brand-primary;
+				height: 3.7in;
+				width: 4.25in;
+				padding: 0 0.3in;
+			
+				h2 {
+					text-align: center;
+					font-size: 54px;
+					font-weight: bold;
+					font-style: italic;
+					color: $brand-primary;
+					margin-top: 10px;
+				}
+				
+				.text-center {
+					margin-bottom: 5px;
+					
+					&.clinic-name {
+						color: $brand-light!important;
+						font-size: 18px;
+					}
+					
+					&.clinic-url {
+						margin-bottom: 14px;
+					}
+				}
+				
+				p {
+					line-height: 18px;
+				}
+				
+				.hh-symbol {
+				    width: 40px;
+				    position: absolute;
+				    right: -50px;
+				    bottom: 50px;
+				}
+			}
+		}
+	}
+		
+	@-moz-document url-prefix() {
+		
+		.site-body, .container{
+			
+			&.content-body, &.blog {
+				width: 100vw;
+			}
+			
+			table {
+				&.print-wrapper {
+					display: block;
+					
+					thead {
+						&.print-head{
+							display: block;
+							position: fixed;
+							top:0;
+							left:40vw
+						}
+					}
+					> tbody{
+						display: block;
+						margin-top:0.5in;
+					}
+				}
+			}
+		}
+	}
+	@media(max-width:767px){
+		.site-body, .container{
+			width:auto;
+		}
+	}
+}
+
+.admin-panels {
+   min-height: 270px;
+   padding: 2px;
+}
+.admin-panels .panel {
+   overflow: visible;
+}
+
+//====================================
+// COLORS AND STYLES
+//====================================
+.double-arrow {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.shadow {
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	box-shadow: 3px 3px 4px #000;
+}
+.clear {
+	clear: both;
+}
+.telephone { /* Orange phone numbers in results list, clinic well, slider, sidebar, footer, etc. */
+	color: $brand-secondary;
+	a {
+		color: $brand-secondary;
+	}
+
+}
+
+//====================================
+// MISC
+//====================================
+
+.ui-autocomplete {
+	@media screen and (min-width: $screen-sm-min){
+		z-index: 9999!important;
+	}
+}
+#ui-id-1{
+	@media screen and (min-width: $screen-sm-min){
+		max-height: 210px;
+		position: fixed;
+		overflow-y: scroll;
+	}
+}
+#ui-id-2{
+	z-index: 1!important;
+}
+#ui-id-3 {
+    z-index: 801!important;
+}
+#ui-id-A{
+	@media screen and (min-width: $screen-sm-min){
+		position: fixed;
+	}
+}
+.ui-autocomplete-loading {
+	background: white url('/img/ajax-loader.gif') right center no-repeat;
+}
+.required {
+	font-weight: bold;
+	label:after {
+		color: #e32;
+		content: '*';
+		display:inline;
+	}
+}
+.hideRequired {
+	label:after {
+		content: '' !important;
+	}
+}
+
+//====================================
+// ALERTS LEGACY
+//====================================
+
+#flash-message {
+	padding-top: 10px;
+	overflow: hidden;
+	.centered {
+		left: 0;
+	}
+}
+#flash-message img {
+  vertical-align: middle;
+}
+#bad-flash, #good-flash, #info-flash, #authMessage {
+	margin-bottom: 0;
+	margin-top: 20px;
+	@extend .alert;
+}
+#bad-flash, #authMessage {
+	margin-bottom: 0;
+	margin-top: 20px;
+	@extend .alert-danger;
+}
+#good-flash {
+	margin-bottom: 0;
+	margin-top: 20px;
+	@extend .alert-success;
+}
+#info-flash {
+	margin-bottom: 0;
+	margin-top: 20px;
+	@extend .alert-info;
+}
+
+//====================================
+// STRUCTURAL
+//====================================
+
+.span20percent, .span40percent, .span60percent,
+.span80percent, .span100percent, .span33percent, .span40percent {
+	margin-left: 0;
+}
+.span20percent { width: 20%; }
+.span40percent { width: 40%; }
+.span50percent { width: 50%; }
+.span60percent { width: 60%; }
+.span80percent { width: 80%; }
+.span100percent { width: 100%; }
+.span33percent { width: 33%; }
+
+body.larger{
+	font-size: 110%;
+	line-height: 140%;
+	/*zoom: 120%;
+	-moz-transform: scale(1.2);*/
+}
+body.smaller{
+	font-size: 50%;
+	line-height: 140%;
+	/*zoom: 80%
+	-moz-transform: scale(.8);*/
+}
+.left-column {
+	width: 460px;
+	float: left;
+	margin-right: 20px;
+	padding-bottom: 20px;
+	min-height: 300px;
+}
+.norm-bullets ul, ul.norm-bullets {
+	list-style-type: disc;
+}
+
+// Hide br-mobile on larger screens
+.br-mobile {
+	display: none;
+}
+@media(max-width:$screen-xs-max){
+	.br-mobile {
+		display: block;
+	}
+}
