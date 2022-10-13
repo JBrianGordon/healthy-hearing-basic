@@ -1,5 +1,5 @@
 import '../common/common';
-import '../jplayer/jquery.jplayer.min';
+import '../jquery/jplayer/jquery.jplayer.min';
 import '../common/play_media';
 import {questionsOnLoad} from './ca_call_questions';
 
