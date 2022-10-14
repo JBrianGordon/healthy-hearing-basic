@@ -91,4 +91,11 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+
+    'GoogleMap' => [
+        'key' => '_google_map_key_',
+    ],
+    'localIp' => '_my_ip_',
+    'country' => 'US',
+    //'country' => 'CA',
 ];
