@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Page[]|\Cake\Collection\CollectionInterface $pages
+ * @var iterable<\App\Model\Entity\Page> $pages
  */
 ?>
 <div class="pages index content">
