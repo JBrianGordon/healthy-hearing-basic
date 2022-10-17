@@ -20,28 +20,9 @@ class PagesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users'],
-        ];
         $pages = $this->paginate($this->Pages);
 
         $this->set(compact('pages'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Page id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $page = $this->Pages->get($id, [
-            'contain' => ['Users'],
-        ]);
-
-        $this->set(compact('page'));
     }
 
     /**
@@ -86,8 +67,7 @@ class PagesController extends AppController
             }
             $this->Flash->error(__('The page could not be saved. Please, try again.'));
         }
-        $users = $this->Pages->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('page', 'users'));
+        $this->set(compact('page'));
     }
 
     /**

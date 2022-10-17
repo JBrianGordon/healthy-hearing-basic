@@ -32,7 +32,6 @@ class PagesController extends AppController
     public function view($page = null)
     {
         $page = $this->Pages->findByTitle($page)->first();
-
         $this->set(compact('page'));
     }
 }
