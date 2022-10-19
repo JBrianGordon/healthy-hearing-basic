@@ -61,6 +61,9 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'view', 'privacyPolicy']);
         $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'view', 'termsOfUse']);
 
+        // Misc pages with more complicated actions, integrations, etc.
+        $builder->connect('/contact-us', 'Pages::contactUs');
+
         // Corp/manufacturer pages
         $builder->connect('/{slug}', 'Corps::view')
             ->setPass(['slug'])
