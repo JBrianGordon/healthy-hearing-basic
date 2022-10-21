@@ -22,6 +22,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Healthy Hearing</title>
     <?= $this->Html->meta('icon') ?>
+    
+	<!--Preload fonts-->
+	<link rel="preload" href="/font/glyphicons-halflings-regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="/font/glyphicons-halflings-regular.woff" as="font" type="font/woff" crossorigin>
+	<link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
@@ -67,13 +72,9 @@
         </div>
       </div>
     </nav>
-    <main class="main">
-        <div class="container">
-            <?= $this->Flash->render() ?>
-            <?= $this->fetch('content') ?>
-            <?= $this->fetch('bs-modals') ?>
-        </div>
-    </main>
+    <?= $this->Flash->render() ?>
+    <?= $this->fetch('content') ?>
+    <?= $this->fetch('bs-modals') ?>
     <footer>
     </footer>
 </body>

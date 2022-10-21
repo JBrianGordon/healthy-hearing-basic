@@ -1,6 +1,5 @@
 .site-body {
   background: $body-bg;
-  padding-top: $navbar-height;
   position: relative;
   @include transition(all 0.3s ease-in);
   z-index: 1;
