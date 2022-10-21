@@ -1,4 +1,4 @@
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
 
 export function directBookBtn() {
 	// Global variable for direct book clinic id

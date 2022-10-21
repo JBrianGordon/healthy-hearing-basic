@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content $content
  */
+ 
+$this->Html->script('dist/content.min', ['block' => true]);
 ?>
 
 <h1><?= $content->title ?></h1>

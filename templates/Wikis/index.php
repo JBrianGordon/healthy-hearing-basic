@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki[]|\Cake\Collection\CollectionInterface $wikis
  */
+ 
+$this->Html->script('dist/common.min', ['block' => true]);
 ?>
 <h1>Wikis</h1>
 <table>

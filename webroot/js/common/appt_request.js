@@ -1,4 +1,4 @@
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
 
 window.submitApptRequest = () => {
     if ($("#CaCallApptRequestForm").get(0).reportValidity()) {

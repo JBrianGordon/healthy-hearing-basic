@@ -1,6 +1,5 @@
 {
   "name": "healthy-hearing-website",
-  "description": "Healthy Hearing JavaScript assets",
   "scripts": {
 	"build": "webpack",
     "compile-sass": "node_modules/.bin/sass webroot/scss/responsive.scss webroot/css/responsive.css"
@@ -9,14 +8,14 @@
   "description": "Healthy Hearing assets served through Webpack",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.6.1",
-    "jquery-ui": "^1.13.2",
-    "penthouse": "^2.3.3",
-    "uglify-js": "^3.17.3",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "jquery": "~3.6.1",
+    "jquery-ui": "~1.13.2",
+    "penthouse": "~2.3.3",
+    "uglify-js": "~3.17.3",
+    "webpack": "~5.74.0",
+    "webpack-cli": "~4.10.0"
   },
   "devDependencies": {
-    "sass": "^1.50.0"
+    "sass": "~1.50.0"
   }
 }

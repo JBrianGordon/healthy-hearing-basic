@@ -1,7 +1,7 @@
 import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
 import './provider';
 import '../modules/wordcount';
 

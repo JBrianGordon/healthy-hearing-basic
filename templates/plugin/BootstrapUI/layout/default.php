@@ -31,7 +31,6 @@
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
 </head>
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
@@ -77,4 +76,5 @@
     <footer>
     </footer>
 </body>
+<?= $this->fetch('script') ?>
 </html>

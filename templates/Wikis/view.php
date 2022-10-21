@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki $wiki
  */
+ 
+$this->Html->script('dist/wiki.min', ['block' => true]);
 ?>
 
 <h1><?= $wiki->title_h1 ?></h1>
