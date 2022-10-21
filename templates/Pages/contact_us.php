@@ -18,6 +18,7 @@ use Cake\Core\Configure;
         'label' => Configure::read('zipLabel'),
         'placeholder' => Configure::read('zipLabel')
     ]);
+    echo $this->Form->control('hearing_care_professional');
     echo $this->Form->control('message', ['maxlength' => '1000']);
     echo $this->Form->button('Submit');
     echo $this->Form->end();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\ContactUsForm;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Pages Controller
@@ -13,6 +14,8 @@ use App\Form\ContactUsForm;
  */
 class PagesController extends AppController
 {
+    use MailerAwareTrait;
+
     /**
      * Homepage
      *
@@ -48,8 +51,12 @@ class PagesController extends AppController
         $page = $this->Pages->findByTitle('contactUs')->first();
 
         if ($this->request->is('post')) {
-            if ($contactUsForm->execute($this->request->getData())) {
+            $requestData = $this->request->getData();
+            if ($contactUsForm->execute($requestData)) {
                 $this->Flash->success('We will get back to you soon.');
+                $this->getMailer('ContactUs')->send('notifyAdmin', compact('requestData'));
+                $this->getMailer('ContactUs')->send('thanksVisitor', compact('requestData'));
+;
             } else {
                 $this->Flash->error('There was a problem submitting your form.');
             }

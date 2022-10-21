@@ -26,6 +26,7 @@ class ContactUsForm extends Form
             'phone' => 'string',
             'email' => 'string',
             'zip' => 'string',
+            'hearing_care_professional' => 'boolean',
             'message' => 'text',
         ]);
     }
