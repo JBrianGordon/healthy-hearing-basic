@@ -1,0 +1,228 @@
+.site-body {
+  background: $body-bg;
+  position: relative;
+  @include transition(all 0.3s ease-in);
+  z-index: 1;
+  overflow-y: hidden;
+  
+  &.fap-results{
+	  
+	section {
+		&.panel-primary {
+			ul {
+				list-style-type: disc;
+				margin-block-start: 1em;
+				margin-block-end: 1em;
+				padding-left: 40px;
+			}
+		}
+	}
+	  
+	details {
+		
+		&.filter-box{
+			display: block;
+			border: 0;
+			padding: 15px;
+			margin-bottom: 0;
+			
+			summary {
+			    margin: 0 auto;
+			    display: block;
+			    width: 250px;
+				list-style-type: none;
+			}
+			
+			.row {
+				width:250px;
+				margin: 0 auto;
+			}
+			
+			input {
+				&.filter-box{
+					display: block;
+				}
+			}
+		}
+	}
+	
+	.logo-container {
+		height: 80px;
+		margin: 0 auto 10px;
+		
+		.clinic-logo {
+			display: block;
+			max-width: 120px;
+			max-height: 120px;
+			margin: 0 auto;
+			
+			@media(max-width:$screen-md-max) {
+				margin-left: -15px;
+			}
+			
+			@media(max-width:$screen-sm-max) {
+				margin-left: 5px;
+				margin-top: 10px;
+			}
+		}
+		
+	}
+	
+  }
+  
+	.read-more-row {
+	  max-width: 100%;
+	  margin-left: 0;
+	}
+  
+	@media (min-width: 768px) {
+		.next-help {
+			a {
+				float: left;
+			}
+		}
+		.back-to-top {
+			a {
+				float: right;
+			}
+		}
+	}
+  
+  @media (min-width: 992px) {
+	&.fap-results{
+		overflow-y: visible;
+		  
+		details {
+			display: block;
+			padding: 25px;
+			
+			&.filter-box {
+				border: 0;
+				text-align: center;
+				padding-top: 0;
+				padding-bottom: 0;
+			  
+				.row {
+					width: 100%;
+				}
+			}
+			
+			summary {
+				width:250px;
+				margin: 0 auto;
+				display: block;
+			}
+		}
+		input {
+			.filter-box {
+				display: inline-block!important;
+			}
+		}
+	
+		.checkbox {
+			label{
+				float: left;
+			}
+		}
+		
+		
+			div.filter-box{
+				display:none;
+			}
+			details {
+				&.well {
+					display: block;
+					border: 0;
+					padding: 0;
+					margin-bottom: 0;
+					
+					summary {
+						display: block;
+						width: 280px;
+						margin: 0 auto;				
+					}
+				}
+			}
+		}
+	}
+  
+  &.blog{
+	  overflow-y: visible;
+  }
+  
+  &.content-body{
+	overflow-y: visible;
+	overflow-x: hidden;
+	
+	header {
+	  >div:first-child {
+		  @media only screen and (min-width: $screen-sm-min) {
+			  padding: 0 70px;
+		  }	  
+	  }
+	}
+	
+	.header-content {
+	  .col-md-8 {
+		  >div {
+			  @media only screen and (min-width: $screen-sm-min) {
+				  padding: 0 70px;
+			  }
+		  }
+	  }
+	  
+	  #authorLine {
+		  font-size: 18px;
+	  }
+	}
+	
+	.help-menu {
+		li {
+			@media only screen and (min-width: $screen-sm-min) {
+				list-style-type: none;
+			}
+		}
+		ul {
+			@media only screen and (min-width: $screen-sm-min) {
+				margin: 10px 0;
+				padding: 0;
+
+				li {
+					margin-left: 20px;
+					
+					&.active {
+						font-weight: bold;
+					}
+				}
+			}
+		}
+	}
+	#wiki-body .aside aside {
+		@media only screen and (min-width: $screen-sm-min) {
+			display:none;
+		}
+	}
+  }
+
+  &.secondary-fixed-nav {
+    padding-top: $navbar-height + $navbar-inverse-height;
+  }
+  
+  .col-md-5.col-lg-5.col-lg-offset-1.over-backdrop{
+	  margin-bottom: 2em;
+  }
+}
+
+.show-side-nav .site-body {
+  transform:translateX(-100vw) translateX(calc($navbar-height / 1.5));
+  @include transition(all 0.3s ease-out);
+  
+  @media only screen and (min-width: $screen-sm-min) {
+    transform:translateX(0vw) translateX(0);
+  }
+  
+}
+
+html.show-side-nav {
+  overflow: hidden;
+}

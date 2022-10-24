@@ -1,0 +1,26 @@
+[data-hh-collapse] {
+  margin-bottom: 0;
+
+  .icon {
+    display: inline-block;
+    font-size: 18px;
+    margin-right: 1em;
+    vertical-align: middle;
+  }
+
+  [data-hh-collapse-item] {
+    .icon {
+      @include hh-icon();
+      @extend .hh-icon-circle-plus;
+    }
+
+    &.on .icon {
+      @extend .hh-icon-circle-minus;
+    }
+  }
+
+  .collapse-heading {
+    display: block;
+    margin: 10px 0;
+  }
+}

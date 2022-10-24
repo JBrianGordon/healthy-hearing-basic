@@ -1,0 +1,106 @@
+[hh-search],
+[data-hh-search] {
+	display: block;
+	float: right;
+	overflow: visible;
+	position: relative;
+	text-align: center;
+	width: calc($navbar-height / 1.5);
+	z-index: 2;
+
+	.search-link {
+		color: transparent;
+		display: block;
+		font-size: 0;
+		height: $navbar-height;
+		padding: 20px 10px;
+		text-decoration: none;
+
+		@media only screen and (max-width: $screen-sm-min) {
+			display: none;
+		}
+		
+		span{
+			color: $brand-primary;
+			font-size: 22px;
+		}
+
+		&:hover,
+		&:active {
+			background: $navbar-default-link-hover-bg;
+			text-decoration: none;
+		}
+
+		&:focus {
+			outline-color: transparent;
+			outline-style: none;
+		}
+	}
+
+	.search-wrapper {
+		background: $navbar-default-bg;
+		display: inline-block;
+		height: $navbar-height;
+		margin-right: -0.25em;
+		position: fixed;
+		right: 0;
+		top: 0;
+		transform:translate(100%,0);
+		transform:translate3d(100%,0,0);
+		transition:all 0.2s ease-in;
+		width: 100vw;
+
+		&.show {
+			transform:translate(0,0);
+			transform:translate3d(0,0,0);
+			transition:all 0.2s ease-out;
+
+			.close-link {
+				background: $navbar-default-link-hover-bg;
+				&:hover,
+				&:active {
+					background: shade($navbar-default-link-hover-bg, 3%);
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	.close-link {
+		color: transparent;
+		font-size: 0;
+		display: inline-block;
+		left: 0;
+		line-height: $navbar-height;
+		position: absolute;
+		text-align: center;
+		width: $navbar-height;
+		
+		span{
+			color: $brand-primary;
+			font-size: 16px
+		}
+
+		&:focus {
+			outline-color: transparent;
+			outline-style: none;
+		}
+	}
+
+	.search-input {
+		border: 0;
+		box-shadow:inset 0px 0px 6px rgba(0,0,0,0.15);
+		font-size: 114%;
+		height: $navbar-height;
+		left: $navbar-height;
+		padding: 1em 2em;
+		position: absolute;
+		top: 0;
+		width: calc(100% - #{$navbar-height});
+
+		&:focus {
+			box-shadow:inset 0px 0px 6px rgba(0,0,0,0.15);
+			outline: none;
+		}
+	}
+}

@@ -1,0 +1,30 @@
+.provider-panel {
+	border: 2px solid $panel-primary-border !important;
+	.panel-body {
+		padding: 15px;
+	}
+}
+
+.call-report-table {
+	th {
+		background-color: $brand-primary;
+		color: white;
+		a {
+			color: white;
+		}
+	}
+}
+
+.nav-clinic-faq {
+	background-color: #f7f7f7;
+	border: 0;
+}
+
+.question {
+	a.anchor {
+		display: block;
+		position: relative;
+		top: -90px;
+		visibility: hidden;
+	}
+}

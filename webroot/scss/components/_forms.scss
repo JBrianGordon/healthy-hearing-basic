@@ -1,0 +1,99 @@
+form {
+	&[action="/search"] {
+		label{
+		    font-size: 0;
+		    line-height: 0;
+		    position: absolute;
+		}
+	}
+	&#FapMegaSearch {
+		margin-bottom: 30px;
+	}
+	label {
+	    &[for="FooterContactEmail"] {
+			font-size: 0;
+			line-height: 0;
+			position: absolute;
+	    }
+	}
+}
+
+.form-control {
+  @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
+  padding: (10px) $padding-base-horizontal;
+
+  &#LocationSearch {
+	  @media(max-width:$screen-sm-max){
+		  font-size: 13px;
+	  }
+  }
+
+  &:focus {
+    @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
+  }
+}
+
+.has-warning {
+  @include form-control-validation($state-warning, $state-warning, $state-warning-bg);
+}
+
+.has-error {
+  @include form-control-validation($state-danger, $state-danger, $state-danger-bg);
+}
+
+.has-success {
+ @include form-control-validation($state-success, $state-success, $state-success-bg);
+}
+
+input[type="checkbox"] {
+  height: 1em;
+  width: 1.5em;
+}
+
+#LocationForm, .clinic-badges {
+	input[type="checkbox"] {
+		margin-left: -25px;
+	}
+}
+
+.border-radio {
+	
+	&.selected-border label{
+		border-color: $brand-light;
+	}
+	
+	label {
+		padding: 10px 20px;
+		border: 3px solid #ddd;
+	}
+	
+	.border-dashed {
+		border: dashed #ddd;
+	}
+	
+	.border-dotted {
+		border: dotted #ddd;
+	}
+	
+	.border-inset {
+		border: inset #ddd;
+	}
+	
+	input {
+		visibility: hidden;
+		width: 0;
+	}
+}
+
+.help-block {
+  font-weight: normal;
+}
+
+#charLimit{
+	font-size: 12px;
+}
+
+.max-chars{
+	color: #e51c23;
+	font-weight: bold;
+}

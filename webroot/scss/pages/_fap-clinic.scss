@@ -1,0 +1,22 @@
+.fap-clinic {
+  .provider-bio {
+    margin-bottom: 20px;
+  }
+
+  .provider-name {
+    margin-bottom: 0.25em;
+  }
+
+  .provider-qualifications {
+    margin-bottom: 0.5em;
+  }
+}
+
+@media (max-width: 991px) {
+  #map_canvas {
+    display: none;
+  }
+  .clinic-description, .clinic-review-blurb {
+  	display: none;
+  }
+}
