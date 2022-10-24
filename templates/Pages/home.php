@@ -59,7 +59,7 @@
             <?php //if (Configure::read('country') == 'US'): ?>
               <div data-hh-map></div>
             <?php //else: ?>
-              <object data="<?php //echo Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
+              <object data="<?php //Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
             <?php //endif; ?>
             <p class="text-center">
               <button class="btn btn-secondary hidden-sm" data-toggle="modal" data-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>

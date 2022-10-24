@@ -668,6 +668,14 @@
 	}
 }
 
+.panel-secondary {
+  @include panel-variant($panel-secondary-border, $panel-secondary-text, $panel-secondary-heading-bg, $panel-secondary-border);
+}
+
+.panel-light {
+  @include panel-variant($panel-light-border, $panel-light-text, $panel-light-heading-bg, $panel-light-border);
+}
+
 .panel-video {
   display: inline-block;
 

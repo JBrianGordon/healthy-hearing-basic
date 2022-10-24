@@ -1,3 +1,9 @@
+html {
+	font-size: 10px;
+}
+body {
+	font-size: 16px;
+}
 body, html {
   @include font($font-family-primary, 'normal', "400");
   -webkit-font-smoothing: antialiased;
@@ -108,12 +114,15 @@ a.print-link {
 }
 
 .lead {
-  @include font($font-family-secondary, normal, normal);
-  font-size: 112%;
-
-  @media only screen and (min-width: $screen-sm-min) {
-    font-size: 128%;
-  }
+	line-height: 1.4;
+	font-size: 24px;
+	
+	@include font($font-family-secondary, normal, normal);
+		font-size: 112%;
+	
+	@media only screen and (min-width: $screen-sm-min) {
+		font-size: 128%;
+	}
 }
 
 .text-large {
