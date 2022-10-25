@@ -1,4 +1,4 @@
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab';
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab';
 
 $(document).ready(function() {
 	// Display the selected tab

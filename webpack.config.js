@@ -1,5 +1,4 @@
 const path = require('path');
-//const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const UglifyJS = require('uglify-js');
 const penthouse = require('penthouse');
@@ -33,8 +32,10 @@ module.exports = {
             jquery: "jquery/src/jquery"
         }
 	},
+	performance: {
+	    hints: false
+	},
     plugins: [
-		//new CleanWebpackPlugin(),
 		new webpack.ProvidePlugin({
 		  $: 'jquery',
 		  jQuery: 'jquery',

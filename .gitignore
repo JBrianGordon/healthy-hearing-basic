@@ -7,6 +7,7 @@
 /tmp/*
 /vendor/*
 webroot/css/*
+webroot/js/dist/*.min.js*
 webroot/debug_kit
 webroot/coverage
 webroot/bootstrap_u_i
