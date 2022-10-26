@@ -12,7 +12,7 @@
 </div>
 <div class="container">
   <div class="row">
-    <?php //echo $this->element('flashes'); ?>
+    <?php //***TODO: uncomment when flash elements added*** echo $this->element('flashes'); ?>
     <div class="col-md-7 col-lg-6 over-backdrop">
       <section class="intro-text inverse">
 	  	<h1 class="hero-headline"><em>Be part of the </em><br>conversation</h1>
@@ -20,13 +20,13 @@
 			<p><?= $content ?></p>
         </p>
         <p class="btn-set">
-          <a href="<?php //echo $this->Clinic->nearMeLink();?>" class="near-me-link btn btn-default btn-lg">Show clinics near me</a>
+          <a href="<?php //***TODO: uncomment when clinic near me functionality built out*** echo $this->Clinic->nearMeLink();?>" class="near-me-link btn btn-default btn-lg">Show clinics near me</a>
           <a href="/help/hearing-loss" class="btn btn-default btn-lg">Learn About Hearing Loss</a>
           <a href="/help/hearing-aids" class="btn btn-default btn-lg">Learn About Hearing Aids</a>
         </p>
       </section>
-      <?php //if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$this->App->isMobileDevice()): ?>
-      	<div class="hearing-test">
+      <?php //***TODO: uncomment when configuration class built*** if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$this->App->isMobileDevice()): ?>
+      	<!--<div class="hearing-test">
 	        <br>
 	        <h3>Online hearing test</h3>
 	        <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
@@ -34,7 +34,7 @@
 	        <p>
 	          <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
 	        </p>
-        </div>
+        </div>-->
       <?php //endif; ?>
     </div>
     <div class="col-md-5 col-lg-offset-1 over-backdrop right-desktop">
@@ -57,10 +57,10 @@
             </p>
           </div>
           <div class="panel-section hidden-xs">
-            <?php //if (Configure::read('country') == 'US'): ?>
+            <?php //***TODO: uncomment when configuration class built*** if (Configure::read('country') == 'US'): ?>
               <div data-hh-map></div>
             <?php //else: ?>
-              <object data="<?php //Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
+              <!--<object data="<?php //***TODO: uncomment when configuration class built*** Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>-->
             <?php //endif; ?>
             <p class="text-center">
               <button class="btn btn-secondary hidden-sm" data-toggle="modal" data-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
@@ -74,7 +74,7 @@
 					<?php endif; ?>
         </div>
       </div>
-      <?php //if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $this->App->isMobileDevice()): ?>
+      <?php //***TODO: uncomment when configuration class built*** if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $this->App->isMobileDevice()): ?>
       	<div class="hearing-test">
 	        <br>
 	        <h3>Online hearing test</h3>
@@ -86,7 +86,7 @@
         </div>
       <?php //endif; ?>
     </div>
-    <?php //if (Configure::read('showReports')): ?>
+    <?php //***TODO: uncomment when configuration class built*** if (Configure::read('showReports')): ?>
       <div class="col-md-7 col-lg-6 mobile-clear">
         <div class="panel panel-light">
           <?php //echo $this->element('content/latest'); ?>
@@ -105,10 +105,10 @@
       </div>
       <div class="modal-body">
         <center>
-          <?php //if (Configure::read('country') == 'US'): ?>
+          <?php //***TODO: uncomment when configuration class built*** if (Configure::read('country') == 'US'): ?>
             <div data-hh-map></div>
           <?php //else: ?>
-            <object data="<?php //echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
+            <object data="<?php //***TODO: uncomment when configuration class built*** echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
           <?php //endif; ?>
         </center>
       </div>

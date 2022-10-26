@@ -34,15 +34,15 @@ form {
 }
 
 .has-warning {
-  @include form-control-validation($state-warning, $state-warning, $state-warning-bg);
+  @include form-control-validation($brand-warning, $brand-warning, $state-warning-bg);
 }
 
 .has-error {
-  @include form-control-validation($state-danger, $state-danger, $state-danger-bg);
+  @include form-control-validation($brand-danger, $brand-danger, $state-danger-bg);
 }
 
 .has-success {
- @include form-control-validation($state-success, $state-success, $state-success-bg);
+ @include form-control-validation($brand-success, $brand-success, $state-success-bg);
 }
 
 input[type="checkbox"] {

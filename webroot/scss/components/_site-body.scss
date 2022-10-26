@@ -5,6 +5,12 @@
   z-index: 1;
   overflow-y: hidden;
   
+  &.home {
+	  .row {
+		  display: block;
+	  }
+  }
+  
   &.fap-results{
 	  
 	section {

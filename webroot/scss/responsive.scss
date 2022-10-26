@@ -1,6 +1,7 @@
 @import "theme-colors.scss"; // Load before bootstrap
 @import "variables/colors";
 @import "mixins/font";
+@import "mixins/forms";
 @import "mixins/hh-icons";
 @import "mixins/_panel-variant";
 @import "../../vendor/friendsofcake/bootstrap-ui/node_modules/bootstrap/scss/bootstrap";
@@ -15,7 +16,7 @@
 @import "components/clinic-well";
 @import "components/date";
 @import "components/footer";
-//@import "components/forms";
+@import "components/forms";
 @import "components/google-maps";
 @import "components/grid";
 @import "components/hh-collapse";
