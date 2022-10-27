@@ -1,5 +1,33 @@
+.nav>li>a {
+    position: relative;
+    display: block;
+}
+
 .navbar {
 	min-height: 70px;
+	padding: 0;
+	
+	.container {
+		display: block;
+	}
+	
+	&.navbar-expand-lg {
+		
+		.navbar-toggler {
+			float: right;
+		}
+		.navbar-nav .nav-link {
+		    padding: 10px 13px;
+			color: $brand-primary;
+		}
+		
+		.navbar-collapse {
+			@media (min-width: $screen-md-min) {
+				display: inline-block !important;
+				float: right;
+			}
+		}
+	}
 }
 
 .navbar-header {
@@ -92,6 +120,12 @@
     @include font($font-family-primary, normal, "700");
     font-size: 87.5%;
     text-transform: uppercase;
+    padding: 10px 13px;
+    
+    @media (min-width:$screen-sm-min) {
+		padding-top: 22.5px;
+		padding-bottom: 22.5px;
+	}
     
     .ida-logo{
 	    width:22px;
@@ -225,6 +259,10 @@
 @media only screen and (min-width: $screen-sm-min) {
   .navbar-default .navbar-nav {
     display: block;
+    
+    li {
+	    float: left;
+    }
   }
 
   .navbar-right {
