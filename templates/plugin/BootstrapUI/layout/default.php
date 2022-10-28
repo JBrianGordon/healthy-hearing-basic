@@ -42,11 +42,13 @@
       <div class="container">
 	    <div class="row">
 		    <div class="col-xs-12" id="navParent">
-		        <a class="navbar-brand d-inline-block" href="/">
+		        <a class="navbar-brand d-inline-block navbar-logo" href="/">
 		          <img src="/img/hh-logo.svg" alt="" width="198" height="40">
 		        </a>
-		        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggler" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-		          <span class="navbar-toggler-icon"></span>
+		        <button class="navbar-toggler navbar-side-nav-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenuToggler" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation" data-hh-side-nav-trigger>
+		        	<a href="" id="desktopSideNavTrigger">
+						<span class="hh-icon-menu"></span>
+		        	</a>
 		        </button>
 		        <div class="collapse navbar-collapse" id="navbarMenuToggler">
 		          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
