@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Utility\MailchimpUtility;
 use Cake\Form\Form;
 use Cake\Form\Schema;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\Validation\Validator;
 
 /**
@@ -12,6 +14,8 @@ use Cake\Validation\Validator;
  */
 class ContactUsForm extends Form
 {
+    use MailerAwareTrait;
+
     /**
      * Builds the schema for the modelless form
      *
@@ -26,6 +30,7 @@ class ContactUsForm extends Form
             'phone' => 'string',
             'email' => 'string',
             'zip' => 'string',
+            'subscribe' => 'boolean',
             'hearing_care_professional' => 'boolean',
             'message' => 'text',
         ]);
@@ -40,17 +45,34 @@ class ContactUsForm extends Form
     public function validationDefault(Validator $validator): Validator
     {
         return $validator->email('email')
-            ->notBlank('email');
+            ->notBlank('email')
+            ->notBlank('message');
     }
 
     /**
      * Defines what to execute once the Form is processed
      *
-     * @param array $data Form data.
+     * @param array $requestData Form data.
      * @return bool
      */
-    protected function _execute(array $data): bool
+    protected function _execute(array $requestData): bool
     {
+        $userData = [
+            'email_address' => $requestData['email'],
+            'merge_fields' => [
+                'FNAME' => $requestData['first_name'],
+                'LNAME' => $requestData['last_name'],
+            ],
+        ];
+
+        if ($requestData['subscribe'] === '1') {
+            $mailchimp = new MailchimpUtility();
+            $mailchimp->subscribeMember($userData);
+        }
+
+        $this->getMailer('ContactUs')->send('notifyAdmin', [$requestData]);
+        $this->getMailer('ContactUs')->send('thanksVisitor', [$requestData]);
+
         return true;
     }
 }

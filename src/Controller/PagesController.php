@@ -54,9 +54,6 @@ class PagesController extends AppController
             $requestData = $this->request->getData();
             if ($contactUsForm->execute($requestData)) {
                 $this->Flash->success('We will get back to you soon.');
-                $this->getMailer('ContactUs')->send('notifyAdmin', compact('requestData'));
-                $this->getMailer('ContactUs')->send('thanksVisitor', compact('requestData'));
-;
             } else {
                 $this->Flash->error('There was a problem submitting your form.');
             }
