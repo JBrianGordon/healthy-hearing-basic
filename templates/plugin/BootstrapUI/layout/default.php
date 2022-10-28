@@ -73,6 +73,7 @@
 	    </div>
       </div>
     </nav>
+    <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
     <?= $this->fetch('content') ?>
     <?= $this->fetch('bs-modals') ?>

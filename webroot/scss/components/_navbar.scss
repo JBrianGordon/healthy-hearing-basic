@@ -255,3 +255,14 @@
   transform:translate3d(calc(-100vw + ($navbar-height / 1.5)),0,0);
   @include transition(all 0.3s ease-out);
 }
+
+.side-nav-links {
+	
+	li > a {
+		text-decoration: none;
+	}
+	
+	.dropdown-toggle::after{
+		vertical-align: 0.1em;
+	}
+}
