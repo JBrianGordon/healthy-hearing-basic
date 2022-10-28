@@ -1,0 +1,5 @@
+@mixin font($family-stack, $style: "normal", $weight: "normal") {
+  font-family: $family-stack;
+  font-style: unquote($style);
+  font-weight: unquote($weight);
+}

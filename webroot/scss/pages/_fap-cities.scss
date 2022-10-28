@@ -1,0 +1,94 @@
+.fap-cities {
+	.list-header {
+		color: tint($text-color, 38%);
+		@include font($font-family-primary, normal, "700");
+		font-size: $font-size-base;
+		position: relative;
+
+		&:after {
+			background: tint($text-color, 30%);
+			content: '';
+			display: block;
+			height: 3px;
+			position: absolute;
+			left: 1.5em;
+			top: calc(50% - 1.5px);
+			width: calc(80% - 1.5em);
+		}
+	}
+
+	.city-list {
+		margin: 0 0 1.5em 1.5em;
+	}
+}
+
+.provider-well {
+	.clinic-provider-name {
+		font-size: 22px;
+		margin-bottom: 10px;
+
+		.provider-credentials {
+			font-size: 20px;
+		}
+	}
+	.provider-title {
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	
+	.clinic-provider-bio {
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 991px) {
+	.filter-box {
+		display: none;
+	}
+
+	#clinic-results {
+
+		.clinic-blurb {
+			display: none;
+		}
+
+		.clinic-info.t2 {
+			.details {
+				padding-left: 0;
+			}
+		}
+
+		.clinic-info {
+			padding-bottom: 20px;
+			border-bottom: solid 1px #ebebeb;
+		}
+
+		.provider-well {
+			margin-top: 10px;
+			margin-bottom: 5px;
+			padding: 15px;
+
+			.clinic-provider-name {
+				font-size: 20px;
+				margin-bottom: 10px;
+
+				.provider-credentials {
+					font-size: 18px;
+				}
+			}
+
+			.provider-title {
+				font-size: 16px;
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.well.clinic-info {
+		border-bottom: solid 1.5px #d9d9d9 !important;
+	}
+}

@@ -1,0 +1,13 @@
+.bs-component.hh-icons {
+  text-align: center;
+
+  [class*="hh-icon-"] {
+    display: inline-block;
+    font-size: 48px;
+    width: 100%;
+  }
+
+  & + .bs-component.hh-icons {
+    margin-top: 40px;
+  }
+}

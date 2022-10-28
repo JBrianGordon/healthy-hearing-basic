@@ -1,3 +1,15 @@
+@font-face {
+	font-family: "Roboto";
+	src: url("/font/roboto-v20-latin-regular.woff") format("woff");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Lato";
+	src: url("/font/lato-v17-latin-regular.woff") format("woff");
+	font-display: swap;
+}
+
 .tar {
   text-align: right !important;
 }

@@ -1,0 +1,36 @@
+.date {
+  @include font($font-family-primary, normal, "700");
+  color: $brand-light;
+  display: inline-block;
+  line-height: 1;
+  text-align: center;
+
+  .month, .day {
+    display: block;
+  }
+
+  .month {
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .day {
+    font-size: 32px;
+  }
+
+  &.large .month {
+    font-size: 24px;
+  }
+
+  &.large .day {
+    font-size: 48px;
+  }
+}
+.inline-date {
+  display: inline-block;
+  width:auto;
+  
+  &#SearchModifiedStart, &#SearchModifiedEnd, &#SearchFrozenExpirationStart, &#SearchFrozenExpirationEnd, &#SearchLastReviewDateStart, &#SearchLastReviewDateEnd {
+	  width: 46%;
+  }
+}

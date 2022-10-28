@@ -1,0 +1,233 @@
+.navbar {
+	min-height: 70px;
+}
+
+.navbar-header {
+  float: left;
+  max-width: 70%;
+  @media only screen and (min-width: $screen-sm-min) {
+    max-width: 25%;
+  }
+}
+.navbar-right {
+  float: right;
+}
+
+.navbar-clinic {
+  border-bottom: 5px solid $brand-secondary !important;
+  
+  .navbar-nav.nav {
+	  display: block;
+  }
+  
+  .clinic-portal-logo {
+    img {
+      display: inline !important;
+      margin-top: 5px !important;
+      width: 199px !important;
+      position: inherit !important;
+    }
+    .portal-title {
+      color: $brand-secondary;
+      text-align: right;
+      font-weight: bold;
+      min-width:199px;
+    }
+  }
+  .clinic-portal-logo.CA {
+    margin-top: -10px;
+    height: 80px;
+    .portal-title {
+      margin-left: 10px;
+    }
+  }
+  .clinic-portal-logo.CA img {
+    margin-bottom: -25px;
+  }
+}
+.navbar-default {
+  border: 0;
+  overflow: visible;
+
+  &.has-shadow {
+    @include box-shadow(0px 2px 8px rgba(0,0,0,0.15));
+  }
+
+  .navbar-logo {
+    float: left;
+    height: $navbar-height;
+    @media only screen and (min-width: $screen-lg-min) {
+      /*margin-left: -30px;*/
+    }
+
+    img {
+      display: block;
+      height: 100%;
+      margin: 0;
+      max-height: 40px;
+      position: relative;
+      top: calc(50% - 20px);
+      
+      @media only screen and (max-width: $screen-sm-max) {
+	      max-height: 45px;
+	      top: calc(50% - 23px);
+      }
+      
+    }
+  }
+
+  .navbar-logo.CA {
+    img {
+      max-height: 75px;
+      height: 75px;
+      top: 3px;
+    }
+  }
+
+  .navbar-nav {
+    display: none;
+  }
+
+  .navbar-nav > li > a {
+    @include font($font-family-primary, normal, "700");
+    font-size: 87.5%;
+    text-transform: uppercase;
+    
+    .ida-logo{
+	    width:22px;
+    }
+  }
+}
+
+.navbar-upgrade {
+	.navbar-nav {
+		display: block;
+		@media (max-width:768px) {
+			margin: 0;
+		}
+		
+		[data-hh-mega-nav] {
+			@media (min-width:$screen-lg-min) {
+			    max-width: 880px;
+			    position: absolute;
+			    right: calc(50% - 570px);
+			}
+		}
+		
+		li[data-hh-mega-nav-trigger='clinic-menu']{
+			display: block;
+		}
+		
+		.clinic-link {
+			@media (max-width:768px) {
+				display: none;
+			}
+		}
+		
+		.login {
+			margin-top: 15px;
+			
+			& > a {
+				font-size: 100%;
+				padding: 0;
+				color: #fff;
+				
+				&:hover {
+					color: #fff;
+					background-color: transparent;
+				}
+			}
+		}
+		
+		small {
+			clear: both;
+			float: right;
+			line-height: 16px;
+			
+			a {
+				padding: 0;
+				float: none;
+			}
+		}
+	}
+}
+
+.secondary-nav {
+  border: 0;
+  border-bottom: solid 1px $navbar-inverse-border;
+  @include box-shadow(0px 2px 8px rgba(0,0,0,0.15));
+  min-height: $navbar-inverse-height;
+  transform:translate3d(0,0,0);
+  @include transition(all 0.3s ease-in);
+
+  .navbar-brand {
+    min-height: $navbar-inverse-height;
+  }
+
+  .navbar-form {
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    .form-control {
+      height: 34px;
+      padding: 6px 12px;
+    }
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+
+  ul > li {
+    display: inline-block;
+    line-height: 1;
+
+    &.active {
+      @include font($font-family-primary, normal, "700");
+
+      a {
+        color: $navbar-inverse-link-active-color;
+      }
+    }
+
+    & > a {
+      color: $navbar-inverse-link-color;
+      display: inline-block;
+      padding: 5px 0.5em;
+
+      &:hover,
+      &:active {
+        color: $navbar-inverse-link-active-color;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.navbar-fixed-top {
+  z-index: 900;
+
+  & + .navbar-fixed-top {
+    top: $navbar-height;
+    z-index: 800;
+  }
+}
+
+.navbar-collapse {
+  overflow: visible;
+}
+
+.show-side-nav .navbar-inverse {
+  transform:translate3d(calc(-100vw + ($navbar-height / 1.5)),0,0);
+  @include transition(all 0.3s ease-out);
+}
+
+@media only screen and (min-width: $screen-sm-min) {
+  .navbar-default .navbar-nav {
+    display: block;
+  }
+
+  .navbar-right {
+    margin-right: 0;
+  }
+}
