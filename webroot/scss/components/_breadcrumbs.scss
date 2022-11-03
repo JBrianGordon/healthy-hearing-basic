@@ -6,6 +6,12 @@
 
   > li {
     line-height: 40px;
+    
+    +li:before {
+	    content: "/ ";
+	    padding: 0 5px;
+	    color: #ccc;
+    }
   }
 
   @media only screen and (max-width: $screen-xs-max) {

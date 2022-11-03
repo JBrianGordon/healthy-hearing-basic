@@ -1,3 +1,20 @@
+.nav {
+	margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    
+	> li {
+	    position: relative;
+	    display: block;
+	    
+		> a {
+			position: relative;
+			display: block;
+			padding: 10px 13px;
+		}
+	}
+}
+
 .navbar {
 	min-height: 70px;
 	padding: 0;
@@ -264,5 +281,27 @@
 	
 	.dropdown-toggle::after{
 		vertical-align: 0.1em;
+	}
+}
+
+.nav-tabs {
+	border-bottom: 1px solid #ddd;
+	
+	> li {
+		float: left;
+		margin-bottom: -1px;
+		
+		a {
+			margin-right: 2px;
+			line-height: 1.6;
+			border: 1px solid transparent;
+			border-radius: 2px 2px 0 0;
+		}
+	}
+}
+
+.nav-stacked {
+	> li {
+		float:none;
 	}
 }

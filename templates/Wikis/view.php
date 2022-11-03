@@ -189,6 +189,7 @@ echo $wikiSchema;
 												<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
 											</div>
 										</div>
+										<!-- ***TODO: Side panel should be it's own element*** -->
 										<div class="col-md-3 col-lg-3 float-end noprint">
 											<!-- Right content -->
 											<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
