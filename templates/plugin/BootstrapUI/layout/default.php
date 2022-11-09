@@ -77,8 +77,7 @@
     <?= $this->Flash->render() ?>
     <?= $this->fetch('content') ?>
     <?= $this->fetch('bs-modals') ?>
-    <footer>
-    </footer>
+    <?= $this->element('footer') ?>
 </body>
 <?= $this->fetch('script') ?>
 </html>
