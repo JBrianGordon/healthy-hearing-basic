@@ -7,15 +7,15 @@
 $this->Html->script('dist/wiki.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
-	<div class="row">
+	<div class="row pt0 pb0">
 		<div class="backdrop-container">
 				<div class="backdrop backdrop-gradient backdrop-height"></div>
 		</div>
 		<div class="container">
-			<div class="row">
-				<!-- ***TODO: Breadcrumb should be it's own dynamic element *** <div class="row">-->
+			<div class="row pt0 pb0">
+				<!-- ***TODO: Breadcrumb should be it's own dynamic element *** <div class="row pt0 pb0">-->
 				<header class="col-md-12 inverse">
-					<div class="row noprint">
+					<div class="row noprint pt0 pb0">
 						<div class="col-sm-12 col-xs-9">
 							<ul class="breadcrumb">
 								<li>
@@ -33,35 +33,31 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 				</header>
 				<div class="col-md-9 panel-parent float-start">
-					<section class="panel">
-						<div class="panel-body">
-							<div class="panel-section expanded">
-								<div class="p20 headline">
-									<h1 class="text-primary"><?php //*** uncomment when Configure is built out, hard coding Healthy Hearing for now *** echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?>Healthy Hearing Help</h1>
-									<p class="lead text-primary"><em>
-										Welcome to our library of original reference materials to help you learn more about hearing health and hearing aids.
-										<?php //*** uncomment when Configure is built out *** if(Configure::read('country') != 'CA'): ?>
-											<br><br>Check out the <a href="/report">Healthy Hearing Report</a> for additional news, articles and interviews about hearing health.
-										<?php //endif; ?>
-									</em></p>
-								</div>
-								
-								<div id="wikis" class="p20">
-									<ul id="accordion" class="nav nav-tabs nav-stacked">
-										<?php foreach ($wikis as $wiki): ?>
-											<li class="parent" style="border-bottom: 1px solid #ddd;">
-												<?= $this->Html->link($wiki->name, $wiki->hh_url) ?>
-												<?php //*** uncomment when Wiki is built out *** echo $this->Wiki->getNavText($nav['parent']); ?>
-											</li>
-										<?php endforeach; ?>
-										<?php //*** uncomment when Configure is built out *** if (Configure::read('showManufacturers')): ?>
-											<!--<li class="parent">
-												<?php //echo $this->Wiki->getNavManufText(); ?>
-											</li>-->
-										<?php //endif; ?>
-									</ul>
-								</div>
-							</div>
+					<section class="panel panel-section expanded">
+						<div class="p20 headline">
+							<h1 class="text-primary"><?php //*** uncomment when Configure is built out, hard coding Healthy Hearing for now *** echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?>Healthy Hearing Help</h1>
+							<p class="lead text-primary"><em>
+								Welcome to our library of original reference materials to help you learn more about hearing health and hearing aids.
+								<?php //*** uncomment when Configure is built out *** if(Configure::read('country') != 'CA'): ?>
+									<br><br>Check out the <a href="/report">Healthy Hearing Report</a> for additional news, articles and interviews about hearing health.
+								<?php //endif; ?>
+							</em></p>
+						</div>
+						
+						<div id="wikis" class="p20">
+							<ul id="accordion" class="nav nav-tabs nav-stacked">
+								<?php foreach ($wikis as $wiki): ?>
+									<li class="parent" style="border-bottom: 1px solid #ddd;">
+										<?= $this->Html->link($wiki->name, $wiki->hh_url) ?>
+										<?php //*** uncomment when Wiki is built out *** echo $this->Wiki->getNavText($nav['parent']); ?>
+									</li>
+								<?php endforeach; ?>
+								<?php //*** uncomment when Configure is built out *** if (Configure::read('showManufacturers')): ?>
+									<!--<li class="parent">
+										<?php //echo $this->Wiki->getNavManufText(); ?>
+									</li>-->
+								<?php //endif; ?>
+							</ul>
 						</div>
 					</section>
 				</div>
@@ -77,19 +73,17 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 						<header class="panel-heading text-center">
 							<h4>Related content</h4>
 						</header>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-lg-12">
-									<table class="table table-bordered" style="margin-bottom: 0;">
-										<?php foreach ($contents as $content): ?>
-											<tr>
-												<td>
-													<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
-												</td>
-											</tr>
-										<?php endforeach; ?>
-									</table>
-								</div>
+						<div class="row pt0 pb0">
+							<div class="col-lg-12">
+								<table class="table table-bordered" style="margin-bottom: 0;">
+									<?php foreach ($contents as $content): ?>
+										<tr>
+											<td>
+												<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</table>
 							</div>
 						</div>
 					</section>
@@ -98,23 +92,21 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 						<header class="panel-heading text-center">
 							<h4>The Healthy Hearing Report</h4>
 						</header>
-						<div class="panel-body">
-							<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
-								<div class="panel-section condensed blog-preview">
-									<div class="row">
-										<div class="col-md-3">
-											<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
-												//'large' => false
-											//]); ?>
-										</div>
-										<div class="col-md-9">
-											<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
-											<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
-										</div>
+						<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
+							<div class="panel-section condensed blog-preview">
+								<div class="row pt0 pb0">
+									<div class="col-md-3">
+										<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
+											//'large' => false
+										//]); ?>
+									</div>
+									<div class="col-md-9">
+										<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
+										<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
 									</div>
 								</div>
-							<?php //endforeach; ?>
-						</div>
+							</div>
+						<?php //endforeach; ?>
 					</section>
 					<section class="panel panel-secondary">
 						<header class="panel-heading text-center">
