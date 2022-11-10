@@ -161,16 +161,16 @@ echo $wikiSchema;
 							</div>
 						</div>
 					</header>
-							<div class="col-md-9 col-lg-9 pl10 pr10 float-start">
+							<div class="col-md-9 col-lg-9 float-start">
 								<div class="panel panel-section expanded">
 									<div id="wiki-body" class="col-lg-12 pr0 pl0">
-										<p><?= $wiki->body ?></p>
+										<?= $wiki->body ?>
 									</div>
 									<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
 								</div>
 							</div>
 							<!-- ***TODO: Side panel should be it's own element*** -->
-							<div class="col-md-3 col-lg-3 float-end noprint">
+							<div class="col-md-3 col-lg-3 float-end noprint pl20 pr10">
 								<!-- Right content -->
 								<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
 									<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>

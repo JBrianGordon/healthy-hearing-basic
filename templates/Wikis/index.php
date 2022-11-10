@@ -15,7 +15,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 			<!-- ***TODO: Breadcrumb should be it's own dynamic element *** <div class="row pt0 pb0">-->
 			<header class="col-md-12 inverse">
 				<div class="row noprint pt0 pb0">
-					<div class="col-sm-12 col-xs-9">
+					<div class="col-sm-12 col-xs-9 pl0">
 						<ul class="breadcrumb">
 							<li>
 								<a href="/"><span>Home</span></a>
@@ -31,7 +31,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 				</div>
 			</header>
-			<div class="col-md-9 panel-parent float-start pl10 pr10">
+			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
 					<div class="p20 headline">
 						<h1 class="text-primary"><?php //*** uncomment when Configure is built out, hard coding Healthy Hearing for now *** echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?>Healthy Hearing Help</h1>
@@ -61,7 +61,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 				</section>
 			</div>
 			<!-- ***TODO: Side panel should be it's own element*** -->
-			<div class="col-md-3 col-lg-3 float-end noprint">
+			<div class="col-md-3 col-lg-3 float-end noprint pl20 pr10">
 				<!-- Right content -->
 				<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
 					<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
