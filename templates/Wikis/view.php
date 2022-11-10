@@ -123,58 +123,48 @@ echo $wikiSchema;
 					<p class="print-link"><?php //***TODO: uncomment when Configure is built*** echo "www.".Configure::read('siteUrl'); ?></p>
 				</div>
 					<header class="col-md-12 inverse">
-						<div>
-							<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
-						</div>
-							<div class="row header-content pt0 pb0">
-								<div class="col-md-8">
-									<div>
-									<?php //***TODO: uncomment when isadmin is built*** if ($isadmin): ?>
-										<?php //***TODO: uncomment when Wiki model is built*** echo $this->Html->link('Edit', ['admin' => true, 'controller' => 'wikis', 'action' => 'edit', $this->Wiki->get('id')], ['class' => 'btn btn-primary pull-right']); ?>
+						<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
+						<div class="row header-content pt0 pb0">
+							<div class="col-md-8">
+								<?php //***TODO: uncomment when isadmin is built*** if ($isadmin): ?>
+									<?php //***TODO: uncomment when Wiki model is built*** echo $this->Html->link('Edit', ['admin' => true, 'controller' => 'wikis', 'action' => 'edit', $this->Wiki->get('id')], ['class' => 'btn btn-primary pull-right']); ?>
+								<?php //endif; ?>
+								<h1><?= $wiki->title_h1 ?></h1>
+								<p class="text-caption">
+									<em id="authorLine">By <?php //***TODO: uncomment when Content model is built*** echo $this->Content->author($wiki, ['schema' => false, 'local_anchor' => true]); ?></em>
+									<?php //***TODO: uncomment when wiki is built*** if (!empty($wiki['Reviewer'])) : ?>
+										<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
+											<?php 
+												/***TODO: uncomment wiki is built*** $reviewer = $wiki['Reviewer'][0]['first_name'] . ' ' . $wiki['Reviewer'][0]['last_name'] . '</a>';
+												$shortBio = '';
+												if (!empty($wiki['Reviewer'][0]['degrees'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['degrees'];
+												}
+												if (!empty($wiki['Reviewer'][0]['title_dept_company'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['title_dept_company'];
+												}
+												if (!empty($wiki['Reviewer'][0]['company'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['company'];
+												}
+												if (!empty($wiki['Reviewer'][0]['short_bio'])) {
+													$shortBio = $wiki['Reviewer'][0]['short_bio'];
+												}
+												echo '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="' . $shortBio . '">' . $reviewer; */?>
 									<?php //endif; ?>
-									<h1><?= $wiki->title_h1 ?></h1>
-									<p class="text-caption">
-										<em id="authorLine">By <?php //***TODO: uncomment when Content model is built*** echo $this->Content->author($wiki, ['schema' => false, 'local_anchor' => true]); ?></em>
-										<?php //***TODO: uncomment when wiki is built*** if (!empty($wiki['Reviewer'])) : ?>
-											<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
-												<?php 
-													/***TODO: uncomment wiki is built*** $reviewer = $wiki['Reviewer'][0]['first_name'] . ' ' . $wiki['Reviewer'][0]['last_name'] . '</a>';
-													$shortBio = '';
-													if (!empty($wiki['Reviewer'][0]['degrees'])) {
-														$reviewer .= ', ' . $wiki['Reviewer'][0]['degrees'];
-													}
-													if (!empty($wiki['Reviewer'][0]['title_dept_company'])) {
-														$reviewer .= ', ' . $wiki['Reviewer'][0]['title_dept_company'];
-													}
-													if (!empty($wiki['Reviewer'][0]['company'])) {
-														$reviewer .= ', ' . $wiki['Reviewer'][0]['company'];
-													}
-													if (!empty($wiki['Reviewer'][0]['short_bio'])) {
-														$shortBio = $wiki['Reviewer'][0]['short_bio'];
-													}
-													echo '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="' . $shortBio . '">' . $reviewer; */?>
-										<?php //endif; ?>
-										<br />Last updated on:
-										<span><?php //***TODO: uncomment when Time is built*** echo $this->Time->format('F jS, Y', $wiki['Wiki']['last_modified']); ?></span>
-									</p>
-									<p class="lead">
-										<?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('short'); ?>
-									</p>
-									</div>
+									<br />Last updated on:
+									<span><?php //***TODO: uncomment when Time is built*** echo $this->Time->format('F jS, Y', $wiki['Wiki']['last_modified']); ?></span>
+								</p>
+								<p class="lead">
+									<?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('short'); ?>
+								</p>
 								</div>
 							</div>
-		
+						</div>
 					</header>
-							<div class="col-md-9 col-lg-9 float-start">
-								<div class="panel pt0">
-									<div class="panel-section expanded">
-										<div class="row pt0 pb0">
-											<div class="col-lg-12">
-												<div id="wiki-body">
-													<p><?= $wiki->body ?></p>
-												</div>
-											</div>
-										</div>
+							<div class="col-md-9 col-lg-9 pl10 pr10 float-start">
+								<div class="panel panel-section expanded">
+									<div id="wiki-body" class="col-lg-12 pr0 pl0">
+										<p><?= $wiki->body ?></p>
 									</div>
 									<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
 								</div>
@@ -189,18 +179,16 @@ echo $wikiSchema;
 								<section class="panel panel-light help-menu">
 								<header class="panel-heading text-center">Help menu</header>
 									<div class="panel-section condensed">
-										<div class="row pt0 pb0">
-											<div class="col-lg-12">
-												<?php
-												//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
-													//'params' => [
-													//	'navigation' => $navigation,
-													//	'slug' => $wiki['Wiki']['slug'],
-													//	'align' => 'text-left'
-													//]
-												//]);
-												?>
-											</div>
+										<div class="col-lg-12">
+											<?php
+											//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
+												//'params' => [
+												//	'navigation' => $navigation,
+												//	'slug' => $wiki['Wiki']['slug'],
+												//	'align' => 'text-left'
+												//]
+											//]);
+											?>
 										</div>
 									</div>
 								</section>
@@ -221,18 +209,16 @@ echo $wikiSchema;
 									<header class="panel-heading text-center">
 										<h4>Related content</h4>
 									</header>
-									<div class="row">
-										<div class="col-lg-12">
-											<table class="table table-bordered" style="margin-bottom: 0;">
-												<?php foreach ($contents as $content): ?>
-													<tr>
-														<td>
-															<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
-														</td>
-													</tr>
-												<?php endforeach; ?>
-											</table>
-										</div>
+									<div class="col-lg-12">
+										<table class="table table-bordered" style="margin-bottom: 0;">
+											<?php foreach ($contents as $content): ?>
+												<tr>
+													<td>
+														<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
+													</td>
+												</tr>
+											<?php endforeach; ?>
+										</table>
 									</div>
 								</section>
 								<?php endif; ?>
@@ -243,16 +229,14 @@ echo $wikiSchema;
 
 										<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
 											<div class="panel-section condensed blog-preview">
-												<div class="row pt0 pb0">
-													<div class="col-md-3">
-														<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
-															//'large' => false
-														//]); ?>
-													</div>
-													<div class="col-md-9">
-														<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
-														<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
-													</div>
+												<div class="col-md-3">
+													<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
+														//'large' => false
+													//]); ?>
+												</div>
+												<div class="col-md-9">
+													<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
+													<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
 												</div>
 											</div>
 										<?php //endforeach; ?>
