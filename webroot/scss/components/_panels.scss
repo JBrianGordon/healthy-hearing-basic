@@ -1,5 +1,11 @@
+.float-start.col-lg-9 {
+	padding-left: 8px;
+	padding-right: 12px;
+}
+	
 .panel {
   border: 0;
+  border-radius: 2px;
   box-shadow:0 1px 3px rgba(0, 0, 0, 0.22);
   margin-bottom: 30px;
   overflow: hidden;
@@ -114,10 +120,7 @@
   }
 }
 
-.panel-body {
-  padding: 0;
-  
-    &.panel-disabled {
+    .panel-disabled {
 	    opacity: 0.5;
 	    pointer-events: none;
     }
@@ -150,7 +153,7 @@
 	}
 
   @media only screen and (min-width: $screen-md-min) {
-    &.row {
+    .row {
       padding: 60px 0;
 
       > .panel-section {
@@ -159,7 +162,7 @@
     }
   }
 
-  & > .panel-section {
+  .panel-section {
     padding: 30px 15px;
     
 	.slogan {
@@ -581,7 +584,6 @@
     }
     
   }
-}
 
 #clinicPhotos .photo-button {
 	margin : 20px auto;

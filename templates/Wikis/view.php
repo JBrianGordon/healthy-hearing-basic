@@ -109,179 +109,143 @@ echo $wikiSchema;
 */
 ?>
 <div class="container-fluid site-body content-body secondary">
-	<div class="row">
+	<div class="row pt0 pb0">
 		<a name="top"></a>
 		<span style="display:none;" id="wiki-id"><?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('id'); ?></span>
 		<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
-		<div class="container">
-			<article class="row">
-				<div class="backdrop-container noprint">
-					<div class="backdrop backdrop-gradient backdrop-height"></div>
+		<article class="container">
+			<div class="backdrop-container noprint">
+				<div class="backdrop backdrop-gradient backdrop-height"></div>
+			</div>
+			<div class="print-wrapper">
+				<div class="print-head">
+					<img src="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('logo'); ?>" alt="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
+					<p class="print-link"><?php //***TODO: uncomment when Configure is built*** echo "www.".Configure::read('siteUrl'); ?></p>
 				</div>
-				<table class="print-wrapper">
-					<thead class="print-head">
-						<tr>
-							<td>
-								<img src="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('logo'); ?>" alt="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
-								<p class="print-link"><?php //***TODO: uncomment when Configure is built*** echo "www.".Configure::read('siteUrl'); ?></p>
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<header class="col-md-12 inverse">
-									<div>
-										<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
+					<header class="col-md-12 inverse">
+						<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
+						<div class="row header-content pt0 pb0">
+							<div class="col-md-8">
+								<?php //***TODO: uncomment when isadmin is built*** if ($isadmin): ?>
+									<?php //***TODO: uncomment when Wiki model is built*** echo $this->Html->link('Edit', ['admin' => true, 'controller' => 'wikis', 'action' => 'edit', $this->Wiki->get('id')], ['class' => 'btn btn-primary pull-right']); ?>
+								<?php //endif; ?>
+								<h1><?= $wiki->title_h1 ?></h1>
+								<p class="text-caption">
+									<em id="authorLine">By <?php //***TODO: uncomment when Content model is built*** echo $this->Content->author($wiki, ['schema' => false, 'local_anchor' => true]); ?></em>
+									<?php //***TODO: uncomment when wiki is built*** if (!empty($wiki['Reviewer'])) : ?>
+										<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
+											<?php 
+												/***TODO: uncomment wiki is built*** $reviewer = $wiki['Reviewer'][0]['first_name'] . ' ' . $wiki['Reviewer'][0]['last_name'] . '</a>';
+												$shortBio = '';
+												if (!empty($wiki['Reviewer'][0]['degrees'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['degrees'];
+												}
+												if (!empty($wiki['Reviewer'][0]['title_dept_company'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['title_dept_company'];
+												}
+												if (!empty($wiki['Reviewer'][0]['company'])) {
+													$reviewer .= ', ' . $wiki['Reviewer'][0]['company'];
+												}
+												if (!empty($wiki['Reviewer'][0]['short_bio'])) {
+													$shortBio = $wiki['Reviewer'][0]['short_bio'];
+												}
+												echo '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="' . $shortBio . '">' . $reviewer; */?>
+									<?php //endif; ?>
+									<br />Last updated on:
+									<span><?php //***TODO: uncomment when Time is built*** echo $this->Time->format('F jS, Y', $wiki['Wiki']['last_modified']); ?></span>
+								</p>
+								<p class="lead">
+									<?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('short'); ?>
+								</p>
+								</div>
+							</div>
+						</div>
+					</header>
+							<div class="col-md-9 col-lg-9 float-start">
+								<div class="panel panel-section expanded">
+									<div id="wiki-body" class="col-lg-12 pr0 pl0">
+										<?= $wiki->body ?>
 									</div>
-										<div class="row header-content">
-											<div class="col-md-8">
-												<div>
-												<?php //***TODO: uncomment when isadmin is built*** if ($isadmin): ?>
-													<?php //***TODO: uncomment when Wiki model is built*** echo $this->Html->link('Edit', ['admin' => true, 'controller' => 'wikis', 'action' => 'edit', $this->Wiki->get('id')], ['class' => 'btn btn-primary pull-right']); ?>
-												<?php //endif; ?>
-												<h1><?= $wiki->title_h1 ?></h1>
-												<p class="text-caption">
-													<em id="authorLine">By <?php //***TODO: uncomment when Content model is built*** echo $this->Content->author($wiki, ['schema' => false, 'local_anchor' => true]); ?></em>
-													<?php //***TODO: uncomment when wiki is built*** if (!empty($wiki['Reviewer'])) : ?>
-														<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
-															<?php 
-																/***TODO: uncomment wiki is built*** $reviewer = $wiki['Reviewer'][0]['first_name'] . ' ' . $wiki['Reviewer'][0]['last_name'] . '</a>';
-																$shortBio = '';
-																if (!empty($wiki['Reviewer'][0]['degrees'])) {
-																	$reviewer .= ', ' . $wiki['Reviewer'][0]['degrees'];
-																}
-																if (!empty($wiki['Reviewer'][0]['title_dept_company'])) {
-																	$reviewer .= ', ' . $wiki['Reviewer'][0]['title_dept_company'];
-																}
-																if (!empty($wiki['Reviewer'][0]['company'])) {
-																	$reviewer .= ', ' . $wiki['Reviewer'][0]['company'];
-																}
-																if (!empty($wiki['Reviewer'][0]['short_bio'])) {
-																	$shortBio = $wiki['Reviewer'][0]['short_bio'];
-																}
-																echo '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="' . $shortBio . '">' . $reviewer; */?>
-													<?php //endif; ?>
-													<br />Last updated on:
-													<span><?php //***TODO: uncomment when Time is built*** echo $this->Time->format('F jS, Y', $wiki['Wiki']['last_modified']); ?></span>
-												</p>
-												<p class="lead">
-													<?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('short'); ?>
-												</p>
+									<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
+								</div>
+							</div>
+							<!-- ***TODO: Side panel should be it's own element*** -->
+							<div class="col-md-3 col-lg-3 float-end noprint pl20 pr10">
+								<!-- Right content -->
+								<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
+									<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
+								<?php //endif; ?>
+								<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
+								<section class="panel panel-light help-menu">
+								<header class="panel-heading text-center">Help menu</header>
+									<div class="panel-section condensed">
+										<div class="col-lg-12">
+											<?php
+											//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
+												//'params' => [
+												//	'navigation' => $navigation,
+												//	'slug' => $wiki['Wiki']['slug'],
+												//	'align' => 'text-left'
+												//]
+											//]);
+											?>
+										</div>
+									</div>
+								</section>
+								<?php //***TODO: uncomment when locations/preferred element added***if(!$this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
+								<section class="panel panel-secondary">
+									<header class="panel-heading text-center">
+										<h4>Find a clinic</h4>
+									</header>
+									<div class="panel-body pt20 pl20 pr20">
+										<?php //***TODO: uncomment when locations/preferred element added***echo $this->element('locations/search', array(
+											//'label' => 'Enter city'
+										//)); ?>
+										<?php //***TODO: uncomment when locations/preferred element added*** echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
+									</div>
+								</section>
+								<?php if (!empty($contents)): ?>
+								<section class="panel panel-light related-reports">
+									<header class="panel-heading text-center">
+										<h4>Related content</h4>
+									</header>
+									<div class="col-lg-12">
+										<table class="table table-bordered" style="margin-bottom: 0;">
+											<?php foreach ($contents as $content): ?>
+												<tr>
+													<td>
+														<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
+													</td>
+												</tr>
+											<?php endforeach; ?>
+										</table>
+									</div>
+								</section>
+								<?php endif; ?>
+								<section class="panel panel-light blog-previews hidden">
+									<header class="panel-heading text-center">
+										<h4>The Healthy Hearing Report</h4>
+									</header>
+
+										<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
+											<div class="panel-section condensed blog-preview">
+												<div class="col-md-3">
+													<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
+														//'large' => false
+													//]); ?>
+												</div>
+												<div class="col-md-9">
+													<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
+													<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
 												</div>
 											</div>
-										</div>
-					
-								</header>
-										<div class="col-md-9 col-lg-9 float-start">
-											<div class="panel">
-												<div class="panel-body">
-													<div class="panel-section expanded">
-														<div class="row">
-															<div class="col-lg-12">
-																<div id="wiki-body">
-																	<p><?= $wiki->body ?></p>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
-											</div>
-										</div>
-										<!-- ***TODO: Side panel should be it's own element*** -->
-										<div class="col-md-3 col-lg-3 float-end noprint">
-											<!-- Right content -->
-											<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
-												<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
-											<?php //endif; ?>
-											<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
-											<section class="panel panel-light help-menu">
-												<header class="panel-heading text-center">Help menu</header>
-												<div class="panel-body">
-													<div class="panel-section condensed">
-														<div class="row">
-															<div class="col-lg-12">
-																<?php
-																//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
-																	//'params' => [
-																	//	'navigation' => $navigation,
-																	//	'slug' => $wiki['Wiki']['slug'],
-																	//	'align' => 'text-left'
-																	//]
-																//]);
-																?>
-															</div>
-														</div>
-													</div>
-												</div>
-											</section>
-											<?php //***TODO: uncomment when locations/preferred element added***if(!$this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
-											<section class="panel panel-secondary">
-												<header class="panel-heading text-center">
-													<h4>Find a clinic</h4>
-												</header>
-												<div class="panel-body pt20 pl20 pr20">
-													<?php //***TODO: uncomment when locations/preferred element added***echo $this->element('locations/search', array(
-														//'label' => 'Enter city'
-													//)); ?>
-													<?php //***TODO: uncomment when locations/preferred element added*** echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
-												</div>
-											</section>
-											<?php if (!empty($contents)): ?>
-											<section class="panel panel-light related-reports">
-												<header class="panel-heading text-center">
-													<h4>Related content</h4>
-												</header>
-												<div class="panel-body">
-													<div class="row">
-														<div class="col-lg-12">
-															<table class="table table-bordered" style="margin-bottom: 0;">
-																<?php foreach ($contents as $content): ?>
-																	<tr>
-																		<td>
-																			<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
-																		</td>
-																	</tr>
-																<?php endforeach; ?>
-															</table>
-														</div>
-													</div>
-												</div>
-											</section>
-											<?php endif; ?>
-											<section class="panel panel-light blog-previews hidden">
-												<header class="panel-heading text-center">
-													<h4>The Healthy Hearing Report</h4>
-												</header>
-												<div class="panel-body">
-													<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
-														<div class="panel-section condensed blog-preview">
-															<div class="row">
-																<div class="col-md-3">
-																	<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
-																		//'large' => false
-																	//]); ?>
-																</div>
-																<div class="col-md-9">
-																	<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
-																	<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
-																</div>
-															</div>
-														</div>
-													<?php //endforeach; ?>
-												</div>
-											</section>
-											<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
-												<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
-											<?php //endif; ?>
-										</div>
-	
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</article>
-		</div>
+										<?php //endforeach; ?>
+
+								</section>
+								<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
+									<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
+								<?php //endif; ?>
+							</div>
+		</article>
 	</div>
 </div>       
