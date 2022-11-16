@@ -25,7 +25,7 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 	$this->end();
 }*/
 ?>
-<div class="container-fluid site-body fap-cities">
+<div class="container-fluid site-body blog">
 	<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
@@ -48,48 +48,39 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 							--->
 								<div class="blog-post">
 									<div class="p10">
-										<!--- *** TODO: uncomment when contenthelper built out ***
-										<span class="subtitle text-light mobile"><?php //echo $this->Content->getType(); ?></span>
-										--->
-										<h3 class="blog-title mobile"><?= $this->Html->link($report->title, $report->hh_url) ?></h3>
-										<p class="text-caption blog-byline mobile"><?= $report->modified ?></p>
+										<span class="subtitle text-light mobile"><?= $report->type; ?></span>
+										<h3 class="blog-title mobile"><?= $this->Html->link($report->title, $report->hh_url, $options = ['class' => 'text-link']) ?></h3>
+										<p class="text-caption blog-byline mobile"><?= date_format($report->modified, 'F j, Y') ?></p>
 										<!--- *** TODO: uncomment when contenthelper built out ***
 										<p class="blog-image"><?php //echo $this->Content->image($report); ?></p>
-										<p class="blog-intro mobile" style="clear: both"><?php //echo $this->Content->get('short'); ?></p>
 										--->
+										<p class="blog-intro mobile" style="clear: both"><?= $report->short; ?></p>
 									</div>
 									<div class="p10 right-content">
-										<!--- *** TODO: uncomment when contenthelper built out ***
-										<span class="subtitle text-light"><?php //echo $this->Content->getType(); ?></span>
-										--->
-										<h3 class="blog-title"><?= $this->Html->link($report->title, $report->hh_url) ?></h3>
-										<p class="text-caption blog-byline"><?= $report->modified ?></p>
-										<!--- *** TODO: uncomment when contenthelper built out ***
-										<p class="blog-intro" style="clear: both"><?php //echo $this->Content->get('short'); ?></p>
-										--->
+										<span class="subtitle text-light"><?= $report->type; ?></span>
+										<h3 class="blog-title"><?= $this->Html->link($report->title, $report->hh_url, $options = ['class' => 'text-link']) ?></h3>
+										<p class="text-caption blog-byline"><?= date_format($report->modified, 'F j, Y') ?></p>
+										<p class="blog-intro" style="clear: both"><?= $report->short; ?></p>
 									</div>
 								</div>
-							<?php endforeach; ?>
-							<?php foreach ($reports as $report): ?>
-							<div>
-							    <div>
-							        <?= $this->Html->link($report->title, $report->hh_url) ?>
-							    </div>
-							    <div>
-							        <?= $report->modified ?>
-							    </div>
-							</div>
 							<?php endforeach; ?>
 						</div>
 					</div>
 					<footer class="panel-section expanded blog-pagination">
-						<?php
-						echo $this->element('pagination',[
-							'options' => [
-								'url' => $pageUrl,
-								'escape' => false
-							]
-						]); ?>
+						<ul class="pagination">
+						    <?=
+						        $this->Paginator->options([
+						            'url' => $pageUrl,
+						            'escape' => false
+						        ]);
+						    ?>
+						    <?= $this->Paginator->first("« First"); ?>
+						    <?= $this->Paginator->prev("« Previous"); ?>
+						    <?= $this->Paginator->numbers(['modulus' => 6]); ?>
+						    <?= $this->Paginator->next("Next »"); ?>
+						    <?= $this->Paginator->last("Last »"); ?>
+						</ul>
+						<p class="text-primary text-small text-uppercase"><strong><?= $this->Paginator->counter(__('Page {{page}} of {{pages}} - {{count}} results')) ?></strong></p>
 					</footer>
 				</div>
 			</section>
@@ -100,17 +91,17 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 	      <!--- *** TODO: uncomment when render_ad works *** -->
 	        <?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
 	      <?php //endif; ?>
-	      <?php if ($this->request->controller != 'quiz_results'): ?>
+	      <?php //if ($this->request->controller != 'quiz_results'): ?>
 	      	<!--- *** TODO: uncomment when locations/preferred built *** -->
 	      	<?php //echo $this->element('locations/preferred'); ?>
-	      <?php endif; ?>
+	      <?php //endif; ?>
 	      <!--- *** TODO: uncomment when Configure works *** -->
           <?php //if (Configure::read('showHearingTest') && ($this->request->controller != 'quiz_results')): ?>
           <section class="panel" style="clear:both">
             <a href="/help/online-hearing-test">
 	            <!--- *** TODO: uncomment when Content Helper built *** -->
 	          <?php //if($this->Content->isMobileDevice()): ?>
-              	<img src="/img/hh-hearing-check.svg" width="262" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
+              	<!---<img src="/img/hh-hearing-check.svg" width="262" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive"> --->
               <?php //else: ?>
               	<img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" class="img-responsive">
               <?php //endif; ?>
@@ -127,14 +118,15 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
               <h4>Find a clinic</h4>
             </header>
             <div class="panel-body pt20 pl20 pr20 pb20">
-	          <!--- *** TODO: uncomment when lcoations/search is built *** -->
+	          <!--- *** TODO: uncomment when locations/search is built *** -->
               <?php //echo $this->element('locations/search', array('label' => 'Enter city')); ?>
               <?php //echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
             </div>
           </section>
-	      <?php if ($this->request->controller == 'quiz_results'): ?>
-	      	<?php echo $this->element('locations/preferred'); ?>
-	      <?php endif; ?>
+          <!--- *** TODO: uncomment when request controller is built *** -->
+	      <?php //if ($this->request->controller == 'quiz_results'): ?>
+	      	<?php //echo $this->element('locations/preferred'); ?>
+	      <?php //endif; ?>
 	      <!--- *** TODO: uncomment when Configure works *** -->
           <?php //if (Configure::read('showReports') && ($this->request->controller != 'quiz_results') && ($_SERVER['REQUEST_URI'] != '/report')): ?>
           <section class="panel panel-light blog-previews">
@@ -164,20 +156,5 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
           </section>
           <?php //endif; ?>
         </div>
-		<ul class="pagination">
-		    <?=
-		        $this->Paginator->options([
-		            'url' => [
-		                'controller' => 'content',
-		                'action' => 'report_index'
-		            ]
-		        ]);
-		    ?>
-		    <?= $this->Paginator->first("FIRST"); ?>
-		    <?= $this->Paginator->prev(); ?>
-		    <?= $this->Paginator->numbers(['modulus' => 2]); ?>
-		    <?= $this->Paginator->next(">>"); ?>
-		    <?= $this->Paginator->last("LAST"); ?>
-		</ul>
 	</div>
 </div>
