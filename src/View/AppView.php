@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace App\View;
 
 use BootstrapUI\View\UIView;
+use Cake\Core\Configure;
 
 /**
  * Application View
