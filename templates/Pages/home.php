@@ -1,4 +1,6 @@
-<?php $this->Html->script('dist/common.min', ['block' => true]); ?>
+<?php $this->Html->script('dist/common.min', ['block' => true]);
+	use Cake\Core\Configure;
+?>
 <div class="container-fluid site-body home">
 	<div class="row pt0">
 		<div class="backdrop-container">
@@ -25,8 +27,8 @@
 		          <a href="/help/hearing-aids" class="btn btn-default btn-lg">Learn About Hearing Aids</a>
 		        </p>
 		      </section>
-		      <?php //***TODO: uncomment when configuration class built*** if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$this->App->isMobileDevice()): ?>
-		      	<!--<div class="hearing-test">
+		      <?php if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$this->App->isMobileDevice()): ?>
+		      	<div class="hearing-test">
 			        <br>
 			        <h3>Online hearing test</h3>
 			        <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
@@ -34,8 +36,8 @@
 			        <p>
 			          <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
 			        </p>
-		        </div>-->
-		      <?php //endif; ?>
+		        </div>
+		      <?php endif; ?>
 		    </div>
 		    <div class="col-md-5 col-lg-offset-1 over-backdrop right-desktop">
 		      <div class="panel panel-secondary">
@@ -44,6 +46,7 @@
 		        </header>
 		        <div class="panel-body">
 		          <div class="panel-section text-center">
+			          <!--***TODO: uncomment when locations/search built*** -->
 		              <?php /*echo $this->element('locations/search', array(
 		                'label' => 'City, '.$stateLabel.' or '.$zipShort,
 		                'form_id' => 'homeform2',
@@ -57,11 +60,11 @@
 		            </p>
 		          </div>
 		          <div class="panel-section hidden-xs">
-		            <?php //***TODO: uncomment when configuration class built*** if (Configure::read('country') == 'US'): ?>
+		            <?php if (Configure::read('country') == 'US'): ?>
 		              <div data-hh-map></div>
-		            <?php //else: ?>
-		              <!--<object data="<?php //***TODO: uncomment when configuration class built*** Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>-->
-		            <?php //endif; ?>
+		            <?php else: ?>
+		              <object data="<?php Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>-->
+		            <?php endif; ?>
 		            <p class="text-center">
 		              <button class="btn btn-secondary hidden-sm" data-toggle="modal" data-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
 		            </p>
@@ -74,7 +77,7 @@
 							<?php endif; ?>
 		        </div>
 		      </div>
-		      <?php //***TODO: uncomment when configuration class built*** if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $this->App->isMobileDevice()): ?>
+		      <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $this->App->isMobileDevice()): ?>
 		      	<div class="hearing-test">
 			        <br>
 			        <h3>Online hearing test</h3>
@@ -84,15 +87,16 @@
 			          <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
 			        </p>
 		        </div>
-		      <?php //endif; ?>
+		      <?php endif; ?>
 		    </div>
-		    <?php //***TODO: uncomment when configuration class built*** if (Configure::read('showReports')): ?>
+		    <?php if (Configure::read('showReports')): ?>
 		      <div class="col-md-7 col-lg-6 mobile-clear">
 		        <div class="panel panel-light">
+			      <!--***TODO: uncomment when content/latest built*** -->
 		          <?php //echo $this->element('content/latest'); ?>
 		        </div>
 		      </div>
-		    <?php //endif; ?>
+		    <?php endif; ?>
 		  </div>
 		</div>
 		<?php $this->append('bs-modals'); ?>
@@ -105,11 +109,11 @@
 		      </div>
 		      <div class="modal-body">
 		        <center>
-		          <?php //***TODO: uncomment when configuration class built*** if (Configure::read('country') == 'US'): ?>
+		          <?php if (Configure::read('country') == 'US'): ?>
 		            <div data-hh-map></div>
-		          <?php //else: ?>
-		            <object data="<?php //***TODO: uncomment when configuration class built*** echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
-		          <?php //endif; ?>
+		          <?php else: ?>
+		            <object data="<?php echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
+		          <?php endif; ?>
 		        </center>
 		      </div>
 		    </div>
