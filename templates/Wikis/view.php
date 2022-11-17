@@ -6,6 +6,8 @@
  
 $this->Html->script('dist/wiki.min', ['block' => true]);
 
+use Cake\Core\Configure;
+
 //***TODO: uncomment when Wiki model is built
 /*$this->Wiki->set($wiki);
 $parts = explode("/", $wiki['Wiki']['slug']);
@@ -119,8 +121,8 @@ echo $wikiSchema;
 			</div>
 			<div class="print-wrapper">
 				<div class="print-head">
-					<img src="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('logo'); ?>" alt="<?php //***TODO: uncomment when Configure is built*** echo Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
-					<p class="print-link"><?php //***TODO: uncomment when Configure is built*** echo "www.".Configure::read('siteUrl'); ?></p>
+					<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
+					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
 					<header class="col-md-12 inverse">
 						<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>

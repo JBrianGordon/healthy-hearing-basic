@@ -5,6 +5,8 @@
  */
  
 $this->Html->script('dist/wiki.min', ['block' => true]);
+
+use Cake\Core\Configure;
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="backdrop-container">
@@ -34,12 +36,12 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
 					<div class="p20 headline">
-						<h1 class="text-primary"><?php //*** uncomment when Configure is built out, hard coding Healthy Hearing for now *** echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?>Healthy Hearing Help</h1>
+						<h1 class="text-primary"><?php echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?> Help</h1>
 						<p class="lead text-primary"><em>
 							Welcome to our library of original reference materials to help you learn more about hearing health and hearing aids.
-							<?php //*** uncomment when Configure is built out *** if(Configure::read('country') != 'CA'): ?>
+							<?php if(Configure::read('country') != 'CA'): ?>
 								<br><br>Check out the <a href="/report">Healthy Hearing Report</a> for additional news, articles and interviews about hearing health.
-							<?php //endif; ?>
+							<?php endif; ?>
 						</em></p>
 					</div>
 					
@@ -51,11 +53,12 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 									<?php //*** uncomment when Wiki is built out *** echo $this->Wiki->getNavText($nav['parent']); ?>
 								</li>
 							<?php endforeach; ?>
-							<?php //*** uncomment when Configure is built out *** if (Configure::read('showManufacturers')): ?>
-								<!--<li class="parent">
+							<?php if (Configure::read('showManufacturers')): ?>
+								<li class="parent">
+									<!--*** TODO: uncomment when Wiki is built out ***-->
 									<?php //echo $this->Wiki->getNavManufText(); ?>
-								</li>-->
-							<?php //endif; ?>
+								</li>
+							<?php endif; ?>
 						</ul>
 					</div>
 				</section>
