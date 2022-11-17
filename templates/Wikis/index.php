@@ -60,62 +60,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 				</section>
 			</div>
-			<!-- ***TODO: Side panel should be it's own element*** -->
-			<div class="col-md-3 col-lg-3 float-end noprint pl20 pr10">
-				<!-- Right content -->
-				<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
-					<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
-				<?php //endif; ?>
-				<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
-				<?php if (!empty($contents)): ?>
-				<section class="panel panel-light related-reports">
-					<header class="panel-heading text-center">
-						<h4>Related content</h4>
-					</header>
-					<div class="col-lg-12">
-						<table class="table table-bordered" style="margin-bottom: 0;">
-							<?php foreach ($contents as $content): ?>
-								<tr>
-									<td>
-										<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
-									</td>
-								</tr>
-							<?php endforeach; ?>
-						</table>
-					</div>
-				</section>
-				<?php endif; ?>
-				<section class="panel panel-light blog-previews hidden">
-					<header class="panel-heading text-center">
-						<h4>The Healthy Hearing Report</h4>
-					</header>
-					<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
-						<div class="panel-section condensed blog-preview">
-							<div class="col-md-3">
-								<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
-									//'large' => false
-								//]); ?>
-							</div>
-							<div class="col-md-9">
-								<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
-								<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
-							</div>
-						</div>
-					<?php //endforeach; ?>
-				</section>
-				<section class="panel panel-secondary">
-					<header class="panel-heading text-center">
-						<h4>Find a clinic</h4>
-					</header>
-					<div class="panel-body pt20 pl20 pr20">
-						<?php //***TODO: uncomment when locations/preferred element added***echo $this->element('locations/search', array(
-							//'label' => 'Enter city'
-						//)); ?>
-						<?php //***TODO: uncomment when locations/preferred element added*** echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
-					</div>
-				</section>
-			</div>
-
+			<?= $this->element('side_panel') ?>
 	</div>
 </div>
 <!-- *** Leaving this commented for now for future reference ***
