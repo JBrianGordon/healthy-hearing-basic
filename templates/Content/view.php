@@ -146,7 +146,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 									<?php endif; ?>
 									<p class="blog-byline text-caption">
 										<?php //*** TODO: uncomment when Content is built out ***if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'local_anchor' => true, 'dateNewLine' => true])): ?>
-											<em>Contributed by <?= $content->primary_author->first_name . ' ' . $content->primary_author->last_name . ', ' . $content->primary_author->title_dept_company . ', ' . $content->primary_author->company ?></em><br>
+											<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
 										<?php //else: ?>
 											<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
 										<?php //endif; ?>
@@ -154,7 +154,12 @@ $this->Html->script('dist/content.min', ['block' => true]);
 									<div id="content_body" class="content-body">
 										<?= $content->body ?>
 									</div>
-									<?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?>
+									<div class="about-author">
+										<div class="about-author-bio">
+											<?= $this->Editorial->getAuthorsBio($content->primary_author, $content->contributors) ?>
+											<div class="clearfix"></div>
+										</div>
+									</div>
 									<div class="blog-categories noprint mt30">
 										<?php //*** TODO: uncomment when related_help_pages is built out ***echo $this->element('content/related_help_pages'); ?>
 									</div>
@@ -164,9 +169,8 @@ $this->Html->script('dist/content.min', ['block' => true]);
 						<?php //*** TODO: uncomment when content/share is built out ***echo $this->element('content/share'); ?>
 						
 					</article>
-				</div>
 				<?= $this->element('side_panel') ?>
-			</span>
+				</div>
 		</div>
 	</div>
   </div>
