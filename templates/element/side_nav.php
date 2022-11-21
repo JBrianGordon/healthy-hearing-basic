@@ -1,4 +1,6 @@
 <?php
+use Cake\Core\Configure;
+	
 $isCqPremier = $listing_type = $featureContentLibrary = $showLibraryLink = false;
 if (!empty($user['location_id'])) {
 	$this->Clinic->setLocation($user['location_id']);
@@ -7,9 +9,9 @@ if (!empty($user['location_id'])) {
 	$featureContentLibrary = $this->Clinic->get('feature_content_library');
 }
 //***TODO: uncomment when roles added*** $showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isadmin;
-//***TODO: uncomment when Configure added*** if (!Configure::read('showSocialMediaContentLibrary')) {
-	//$showLibraryLink = false;
-//}
+if (!Configure::read('showSocialMediaContentLibrary')) {
+	$showLibraryLink = false;
+}
 ?>
 <div data-hh-side-nav>
 	<div class="row noprint">
@@ -31,10 +33,10 @@ if (!empty($user['location_id'])) {
 					<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing loss</a>
 					<ul class="dropdown-menu">
 						<li><a tabindex="-1" href="/help/hearing-loss">Hearing loss overview</a></li>
-						<?php //***TODO: uncomment when Configure added*** if(Configure::read('country') == 'US'): ?>
+						<?php if(Configure::read('country') == 'US'): ?>
 							<li><a tabindex="-1" href="/help/hearing-loss/symptoms">Symptoms</a></li>
 							<li><a tabindex="-1" href="/help/hearing-loss/causes">Causes</a></li>
-						<?php //endif; ?>
+						<?php endif; ?>
 						<li><a tabindex="-1" href="/help/hearing-loss/tests">Tests</a></li>
 					</ul>
 				</li>
@@ -42,15 +44,15 @@ if (!empty($user['location_id'])) {
 					<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing aids</a>
 					<ul class="dropdown-menu">
 						<li><a tabindex="-1" href="/help/hearing-aids">Hearing aids overview</a></li>
-						<?php //***TODO: uncomment when Configure added*** if(Configure::read('country') == 'US'): ?>
+						<?php if(Configure::read('country') == 'US'): ?>
 							<li><a tabindex="-1" href="/help/hearing-aids/health-benefits">Health benefits</a></li>
-						<?php //***TODO: uncomment when Configure added*** endif; ?>
+						<?php endif; ?>
 						<li><a tabindex="-1" href="/help/hearing-aids/types">Types & styles</a></li>
 						<li><a tabindex="-1" href="/help/hearing-aids/prices">Prices</a></li>
 						<li><a tabindex="-1" href="/help/hearing-aids/insurance-financial-assistance">Insurance & financial assistance</a></li>
 					</ul>
 				</li>
-				<?php //***TODO: uncomment when Configure added*** if (Configure::read('showTinnitus')): ?>
+				<?php if (Configure::read('showTinnitus')): ?>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Tinnitus</a>
 						<ul class="dropdown-menu">
@@ -60,28 +62,28 @@ if (!empty($user['location_id'])) {
 							<li><a tabindex="-1" href="/help/tinnitus/relief">Relief</a></li>
 						</ul>
 					</li>
-				<?php //***TODO: uncomment when Configure added*** else: ?>
+				<?php else: ?>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Tinnitus</a>
 							<ul class="dropdown-menu">
 								<li><a tabindex="-1" href="/help/hearing-loss/tinnitus-treatment">Diagnosis & treatment</a></li>
 							</ul>
 					</li>
-				<?php //***TODO: uncomment when Configure added*** endif; ?>
-				<li><a href="/help/<?php //***TODO: uncomment when Configure added*** echo Configure::read('country') == 'CA' ? "hearing-aids/" : ""; ?>assistive-listening-devices">Assistive listening devices</a></li>
-				<?php //***TODO: uncomment when Configure added*** if (Configure::read('showReports')): ?>
+				<?php endif; ?>
+				<li><a href="/help/<?= Configure::read('country') == 'CA' ? "hearing-aids/" : ""; ?>assistive-listening-devices">Assistive listening devices</a></li>
+				<?php if (Configure::read('showReports')): ?>
 					<li><a href="/report" tabindex="-1">News</a></li>
-				<?php //***TODO: uncomment when Configure added*** endif; ?>
-				<?php //***TODO: uncomment when Configure added*** if(Configure::read('country') == 'US'): ?>
+				<?php endif; ?>
+				<?php if(Configure::read('country') == 'US'): ?>
 					<li><a href="/newsletter" tabindex="-1">Sign up for our newsletter</a></li>
-				<?php //***TODO: uncomment when Configure added*** endif; ?>
+				<?php endif; ?>
 				<?php //***TODO: uncomment when roles added*** if(!($isadmin && $isitadmin && $isagent && $iscallsupervisor && $iswriter && $iscsa) && $this->layout == 'upgrade') : ?>
 					<li><a href="/clinic/users/login">Login</a></li>
 				<?php //endif; ?>
 				<?php //***TODO: uncomment when roles added*** if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
 					<li><a href="/admin-panel"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>
 				<?php //endif; ?>
-			<?php //***TODO: uncomment when Configure added*** endif; ?>
+			<?php //endif; ?>
 			</ul>
 		</div>
 	</div>
