@@ -3,37 +3,44 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Corp[]|\Cake\Collection\CollectionInterface $corps
  */
+ 
+$this->Html->script('dist/common.min', ['block' => true]);
 ?>
-<h1>Corps</h1>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Created</th>
-    </tr>
-
-    <?php foreach ($corps as $corp): ?>
-    <tr>
-        <td>
-            <?= $this->Html->link($corp->title, $corp->hh_url) ?>
-        </td>
-        <td>
-            <?= $corp->modified ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-    <ul class="pagination">
-        <?=
-            $this->Paginator->options([
-                'url' => [
-                    'controller' => 'corps',
-                    'action' => 'index'
-                ]
-            ]);
-        ?>
-        <?= $this->Paginator->prev(); ?>
-        <?= $this->Paginator->numbers(['modulus' => 2]); ?>
-        <?= $this->Paginator->next(">>"); ?>
-        <?= $this->Paginator->first("FIRST"); ?>
-        <?= $this->Paginator->last("LAST"); ?>
-    </ul>
-</table>
+<div class="container-fluid site-body blog">
+    <div class="backdrop backdrop-gradient backdrop-height"></div>
+    <div class="container">
+      <div class="row page-content">
+		<div class="col-md-9 float-start">
+		  <section class="panel">
+		    <div class="panel-body">
+		      <div class="panel-section expanded">
+		        <h1 class="text-primary">Hearing aid manufacturers</h1>
+		        <!-- ***TODO: uncomment when $pageContent created*** -->
+				<p><?php //echo $pageContent; ?></p>
+		        <?php foreach ($corps as $corp): ?>
+			        <div class="well manufacturer" id="manufacturer-<?= $corp->id ?>">
+			          <div class="row">
+			            <div class="col-md-3 gutter-below">
+				            <div class="logo-container">
+			            		<img src="<?= $corp->thumb_url ?>" loading="lazy" alt="<?= $corp->title ?>" class="img-responsive align-center" width="150px">
+				            </div>
+			            </div>
+			            <div class="col-md-9">
+			              <p>
+			                <?= $corp->short ?>
+			              </p>
+			              <p>
+			              	<a href="hearing-aid-manufacturers/<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
+			              </p>
+			            </div>
+			          </div>
+			        </div>
+		      	<?php endforeach; ?>
+		      </div>
+		    </div>
+		  </section>
+		</div>
+		<?= $this->element('side_panel') ?>
+      </div>
+    </div>
+</div>
