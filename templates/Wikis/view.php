@@ -110,7 +110,7 @@ $wikiSchema .= '}</script>';
 echo $wikiSchema;
 */
 ?>
-<div class="container-fluid site-body content-body secondary">
+<div class="container-fluid site-body content-body secondary p0">
 	<div class="row pt0 pb0">
 		<a name="top"></a>
 		<span style="display:none;" id="wiki-id"><?php //***TODO: uncomment when Wiki model is built*** echo $this->Wiki->get('id'); ?></span>
