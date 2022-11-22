@@ -1,5 +1,5 @@
 <!-- ***TODO: Side panel should be it's own element*** -->
-<div class="col-md-3 col-lg-3 float-end noprint pl20 pr10">
+<div class="col-md-3 float-end noprint">
 	<!-- Right content -->
 	<?php //***TODO: uncomment when Configure added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
 		<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
