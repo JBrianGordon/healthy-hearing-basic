@@ -30,6 +30,7 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
+		<div class="row">
 		<div class="col-md-9 float-start">
 			<?php if(isset($pageContent)) : ?>
 				<section class="panel">
@@ -86,5 +87,6 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 			</section>
 		</div>
 		<?= $this->element('side_panel') ?>
+		</div>
 	</div>
 </div>

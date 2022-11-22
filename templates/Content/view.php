@@ -115,63 +115,65 @@ $this->Html->script('dist/content.min', ['block' => true]);
 <?= $this->element('schema/person', ['author' => $content->primary_author]) ?>
 
 <div class="container-fluid site-body blog">
-  <div class="row">
-	<div class="backdrop backdrop-gradient backdrop-height"></div>
 	<div class="container">
-		<div class="row noprint">
-			<div class="col-sm-9 inverse">
-				<!-- *** TODO: add breadcrumbs when element is built *** -->
-				<div id="ellipses">...</div>
+	  <div class="row">
+		<div class="backdrop backdrop-gradient backdrop-height"></div>
+		<div class="container">
+			<div class="row noprint">
+				<div class="col-sm-9 inverse">
+					<!-- *** TODO: add breadcrumbs when element is built *** -->
+					<div id="ellipses">...</div>
+				</div>
 			</div>
-		</div>
-		<div class="row page-content">
-			<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
-				<div class="col-md-9 float-start" style="min-height:100vh">
-					<article class="panel">
-						<div class="print-wrapper">
-							<div class="print-head">
-								<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
-								<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
-							</div>
-							<div class="panel-body">
-								<div class="panel-section expanded">
-									<?php
-										//if ($isadmin) {
-										    //*** TODO: uncomment when Content is built out ***echo $this->Content->adminLink();
-										//}
-									?>
-									<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>"><?= $content->title ?></h1>
-									<?php if(isset($subtitle)) : ?>
-										<h2 class="text-primary mt0 mb30"><?= $content->subtitle ?></h2>
-									<?php endif; ?>
-									<p class="blog-byline text-caption">
-										<?php //*** TODO: uncomment when Content is built out ***if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'local_anchor' => true, 'dateNewLine' => true])): ?>
-											<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
-										<?php //else: ?>
-											<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
-										<?php //endif; ?>
-									</p>
-									<div id="content_body" class="content-body">
-										<?= $content->body ?>
-									</div>
-									<div class="about-author">
-										<div class="about-author-bio">
-											<?= $this->Editorial->getAuthorsBio($content->primary_author, $content->contributors) ?>
-											<div class="clearfix"></div>
+			<div class="row page-content">
+				<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
+					<div class="col-md-9 float-start" style="min-height:100vh">
+						<article class="panel">
+							<div class="print-wrapper">
+								<div class="print-head">
+									<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
+									<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
+								</div>
+								<div class="panel-body">
+									<div class="panel-section expanded">
+										<?php
+											//if ($isadmin) {
+											    //*** TODO: uncomment when Content is built out ***echo $this->Content->adminLink();
+											//}
+										?>
+										<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>"><?= $content->title ?></h1>
+										<?php if(isset($subtitle)) : ?>
+											<h2 class="text-primary mt0 mb30"><?= $content->subtitle ?></h2>
+										<?php endif; ?>
+										<p class="blog-byline text-caption">
+											<?php //*** TODO: uncomment when Content is built out ***if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'local_anchor' => true, 'dateNewLine' => true])): ?>
+												<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
+											<?php //else: ?>
+												<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
+											<?php //endif; ?>
+										</p>
+										<div id="content_body" class="content-body">
+											<?= $content->body ?>
 										</div>
-									</div>
-									<div class="blog-categories noprint mt30">
-										<?php //*** TODO: uncomment when related_help_pages is built out ***echo $this->element('content/related_help_pages'); ?>
+										<div class="about-author">
+											<div class="about-author-bio">
+												<?= $this->Editorial->getAuthorsBio($content->primary_author, $content->contributors) ?>
+												<div class="clearfix"></div>
+											</div>
+										</div>
+										<div class="blog-categories noprint mt30">
+											<?php //*** TODO: uncomment when related_help_pages is built out ***echo $this->element('content/related_help_pages'); ?>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<?php //*** TODO: uncomment when content/share is built out ***echo $this->element('content/share'); ?>
-						
-					</article>
-				<?= $this->element('side_panel') ?>
-				</div>
+							<?php //*** TODO: uncomment when content/share is built out ***echo $this->element('content/share'); ?>
+							
+						</article>
+					<?= $this->element('side_panel') ?>
+					</div>
+			</div>
 		</div>
+	  </div>
 	</div>
-  </div>
 </div>
