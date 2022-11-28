@@ -77,27 +77,11 @@ summary {
 	display: revert;
 	cursor: pointer;
 }
-table {
-	&.print-wrapper {
-		display: block;
-		
-		thead {
-			&.print-head{
-				display: none;
-			} 
-		}
-		
-		> tbody {
-			display: block;
-			
-			> tr {
-				display: block;
-					
-				> td {
-					display: block;
-				}
-			}
-		}
+.print-wrapper {
+	display: block;
+	
+	.print-head{
+			display: none;
 	}
 }
 
@@ -130,27 +114,10 @@ table {
     .wistia_responsive_padding {
 	    padding: 0!important
 	}
-	table {
-		&.print-wrapper {
-			display: table;
-			
-			thead {
-				&.print-head{
-					display: table-header-group;
-				} 
-			}
-			
-			> tbody {
-				display: table-row-group;
-				
-				> tr {
-					display: table-row;
-					
-					> td {
-						display: table-cell;
-					}
-				}
-			}
+	.print-wrapper {
+			//display: table;
+		.print-head {
+			display: block;
 		}
 	}
 	
@@ -226,22 +193,14 @@ table {
 				width: 100vw;
 			}
 			
-			table {
-				&.print-wrapper {
-					display: block;
-					
-					thead {
-						&.print-head{
-							display: block;
-							position: fixed;
-							top:0;
-							left:40vw
-						}
-					}
-					> tbody{
+			.print-wrapper {
+				display: block;
+				
+				.print-head{
 						display: block;
-						margin-top:0.5in;
-					}
+						position: fixed;
+						top:0;
+						left:40vw
 				}
 			}
 		}

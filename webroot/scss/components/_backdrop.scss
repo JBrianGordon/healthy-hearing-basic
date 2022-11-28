@@ -21,7 +21,11 @@
 	opacity: 0.85;
 }
 .backdrop-height {
-	height: 520px;
+	height: 1520px;
+	
+	&.backdrop-home-gradient {
+		height: 520px;
+	}
 }
 
 .backdrop-home, .backdrop-help {

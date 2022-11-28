@@ -17,3 +17,16 @@ var wistiaEmbed = $(".wistia_embed");
 for(var i=0;i<wistiaEmbed.length;i++){
 	wistiaEmbed.eq(i).addClass("noprint");
 }
+
+$(".accordion-handle").click(function(){
+	let accordion_id = "#" + $(this).attr("rel");
+	if($(accordion_id).hasClass("hidden")){
+		$("#accordion ul:visible").slideUp("normal").addClass("hidden");
+		$(accordion_id).slideDown().removeClass("hidden");
+		$(accordion_id + "-icon").removeClass("icon-chevron-right").addClass("icon-chevron-down");
+	} else {
+		$(accordion_id).slideUp().addClass("hidden");
+		$(accordion_id + "-icon").removeClass("icon-chevron-down").addClass("icon-chevron-right");
+	}
+	return false;
+});

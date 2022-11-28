@@ -6,10 +6,6 @@
   line-height: 1.4;
 }
 
-.btn-default {
-  @include button-variant($gray-dark, $btn-light-color, $btn-default-border);
-}
-
 .btn-secondary {
   @include button-variant($btn-secondary-border, $btn-secondary-bg, $btn-secondary-color);
 }
@@ -22,13 +18,20 @@
   @include button-variant($btn-neutral-color, $btn-neutral-bg, $btn-neutral-border);
 }
 
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
 .btn-lg {
   // line-height: ensure even-numbered height of button next to large input
   @include button-size(10px, 22px, 1.4, $btn-border-radius-large);
 }
 .btn-sm {
   // line-height: ensure proper height of button next to small input
-  @include button-size(5px, 12px, 1.5, $btn-border-radius);
+  @include button-size(5px, 12px, 12px, $btn-border-radius);
+  line-height: 1.5;
   
   &.group-toggle {
 	  float: right;

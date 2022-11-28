@@ -1,10 +1,14 @@
-ul.no-bullets {
-  list-style-type: none!important;
-  padding-left: 0;
-
-  li {
-    margin-bottom: 0.5em;
-  }
+ul {
+	margin-bottom: 12.5px;
+	
+	&.no-bullets {
+		list-style-type: none!important;
+		padding-left: 0;
+		
+		li {
+			margin-bottom: 0.5em;
+		}
+	}
 }
 
 //Custom SCSS for jQuery UI dropdown lists

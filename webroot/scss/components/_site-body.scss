@@ -76,6 +76,14 @@
 	
   }
   
+  &.fap-cities {
+	  padding: 0;
+	  
+	  .container {
+		  padding: 0;
+	  }
+  }
+  
 	.read-more-row {
 	  max-width: 100%;
 	  margin-left: 0;
@@ -154,6 +162,7 @@
   
   &.blog{
 	  overflow-y: visible;
+	  padding: 0;
   }
   
   &.content-body{

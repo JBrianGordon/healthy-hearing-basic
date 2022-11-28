@@ -1,6 +1,5 @@
 .site-footer {
 	background: $white;
-	margin-top: 50px;
 	padding: 40px inherit;
 	position: relative;
 
@@ -33,6 +32,7 @@
 			background-size: 72px 72px;
 			padding-left: 96px + 15px;
 			text-align: left;
+			width: inherit;
 		}
 	}
 	

@@ -25,7 +25,6 @@
 .btn-group-xs > .btn { @extend .btn-xs; }
 .btn-default {
   @extend .btn-light;
-  border-color: #333;
   &:hover {
     background-color: #e6e6e6;
     border-color: #333;

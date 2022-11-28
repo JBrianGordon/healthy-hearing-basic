@@ -13,15 +13,34 @@
     padding-right: 15px;
 }
 
+.col-md-3 {
+	width: 100%;
+	padding: 0 15px;
+}
+
+.row {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
 @media (min-width: 768px) {
 	.container {
 	    width: 750px;
+	    
+		.col-md-3 {
+			width: 25%;
+		}
 	}
 }
 
 @media (min-width: 992px) {
 	.container {
 	    width: 970px;
+	    
+		.row {
+			margin-left: -15px;
+			margin-right: -15px;
+		}
 	}
 }
 
