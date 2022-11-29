@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\ContactUsForm;
+use Cake\Core\Configure;
 use Cake\Mailer\MailerAwareTrait;
 
 /**
@@ -15,6 +16,29 @@ use Cake\Mailer\MailerAwareTrait;
 class PagesController extends AppController
 {
     use MailerAwareTrait;
+
+    /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent(
+            'Recaptcha.Recaptcha',
+            [
+                'enable' => true,
+                'sitekey' => Configure::read('recaptchaPublicKey'),
+                'secret' => Configure::read('recaptchaPrivateKey'),
+                'type' => 'image',
+                'theme' => 'light',
+                'lang' => 'en',
+                'size' => 'normal',
+            ]
+        );
+    }
 
     /**
      * Homepage
@@ -49,17 +73,25 @@ class PagesController extends AppController
     {
         $contactUsForm = new ContactUsForm();
         $page = $this->Pages->findByTitle('contactUs')->first();
+        $this->set(compact('contactUsForm', 'page'));
 
         if ($this->request->is('post')) {
+            if (!$this->Recaptcha->verify()) {
+                $this->Flash->error('reCAPTCHA test failed ("I\'m not a robot"). Please try again!');
+
+                return;
+            }
+
             $requestData = $this->request->getData();
             if ($contactUsForm->execute($requestData)) {
                 $this->Flash->success('We will get back to you soon.');
+
+                return $this->redirect('/contact-us', 301);
             } else {
                 $this->Flash->error('There was a problem submitting your form.');
+
+                return;
             }
         }
-
-        $this->set(compact('contactUsForm'));
-        $this->set(compact('page'));
     }
 }

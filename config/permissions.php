@@ -134,12 +134,12 @@ return [
                 }
 
                 return false;
-            }
+            },
         ],
         // Pages - no auth required
         [
             'controller' => 'Pages',
-            'action' => 'home',
+            'action' => ['home', 'contactUs'],
             'bypassAuth' => true,
         ],
         // Content - no auth required
@@ -170,5 +170,5 @@ return [
             'action' => '*',
             'bypassAuth' => true,
         ],
-    ]
+    ],
 ];

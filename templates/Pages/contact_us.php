@@ -14,7 +14,7 @@ echo $this->Form->control('first_name', ['placeholder' => 'First name']);
 echo $this->Form->control('last_name', ['placeholder' => 'Last name']);
 echo $this->Form->control('phone', ['placeholder' => 'Phone']);
 echo $this->Form->control('email', [
-    'label' => 'Email*',
+    'label' => 'Email',
     'placeholder' => 'Email',
 ]);
 echo $this->Form->control('zip', [
@@ -29,10 +29,11 @@ echo $this->Form->control('hearing_care_professional', [
     'label' => 'I am a hearing care professional',
 ]);
 echo $this->Form->control('message', [
-    'label' => 'Message*',
+    'label' => 'Message',
     'maxlength' => '1000',
     'style' => 'min-height: 172px',
 ]);
+echo $this->Recaptcha->display();
 echo $this->Form->button('Send Message');
 echo $this->Form->end();
 
