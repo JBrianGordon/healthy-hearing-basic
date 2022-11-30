@@ -42,7 +42,7 @@ if($('#admin_search_toggle').length > 0){
 	new SearchToggle({toggle_id: "#admin_search_toggle", elem_id: "#admin_search", toggle_text_id: "#admin_search_text"});
 }
 //Reorganize search options and change booleans into a toggle
-if($("#admin-search[action='/admin/locations']").length){
+if($("form[action='/admin/locations']").length || $("form[action='/admin/crm-searches']").length){
 	var generalInputs = document.createElement("div"),
 		reviewInputs = document.createElement("div"),
 		managementInputs = document.createElement("div"),

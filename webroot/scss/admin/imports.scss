@@ -1,5 +1,16 @@
 .locations {
 	margin: 0 -20px;
+	
+	.form-label {
+		width: 58.33333%;
+		text-align: right;
+		padding: 7px 15px 0;
+	}
+	
+	.form-control:not([type='date']) {
+		display: inline-block;
+		width: 41.66667%;
+	}
 }
 
 .status-unlinked {

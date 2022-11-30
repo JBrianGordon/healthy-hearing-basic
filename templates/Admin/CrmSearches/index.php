@@ -37,7 +37,7 @@ foreach ($fields as $field => $type) {
     }
 }
 
-$this->Html->script('dist/common.min', ['block' => true]);
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -52,9 +52,9 @@ $this->Html->script('dist/common.min', ['block' => true]);
 						<div class="panel-heading">Crm Searches Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<a href="/admin/crm_searches" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Browse</a>
-								<a href="/admin/crm_searches/edit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add</a>
-								<a href="/admin/locations" class="sprint-find btn btn-default"><span class="glyphicon glyphicon-user"></span> CRM</a>
+								<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => '#'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+								<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 							</div>
 						</div>
 					</div>
@@ -68,9 +68,6 @@ $this->Html->script('dist/common.min', ['block' => true]);
 									//$this->Html->link('<span class="glyphicon glyphicon-user"></span> CRM', array('admin' => true, 'controller' => 'locations', 'action' => 'index'), array('escape' => false, 'class' => 'sprint-find btn btn-default'))
 								//);
 								?>
-								<div class="btn-group btn-group-sm pt-2 mb-3">
-								    <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-								</div>
 								<h2><?= __('Crm Searches') ?></h2>
 								<div class="locations index">
 								    <?= $this->element('pagination') ?>
@@ -80,12 +77,6 @@ $this->Html->script('dist/common.min', ['block' => true]);
 										<table class="table table-bordered table-striped table-condensed" cellpadding="0" cellspacing="0">
 											<thead>
 												<tr>
-									                <th><?= $this->Paginator->sort('id') ?><br><?= $this->Paginator->sort('order') ?></th>
-									                <th><?= $this->Paginator->sort('is_public') ?></th>
-									                <th><?= $this->Paginator->sort('model') ?></th>
-									                <th><?= $this->Paginator->sort('title') ?><br><?= 'Search' ?></th>
-									                <th><?= $this->Paginator->sort('user_id', 'User') ?></th>
-									                <th><?= $this->Paginator->sort('created') ?><br><?= $this->Paginator->sort('modified') ?></th>
 									                <th class="actions"><?= __('Actions') ?></th>
 												</tr>
 											</thead>
@@ -95,7 +86,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 									                    <td><span class="badge bg-info"><?= $crmSearch->id ?></span><br><?= $crmSearch->order ?></td>
 									                    <td><?= $this->Admin->yesNo($crmSearch->is_public) ?></td>
 									                    <td><?= h($crmSearch->model) ?></td>
-									                    <td style="word-wrap: break-word; max-width: 500px;"><?= h($crmSearch->title) ?><br><small><?= h($crmSearch->search) ?></small></td>
+									                    <td style="word-wrap: break-word; max-width: 350px;"><?= h($crmSearch->title) ?><br><small><?= h($crmSearch->search) ?></small></td>
 									                    <td>
 									                        <?=
 									                            $crmSearch->has('user') ?
@@ -106,7 +97,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 									                            ]) : ''
 									                        ?>     
 									                    </td>
-									                    <td nowrap><?= date('Y-m-d, H:i', strtotime($crmSearch->created)) ?><br><?= date('Y-m-d, H:i', strtotime($crmSearch->modified))  ?></td>
+									                    <td nowrap><?= date('M jS Y, H:i', strtotime($crmSearch->created)) ?><br><?= date('M jS Y, H:i', strtotime($crmSearch->modified))  ?></td>
 									                    <td class="actions">
 									                        <div class="btn-group-vertical btn-group">
 									                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-xs btn-default']) ?>

@@ -94,21 +94,15 @@ class AdminHelper extends Helper
                 break;
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
-                $formInput .= '<label class="float-start '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
-                $checked0 = ($value == 0) ? 'checked' : '';
-                $checked1 = ($value == 1) ? 'checked' : '';
-                $checkedAll = ($value == null) ? 'checked' : '';
-                $formInput .= '<div class="btn-group float-end">';
-                $formInput .= '<label class="btn btn-outline-danger">';
-                $formInput .= '<input type="radio" value="0" name="'.$field.'" id="'.$fieldSlug.'0" '.$checked0.'>&nbsp;';
+                $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
+                $formInput .= '<label class="switch">';
+                $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$label.'">';
+                $formInput .= '<span class="slider col-md-7">';
+                $formInput .= '<span class="switch-negative"></span>';
+                $formInput .= '<span class="switch-off"></span>';
+                $formInput .= '<span class="switch-positive"></span>';
+                $formInput .= '</span>';
                 $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-outline-info">';
-                $formInput .= '<input type="radio" value="" name="'.$field.'" id="'.$fieldSlug.'All" '.$checkedAll.'>&nbsp;';
-                $formInput .= '</label>';
-                $formInput .= '<label class="btn btn-outline-success">';
-                $formInput .= '<input type="radio" value="1" name="'.$field.'" id="'.$fieldSlug.'1" '.$checked1.'>&nbsp;';
-                $formInput .= '</label>';
-                $formInput .= '</div>';
                 break;
             case 'datetime':
             case 'date':
@@ -124,7 +118,7 @@ class AdminHelper extends Helper
             default: //string, integer, biginteger
                 $formInput = $this->Form->control($field, [
                     'type' => 'text',
-                    'label' => ['text' => $label, 'floating' => true],
+                    'label' => ['text' => $label],
                 ]);
                 break;
         }

@@ -50,11 +50,11 @@ $this->loadHelper('Search.Search', [
 <div class="row justify-content-end">
     <?php if (!empty($this->request->getQueryParams())) : ?>
         <div class="col col-md-auto p-0">
-            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-sm btn-info text-light', 'role' => 'button']) ?>
+            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
         </div>
     <?php endif; ?>
     <div class="col col-md-auto">
-        <button class="btn btn-sm btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
+        <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
             + Advanced
         </button>
     </div>
@@ -102,42 +102,44 @@ $this->loadHelper('Search.Search', [
         <?php endforeach; ?>
     <?php endif; ?>
     <!-- ALL OTHER FIELDS -->
-    <?php if (!empty($fields)): ?>
-        <?php $column = 1; ?>
-        <?php foreach ($fields as $field): ?>
-            <?php if (!empty($field['checkboxGroupName'])): ?>
-                <!-- Checkbox groups will span whole row, so always start on column 1 -->
-                <?php if ($column==2): ?>
-                    </div> <!-- end row -->
-                <?php endif; ?>
-                <?php $formInput = $this->Admin->checkboxGroup($field['checkboxGroupName'], $field['checkboxFields']); ?>
-                <div class="row" style="min-height: 74px;">
-                    <div class="col-md-12">
-                        <?= $formInput ?>
-                        <?php $column==1; ?>
-                    </div> <!-- end col -->
-                </div> <!-- end row -->
-            <?php else: ?>
-                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
-                <?php if ($column == 1): ?>
-                    <div class="row" style="min-height: 74px;">
-                        <div class="col-md-6">
-                            <?= $formInput ?>
-                            <?php $column = 2; ?>
-                        </div> <!-- end col -->
-                <?php else: // column 2 ?>
-                        <div class="col-md-6">
-                            <?= $formInput ?>
-                            <?php $column = 1; ?>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <?php if ($column==2): ?>
-            </div> <!-- end row -->
-        <?php endif; ?>
-    <?php endif; ?>
+    <div class="filter-group">
+	    <?php if (!empty($fields)): ?>
+	        <?php $column = 1; ?>
+	        <?php foreach ($fields as $field): ?>
+	            <?php if (!empty($field['checkboxGroupName'])): ?>
+	                <!-- Checkbox groups will span whole row, so always start on column 1 -->
+	                <?php if ($column==2): ?>
+	                    </div> <!-- end row -->
+	                <?php endif; ?>
+	                <?php $formInput = $this->Admin->checkboxGroup($field['checkboxGroupName'], $field['checkboxFields']); ?>
+	                <div class="row" style="min-height: 74px;">
+	                    <div class="col-md-12">
+	                        <?= $formInput ?>
+	                        <?php $column==1; ?>
+	                    </div> <!-- end col -->
+	                </div> <!-- end row -->
+	            <?php else: ?>
+	                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
+	                <?php if ($column == 1): ?>
+	                    <div class="row" style="min-height: 74px;">
+	                        <div class="col-md-6">
+	                            <?= $formInput ?>
+	                            <?php $column = 2; ?>
+	                        </div> <!-- end col -->
+	                <?php else: // column 2 ?>
+	                        <div class="col-md-6">
+	                            <?= $formInput ?>
+	                            <?php $column = 1; ?>
+	                        </div> <!-- end col -->
+	                    </div> <!-- end row -->
+	                <?php endif; ?>
+	            <?php endif; ?>
+	        <?php endforeach; ?>
+	        <?php if ($column==2): ?>
+	            </div> <!-- end row -->
+	        <?php endif; ?>
+	    <?php endif; ?>
+	</div>
     <?php
     echo $this->Form->button('Search', [
         'type' => 'submit',
