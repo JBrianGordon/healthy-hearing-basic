@@ -41,8 +41,11 @@ var SearchToggle = jQuery.Class.create({
 if($('#admin_search_toggle').length > 0){
 	new SearchToggle({toggle_id: "#admin_search_toggle", elem_id: "#admin_search", toggle_text_id: "#admin_search_text"});
 }
+if($('#advanced_search_toggle').length > 0){
+	new SearchToggle({toggle_id: "#advanced_search_toggle", elem_id: "#advanced_search", toggle_text_id: "#advanced_search_text"});
+}
 //Reorganize search options and change booleans into a toggle
-if($("#admin-search[action='/admin/locations']").length){
+if($("form").attr("action").match("/admin/locations") || $("form").attr("action").match("/admin/crm-searches")){
 	var generalInputs = document.createElement("div"),
 		reviewInputs = document.createElement("div"),
 		managementInputs = document.createElement("div"),
@@ -98,6 +101,7 @@ if($("#admin-search[action='/admin/locations']").length){
 	})
 	
 	//Load styles when sliders have been used in a previous search
+	//TODO: check that this is working. Currently previous search value does not persist on page but in url
 	var switchInput = $("label.switch input");
 	for(var i=0;i<switchInput.length;i++){
 		if(switchInput.eq(i).val() == 1){

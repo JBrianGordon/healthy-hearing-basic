@@ -1,5 +1,18 @@
 .locations {
-	margin: 0 -20px;
+	
+	label {
+		width: 41.66667%;
+		text-align: right;
+		padding: 7px 15px 0;
+		font-weight: bold;
+	}
+	
+	.form-control:not([type='date']), .form-select {
+		display: inline-block;
+		width: 58.33333%;
+		padding: 10px 12px;
+		font-size: 1.5rem;
+	}
 }
 
 .status-unlinked {
