@@ -79,7 +79,7 @@ class AdminHelper extends Helper
                     'type' => 'select',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label, 'floating' => true],
+                    'label' => ['text' => $label],
                     'multiple' => null,
                 ]);
                 break;
@@ -95,21 +95,14 @@ class AdminHelper extends Helper
             case 'boolean':
                 // TODO: Make this a prettier 3-way switch
                 $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
-                $formInput .= '<label class="switch">';
                 $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$label.'">';
-                $formInput .= '<span class="slider col-md-7">';
-                $formInput .= '<span class="switch-negative"></span>';
-                $formInput .= '<span class="switch-off"></span>';
-                $formInput .= '<span class="switch-positive"></span>';
-                $formInput .= '</span>';
-                $formInput .= '</label>';
                 break;
             case 'datetime':
             case 'date':
                 $startValue = isset($value['start']) ? $value['start'] : null;
                 $endValue = isset($value['end']) ? $value['end'] : null;
                 $formInput .= '<div class="input-group">';
-                $formInput .= '<label class="form-check-label col-md-4" for="'.$fieldSlug.'">'.$label.'</label>';
+                $formInput .= '<label class="form-check-label col-md-5 tar" for="'.$fieldSlug.'">'.$label.'</label>';
                 $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
                 $formInput .= '<span>&nbsp; - &nbsp;</span>';
                 $formInput .= '<input class="form-control" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';

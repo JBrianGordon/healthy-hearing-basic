@@ -32,8 +32,10 @@
 }
 .btn-sm {
   // line-height: ensure proper height of button next to small input
-  @include button-size(5px, 12px, 12px, $btn-border-radius);
+  padding: 5px 12px;
+  font-size: 12px;
   line-height: 1.5;
+  border-radius: 3em;
   
   &.group-toggle {
 	  float: right;

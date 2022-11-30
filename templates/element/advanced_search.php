@@ -50,19 +50,19 @@ $this->loadHelper('Search.Search', [
 <div class="row justify-content-end">
     <?php if (!empty($this->request->getQueryParams())) : ?>
         <div class="col col-md-auto p-0">
-            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-info text-light', 'role' => 'button']) ?>
+            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-info btn-sm', 'role' => 'button']) ?>
         </div>
     <?php endif; ?>
     <div class="col col-md-auto">
-        <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
+        <span id="advanced_search_toggle" class="btn btn-primary btn-sm mb-2" type="button" aria-expanded="false">
             + Advanced
-        </button>
+        </span>
     </div>
 </div>
-<div class="collapse" id="advancedSearch">
+<div class="collapse well blue-well" id="advanced_search">
     <?php
     echo $this->Form->create(null, [
-        'class' => 'bg-light mb-2 p-4',
+        'class' => 'mb-2',
         'valueSources' => 'query',
     ]);
     ?>

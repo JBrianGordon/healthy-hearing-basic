@@ -1,15 +1,17 @@
 .locations {
-	margin: 0 -20px;
 	
-	.form-label {
-		width: 58.33333%;
+	label {
+		width: 41.66667%;
 		text-align: right;
 		padding: 7px 15px 0;
+		font-weight: bold;
 	}
 	
-	.form-control:not([type='date']) {
+	.form-control:not([type='date']), .form-select {
 		display: inline-block;
-		width: 41.66667%;
+		width: 58.33333%;
+		padding: 10px 12px;
+		font-size: 1.5rem;
 	}
 }
 
