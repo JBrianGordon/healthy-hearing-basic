@@ -1,5 +1,4 @@
 .locations {
-	
 	label {
 		width: 41.66667%;
 		text-align: right;
@@ -12,6 +11,16 @@
 		width: 58.33333%;
 		padding: 10px 12px;
 		font-size: 1.5rem;
+	}
+	
+	&.crmsearches {
+		label {
+			width: 25%;
+		}
+		
+		.form-control:not([type='date']), .form-select {
+			width: 75%;
+		}
 	}
 }
 
