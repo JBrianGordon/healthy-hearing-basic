@@ -21,7 +21,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 							<div class="btn-group">
 								<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 								<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-								<?= $this->Html->link("<i class='bi bi-trash-lg'></i> Delete", ['action' => 'delete', $crmSearch->id], ['class' => 'btn btn-danger', 'escape' => false], ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id)]) ?>
+								<?= $this->Html->link("<i class='bi bi-trash'></i> Delete", ['action' => 'delete', $crmSearch->id], ['class' => 'btn btn-danger', 'escape' => false], ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id)]) ?>
 								<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 							</div>
 						</div>
@@ -35,12 +35,14 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						            <?= $this->Form->create($crmSearch) ?>
 						            <fieldset>
 						                <?php
-						                    echo $this->Form->control('user_id', ['options' => $users]);
+							                echo '<div class="mb-3 form-group text"><label class="form-label" for="id">ID</label><div class="form-control border-0 pl0">' . $crmSearch->id . '</div></div><div class="clearfix"></div>';
 						                    echo $this->Form->control('model');
+						                    echo $this->Form->control('order');
 						                    echo $this->Form->control('title');
 						                    echo $this->Form->control('search');
 						                    echo $this->Form->control('is_public');
-						                    echo $this->Form->control('priority');
+						                    echo $this->Form->control('user_id', ['options' => $users]);
+						                    echo $this->Form->control('created');
 						                ?>
 						            </fieldset>
 						            <?= $this->Form->button(__('Submit')) ?>

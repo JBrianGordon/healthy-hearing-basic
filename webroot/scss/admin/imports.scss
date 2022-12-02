@@ -13,9 +13,21 @@
 		font-size: 1.5rem;
 	}
 	
+	.form-check {
+		padding-left: 0;
+		
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 25px;
+			top: 5px;
+		}
+	}
+	
 	&.crmsearches {
 		label {
 			width: 25%;
+			float: left;
 		}
 		
 		.form-control:not([type='date']), .form-select {
