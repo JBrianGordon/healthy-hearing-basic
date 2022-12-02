@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\ContactUsForm;
+use App\Form\NewsletterForm;
 use Cake\Core\Configure;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Pages Controller
@@ -93,5 +95,55 @@ class PagesController extends AppController
                 return;
             }
         }
+    }
+
+    /**
+     * Newsletter method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function newsletter()
+    {
+        if (!Configure::read('showNewsletter')) {
+            throw new NotFoundException();
+        }
+
+        $newsletterForm = new newsletterForm();
+        $page = $this->Pages->findByTitle('newsletter')->first();
+        $this->set(compact('newsletterForm', 'page'));
+
+        if ($this->request->is('post')) {
+            if (!$this->Recaptcha->verify()) {
+                $this->Flash->error('reCAPTCHA test failed ("I\'m not a robot"). Please try again!');
+
+                return;
+            }
+
+            $requestData = $this->request->getData();
+            if ($newsletterForm->execute($requestData)) {
+                $this->Flash->success('Thank you for subscribing to our newsletter! Look for a confirmation email from us in your inbox.');
+
+                return $this->redirect('/newsletter-success');
+            } else {
+                $this->Flash->error('There was a problem submitting your form.');
+
+                return;
+            }
+
+        }
+    }
+
+    /**
+     * Success page for newsletter sign-ups
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function newsletterSuccess()
+    {
+        if (!Configure::read('showNewsletter')) {
+            throw new NotFoundException();
+        }
+        //TO-DO: function for on-the-fly title changes in controller
+        // Title for this page: 'Thank you for subscribing to the Healthy Hearing newsletter!''
     }
 }

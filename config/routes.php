@@ -63,6 +63,8 @@ return static function (RouteBuilder $routes) {
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');
+        $builder->connect('/newsletter', 'Pages::newsletter');
+        $builder->connect('/newsletter-success', 'Pages::newsletterSuccess');
 
         // Corp/manufacturer pages
         $builder->connect('/{slug}', 'Corps::view')

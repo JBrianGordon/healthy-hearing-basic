@@ -139,7 +139,12 @@ return [
         // Pages - no auth required
         [
             'controller' => 'Pages',
-            'action' => ['home', 'contactUs'],
+            'action' => [
+                'contactUs',
+                'home',
+                'newsletter',
+                'newsletterSuccess',
+            ],
             'bypassAuth' => true,
         ],
         // Content - no auth required
