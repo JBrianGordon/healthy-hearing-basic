@@ -6,6 +6,11 @@
 	text-transform: uppercase;
 	font-weight: bold;
 	line-height: 1.4;
+	
+	&.rounded-start {
+		border-bottom-left-radius: 3rem !important;
+		border-top-left-radius: 3rem !important;
+	}
 }
 
 .btn-secondary {

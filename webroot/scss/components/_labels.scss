@@ -18,3 +18,53 @@ label {
 		}
 	}
 }
+
+#advanced_search {
+	label {
+		width: 41.66667%;
+		text-align: right;
+		padding: 7px 15px 0;
+		font-weight: bold;
+	}
+	
+	.form-control:not([type='date']), .form-select {
+		display: inline-block;
+		width: 58.33333%;
+		padding: 10px 12px;
+		font-size: 1.5rem;
+	}
+	
+	.form-check {
+		padding-left: 0;
+		
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 25px;
+			top: 5px;
+		}
+	}
+}
+
+.table-striped {
+	.label:not(.bg-light) {
+		display: inline;
+		padding: 0.2em 0.6em 0.3em;
+		font-size: 75%;
+		line-height: 1;
+		color: #fff;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: baseline;
+		border-radius: 0.25em;
+	}
+	
+	.bg-light {
+		color: #7b7e80;
+		border: 1px solid #7b7e80;
+	}
+	
+	.bi-book-fill {
+		color: $brand-secondary;
+	}
+}
