@@ -39,8 +39,7 @@
 </head>
 <body>
     <nav class="navbar navbar-default sticky-top navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-	    <div class="row pt0 pb0">
+    	<div class="container p0">
 		    <div class="col-xs-12" id="navParent">
 		        <a class="navbar-brand d-inline-block navbar-logo" href="/">
 		          <img src="/img/hh-logo.svg" alt="" width="198" height="40">
@@ -70,8 +69,7 @@
 		          </ul>
 		        </div>
 		    </div>
-	    </div>
-      </div>
+    	</div>
     </nav>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
