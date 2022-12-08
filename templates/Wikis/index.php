@@ -49,8 +49,12 @@ use Cake\Core\Configure;
 						<ul id="accordion" class="nav nav-tabs nav-stacked">
 							<?php foreach ($wikis as $wiki): ?>
 								<li class="parent" style="border-bottom: 1px solid #ddd;">
-									<?= $this->Html->link($wiki->name, $wiki->hh_url) ?>
-									<?php //*** uncomment when Wiki is built out *** echo $this->Wiki->getNavText($nav['parent']); ?>
+									<a href="/help/<?= $wiki->hh_url['slug'] ?>">
+										<div class="wiki-parent">
+											<strong><?= $wiki->name ?></strong><br>
+											<span class="short"><?= $wiki->short ?></span>
+										</div>
+									</a>
 								</li>
 							<?php endforeach; ?>
 							<?php if (Configure::read('showManufacturers')): ?>
