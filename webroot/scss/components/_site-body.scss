@@ -76,14 +76,42 @@
 	
   }
   
-  &.fap-cities {
-	  padding: 0;
+&.fap-cities {
+	padding: 0;
+	
+	.container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 	  
-	  .container {
-		  padding-left: 15px;
-		  padding-right: 15px;
-	  }
-  }
+	label {
+		width: 25%;
+		float: left;
+		text-align: right;
+		padding: 7px 15px 0
+	}
+	
+	.form-control, .form-select {
+		width: 75%;
+		font-size: 16px;
+	}
+	
+	.date {  
+		display: block;
+		color: #212529;
+	}
+	
+	.form-check {
+		padding-left: 0;
+		
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 25px;
+			top: 5px;
+		}
+	}
+}
   
 	.read-more-row {
 	  max-width: 100%;
