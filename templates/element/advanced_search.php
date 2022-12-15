@@ -53,7 +53,7 @@ $this->loadHelper('Search.Search', [
             <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-info btn-sm', 'role' => 'button']) ?>
         </div>
     <?php endif; ?>
-    <div class="col col-md-auto">
+    <div class="col col-md-auto mb20">
         <span id="advanced_search_toggle" class="btn btn-primary btn-sm mb-2" type="button" aria-expanded="false">
             + Advanced
         </span>
@@ -71,12 +71,11 @@ $this->loadHelper('Search.Search', [
         <?php foreach ($groupedFields as $groupName => $groupFields): ?>
             <?php $groupNameReadable = ucfirst(Inflector::delimit($groupName, ' ')); ?>
             <?php if (!empty($groupFields)): ?>
-                <div class="row justify-content-end">
-                    <div class="col col-md-auto">
-                        <button class="btn btn-sm btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $groupName ?>" aria-expanded="false" aria-controls="advancedSearch" style="min-width:178px;">+ <?= $groupNameReadable ?></button>
-                    </div>
+                <div class="col col-md-auto">
+	                <h3 class="crm-group-header"><?= $groupNameReadable ?></h3>
+                    <button class="btn btn-sm btn-primary mb20 group-toggle" type="button" style="min-width:178px;"><span class="bi-plus-lg"> Expand section</span></button>
                 </div>
-                <div class="collapse mb-3" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
+                <div class="mb-3 filter-group hidden" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
                     <?php $column = 1; ?>
                     <?php foreach ($groupFields as $field): ?>
                         <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
@@ -101,9 +100,9 @@ $this->loadHelper('Search.Search', [
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endif; ?>
-    <!-- ALL OTHER FIELDS -->
-    <div class="filter-group">
-	    <?php if (!empty($fields)): ?>
+    <?php if (!empty($fields)): ?>
+	    <!-- ALL OTHER FIELDS -->
+	    <div class="filter-group">
 	        <?php $column = 1; ?>
 	        <?php foreach ($fields as $field): ?>
 	            <?php if (!empty($field['checkboxGroupName'])): ?>
@@ -138,8 +137,8 @@ $this->loadHelper('Search.Search', [
 	        <?php if ($column==2): ?>
 	            </div> <!-- end row -->
 	        <?php endif; ?>
-	    <?php endif; ?>
-	</div>
+		</div>
+	<?php endif; ?>
     <?php
     echo $this->Form->button('Search', [
         'type' => 'submit',

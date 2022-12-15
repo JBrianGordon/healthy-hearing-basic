@@ -120,9 +120,9 @@ if($("form").attr("action").match("/admin/locations") || $("form").attr("action"
 	//Expand/collapse button functionality
 	$(".group-toggle").on("click",function(){
 		if ($(this).closest("div").next(".filter-group").hasClass("hidden")) {
-			$(this).html("<span class='glyphicon glyphicon-minus'></span> Collapse section").closest("div").next(".filter-group").removeClass("hidden");
+			$(this).html("<span class='bi-minus-lg'> Collapse section</span>").closest("div").next(".filter-group").removeClass("hidden");
 		} else {
-			$(this).html("<span class='glyphicon glyphicon-plus'></span> Expand section").closest("div").next(".filter-group").addClass("hidden");
+			$(this).html("<span class='bi-plus-lg'> Expand section</span>").closest("div").next(".filter-group").addClass("hidden");
 		}
 	})
 

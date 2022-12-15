@@ -30,7 +30,7 @@
   display: inline-block;
   width:auto;
   
-  &#SearchModifiedStart, &#SearchModifiedEnd, &#SearchFrozenExpirationStart, &#SearchFrozenExpirationEnd, &#SearchLastReviewDateStart, &#SearchLastReviewDateEnd {
+  &#modified-start, &#modified-end, &#frozen-expiration-start, &#frozen-expiration-end, &#last-review-date-start, &#last-review-date-end {
 	  width: 46%;
   }
 }

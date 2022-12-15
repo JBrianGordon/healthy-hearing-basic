@@ -82,6 +82,12 @@
 		  }
 	  }
   }
+  
+
+	.hidden {
+	    display: none !important;
+	    visibility: hidden !important;
+	}
 }
 
 .panel-heading {
