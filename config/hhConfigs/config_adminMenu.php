@@ -47,7 +47,7 @@ $editorialItems['Tags'] = [
     'url' => '/admin/tags',
 ];
 $editorialMenu = [
-    'icon' => 'bi bi-font',
+    'icon' => 'bi bi-fonts',
     'items' => $editorialItems,
 ];
 
@@ -113,7 +113,7 @@ if (Configure::read('isTieringEnabled')) {
     ];
 }
 $importsMenu = [
-    'icon' => 'bi bi-import',
+    'icon' => 'bi bi-journal-arrow-down',
     'items' => $importsItems,
 ];
 
@@ -172,7 +172,7 @@ if (Configure::read('isCallAssistEnabled')) {
         'icon' => 'bi bi-bar-chart-fill',
     ];
     $callAssistMenu = [
-        'icon' => 'bi bi-earphone',
+        'icon' => 'bi bi-telephone-fill',
         'items' => $callAssistItems,
     ];
 } else {
@@ -192,7 +192,7 @@ $callTrackingItems['Metrics'] = [
     'icon' => 'bi bi-bar-chart-fill',
 ];
 $callTrackingMenu = [
-    'icon' => 'bi bi-earphone',
+    'icon' => 'bi bi-telephone-fill',
     'items' => $callTrackingItems,
 ];
 
