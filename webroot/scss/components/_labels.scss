@@ -8,6 +8,14 @@
   color: $gray;
 }
 
+.label-success {
+	background-color: $label-success-bg;
+}
+
+.label-danger {
+	background-color: $label-danger-bg;
+}
+
 label {
 	&[for="adBlock"] {
 		color: $brand-primary;
@@ -57,6 +65,12 @@ label {
 		white-space: nowrap;
 		vertical-align: baseline;
 		border-radius: 0.25em;
+		
+		&.label-default {
+		  background: transparentize(white, 1);
+		  border: solid 1px $gray;
+		  color: $gray;
+		}
 	}
 	
 	.bg-light {

@@ -13,6 +13,13 @@ use App\Controller\AppController;
  */
 class CorpsController extends AppController
 {
+	
+	public $paginate = [
+        'order' => [
+            'Corps.priority' => 'asc',
+        ],
+    ];
+	
     /**
      * Index method
      *

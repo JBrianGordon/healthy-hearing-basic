@@ -4,97 +4,85 @@
  * @var \App\Model\Entity\Corp[]|\Cake\Collection\CollectionInterface $corps
  */
 ?>
-<div class="corps index content">
-    <?= $this->Html->link(__('New Corp'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Corps') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('user_id') ?></th>
-                    <th><?= $this->Paginator->sort('type') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th><?= $this->Paginator->sort('last_modified') ?></th>
-                    <th><?= $this->Paginator->sort('modified_by') ?></th>
-                    <th><?= $this->Paginator->sort('title') ?></th>
-                    <th><?= $this->Paginator->sort('title_long') ?></th>
-                    <th><?= $this->Paginator->sort('slug') ?></th>
-                    <th><?= $this->Paginator->sort('abbr') ?></th>
-                    <th><?= $this->Paginator->sort('notify_email') ?></th>
-                    <th><?= $this->Paginator->sort('approval_email') ?></th>
-                    <th><?= $this->Paginator->sort('phone') ?></th>
-                    <th><?= $this->Paginator->sort('website_url') ?></th>
-                    <th><?= $this->Paginator->sort('website_url_description') ?></th>
-                    <th><?= $this->Paginator->sort('pdf_all_url') ?></th>
-                    <th><?= $this->Paginator->sort('favicon') ?></th>
-                    <th><?= $this->Paginator->sort('address') ?></th>
-                    <th><?= $this->Paginator->sort('thumb_url') ?></th>
-                    <th><?= $this->Paginator->sort('facebook_title') ?></th>
-                    <th><?= $this->Paginator->sort('facebook_description') ?></th>
-                    <th><?= $this->Paginator->sort('facebook_image') ?></th>
-                    <th><?= $this->Paginator->sort('date_approved') ?></th>
-                    <th><?= $this->Paginator->sort('id_old') ?></th>
-                    <th><?= $this->Paginator->sort('is_approvalrequired') ?></th>
-                    <th><?= $this->Paginator->sort('is_active') ?></th>
-                    <th><?= $this->Paginator->sort('is_featured') ?></th>
-                    <th><?= $this->Paginator->sort('id_draft_parent') ?></th>
-                    <th><?= $this->Paginator->sort('priority') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($corps as $corp): ?>
-                <tr>
-                    <td><?= $this->Number->format($corp->id) ?></td>
-                    <td><?= $this->Number->format($corp->user_id) ?></td>
-                    <td><?= h($corp->type) ?></td>
-                    <td><?= h($corp->created) ?></td>
-                    <td><?= h($corp->modified) ?></td>
-                    <td><?= h($corp->last_modified) ?></td>
-                    <td><?= $this->Number->format($corp->modified_by) ?></td>
-                    <td><?= h($corp->title) ?></td>
-                    <td><?= h($corp->title_long) ?></td>
-                    <td><?= h($corp->slug) ?></td>
-                    <td><?= h($corp->abbr) ?></td>
-                    <td><?= h($corp->notify_email) ?></td>
-                    <td><?= h($corp->approval_email) ?></td>
-                    <td><?= h($corp->phone) ?></td>
-                    <td><?= h($corp->website_url) ?></td>
-                    <td><?= h($corp->website_url_description) ?></td>
-                    <td><?= h($corp->pdf_all_url) ?></td>
-                    <td><?= h($corp->favicon) ?></td>
-                    <td><?= h($corp->address) ?></td>
-                    <td><?= h($corp->thumb_url) ?></td>
-                    <td><?= h($corp->facebook_title) ?></td>
-                    <td><?= h($corp->facebook_description) ?></td>
-                    <td><?= h($corp->facebook_image) ?></td>
-                    <td><?= h($corp->date_approved) ?></td>
-                    <td><?= $this->Number->format($corp->id_old) ?></td>
-                    <td><?= $this->Number->format($corp->is_approvalrequired) ?></td>
-                    <td><?= h($corp->is_active) ?></td>
-                    <td><?= h($corp->is_featured) ?></td>
-                    <td><?= $this->Number->format($corp->id_draft_parent) ?></td>
-                    <td><?= $this->Number->format($corp->priority) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $corp->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $corp->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $corp->id], ['confirm' => __('Are you sure you want to delete # {0}?', $corp->id)]) ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+<div class="container-fluid site-body fap-cities">
+	<div class="row">
+		<div class="backdrop-container">
+			<div class="backdrop backdrop-gradient backdrop-height"></div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="clear"></div>
+				<header class="col-md-12 mt10">
+					<div class="panel panel-light">
+						<div class="panel-heading">Company Actions</div>
+						<div class="panel-body p10">
+							<div class="btn-group">
+								<a href="/admin/corps" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Browse</a>
+								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+							</div>
+						</div>
+					</div>
+				</header>
+				<div class="col-md-12">
+					<section class="panel">
+						<div class="panel-body">
+							<div class="panel-section expanded">
+								<h2><?= __('Companies') ?></h2>
+								<!-- ***TODO*** add in search bar and admin search toggle -->
+								<div class="corps index">
+								    <div class="paginator">
+								        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+								    </div>
+								    <div class="table-responsive">
+								        <table class="table table-bordered table-striped table-condensed mt20">
+								            <thead>
+								                <tr>
+									                <th><?= $this->Paginator->sort('priority', __('Order')) ?></th>
+								                    <th><?= $this->Paginator->sort('is_active', __('Active')) ?><br><?= $this->Paginator->sort('id') ?></th>
+								                    <th><?= $this->Paginator->sort('title') ?><br><?= $this->Paginator->sort('slug') ?></th>
+								                    <th><?= $this->Paginator->sort('short') ?></th>
+								                    <th><?= $this->Paginator->sort('website_url') ?></th>
+								                    <th width="120"><?= $this->Paginator->sort('last_modified', __('Last Mod')) ?><br><?= $this->Paginator->sort('modified', __('Last Saved')) ?></th>
+								                    <th class="actions"><?= __('Actions') ?></th>
+								                </tr>
+								            </thead>
+								            <tbody>
+								                <?php foreach ($corps as $corp): ?>
+								                <tr>
+									                <td><?= $this->Number->format($corp->priority) ?></td>
+								                    <td><?= $corp->is_active ? '<span class="label label-success bi bi-check-lg"> Yes</span>' : '<span class="label label-danger bi bi-x-lg"> No</span>' ?><br><span class="label label-default"><?= h($corp->id) ?></span></td>
+								                    <td><?= h($corp->title) ?><br><?= h($corp->slug) ?></td>
+								                    <td><?= h($corp->short) ?></td>
+								                    <td><?= h($corp->website_url) ?></td>
+								                    <td><?= date_format($corp->last_modified, 'M j, Y') ?><br><?= date_format($corp->modified, 'M j, Y') ?></td>
+								                    <td>
+									                    <div class="btn-group btn-group-vertical">
+									                        <?= $this->Html->link(__('View'), ['action' => 'view', $corp->id], ['class'=>'btn btn-xs btn-default bi bi-eye-fill']) ?>
+									                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $corp->id], ['class'=>'btn btn-xs btn-default bi bi-pencil-fill']) ?>
+									                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $corp->id], ['class'=>'btn btn-xs btn-danger bi bi-trash-fill'], ['confirm' => __('Are you sure you want to delete # {0}?', $corp->id)]) ?>
+									                    </div>
+								                    </td>
+								                </tr>
+								                <?php endforeach; ?>
+								            </tbody>
+								        </table>
+								    </div>
+								    <div class="paginator">
+								        <ul class="pagination">
+								            <?= $this->Paginator->first('<< ' . __('first')) ?>
+								            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+								            <?= $this->Paginator->numbers() ?>
+								            <?= $this->Paginator->next(__('next') . ' >') ?>
+								            <?= $this->Paginator->last(__('last') . ' >>') ?>
+								        </ul>
+								        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+								    </div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

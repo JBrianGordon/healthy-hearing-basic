@@ -79,6 +79,12 @@
 	}
 }
 
+.btn-group {
+	>.btn:not(:first-child), >.btn-group:not(:first-child) {
+		margin-left: 0;
+	}
+}
+
 .btn-group-vertical {
   & > .btn:first-child:not(:last-child) {
     border-top-left-radius: $border-radius-base;
