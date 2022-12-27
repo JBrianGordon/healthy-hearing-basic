@@ -20,12 +20,12 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 						<div class="panel-heading"><?= __('Company Actions') ?></div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default']) ?>
+								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 								<?= $this->Form->postLink(__(' Delete'),['action' => 'delete', $corp->id],['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'btn btn-danger bi bi-trash-fill', 'id' => 'deleteBtn']) ?>
-								<a href="/admin/corps/preview/9" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> Preview</a>
-								<a href="/oticon-hearing-aids" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> View</a>
-								<a href="/admin/corps/draft/9" class="btn btn-default"><span class="glyphicon glyphicon-copy"></span> Update and republish</a>
+								<?= /*** TODO: add preview to controller ***/ $this->Html->link(__(' Preview'), ['action' => 'preview'], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+								<?= $this->Html->link(__(' View'), '/'.$corp->slug, ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+								<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft'], ['class' => 'btn btn-default']) ?>
 							</div>
 						</div>
 					</div>
