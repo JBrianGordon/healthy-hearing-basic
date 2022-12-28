@@ -111,6 +111,22 @@
 			left: 25px;
 			top: 5px;
 		}
+		
+		&.checkbox {
+			label {
+				min-height: 25px;
+				padding-left: 20px;
+				margin-bottom: 0;
+				font-weight: normal;
+				cursor: pointer;
+				width: auto;
+			}
+			
+			input[type=checkbox] {
+				position: absolute;
+				margin-left: -20px;
+			}
+		}
 	}
 }
   
