@@ -23,7 +23,7 @@ $session = $this->request->getSession();
 							<div class="admin-panels">
 								<div class="tar pb20">
 									<div class="btn-group">
-										<button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">Logged in as <?= $session->read('Auth.username') ?>&nbsp;<span class="caret"></span></button>
+										<button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">Logged in as [<?= $session->read('Auth.username') ?>]&nbsp;<span class="caret"></span></button>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 											<li><a class="dropdown-item" href="/logout"><span class="glyphicon glyphicon-share"></span> Logout</a></li>
 										</ul>
