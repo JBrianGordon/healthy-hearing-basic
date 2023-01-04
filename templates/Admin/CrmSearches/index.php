@@ -52,9 +52,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-heading">Crm Searches Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => '#'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-								<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-								<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<?= $this->Html->link(" Browse", ['action' => '#'], ['class' => 'btn btn-default bi bi-search', 'escape' => false]) ?>
+								<?= $this->Html->link(" Add", ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
+								<?= $this->Html->link(" CRM", ['action' => 'locations'], ['class' => 'btn btn-default bi bi-person-fill', 'escape' => false]) ?>
 							</div>
 						</div>
 					</div>
@@ -63,11 +63,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					<section class="panel">
 						<div class="panel-body">
 							<div class="panel-section expanded">
-								<?php
-								//$this->Admin->add(
-									//$this->Html->link('<span class="glyphicon glyphicon-user"></span> CRM', array('admin' => true, 'controller' => 'locations', 'action' => 'index'), array('escape' => false, 'class' => 'sprint-find btn btn-default'))
-								//);
-								?>
 								<h2><?= __('Crm Searches') ?></h2>
 								<div class="locations index">
 								    <?= $this->element('pagination') ?>
