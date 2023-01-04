@@ -1,6 +1,7 @@
+<?php use Cake\Core\Configure; ?>
 <div class="col-md-3 float-end noprint">
 	<!-- Right content -->
-	<?php //***TODO: uncomment when mobile check added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
+	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
 		<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
 	<?php //endif; ?>
 	<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
@@ -70,7 +71,7 @@
 			<?php //endforeach; ?>
 
 	</section>
-	<?php //***TODO: uncomment when mobile check added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
+	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
 		<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
 	<?php //endif; ?>
 </div>
