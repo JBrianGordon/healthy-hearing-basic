@@ -37,7 +37,6 @@
 							            <?= $this->Form->create($zip) ?>
 							            <fieldset>
 							                <?php
-								                /*** TODO: look into 'zip' validation error in debug ***/
 								                echo $this->Form->control('zip', ['label' => 'ZIP', 'type' => 'number']);
 							                    echo $this->Form->control('lat', ['required' => false]);
 							                    echo $this->Form->control('lon', ['required' => false]);
