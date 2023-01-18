@@ -67,8 +67,8 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 						<div class="panel-heading">Imports Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link(" Dashboard", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
-								<?= $this->Html->link(" Stats", ['controller' => 'imports', 'action' => 'tier_status_report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+								<?= $this->Html->link(" Dashboard", ['action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
+								<?= $this->Html->link(" Stats", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
 							</div>
 						</div>
 					</div>
