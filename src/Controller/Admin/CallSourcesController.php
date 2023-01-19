@@ -25,6 +25,10 @@ class CallSourcesController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('Export', [
+            'actions' => ['export']
+        ]);
     }
     
     /**
@@ -49,6 +53,21 @@ class CallSourcesController extends AppController
                 'search' => $requestParams,
             ]);
         $this->set('callSources', $this->paginate($callSourcesQuery));
+        $this->set('count', $callSourcesQuery->count());
         $this->set('fields', $this->CallSources->getSchema()->typeMap());
+    }
+
+    /**
+    * Export a list of calls to CSV
+    */
+    function export() {
+        $this->autoRender = false;
+        $requestParams = $this->request->getQueryParams();
+
+        //$this->Export->setIgnoreFields();
+        //$this->Export->setAdditionalFields();
+        //$this->Export->setOverwriteLabels();
+        $this->Export->exportCsv('export_call_sources.csv');
+        die();
     }
 }
