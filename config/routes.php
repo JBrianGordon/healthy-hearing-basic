@@ -65,6 +65,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/contact-us', 'Pages::contactUs');
         $builder->connect('/newsletter', 'Pages::newsletter');
         $builder->connect('/newsletter-success', 'Pages::newsletterSuccess');
+        $builder->connect('/clinic', 'Pages::clinicInfo');
 
         // Corp/manufacturer pages
         $builder->connect('/{slug}', 'Corps::view')
