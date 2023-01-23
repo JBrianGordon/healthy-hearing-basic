@@ -3,13 +3,14 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\CallSource[]|\Cake\Collection\CollectionInterface $callSources
  */
-
+use Cake\Routing\Router;
 $this->loadHelper('Search.Search', [
     'additionalBlacklist' => [
         'saved_search',
     ],
 ]);
 $queryParams = $this->request->getQueryParams();
+$exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
 $advancedSearchFields = [];
 foreach ($fields as $field => $type) {
@@ -47,7 +48,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body p10">
 							<div class="btn-group">
 								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-								<?= $this->Html->link(__(' Export'), ['action' => 'export.csv'], ['class' => 'btn btn-default bi bi-download']) ?>
+								<?= $this->Form->button(' Export', ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
 							</div>
 						</div>
 					</div>
@@ -108,3 +109,24 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		</div>
 	</div>
 </div>
+<?php
+// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
+echo '<script type="text/javascript">
+    function exportBtnClick() {
+        var count = '.$count.';
+        var readableCount = "'.number_format($count).'";
+        var exportUrl = "'.$exportUrl.'";
+        if (count < 100000) {
+            // Small file. Download immediately.
+            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
+                window.location.replace(exportUrl);
+            }
+        } else {
+            // Large file
+            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
+            alert("Export is too large. Please narrow your results to 100,000 or less.");
+        }
+    }
+    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
+</script>';
+?>
