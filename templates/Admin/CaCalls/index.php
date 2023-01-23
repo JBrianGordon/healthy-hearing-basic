@@ -87,6 +87,8 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 								    <?= $this->element('pagination') ?>
 								    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
 								    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
+								    <?= $this->Form->input('hiddenCount', ['id' => 'hiddenCount', 'type' => 'hidden', 'value' => $count]) ?>
+								    <?= $this->Form->input('hiddenExport', ['id' => 'hiddenExport', 'type' => 'hidden', 'value' => $exportUrl]) ?>
 								    <div class="table-responsive mt30">
 								        <table class="table table-striped table-bordered table-sm">
 								            <thead>
@@ -151,27 +153,6 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 								    </div>
 								    <?= $this->element('pagination') ?>
 								</div>
-								<?php
-								// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-								echo '<script type="text/javascript">
-								    function exportBtnClick() {
-								        var count = '.$count.';
-								        var readableCount = "'.number_format($count).'";
-								        var exportUrl = "'.$exportUrl.'";
-								        if (count < 100000) {
-								            // Small file. Download immediately.
-								            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-								                window.location.replace(exportUrl);
-								            }
-								        } else {
-								            // Large file
-								            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-								            alert("Export is too large. Please narrow your results to 100,000 or less.");
-								        }
-								    }
-								    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-								</script>';
-								?>
 							</div>
 						</div>
 					</section>

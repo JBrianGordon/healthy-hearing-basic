@@ -21,5 +21,5 @@ $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
 <?php if ($isCallSupervisor): ?>
 	<?= $this->Html->link("Calls", ['controller' => 'ca_calls', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?= $this->Html->link("Call groups", ['controller' => 'ca_call_groups', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-	<?= $this->Html->link(" Export", ['action' => 'export.csv'], ['id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escape' => false]) ?>
+	<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
 <?php endif; ?>
