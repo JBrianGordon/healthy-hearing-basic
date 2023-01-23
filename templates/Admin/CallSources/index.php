@@ -47,7 +47,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body p10">
 							<div class="btn-group">
 								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-								<!-- *** TODO: Export functionality needs to be built out *** -->
 								<?= $this->Html->link(__(' Export'), ['action' => 'export.csv'], ['class' => 'btn btn-default bi bi-download']) ?>
 							</div>
 						</div>
