@@ -95,6 +95,10 @@
 	.form-control, .form-select {
 		width: 75%;
 		font-size: 16px;
+		
+		&.inline-date {
+			width: 46%;
+		}
 	}
 	
 	.date {  

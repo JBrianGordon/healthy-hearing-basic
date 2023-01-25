@@ -87,105 +87,114 @@ $advancedSearchFields[] = [
     'checkboxGroupName' => 'Topics',
     'checkboxFields' => $topicFields
 ];
+
+$this->Html->script('dist/ca_call_index.min', ['block' => true]);
 ?>
-<div class="caCallGroups index content">
-    <div class="btn-group btn-group-sm pt-2 mb-3">
-        <?= $this->element('ca_calls/action_bar', ['spamCount' => $spamCount]) ?>
-        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
-    </div>
-    <h3>Call Groups</h3>
-    <?= $this->element('pagination') ?>
-    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
-    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-sm">
-            <thead>
-                <tr>
-                    <th><?= $this->Paginator->sort('id', 'Group ID') ?></th>
-                    <th><?= $this->Paginator->sort('location_id', 'Clinic') ?></th>
-                    <th><?= $this->Paginator->sort('caller_last_name', 'Caller name') ?><br><?= $this->Paginator->sort('patient_last_name', 'Patient name') ?></th>
-                    <th><?= $this->Paginator->sort('created', 'Initial call time') ?></th>
-                    <th><?= $this->Paginator->sort('score') ?></th>
-                    <th><?= $this->Paginator->sort('prospect') ?><br><?= $this->Paginator->sort('status') ?></th>
-                    <th>Flags: <?= $this->Paginator->sort('is_review_needed', 'RN') ?>/<?= $this->Paginator->sort('is_prospect_override', 'PO') ?>/<br>
-                        <?= $this->Paginator->sort('is_spam', 'Spam') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($caCallGroups as $caCallGroup): ?>
-                    <tr>
-                        <td><?= $caCallGroup->id ?></td>
-                        <td>
-                            <?php if (!empty($caCallGroup->location)): ?>
-                                <!-- TODO: hh_url -->
-                                <?= $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', 'prefix' => false, $caCallGroup->location_id]) ?><br>
-                                <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?><br>
-                                <?= $this->Html->link('All Call Groups', ['controller' => 'CaCallGroups', 'action' => 'index', '?' => ['location_id' => $caCallGroup->location_id]], ['class' => 'btn btn-default btn-xs']) ?>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
-                            <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
-                        </td>
-                        <td>
-                            <?php if (isset($caCallGroup->ca_calls[0])): ?>
-                                <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
-                                <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
-                            <?php else: ?>
-                                <span class="badge bg-danger">No calls</span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?php if (!empty($caCallGroup->score)): ?>
-                                <?= CaCallGroup::$scores[$caCallGroup->score] ?>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <span class="badge bg-info"><?= $caCallGroup->prospect ?></span><br>
-                            <?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
-                        <td>
-                            <?php if ($caCallGroup->is_review_needed): ?>
-                                <span class="badge bg-danger">Review Needed</span>
-                            <?php endif; ?>
-                            <?php if ($caCallGroup->is_prospect_override): ?>
-                                <span class="badge bg-warning">Prospect Override</span>
-                            <?php endif; ?>
-                            <?php if ($caCallGroup->is_spam): ?>
-                                <span class="badge bg-danger">Spam</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="actions">
-                            <div class="btn-group-vertical btn-group-sm">
-                                <?= $this->Html->link(__('View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
-                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default']) ?>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    <?= $this->element('pagination') ?>
+<div class="container-fluid site-body fap-cities">
+	<div class="row">
+		<div class="backdrop-container">
+			<div class="backdrop backdrop-gradient backdrop-height"></div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="clear"></div>
+				<header class="col-md-12 mt10">
+					<div class="panel panel-light">
+						<div class="panel-heading">Ca Call Groups Actions</div>
+						<div class="panel-body p10">
+							<div class="btn-group">
+								<?= $this->element('ca_calls/action_bar', ['spamCount' => $spamCount]) ?>
+							</div>
+						</div>
+					</div>
+				</header>						
+				<div class="col-md-12">
+					<section class="panel">
+						<div class="panel-body">
+							<div class="panel-section expanded">
+								<h2>Call Groups</h2>
+								<div class="caCallGroups index content">
+								    <?= $this->element('pagination') ?>
+								    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
+								    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
+								    <div class="table-responsive">
+								        <table class="table table-striped table-bordered table-sm">
+								            <thead>
+								                <tr>
+								                    <th class="p5"><?= $this->Paginator->sort('id', 'Group ID') ?></th>
+								                    <th class="p5"><?= $this->Paginator->sort('location_id', 'Clinic') ?></th>
+								                    <th class="p5"><?= $this->Paginator->sort('caller_last_name', 'Caller name') ?>/<br><?= $this->Paginator->sort('patient_last_name', 'Patient name') ?></th>
+								                    <th class="p5"><?= $this->Paginator->sort('created', 'Initial call time') ?></th>
+								                    <th class="p5"><?= $this->Paginator->sort('score') ?></th>
+								                    <th class="p5"><?= $this->Paginator->sort('prospect') ?>/<br><?= $this->Paginator->sort('status') ?></th>
+								                    <th class="p5">Flags: <?= $this->Paginator->sort('is_review_needed', 'RN') ?>/<?= $this->Paginator->sort('is_prospect_override', 'PO') ?>/<br>
+								                        <?= $this->Paginator->sort('is_spam', 'Spam') ?></th>
+								                    <th class="actions p5"><?= __('Actions') ?></th>
+								                </tr>
+								            </thead>
+								            <tbody>
+								                <?php foreach ($caCallGroups as $caCallGroup): ?>
+								                    <tr>
+								                        <td class="p5"><?= $caCallGroup->id ?></td>
+								                        <td class="p5">
+								                            <?php if (!empty($caCallGroup->location)): ?>
+								                                <!-- TODO: hh_url -->
+								                                <?= $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', 'prefix' => false, $caCallGroup->location_id]) ?><br>
+								                                <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?><br>
+								                                <?= $this->Html->link('All Call Groups', ['controller' => 'CaCallGroups', 'action' => 'index', '?' => ['location_id' => $caCallGroup->location_id]], ['class' => 'btn btn-default btn-xs']) ?>
+								                            <?php endif; ?>
+								                        </td>
+								                        <td class="p5">
+								                            <?= h($caCallGroup->caller_first_name) ?> <?= h($caCallGroup->caller_last_name) ?><br>
+								                            <?= h($caCallGroup->patient_first_name) ?> <?= h($caCallGroup->patient_last_name) ?>
+								                        </td>
+								                        <td class="p5">
+								                            <?php if (isset($caCallGroup->ca_calls[0])): ?>
+								                                <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
+								                                <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
+								                            <?php else: ?>
+								                                <span class="badge bg-danger">No calls</span>
+								                            <?php endif; ?>
+								                        </td>
+								                        <td class="p5">
+								                            <?php if (!empty($caCallGroup->score)): ?>
+								                                <?= CaCallGroup::$scores[$caCallGroup->score] ?>
+								                            <?php endif; ?>
+								                        </td>
+								                        <td class="p5">
+									                        <?php if (!empty($caCallGroup->prospect)): ?>
+									                            <span class="label label-default"><?= $caCallGroup->prospect ?></span><br>
+									                        <?php endif; ?>
+									                        <?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
+								                        <td class="p5">
+								                            <?php if ($caCallGroup->is_review_needed): ?>
+								                                <span class="badge bg-danger">Review Needed</span>
+								                            <?php endif; ?>
+								                            <?php if ($caCallGroup->is_prospect_override): ?>
+								                                <span class="badge bg-warning">Prospect Override</span>
+								                            <?php endif; ?>
+								                            <?php if ($caCallGroup->is_spam): ?>
+								                                <span class="badge bg-danger">Spam</span>
+								                            <?php endif; ?>
+								                        </td>
+								                        <td class="actions p5">
+								                            <div class="btn-group-vertical btn-group-sm">
+								                                <?= $this->Html->link(__(' View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default bi bi-eye-fill']) ?>
+								                                <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default bi bi-pencil-fill']) ?>
+								                            </div>
+								                        </td>
+								                    </tr>
+								                <?php endforeach; ?>
+								            </tbody>
+								        </table>
+								    </div>
+								    <?= $this->element('pagination') ?>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<?php
-// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-echo '<script type="text/javascript">
-    function exportBtnClick() {
-        var count = '.$count.';
-        var readableCount = "'.number_format($count).'";
-        var exportUrl = "'.$exportUrl.'";
-        if (count < 100000) {
-            // Small file. Download immediately.
-            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-                window.location.replace(exportUrl);
-            }
-        } else {
-            // Large file
-            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-            alert("Export is too large. Please narrow your results to 100,000 or less.");
-        }
-    }
-    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-</script>';
-?>
