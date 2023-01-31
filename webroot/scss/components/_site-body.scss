@@ -134,6 +134,11 @@
 		}
 	}
 }
+
+.clearfix {
+	display: block;
+	clear: both
+}
   
 	.read-more-row {
 	  max-width: 100%;
