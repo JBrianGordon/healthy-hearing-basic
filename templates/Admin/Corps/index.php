@@ -57,7 +57,7 @@
 								                    <td><?= date_format($corp->last_modified, 'M j, Y') ?><br><?= date_format($corp->modified, 'M j, Y') ?></td>
 								                    <td>
 									                    <div class="btn-group btn-group-vertical">
-									                        <?= $this->Html->link(__('View'), ['action' => 'view', $corp->id], ['class'=>'btn btn-xs btn-default bi bi-eye-fill']) ?>
+									                        <?= $this->Html->link(__('View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class'=>'btn btn-xs btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 									                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $corp->id], ['class'=>'btn btn-xs btn-default bi bi-pencil-fill']) ?>
 									                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $corp->id], ['class'=>'btn btn-xs btn-danger bi bi-trash-fill'], ['confirm' => __('Are you sure you want to delete # {0}?', $corp->id)]) ?>
 									                    </div>
