@@ -21,7 +21,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 							<div class="btn-group">
 								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
 								<!-- ***TODO: set up add when ready**-->
-								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+								<?= $this->Html->link(__(' Add'), ['action' => 'edit'], ['class' => 'btn btn-success bi-plus-lg']) ?>
 								<?= $this->Form->postLink(
 					                __('Delete'),
 					                ['action' => 'delete', $content->id],
@@ -54,12 +54,17 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    echo $this->Form->control('type');
 								                    echo $this->Form->control('primary_author');
 								                    echo $this->Form->control('hh_url');
-								                    //*** TODO: Fix checkbox layout ***
+								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_active');
+								                    echo '</div>';
+								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_library_item');
+								                    echo '</div>';
+								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_gone');
+								                    echo '</div>';
 								                ?>
-								                <ul class="nav nav-tabs mb-3" role="tablist">
+								                <ul class="nav nav-tabs mb-3 clearfix" role="tablist">
 								                    <li class="nav-item" role="presentation">
 								                        <button class="nav-link active" id="content-tab"
 								                            data-bs-toggle="tab" data-bs-target="#content"
