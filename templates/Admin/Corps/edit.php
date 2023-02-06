@@ -48,9 +48,11 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 									                //*** TODO: Add primary authors ***
 									                echo $this->Form->control('priority', ['label' => 'Order']);
 									                echo $this->Form->control('last_modified', ['empty' => true]);
+									                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 									                echo $this->Form->control('is_active');
+									                echo '</div>';
 								                ?>
-												<div class="tabbable">
+												<div class="tabbable clearfix">
 													<ul class="nav nav-tabs">
 														<li class="active"><a href="#Corp" data-toggle="tab" aria-expanded="true">Company</a></li>
 														<li class=""><a href="#Admin" data-toggle="tab" aria-expanded="false">Admin</a></li>
