@@ -41,7 +41,7 @@ stages:
     displayName: Web deploy
     dependsOn: Build
     environment:
-      name: hhdev-virtual-machine
+      name: HH Dev
       resourceType: VirtualMachine
       tags: dev
     strategy:
