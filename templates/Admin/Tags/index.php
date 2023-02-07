@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Tag[]|\Cake\Collection\CollectionInterface $tags
  */
+ 
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
