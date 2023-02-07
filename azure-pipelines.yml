@@ -57,7 +57,7 @@ stages:
           - task: ExtractFiles@1
             inputs: 
               archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
-              destinationFolder: '/home/hhadmin/hh’
+              destinationFolder: '/home/hhadmin/hh'
           - script: |
               sudo rm -r /var/www/hh/ &&
               sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
