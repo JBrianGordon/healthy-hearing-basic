@@ -144,4 +144,20 @@ class ClinicHelper extends Helper
         }
         return $retval;
     }
+    
+	/**
+	* Truncate text
+	*/
+	public function truncate($string, $limit, $pad=" ...") {
+		if (strlen($string) <= $limit) {
+			return $string;
+		}
+		$retval = substr($string, 0, $limit);
+		if ($string[$limit] != ' ' && $string[$limit] != '.') {
+			$offset = strrpos($retval, ' ');
+			$retval = substr($retval, 0, $offset);
+		}
+		$retval .= $pad;
+		return $retval;
+	}
 }
