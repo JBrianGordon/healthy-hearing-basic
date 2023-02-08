@@ -29,6 +29,9 @@ stages:
       displayName: 'Use PHP version $(phpVersion)'
     - script: composer install --no-interaction --prefer-dist
       displayName: 'composer install'
+    - script: |
+        bin/cake bootstrap install
+      displayName: 'bin/cake bootstrap install'
     - task: NodeTool@0
       inputs:
         versionSpec: '16.x'
