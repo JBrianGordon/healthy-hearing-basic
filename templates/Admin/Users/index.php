@@ -57,7 +57,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					<div class="panel panel-light">
 						<div class="panel-heading">Users Actions</div>
 						<div class="panel-body p10">
-							<div class="btn-group"><a href="/admin/users" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Browse</a><a href="/admin/users/edit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add</a></div>
+							<div class="btn-group">
+								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
+								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+							</div>
 						</div>
 					</div>
 				</header>						
@@ -66,7 +69,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body">
 							<div class="panel-section expanded">
 								<div class="users index content">
-								    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
 								    <h3><?= __(Configure::read('siteNameAbbr').' Users') ?></h3>
 								    <?= $this->element('pagination') ?>
 								    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
