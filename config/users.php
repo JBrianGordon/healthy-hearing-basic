@@ -49,7 +49,7 @@ $config = [
         ],
         'Registration' => [
             // determines if the register is enabled
-            'active' => true,
+            'active' => false,
             // determines if the reCaptcha is enabled for registration
             'reCaptcha' => true,
             // allow a logged in user to access the registration form
@@ -117,7 +117,7 @@ $config = [
                 ],
             ],
         ],
-        'Superuser' => ['allowedToChangePasswords' => false], // able to reset any users password
+        'Superuser' => ['allowedToChangePasswords' => true], // able to reset any users password
         // list of valid hosts to allow redirects after valid login via the `redirect` query param
         'AllowedRedirectHosts' => $allowedRedirectHosts,
     ],

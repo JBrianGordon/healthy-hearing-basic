@@ -33,6 +33,11 @@ label {
 		text-align: right;
 		padding: 7px 15px 0;
 		font-weight: bold;
+		
+		&.float-end {
+			width: 90%;
+			text-align: left;
+		}
 	}
 	
 	.form-control:not([type='date']), .form-select {
