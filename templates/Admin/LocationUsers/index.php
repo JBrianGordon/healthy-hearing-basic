@@ -54,7 +54,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-heading">Clinic Users Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link(" Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<?= $this->Html->link(" Browse", ['action' => 'index'], ['class' => 'btn btn-default bi bi-search', 'escape' => false]) ?>
 								<?= $this->Html->link(" Add", ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
 							</div>
 						</div>
@@ -128,11 +128,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                        ?>
 								                    </td>
 								                    <td class="actions">
-								                        <div class="btn-group-vertical btn-group-sm">
-								                            <?= $this->Html->link(__('Edit'),
-								                                ['action' => 'edit', $locationUser->id],
-								                                ['class' => 'btn btn-default bi bi-pencil-fill']) ?>
-								                        </div>
+							                            <?= $this->Html->link(__(' Edit'),
+							                                ['action' => 'edit', $locationUser->id],
+							                                ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) 
+							                            ?>
 								                    </td>
 								                </tr>
 								                <?php endforeach; ?>
