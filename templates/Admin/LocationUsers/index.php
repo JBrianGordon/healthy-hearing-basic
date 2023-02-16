@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\LocationUser[]|\Cake\Collection\CollectionInterface $locationUsers
  */
- /*** TODO: Do we need the date fields to have start and end? I think we just need one***/
 use Cake\Core\Configure;
 use App\Model\Entity\User;
 $this->loadHelper('Search.Search', [
