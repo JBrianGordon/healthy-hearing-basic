@@ -102,14 +102,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                        <td><?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?></td>
 								                        <td><?php echo date('M jS Y, H:i', strtotime($user->created)).'<br>'.date('M jS Y, H:i', strtotime($user->modified)); ?></td>
 								                        <td class="actions">
-								                            <div class="btn-group-vertical btn-group-sm">
-								                                <?= $this->Html->link(__('Edit'),
-								                                    ['action' => 'edit', $user->id],
-								                                    ['class' => 'btn btn-default rounded bi-pencil-fill']) ?>
-								                                <?= $this->Form->postLink(__('Delete'),
-								                                    ['action' => 'delete', $user->id],
-								                                    ['class' => 'btn btn-default rounded bi-trash-fill', 'confirm' => __('Are you sure you want to delete {0}?', $user->username)]) ?>
-								                            </div>
+							                                <?= $this->Html->link(__(' Edit'),
+							                                    ['action' => 'edit', $user->id],
+							                                    ['class' => 'btn btn-default btn-xs bi-pencil-fill']) 
+							                                ?>
 								                        </td>
 								                    </tr>
 								                <?php endforeach; ?>
