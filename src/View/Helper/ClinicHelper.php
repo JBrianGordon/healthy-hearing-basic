@@ -41,18 +41,7 @@ class ClinicHelper extends Helper
         return '<span class="badge bg-info">'.$reviewsApproved.' reviews</span>';
     }
 
-    public function reviewStatus($key = null) {
-        if ($key !== null) {
-            return Review::$statuses[$key];
-        }
-    }
-
-    public function reviewResponseStatus($key = null) {
-        if ($key !==  null) {
-            return Review::$responseStatuses[$key];
-        }
-    }
-
+    // TO-DO: Remove this function from reviewVerification() below
     public function reviewOrigin($key = null) {
         if ($key !== null) {
             return Review::$origins[$key];

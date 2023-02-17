@@ -9,6 +9,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Review;
+use App\Enums\Model\Review\ReviewStatus;
 
 /**
  * Reviews Model
@@ -203,4 +204,18 @@ class ReviewsTable extends Table
     function ignore($id = null){
         return $this->setStatus($id, Review::STATUS_IGNORED);
     }
+
+
+    /**
+    * Approve function for Reviews
+    * @param int id
+    * @return result of status settinfg
+    */
+    function approve($id = null){
+        $review = $this->get($id);
+        $review->status = ReviewStatus::APPROVED->value;
+
+        return $this->save($review);
+    }
+
 }

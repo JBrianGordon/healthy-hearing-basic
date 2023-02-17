@@ -139,4 +139,24 @@ class ReviewsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    /**
+     * Approve method
+     *
+     * @param string|null $id Review id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function approve($id = null)
+    {
+        $this->request->allowMethod(['post']);
+        if ($this->Reviews->approve($id)) {
+            $this->Flash->success(__('Review approved.'));
+        } else {
+            $this->Flash->error(__('Review was not approved. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
 }

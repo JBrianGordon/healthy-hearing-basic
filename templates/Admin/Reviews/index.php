@@ -7,6 +7,9 @@
 use Cake\Core\Configure;
 use App\Model\Entity\Review;
 use App\Model\Entity\Location;
+use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewOrigin;
+use App\Enums\Model\Review\ReviewResponseStatus;
 
 $this->loadHelper('Search.Search', [
     'additionalBlacklist' => [
@@ -98,9 +101,13 @@ foreach ($fields as $field => $type) {
                             'hiddenField' => 0,
                             'class' => 'checkbox'
                         )); ?></td>
-                        <td><?= $this->Clinic->reviewStatus($review->status); ?>
-                            <?= $this->Clinic->reviewOrigin($review->origin); ?><br><br>
-                            <?= $this->Clinic->reviewResponseStatus($review->response_status); ?></td>
+                        <td>
+                            <?= ReviewStatus::from($review->status)->getStatusLabel(); ?>
+                            <?= ReviewOrigin::from($review->origin)->getOriginLabel(); ?>
+                            <br>
+                            <br>
+                            <?= ReviewResponseStatus::from($review->origin)->getResponseStatusLabel(); ?>
+                        </td>
                         <td>
                             <span class="badge bg-info"><?= $review->character_count; ?></span><br>
                             <?php echo ($review->is_spam) ? "<strong>Spam</strong>" : ""; ?><br>
@@ -141,7 +148,7 @@ foreach ($fields as $field => $type) {
                         <td class="actions" nowrap>
                             <div class="btn-group-vertical btn-group-xs">
                                 <?php echo $this->Html->link("View/Edit", array('admin' => true, 'action' => 'edit', $review->id), array('escape' => false, 'class' => 'btn btn-default')); ?>
-                                <?php echo $this->Html->link("Publish Positive", array('admin' => true, 'action' => 'approve', $review->id, $filter), array('escape' => false, 'class' => 'btn btn-default'), "Are you sure you want to publish ID #{$review->id} (positive)?"); ?>
+                                <?php echo $this->Form->postLink('Publish Positive', ['admin' => true, 'action' => 'approve', $review->id, $filter], ['escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]); ?>
                                 <?php echo $this->Html->link("Publish Negative", array('admin' => true, 'action' => 'deny', $review->id, $filter), array('escape' => false, 'class' => 'btn btn-default'), ['confirm' =>"Are you sure you want to publish ID #{$review->id} (negative)?"]);    ?>
                                 <?php echo $this->Html->link("Quick Spam", array('admin' => true, 'action' => 'spam', $review->id, $filter), ['escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as Spam?"]);    ?>
                                 <!-- Phone reviews will be ignored instead of deleted -->
