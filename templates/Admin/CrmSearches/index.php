@@ -72,6 +72,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 										<table class="table table-bordered table-striped table-condensed" cellpadding="0" cellspacing="0">
 											<thead>
 												<tr>
+								                    <th><?= $this->Paginator->sort('order', 'Order') ?></th>
+								                    <th><?= $this->Paginator->sort('is_public', 'Is Public') ?></th>
+								                    <th><?= $this->Paginator->sort('model', 'Model') ?></th>
+								                    <th><?= $this->Paginator->sort('title', 'Title') ?><br><?= $this->Paginator->sort('search', 'Search') ?></th>
+								                    <th><?= $this->Paginator->sort('user_id', 'User') ?></th>
+								                    <th><?= $this->Paginator->sort('created', 'Created') ?><br><?= $this->Paginator->sort('modified', 'Modified') ?></th>
 									                <th class="actions"><?= __('Actions') ?></th>
 												</tr>
 											</thead>
@@ -95,12 +101,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 									                    <td nowrap><?= date('M jS Y, H:i', strtotime($crmSearch->created)) ?><br><?= date('M jS Y, H:i', strtotime($crmSearch->modified))  ?></td>
 									                    <td class="actions">
 									                        <div class="btn-group-vertical btn-group">
-									                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-xs btn-default']) ?>
+									                            <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-xs btn-default bi bi-pencil-fill']) ?>
 									                            <?=
 									                                $this->Form->postLink(
-									                                    __('Delete'),
+									                                    __(' Delete'),
 									                                    ['action' => 'delete', $crmSearch->id],
-									                                    ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'btn btn-xs btn-danger']
+									                                    ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'btn btn-xs btn-danger bi bi-trash-fill']
 									                                )
 									                            ?>
 									                        </div>
