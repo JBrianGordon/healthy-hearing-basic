@@ -149,7 +149,7 @@ foreach ($fields as $field => $type) {
                             <div class="btn-group-vertical btn-group-xs">
                                 <?php echo $this->Html->link("View/Edit", array('admin' => true, 'action' => 'edit', $review->id), array('escape' => false, 'class' => 'btn btn-default')); ?>
                                 <?php echo $this->Form->postLink('Publish Positive', ['admin' => true, 'action' => 'approve', $review->id, $filter], ['escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]); ?>
-                                <?php echo $this->Html->link("Publish Negative", array('admin' => true, 'action' => 'deny', $review->id, $filter), array('escape' => false, 'class' => 'btn btn-default'), ['confirm' =>"Are you sure you want to publish ID #{$review->id} (negative)?"]);    ?>
+                                <?php echo $this->Form->postLink("Publish Negative", ['admin' => true, 'action' => 'deny', $review->id, $filter], ['escape' => false, 'class' => 'btn btn-default', 'confirm' =>"Are you sure you want to publish ID #{$review->id} (negative)?"]);    ?>
                                 <?php echo $this->Html->link("Quick Spam", array('admin' => true, 'action' => 'spam', $review->id, $filter), ['escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as Spam?"]);    ?>
                                 <!-- Phone reviews will be ignored instead of deleted -->
                                 <?php $ignoreOrDelete = ($review->origin == Review::ORIGIN_PHONE) ? "Ignore" : "Delete"; ?>

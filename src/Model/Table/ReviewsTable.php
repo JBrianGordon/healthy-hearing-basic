@@ -209,7 +209,7 @@ class ReviewsTable extends Table
     /**
     * Approve function for Reviews
     * @param int id
-    * @return result of status settinfg
+    * @return result of status setting
     */
     function approve($id = null){
         $review = $this->get($id);
@@ -218,4 +218,15 @@ class ReviewsTable extends Table
         return $this->save($review);
     }
 
+    /**
+    * Deny (approve negative reviews) function for Reviews
+    * @param int id
+    * @return result of status setting
+    */
+    function deny($id = null){
+        $review = $this->get($id);
+        $review->status = ReviewStatus::DENIED->value;
+
+        return $this->save($review);
+    }
 }
