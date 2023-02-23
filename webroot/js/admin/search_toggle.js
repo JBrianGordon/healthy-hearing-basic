@@ -50,10 +50,10 @@ if($("form").attr("action").match("/admin/locations") || $("form").attr("action"
 		reviewInputs = document.createElement("div"),
 		managementInputs = document.createElement("div"),
 		upgrades = document.createElement("div"),
-		genInputsHeadline = "<div><h3 class='crm-group-header'>General demographics</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-minus'></span> Collapse section</span></div>",
-		reviewsHeadline = "<div><h3 class='crm-group-header'>Reviews</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>",
-		changeManagementHeadline = "<div><h3 class='crm-group-header'>Change management</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>",
-		upgradeHeadline = "<div><h3 class='crm-group-header'>Upgrade Features</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>";
+		genInputsHeadline = "<div><h3 class='crm-group-header'>General demographics</h3><span class='group-toggle btn btn-primary btn-sm'> Collapse section</span></div>",
+		reviewsHeadline = "<div><h3 class='crm-group-header'>Reviews</h3><span class='group-toggle btn btn-primary btn-sm'> Expand section</span></div>",
+		changeManagementHeadline = "<div><h3 class='crm-group-header'>Change management</h3><span class='group-toggle btn btn-primary btn-sm'> Expand section</span></div>",
+		upgradeHeadline = "<div><h3 class='crm-group-header'>Upgrade Features</h3><span class='group-toggle btn btn-primary btn-sm'> Expand section</span></div>";
 		generalInputs.classList.add("filter-group");
 		reviewInputs.classList.add("filter-group", "hidden");
 		managementInputs.classList.add("filter-group", "hidden");
@@ -120,7 +120,7 @@ if($("form").attr("action").match("/admin/locations") || $("form").attr("action"
 	//Expand/collapse button functionality
 	$(".group-toggle").on("click",function(){
 		if ($(this).closest("div").next(".filter-group").hasClass("hidden")) {
-			$(this).html("<span class='bi-minus-lg'> Collapse section</span>").closest("div").next(".filter-group").removeClass("hidden");
+			$(this).html("<span class='bi-dash-lg'> Collapse section</span>").closest("div").next(".filter-group").removeClass("hidden");
 		} else {
 			$(this).html("<span class='bi-plus-lg'> Expand section</span>").closest("div").next(".filter-group").addClass("hidden");
 		}

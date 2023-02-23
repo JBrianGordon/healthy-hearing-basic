@@ -156,6 +156,8 @@ $groupedFields = [
 
 ?>
 <?php $this->Html->script('dist/admin_index_locations.min', ['block' => true]); ?>
+<span id="count" class="d-none"><?= $count ?></span>
+<span id="exportUrl" class="d-none"><?= $exportUrl ?></span>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
 		<div class="backdrop-container">
@@ -170,8 +172,8 @@ $groupedFields = [
 						<div class="panel-body p10">
 							<div class="btn-group">
 						        <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-						        <!-- TODO : ADD FUNCTIONALITY FOR THSE BUTTONS -->
 						        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
+						        <!-- TODO : ADD FUNCTIONALITY FOR THSE BUTTONS -->
 						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emails'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("YHN", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("Oticon", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
@@ -323,6 +325,7 @@ $groupedFields = [
 								                            <?= $this->Html->link(__('View'),
 								                                ['action' => 'view', 'prefix' => false, $location->id],
 								                                ['class' => 'btn btn-default']) ?>
+								                                <!-- *** TODO: missing route needs to be added *** -->
 								                            <?php /*= $this->Html->link(__('Clinic Edit'),
 								                                ['action' => 'edit', 'prefix' => 'clinic', $location->id],
 								                                ['class' => 'btn btn-default']) */ ?>
@@ -334,10 +337,6 @@ $groupedFields = [
 								        </table>
 								    </div>
 								    <?= $this->element('pagination') ?>
-								    <?php
-								    // TODO: Update this when jquery is installed. This will allow certain fields (like priority) to be editable from index page. 
-								    //echo $this->element('inline_ajax');
-								    ?>
 								</div>
 							</div>
 						</div>
@@ -347,24 +346,3 @@ $groupedFields = [
 		</div>
 	</div>
 </div>
-<?php
-// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-echo '<script type="text/javascript">
-    function exportBtnClick() {
-        var count = '.$count.';
-        var readableCount = "'.number_format($count).'";
-        var exportUrl = "'.$exportUrl.'";
-        if (count < 100000) {
-            // Small file. Download immediately.
-            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-                window.location.replace(exportUrl);
-            }
-        } else {
-            // Large file
-            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-            alert("Export is too large. Please narrow your results to 100,000 or less.");
-        }
-    }
-    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-</script>';
-?>
