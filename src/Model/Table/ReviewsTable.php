@@ -3,19 +3,16 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
+use App\Enums\Model\Review\ReviewStatus;
+use App\Model\Entity\Review;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Search\Model\Filter\Base;
-use App\Model\Entity\Review;
-use App\Enums\Model\Review\ReviewStatus;
 
 /**
  * Reviews Model
  *
  * @property \App\Model\Table\LocationsTable&\Cake\ORM\Association\BelongsTo $Locations
- *
  * @method \App\Model\Entity\Review newEmptyEntity()
  * @method \App\Model\Entity\Review newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Review[] newEntities(array $data, array $options = [])
@@ -29,7 +26,6 @@ use App\Enums\Model\Review\ReviewStatus;
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ReviewsTable extends Table
@@ -92,10 +88,10 @@ class ReviewsTable extends Table
             ->add('listing_type', 'Search.Callback', [
                 'callback' => function ($query, $args, $filter) {
                     $listingType = $args['listing_type'];
-                    $query->matching('Locations', function ($q) use($listingType) {
-                        return $q->where(['Locations.listing_type LIKE' => '%'.$listingType.'%']);
+                    $query->matching('Locations', function ($q) use ($listingType) {
+                        return $q->where(['Locations.listing_type LIKE' => '%' . $listingType . '%']);
                     });
-                }
+                },
             ]);
     }
 
@@ -185,33 +181,24 @@ class ReviewsTable extends Table
     }
 
     /**
-    * Set the status of a review, quickly
-    */
-    function setStatus($id = null, $status = null){
-        if ($this->exists($id) && in_array($status, array_keys(Review::$statuses))){
-            $review = $this->get($id);
-            $review = $this->patchEntity($review, ['status' => $status]);
-            return $this->save($review);
-        }
-        return false;
-    }
-
-    /**
-    * Shortcut function ignore
-    * @param int id
-    * @return result of status setting
-    */
-    function ignore($id = null){
+     * Shortcut function ignore
+     *
+     * @param int $id Review id
+     * @return \App\Model\Table\result of status setting
+     */
+    public function ignore($id = null)
+    {
         return $this->setStatus($id, Review::STATUS_IGNORED);
     }
 
-
     /**
-    * Approve function for Reviews
-    * @param int id
-    * @return result of status setting
-    */
-    function approve($id = null){
+     * Approve function for Reviews
+     *
+     * @param int $id Review id
+     * @return \Cake\Datasource\EntityInterface|false of status setting
+     */
+    public function approve($id = null)
+    {
         $review = $this->get($id);
         $review->status = ReviewStatus::APPROVED->value;
 
@@ -219,11 +206,47 @@ class ReviewsTable extends Table
     }
 
     /**
-    * Deny (approve negative reviews) function for Reviews
-    * @param int id
-    * @return result of status setting
-    */
-    function deny($id = null){
+     * Approve-all function for Reviews
+     *
+     * @param array $ids Array of Review ids to be approved
+     * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
+     */
+    public function approveAll(array $ids)
+    {
+        $reviews = $this->find()
+            ->where(['id IN' => $ids])
+            ->toList();
+
+        // Create patch data array of Review ids and APPROVED statuses
+        $patchData = array_fill(0, count($ids), ['status' => ReviewStatus::APPROVED->value]);
+        foreach ($patchData as $key => &$entityData) {
+            $entityData = array_merge(
+                [
+                    'id' => $reviews[$key]->id,
+                ],
+                $entityData
+            );
+        }
+
+        $patchedEntities = $this->patchEntities(
+            $reviews,
+            $patchData,
+            [
+                'fields' => ['status'],
+            ]
+        );
+
+        return $this->saveManyOrFail($patchedEntities);
+    }
+
+    /**
+     * Deny (approve negative reviews) function for Reviews
+     *
+     * @param int $id  Review id
+     * @return \App\Model\Table\result of status setting
+     */
+    public function deny($id = null)
+    {
         $review = $this->get($id);
         $review->status = ReviewStatus::DENIED->value;
 

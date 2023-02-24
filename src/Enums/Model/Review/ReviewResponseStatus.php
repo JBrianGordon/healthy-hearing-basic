@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Enums\Model\Review;
 
@@ -16,6 +17,11 @@ enum ReviewResponseStatus: int
             self::RESPONSE_STATUS_RESPONDED => 'Responded',
             self::RESPONSE_STATUS_PUBLISHED => 'Response Published',
             self::RESPONSE_STATUS_IGNORED => 'Response Ignored',
-       };
+        };
+    }
+
+    public static function getResponseStatusLabelArray(): array
+    {
+        return array_map(fn($case) => $case->getResponseStatusLabel(), self::cases());
     }
 }
