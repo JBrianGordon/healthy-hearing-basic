@@ -27,10 +27,5 @@
   }
 }
 .inline-date {
-  display: inline-block;
-  width:auto;
-  
-  &#modified-start, &#modified-end, &#frozen-expiration-start, &#frozen-expiration-end, &#last-review-date-start, &#last-review-date-end, &#created-start, &#created-end, &#lastlogin-start, &#lastlogin-end, &#reset-expiration-date-start, &#reset-expiration-date-end {
-	  width: 46%;
-  }
+    display: inline-block;
 }

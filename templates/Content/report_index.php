@@ -1,4 +1,6 @@
 <?php
+use Cake\Routing\Router;	
+
 $this->Html->script('dist/content.min', ['block' => true]); 
 if (isset($search)) {
 	$pageUrl = ['controller' => 'content', 'action' => 'search', $search];
@@ -8,7 +10,7 @@ if (isset($search)) {
 	$pageUrl = ['controller' => 'content', 'action' => 'report_index'];
 }
 //Pagination in head
-/***TODO: uncomment when paginator and router built out***
+/*** TODO: can we remove this? Not sure it's being used ***/
 if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 	$paginatorParams = $this->Paginator->params();
 	$this->start('paginator_head');
@@ -23,7 +25,7 @@ if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
 		}
 	}
 	$this->end();
-}*/
+}
 ?>
 <div class="container-fluid site-body blog">
 	<div class="backdrop-container">

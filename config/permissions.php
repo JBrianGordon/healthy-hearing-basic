@@ -144,6 +144,7 @@ return [
                 'home',
                 'newsletter',
                 'newsletterSuccess',
+                'clinicInfo'
             ],
             'bypassAuth' => true,
         ],

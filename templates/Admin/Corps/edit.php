@@ -24,7 +24,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 								<?= $this->Form->postLink(__(' Delete'),['action' => 'delete', $corp->id],['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'btn btn-danger bi bi-trash-fill', 'id' => 'deleteBtn']) ?>
 								<?= /*** TODO: add preview to controller ***/ $this->Html->link(__(' Preview'), ['action' => 'preview'], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-								<?= $this->Html->link(__(' View'), '/'.$corp->slug, ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+								<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 								<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft'], ['class' => 'btn btn-default']) ?>
 							</div>
 						</div>
@@ -48,9 +48,11 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 									                //*** TODO: Add primary authors ***
 									                echo $this->Form->control('priority', ['label' => 'Order']);
 									                echo $this->Form->control('last_modified', ['empty' => true]);
+									                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 									                echo $this->Form->control('is_active');
+									                echo '</div>';
 								                ?>
-												<div class="tabbable">
+												<div class="tabbable clearfix">
 													<ul class="nav nav-tabs">
 														<li class="active"><a href="#Corp" data-toggle="tab" aria-expanded="true">Company</a></li>
 														<li class=""><a href="#Admin" data-toggle="tab" aria-expanded="false">Admin</a></li>

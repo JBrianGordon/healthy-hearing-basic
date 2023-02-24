@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 
 Configure::load('hhConfigs/config_adminMenu', 'default');
 $adminMenu = Configure::read('adminMenu');
+$session = $this->request->getSession();
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -22,8 +23,7 @@ $adminMenu = Configure::read('adminMenu');
 							<div class="admin-panels">
 								<div class="tar pb20">
 									<div class="btn-group">
-										<!-- ***TODO: add user name when user is added to page*** -->
-										<button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">Logged in as ***** &nbsp;<span class="caret"></span></button>
+										<button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">Logged in as [<?= $session->read('Auth.username') ?>]&nbsp;<span class="caret"></span></button>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 											<li><a class="dropdown-item" href="/logout"><span class="glyphicon glyphicon-share"></span> Logout</a></li>
 										</ul>

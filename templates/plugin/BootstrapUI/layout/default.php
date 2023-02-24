@@ -52,6 +52,7 @@
 		        <div class="collapse navbar-collapse" id="navbarMenuToggler">
 		          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 		            <li class="nav-item">
+		            <!-- *** TODO: Add near me link functionality when built *** -->
 		              <a class="nav-link text-uppercase" href="#">Find a clinic</a>
 		            </li>
 		            <li class="nav-item">

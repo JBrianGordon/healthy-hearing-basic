@@ -95,6 +95,10 @@
 	.form-control, .form-select {
 		width: 75%;
 		font-size: 16px;
+		
+		&.inline-date {
+			width: 46%;
+		}
 	}
 	
 	.date {  
@@ -109,7 +113,7 @@
 			float: none;
 			position: relative;
 			left: 25px;
-			top: 5px;
+			top: 8px;
 		}
 		
 		&.checkbox {
@@ -123,11 +127,17 @@
 			}
 			
 			input[type=checkbox] {
-				position: absolute;
-				margin-left: -20px;
+				position: relative;
+				margin-right: 10px;
+				float: left;
 			}
 		}
 	}
+}
+
+.clearfix {
+	display: block;
+	clear: both
 }
   
 	.read-more-row {

@@ -54,6 +54,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    echo $this->Form->control('type');
 								                    echo $this->Form->control('primary_author');
 								                    echo $this->Form->control('hh_url');
+								                    //*** TODO: Fix checkbox layout ***
 								                    echo $this->Form->control('is_active');
 								                    echo $this->Form->control('is_library_item');
 								                    echo $this->Form->control('is_gone');
@@ -82,6 +83,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    <!-- Content Tab -->
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
+									                       /*** TODO: Add CKEditor when ready ***/
 								                            echo $this->Form->control('body');
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');

@@ -52,9 +52,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-heading">Crm Searches Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => '#'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-								<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-								<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<?= $this->Html->link(" Browse", ['action' => '#'], ['class' => 'btn btn-default bi bi-search', 'escape' => false]) ?>
+								<?= $this->Html->link(" Add", ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
+								<?= $this->Html->link(" CRM", ['action' => 'locations'], ['class' => 'btn btn-default bi bi-person-fill', 'escape' => false]) ?>
 							</div>
 						</div>
 					</div>
@@ -63,11 +63,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					<section class="panel">
 						<div class="panel-body">
 							<div class="panel-section expanded">
-								<?php
-								//$this->Admin->add(
-									//$this->Html->link('<span class="glyphicon glyphicon-user"></span> CRM', array('admin' => true, 'controller' => 'locations', 'action' => 'index'), array('escape' => false, 'class' => 'sprint-find btn btn-default'))
-								//);
-								?>
 								<h2><?= __('Crm Searches') ?></h2>
 								<div class="locations index">
 								    <?= $this->element('pagination') ?>
@@ -77,6 +72,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 										<table class="table table-bordered table-striped table-condensed" cellpadding="0" cellspacing="0">
 											<thead>
 												<tr>
+								                    <th><?= $this->Paginator->sort('order', 'Order') ?></th>
+								                    <th><?= $this->Paginator->sort('is_public', 'Is Public') ?></th>
+								                    <th><?= $this->Paginator->sort('model', 'Model') ?></th>
+								                    <th><?= $this->Paginator->sort('title', 'Title') ?><br><?= $this->Paginator->sort('search', 'Search') ?></th>
+								                    <th><?= $this->Paginator->sort('user_id', 'User') ?></th>
+								                    <th><?= $this->Paginator->sort('created', 'Created') ?><br><?= $this->Paginator->sort('modified', 'Modified') ?></th>
 									                <th class="actions"><?= __('Actions') ?></th>
 												</tr>
 											</thead>
@@ -100,12 +101,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 									                    <td nowrap><?= date('M jS Y, H:i', strtotime($crmSearch->created)) ?><br><?= date('M jS Y, H:i', strtotime($crmSearch->modified))  ?></td>
 									                    <td class="actions">
 									                        <div class="btn-group-vertical btn-group">
-									                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-xs btn-default']) ?>
+									                            <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $crmSearch->id], ['class' => 'btn btn-xs btn-default bi bi-pencil-fill']) ?>
 									                            <?=
 									                                $this->Form->postLink(
-									                                    __('Delete'),
+									                                    __(' Delete'),
 									                                    ['action' => 'delete', $crmSearch->id],
-									                                    ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'btn btn-xs btn-danger']
+									                                    ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id), 'class' => 'btn btn-xs btn-danger bi bi-trash-fill']
 									                                )
 									                            ?>
 									                        </div>

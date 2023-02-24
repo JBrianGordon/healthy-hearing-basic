@@ -55,7 +55,7 @@ class AdminHelper extends Helper
         foreach ($checkboxFields as $field) {
             $formInput .= '<div class="mb-1 col-md-6">';
             $label = ['text' => $field['label'], 'class' => 'small'];
-            $formInput .= $this->formInput($field['field'], 'boolean', $field['label'], false, false, $field['value']);
+            $formInput .= $this->formInput($field['field'], $field['type'], $field['label'], false, false, $field['value']);
             $formInput .= '</div>';
         }
         $formInput .= '</div></div>';
@@ -96,6 +96,15 @@ class AdminHelper extends Helper
                 // TODO: Make this a prettier 3-way switch
                 $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
                 $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$label.'">';
+                break;
+			case 'checkbox':
+                $formInput = $this->Form->control($field, [
+                    'type' => 'checkbox',
+                    'options' => $options,
+                    'empty' => $empty,
+                    'label' => ['text' => $label, 'class' => 'float-end'],
+                    'multiple' => null,
+                ]);
                 break;
             case 'datetime':
             case 'date':
