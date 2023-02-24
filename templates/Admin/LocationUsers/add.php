@@ -19,8 +19,8 @@ $this->Html->script('dist/location_users.min', ['block' => true]);
 						<div class="panel-heading"><?= __(' Clinic Users Actions') ?></div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<a href="/admin/location_users" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Browse</a>
-								<a href="/admin/location_users/edit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add</a>
+								<a href="/admin/location_users" class="btn btn-default bi bi-search"> Browse</a>
+								<a href="/admin/location_users/edit" class="btn btn-success bi bi-plus-lg"> Add</a>
 							</div>
 						</div>
 					</div>
