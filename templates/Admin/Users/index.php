@@ -57,7 +57,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					<div class="panel panel-light">
 						<div class="panel-heading">Users Actions</div>
 						<div class="panel-body p10">
-							<div class="btn-group"><a href="/admin/users" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Browse</a><a href="/admin/users/edit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add</a></div>
+							<div class="btn-group">
+								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
+								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+							</div>
 						</div>
 					</div>
 				</header>						
@@ -66,7 +69,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body">
 							<div class="panel-section expanded">
 								<div class="users index content">
-								    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
 								    <h3><?= __(Configure::read('siteNameAbbr').' Users') ?></h3>
 								    <?= $this->element('pagination') ?>
 								    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
@@ -102,14 +104,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                        <td><?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?></td>
 								                        <td><?php echo date('M jS Y, H:i', strtotime($user->created)).'<br>'.date('M jS Y, H:i', strtotime($user->modified)); ?></td>
 								                        <td class="actions">
-								                            <div class="btn-group-vertical btn-group-sm">
-								                                <?= $this->Html->link(__('Edit'),
-								                                    ['action' => 'edit', $user->id],
-								                                    ['class' => 'btn btn-default rounded bi-pencil-fill']) ?>
-								                                <?= $this->Form->postLink(__('Delete'),
-								                                    ['action' => 'delete', $user->id],
-								                                    ['class' => 'btn btn-default rounded bi-trash-fill', 'confirm' => __('Are you sure you want to delete {0}?', $user->username)]) ?>
-								                            </div>
+							                                <?= $this->Html->link(__(' Edit'),
+							                                    ['action' => 'edit', $user->id],
+							                                    ['class' => 'btn btn-default btn-xs bi-pencil-fill']) 
+							                                ?>
 								                        </td>
 								                    </tr>
 								                <?php endforeach; ?>
