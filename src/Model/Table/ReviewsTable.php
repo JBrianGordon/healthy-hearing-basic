@@ -4,10 +4,17 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
+use Cake\Log\LogTrait;
+use Cake\I18n\FrozenTime;
+
 
 /**
  * Reviews Model
@@ -30,6 +37,8 @@ use Cake\Validation\Validator;
  */
 class ReviewsTable extends Table
 {
+    use LogTrait;
+
     /**
      * Initialize method
      *
@@ -181,6 +190,70 @@ class ReviewsTable extends Table
     }
 
     /**
+     * beforeSave() for ReviewsTable
+     *
+     * @param \Cake\Datasource\EntityInterface $event
+     * @param \Cake\Event\EventInterface $entity
+     * @param \ArrayObject $options
+     *
+     */
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $entity->set('_send_notification_email', true);
+        $timeTest = FrozenTime::now()->format('Y-m-d H:i:s');
+        $entity->set('timeTest', $timeTest);
+
+        // Check if 'status' OR 'response_status' has changed
+        if ($entity->isDirty('status') || $entity->isDirty('response_status')) {
+            // Is status 'Approved' (Published)?
+            if (ReviewStatus::APPROVED === ReviewStatus::from($entity->get('status'))) {
+                // Was the 'response_status' changed from RESPONDED -> PUBLISHED
+                if (
+                    $entity->getOriginal('response_status') === ReviewResponseStatus::RESPONSE_STATUS_RESPONDED  &&
+                    $entity->get('response_status') === ReviewResponseStatus::RESPONSE_STATUS_PUBLISHED
+                   ) {
+                    // A clinic response was approved -> Send response-posted email
+                    $entity->set('emailReviewResponsePosted', true);
+                // Another 'response_status' change that doesn't trigger an email will return true
+                } elseif ($entity->getOriginal('response_status') !== $entity->get('response_status')) {
+                    return true;
+                // Status changed to Approved - Send positive review email
+                } else {
+                    $entity->set('emailReviewRecievedPositive', true);
+                }
+            // Is status 'Denied' (Publish negative review)?
+            } elseif (ReviewStatus::DENIED === ReviewStatus::from($entity->get('status'))) {
+                // Status changed to 'Denied' (Published Negative) - Send negative review email
+                $entity->set('emailReviewRecievedNegative', true);
+                $entity->set('denied_date', FrozenTime::now()->format('Y-m-d H:i:s'));
+                $entity->set('status', ReviewStatus::APPROVED->value);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * afterSave() for ReviewsTable
+     *
+     * @param \Cake\Datasource\EntityInterface $event
+     * @param \Cake\Event\EventInterface $entity
+     * @param \ArrayObject $options
+     *
+     */
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        match (true) {
+            $entity->get('emailReviewResponsePosted') => $this->log("emailReviewResponsePosted", 'debug'),
+            $entity->get('emailReviewRecievedPositive') => $this->log("emailReviewRecieved-POSITIVE", 'debug'),
+            $entity->get('emailReviewRecievedNegative') => $this->log("emailReviewRecieved-NEGATIVE", 'debug'),
+        };
+
+        // averageRating()
+        // updateReviewCount()
+        // updateReviewStatus()
+    }
+
+    /**
      * Shortcut function ignore
      *
      * @param int $id Review id
@@ -188,7 +261,10 @@ class ReviewsTable extends Table
      */
     public function ignore($id = null)
     {
-        return $this->setStatus($id, Review::STATUS_IGNORED);
+        $review = $this->get($id);
+        $review->status = ReviewStatus::IGNORED->value;
+
+        return $this->save($review);
     }
 
     /**
