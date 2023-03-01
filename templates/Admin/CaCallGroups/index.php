@@ -138,8 +138,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 								                        <td class="p5"><?= $caCallGroup->id ?></td>
 								                        <td class="p5">
 								                            <?php if (!empty($caCallGroup->location)): ?>
-								                                <!-- TODO: hh_url -->
-								                                <?= $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', 'prefix' => false, $caCallGroup->location_id]) ?><br>
+								                                <?= $this->Html->link($caCallGroup->location->title, ['controller' => 'Admin/Locations', 'action' => 'edit', 'prefix' => false, $caCallGroup->location_id]) ?><br>
 								                                <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?><br>
 								                                <?= $this->Html->link('All Call Groups', ['controller' => 'CaCallGroups', 'action' => 'index', '?' => ['location_id' => $caCallGroup->location_id]], ['class' => 'btn btn-default btn-xs']) ?>
 								                            <?php endif; ?>

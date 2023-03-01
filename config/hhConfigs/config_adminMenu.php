@@ -41,7 +41,7 @@ if (Configure::read('showReports')) {
 }
 $editorialItems['Misc. pages'] = [
     'url' => '/admin/pages',
-    'icon' => 'bi bi-book',
+    'icon' => 'bi bi-book-fill',
 ];
 $editorialItems['Tags'] = [
     'url' => '/admin/tags',
@@ -73,7 +73,7 @@ if (Configure::read('isCallTrackingEnabled')) {
 }
 $locationsItems['Clinic portal'] = [
     'url' => '/clinic/login',
-    'icon' => 'bi bi-person-workspace',
+    'icon' => 'bi bi-box-arrow-in-right',
 ];
 $locationsItems['Clinic users'] = [
     'url' => '/admin/location-users',
@@ -221,7 +221,7 @@ if (Configure::read('showImageSitemap')) {
     ];
 }
 $seoToolsMenu = [
-    'icon' => 'bi bi-briefcase',
+    'icon' => 'bi bi-briefcase-fill',
     'items' => $seoItems,
 ];
 
