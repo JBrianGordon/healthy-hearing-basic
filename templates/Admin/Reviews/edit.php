@@ -23,7 +23,7 @@
             <fieldset>
                 <legend><?= __('Edit Review') ?></legend>
                 <?php
-                    echo $this->Form->control('location_id', ['options' => $locations]);
+                    echo $this->Form->number('location_id');
                     echo $this->Form->control('body');
                     echo $this->Form->control('first_name');
                     echo $this->Form->control('last_name');

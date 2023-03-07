@@ -161,6 +161,13 @@ return [
             'action' => ['index', 'view'],
             'bypassAuth' => true,
         ],
+        // Reviews - no auth required
+        [
+            'prefix' => false,
+            'controller' => 'Reviews',
+            'action' => ['addReview'],
+            'bypassAuth' => true,
+        ],
         // Wikis - no auth required
         [
             'prefix' => false,

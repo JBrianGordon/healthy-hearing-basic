@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewOrigin;
+
 /**
  * Reviews Controller
  *
@@ -47,5 +50,50 @@ class ReviewsController extends AppController
         }
         $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
         $this->set(compact('review', 'locations'));
+    }
+
+    /**
+     * Add Review method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function addReview()
+    {
+        // TO-DO: This currently requires manual AJAX-ing from the console with something like:
+        // fetch('/reviews/add-review', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+        //   },
+        //   body: JSON.stringify({
+        //     location_id: 8119030851,
+        //     first_name: 'Bill',
+        //     last_name: 'Talkington',
+        //     zip: 15401,
+        //     rating: 5,
+        //     body: 'This is a great clinic!!!!!!',
+        //   })
+        // }).then(response => response.text())
+        //   .then(data => console.log(data))
+        //   .catch(error => console.error(error));
+        $this->viewBuilder()->setLayout('ajax');
+
+        $review = $this->Reviews->newEmptyEntity();
+
+        $jsonData = (string)$this->request->getBody();
+
+        $jsonRequestData = json_decode($jsonData, true);
+
+        $jsonRequestData['status'] = ReviewStatus::PENDING->value;
+        $jsonRequestData['origin'] = ReviewOrigin::ORIGIN_ONLINE->value;
+
+        $review = $this->Reviews->patchEntity($review, $jsonRequestData);
+
+        if ($this->Reviews->save($review)) {
+            return $this->response->withStringBody('Successfully saved!');
+        }
+        return $this->response->withStringBody('Failure on save!');
+
     }
 }

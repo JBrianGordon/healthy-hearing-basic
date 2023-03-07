@@ -96,9 +96,9 @@ class ReviewsController extends AppController
             $review = $this->Reviews->patchEntity(
                 $review,
                 $this->request->getData(),
-                [
-                    'fields' => ['body', 'first_name'] // TO-DO: UPDATE 'FIELDS'
-                ]
+                // [
+                //     'fields' => ['body', 'first_name'] // TO-DO: UPDATE 'FIELDS'
+                // ]
             );
             if ($this->Reviews->save($review)) {
                 $this->Flash->success(__('The review has been saved.'));

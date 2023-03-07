@@ -48,7 +48,7 @@ class Review extends Entity
      * @var array<bool>
      */
     protected $_accessible = [
-        '*' => false,
+        '*' => true,    // TO-DO: THIS IS VERY PERMISSIVE WHILE WE WORK ON FEATURES
         // 'location_id' => true,
         // 'body' => true,
         // 'first_name' => true,
