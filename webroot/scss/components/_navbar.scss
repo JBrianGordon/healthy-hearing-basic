@@ -45,6 +45,18 @@
 		}
 		.navbar-nav .nav-link {
 			color: $brand-primary;
+			
+			.hidden-sm {
+				@media (max-width: $screen-sm-max) {
+					display: none;
+				}
+			}
+			
+			.hidden-lg {
+				@media (min-width: $screen-md-min) {
+					display: none;
+				}
+			}
 		}
 		
 		.navbar-collapse {
