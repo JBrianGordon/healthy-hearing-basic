@@ -11,57 +11,112 @@ $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
 ?>
 <nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light bg-light">
-	<div class="container p0">
+	<div class="container">
 		<div class="row">
 			<div class="col-xs-12" id="navParent">
 				<div class="navbar-header">
-					<a href="/" class="navbar-logo <?php echo Configure::read('country'); ?>" <?php echo $logoBorder; ?>>
-						<img src="<?= $logo; ?>" alt="<?php echo $siteName; ?>" width="198" height="40" />
+					<a href="/" class="navbar-logo <?= Configure::read('country'); ?>" <?= $logoBorder ?>>
+						<img src="<?= $logo ?>" alt="<?= $siteName ?>" width="198" height="40" />
 					</a>
 				</div>
 				<div class="nav navbar-right" id="navContainer">
-					<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
-						<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
-							<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
-						</div>
-					</div>
-					<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
-					<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
-						<div class="navbar-search" data-hh-search>
-							<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
-							<div class="search-wrapper" id="searchWrapper">
-							  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
-							  <form id="MegaSearch" action="/search" method="POST">
-								<label for="ContentSearch">Search the site</label>
-							  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
-							  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
-							  </form>
+					<?php if (empty($user)): ?>
+						<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
+							<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
+								<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
 							</div>
 						</div>
-					<?php //endif; ?>
-					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						<li data-hh-mega-nav-trigger="find-a-professional">
-							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
-								<span class="hidden-md hidden-lg">Clinics</span>
-								<span class="hidden-sm">Find a clinic</span>
-							</a>
-						</li>
-						<li data-hh-mega-nav-trigger="hearing-loss-help">
-							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-						</li>
-						<li data-hh-mega-nav-trigger="hearing-aid-help">
-							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-						</li>
-						<?php if (Configure::read('showReports')): ?>
-							<li>
-								<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-							</li>
-						<?php endif; ?>
+					<?php else: ?>
 						<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
-						<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
-							<li>
-								<?= $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
+						<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
+							<!--<div class="navbar-search" data-hh-search>
+								<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
+								<div class="search-wrapper" id="searchWrapper">
+								  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
+								  <form id="MegaSearch" action="/search" method="POST">
+									<label for="ContentSearch">Search the site</label>
+								  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
+								  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
+								  </form>
+								</div>
+							</div>-->
+						<?php //endif; ?>
+						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+							<li data-hh-mega-nav-trigger="find-a-professional">
+								<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
+									<span class="hidden-md hidden-lg">Clinics</span>
+									<span class="hidden-sm">Find a clinic</span>
+								</a>
 							</li>
+							<li data-hh-mega-nav-trigger="hearing-loss-help">
+								<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+							</li>
+							<li data-hh-mega-nav-trigger="hearing-aid-help">
+								<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+							</li>
+							<?php if (Configure::read('showReports')): ?>
+								<li>
+									<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+								</li>
+							<?php endif; ?>
+							<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
+							<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
+								<li>
+									<?= $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
+								</li>
+							<?php //endif; ?>
+						</ul>
+					<?php endif; ?>
+					<ul class="nav navbar-nav navbar-right ms-auto mb-2 mb-lg-0">
+						<?php if (empty($user)): ?>
+							<li class="dropdown clinic-link">
+								<a href="#" class="dropdown-toggle bi bi-user-fill" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> My Account <span class="caret"></span></a>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+									<li><?= $this->Html->link(' My Profile', ['action' => '/locations/edit', 'class' => 'bi bi-globe-americas'], ['escape' => false]) ?></li>
+									<li><?= $this->Html->link(' Reporting', ['action'=>'/ca_call_groups/report', 'class' => 'bi bi-list-task']) ?></li>
+									<li><?= $this->Html->link(' Reviews', ['action'=>'reviews', 'class' => 'bi bi-star-fill']) ?></li>
+									<!-- *** TODO: check if $showLibaryLink when variable is set *** -->
+									<?php //if ($showLibraryLink): ?>
+										<li><?= $this->Html->link(' Library', ['action'=>'library', 'class' => 'bi bi-book-fill']) ?></li>
+									<?php //endif; ?>
+									<li><?= $this->Html->link(' Help', ['action'=>'/pages/faq', 'class' => 'bi bi-question-circle-fill']) ?></li>
+									<li><?= $this->Html->link(' Inspired by Ida', ['action'=>'/pages/about-ida', 'class' => 'bi bi-award-fill']) ?></li>
+									<hr class="mt10 mb10">
+									<li><?= $this->Html->link(' My Account', ['action'=>'/users/account', 'class' => 'bi bi-person-fill', 'escape' => 'false']) ?></li>
+									<li><?= $this->Html->link(' Logout', ['action'=>'logout', 'class' => 'bi bi-power', 'escape' => 'false']) ?></li>
+								</ul>
+							</li>
+						<?php else: ?>
+							<div class="nav navbar-right" id="navContainer">
+								<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
+									<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
+										<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
+									</div>
+								</div>
+								<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
+									<div class="navbar-search" data-hh-search>
+										<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
+										<div class="search-wrapper" id="searchWrapper">
+										  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
+										  <form id="MegaSearch" action="/search" method="POST">
+											<label for="ContentSearch">Search the site</label>
+										  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
+										  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
+										  </form>
+										</div>
+									</div>
+								<?php //endif; ?>
+								<ul class="nav navbar-nav">
+									<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
+										<!--<li class="bi bi-gear-fill">
+											<a href="/admin-panel"></a>
+										</li>-->
+									<?php //endif; ?>
+								</ul>
+							</div>
+						<?php endif; ?>
+						<?php //if ($isadmin || $isagent || $iswriter): ?>
+							<!--<li class="clinic-link bi bi-gear-fill"><a href="/admin-panel"></a></li>-->
 						<?php //endif; ?>
 					</ul>
 				</div>
@@ -74,7 +129,7 @@ $logo = Configure::read('logo');
 			<div class="row mega-nav-inner">
 				<div class="col-md-6 col-sm-6">
 					<?php if (!empty($clinicsNearMe)): ?>
-						<?php echo $this->element($this->Clinic->nearMe($clinicsNearMe, 'nav_bar')); ?>
+						<?= $this->element($this->Clinic->nearMe($clinicsNearMe, 'nav_bar')); ?>
 					<?php endif; ?>
 					<hr style="border-top: 4px ridge #78afc9;">
 					<p class="mb5"><strong>Find hearing clinics in my country:</strong></p>
@@ -90,7 +145,7 @@ $logo = Configure::read('logo');
 					<?php if (Configure::read('country') == 'US'): ?>
 						<div data-hh-map></div>
 					<?php else: ?>
-						<object data="<?php echo Configure::read('map'); ?>" type="image/svg+xml" id="headerMap"></object>
+						<object data="<?= Configure::read('map'); ?>" type="image/svg+xml" id="headerMap"></object>
 					<?php endif; ?>
 					<div class="tac mt20">
 						<!-- *** TODO: add search bar when it's built out *** -->
