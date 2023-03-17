@@ -158,244 +158,244 @@ class UsersTable extends CakeDcUsersTable
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->scalar('username')
-            ->maxLength('username', 128)
-            ->requirePresence('username', 'create')
-            ->notEmptyString('username');
+        // $validator
+        //     ->scalar('username')
+        //     ->maxLength('username', 128)
+        //     ->requirePresence('username', 'create')
+        //     ->notEmptyString('username');
 
-        $validator
-            ->scalar('password')
-            ->maxLength('password', 128)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+        // $validator
+        //     ->scalar('password')
+        //     ->maxLength('password', 128)
+        //     ->requirePresence('password', 'create')
+        //     ->notEmptyString('password');
 
-        $validator
-            ->integer('level')
-            ->notEmptyString('level');
+        // $validator
+        //     ->integer('level')
+        //     ->notEmptyString('level');
 
-        $validator
-            ->scalar('first_name')
-            ->maxLength('first_name', 128)
-            ->requirePresence('first_name', 'create')
-            ->notEmptyString('first_name');
+        // $validator
+        //     ->scalar('first_name')
+        //     ->maxLength('first_name', 128)
+        //     ->requirePresence('first_name', 'create')
+        //     ->notEmptyString('first_name');
 
-        $validator
-            ->scalar('middle_name')
-            ->maxLength('middle_name', 128)
-            ->allowEmptyString('middle_name');
+        // $validator
+        //     ->scalar('middle_name')
+        //     ->maxLength('middle_name', 128)
+        //     ->allowEmptyString('middle_name');
 
-        $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 128)
-            ->requirePresence('last_name', 'create')
-            ->notEmptyString('last_name');
+        // $validator
+        //     ->scalar('last_name')
+        //     ->maxLength('last_name', 128)
+        //     ->requirePresence('last_name', 'create')
+        //     ->notEmptyString('last_name');
 
-        $validator
-            ->scalar('degrees')
-            ->maxLength('degrees', 128)
-            ->allowEmptyString('degrees');
+        // $validator
+        //     ->scalar('degrees')
+        //     ->maxLength('degrees', 128)
+        //     ->allowEmptyString('degrees');
 
-        $validator
-            ->scalar('credentials')
-            ->maxLength('credentials', 128)
-            ->allowEmptyString('credentials');
+        // $validator
+        //     ->scalar('credentials')
+        //     ->maxLength('credentials', 128)
+        //     ->allowEmptyString('credentials');
 
-        $validator
-            ->scalar('title_dept_company')
-            ->allowEmptyString('title_dept_company');
+        // $validator
+        //     ->scalar('title_dept_company')
+        //     ->allowEmptyString('title_dept_company');
 
-        $validator
-            ->scalar('company')
-            ->maxLength('company', 128)
-            ->allowEmptyString('company');
+        // $validator
+        //     ->scalar('company')
+        //     ->maxLength('company', 128)
+        //     ->allowEmptyString('company');
 
-        $validator
-            ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email');
+        // $validator
+        //     ->email('email')
+        //     ->requirePresence('email', 'create')
+        //     ->notEmptyString('email');
 
-        $validator
-            ->scalar('phone')
-            ->maxLength('phone', 32)
-            ->allowEmptyString('phone');
+        // $validator
+        //     ->scalar('phone')
+        //     ->maxLength('phone', 32)
+        //     ->allowEmptyString('phone');
 
-        $validator
-            ->scalar('address')
-            ->maxLength('address', 128)
-            ->allowEmptyString('address');
+        // $validator
+        //     ->scalar('address')
+        //     ->maxLength('address', 128)
+        //     ->allowEmptyString('address');
 
-        $validator
-            ->scalar('address_2')
-            ->maxLength('address_2', 128)
-            ->allowEmptyString('address_2');
+        // $validator
+        //     ->scalar('address_2')
+        //     ->maxLength('address_2', 128)
+        //     ->allowEmptyString('address_2');
 
-        $validator
-            ->scalar('city')
-            ->maxLength('city', 128)
-            ->allowEmptyString('city');
+        // $validator
+        //     ->scalar('city')
+        //     ->maxLength('city', 128)
+        //     ->allowEmptyString('city');
 
-        $validator
-            ->scalar('state')
-            ->maxLength('state', 128)
-            ->allowEmptyString('state');
+        // $validator
+        //     ->scalar('state')
+        //     ->maxLength('state', 128)
+        //     ->allowEmptyString('state');
 
-        $validator
-            ->scalar('zip')
-            ->maxLength('zip', 32)
-            ->allowEmptyString('zip');
+        // $validator
+        //     ->scalar('zip')
+        //     ->maxLength('zip', 32)
+        //     ->allowEmptyString('zip');
 
-        $validator
-            ->scalar('country')
-            ->maxLength('country', 2)
-            ->allowEmptyString('country');
+        // $validator
+        //     ->scalar('country')
+        //     ->maxLength('country', 2)
+        //     ->allowEmptyString('country');
 
-        $validator
-            ->scalar('url')
-            ->maxLength('url', 255)
-            ->allowEmptyString('url');
+        // $validator
+        //     ->scalar('url')
+        //     ->maxLength('url', 255)
+        //     ->allowEmptyString('url');
 
-        $validator
-            ->scalar('bio')
-            ->allowEmptyString('bio');
+        // $validator
+        //     ->scalar('bio')
+        //     ->allowEmptyString('bio');
 
-        $validator
-            ->scalar('image_url')
-            ->maxLength('image_url', 128)
-            ->allowEmptyFile('image_url');
+        // $validator
+        //     ->scalar('image_url')
+        //     ->maxLength('image_url', 128)
+        //     ->allowEmptyFile('image_url');
 
-        $validator
-            ->scalar('thumb_url')
-            ->maxLength('thumb_url', 128)
-            ->allowEmptyString('thumb_url');
+        // $validator
+        //     ->scalar('thumb_url')
+        //     ->maxLength('thumb_url', 128)
+        //     ->allowEmptyString('thumb_url');
 
-        $validator
-            ->scalar('square_url')
-            ->maxLength('square_url', 128)
-            ->allowEmptyString('square_url');
+        // $validator
+        //     ->scalar('square_url')
+        //     ->maxLength('square_url', 128)
+        //     ->allowEmptyString('square_url');
 
-        $validator
-            ->scalar('micro_url')
-            ->maxLength('micro_url', 128)
-            ->allowEmptyString('micro_url');
+        // $validator
+        //     ->scalar('micro_url')
+        //     ->maxLength('micro_url', 128)
+        //     ->allowEmptyString('micro_url');
 
-        $validator
-            ->integer('modified_by')
-            ->notEmptyString('modified_by');
+        // $validator
+        //     ->integer('modified_by')
+        //     ->notEmptyString('modified_by');
 
-        $validator
-            ->dateTime('last_login')
-            ->allowEmptyDateTime('last_login');
+        // $validator
+        //     ->dateTime('last_login')
+        //     ->allowEmptyDateTime('last_login');
 
-        $validator
-            ->boolean('active')
-            ->notEmptyString('active');
+        // $validator
+        //     ->boolean('active')
+        //     ->notEmptyString('active');
 
-        $validator
-            ->boolean('is_hardened_password')
-            ->notEmptyString('is_hardened_password');
+        // $validator
+        //     ->boolean('is_hardened_password')
+        //     ->notEmptyString('is_hardened_password');
 
-        $validator
-            ->boolean('is_admin')
-            ->notEmptyString('is_admin');
+        // $validator
+        //     ->boolean('is_admin')
+        //     ->notEmptyString('is_admin');
 
-        $validator
-            ->boolean('is_it_admin')
-            ->notEmptyString('is_it_admin');
+        // $validator
+        //     ->boolean('is_it_admin')
+        //     ->notEmptyString('is_it_admin');
 
-        $validator
-            ->boolean('is_agent')
-            ->notEmptyString('is_agent');
+        // $validator
+        //     ->boolean('is_agent')
+        //     ->notEmptyString('is_agent');
 
-        $validator
-            ->boolean('is_call_supervisor')
-            ->notEmptyString('is_call_supervisor');
+        // $validator
+        //     ->boolean('is_call_supervisor')
+        //     ->notEmptyString('is_call_supervisor');
 
-        $validator
-            ->boolean('is_author')
-            ->notEmptyString('is_author');
+        // $validator
+        //     ->boolean('is_author')
+        //     ->notEmptyString('is_author');
 
-        $validator
-            ->scalar('notes')
-            ->allowEmptyString('notes');
+        // $validator
+        //     ->scalar('notes')
+        //     ->allowEmptyString('notes');
 
-        $validator
-            ->boolean('is_deleted')
-            ->notEmptyString('is_deleted');
+        // $validator
+        //     ->boolean('is_deleted')
+        //     ->notEmptyString('is_deleted');
 
-        $validator
-            ->boolean('is_csa')
-            ->notEmptyString('is_csa');
+        // $validator
+        //     ->boolean('is_csa')
+        //     ->notEmptyString('is_csa');
 
-        $validator
-            ->boolean('is_writer')
-            ->notEmptyString('is_writer');
+        // $validator
+        //     ->boolean('is_writer')
+        //     ->notEmptyString('is_writer');
 
-        $validator
-            ->scalar('recovery_email')
-            ->maxLength('recovery_email', 100)
-            ->allowEmptyString('recovery_email');
+        // $validator
+        //     ->scalar('recovery_email')
+        //     ->maxLength('recovery_email', 100)
+        //     ->allowEmptyString('recovery_email');
 
-        $validator
-            ->scalar('clinic_password')
-            ->maxLength('clinic_password', 10)
-            ->allowEmptyString('clinic_password');
+        // $validator
+        //     ->scalar('clinic_password')
+        //     ->maxLength('clinic_password', 10)
+        //     ->allowEmptyString('clinic_password');
 
-        $validator
-            ->integer('timezone_offset')
-            ->notEmptyString('timezone_offset');
+        // $validator
+        //     ->integer('timezone_offset')
+        //     ->notEmptyString('timezone_offset');
 
-        $validator
-            ->scalar('timezone')
-            ->maxLength('timezone', 3)
-            ->allowEmptyString('timezone');
+        // $validator
+        //     ->scalar('timezone')
+        //     ->maxLength('timezone', 3)
+        //     ->allowEmptyString('timezone');
 
-        $validator
-            ->scalar('token')
-            ->maxLength('token', 255)
-            ->allowEmptyString('token');
+        // $validator
+        //     ->scalar('token')
+        //     ->maxLength('token', 255)
+        //     ->allowEmptyString('token');
 
-        $validator
-            ->dateTime('token_expires')
-            ->allowEmptyDateTime('token_expires');
+        // $validator
+        //     ->dateTime('token_expires')
+        //     ->allowEmptyDateTime('token_expires');
 
-        $validator
-            ->scalar('api_token')
-            ->maxLength('api_token', 255)
-            ->allowEmptyString('api_token');
+        // $validator
+        //     ->scalar('api_token')
+        //     ->maxLength('api_token', 255)
+        //     ->allowEmptyString('api_token');
 
-        $validator
-            ->dateTime('activation_date')
-            ->allowEmptyDateTime('activation_date');
+        // $validator
+        //     ->dateTime('activation_date')
+        //     ->allowEmptyDateTime('activation_date');
 
-        $validator
-            ->scalar('secret')
-            ->maxLength('secret', 32)
-            ->allowEmptyString('secret');
+        // $validator
+        //     ->scalar('secret')
+        //     ->maxLength('secret', 32)
+        //     ->allowEmptyString('secret');
 
-        $validator
-            ->boolean('secret_verified')
-            ->allowEmptyString('secret_verified');
+        // $validator
+        //     ->boolean('secret_verified')
+        //     ->allowEmptyString('secret_verified');
 
-        $validator
-            ->dateTime('tos_date')
-            ->allowEmptyDateTime('tos_date');
+        // $validator
+        //     ->dateTime('tos_date')
+        //     ->allowEmptyDateTime('tos_date');
 
-        $validator
-            ->boolean('is_superuser')
-            ->notEmptyString('is_superuser');
+        // $validator
+        //     ->boolean('is_superuser')
+        //     ->notEmptyString('is_superuser');
 
-        $validator
-            ->scalar('role')
-            ->maxLength('role', 255)
-            ->allowEmptyString('role');
+        // $validator
+        //     ->scalar('role')
+        //     ->maxLength('role', 255)
+        //     ->allowEmptyString('role');
 
-        $validator
-            ->allowEmptyString('additional_data');
+        // $validator
+        //     ->allowEmptyString('additional_data');
 
         return $validator;
     }

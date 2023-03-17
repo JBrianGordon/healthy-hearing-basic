@@ -115,6 +115,19 @@ return [
             'controller' => '*',
             'action' => '*',
         ],
+        //
+        [
+        // Clinics can only access their clinic's info when logged in
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Locations',
+            'action' => 'edit',
+            'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'table' => 'LocationsUsers',
+                'id' => 'location_id',
+                'ownerForeignKey' => 'user_id'
+            ]),
+        ],
         //specific actions allowed for the all roles in Users plugin
         [
             'role' => '*',
