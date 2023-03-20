@@ -9,6 +9,7 @@ $iscsa = isset($iscsa) ? $iscsa : false;
 $iswriter = isset($iswriter) ? $iswriter : false;
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
+//$wikiModel = ClassRegistry::init('Wiki');
 ?>
 <nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light bg-light">
 	<div class="container">
@@ -20,7 +21,7 @@ $logo = Configure::read('logo');
 					</a>
 				</div>
 				<div class="nav navbar-right" id="navContainer">
-					<?php if (empty($user)): ?>
+					<?php if (!empty($user)): ?>
 						<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
 							<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
 								<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
@@ -62,28 +63,30 @@ $logo = Configure::read('logo');
 							<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
 							<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
 								<li>
-									<?= $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
+									<?php echo $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
 								</li>
 							<?php //endif; ?>
 						</ul>
 					<?php endif; ?>
+					<!-- *** TODO: $user is not currently set, check this logic when it is ***-->
+					<?php if (!empty($user)): ?>
 					<ul class="nav navbar-nav navbar-right ms-auto mb-2 mb-lg-0">
-						<?php if (empty($user)): ?>
+						
 							<li class="dropdown clinic-link">
-								<a href="#" class="dropdown-toggle bi bi-user-fill" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> My Account <span class="caret"></span></a>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-									<li><?= $this->Html->link(' My Profile', ['action' => '/locations/edit', 'class' => 'bi bi-globe-americas'], ['escape' => false]) ?></li>
-									<li><?= $this->Html->link(' Reporting', ['action'=>'/ca_call_groups/report', 'class' => 'bi bi-list-task']) ?></li>
-									<li><?= $this->Html->link(' Reviews', ['action'=>'reviews', 'class' => 'bi bi-star-fill']) ?></li>
+								<a href="#" class="dropdown-toggle bi bi-person-fill" role="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"> My Account <span class="caret"></span></a>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+									<li class=""><?= $this->Html->link(' My Profile', ['controller' => 'clinic', 'action' => '/locations/edit'], ['class' => 'bi bi-globe2', 'escape' => false]) ?></li>
+									<li><?= $this->Html->link(' Reporting', ['controller' => 'clinic', 'action'=>'/ca_call_groups/report'], ['class' => 'bi bi-list-task']) ?></li>
+									<li><?= $this->Html->link(' Reviews', ['controller' => 'clinic', 'action'=>'reviews'], ['class' => 'bi bi-star-fill']) ?></li>
 									<!-- *** TODO: check if $showLibaryLink when variable is set *** -->
 									<?php //if ($showLibraryLink): ?>
-										<li><?= $this->Html->link(' Library', ['action'=>'library', 'class' => 'bi bi-book-fill']) ?></li>
+										<li><?= $this->Html->link(' Library', ['controller' => 'clinic', 'action'=>'library'], ['class' => 'bi bi-book-fill']) ?></li>
 									<?php //endif; ?>
-									<li><?= $this->Html->link(' Help', ['action'=>'/pages/faq', 'class' => 'bi bi-question-circle-fill']) ?></li>
-									<li><?= $this->Html->link(' Inspired by Ida', ['action'=>'/pages/about-ida', 'class' => 'bi bi-award-fill']) ?></li>
+									<li><?= $this->Html->link(' Help', ['controller' => 'clinic', 'action'=>'/pages/faq'], ['class' => 'bi bi-question-circle-fill']) ?></li>
+									<li><?= $this->Html->link(' Inspired by Ida', ['controller' => 'clinic', 'action'=>'/pages/about-ida'], ['class' => 'bi bi-award-fill']) ?></li>
 									<hr class="mt10 mb10">
-									<li><?= $this->Html->link(' My Account', ['action'=>'/users/account', 'class' => 'bi bi-person-fill', 'escape' => 'false']) ?></li>
-									<li><?= $this->Html->link(' Logout', ['action'=>'logout', 'class' => 'bi bi-power', 'escape' => 'false']) ?></li>
+									<li><?= $this->Html->link(' My Account', ['controller' => 'clinic', 'action'=>'/users/account'], ['class' => 'bi bi-person-fill', 'escape' => false]) ?></li>
+									<li><?= $this->Html->link(' Logout', ['prefix' => false, 'action'=>'logout'], ['class' => 'bi bi-power', 'escape' => false]) ?></li>
 								</ul>
 							</li>
 						<?php else: ?>
@@ -93,8 +96,9 @@ $logo = Configure::read('logo');
 										<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
 									</div>
 								</div>
+								<!-- *** TODO: uncomment when search feature built out *** -->
 								<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
-									<div class="navbar-search" data-hh-search>
+									<!--<div class="navbar-search" data-hh-search>
 										<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
 										<div class="search-wrapper" id="searchWrapper">
 										  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
@@ -104,7 +108,7 @@ $logo = Configure::read('logo');
 										  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
 										  </form>
 										</div>
-									</div>
+									</div>-->
 								<?php //endif; ?>
 								<ul class="nav navbar-nav">
 									<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
@@ -114,11 +118,12 @@ $logo = Configure::read('logo');
 									<?php //endif; ?>
 								</ul>
 							</div>
+						
+						<?php if ($isadmin || $isagent || $iswriter): ?>
+							<li><?= $this->Html->link(false, ['prefix' => false, 'action'=>'admin-panel'], ['class' => 'clinic-link bi bi-gear-fill']) ?></a></li>
 						<?php endif; ?>
-						<?php //if ($isadmin || $isagent || $iswriter): ?>
-							<!--<li class="clinic-link bi bi-gear-fill"><a href="/admin-panel"></a></li>-->
-						<?php //endif; ?>
 					</ul>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -149,19 +154,90 @@ $logo = Configure::read('logo');
 					<?php endif; ?>
 					<div class="tac mt20">
 						<!-- *** TODO: add search bar when it's built out *** -->
-						<?php /*echo $this->element('locations/search', array(
+						<?= $this->element('locations/search', [
 							'label' => 'Enter city, '.$stateLabel.' or '.$zipShort,
 							'form_id' => 'fapdropdownform',
 							'auto_id' => 'fapdropdownsearchid',
 							'search_id' => 'fapdropdownSearch',
 							'btnId' => 'fapdropdownSearchBtn',
 							'inline' => true
-						));*/ ?>
+						]); ?>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- *** TODO build out this element in it's own file or right here *** -->
+		<!-- *** TODO: uncomment portions of the below block when the wiki model and content model are further built out *** -->
+		<div data-hh-mega-nav="hearing-loss-help">
+			<div class="row mega-nav-inner">
+				<div class="<?= (Configure::read('isMetric')) ? 'col-md-12 col-sm-12' : 'col-md-4 col-sm-4'; ?>">
+					<?php //$hearing_loss = $wikiModel->findNavBySlug('hearing-loss'); ?>
+					<h4><?= $this->Html->link('Hearing loss', $hearing_loss['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+					<ul class="no-bullets">
+						<?php foreach($hearing_loss['children'] as $wiki): ?>
+							<li<?php if(Configure::read('isMetric')) { echo ' class="col-md-4 col-sm-4"'; }?>><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+				<?php if (Configure::read('showTinnitus')): ?>
+					<div class="col-md-4 col-sm-4">
+						<?php //$wikis = $wikiModel->findNavBySlug('tinnitus'); ?>
+						<h4><?= $this->Html->link('Tinnitus', $wikis['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+						<ul class="no-bullets">
+							<?php foreach($wikis['children'] as $wiki): ?>
+								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+				<?php if (Configure::read('showAssistiveListening')): ?>
+					<div class="col-md-4 col-sm-4">
+						<?php //$wikis = $wikiModel->findNavBySlug('assistive-listening-devices'); ?>
+						<h4><?= $this->Html->link('Assistive listening devices', $wikis['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+						<ul class="no-bullets">
+							<?php foreach($wikis['children'] as $wiki): ?>
+								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+		
+		<div data-hh-mega-nav="hearing-aid-help">
+			<?php
+			//$hearing_aids = $wikiModel->findNavBySlug('hearing-aids');
+			//$wikis = $this->Content->splitBy($hearing_aids['children'], 3);
+			?>
+			<div class="row mega-nav-inner">
+				<div class="col-md-12 col-sm-12">
+					<h4><?= $this->Html->link('Hearing aids', $hearing_aids['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+					<?php if (!empty($wikis[0])): ?>
+						<ul class="no-bullets col-md-4 col-sm-4">
+							<?php foreach($wikis[0] as $wiki): ?>
+								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+					<?php if (!empty($wikis[1])): ?>
+						<ul class="no-bullets col-md-4 col-sm-4">
+							<?php foreach($wikis[1] as $wiki): ?>
+								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+					<?php if (!empty($wikis[2])): ?>
+						<ul class="no-bullets col-md-4 col-sm-4">
+							<?php foreach($wikis[2] as $key => $wiki): ?>
+								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php endforeach; ?>
+							<?php if ($settings['country'] == 'US'): ?>
+							<li><?= $this->Html->link('Hearing aid manufacturers', array('admin' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'), array('class' => 'text-link')); ?></li>
+							<?php endif; ?>
+						</ul>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		<?php //echo $this->element('nav_wiki_menu', [], ['cache' => ['config' => 'view_short']]); ?>
 	<?php endif; ?>
 </nav>
