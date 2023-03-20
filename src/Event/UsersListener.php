@@ -4,9 +4,12 @@ namespace App\Event;
 
 use Cake\Cache\Cache;
 use Cake\Event\EventListenerInterface;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 class UsersListener implements EventListenerInterface
 {
+    use LocatorAwareTrait;
+
     /**
      * @return string[]
      */
@@ -33,12 +36,16 @@ class UsersListener implements EventListenerInterface
                 'action' => 'panel'
             ]);
         } elseif ($user->role === 'clinic') {
+            $locationsUsersForClinic = $this->fetchTable('LocationsUsers')
+                ->find()
+                ->where(['user_id' => $user->id])
+                ->first();
             $event->setResult([
                 'plugin' => false,
                 'prefix' => 'Clinic',
                 'controller' => 'Locations',
                 'action' => 'edit',
-                $user->location_id
+                $locationsUsersForClinic->location_id
             ]);
         }
 

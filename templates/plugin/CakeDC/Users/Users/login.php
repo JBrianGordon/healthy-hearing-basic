@@ -12,7 +12,7 @@
 use Cake\Core\Configure;
 
 // TODO: THIS BREAKS THE PAGE
-// <?php $this->Html->script('dist/login.min', ['block' => true]); ?>
+// <?php $this->Html->script('dist/login.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
