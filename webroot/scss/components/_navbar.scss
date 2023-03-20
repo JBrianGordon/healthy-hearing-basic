@@ -11,6 +11,7 @@
 			position: relative;
 			display: block;
 			padding: 10px 13px;
+			color: #304369;
 		}
 		
 		&.active {
@@ -35,6 +36,12 @@
 		.navbar-collapse {
 			overflow: visible;
 		}
+		
+		.open > {
+			.dropdown-menu {
+				display: block;
+			}
+		}
 	}
 	
 	&.navbar-expand-lg {
@@ -45,6 +52,18 @@
 		}
 		.navbar-nav .nav-link {
 			color: $brand-primary;
+			
+			.hidden-sm {
+				@media (max-width: $screen-sm-max) {
+					display: none;
+				}
+			}
+			
+			.hidden-lg {
+				@media (min-width: $screen-md-min) {
+					display: none;
+				}
+			}
 		}
 		
 		.navbar-collapse {
@@ -103,6 +122,31 @@
 				   
 				   li {
 					float: left;
+				   }
+				   
+				   .dropdown-menu {
+					   min-width: 160px;
+					   font-size: 16px;
+					   
+					   li {
+						   float: none;
+						   
+						   a {
+								display: block;
+								padding: 3px 20px;
+								clear: both;
+								font-weight: normal;
+								line-height: 1.6;
+								color: #333;
+								white-space: nowrap;
+								
+								&:hover {
+								    text-decoration: none;
+								    color: #262626;
+								    background-color: #f5f5f5;
+								}
+						   }
+					   }
 				   }
 			}
 		 }
