@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Event;
 
-use Cake\Cache\Cache;
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\Locator\LocatorAwareTrait;
 
@@ -33,7 +33,7 @@ class UsersListener implements EventListenerInterface
                 'plugin' => false,
                 'prefix' => 'Admin',
                 'controller' => 'Utils',
-                'action' => 'panel'
+                'action' => 'panel',
             ]);
         } elseif ($user->role === 'clinic') {
             $locationsUsersForClinic = $this->fetchTable('LocationsUsers')
@@ -45,9 +45,8 @@ class UsersListener implements EventListenerInterface
                 'prefix' => 'Clinic',
                 'controller' => 'Locations',
                 'action' => 'edit',
-                $locationsUsersForClinic->location_id
+                $locationsUsersForClinic->location_id,
             ]);
         }
-
     }
 }

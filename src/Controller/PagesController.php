@@ -6,8 +6,8 @@ namespace App\Controller;
 use App\Form\ContactUsForm;
 use App\Form\NewsletterForm;
 use Cake\Core\Configure;
-use Cake\Mailer\MailerAwareTrait;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Pages Controller
@@ -121,7 +121,9 @@ class PagesController extends AppController
 
             $requestData = $this->request->getData();
             if ($newsletterForm->execute($requestData)) {
-                $this->Flash->success('Thank you for subscribing to our newsletter! Look for a confirmation email from us in your inbox.');
+                $this->Flash->success(
+                    'Thank you for subscribing to our newsletter! Look for a confirmation email from us in your inbox.'
+                );
 
                 return $this->redirect('/newsletter-success');
             } else {
@@ -129,7 +131,6 @@ class PagesController extends AppController
 
                 return;
             }
-
         }
     }
 

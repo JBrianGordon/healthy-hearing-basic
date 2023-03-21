@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
-use Search\Model\Filter\Base;
 
 /**
  * Users Model
@@ -29,7 +26,6 @@ use Search\Model\Filter\Base;
  * @property \App\Model\Table\ContentTable&\Cake\ORM\Association\BelongsToMany $Content
  * @property \App\Model\Table\CorpsTable&\Cake\ORM\Association\BelongsToMany $Corps
  * @property \App\Model\Table\WikisTable&\Cake\ORM\Association\BelongsToMany $Wikis
- *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -43,7 +39,6 @@ use Search\Model\Filter\Base;
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends CakeDcUsersTable
@@ -417,20 +412,24 @@ class UsersTable extends CakeDcUsersTable
     }
 
     /**
-    * Find a list of all users that are call center agents
-    */
-    public function findAgents() {
+     * Find a list of all users that are call center agents
+     *
+     * @return array Array of call center agents
+     */
+    public function findAgents()
+    {
         $agentsQuery = $this->find('list', [
             'keyField' => 'id',
-            'valueField' => 'username'
+            'valueField' => 'username',
         ])
         ->where([
             'active' => true,
             'OR' => [
                 'is_agent' => true,
                 'is_call_supervisor' => true,
-            ]
+            ],
         ]);
+
         return $agentsQuery->toArray();
     }
 }

@@ -37,7 +37,6 @@ class CopyLocationUsersDataCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
-
         $io->out('Copying location_users data into users table...');
 
         $locationUsersTable = $this->fetchTable('LocationUsers');
@@ -50,7 +49,7 @@ class CopyLocationUsersDataCommand extends Command
             $locationUser['last_login'] = $locationUser['lastlogin'];
             $locationUser['role'] = 'clinic';
 
-            if ($locationUser['email'] === NULL) {
+            if ($locationUser['email'] === null) {
                 $locationUser['email'] = '';
             }
 
@@ -65,9 +64,14 @@ class CopyLocationUsersDataCommand extends Command
             $copiedUser->setAccess('*', true);
             $copiedUser->setAccess('id', false);
 
-
             if (!$usersTable->save($copiedUser, ['checkRules' => false])) {
-                $io->err(sprintf('Error saving user record for user %s and location %s', $copiedUser->username, $copiedUser->location_id));
+                $io->err(
+                    sprintf(
+                        'Error saving user record for user %s and location %s',
+                        $copiedUser->username,
+                        $copiedUser->location_id
+                    )
+                );
             }
         }
 

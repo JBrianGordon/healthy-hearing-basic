@@ -57,7 +57,13 @@ class PopulateLocationUsersCommand extends Command
                 $locationsUser->user_id = $user->id;
 
                 if (!$locationsUsersTable->save($locationsUser)) {
-                    $io->err(sprintf('Error saving locations_user record for user %s and location %s', $locationUser->username, $locationUser->location_id));
+                    $io->err(
+                        sprintf(
+                            'Error saving locations_user record for user %s and location %s',
+                            $locationUser->username,
+                            $locationUser->location_id
+                        )
+                    );
                 }
             } else {
                 $io->err(sprintf('Could not find user record for username %s', $locationUser->username));

@@ -125,9 +125,8 @@ return static function (RouteBuilder $routes) {
         )
         ->setPass(['location_id'])
         ->setPatterns([
-            'location_id' => '^81190\d{5}$'
+            'location_id' => '^81190\d{5}$',
         ]);
-
 
         // All routes here will be prefixed with `/clinic`, and
         // have the `'prefix' => 'Clinic'` route element added that
