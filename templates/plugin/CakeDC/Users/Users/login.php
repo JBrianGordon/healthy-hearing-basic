@@ -11,7 +11,7 @@
 
 use Cake\Core\Configure;
 
-<?php $this->Html->script('dist/login.min', ['block' => true]); ?>
+// $this->Html->script('dist/login.min', ['block' => true]); // TODO: Commented this out (deleted php tags) - broke /login
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
