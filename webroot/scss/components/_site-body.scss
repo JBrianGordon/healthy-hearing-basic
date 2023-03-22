@@ -89,7 +89,15 @@
 		float: left;
 		text-align: right;
 		padding: 7px 15px 0;
-		font-weight: bold
+		font-weight: bold;
+		
+		&.col-md-2-override {
+			width: 16.66666%;
+		}
+		
+		&.col-md-4-override {
+			width: 33.33333%;
+		}
 	}
 	
 	.form-control, .form-select {
@@ -98,6 +106,14 @@
 		
 		&.inline-date {
 			width: 46%;
+		}
+		
+		&.col-md-8-override {
+			width: 66.66666%;
+		}
+		
+		&.col-md-10-override {
+			width: 83.33333%;
 		}
 	}
 	

@@ -112,14 +112,9 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 												</tr>
 											</tbody>
 										</table>
-										<?php
-						                    echo $this->Form->control('priority', ['label' => ['class' => 'col col-md-3 control-label'], 'class' => 'col col-md-9 mb10']);
-						                    echo '<div class="form-actions tar clearfix">';
-						                    echo $this->Form->button(__('Save Location'), ['class' => 'btn btn-primary btn-lg']);
-						                    echo '</div>';
-						                ?>
+										<?= $this->Form->control('priority', ['label' => ['class' => 'col col-md-3 control-label'], 'class' => 'col col-md-9 mb10']); ?>
 						                <div class="tabbable">
-											<ul class="nav nav-tabs location-tabs">
+											<ul class="nav nav-tabs location-tabs clearfix">
 												<li class="active"><a href="#Location" data-toggle="tab" aria-expanded="true">Location</a></li>
 												<li><a href="#Details" data-toggle="tab">Details</a></li>
 												<li><a href="#Provider" data-toggle="tab">Provider</a></li>
@@ -137,22 +132,22 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 												<!-- Location Tab -->
 												<div class="tab-pane active" id="Location">
 													<div class="form-group">
-														<div class="col col-md-offset-2 col-md-8 mb10">
+														<div class="col col-md-offset-2 col-md-8 mb10 pl0">
 															<?= $this->Html->link(' Geocode', ['action' => 'geocode'], ['class' => 'btn btn-xs btn-primary bi bi-geo-alt-fill']) ?>
 														</div>
 													</div>
-													<div class="col-md-5 p0" style="margin-left:146px">
+													<div class="col-md-6 p0">
 														<?php
-															echo $this->Form->control('address', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-															echo $this->Form->control('city', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-															echo $this->Form->control('zip', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
+															echo $this->Form->control('address', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+															echo $this->Form->control('city', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+															echo $this->Form->control('zip', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
 														?>
 													</div>
-													<div class="col-md-5 p0">
+													<div class="col-md-6 p0">
 														<?php
-															echo $this->Form->control('address_2', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-															echo $this->Form->control('state', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-															echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
+															echo $this->Form->control('address_2', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+															echo $this->Form->control('state', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+															echo '<div class="col-md-8 col-md-offset-4 pl0 mb-3">';
 															echo $this->Form->control('is_mobile', ['label' => ' Mobile-only clinic?']);
 															echo '</div>';
 														?>
@@ -166,103 +161,65 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 														</div>
 													</div>
 													<div class="clearfix"></div>
-														<div class="row pl0">
-															<div class="col-md-12">
-																<?php
-												                    echo $this->Form->control('phone');
-												                    echo $this->Form->control('email');
-												                ?>
-												            </div>
-												            <div class="mb-3 form-group">
-												                <div class="col-md-5 p0" style="margin-left:151px">
-													                <?php
-												                    	echo $this->Form->control('lat', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-												                    ?>
-												                </div>'
-												                <div class="col-md-5 pl0">
-												                    <?php echo $this->Form->control('lon', ['label' => ['class' => 'col col-md-4 control-label'], 'class' => 'col col-md-8 mb10']);
-													                ?>
-												                </div>
+													<div class="row pl0">
+														<div class="col-md-12">
+															<?php
+											                    echo $this->Form->control('phone', ['label' => ['class' => 'col col-md-2-override control-label'], 'class' => 'col col-md-10-override mb10']);
+											                    echo $this->Form->control('email', ['label' => ['class' => 'col col-md-2-override control-label'], 'class' => 'col col-md-10-override mb10']);
+											                ?>
+											            </div>
+											            <div class="mb-3 form-group">
+											                <div class="col-md-6 p0">
 												                <?php
-												                    echo $this->Form->control('timezone', ['required' => false]);
-												                    echo $this->Form->control('landmarks');
-												                ?>
-												                <span class="help-block col-md-9 col-md-offset-3">Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic.</span>
-												            </div>
-												            <hr>
-												            <!-- ***TODO: Add linked locations ***-->
-												            <div class="col-md-12 pl0 ml10">'
-													            <?php
-												                    echo $this->Form->control('frozen_expiration', ['empty' => true]);
-												                    echo $this->Form->control('oticon_tier');
-												                    echo $this->Form->control('yhn_tier');
-												                    echo $this->Form->control('cqp_tier');
-												                    echo $this->Form->control('entity_segment');
-												                    echo $this->Form->control('title_status');
-												                    echo $this->Form->control('address_status');
-												                    echo $this->Form->control('phone_status');
-												                    echo $this->Form->control('is_title_ignore');
-												                    echo $this->Form->control('is_address_ignore');
-												                    echo $this->Form->control('is_phone_ignore');
-												                    echo $this->Form->control('is_grace_period');
-												                    echo $this->Form->control('grace_period_end', ['empty' => true]);
-												                    echo $this->Form->control('is_geocoded');
-												                    echo $this->Form->control('filter_has_photo');
-												                    echo $this->Form->control('filter_insurance');
-												                    echo $this->Form->control('filter_evening_weekend');
-												                    echo $this->Form->control('filter_adult_hearing_test');
-												                    echo $this->Form->control('filter_hearing_aid_fitting');
-												                    echo $this->Form->control('feature_content_library');
-												                    echo $this->Form->control('content_library_expiration', ['empty' => true]);
-												                    echo $this->Form->control('feature_special_announcement');
-												                    echo $this->Form->control('special_announcement_expiration', ['empty' => true]);
-												                    echo $this->Form->control('payment');
-												                    echo $this->Form->control('average_rating');
-												                    echo $this->Form->control('reviews_approved');
-												                    echo $this->Form->control('review_status');
-												                    echo $this->Form->control('last_review_date', ['empty' => true]);
-												                    echo $this->Form->control('last_xml');
-												                    echo $this->Form->control('last_note_status');
-												                    echo $this->Form->control('last_import_status');
-												                    echo $this->Form->control('last_contact_date', ['empty' => true]);
-												                    echo $this->Form->control('is_last_edit_by_owner');
-												                    echo $this->Form->control('last_edit_by_owner_date', ['empty' => true]);
-												                    echo $this->Form->control('redirect');
-												                    echo $this->Form->control('email_status');
-												                    echo $this->Form->control('is_email_ignore');
-												                    echo $this->Form->control('review_needed');
-												                    echo $this->Form->control('direct_book_type');
-												                    echo $this->Form->control('direct_book_url');
-												                    echo $this->Form->control('direct_book_iframe');
-												                    echo $this->Form->control('covid19_statement');
-												                    echo $this->Form->control('is_service_agreement_signed');
-												                    echo $this->Form->control('is_junk');
-												                    echo $this->Form->control('id_coupon');
-												                    echo $this->Form->control('is_email_allowed');
-											                	?>
+											                    	echo $this->Form->control('lat', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+											                    ?>
 											                </div>
+											                <div class="col-md-6 pl0">
+											                    <?php echo $this->Form->control('lon', ['label' => ['class' => 'col col-md-4-override control-label'], 'class' => 'col col-md-8-override mb10']);
+												                ?>
+											                </div>
+											                <?php
+											                    echo $this->Form->control('timezone', ['label' => ['class' => 'col col-md-2-override control-label'], 'class' => 'col col-md-10-override mb10', 'required' => false]);
+											                    echo $this->Form->control('landmarks', ['label' => ['class' => 'col col-md-2-override control-label'], 'class' => 'col col-md-10-override mb10']);
+											                ?>
+											                <span class="help-block col-md-10 col-md-offset-2">Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic.</span>
+											            </div>
+														<div class="row">
+															<div class="col-md-offset-2 col-md-10">
+																<div class="thumbnail">
+																	<!-- *** TODO: build locations/map partial *** -->
+																	<?php //echo $this->element('locations/map', ['location' => $this->request->data, 'hideProvider' => $hideProvider]); ?>
+																</div>
+															</div>
 														</div>
+											            <hr class="mt25">
+											            <!-- ***TODO: Add linked locations ***-->
 													</div>
 												</div>
 												<!-- Details tab -->
 												<div class="tab-pane" id="Details">
-													<div class="col-md-12 ida-wrapper mb20">
-														<div class="checkbox">
-															<?php
-																echo $this->Form->control('is_ida_verified');
-															?>
-														</div>
+													<div class="col-md-12 ida-wrapper mb20 pl0">
+													    <?= $this->Form->hidden('Location.is_ida_verified', ['value' => 0]) ?>
+													    <label class="col control-label switch boolean-switch" for="location-is-ida-verified">
+													        <?= $this->Form->checkbox('Location.is_ida_verified', [
+													            'value' => 1,
+													            'class' => '',
+													            'id' => 'location-is-ida-verified'
+													        ]) ?>
+													        <span class="slider" style="margin-left:245px"></span> Ida verified clinic
+													    </label>
 													</div>
 													<?php
-														echo $this->Form->control('slogan');
+														echo $this->Form->control('slogan', ['class' => 'text', 'type' => 'text']);
 														echo $this->Form->control('url');
 									                    echo $this->Form->control('facebook');
 									                    echo $this->Form->control('twitter');
 									                    echo $this->Form->control('youtube');
-									                    echo $this->Form->control('services');
-									                    echo $this->Form->control('about_us');
+									                    /*** TODO: replace with CKEditor ***/
+									                    echo $this->Form->control('services', ['required' => true]);
+									                    echo $this->Form->control('about_us', ['required' => true]);
 													?>
-													<div class="panel panel-default">
+													<div class="panel panel-default pb20">
 														<div class="panel-heading">Enhanced features</div>
 														<div class="panel-body m10<?php if ($location->listing_type != Location::LISTING_TYPE_ENHANCED && $location->listing_type != Location::LISTING_TYPE_PREMIER){echo " panel-disabled";}?>">
 															<!-- Badges -->
@@ -582,6 +539,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 															<th width="12%">Closed</th>
 															<th width="12%">By Appt</th>
 														</tr>
+														<!-- *** TODO: update once locationHour is pulled in ***-->
 														<span class="hidden"><?php //echo $locationHour->id; ?></span>
 														<?php //foreach ($days as $day): ?>
 															<tr>
@@ -730,30 +688,38 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 													<?php if (Configure::read('isCallAssistEnabled')): ?>
 														<div class="tab-pane" id="CallAssist">
 															<?php if ($location->is_call_assist): ?>
-																<div class="well"><span class="glyphicon glyphicon-ok" style="color:limegreen;"></span> Call Assist is enabled. The CallSource number will route to our call center.</div>
+																<div class="well"><span class="bi bi-check-lg" style="color:limegreen;"></span> Call Assist is enabled. The CallSource number will route to our call center.</div>
 															<?php else: ?>
-																<div class="well"><span class="glyphicon glyphicon-remove" style="color:red;"></span> Call Assist is disabled. The CallSource number will route directly to clinic.</div>
+																<div class="well"><span class="bi bi-x-lg" style="color:red;"></span> Call Assist is disabled. The CallSource number will route directly to clinic.</div>
 															<?php endif; ?>
-															<?php echo $this->Form->control('is_bypassed', [
-																'label' => 'Send outbound survey calls directly to consumer<br><span class="text-muted">(Clinic will not answer)</span>',
-																'type' => 'select',
-																'options' => [0 => 'No', 1 => 'Yes']
+															<div class="col-md-12 p0">
+															<?= $this->Form->control('is_bypassed', [
+															    'label' => [
+															        'text' => 'Send outbound survey calls directly to consumer<br><span class="text-muted">(Clinic will not answer)</span>',
+															        'escape' => false,
+															        'class' => 'pt0'
+															    ],
+															    'type' => 'select',
+															    'options' => [0 => 'No', 1 => 'Yes']
 															]); ?>
-															<?php echo $this->Form->control('direct_book_type', [
+															</div>
+															<?= $this->Form->control('direct_book_type', [
 																'label' => 'Direct book type',
 																'type' => 'select',
 																'options' => Location::$directBookTypes,
 															]);	?>
 															<div id="direct-book-links">
-																<?php echo $this->Form->control('direct_book_url', [
+																<?= $this->Form->control('direct_book_url', [
 																	'label' => 'Direct book URL',
 																	'type' => 'text',
-																	'rows' => 4
+																	'rows' => 4,
+																	'required' => false
 																]);	?>
-																<?php echo $this->Form->control('direct_book_iframe', [
+																<?= $this->Form->control('direct_book_iframe', [
 																	'label' => 'Direct book iFrame',
 																	'type' => 'text',
-																	'rows' => 4
+																	'rows' => 4,
+																	'required' => false
 																]);	?>
 															</div>
 															<hr>
@@ -804,8 +770,6 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																<?php //endforeach; ?>
 															</table>
 														</div>
-													<?php endif; ?>
-													
 													<!-- User Tab -->
 													<div class="tab-pane" id="User">
 														<div class="form-group mb20">
@@ -822,6 +786,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 														<table class="table table-striped table-bordered table-condensed">
 															<tr>
 																<th class="col-md-3 tar">ID</th>
+																<!-- *** TODO: uncomment this and much of the code below when LocationUser added *** -->
 																<td class="col-md-9"><?php //echo $this->request->data['LocationUser']['id']; ?></td>
 															</tr>
 															<tr>
@@ -890,7 +855,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																</div>
 									
 																<?php //$notificationStyle = isset($this->validationErrors['LocationEmail'][$i]) ? '' : 'display:none;'; ?>
-																<div id="additional-notification" style=<?php echo $notificationStyle; ?>>
+																<div id="additional-notification" style=<?php //echo $notificationStyle; ?>>
 																	<?php //echo $this->Form->control("LocationEmail.$i.id", ['default' => isset($this->request->data['LocationEmail'][$i]['id']) ? $this->request->data['LocationEmail'][$i]['id'] : '']); ?>
 																	<?php //foreach(['email','first_name','last_name'] as $field): ?>
 																		<?php //echo $this->Form->control("LocationEmail.$i.$field", ['required' => false]); ?>
@@ -1091,9 +1056,10 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																		<label class="col-md-3 control-label">YHN Import Date</label>
 																		<div class="col col-md-3">
 																			<select class="form-control js-import-select">
+																				<!-- *** TODO: Uncomment once importLocation is set *** -->
 																				<?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
 																					<?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
-																						<option value="<?php //echo $importLocation['import_id']; ?>">
+																						<option value="<?php echo '1' //Populating with dummy value for now $importLocation['import_id']; ?>">
 																							<?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
 																						</option>
 																					<?php //endif; ?>
@@ -1143,9 +1109,10 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																		<label class="col-md-3 control-label">CQP Import Date</label>
 																		<div class="col col-md-3">
 																			<select class="form-control js-cqp-import-select">
+																			<!-- *** TODO: uncomment once $importLocation is called in *** -->
 																			<?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
 																				<?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-																					<option value="<?php //echo $importLocation['import_id']; ?>">
+																					<option value="<?php echo '1' //Populate with dummy value for now $importLocation['import_id']; ?>">
 																						<?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
 																					</option>
 																				<?php //endif; ?>
@@ -1254,58 +1221,58 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 														</div>
 														<div class="row">
 															<div class="col-md-6">
-																<?php echo $this->Form->control('filter_has_photo', array(
-																	'div' => false,
-																	'label' => array(
-																		'class' => 'col control-label',
-																		'text' => 'Has Photo',
-																	),
-																	'type' => 'checkbox',
-																	'class' => '',
-																	'wrapInput' => 'col col-md-9 col-md-offset-3'
-																)); ?>
-																<?php echo $this->Form->control('filter_insurance', array(
-																	'div' => false,
-																	'label' => array(
-																		'class' => 'col control-label',
-																		'text' => 'Accepts Insurance',
-																	),
-																	'type' => 'checkbox',
-																	'class' => '',
-																	'wrapInput' => 'col col-md-9 col-md-offset-3'
-																)); ?>
-																<?php echo $this->Form->control('filter_evening_weekend', array(
-																	'div' => false,
-																	'label' => array(
-																		'class' => 'col control-label',
-																		'text' => 'Evening or Weekend Hours',
-																	),
-																	'type' => 'checkbox',
-																	'class' => '',
-																	'wrapInput' => 'col col-md-9 col-md-offset-3'
-																)); ?>
+																<div class="col col-md-9 col-md-offset-3">
+																	<?= $this->Form->control('filter_has_photo', [
+																		'label' => [
+																			'class' => 'col control-label',
+																			'text' => 'Has Photo',
+																		],
+																		'type' => 'checkbox',
+																		'class' => ''
+																	]); ?>
+																</div>
+																<div class="col col-md-9 col-md-offset-3">
+																	<?= $this->Form->control('filter_insurance', [
+																		'label' => [
+																			'class' => 'col control-label',
+																			'text' => 'Accepts Insurance',
+																		],
+																		'type' => 'checkbox',
+																		'class' => ''
+																	]); ?>
+																</div>
+																<div class="col col-md-9 col-md-offset-3">
+																	<?= $this->Form->control('filter_evening_weekend', [
+																		'label' => [
+																			'class' => 'col control-label',
+																			'text' => 'Evening or Weekend Hours',
+																		],
+																		'type' => 'checkbox',
+																		'class' => ''
+																	]); ?>
+																</div>
 															</div>
 															<div class="col-md-6">
-																<?php echo $this->Form->control('filter_adult_hearing_test', array(
-																	'div' => false,
-																	'label' => array(
-																		'class' => 'col control-label',
-																		'text' => 'Adult Hearing Test',
-																	),
-																	'type' => 'checkbox',
-																	'class' => '',
-																	'wrapInput' => 'col col-md-9 col-md-offset-3'
-																)); ?>
-																<?php echo $this->Form->control('filter_hearing_aid_fitting', array(
-																	'div' => false,
-																	'label' => array(
+																<div class="col col-md-9 col-md-offset-3">
+																	<?= $this->Form->control('filter_adult_hearing_test', [
+																		'label' => [
+																			'class' => 'col control-label',
+																			'text' => 'Adult Hearing Test',
+																		],
+																		'type' => 'checkbox',
+																		'class' => ''
+																	]); ?>
+																</div>
+																<div class="col col-md-9 col-md-offset-3">
+																<?= $this->Form->control('filter_hearing_aid_fitting', [
+																	'label' => [
 																		'class' => 'col control-label',
 																		'text' => 'Hearing Test Aid Fitting',
-																	),
+																	],
 																	'type' => 'checkbox',
-																	'class' => '',
-																	'wrapInput' => 'col col-md-9 col-md-offset-3'
-																)); ?>
+																	'class' => ''
+																]); ?>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -1323,8 +1290,8 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																<td class="col-md-9"><?php //echo dateTimeCentralToEastern($location->modified); ?></td>
 															</tr>
 														</table>
-														<?php echo $this->Form->control('redirect'); ?>
-														<?php echo $this->Form->control('is_retail', [
+														<?= $this->Form->control('redirect'); ?>
+														<?= $this->Form->control('is_retail', [
 																'label' => 'WDH Retail',
 																'type' => 'select',
 																'options' => [
@@ -1335,7 +1302,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 															]);
 														?>
 														<?php if (Configure::read('isYhnImportEnabled')): ?>
-															<?php echo $this->Form->control('is_cq_premier', [
+															<?= $this->Form->control('is_cq_premier', [
 																	'label' => 'CQ Premier',
 																	'type' => 'select',
 																	'options' => [
@@ -1345,7 +1312,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																	'default' => 0,
 																]);
 															?>
-															<?php echo $this->Form->control('is_iris_plus', [
+															<?= $this->Form->control('is_iris_plus', [
 																	'label' => 'Iris+',
 																	'type' => 'select',
 																	'options' => [
@@ -1357,7 +1324,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																]);
 															?>
 														<?php endif; ?>
-														<?php echo $this->Form->control('is_junk', [
+														<?= $this->Form->control('is_junk', [
 																'label' => 'Junk',
 																'type' => 'select',
 																'options' => [
@@ -1367,30 +1334,31 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																'default' => 0,
 															]);
 														?>
-														<?php echo $this->Form->control('is_email_allowed', [
-															'label' => [
-																'class' => 'control-label',
-																'text' => 'Allow email notifications for profile updates'
-															],
-															'wrapInput' => 'col col-md-9 col-md-offset-3'
-														]); ?>
-														<?php if (Configure::read('isTieringEnabled')): ?>
-															<?php echo $this->Form->control('is_service_agreement_signed', array(
+														<div class="col col-md-9 col-md-offset-3 pl0">
+															<?= $this->Form->control('is_email_allowed', [
 																'label' => [
 																	'class' => 'control-label',
-																	'text' => 'Service agreement signed'
-																],
-																'wrapInput' => 'col col-md-9 col-md-offset-3'
-															)); ?>
+																	'text' => 'Allow email notifications for profile updates'
+																]
+															]); ?>
+														</div>
+														<?php if (Configure::read('isTieringEnabled')): ?>
+															<div class="col col-md-9 col-md-offset-3 pl0">
+																<?= $this->Form->control('is_service_agreement_signed', [
+																	'label' => [
+																		'class' => 'control-label',
+																		'text' => 'Service agreement signed'
+																	]
+																]); ?>
+															</div>
 															<strong class="col col-md-9 col-md-offset-2">Premier Features -- Individual purchase</strong>
-															<div class="row<?php if($location->is_cqp){echo ' panel-disabled';}?>">
-																<div class="col col-md-3 col-md-offset-3">
-																	<?php echo $this->Form->control('feature_content_library', [
+															<div class="row col-md-12 mb25<?php if($location->is_cqp){echo ' panel-disabled';}?>">
+																<div class="col col-md-9 col-md-offset-3">
+																	<?= $this->Form->control('feature_content_library', [
 																		'label' => [
 																			'class' => 'control-label',
 																			'text' => 'Social media library'
-																		],
-																		'wrapInput' => 'col col-md-12'
+																		]
 																	]); ?>
 																</div>
 																<div id="content-library-expiration" class="col col-md-6" style="display:none;">
@@ -1406,16 +1374,22 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																</div>
 															</div>
 														<?php endif; ?>
-														<hr>
+														<hr class="clearfix">
 														<div id="versions">
 															<a href="#" id="load-versions" class="btn btn-info">Load Versions</a> <img id="version-loader" src="/img/ajax-loader.gif" class="hide">
 														</div>
 													</div>
+													<?php endif; ?>
 												<?php //endif; ?>
 						                		</div>
 											</div>
 						                </div>
 						            </fieldset>
+						            <?php
+					                    echo '<div class="form-actions tar clearfix">';
+					                    echo $this->Form->button(__('Save Location'), ['class' => 'btn btn-primary btn-lg']);
+					                    echo '</div>';
+						            ?>
 						            <?= $this->Form->end() ?>
 						        </div>
 							</div>
