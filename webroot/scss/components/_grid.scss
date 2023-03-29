@@ -41,6 +41,12 @@
 	}
 }
 
+@media (min-width: $screen-xs-min) {
+	.col-xs-12 {
+		width: 100%;
+	}
+}
+
 @media (min-width: 768px) {
 	.container {
 		.col-md-3 {
