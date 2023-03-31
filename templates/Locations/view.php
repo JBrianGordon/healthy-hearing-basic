@@ -102,10 +102,10 @@ $showSpecialAnnouncement = (
 												<?php //endif; ?>
 											</div>
 										</div>
-										<!--*** TODO: Build AppHelper and locations/map ***-->
+										<!--*** TODO: Build AppHelper ***-->
 										<?php if (false/*Configure::read('country') == 'CA' && !$this->App->isMobileDevice()*/): ?>
 											<div class="col-md-6">
-												<?php //echo $this->element('locations/map', ['hideProvider' => $hideProvider]); ?>
+												<?= $this->element('locations/map'/*, ['hideProvider' => $hideProvider]*/) ?>
 											</div>
 										<?php endif; ?>
 									</div>
@@ -309,7 +309,7 @@ $showSpecialAnnouncement = (
 								echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
 								echo '<div class="panel-body"><div class="panel-section condensed">';
 								//*** TODO: build locations/map ***
-								//echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
+								echo $this->element('locations/map'/*, ['hideProvider' => $hideProvider]*/);
 								if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
 									echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
 								};
