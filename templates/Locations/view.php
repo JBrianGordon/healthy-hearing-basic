@@ -689,8 +689,8 @@ $showSpecialAnnouncement = (
 							<!--*** TODO: set displayOpenClosed and isEnhancedOrPremier ***-->
 							<?php if (Configure::read('showAds')/* && !$isEnhancedOrPremier*/): ?>
 								<!-- Ad space -->
-								<!--*** TODO: build render_ad -->
-								<?php /* echo $this->element('render_ad', array('ad' => $ad))*/; ?>
+								<!--*** TODO: set $ad variable -->
+								<?php /*echo $this->element('render_ad', ['ad' => $ad])*/ ?>
 							<?php endif; ?>
 							
 						</div>

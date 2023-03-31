@@ -2,7 +2,8 @@
 <div class="col-md-3 float-end noprint">
 	<!-- Right content -->
 	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
-		<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
+		<!--*** TODO: set $ad variable -->
+		<?php //echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php //endif; ?>
 	<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
 	<section class="panel panel-light help-menu">
@@ -72,6 +73,7 @@
 
 	</section>
 	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
-		<?php //echo $this->element('render_ad', array('ad' => $ad)); ?>
+		<!--*** TODO: set $ad variable -->
+		<?php //echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php //endif; ?>
 </div>
