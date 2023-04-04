@@ -127,7 +127,7 @@ return [
         'LocationUser.lastlogin',
         'location_segment',
         'entity_segment',
-        'yhn_location_id',
+        'id_yhn_location',
         'is_yhn',
         'is_oticon',
         'is_retail',
