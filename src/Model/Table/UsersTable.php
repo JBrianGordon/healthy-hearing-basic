@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+
+use Cake\Event\EventInterface;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
 use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
@@ -113,6 +116,7 @@ class UsersTable extends CakeDcUsersTable
             'targetForeignKey' => 'wiki_id',
             'joinTable' => 'users_wikis',
         ]);
+        $this->belongsToMany('Locations');
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -409,6 +413,20 @@ class UsersTable extends CakeDcUsersTable
         $rules->add($rules->existsIn('corp_id', 'Corps'), ['errorField' => 'corp_id']);
 
         return $rules;
+    }
+
+
+    public function findAuth(\Cake\ORM\Query $query, array $options)
+    {
+        $query->contain([
+            'Locations' => [
+                'fields' => [
+                    'id'
+                ],
+            ],
+        ]);
+
+        return $query;
     }
 
     /**

@@ -128,6 +128,13 @@ return [
                 'ownerForeignKey' => 'user_id',
             ]),
         ],
+        // Logged in clinics can access Reviews controller pages
+        [
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Reviews',
+            'action' => ['index', 'respond'],
+        ],
         //specific actions allowed for the all roles in Users plugin
         [
             'role' => '*',
