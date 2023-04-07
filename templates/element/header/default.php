@@ -21,109 +21,30 @@ $logo = Configure::read('logo');
 					</a>
 				</div>
 				<div class="nav navbar-right" id="navContainer">
-					<?php if (!empty($user)): ?>
-						<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
-							<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger="">
-								<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
-							</div>
-						</div>
-					<?php else: ?>
-						<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
-						<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
-							<!--<div class="navbar-search" data-hh-search>
-								<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
-								<div class="search-wrapper" id="searchWrapper">
-								  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
-								  <form id="MegaSearch" action="/search" method="POST">
-									<label for="ContentSearch">Search the site</label>
-								  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
-								  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
-								  </form>
-								</div>
-							</div>-->
-						<?php //endif; ?>
-						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-							<li data-hh-mega-nav-trigger="find-a-professional">
-								<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
-									<span class="hidden-md hidden-lg">Clinics</span>
-									<span class="hidden-sm">Find a clinic</span>
-								</a>
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li data-hh-mega-nav-trigger="find-a-professional">
+							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
+								<span class="hidden-md hidden-lg">Clinics</span>
+								<span class="hidden-sm">Find a clinic</span>
+							</a>
+						</li>
+						<li data-hh-mega-nav-trigger="hearing-loss-help">
+							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+						</li>
+						<li data-hh-mega-nav-trigger="hearing-aid-help">
+							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+						</li>
+						<?php if (Configure::read('showReports')): ?>
+							<li>
+								<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 							</li>
-							<li data-hh-mega-nav-trigger="hearing-loss-help">
-								<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-							</li>
-							<li data-hh-mega-nav-trigger="hearing-aid-help">
-								<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-							</li>
-							<?php if (Configure::read('showReports')): ?>
-								<li>
-									<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
-								</li>
-							<?php endif; ?>
-							<!-- *** TODO: uncomment when $isadmin and $isitadmin are set -->
-							<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
-								<li>
-									<?php echo $this->AuthLink->link('<i class="bi bi-gear-fill"></i>', '/admin', ['escape' => false, 'class'=>'nav-link']); ?>
-								</li>
-							<?php //endif; ?>
-						</ul>
-					<?php endif; ?>
-					<!-- *** TODO: $user is not currently set, check this logic when it is ***-->
-					<?php if (!empty($user)): ?>
-					<ul class="nav navbar-nav navbar-right ms-auto mb-2 mb-lg-0">
-						
-							<li class="dropdown clinic-link">
-								<a href="#" class="dropdown-toggle bi bi-person-fill" role="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"> My Account <span class="caret"></span></a>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-									<li class=""><?= $this->Html->link(' My Profile', ['controller' => 'clinic', 'action' => '/locations/edit'], ['class' => 'bi bi-globe2', 'escape' => false]) ?></li>
-									<li><?= $this->Html->link(' Reporting', ['controller' => 'clinic', 'action'=>'/ca_call_groups/report'], ['class' => 'bi bi-list-task']) ?></li>
-									<li><?= $this->Html->link(' Reviews', ['controller' => 'clinic', 'action'=>'reviews'], ['class' => 'bi bi-star-fill']) ?></li>
-									<!-- *** TODO: check if $showLibaryLink when variable is set *** -->
-									<?php //if ($showLibraryLink): ?>
-										<li><?= $this->Html->link(' Library', ['controller' => 'clinic', 'action'=>'library'], ['class' => 'bi bi-book-fill']) ?></li>
-									<?php //endif; ?>
-									<li><?= $this->Html->link(' Help', ['controller' => 'clinic', 'action'=>'/pages/faq'], ['class' => 'bi bi-question-circle-fill']) ?></li>
-									<li><?= $this->Html->link(' Inspired by Ida', ['controller' => 'clinic', 'action'=>'/pages/about-ida'], ['class' => 'bi bi-award-fill']) ?></li>
-									<hr class="mt10 mb10">
-									<li><?= $this->Html->link(' My Account', ['controller' => 'clinic', 'action'=>'/users/account'], ['class' => 'bi bi-person-fill', 'escape' => false]) ?></li>
-									<li><?= $this->Html->link(' Logout', ['prefix' => false, 'action'=>'logout'], ['class' => 'bi bi-power', 'escape' => false]) ?></li>
-								</ul>
-							</li>
-						<?php else: ?>
-							<div class="nav navbar-right" id="navContainer">
-								<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
-									<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
-										<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
-									</div>
-								</div>
-								<!-- *** TODO: uncomment when search feature built out *** -->
-								<?php //if (Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)): ?>
-									<!--<div class="navbar-search" data-hh-search>
-										<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
-										<div class="search-wrapper" id="searchWrapper">
-										  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
-										  <form id="MegaSearch" action="/search" method="POST">
-											<label for="ContentSearch">Search the site</label>
-										  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
-										  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
-										  </form>
-										</div>
-									</div>-->
-								<?php //endif; ?>
-								<ul class="nav navbar-nav">
-									<?php //if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
-										<!--<li class="bi bi-gear-fill">
-											<a href="/admin-panel"></a>
-										</li>-->
-									<?php //endif; ?>
-								</ul>
-							</div>
-						
-						<?php if ($isadmin || $isagent || $iswriter): ?>
-							<li><?= $this->Html->link(false, ['prefix' => false, 'action'=>'admin-panel'], ['class' => 'clinic-link bi bi-gear-fill']) ?></a></li>
+						<?php endif; ?>
+						<?= $this->element('header/admin_panel_link') ?>
+						<?php if ($this->Identity->get('role') === 'clinic'): ?>
+							<?= $this->element('header/clinic_panel_link') ?>
 						<?php endif; ?>
 					</ul>
-					<?php endif; ?>
+					<!-- TODO: SEARCH/MAGNIFYING GLASS -->
 				</div>
 			</div>
 		</div>

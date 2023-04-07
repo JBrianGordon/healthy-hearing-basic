@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller\Clinic;
+
+use App\Controller\AppController;
+
+/**
+ * Locations Controller
+ */
+class BaseClinicController extends AppController
+{
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->viewBuilder()->setLayout('clinic_panel');
+        $this->loadComponent('Authentication.Authentication');
+    }
+}

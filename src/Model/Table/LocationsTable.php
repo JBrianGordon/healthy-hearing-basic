@@ -114,6 +114,7 @@ class LocationsTable extends Table
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
+        $this->belongsToMany('Users');
 
         // Setup search filter using search manager
         $this->searchManager()
