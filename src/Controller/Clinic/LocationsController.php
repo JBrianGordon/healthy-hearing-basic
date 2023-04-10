@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Clinic;
 
-use App\Controller\AppController;
-
 /**
  * Locations Controller
  *

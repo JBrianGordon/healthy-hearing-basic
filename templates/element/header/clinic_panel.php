@@ -50,14 +50,14 @@ $logo = Configure::read('logo');
                                         'prefix' => 'Clinic',
                                         'controller' => 'Locations',
                                         'action' => 'edit',
-                                        $this->Identity->get('locations.0.id')
+                                        $this->Identity->get('locations.0.id'),
                                     ],
                                     [
                                         'escape' => false,
-                                        'class'=>'dropdown-item'
+                                        'class' => 'dropdown-item',
                                     ]
                                 );
-                            ?>
+                                ?>
                         </li>
                         <!-- <li><a href="/clinic/locations/edit" class="dropdown-item"><span class="bi bi-globe2"></span> My Profile</a></li> -->
                         <li><a href="/clinic/ca_call_groups/report" class="dropdown-item"><span class="bi bi-list-task"></span> Reporting</a></li>
@@ -73,9 +73,9 @@ $logo = Configure::read('logo');
                                 '<span class="bi bi-power"></span> Logout',
                                 [
                                     'class' => 'dropdown-item',
-                                    'escape' => false
-                                ])
-                            ?>
+                                    'escape' => false,
+                                ]
+                            ) ?>
                         </li>
                     </ul>
                 </li>

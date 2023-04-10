@@ -21,7 +21,7 @@ class UsersListener implements EventListenerInterface
     }
 
     /**
-     * @param \Cake\Event\Event $event
+     * @param \Cake\Event\Event $event CakePHP Event
      */
     public function afterLogin(\Cake\Event\Event $event)
     {
