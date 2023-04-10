@@ -4,7 +4,6 @@
  * @var iterable<\App\Model\Entity\Review> $reviews
  */
 
-use Cake\View\Helper\Form;
 ?>
 <div class="reviews index content">
     <h3><?= __('Reviews') ?></h3>
@@ -23,7 +22,7 @@ use Cake\View\Helper\Form;
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($reviews as $review): ?>
+                <?php foreach ($reviews as $review) : ?>
                 <tr>
                     <td><?= h($review->created) ?></td>
                     <td><?= h($review->first_name) ?></td>
@@ -40,10 +39,10 @@ use Cake\View\Helper\Form;
                                     'prefix' => 'Clinic',
                                     'controller' => 'Reviews',
                                     'action' => 'respond',
-                                    $review->id
+                                    $review->id,
                                 ],
                                 [
-                                    'class' => 'btn btn-primary'
+                                    'class' => 'btn btn-primary',
                                 ]
                             )
                         ?>
@@ -61,6 +60,10 @@ use Cake\View\Helper\Form;
             <?= $this->Paginator->next(__('next') . ' >') ?>
             <?= $this->Paginator->last(__('last') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+        <p>
+            <?= $this->Paginator->counter(__(
+                'Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total'
+            )) ?>     
+        </p>
     </div>
 </div>

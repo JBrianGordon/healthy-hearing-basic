@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-
-use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
@@ -415,13 +413,19 @@ class UsersTable extends CakeDcUsersTable
         return $rules;
     }
 
-
-    public function findAuth(\Cake\ORM\Query $query, array $options)
+    /**
+     * Custom finder used at login to retrieve Location ID connected to a user
+     *
+     * @param \Cake\ORM\Query $query CakePHP query
+     * @param array $options Options array for query
+     * @return \Cake\ORM\Query Modified CakePHP query
+     */
+    public function findAuth(Query $query, array $options)
     {
         $query->contain([
             'Locations' => [
                 'fields' => [
-                    'id'
+                    'id',
                 ],
             ],
         ]);

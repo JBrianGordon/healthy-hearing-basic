@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Clinic;
 
-use App\Controller\AppController;
-
 /**
  * Reviews Controller
  *
@@ -13,7 +11,6 @@ use App\Controller\AppController;
  */
 class ReviewsController extends BaseClinicController
 {
-
     public $paginate = [
         'order' => [
             'Reviews.created' => 'desc',
@@ -36,7 +33,7 @@ class ReviewsController extends BaseClinicController
         $reviews = $this->paginate(
             $this->Reviews->find('all')
                 ->where([
-                    'location_id' => $locationId
+                    'location_id' => $locationId,
                 ])
         );
 
@@ -62,7 +59,7 @@ class ReviewsController extends BaseClinicController
 
                 return $this->redirect([
                     'action' => 'index',
-                    $review->location_id
+                    $review->location_id,
                 ]);
             }
             $this->Flash->error(__('The review could not be saved. Please, try again.'));

@@ -10,6 +10,15 @@ use App\Controller\AppController;
  */
 class BaseClinicController extends AppController
 {
+    /**
+     * Initialization hook method.
+     *
+     * Use this method to add common initialization code like loading components.
+     *
+     * e.g. `$this->loadComponent('FormProtection');`
+     *
+     * @return void
+     */
     public function initialize(): void
     {
         parent::initialize();
