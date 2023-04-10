@@ -26,6 +26,16 @@ use Cake\ORM\Entity;
 class CallSource extends Entity
 {
     /**
+    * We have 2 special locations for 'Quick Pick' and "Return calls from clinic'.
+    */
+    const LOCATION_ID_QUICK_PICK = 1111;
+    const LOCATION_ID_FROM_CLINIC = 2222;
+    static $specialLocations = [
+        self::LOCATION_ID_QUICK_PICK,
+        self::LOCATION_ID_FROM_CLINIC
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

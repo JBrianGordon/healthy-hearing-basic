@@ -115,6 +115,26 @@ return [
             'controller' => '*',
             'action' => '*',
         ],
+        // clinic-prefixed routes
+        [
+        // Clinics can only access their clinic's info when logged in
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Locations',
+            'action' => 'edit',
+            'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'table' => 'LocationsUsers',
+                'id' => 'location_id',
+                'ownerForeignKey' => 'user_id',
+            ]),
+        ],
+        // Logged in clinics can access Reviews controller pages
+        [
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Reviews',
+            'action' => ['index', 'respond'],
+        ],
         //specific actions allowed for the all roles in Users plugin
         [
             'role' => '*',
@@ -144,7 +164,7 @@ return [
                 'home',
                 'newsletter',
                 'newsletterSuccess',
-                'clinicInfo'
+                'clinicInfo',
             ],
             'bypassAuth' => true,
         ],
