@@ -52,11 +52,10 @@ class RenameColumns extends AbstractMigration
                 ->renameColumn('cqp_practice_id', 'id_cqp_practice')
                 ->renameColumn('cqp_office_id', 'id_cqp_office')
                 ->renameColumn('coupon_id', 'id_coupon')
-                ->renameColumn('sf_id', 'id_sf')
                 ->update();
             $this->table('providers')
                 ->renameColumn('order', 'priority')
-                ->renameColumn('yhn_location_id', 'id_yhn_location')
+                ->renameColumn('yhn_provider_id', 'id_yhn_provider')
                 ->update();
             $this->table('users')
                 ->renameColumn('is_active', 'active')
