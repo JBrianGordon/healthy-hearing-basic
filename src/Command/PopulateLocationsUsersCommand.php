@@ -11,7 +11,7 @@ use Cake\Console\ConsoleOptionParser;
 /**
  * PopulateLocationUsers command.
  */
-class PopulateLocationUsersCommand extends Command
+class PopulateLocationsUsersCommand extends Command
 {
     /**
      * Hook method for defining this command's option parser.
@@ -59,7 +59,7 @@ class PopulateLocationUsersCommand extends Command
                 if (!$locationsUsersTable->save($locationsUser)) {
                     $io->err(
                         sprintf(
-                            'Error saving locations_user record for user %s and location %s',
+                            'Error saving locations_users record for user %s and location %s',
                             $locationUser->username,
                             $locationUser->location_id
                         )
