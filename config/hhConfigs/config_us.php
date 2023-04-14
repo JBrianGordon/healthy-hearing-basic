@@ -73,6 +73,10 @@ return [
     'isTieringEnabled' => true,
     'isYhnAutoMatched' => false,
     'importTag' => 'YHN',
+	// Google Maps API
+	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
+	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',
+	'googleMapsWebServicesApiKey' => 'AIzaSyDwFnCP8X_TM8j4rlRZohfW2-D9bG_-Ryg',
     // Misc
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',
@@ -123,7 +127,7 @@ return [
         'LocationUser.lastlogin',
         'location_segment',
         'entity_segment',
-        'yhn_location_id',
+        'id_yhn_location',
         'is_yhn',
         'is_oticon',
         'is_retail',

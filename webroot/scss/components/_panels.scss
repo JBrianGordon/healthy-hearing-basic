@@ -121,6 +121,14 @@
   }
 }
 
+.panel-default {
+	.panel-heading {
+		color: #515254;
+	    background-color: #eee;
+	    border-color: transparent;
+	}
+}
+
     .panel-disabled {
 	    opacity: 0.5;
 	    pointer-events: none;

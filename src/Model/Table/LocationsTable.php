@@ -9,6 +9,8 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
+use Cake\Core\Configure;
+use Cake\Console\ConsoleIo;
 
 /**
  * Locations Model
@@ -79,13 +81,13 @@ class LocationsTable extends Table
         $this->hasMany('ImportStatus', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationAds', [
+        $this->hasOne('LocationAds', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('LocationEmails', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationHours', [
+        $this->hasOne('LocationHours', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('LocationLinks', [
@@ -106,12 +108,13 @@ class LocationsTable extends Table
         $this->hasMany('LocationVideos', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationVidscrips', [
+        $this->hasOne('LocationVidscrips', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
+        $this->belongsToMany('Users');
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -944,5 +947,195 @@ class LocationsTable extends Table
             ->notEmptyString('is_email_allowed');
 
         return $validator;
+    }
+
+    /**
+    * Calculate the listing types for all location ids
+    */
+    public function calculateListingTypes(ConsoleIo $io) {
+        $io->hr();
+        $io->out('Calculate listing types for all locations');
+        $io->hr();
+        $locations = $this->find('all', [
+            'contain' => [],
+            'fields' => ['id', 'yhn_tier', 'oticon_tier', 'cqp_tier', 'is_grace_period', 'listing_type', 'is_listing_type_frozen', 'is_show']
+        ])->all();
+        foreach ($locations as $location) {
+            $this->calculateListingType($location);
+            echo '.';
+        }
+
+        $io->out();
+        $io->out('Done.');
+    }
+
+    /**
+    * Calculate the listing type for this location id, based on oticon
+    * @param entity object location or int locationId
+    */
+    public function calculateListingType($location) {
+        if (!is_object($location)) {
+            // Location ID was passed
+            $location = $this->get($location);
+        }
+        if (!Configure::read('isTieringEnabled')) {
+            // For Canada, if the clinic came in on most recent import, mark it Enhanced. Otherwise None.
+            $listingType = Location::LISTING_TYPE_NONE;
+            if ($this->isLocationInLatestImport($location->id, 'ca')) {
+                $listingType = Location::LISTING_TYPE_ENHANCED;
+            }
+        } else {
+            // US
+            $listingType = Location::LISTING_TYPE_NONE;
+            if ($location->is_listing_type_frozen) {
+                $listingType = $location->listing_type;
+            } else if (($location->yhn_tier == 2) ||
+                ($location->cqp_tier == 2) ||
+                ($location->oticon_tier == 1) ||
+                ($location->oticon_tier == 2) ||
+                (($location->oticon_tier == 3) && $location->is_grace_period)) {
+                $listingType = Location::LISTING_TYPE_BASIC;
+            }
+        }
+        if (empty($location->id)) {
+            // New location. Return listing type without saving.
+            return $listingType;
+        } else {
+            $location->listing_type = $listingType;
+            // LISTING_TYPE_NONE locations should be no-show
+            if ($listingType == Location::LISTING_TYPE_NONE) {
+                $location->is_show = false;
+            }
+            $this->save($location);
+            return $listingType;
+        }
+    }
+
+    /**
+    * Make sure all locations that are LISTING_TYPE_NONE or inactive are also no-show.
+    */
+    public function noShowLocations(ConsoleIo $io) {
+        $io->helper('BaseShell')->title('Find locations that should be no-show');
+        // Make sure Quick Pick and Return Call from Clinic are not shown
+        foreach (['1111', '2222'] as $locationId) {
+            $locationEntity = $this->get($locationId);
+            if ($locationEntity->is_show == true) {
+                $locationEntity->is_show = false;
+                $this->save($locationEntity);
+                $this->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
+            }
+        }
+        $locationIds = $this->find('list', [
+            'conditions' => [
+                'Locations.is_show' => true,
+                'OR' => [
+                    'Locations.listing_type' => Location::LISTING_TYPE_NONE,
+                    'Locations.is_active' => false
+                ]
+            ]
+        ])->toArray();
+        foreach ($locationIds as $locationId) {
+            $locationEntity = $this->get($locationId);
+            $locationEntity->is_show = false;
+            $this->save($locationEntity);
+        }
+        $io->out('Found and marked '.count($locationIds).' locations no-show.');
+    }
+
+    // Show clinics that have an active CS number
+    function showClinicsWithActiveCS(ConsoleIo $io) {
+        $io->helper('BaseShell')->title('Show all clinics that have an active CS number');
+        $callSources = $this->CallSources->find('all', [
+            'contain' => [
+                'Locations' => [
+                    'fields' => ['Locations.id', 'Locations.listing_type', 'Locations.is_active', 'Locations.is_show']
+                ]
+            ],
+            'conditions' => [
+                'CallSources.is_active' => true,
+                'Locations.is_active' => true,
+                'Locations.listing_type !=' => Location::LISTING_TYPE_NONE,
+                'Locations.is_show' => false
+            ]
+        ])->all();
+        foreach ($callSources as $callSource) {
+            $locationEntity = $this->get($callSource->location->id);
+            $locationEntity->is_show = true;
+            $this->save($locationEntity);
+        }
+        $io->out("Done. Found ".count($callSources)." locations to mark is_show.");
+    }
+
+    public function updateAllFilters(ConsoleIo $io) {
+        $io->helper('BaseShell')->title('Update filters');
+        $locations = $this->find('list')->toArray();
+        $progress = $io->helper('Progress')->init(['total'=> count($locations)]);
+        foreach ($locations as $locationId => $locationTitle) {
+            $this->updateFilters($locationId);
+            $progress->increment()->draw();
+        }
+        $io->out();
+        $io->out('Done.');
+    }
+
+    /**
+    * Set the boolean filters true or false based on current data of the location.
+    * URL and Reviews filter is based on their actual fiels (url, reviews_approved) and is not set by this
+    * @param int id of Location
+    * @return boolean success
+    */
+    public function updateFilters($locationId) {
+        $locationEntity = $this->get($locationId, [
+            'contain' => [
+                'LocationHours',
+                'LocationProviders.Providers'
+            ]
+        ]);
+        if (empty($locationEntity)) {
+            return false;
+        }
+
+        //FYI Url and reviews are based on Location.url and Location.reviews_approved, Not a filter boolean.
+        //This function is only checking for the boolean filters we've setup for the location
+        $locationEntity->filter_has_photo = false;
+        $locationEntity->filter_insurance = false;
+        $locationEntity->filter_evening_weekend = false;
+        $locationEntity->filter_adult_hearing_test = false;
+        $locationEntity->filter_hearing_aid_fitting = false;
+
+        //Check photo
+        foreach ($locationEntity->location_providers as $locationProvider) {
+            if (!empty($locationProvider->provider->thumb_url)) {
+                $locationEntity->filter_has_photo = true;
+            }
+        }
+        //Check insurance
+        if (!empty($locationEntity->payment)) {
+            if (strpos($locationEntity->payment,'"2048":"1"')) {
+                $locationEntity->filter_insurance = true;
+            }
+        }
+        //Check evening/weekend hours
+        if (!empty($locationEntity->location_hour)) {
+            if ($locationEntity->location_hour->is_evening_weekend_hours) {
+                $locationEntity->filter_evening_weekend = true;
+            } else {
+                $hour = $locationEntity->location_hour;
+                if ($hour->sat_open!="" && $hour->sat_close!="" && $hour->sat_is_closed!=true) {
+                    // Open Sat
+                    $locationEntity->filter_evening_weekend = true;
+                }
+                if ($hour->sun_open!="" && $hour->sun_close!="" && $hour->sun_is_closed!=true) {
+                    // Open Sun
+                    $locationEntity->filter_evening_weekend = true;
+                }
+            }
+        }
+        //Check Adult Hearing
+        $locationEntity->filter_adult_hearing_test = true;
+        $locationEntity->filter_hearing_aid_fitting = true;
+
+        //TODO: Previously this save() used callbacks=false because updateFilters() is called from afterSave(). We need to test if this still functions correctly or creates a loop.
+        return $this->save($locationEntity);
     }
 }

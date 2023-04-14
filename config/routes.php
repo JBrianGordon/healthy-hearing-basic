@@ -117,6 +117,23 @@ return static function (RouteBuilder $routes) {
         $adminBuilder->fallbacks(DashedRoute::class);
     });
 
+    // Clinic-prefixed routes
+    $routes->prefix('Clinic', function (RouteBuilder $clinicBuilder) {
+        $clinicBuilder->connect(
+            '/locations/edit/{location_id}',
+            'Locations::edit'
+        )
+        ->setPass(['location_id'])
+        ->setPatterns([
+            'location_id' => '^81190\d{5}$',
+        ]);
+
+        // All routes here will be prefixed with `/clinic`, and
+        // have the `'prefix' => 'Clinic'` route element added that
+        // will be required when generating URLs for these routes
+        $clinicBuilder->fallbacks(DashedRoute::class);
+    });
+
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.

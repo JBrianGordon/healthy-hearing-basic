@@ -7,6 +7,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\Location;
+use App\Model\Entity\Review;
 
 /**
  * Imports Model
@@ -34,6 +36,8 @@ use Cake\Validation\Validator;
  */
 class ImportsTable extends Table
 {
+    protected $reportData = '';
+
     /**
      * Initialize method
      *
@@ -106,6 +110,10 @@ class ImportsTable extends Table
             ->allowEmptyString('updated_providers');
 
         return $validator;
+    }
+
+    protected function reportOut($val='') {
+        $this->reportData .= $val . "\r\n";
     }
 
     public function getLatestImportId() {

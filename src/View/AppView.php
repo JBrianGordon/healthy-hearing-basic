@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace App\View;
 
 use BootstrapUI\View\UIView;
-use Cake\Core\Configure;
+use Cake\Core\Configure; // Load Configure for all child views/templates
 
 /**
  * Application View
@@ -38,9 +38,12 @@ class AppView extends UIView
      */
     public function initialize(): void
     {
-        parent::initialize();
+        // Don't use FriendsOfCake/boostrap-ui default layout
+        $this->initializeUI(['layout' => false]);
+
         $this->loadHelper('Editorial');
         $this->loadHelper('Authentication.Identity');
         $this->loadHelper('CakeDC/Users.AuthLink');
+        $this->loadHelper('CakeDC/Users.User');
     }
 }
