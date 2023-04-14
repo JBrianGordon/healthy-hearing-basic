@@ -14,6 +14,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
+use Cake\Mailer\MailerAwareTrait;
 
 
 /**
@@ -38,6 +39,7 @@ use Cake\I18n\FrozenTime;
 class ReviewsTable extends Table
 {
     use LogTrait;
+    use MailerAwareTrait;
 
     /**
      * Initialize method
@@ -192,8 +194,8 @@ class ReviewsTable extends Table
     /**
      * beforeSave() for ReviewsTable
      *
-     * @param \Cake\Datasource\EntityInterface $event
-     * @param \Cake\Event\EventInterface $entity
+     * @param \Cake\Event\EventInterface $event
+     * @param \Cake\Datasource\EntityInterface $entity
      * @param \ArrayObject $options
      *
      */
@@ -217,12 +219,12 @@ class ReviewsTable extends Table
                     return true;
                 // Status changed to Approved - Send positive review email
                 } else {
-                    $entity->set('sendReviewEmail', 'emailReviewRecievedPositive');
+                    $entity->set('sendReviewEmail', 'emailPositiveReviewReceived');
                 }
             // Is status 'Denied' (Publish negative review)?
             } elseif (ReviewStatus::DENIED === ReviewStatus::from($entity->get('status'))) {
                 // Status changed to 'Denied' (Published Negative) - Send negative review email
-                $entity->set('sendReviewEmail', 'emailReviewRecievedNegative');
+                $entity->set('sendReviewEmail', 'emailNegativeReviewReceived');
                 $entity->set('denied_date', FrozenTime::now()->format('Y-m-d H:i:s'));
                 $entity->set('status', ReviewStatus::APPROVED->value);
             }
@@ -233,8 +235,8 @@ class ReviewsTable extends Table
     /**
      * afterSave() for ReviewsTable
      *
-     * @param \Cake\Datasource\EntityInterface $event
-     * @param \Cake\Event\EventInterface $entity
+     * @param \Cake\Event\EventInterface $event
+     * @param \Cake\Datasource\EntityInterface $entity
      * @param \ArrayObject $options
      *
      */
@@ -242,10 +244,11 @@ class ReviewsTable extends Table
     {
         $sendReviewEmail = $entity->get('sendReviewEmail');
         if ($sendReviewEmail !== false) {
+            $mailer = $this->getMailer('Review');
             match ($sendReviewEmail) {
-                'emailReviewResponsePosted' => $this->log("emailReviewResponsePosted", 'debug'),
-                'emailReviewRecievedPositive' => $this->log("emailReviewRecieved-POSITIVE", 'debug'),
-                'emailReviewRecievedNegative' => $this->log("emailReviewRecieved-NEGATIVE", 'debug'),
+                'emailPositiveReviewReceived' => $mailer->send('emailPositiveReviewReceived', [$entity]),
+                'emailNegativeReviewReceived' => $mailer->send('emailNegativeReviewReceived', [$entity]),
+                'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
             };
         };
 
