@@ -5,6 +5,7 @@ namespace App\Mailer;
 
 use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
+use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\Log\LogTrait;
 
 /**
@@ -12,6 +13,7 @@ use Cake\Log\LogTrait;
  */
 class ReviewMailer extends Mailer
 {
+    use LocatorAwareTrait;
     use LogTrait;
     /**
      * Mailer's name.
@@ -25,10 +27,11 @@ class ReviewMailer extends Mailer
      *
      * @param \Cake\ORM\Entity $review Review entity
      */
-    public function emailPositiveReviewReceived($review) {
+    public function emailPositiveReviewReceived($review)
+    {
         $this
             ->setEmailFormat('html')
-            ->setTo('btalkington@healthyhearing.com')
+            ->setTo($this->getLocationEmail($review->location_id))
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Positive Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/positiveReviewReceived')
@@ -40,10 +43,11 @@ class ReviewMailer extends Mailer
      *
      * @param \Cake\ORM\Entity $review Review entity
      */
-    public function emailNegativeReviewReceived($review) {
+    public function emailNegativeReviewReceived($review)
+    {
         $this
             ->setEmailFormat('html')
-            ->setTo('btalkington@healthyhearing.com')
+            ->setTo($this->getLocationEmail($review->location_id))
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Negative Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/negativeReviewReceived')
@@ -55,13 +59,24 @@ class ReviewMailer extends Mailer
      *
      * @param \Cake\ORM\Entity $review Review entity
      */
-    public function emailReviewResponsePosted($review) {
+    public function emailReviewResponsePosted($review)
+    {
         $this
             ->setEmailFormat('html')
-            ->setTo('btalkington@healthyhearing.com')
+            ->setTo($this->getLocationEmail($review->location_id))
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review Response Posted')
             ->viewBuilder()
                 ->setTemplate('Review/reviewResponsePosted')
                 ->setVar('reviewData', $review);
+    }
+
+    protected function getLocationEmail($locationId)
+    {
+        return $this
+            ->getTableLocator()
+            ->get('Locations')
+            ->findById($locationId)
+            ->first()
+            ->email;
     }
 }
