@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Mailer;
 
 use Cake\Core\Configure;
+use Cake\Log\LogTrait;
 use Cake\Mailer\Mailer;
 use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\Log\LogTrait;
 
 /**
  * Review mailer.
@@ -15,6 +15,7 @@ class ReviewMailer extends Mailer
 {
     use LocatorAwareTrait;
     use LogTrait;
+
     /**
      * Mailer's name.
      *
@@ -26,6 +27,7 @@ class ReviewMailer extends Mailer
      * Send an email to a clinic after a positive email is approved.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @return $this
      */
     public function emailPositiveReviewReceived($review)
     {
@@ -36,12 +38,15 @@ class ReviewMailer extends Mailer
             ->viewBuilder()
                 ->setTemplate('Review/positiveReviewReceived')
                 ->setVar('reviewData', $review);
+
+        return $this;
     }
 
     /**
      * Send an email to a clinic after a negative email is approved.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @return $this
      */
     public function emailNegativeReviewReceived($review)
     {
@@ -52,12 +57,15 @@ class ReviewMailer extends Mailer
             ->viewBuilder()
                 ->setTemplate('Review/negativeReviewReceived')
                 ->setVar('reviewData', $review);
+
+        return $this;
     }
 
     /**
      * Send an email to a clinic after a review response is published.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @return $this
      */
     public function emailReviewResponsePosted($review)
     {
@@ -68,8 +76,16 @@ class ReviewMailer extends Mailer
             ->viewBuilder()
                 ->setTemplate('Review/reviewResponsePosted')
                 ->setVar('reviewData', $review);
+
+        return $this;
     }
 
+    /**
+     * Return email address for clinic location
+     *
+     * @param int $locationId Location ID
+     * @return string Location email address
+     */
     protected function getLocationEmail($locationId)
     {
         return $this
