@@ -41,6 +41,14 @@ class ReviewsTable extends Table
     use LogTrait;
     use MailerAwareTrait;
 
+    public $ratings = array(
+        1 => '1 (Poor)',
+        2 => '2 (Below average)',
+        3 => '3 (Average)',
+        4 => '4 (Above average)',
+        5 => '5 (Excellent)',
+    );
+
     /**
      * Initialize method
      *

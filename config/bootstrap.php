@@ -45,6 +45,7 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use Cake\Utility\Inflector;
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -355,4 +356,72 @@ function getEasternTimezoneOffset() {
 */
 function getCurrentEasternTime($format = 'Y-m-d H:i:s') {
     return dateTimeEastern('now', $format);
+}
+
+/**
+* slugify - makes a string a slug-friendly string
+* (lower case, only dashes, no double-dashes)
+* @param mixed $input
+* @param string $splitter
+* @return string $slugFormattedInput
+*/
+function slugify($input='', $splitter = "-") {
+    if (is_array($input)) {
+        foreach ( $input as $key => $val ) {
+            $input[$key] = Inflector::delimit(ucwords(strtolower($val)), $splitter);
+        }
+        return $input;
+    } else {
+        return Inflector::delimit(ucwords(strtolower($input)), $splitter);
+    }
+}
+/**
+* Slugify a region NM-New-Mexico
+* @param region with state abbreviation string.
+*/
+function slugifyRegion($region = null){
+    $region = str_replace(' ', '-', $region);
+    $region_parts = explode('-',$region);
+    $region_parts[0] = strtoupper($region_parts[0]);
+    for($i = 1; $i < count($region_parts); $i++){
+        $region_parts[$i] = slugify($region_parts[$i]);
+    }
+    return implode('-',$region_parts);
+}
+/**
+* Slugify a city Wilkes-Barre and Albuquerque
+*/
+function slugifyCity($city = null){
+    //todo clean city name
+    //$city = ClassRegistry::init('City')->cleanCityName($city);
+    $city = str_replace(' ', '-', $city);
+    $city_parts = explode('-',$city);
+    for($i = 0; $i < count($city_parts); $i++){
+        $city_parts[$i] = slugify($city_parts[$i]);
+    }
+    $city = implode('-',$city_parts);
+    $city = ($city == 'Coeur-Dalene') ? 'Coeur-dAlene' : $city;
+    return $city;
+}
+/**
+* Clean zip for display
+*/
+function cleanZip($zip = null){
+    $zip = str_replace('-', ' ', $zip);
+    if (Configure::read('country') == 'US') {
+        // Only use first 5 digits of zip
+        $zip = substr($zip, 0, 5);
+    }
+    return $zip;
+}
+/**
+* Slugify a zip
+*/
+function slugifyZip($zip = null){
+    $zip = str_replace(' ', '-', $zip);
+    if (Configure::read('country') == 'US') {
+        // Only use first 5 digits of US zip
+        $zip = substr($zip, 0, 5);
+    }
+    return $zip;
 }

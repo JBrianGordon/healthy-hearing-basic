@@ -11,15 +11,13 @@ use App\Model\Entity\CaCallGroup;
 $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <?php
-/*** TODO: uncomment once Provider is pulled in and Clinic methods built ***
-$this->Clinic->set($location);
-$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location['Location']['id']);
-$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location['Location']['id']);
+$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
+$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
 $hideProvider = empty($location['Provider'][0]['title']) && empty($location['Provider'][0]['credentials']) && empty($location['Provider'][0]['thumb_url']) && empty($location['Provider'][0]['description']);
 $showSpecialAnnouncement = (
-	($location['Location']['listing_type'] == Location::LISTING_TYPE_PREMIER) ||
-	($location['Location']['feature_special_announcement'])
-);*/
+	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
+	($location->feature_special_announcement)
+);
 ?>
 <div class="container-fluid site-body fap-results">
 	<div class="row">
@@ -31,9 +29,9 @@ $showSpecialAnnouncement = (
 				<header class="col-md-12 inverse breadcrumb-header">
 					<?php /*** TODO: uncomment when breadcrumbs are built out ***: echo $this->element('layouts/breadcrumbs', ['crumbs' => [
 						'Find a clinic' => '/hearing-aids',
-						$location['Location']['state_full'] => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
-						$location['Location']['city'] => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
-						$location['Location']['title'] => ''
+						$location->state_full => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
+						$location->city => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
+						$location->title => ''
 					]]); */
 					?>
 				</header>
@@ -54,8 +52,8 @@ $showSpecialAnnouncement = (
 												</div>
 											<?php //endif; ?>
 											<h1 class="text-primary name"><?= $location->title ?></h1>
-											<?php if(!empty($location['Location']['logo_url']) && $location['Location']['listing_type'] == 'Premier'){
-												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location['Location']['logo_url'] .'" alt="'. $location['Location']['title'] .' logo" width="400" height="80">';
+											<?php if(!empty($location->logo_url) && $location->listing_type == 'Premier'){
+												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
 											}; ?>
 											<div class="geo" style="display:none;">
 												<span class="latitude">
@@ -341,7 +339,7 @@ $showSpecialAnnouncement = (
 									echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
 									echo '<div class="panel-body"><div class="panel-section condensed">';
 									echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
-									if (!$location['Location']['is_mobile'] && ($location['Location']['listing_type'] === 'Premier')) {
+									if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
 										echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
 									};
 									echo '</div></div></section>';
@@ -544,14 +542,14 @@ $showSpecialAnnouncement = (
 													$moneyOffArray = [1,4,7];
 													$freeAccArray = [2,5,8];
 													$freeScreenArray = [3,6,9];	
-													if (in_array($location['Location']['coupon_id'], $moneyOffArray)){
+													if (in_array($location->coupon_id, $moneyOffArray)){
 														$couponAlt = "$200 off premium technology coupon for ";
-													} elseif (in_array($location['Location']['coupon_id'], $freeAccArray)){
+													} elseif (in_array($location->coupon_id, $freeAccArray)){
 														$couponAlt = "Free accessory with purchase coupon for ";
-													} elseif (in_array($location['Location']['coupon_id'], $freeScreenArray)) {
+													} elseif (in_array($location->coupon_id, $freeScreenArray)) {
 														$couponAlt = "Free hearing screening coupon for ";
 													}
-													$couponAlt .= $location['Location']['title'];
+													$couponAlt .= $location->title;
 												?>
 												<img loading="lazy" width="300" height="300" src="<?= '/img/coupons/coupon-'.$location->coupon_id.'.jpg'; ?>" alt="<?= $couponAlt ?>">
 											</div>

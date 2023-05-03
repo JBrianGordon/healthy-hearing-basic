@@ -150,7 +150,7 @@ use Cake\Utility\Inflector;
 class Location extends Entity
 {
     protected $_virtual = ['is_oticon', 'state_full', 'hh_url', 'slug'];
-    protected $__oticonPrefix = '81190';
+    static $oticonPrefix = '81190';
 
     /**
     * Enum - Listing Type
@@ -240,15 +240,14 @@ class Location extends Entity
 
     protected function _getHhUrl()
     {
-        // TODO
         if (!empty($this->title)) {
             $hhUrl = Router::url([
                 'prefix' => false,
                 'plugin' => false,
                 'controller' => 'locations',
-                'action' => 'view_by_id',
-                'id' => preg_replace('/^'. $this->__oticonPrefix .'/', '', (string)$this->id),
-                'title' => Inflector::dasherize(Inflector::camelize($this->title)),
+                'action' => 'view',
+                'id' => preg_replace('/^'. self::$oticonPrefix .'/', '', (string)$this->id),
+                'title' => Inflector::dasherize(Inflector::camelize(strtolower($this->title))),
             ]);
             return $hhUrl;
         } else {
