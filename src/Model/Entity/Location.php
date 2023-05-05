@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 /**
  * Location Entity
@@ -247,7 +247,7 @@ class Location extends Entity
                 'controller' => 'locations',
                 'action' => 'view',
                 'id' => preg_replace('/^'. self::$oticonPrefix .'/', '', (string)$this->id),
-                'title' => Inflector::dasherize(Inflector::camelize(strtolower($this->title))),
+                'title' => Text::slug(strtolower($this->title)),
             ]);
             return $hhUrl;
         } else {
@@ -257,7 +257,7 @@ class Location extends Entity
 
     protected function _getSlug()
     {
-        $slug = empty($this->title) ? '' : Inflector::dasherize(Inflector::camelize($this->title));
+        $slug = empty($this->title) ? '' : Text::slug(strtolower($this->title));
         return $slug;
     }
 

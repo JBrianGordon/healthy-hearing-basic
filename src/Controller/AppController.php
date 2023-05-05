@@ -97,8 +97,8 @@ class AppController extends Controller
         $this->set('siteName', $this->siteName);
 
         // Find a random generic ad with no exclusivity tags
-        //$ad = ClassRegistry::init('Ad')->findGenericAd();
-        //$this->set('ad', $ad);
+        $ad = $this->fetchTable('Advertisements')->findGenericAd();
+        $this->set('ad', $ad);
 
         //$this->Configuration->load('HH');
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......

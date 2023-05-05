@@ -1,11 +1,6 @@
 <?php
 use Cake\Core\Configure;
-	
-$isadmin = isset($isadmin) ? $isadmin : false;
-$isagent = isset($isagent) ? $isagent : false;
-$iscallsupervisor = isset($iscallsupervisor) ? $iscallsupervisor : false;
-$iscsa = isset($iscsa) ? $iscsa : false;
-$iswriter = isset($iswriter) ? $iswriter : false;
+$isClinic = $this->App->isClinic();
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
 //$wikiModel = ClassRegistry::init('Wiki');
@@ -39,7 +34,7 @@ $logo = Configure::read('logo');
 							</li>
 						<?php endif; ?>
 						<?= $this->element('header/admin_panel_link') ?>
-						<?php if ($this->Identity->get('role') === 'clinic'): ?>
+						<?php if ($isClinic): ?>
 							<?= $this->element('header/clinic_panel_link') ?>
 						<?php endif; ?>
 					</ul>

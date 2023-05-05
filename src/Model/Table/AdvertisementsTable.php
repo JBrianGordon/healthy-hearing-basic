@@ -44,6 +44,10 @@ class AdvertisementsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('TagAds', [
+            'foreignKey' => 'ad_id',
+        ]);
     }
 
     /**
@@ -111,5 +115,109 @@ class AdvertisementsTable extends Table
             ->notEmptyString('tag_basic');
 
         return $validator;
+    }
+
+    /**
+    * Find an advertisement to display with no exclusivity tags.
+    * If more than one found, it will randomly select one. If none are found, returns null.
+    */
+    function findGenericAd() {
+        $allAds = $this->find('all', [
+            'contain' => ['TagAds.Tags'],
+            'conditions' => [
+                'is_active' => true,
+                'tag_corps' => false,
+                'tag_basic' => false,
+            ]
+        ])->all();
+        $genericAds = [];
+        foreach ($allAds as $ad) {
+            // Don't include ads with an exclusivity tag
+            if (empty($ad->tag_ads)) {
+                $genericAds[] = $ad;
+            }
+        }
+        if (empty($genericAds)) {
+            return null;
+        } else {
+            // Randomly select one of the generic ads in this array
+            $key = array_rand($genericAds);
+            return $genericAds[$key];
+        }
+    }
+
+    /**
+    * Find an advertisement to display based on exclusivity tag.
+    * If more than one found, it will randomly select one. If none are found, returns null.
+    * @param $tags array of tags
+    */
+    function findAdByTags($tags) {
+        /* TODO:
+        $allExclusiveAds = [];
+        $uniqueAdIds = [];
+        foreach ($tags as $tag) {
+            $ads = ClassRegistry::init('TagAd')->find('all', [
+                'contain' => ['Ad'],
+                'conditions' => [
+                    'TagAd.tag_id' => $tag,
+                    'Ad.is_active' => true
+                ]
+            ]);
+            foreach ($ads as $ad) {
+                if (!in_array($ad['Ad']['id'], $uniqueAdIds)) {
+                    $allExclusiveAds[]['Ad'] = $ad['Ad'];
+                    $uniqueAdIds[] = $ad['Ad']['id'];
+                }
+            }
+        }
+        if (empty($allExclusiveAds)) {
+            return null;
+        } else {
+            // Randomly select one of the exclusive ads in this array
+            $key = array_rand($allExclusiveAds);
+            return $allExclusiveAds[$key];
+        }*/
+    }
+
+    /**
+    * Find an advertisement to display that is tagged for corp pages.
+    * If more than one found, it will randomly select one. If none are found, returns null.
+    */
+    function findAdForCorps() {
+        /* TODO:
+        $allCorpAds = ClassRegistry::init('Ad')->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'Ad.is_active' => true,
+                'Ad.tag_corps' => true,
+            ]
+        ]);
+        if (empty($allCorpAds)) {
+            return null;
+        } else {
+            // Randomly select one of the corp ads in this array
+            $key = array_rand($allCorpAds);
+            return $allCorpAds[$key];
+        }*/
+    }
+
+    /**
+    * Find an advertisement to display that is tagged for basic profile pages.
+    * If more than one found, it will randomly select one. If none are found, returns null.
+    */
+    function findAdForBasicProfile() {
+        $allBasicAds = $this->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'tag_basic' => true,
+            ]
+        ])->toArray();
+        if (empty($allBasicAds)) {
+            return null;
+        } else {
+            // Randomly select one of the basic ads in this array
+            $key = array_rand($allBasicAds);
+            return $allBasicAds[$key];
+        }
     }
 }
