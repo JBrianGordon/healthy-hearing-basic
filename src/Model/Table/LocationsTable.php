@@ -9,8 +9,12 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
+use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
 use Cake\Console\ConsoleIo;
+use Cake\Routing\Router;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Locations Model
@@ -1137,5 +1141,255 @@ class LocationsTable extends Table
 
         //TODO: Previously this save() used callbacks=false because updateFilters() is called from afterSave(). We need to test if this still functions correctly or creates a loop.
         return $this->save($locationEntity);
+    }
+
+    /**
+    * Build the region from a state abbr or region
+    * @param string state (NM, NM-New, etc..)
+    * @return string NM-New-Mexico
+    */
+    public function stateRegion($state) {
+        $abbr = $this->parseStateSlug($state);
+        $full = $this->stateFull($abbr);
+        if (empty($full)) {
+            return null;
+        }
+        return slugifyRegion($abbr . ' ' . $full);
+    }
+
+    /**
+    * Parse back the abbreviation of a ST-State-Name slug
+    * @param string state slug
+    * @return string ST
+    */
+    public function parseStateSlug($stateslug) {
+        if (strpos($stateslug,"-")) {
+            $array = explode("-", $stateslug);
+            if (strcasecmp(substr($array[0], 0, 1), substr($array[1], 0, 1)) != 0) {
+                // Invalid $stateslug. Abbr and full name do not start with same letter.
+                return null;
+            }
+            return array_shift($array);
+        }   else {
+            return $stateslug;
+        }
+    }
+
+    /**
+    * Handy shortcut function to return a full state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    public function stateFull($state_input) {
+        return $this->state('full',$state_input);
+    }
+
+    /**
+    * Handy shortcut function to return a full/abbr state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    public function state($get,$stateInput) {
+        $stateInput = trim($stateInput);
+        $states = Configure::read('states');
+        foreach ($states as $state => $stateFull) {
+            if (strtoupper($stateInput) == strtoupper($state) || strtoupper($stateInput)==strtoupper($stateFull)) {
+                if ($get=='full') {
+                    return $stateFull;
+                } else {
+                    return $state;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Get the state region based on the state_input
+    * @param string state input (NM, NM-New-Mexico, NM-New)
+    * @return string region the state belongs to (West, Midwest, etc..)
+    */
+    public function googleRegion($state) {
+        $state = $this->parseStateSlug($state);
+        $regions = Configure::read('regions');
+        foreach ($regions as $region => $regionStates) {
+            if (in_array($state, $regionStates)) {
+                return $region;
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Find a location based off it's id and uri
+    * @param int id
+    */
+    public function findByIdSlug($id = null, $uri = null) {
+        if ($uri === Router::url($this->findForRedirectById($id))) {
+            return $this->findByIdForView($id);
+        }
+        return array();
+    }
+
+    /**
+    * Find the redirect based off an id
+    * @param int location id (full or 5-digit)
+    * @return string url or false
+    */
+    public function findForRedirectById($id) {
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id IN' => [$id, Location::$oticonPrefix.$id]
+            ],
+            'contain' => [],
+            'fields' => [
+                'Locations.state',
+                'Locations.city',
+                'Locations.zip',
+                'Locations.id',
+                'Locations.title',
+                'Locations.redirect',
+                'Locations.is_active',
+                'Locations.is_show'
+            ],
+            'order' => ['Locations.id' => 'DESC']
+        ])->first();
+        if (empty($location)) {
+            return false;
+        }
+        if (!empty($location->redirect)) {
+            return $location->redirect;
+        }
+        if (!$location->is_active || !$location->is_show) {
+            // inactive or noshow location
+            return false;
+        }
+        return isset($location->hh_url) ? $location->hh_url : false;
+    }
+
+    /**
+    * Find location for id
+    * @param int id
+    * @return the result of the find
+    */
+    public function findByIdForView($id = null){
+        $locationId = $this->findById(Location::$oticonPrefix.$id)->count() ? Location::$oticonPrefix.$id : $id;
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id' => $locationId,
+                'Locations.listing_type !=' => Location::LISTING_TYPE_NONE,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+            ],
+            'contain' => [
+                'CallSources',
+                'LocationHours',
+                'LocationProviders.Providers' => [
+                    // TODO fix provider order
+                    //'order' => 'Providers.order ASC, Providers.id ASC'
+                ],
+                'Reviews' => [
+                    'conditions' => [
+                        'Reviews.status' => ReviewStatus::APPROVED->value
+                    ],
+                    'Zips' => [
+                        'fields' => ['city','state']
+                    ],
+                ]
+            ]
+        ])->first();
+        if (!empty($location)) {
+            // Optional premier features for non-Premier locations
+            if ($location->listing_type !== Location::LISTING_TYPE_PREMIER) {
+                // Get ads/coupons/special announcements
+                $location->location_ads = $this->LocationAds->find('all', [
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+            }
+            // Premier features ('Premier' listings only)
+            if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
+                // Get videos
+                $location->location_videos = $this->LocationVideos->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+
+                // Get photos
+                $location->location_photos = $this->LocationPhoto->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+
+                // Get ads/coupons/special announcements
+                $location->location_ads = $this->LocationAd->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+            }
+            //Get vidscrips
+            if ($location->is_cq_premier) {
+                $location->location_vidscrips = $this->LocationVidscrips->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+            }
+        }
+        return $location;
+    }
+
+    /**
+    * Get the timezone abbreviation of this clinic (America/New_York, America/Los_Angeles, etc..))
+    * @return string timezone for display
+    */
+    public function getClinicTimezone($id) {
+        $locationEntity = $this->get($id);
+        $timezone = $locationEntity->timezone;
+
+        if (empty($timezone)) {
+            // Get the timezone from Google API for this lat/lon
+            $lat = $locationEntity->lat;
+            $lon = $locationEntity->lon;
+            $timestamp = time();
+            // Only access google api on prod
+            $apiKey = (Configure::read('env') == 'prod') ? Configure::read('googleMapsWebServicesApiKey') : '';
+            $url = "https://maps.googleapis.com/maps/api/timezone/json?location=".$lat.",".$lon."&amp;timestamp=".$timestamp."&sensor=false&key=".$apiKey;
+            $apiResult = json_decode(file_get_contents($url));
+            if (!empty($apiResult->timeZoneId)) {
+                $timezone = $apiResult->timeZoneId;
+                $locationEntity->timezone = $timezone;
+                $this->save($locationEntity);
+            }
+        }
+
+        if (empty($timezone)) {
+            // If we didn't find the timezone, default to eastern timezone for now, but don't save it to database
+            $timezone = 'America/New_York';
+        }
+
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        return $date->format('T');
+    }
+
+    /**
+    * TODO: DELETE
+    */
+    public function getTimezoneByState($state) {
+        // TODO: This function can be deleted. Leaving here temporarily to catch any calls to this function as we pull code over.
+        // Previously we used geoip_time_zone_by_country_and_region() to find the timezone for this state. This isn't accurate or recommended anymore because some states have 2 timezones.
+        // Going forward, let's use getClinicTimezone() which I am updating to call the Google Timestamp API.
+        die('die: getTimezoneByState() should not be used anymore');
+    }
+
+    /**
+    * Get the timezone offset of this clinic
+    * @return int timezone offset
+    */
+    public function getClinicTimezoneOffset($id) {
+        $offset = null;
+        $timezone = $this->getClinicTimezone($id);
+        $dateTimeZone = new DateTimeZone($timezone);
+        $offset = $dateTimeZone->getOffset(new DateTime);
+        $offset = abs($offset/60/60);
+        return $offset;
     }
 }

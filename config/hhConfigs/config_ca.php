@@ -139,4 +139,6 @@ return [
         'SK' => 'Saskatchewan',
         'YT' => 'Yukon',
     ],
+    'regions' => [
+    ],
 ];

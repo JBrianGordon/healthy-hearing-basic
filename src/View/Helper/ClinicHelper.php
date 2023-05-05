@@ -7,6 +7,10 @@ use Cake\View\Helper;
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
 use Cake\Utility\Inflector;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Clinic helper
@@ -19,6 +23,12 @@ class ClinicHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [];
+
+    public function initialize(array $config): void
+    {
+        $this->Locations = TableRegistry::getTableLocator()->get('Locations');
+        $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+    }
 
     /**
     * Return the badge of the clinic listing type.
@@ -149,4 +159,81 @@ class ClinicHelper extends Helper
 		$retval .= $pad;
 		return $retval;
 	}
+
+    public function getOpenClosedByLocationId($locationId) {
+        $isEnhancedOrPremier = $this->isEnhancedOrPremierByLocationId($locationId);
+        return $this->getOpenClosed($locationId, $isEnhancedOrPremier);
+    }
+
+    public function getOpenClosed($locationId, $isEnhancedOrPremier) {
+        $displayOpenClosed = null;
+        if (Configure::read('isOpenClosedEnabled')) {
+            if ($isEnhancedOrPremier) {
+                $dayOfWeek = strtolower(date('D'));
+                $hours = $this->LocationHours->find('all', [
+                    'contain' => [],
+                    'conditions' => [
+                        'location_id' => $locationId,
+                    ]
+                ])->first();
+                if (!empty($hours) && !$hours->{$dayOfWeek.'_is_closed'}) {
+                    // Clinic is open today
+                    if (!empty($hours->{$dayOfWeek.'_open'}) && !empty($hours->{$dayOfWeek.'_close'})) {
+                        $clinicTimezone = $this->getClinicTimezone($locationId);
+                        $currentDateTime = new DateTime('now', new DateTimeZone($clinicTimezone));
+                        $currentTime = $currentDateTime->getTimestamp();
+                        $openTime = strtotime($hours->{$dayOfWeek.'_open'}.' '.$clinicTimezone);
+                        $closeTime = strtotime($hours->{$dayOfWeek.'_close'}.' '.$clinicTimezone);
+                        if (($currentTime > $openTime) && ($currentTime < $closeTime)) {
+                            $isOpenNow = true;
+                            $openHours = $hours->{$dayOfWeek.'_open'}.' - '.$hours->{$dayOfWeek.'_close'};
+                            if ($hours->is_closed_lunch) {
+                                $lunchStartTime = strtotime($hours->lunch_start.' '.$clinicTimezone);
+                                $lunchEndTime = strtotime($hours->lunch_end.' '.$clinicTimezone);
+                                if (($currentTime > $lunchStartTime) && ($currentTime < $lunchEndTime)) {
+                                    // Currently closed for lunch. Do not display "Open now".
+                                    $isOpenNow = false;
+                                } elseif (($lunchStartTime > $openTime) && ($lunchEndTime < $closeTime)) {
+                                    // Time will be split by lunch break
+                                    $openHours = $hours->{$dayOfWeek.'_open'}.' - '.$hours->lunch_start.', '.$hours->lunch_end.' - '.$hours->{$dayOfWeek.'_close'};
+                                }
+                            }
+                            if ($isOpenNow) {
+                                if ($hours->{$dayOfWeek.'_is_byappt'}) {
+                                    $displayOpenClosed = '<span class="open">Open now by appointment!</span> '.$openHours;
+                                } else {
+                                    $displayOpenClosed = '<span class="open">Open now!</span> '.$openHours;
+                                }
+                            }
+                        }
+                    } else if ($hours->{$dayOfWeek.'_is_byappt'}) {
+                        // Show "Open by appt" during 9am-4pm clinic timezone
+                        $clinicTimezone = $this->getClinicTimezone($locationId);
+                        $currentDateTime = new DateTime('now', new DateTimeZone($clinicTimezone));
+                        $currentTime = $currentDateTime->getTimestamp();
+                        $openTime = strtotime('9:00 am '.$clinicTimezone);
+                        $closeTime = strtotime('4:00 pm '.$clinicTimezone);
+                        if (($currentTime > $openTime) && ($currentTime < $closeTime)) {
+                            $displayOpenClosed = '<span class="open">Open today by appointment</span>';
+                        }
+                    }
+                }
+            }
+        }
+        return $displayOpenClosed;
+    }
+
+    public function isEnhancedOrPremierByLocationId($locationId) {
+        // Returns true if this location is Enhanced or Premier
+        $listingType = $this->Locations->get($locationId)->listing_type;
+        return in_array($listingType, [Location::LISTING_TYPE_ENHANCED, Location::LISTING_TYPE_PREMIER]);
+    }
+
+    public function getClinicDateTime($id, $datetime, $format='m/d/Y g:i a T') {
+        return $this->Locations->getClinicDateTime($id, $datetime, $format);
+    }
+
+    public function getClinicTimezone($id) {
+        return $this->Locations->getClinicTimezone($id);
+    }
 }
