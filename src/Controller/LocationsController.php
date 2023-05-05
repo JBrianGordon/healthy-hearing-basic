@@ -34,23 +34,6 @@ class LocationsController extends AppController
         $this->set(compact('locations'));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Location id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    /*
-    public function view($id = null)
-    {
-        $location = $this->Locations->get($id, [
-            'contain' => ['CaCallGroups', 'CallSources', 'CsCalls', 'ImportLocations', 'ImportStatus', 'LocationAds', 'LocationEmails', 'LocationHours', 'LocationLinks', 'LocationNotes', 'LocationPhotos', 'LocationProviders', 'LocationUsers', 'LocationVideos', 'LocationVidscrips', 'Reviews'],
-        ]);
-
-        $this->set(compact('location'));
-    }*/
-
     public function states()
     {
         die('TODO states()');
@@ -62,7 +45,7 @@ class LocationsController extends AppController
     }
 
     /**
-    * The actual view for a clinic
+    * Profile page
     * /hearing-aids/id-title
     */
     public function view($id = null, $title = null)
@@ -75,11 +58,11 @@ class LocationsController extends AppController
             if ($redirect = $this->Location->findForRedirectById($locationId)) {
                 return $this->redirect($redirect, 301);
             } else {    //we don't have this location, kick back one level.
-                $location = $this->Location->find('first', [
+                $location = $this->Location->find('all', [
                     'contain' => [],
                     'fields' => ['id', 'city', 'state', 'zip', 'title'],
                     'conditions' => ['Location.id' => $locationId]
-                ]);
+                ])->first();
                 if (!empty($location)) {
                     $this->response->disableCache();
                     // Found an inactive clinic, redirect to the zip page
@@ -177,7 +160,7 @@ class LocationsController extends AppController
 
         // Look for exclusive ad for basic profiles
         if ($location->listing_type == Location::LISTING_TYPE_BASIC) {
-            $exclusiveAd = ClassRegistry::init('Ad')->findAdForBasicProfile();
+            $exclusiveAd = $this->fetchTable('Advertisements')->findAdForBasicProfile();
             if (!empty($exclusiveAd)) {
                 // Overwrite the generic ad
                 $this->set('ad', $exclusiveAd);

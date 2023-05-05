@@ -54,6 +54,8 @@ use DateTimeZone;
  */
 class LocationsTable extends Table
 {
+    public $payments; // Defined in initialize()
+
     /**
      * Initialize method
      *
@@ -433,6 +435,21 @@ class LocationsTable extends Table
                     }
                 }
             ]);
+
+        // Accepted forms of payments options at a clinic
+        $this->payments = [
+            2 => ['name' => 'Visa', 'icon' => 'card2.gif'],
+            4 => ['name' => 'MasterCard', 'icon' => 'card1.gif'],
+            8 => ['name' => 'American Express', 'icon' => 'card4.gif'],
+            16 => ['name' => 'Discover', 'icon' => 'card6.gif'],
+            //32 => array('name' => 'Diners Club', 'icon' => ''),
+            64 => ['name' => 'Cash', 'icon' => ''],
+            128 => ['name' => Configure::read('checkPayment'), 'icon' => ''],
+            256 => ['name' => 'Debit', 'icon' => 'card3.gif'],
+            512 => ['name' => 'Financial aid', 'icon' => ''],
+            1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
+            2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
+        ];
     }
 
     /**
@@ -1302,9 +1319,9 @@ class LocationsTable extends Table
             // Optional premier features for non-Premier locations
             if ($location->listing_type !== Location::LISTING_TYPE_PREMIER) {
                 // Get ads/coupons/special announcements
-                $location->location_ads = $this->LocationAds->find('all', [
+                $location->location_ad = $this->LocationAds->find('all', [
                     'conditions' => ['location_id' => $locationId]
-                ])->all();
+                ])->first();
             }
             // Premier features ('Premier' listings only)
             if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
@@ -1315,26 +1332,61 @@ class LocationsTable extends Table
                 ])->all();
 
                 // Get photos
-                $location->location_photos = $this->LocationPhoto->find('all', [
+                $location->location_photos = $this->LocationPhotos->find('all', [
                     'contain' => [],
                     'conditions' => ['location_id' => $locationId]
                 ])->all();
 
                 // Get ads/coupons/special announcements
-                $location->location_ads = $this->LocationAd->find('all', [
+                $location->location_ad = $this->LocationAds->find('all', [
                     'contain' => [],
                     'conditions' => ['location_id' => $locationId]
-                ])->all();
+                ])->first();
             }
             //Get vidscrips
             if ($location->is_cq_premier) {
-                $location->location_vidscrips = $this->LocationVidscrips->find('all', [
+                $location->location_vidscrip = $this->LocationVidscrips->find('all', [
                     'contain' => [],
                     'conditions' => ['location_id' => $locationId]
-                ])->all();
+                ])->first();
             }
         }
         return $location;
+    }
+
+    /**
+    * Find all linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findLocationLinks($locationId) {
+        $links = $this->LocationLinks->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'OR' => [
+                    'location_id' => $locationId,
+                    'id_linked_location' => $locationId
+                ],
+            ],
+        ])->all();
+        return $links;
+    }
+
+    /**
+    * Find unique linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findLocationLinksByDistance($locationId) {
+        $links = $this->findLocationLinks($locationId);
+        $linksByDistance = [];
+        foreach ($links as $link) {
+            if ($link->location_id == $locationId) {
+                $linksByDistance[$link->id_linked_location] = $link->distance;
+            } else {
+                $linksByDistance[$link->location_id] = $link->distance;
+            }
+        }
+        asort($linksByDistance);
+        return $linksByDistance;
     }
 
     /**

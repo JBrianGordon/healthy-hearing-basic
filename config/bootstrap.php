@@ -234,6 +234,11 @@ TypeFactory::map('time', StringType::class);
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 
+
+function formatNumber($sPhone){
+    //TODO: REMOVE THIS FUNCTION AFTER PULLING CODE INTO CAKE4
+    die('die use formatPhoneNumber() instead of formatNumber()');
+}
 /**
   * Format the phone number
   */
@@ -270,6 +275,13 @@ function formatPhoneNumber($sPhone){
         $retval .= " x$extension";
     }
     return $retval;
+}
+
+/**
+* Removes non-numeric characters from phone number
+*/
+function cleanPhone($phone){
+    return preg_replace("/[^0-9]/",'',$phone);
 }
 
 /**
