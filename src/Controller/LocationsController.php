@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewOrigin;
+use Cake\View\JsonView;
+use Cake\Log\LogTrait;
+use Cake\Log\Log;
+
 /**
  * Locations Controller
  *
@@ -11,6 +17,10 @@ namespace App\Controller;
  */
 class LocationsController extends AppController
 {
+    // public function viewClasses(): array
+    // {
+    //     return [JsonView::class];
+    // }
     /**
      * Index method
      *
@@ -37,5 +47,27 @@ class LocationsController extends AppController
         ]);
 
         $this->set(compact('location'));
+    }
+
+    /**
+     * Add Review method
+     *
+     * @return \Cake\Http\Response|null|void
+     */
+    public function addReview()
+    {
+        $review = $this->Locations->Reviews->newEmptyEntity();
+
+        $jsonRequestData = $this->request->getData('reviews');
+        $jsonRequestData['status'] = ReviewStatus::PENDING->value;
+        $jsonRequestData['origin'] = ReviewOrigin::ORIGIN_ONLINE->value;
+
+        $review = $this->Locations->Reviews->patchEntity($review, $jsonRequestData);
+
+        if ($this->Locations->Reviews->save($review)) {
+            return $this->response->withStringBody('Successfully saved!');
+        }
+
+        return $this->response->withStringBody('Failure on save!');
     }
 }

@@ -120,26 +120,29 @@ class ReviewsTable extends Table
 
         $validator
             ->scalar('body')
-            ->allowEmptyString('body');
+            ->requirePresence('body')
+            ->notEmptyString('body');
 
         $validator
             ->scalar('first_name')
             ->maxLength('first_name', 255)
-            ->allowEmptyString('first_name');
+            ->requirePresence('first_name')
+            ->notEmptyString('first_name');
 
         $validator
             ->scalar('last_name')
             ->maxLength('last_name', 255)
-            ->allowEmptyString('last_name');
+            ->requirePresence('last_name');
 
         $validator
             ->scalar('zip')
             ->maxLength('zip', 10)
-            ->allowEmptyString('zip');
+            ->requirePresence('zip')
+            ->notEmptyString('first_name');
 
         $validator
             ->integer('rating')
-            ->notEmptyString('rating');
+            ->requirePresence('rating');
 
         $validator
             ->boolean('is_spam')

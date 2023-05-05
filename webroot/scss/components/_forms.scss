@@ -45,10 +45,10 @@ form {
  @include form-control-validation($brand-success, $brand-success, $state-success-bg);
 }
 
-input[type="checkbox"] {
+/*input[type="checkbox"] {
   height: 1em;
   width: 1.5em;
-}
+}*/
 
 #LocationForm, .clinic-badges {
 	input[type="checkbox"] {

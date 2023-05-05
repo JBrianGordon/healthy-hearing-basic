@@ -168,6 +168,12 @@ return [
             ],
             'bypassAuth' => true,
         ],
+        [
+            'prefix' => false,
+            'controller' => 'Locations',
+            'action' => ['view'],
+            'bypassAuth' => true,
+        ],
         // Content - no auth required
         [
             'controller' => 'Content',

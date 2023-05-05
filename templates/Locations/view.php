@@ -8,7 +8,7 @@ use App\Model\Entity\Location;
 use Cake\Core\Configure;
 use App\Model\Entity\CaCallGroup;
  
-$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+// $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <?php
 /*** TODO: uncomment once Provider is pulled in and Clinic methods built ***
@@ -21,7 +21,7 @@ $showSpecialAnnouncement = (
 	($location['Location']['feature_special_announcement'])
 );*/
 ?>
-<div class="container-fluid site-body fap-results">
+<div class="container-fluid fap-results">
 	<div class="row">
 		<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -297,6 +297,8 @@ $showSpecialAnnouncement = (
 							</div>
 						<?php endif; ?>
 						
+						<?= $this->element('locations/profile/review_section') ?>
+
 						<div class="col-md-8">
 							<!-- About / Services -->
 							<?php

@@ -43,7 +43,8 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        // TO-DO: Figure out if we can get rid of the RequestHandler (on deprecation list)
+        //$this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
         /*
