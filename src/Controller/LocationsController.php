@@ -136,7 +136,7 @@ class LocationsController extends AppController
         // Confirm the key 'Ids' exists, that it is an array, and that this location is Oticon t3,
         // then check if our current ID is in the array. (Either as an oticon ID or a location ID)
         if (is_array($noIndexLocations) && ($location->oticon_tier == 3) && ($location->yhn_tier == 0)) {
-            if (in_array($location->oticon_id, $noIndexLocations) || in_array($location->id, $noIndexLocations)) {
+            if (in_array($location->id_oticon, $noIndexLocations) || in_array($location->id, $noIndexLocations)) {
                 $this->meta['robots'] = 'noindex';
             }
         }*/

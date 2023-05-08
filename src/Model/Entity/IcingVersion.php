@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * IcingVersion Entity
  *
  * @property string $id
- * @property string $model_id
+ * @property string $id_model
  * @property int|null $user_id
  * @property string|null $json
  * @property \Cake\I18n\FrozenTime|null $created
@@ -32,7 +32,7 @@ class IcingVersion extends Entity
      * @var array<bool>
      */
     protected $_accessible = [
-        'model_id' => true,
+        'id_model' => true,
         'user_id' => true,
         'model' => true,
         'json' => true,

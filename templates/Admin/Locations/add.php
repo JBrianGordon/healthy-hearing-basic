@@ -113,8 +113,8 @@
                     echo $this->Form->control('email_status');
                     echo $this->Form->control('is_email_ignore');
                     echo $this->Form->control('id_yhn_location');
-                    echo $this->Form->control('cqp_practice_id');
-                    echo $this->Form->control('cqp_office_id');
+                    echo $this->Form->control('id_cqp_practice');
+                    echo $this->Form->control('id_cqp_office');
                     echo $this->Form->control('review_needed');
                     echo $this->Form->control('is_retail');
                     echo $this->Form->control('direct_book_type');

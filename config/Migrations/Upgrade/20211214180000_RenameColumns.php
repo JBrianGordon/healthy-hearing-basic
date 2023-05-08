@@ -31,12 +31,20 @@ class RenameColumns extends AbstractMigration
             $this->table('crm_searches')
                 ->renameColumn('order', 'priority')
                 ->update();
+            $this->table('drafts')
+                ->renameColumn('model_id', 'id_model')
+                ->update();
+            $this->table('icing_versions')
+                ->renameColumn('model_id', 'id_model')
+                ->update();
             $this->table('import_diffs')
                 ->renameColumn('model_id', 'id_model')
                 ->update();
             $this->table('import_locations')
                 ->renameColumn('external_id', 'id_external')
                 ->renameColumn('oticon_id', 'id_oticon')
+                ->renameColumn('cqp_practice_id', 'id_cqp_practice')
+                ->renameColumn('cqp_office_id', 'id_cqp_office')
                 ->update();
             $this->table('import_providers')
                 ->renameColumn('external_id', 'id_external')

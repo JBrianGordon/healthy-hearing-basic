@@ -109,8 +109,8 @@ use Cake\Utility\Text;
  * @property int $email_status
  * @property bool $is_email_ignore
  * @property string $id_yhn_location
- * @property string|null $cqp_practice_id
- * @property string|null $cqp_office_id
+ * @property string|null $id_cqp_practice
+ * @property string|null $id_cqp_office
  * @property int|null $review_needed
  * @property bool $is_retail
  * @property string $direct_book_type
@@ -404,8 +404,8 @@ class Location extends Entity
         'email_status' => true,
         'is_email_ignore' => true,
         'id_yhn_location' => true,
-        'cqp_practice_id' => true,
-        'cqp_office_id' => true,
+        'id_cqp_practice' => true,
+        'id_cqp_office' => true,
         'review_needed' => true,
         'is_retail' => true,
         'direct_book_type' => true,

@@ -8,6 +8,7 @@ use App\Model\Entity\Location;
 use Cake\Core\Configure;
 
 $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
+$externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 ?>
 <div class="container-fluid site-body fap-cities default">
 	<div class="row">
@@ -76,11 +77,11 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 												</tr>
 												<tr>
 													<th class="tar">SF ID</th>
-													<td><?= $location->sf_id ?></td>
+													<td><?= $location->id_sf ?></td>
 												</tr>
 												<tr>
 													<th class="tar">Oticon ID</th>
-													<td><?= $location->oticon_sf ?></td>
+													<td><?= $location->id_oticon ?></td>
 												</tr>
 												<tr>
 													<th class="tar">YHN ID</th>
@@ -88,11 +89,11 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 												</tr>
 												<tr>
 													<th class="tar">CQP Practice ID</th>
-													<td><?= $location->cqp_practice_id ?></td>
+													<td><?= $location->id_cqp_practice ?></td>
 												</tr>
 												<tr>
 													<th class="tar">CQP Office ID</th>
-													<td><?= $location->cqp_office_id ?></td>
+													<td><?= $location->id_cqp_office ?></td>
 												</tr>
 												<tr>
 													<th class="tar">Parent Location ID</th>
@@ -391,7 +392,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																			</div>
 																		</div>
 																		<div id="couponSelected" style="display:none;">
-																			<span class="hidden"><?php echo $location->coupon_id; ?></span>
+																			<span class="hidden"><?php echo $location->id_coupon; ?></span>
 																			<div class='col-md-offset-4 col-md-3'>
 																				<?php //echo $this->Clinic->previewCoupon($couponId, false, true); ?>
 																			</div>
@@ -1067,7 +1068,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																			</select>
 																		</div>
 																	</div>
-																	<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'cqp_practice_id', 'cqp_office_id']; ?>
+																	<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
 																	<?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
 																		<?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
 																			<div class="import col-md-11 col-md-offset-1" import="<?php //echo $importLocation['import_id']; ?>">
@@ -1083,7 +1084,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																							case "state":
 																								$label = Configure::read('stateLabel');
 																								break;
-																							case "external_id":
+																							case "id_external":
 																								$label = $externalIdLabel;
 																								break;
 																							default:
@@ -1120,7 +1121,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																			</select>
 																		</div>
 																	</div>
-																	<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'external_id', 'oticon_id', 'is_retail']; ?>
+																	<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail']; ?>
 																	<?php //foreach ($this->request->data['ImportLocation'] as $importLocation): ?>
 																		<?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
 																			<div class="cqpImport col-md-11 col-md-offset-1" import="<?php //echo $importLocation['import_id']; ?>">
@@ -1136,7 +1137,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																							case "state":
 																								$label = Configure::read('stateLabel');
 																								break;
-																							case "external_id":
+																							case "id_external":
 																								$label = $externalIdLabel;
 																								break;
 																							default:
@@ -1175,7 +1176,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																	</select>
 																</div>
 															</div>
-															<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'cqp_practice_id', 'cqp_office_id']; ?>
+															<?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
 															<?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
 															<div class="import col-md-11 col-md-offset-1" import="<?php echo $importLocation['import_id']; ?>">
 																<br /><br />
@@ -1190,7 +1191,7 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 																			case "state":
 																				$label = Configure::read('stateLabel');
 																				break;
-																			case "external_id":
+																			case "id_external":
 																				$label = $externalIdLabel;
 																				break;
 																			default:

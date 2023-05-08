@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use App\Model\Entity\Import;
 
 $queryParams = $this->request->getQueryParams();
+$externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 // Advanced search details
 $advancedSearchFields = [];
 $ignoreFields = [];
@@ -203,11 +204,11 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                            <?php if (!empty($importLocation->id_external)): ?>
 								                                <span class="badge bg-yhn"><?php echo $importLocation->id_external; ?></span><br>
 								                            <?php endif; ?>
-								                            <?php if (!empty($importLocation->cqp_practice_id)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_practice_id; ?></span><br>
+								                            <?php if (!empty($importLocation->id_cqp_practice)): ?>
+								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_practice; ?></span><br>
 								                            <?php endif; ?>
-								                            <?php if (!empty($importLocation->cqp_office_id)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_office_id; ?></span><br>
+								                            <?php if (!empty($importLocation->id_cqp_office)): ?>
+								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_office; ?></span><br>
 								                            <?php endif; ?>
 								                        </td>
 								                        <td class="p5"><?php echo $importLocation->address; ?></td>

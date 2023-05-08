@@ -48,9 +48,6 @@ class DraftsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Models', [
-            'foreignKey' => 'model_id',
-        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
@@ -76,6 +73,11 @@ class DraftsTable extends Table
             ->notEmptyString('model');
 
         $validator
+            ->scalar('id_model')
+            ->maxLength('id_model', 36)
+            ->allowEmptyString('id_model');
+
+        $validator
             ->scalar('json')
             ->requirePresence('json', 'create')
             ->notEmptyString('json');
@@ -92,7 +94,6 @@ class DraftsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('model_id', 'Models'), ['errorField' => 'model_id']);
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;

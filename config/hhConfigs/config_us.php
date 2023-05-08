@@ -92,7 +92,7 @@ return [
     // Location CSV export fields and non-US overrides
     'locationExportFields' => [
         'id',
-        'oticon_id',
+        'id_oticon',
         'title',
         'address',
         'address_2',
