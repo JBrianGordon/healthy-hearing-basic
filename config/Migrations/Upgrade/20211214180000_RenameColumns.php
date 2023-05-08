@@ -19,6 +19,9 @@ class RenameColumns extends AbstractMigration
                 ->renameColumn('locked_by_user_id', 'id_locked_by_user')
                 ->renameColumn('xml_file_id', 'id_xml_file')
                 ->update();
+            $this->table('configurations')
+                ->renameColumn('order', 'priority')
+                ->update();
             $this->table('content')
                 ->renameColumn('brafton_id', 'id_brafton')
                 ->renameColumn('draft_parent_id', 'id_draft_parent')
