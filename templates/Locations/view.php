@@ -522,7 +522,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							
 							<!-- Special announcement -->
 							<?php if ($showSpecialAnnouncement): ?>
-								<?php if (!empty($location->coupon_id)): ?>
+								<?php if (!empty($location->id_coupon)): ?>
 									<div class="panel panel-light" id="specialAnnouncement">
 										<header class="panel-heading text-center"><h2>Special Offer</h2></header>
 										<div class="panel-body">
@@ -531,16 +531,16 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 													$moneyOffArray = [1,4,7];
 													$freeAccArray = [2,5,8];
 													$freeScreenArray = [3,6,9];	
-													if (in_array($location->coupon_id, $moneyOffArray)){
+													if (in_array($location->id_coupon, $moneyOffArray)){
 														$couponAlt = "$200 off premium technology coupon for ";
-													} elseif (in_array($location->coupon_id, $freeAccArray)){
+													} elseif (in_array($location->id_coupon, $freeAccArray)){
 														$couponAlt = "Free accessory with purchase coupon for ";
-													} elseif (in_array($location->coupon_id, $freeScreenArray)) {
+													} elseif (in_array($location->id_coupon, $freeScreenArray)) {
 														$couponAlt = "Free hearing screening coupon for ";
 													}
 													$couponAlt .= $location->title;
 												?>
-												<img loading="lazy" width="300" height="300" src="<?= '/img/coupons/coupon-'.$location->coupon_id.'.jpg'; ?>" alt="<?= $couponAlt ?>">
+												<img loading="lazy" width="300" height="300" src="<?= '/img/coupons/coupon-'.$location->id_coupon.'.jpg'; ?>" alt="<?= $couponAlt ?>">
 											</div>
 										</div>
 										<footer class="panel-footer">Please mention this Healthy Hearing coupon when you book your appointment.</footer>

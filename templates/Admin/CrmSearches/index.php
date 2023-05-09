@@ -72,7 +72,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 										<table class="table table-bordered table-striped table-condensed" cellpadding="0" cellspacing="0">
 											<thead>
 												<tr>
-								                    <th><?= $this->Paginator->sort('order', 'Order') ?></th>
+								                    <th><?= $this->Paginator->sort('priority', 'Order') ?></th>
 								                    <th><?= $this->Paginator->sort('is_public', 'Is Public') ?></th>
 								                    <th><?= $this->Paginator->sort('model', 'Model') ?></th>
 								                    <th><?= $this->Paginator->sort('title', 'Title') ?><br><?= $this->Paginator->sort('search', 'Search') ?></th>
@@ -84,7 +84,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 											<tbody>
 								                <?php foreach ($allCrmSearches as $crmSearch) : ?>
 									                <tr>
-									                    <td><span class="badge bg-info"><?= $crmSearch->id ?></span><br><?= $crmSearch->order ?></td>
+									                    <td><span class="badge bg-info"><?= $crmSearch->id ?></span><br><?= $crmSearch->priority ?></td>
 									                    <td><?= $this->Admin->yesNo($crmSearch->is_public) ?></td>
 									                    <td><?= h($crmSearch->model) ?></td>
 									                    <td style="word-wrap: break-word; max-width: 350px;"><?= h($crmSearch->title) ?><br><small><?= h($crmSearch->search) ?></small></td>

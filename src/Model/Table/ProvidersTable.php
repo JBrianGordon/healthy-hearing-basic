@@ -133,8 +133,8 @@ class ProvidersTable extends Table
             ->allowEmptyString('phone');
 
         $validator
-            ->integer('order')
-            ->notEmptyString('order');
+            ->integer('priority')
+            ->notEmptyString('priority');
 
         $validator
             ->scalar('aud_or_his')

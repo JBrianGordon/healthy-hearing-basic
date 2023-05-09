@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Model Id') ?></th>
-                    <td><?= h($draft->model_id) ?></td>
+                    <td><?= h($draft->id_model) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Model') ?></th>

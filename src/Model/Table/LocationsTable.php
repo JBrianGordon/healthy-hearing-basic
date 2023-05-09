@@ -142,8 +142,8 @@ class LocationsTable extends Table
             ->value('entity_segment')
             ->value('priority')
             ->value('id_yhn_location')
-            ->value('cqp_practice_id')
-            ->value('cqp_office_id')
+            ->value('id_cqp_practice')
+            ->value('id_cqp_office')
             ->value('timezone')
             ->value('covid19_statement')
             ->value('average_rating')
@@ -1303,7 +1303,7 @@ class LocationsTable extends Table
                 'LocationHours',
                 'LocationProviders.Providers' => [
                     // TODO fix provider order
-                    //'order' => 'Providers.order ASC, Providers.id ASC'
+                    //'order' => 'Providers.priority ASC, Providers.id ASC'
                 ],
                 'Reviews' => [
                     'conditions' => [

@@ -19,6 +19,9 @@ class RenameColumns extends AbstractMigration
                 ->renameColumn('locked_by_user_id', 'id_locked_by_user')
                 ->renameColumn('xml_file_id', 'id_xml_file')
                 ->update();
+            $this->table('configurations')
+                ->renameColumn('order', 'priority')
+                ->update();
             $this->table('content')
                 ->renameColumn('brafton_id', 'id_brafton')
                 ->renameColumn('draft_parent_id', 'id_draft_parent')
@@ -31,12 +34,20 @@ class RenameColumns extends AbstractMigration
             $this->table('crm_searches')
                 ->renameColumn('order', 'priority')
                 ->update();
+            $this->table('drafts')
+                ->renameColumn('model_id', 'id_model')
+                ->update();
+            $this->table('icing_versions')
+                ->renameColumn('model_id', 'id_model')
+                ->update();
             $this->table('import_diffs')
                 ->renameColumn('model_id', 'id_model')
                 ->update();
             $this->table('import_locations')
                 ->renameColumn('external_id', 'id_external')
                 ->renameColumn('oticon_id', 'id_oticon')
+                ->renameColumn('cqp_practice_id', 'id_cqp_practice')
+                ->renameColumn('cqp_office_id', 'id_cqp_office')
                 ->update();
             $this->table('import_providers')
                 ->renameColumn('external_id', 'id_external')

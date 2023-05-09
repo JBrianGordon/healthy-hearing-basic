@@ -35,7 +35,7 @@ class ProvidersFixture extends TestFixture
                 'created' => '2021-12-10 21:24:10',
                 'modified' => '2021-12-10 21:24:10',
                 'phone' => 'Lorem ipsum do',
-                'order' => 1,
+                'priority' => 1,
                 'aud_or_his' => 'Lorem ipsum dolor sit amet',
                 'caqh_number' => 'Lorem ipsum dolor sit amet',
                 'npi_number' => 'Lorem ipsum dolor sit amet',
