@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Routing\Router;
+use Cake\Core\Configure;
+
 /**
  * Wikis Controller
  *
@@ -18,9 +21,17 @@ class WikisController extends AppController
      */
     public function index()
     {
-        $wikis = $this->paginate($this->Wikis->findByIsActiveAndIdDraftParent(1, 0));
-
-        $this->set(compact('wikis'));
+        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'wikis','action'=>'index'])) {
+            // Self-heal url
+            return $this->redirect(['controller'=>'wikis','action'=>'index'], 301);
+        }
+        $this->layout = 'simple';
+        $this->meta['description'] = "Read our most comprehensive articles on the topics of hearing loss, hearing aids and tinnitus. All reviewed by our staff editors and audiologists.";
+        $this->setMeta('robots', 'INDEX, FOLLOW');
+        $title = Configure::read('siteName')." help: Hearing loss, hearing aids, tinnitus and more";
+        $this->add_title($title);
+        $this->backgroundHeight = '1200px';
+        $this->set('wikis', $this->Wikis->findForIndex());
     }
 
     /**
