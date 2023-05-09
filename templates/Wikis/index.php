@@ -36,10 +36,10 @@ use Cake\Core\Configure;
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
 					<div class="p20 headline">
-						<h1 class="text-primary"><?php echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?> Help</h1>
+						<h1 class="text-primary"><?php echo Configure::read('siteName'); ?> Help</h1>
 						<p class="lead text-primary"><em>
 							Welcome to our library of original reference materials to help you learn more about hearing health and hearing aids.
-							<?php if(Configure::read('country') != 'CA'): ?>
+							<?php if (Configure::read('country') != 'CA'): ?>
 								<br><br>Check out the <a href="/report">Healthy Hearing Report</a> for additional news, articles and interviews about hearing health.
 							<?php endif; ?>
 						</em></p>
@@ -49,18 +49,12 @@ use Cake\Core\Configure;
 						<ul id="accordion" class="nav nav-tabs nav-stacked">
 							<?php foreach ($wikis as $wiki): ?>
 								<li class="parent" style="border-bottom: 1px solid #ddd;">
-									<a href="/help/<?= $wiki->hh_url['slug'] ?>">
-										<div class="wiki-parent">
-											<strong><?= $wiki->name ?></strong><br>
-											<span class="short"><?= $wiki->short ?></span>
-										</div>
-									</a>
+									<?php echo $this->Wiki->getNavText($wiki['parent']); ?>
 								</li>
 							<?php endforeach; ?>
 							<?php if (Configure::read('showManufacturers')): ?>
 								<li class="parent">
-									<!--*** TODO: uncomment when Wiki is built out ***-->
-									<?php //echo $this->Wiki->getNavManufText(); ?>
+									<?php echo $this->Wiki->getNavManufText(); ?>
 								</li>
 							<?php endif; ?>
 						</ul>
@@ -70,19 +64,3 @@ use Cake\Core\Configure;
 			<?= $this->element('side_panel') ?>
 	</div>
 </div>
-<!-- *** Leaving this commented for now for future reference ***
-<ul class="pagination">
-    <?=
-        $this->Paginator->options([
-            'url' => [
-                'controller' => 'wikis',
-                'action' => 'index'
-            ]
-        ]);
-    ?>
-    <?= $this->Paginator->prev(); ?>
-    <?= $this->Paginator->numbers(['modulus' => 2]); ?>
-    <?= $this->Paginator->next(">>"); ?>
-    <?= $this->Paginator->first("FIRST"); ?>
-    <?= $this->Paginator->last("LAST"); ?>
-</ul>-->

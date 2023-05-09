@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
 
 /**
  * Wikis Model
@@ -206,5 +207,74 @@ class WikisTable extends Table
         // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    public function findForIndex() {
+        //Grab all the parents first in the order we want them in.
+        $parents = $this->find('all', array(
+            'conditions' => array(
+                'Wikis.is_active' => true,
+                'Wikis.slug NOT LIKE' => '%/%'
+            ),
+            'fields' => array('Wikis.slug'),
+            'order' => ['Wikis.priority' => 'ASC', 'Wikis.slug' => 'ASC']
+        ))->all();
+        $retval = array();
+        $hideSlugs = [];
+        if (!Configure::read('showAssistiveListening')) {
+            $hideSlugs[] = 'assistive-listening-devices';
+        }
+        if (!Configure::read('showTinnitus')) {
+            $hideSlugs[] = 'tinnitus';
+        }
+        foreach($parents as $parent) {
+            if (in_array($parent->slug, $hideSlugs)) {
+                continue;
+            }
+            $retval[] = $this->findNavBySlug($parent->slug);
+        }
+        return $retval;
+    }
+
+    /**
+    * Find navigation bar of other wikis based on the given slug.
+    * @param string slug.
+    * @return array of navigation.
+    */
+    public function findNavBySlug($slug = null) {
+        $retval = array(
+            'parent' => [],
+            'children' => []
+        );
+        $parts = explode("/",$slug);
+        $parentSlug = array_shift($parts);
+        $retval = array(
+            'parent' => $this->findForLinkBySlug($parentSlug),
+            'children' => $this->findForLinkBySlug($parentSlug.'/%', true)
+        );
+        return $retval;
+    }
+
+    /**
+    * Find for a link by the slug
+    * @param string slug
+    * @param bool findAll - true to find all, false to find first (default)
+    * @return array of result with only name and slug returned.
+    */
+    public function findForLinkBySlug($slug = null, $findAll=false) {
+        $wikiQuery = $this->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'slug LIKE' => $slug
+            ],
+            'fields' => ['name', 'slug', 'short'],
+            'order' => ['priority ASC, name ASC']
+        ]);
+        if ($findAll) {
+            $retval = $wikiQuery->all();
+        } else {
+            $retval = $wikiQuery->first();
+        }
+        return $retval;
     }
 }

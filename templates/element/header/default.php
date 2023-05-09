@@ -3,7 +3,6 @@ use Cake\Core\Configure;
 $isClinic = $this->App->isClinic();
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
-//$wikiModel = ClassRegistry::init('Wiki');
 ?>
 <nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light bg-light">
 	<div class="container">
@@ -44,7 +43,7 @@ $logo = Configure::read('logo');
 		</div>
 	</div>
 
-	<?php if (empty($is_mobile)): ?>
+	<?php if (!$this->App->isMobileDevice()): ?>
 		<div data-hh-mega-nav="find-a-professional">
 			<div class="row mega-nav-inner">
 				<div class="col-md-6 col-sm-6">
@@ -81,36 +80,36 @@ $logo = Configure::read('logo');
 				</div>
 			</div>
 		</div>
-		<!-- *** TODO: uncomment portions of the below block when the wiki model and content model are further built out *** -->
+
 		<div data-hh-mega-nav="hearing-loss-help">
 			<div class="row mega-nav-inner">
 				<div class="<?= (Configure::read('isMetric')) ? 'col-md-12 col-sm-12' : 'col-md-4 col-sm-4'; ?>">
-					<?php //$hearing_loss = $wikiModel->findNavBySlug('hearing-loss'); ?>
-					<h4><?= $this->Html->link('Hearing loss', $hearing_loss['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+					<?php $hearing_loss = $this->Wiki->findNavBySlug('hearing-loss'); ?>
+					<h4><?= $this->Html->link('Hearing loss', $hearing_loss['parent']->hh_url, ['class' => 'text-link']); ?></h4>
 					<ul class="no-bullets">
-						<?php foreach($hearing_loss['children'] as $wiki): ?>
-							<li<?php if(Configure::read('isMetric')) { echo ' class="col-md-4 col-sm-4"'; }?>><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+						<?php foreach ($hearing_loss['children'] as $wiki): ?>
+							<li<?php if(Configure::read('isMetric')) { echo ' class="col-md-4 col-sm-4"'; }?>><?= $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'text-link']); ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>
 				<?php if (Configure::read('showTinnitus')): ?>
 					<div class="col-md-4 col-sm-4">
-						<?php //$wikis = $wikiModel->findNavBySlug('tinnitus'); ?>
-						<h4><?= $this->Html->link('Tinnitus', $wikis['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+						<?php $wikis = $this->Wiki->findNavBySlug('tinnitus'); ?>
+						<h4><?= $this->Html->link('Tinnitus', $wikis['parent']->hh_url, ['class' => 'text-link']); ?></h4>
 						<ul class="no-bullets">
-							<?php foreach($wikis['children'] as $wiki): ?>
-								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+							<?php foreach ($wikis['children'] as $wiki): ?>
+								<li><?= $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 						</ul>
 					</div>
 				<?php endif; ?>
 				<?php if (Configure::read('showAssistiveListening')): ?>
 					<div class="col-md-4 col-sm-4">
-						<?php //$wikis = $wikiModel->findNavBySlug('assistive-listening-devices'); ?>
-						<h4><?= $this->Html->link('Assistive listening devices', $wikis['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+						<?php $wikis = $this->Wiki->findNavBySlug('assistive-listening-devices'); ?>
+						<h4><?= $this->Html->link('Assistive listening devices', $wikis['parent']->hh_url, ['class' => 'text-link']); ?></h4>
 						<ul class="no-bullets">
 							<?php foreach($wikis['children'] as $wiki): ?>
-								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+								<li><?= $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 						</ul>
 					</div>
@@ -120,39 +119,39 @@ $logo = Configure::read('logo');
 		
 		<div data-hh-mega-nav="hearing-aid-help">
 			<?php
-			//$hearing_aids = $wikiModel->findNavBySlug('hearing-aids');
-			//$wikis = $this->Content->splitBy($hearing_aids['children'], 3);
+			$hearing_aids = $this->Wiki->findNavBySlug('hearing-aids');
+			$wikis = $this->App->splitBy($hearing_aids['children'], 3);
 			?>
 			<div class="row mega-nav-inner">
 				<div class="col-md-12 col-sm-12">
-					<h4><?= $this->Html->link('Hearing aids', $hearing_aids['parent']['Wiki']['hh_url'], array('class' => 'text-link')); ?></h4>
+					<h4><?= $this->Html->link('Hearing aids', $hearing_aids['parent']->hh_url, ['class' => 'text-link']); ?></h4>
 					<?php if (!empty($wikis[0])): ?>
 						<ul class="no-bullets col-md-4 col-sm-4">
 							<?php foreach($wikis[0] as $wiki): ?>
-								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+								<li><?= $this->Html->link($wiki['name'], $wiki['hh_url'], ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
 					<?php if (!empty($wikis[1])): ?>
 						<ul class="no-bullets col-md-4 col-sm-4">
 							<?php foreach($wikis[1] as $wiki): ?>
-								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+								<li><?= $this->Html->link($wiki['name'], $wiki['hh_url'], ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
 					<?php if (!empty($wikis[2])): ?>
 						<ul class="no-bullets col-md-4 col-sm-4">
 							<?php foreach($wikis[2] as $key => $wiki): ?>
-								<li><?= $this->Html->link($wiki['Wiki']['name'], $wiki['Wiki']['hh_url'], array('class' => 'text-link')); ?></li>
+								<li><?= $this->Html->link($wiki['name'], $wiki['hh_url'], ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
-							<?php if ($settings['country'] == 'US'): ?>
-							<li><?= $this->Html->link('Hearing aid manufacturers', array('admin' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'), array('class' => 'text-link')); ?></li>
+							<?php if (Configure::read('country') == 'US'): ?>
+								<li><?= $this->Html->link('Hearing aid manufacturers', ['admin' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'], ['class' => 'text-link']); ?></li>
 							<?php endif; ?>
 						</ul>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
-		<?php //echo $this->element('nav_wiki_menu', [], ['cache' => ['config' => 'view_short']]); ?>
+		<?php //TODO: echo $this->element('nav_wiki_menu', [], ['cache' => ['config' => 'view_short']]); ?>
 	<?php endif; ?>
 </nav>

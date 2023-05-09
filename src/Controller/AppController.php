@@ -162,4 +162,48 @@ class AppController extends Controller
         }
         return $title_text;
     }
+
+    /**
+    * checks if host is the host we're on
+    * www1.healthyhearing.com is false
+    * www.healthyhearing.com is true (in production)
+    */
+    public function isPrimaryHost() {
+        $default_host = Configure::read('host');
+        return $default_host == $this->getHost();
+    }
+
+    /**
+    * Get the current host
+    */
+    public function getHost() {
+        $host = "";
+        foreach (array(/*'SERVER_NAME',*/ 'HTTP_HOST') as $key) {
+            if (isset($_SERVER[$key]) && !empty($_SERVER[$key])) {
+                $host = $_SERVER[$key];
+                break;
+            }
+        }
+        if (empty($host) && $this->Session->host) {
+            $host = $this->Session->host;
+        }
+        return $host;
+    }
+
+    /**
+    * Sets the Meta Tag for me.
+    * @param string name of key for meta tag
+    * @param string content of the meta tag
+    * @param boolean overwrite, if already set overwrite it, (default false)
+    */
+    public function setMeta($name, $content, $overwrite = false) {
+        if ($name == 'robots' && !$this->isPrimaryHost()) {
+            return false;
+        }
+        if (isset($this->meta[$name]) && !$overwrite) {
+            return false;
+        }
+        $this->meta[$name] = $content;
+        return true;
+    }
 }
