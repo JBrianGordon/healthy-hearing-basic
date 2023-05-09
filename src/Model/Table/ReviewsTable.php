@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Enums\Model\Location\LocationReviewStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
@@ -66,11 +67,13 @@ class ReviewsTable extends Table
 
         $this->addBehavior('CounterCache', [
             'Locations' => [
+                // Total # of approved reviews for a Location (e.g. 17)
                 'reviews_approved' => [
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
                     ],
                 ],
+                // Average review rating for a Location (e.g. 4.2)
                 'average_rating' => function ($event, $entity, $table, $original) {
                     $reviews = $this->find()
                         ->where([
@@ -82,9 +85,24 @@ class ReviewsTable extends Table
                     foreach($reviews as $review) {
                         $numerator += $review->rating;
                     }
-
-                    return round($numerator / count($reviews), 2);
-                }
+                    if (count($reviews) > 0) {
+                        return round($numerator / count($reviews), 2);
+                    }
+                    return false;
+                },
+                // Review status for a Location (e.g. 'Review5Plus, Review4Less')
+                'review_status' => function ($event, $entity, $table, $original) {
+                    $reviewsApprovedCount = $this->find()
+                        ->where([
+                            'location_id' => $entity->location_id,
+                            'status' => ReviewStatus::APPROVED->value,
+                        ])->count();
+                    if ($reviewsApprovedCount >= 5) {
+                        return LocationReviewStatus::REVIEW_STATUS_5_PLUS->value;
+                    } else {
+                        return LocationReviewStatus::REVIEW_STATUS_4_LESS->value;
+                    }
+                },
             ]
         ]);
 

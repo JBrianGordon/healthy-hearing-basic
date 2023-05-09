@@ -128,12 +128,11 @@ class ClinicHelper extends Helper
             'half' => '<i class="bi bi-star-half"></i>',//'<span class="hh-icon-half-star"></span>',
             'empty' => '<i class="bi bi-star"></i>'//'<span class="hh-icon-outline-star"></span>'
         ];
-        $rating = strval($rating);
         $retval = null;
         for ($i = 1; $i <= 5; $i++) {
             if ($rating >= $i) {
                 $retval .= $stars['full'];
-            } elseif(strpos($rating,'.') !== false) {
+            } elseif(strpos(strval($rating),'.') !== false) {
                 $rating = 0; //no more full stars after this, set rating to 0;
                 $retval .= $stars['half'];
             } else {
