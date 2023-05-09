@@ -16,7 +16,6 @@ use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
 
-
 /**
  * Reviews Model
  *
@@ -64,6 +63,30 @@ class ReviewsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
+
+        $this->addBehavior('CounterCache', [
+            'Locations' => [
+                'reviews_approved' => [
+                    'conditions' => [
+                        'Reviews.status' => ReviewStatus::APPROVED->value
+                    ],
+                ],
+                'average_rating' => function ($event, $entity, $table, $original) {
+                    $reviews = $this->find()
+                        ->where([
+                            'location_id' => $entity->location_id,
+                            'status' => ReviewStatus::APPROVED->value,
+                        ])->all();
+
+                    $numerator = 0;
+                    foreach($reviews as $review) {
+                        $numerator += $review->rating;
+                    }
+
+                    return round($numerator / count($reviews), 2);
+                }
+            ]
+        ]);
 
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
@@ -239,6 +262,7 @@ class ReviewsTable extends Table
                 $entity->set('denied_date', FrozenTime::now()->format('Y-m-d H:i:s'));
                 $entity->set('status', ReviewStatus::APPROVED->value);
             }
+
             return true;
         }
     }
