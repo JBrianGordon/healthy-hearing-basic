@@ -50,15 +50,15 @@ class LocationsController extends AppController
     */
     public function view($id = null, $title = null)
     {
-        $locationId = $this->Locations->exists(Location::$oticonPrefix.$id) ? Location::$oticonPrefix.$id : $id;
+        $locationId = $this->Locations->exists(['id' => Location::$oticonPrefix.$id]) ? Location::$oticonPrefix.$id : $id;
         $this->layout = 'profile';
         $location = $this->Locations->findByIdSlug($locationId, $_SERVER['REQUEST_URI']);
         if (empty($location)) {
             //If we have an id, find the right slug
-            if ($redirect = $this->Location->findForRedirectById($locationId)) {
+            if ($redirect = $this->Locations->findForRedirectById($locationId)) {
                 return $this->redirect($redirect, 301);
             } else {    //we don't have this location, kick back one level.
-                $location = $this->Location->find('all', [
+                $location = $this->Locations->find('all', [
                     'contain' => [],
                     'fields' => ['id', 'city', 'state', 'zip', 'title'],
                     'conditions' => ['Location.id' => $locationId]
