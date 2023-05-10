@@ -197,6 +197,7 @@ class LocationsController extends AppController
         $jsonRequestData = $this->request->getData('reviews');
         $jsonRequestData['status'] = ReviewStatus::PENDING->value;
         $jsonRequestData['origin'] = ReviewOrigin::ORIGIN_ONLINE->value;
+        $jsonRequestData['ip'] = $this->request->getSession()->read('clientIp');
 
         $review = $this->Locations->Reviews->patchEntity($review, $jsonRequestData);
 
