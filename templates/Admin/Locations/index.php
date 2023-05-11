@@ -321,7 +321,7 @@ $groupedFields = [
 								                                ['action' => 'edit', $location->id],
 								                                ['class' => 'btn btn-default', 'escape' => false]) ?>
 								                            <?= $this->Html->link(__('View'),
-								                                ['action' => 'view', 'prefix' => false, $location->id],
+								                                $location->hh_url,
 								                                ['class' => 'btn btn-default']) ?>
 								                            <?php /*= $this->Html->link(__('Clinic Edit'),
 								                                ['action' => 'edit', 'prefix' => 'clinic', $location->id],
