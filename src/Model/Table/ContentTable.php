@@ -353,11 +353,15 @@ class ContentTable extends Table
             'contain' => ['Content'],
             'conditions' => [
                 'tag_id IN' => $tagIds,
+                'Content.is_active' => true,
+                'Content.last_modified <= CURDATE()',
             ],
         ])->all();
         $contents = [];
+        $contentIds = [];
         foreach ($contentTags as $contentTag) {
-            if ($contentTag->content->is_active && ($contentTag->content->last_modified <= date('Y-m-d'))) {
+            if (!in_array($contentTag->content->id, $contentIds)) {
+                $contentIds[] = $contentTag->content->id;
                 $contents[] = $contentTag->content;
             }
         }
