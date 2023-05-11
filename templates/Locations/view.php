@@ -19,8 +19,6 @@ $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
-$isAdmin = $this->App->isAdmin();
-$isClinic = $this->App->isClinic();
 $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
 ?>
 <div class="container-fluid fap-results">

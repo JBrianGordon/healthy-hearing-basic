@@ -4,7 +4,7 @@ use Cake\Routing\Router;
 $this->Html->script('dist/content.min', ['block' => true]); 
 if (isset($search)) {
 	$pageUrl = ['controller' => 'content', 'action' => 'search', $search];
-} elseif (isset($tag) && strpos($this->request->here, 'tag') !== false) {
+} elseif (isset($tag) && strpos($_SERVER['REQUEST_URI'], 'tag') !== false) {
 	$pageUrl = ['controller' => 'content', 'action' => 'tag', $tag];
 } else {
 	$pageUrl = ['controller' => 'content', 'action' => 'report_index'];

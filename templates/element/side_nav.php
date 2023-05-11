@@ -8,7 +8,7 @@ if (!empty($user['location_id'])) {
 	$listing_type = $this->Clinic->get('listing_type');
 	$featureContentLibrary = $this->Clinic->get('feature_content_library');
 }
-//***TODO: uncomment when roles added*** $showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isadmin;
+//***TODO: uncomment when roles added*** $showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isAdmin;
 if (!Configure::read('showSocialMediaContentLibrary')) {
 	$showLibraryLink = false;
 }
@@ -18,7 +18,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 		<div class="col-sm-12">
 			<ul class="side-nav-links">
 				<li><span><strong>Menu</strong></span></li>
-			<?php //***TODO: uncomment when roles added*** if (($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa) && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')): ?>
+			<?php //***TODO: uncomment when roles added*** if (($isAdmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa) && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')): ?>
 				<li><a href="/clinic/locations/edit"><span class="glyphicon glyphicon-globe"></span> My Profile</a></li>
 				<li><a href="/clinic/ca_call_groups/report"><span class="glyphicon glyphicon-list"></span> Reporting</a></li>
 				<li><a href="/clinic/reviews"><span class="glyphicon glyphicon-star"></span> Reviews</a></li>
@@ -77,10 +77,10 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 				<?php if(Configure::read('country') == 'US'): ?>
 					<li><a href="/newsletter" tabindex="-1">Sign up for our newsletter</a></li>
 				<?php endif; ?>
-				<?php //***TODO: uncomment when roles added*** if(!($isadmin && $isitadmin && $isagent && $iscallsupervisor && $iswriter && $iscsa) && $this->layout == 'upgrade') : ?>
+				<?php //***TODO: uncomment when roles added*** if(!($isAdmin && $isitadmin && $isagent && $iscallsupervisor && $iswriter && $iscsa) && $this->layout == 'upgrade') : ?>
 					<li><a href="/clinic/users/login">Login</a></li>
 				<?php //endif; ?>
-				<?php //***TODO: uncomment when roles added*** if ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
+				<?php //***TODO: uncomment when roles added*** if ($isAdmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa): ?>
 					<li><a href="/admin-panel"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>
 				<?php //endif; ?>
 			<?php //endif; ?>

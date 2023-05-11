@@ -61,7 +61,7 @@ $isPreview = isset($isPreview) ? $isPreview : false;
 		"name": "' . htmlentities(strip_tags($title)) . '",
 		"url": "https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '",
 		"articleBody": "' . htmlentities(strip_tags($this->Content->getBody())) . '",';
-		if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'local_anchor' => true, 'dateNewLine' => true])) {
+		if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])) {
 			$contentSchema .= '"author": {
 				"@type": "Person",
 				"name": "' . $content['Author']['first_name'] . ' ' . $content['Author']['last_name'] . '"';
@@ -137,16 +137,16 @@ $this->Html->script('dist/content.min', ['block' => true]);
 								<div class="panel-body">
 									<div class="panel-section expanded">
 										<?php
-											//if ($isadmin) {
+											if ($isAdmin) {
 											    //*** TODO: uncomment when Content is built out ***echo $this->Content->adminLink();
-											//}
+											}
 										?>
 										<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>"><?= $content->title ?></h1>
 										<?php if(isset($subtitle)) : ?>
 											<h2 class="text-primary mt0 mb30"><?= $content->subtitle ?></h2>
 										<?php endif; ?>
 										<p class="blog-byline text-caption">
-											<?php //*** TODO: uncomment when Content is built out ***if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'local_anchor' => true, 'dateNewLine' => true])): ?>
+											<?php if ($author = $this->App->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])): ?>
 												<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
 											<?php //else: ?>
 												<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>

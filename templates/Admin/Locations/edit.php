@@ -684,7 +684,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 													</div>
 												</div>
 												
-												<?php //if ($isadmin): ?>
+												<?php if ($isAdmin): ?>
 													<!-- Call Assist Tab -->
 													<?php if (Configure::read('isCallAssistEnabled')): ?>
 														<div class="tab-pane" id="CallAssist">
@@ -1381,7 +1381,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														</div>
 													</div>
 													<?php endif; ?>
-												<?php //endif; ?>
+												<?php endif; ?>
 						                		</div>
 											</div>
 						                </div>

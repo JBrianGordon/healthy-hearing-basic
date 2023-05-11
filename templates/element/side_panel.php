@@ -1,20 +1,19 @@
 <?php use Cake\Core\Configure; ?>
 <div class="col-md-3 float-end noprint">
 	<!-- Right content -->
-	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && $this->Content->isMobileDevice()): ?>
-		<!--*** TODO: set $ad variable -->
-		<?php //echo $this->element('render_ad', ['ad' => $ad]); ?>
-	<?php //endif; ?>
+	<?php if (Configure::read('showAds') && $this->App->isMobileDevice()): ?>
+		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
+	<?php endif; ?>
 	<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
 	<section class="panel panel-light help-menu">
-	<header class="panel-heading text-center">Help menu</header>
+		<header class="panel-heading text-center">Help menu</header>
 		<div class="panel-section condensed">
 			<div class="col-lg-12">
 				<?php
 				//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
 					//'params' => [
 					//	'navigation' => $navigation,
-					//	'slug' => $wiki['Wiki']['slug'],
+					//	'slug' => $wiki->slug,
 					//	'align' => 'text-left'
 					//]
 				//]);
@@ -35,29 +34,29 @@
 		</div>
 	</section>
 	<?php if (!empty($contents)): ?>
-	<section class="panel panel-light related-reports">
-		<header class="panel-heading text-center">
-			<h4>Related content</h4>
-		</header>
-		<div class="col-lg-12">
-			<table class="table table-bordered" style="margin-bottom: 0;">
-				<?php foreach ($contents as $content): ?>
-					<tr>
-						<td>
-							<?php echo $this->Html->link($content['Content']['title'], $content['Content']['hh_url']); ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</table>
-		</div>
-	</section>
+		<section class="panel panel-light related-reports">
+			<header class="panel-heading text-center">
+				<h4>Related content</h4>
+			</header>
+			<div class="col-lg-12">
+				<table class="table table-bordered" style="margin-bottom: 0;">
+					<?php foreach ($contents as $content): ?>
+						<tr>
+							<td>
+								<?php echo $this->Html->link($content->title, $content->hh_url); ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			</div>
+		</section>
 	<?php endif; ?>
-	<section class="panel panel-light blog-previews hidden">
-		<header class="panel-heading text-center">
-			<h4>The Healthy Hearing Report</h4>
-		</header>
-
-			<?php //***TODO: uncomment when $articles is defined*** foreach ($articles as $content): ?>
+	<?php if (!empty($articles)): ?>
+		<section class="panel panel-light blog-previews hidden">
+			<header class="panel-heading text-center">
+				<h4>The Healthy Hearing Report</h4>
+			</header>
+			<?php foreach ($articles as $content): ?>
 				<div class="panel-section condensed blog-preview">
 					<div class="col-md-3">
 						<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
@@ -69,11 +68,10 @@
 						<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
 					</div>
 				</div>
-			<?php //endforeach; ?>
-
-	</section>
-	<?php //***TODO: uncomment when ContentHelper added*** if (Configure::read('showAds') && !$this->Content->isMobileDevice()): ?>
-		<!--*** TODO: set $ad variable -->
-		<?php //echo $this->element('render_ad', ['ad' => $ad]); ?>
-	<?php //endif; ?>
+			<?php endforeach; ?>
+		</section>
+	<?php endif; ?>
+	<?php if (Configure::read('showAds') && !$this->App->isMobileDevice()): ?>
+		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
+	<?php endif; ?>
 </div>

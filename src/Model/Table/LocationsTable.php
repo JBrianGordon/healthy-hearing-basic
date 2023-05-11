@@ -6,11 +6,13 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
 use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
+use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
 use Cake\Routing\Router;
 use DateTime;
@@ -1116,7 +1118,7 @@ class LocationsTable extends Table
             return false;
         }
 
-        //FYI Url and reviews are based on Location.url and Location.reviews_approved, Not a filter boolean.
+        //FYI Url and reviews are based on Locations.url and Locations.reviews_approved, Not a filter boolean.
         //This function is only checking for the boolean filters we've setup for the location
         $locationEntity->filter_has_photo = false;
         $locationEntity->filter_insurance = false;
@@ -1443,5 +1445,158 @@ class LocationsTable extends Table
         $offset = $dateTimeZone->getOffset(new DateTime);
         $offset = abs($offset/60/60);
         return $offset;
+    }
+
+    /**
+    * Use geoIP lookup or cached zip to find clinics near you.
+    * @param int limit - Number of clinics to find
+    * @param bool preferredOnly - true to only find Enhanced/Premier clinics
+    * @return array list of clinics near you
+    */
+    public function findClinicsNearMe($limit = 4, $preferredOnly = false) {
+        $geoLocData = [];
+
+        if (empty($_SESSION['geoLocData'])) {
+            $this->getGeoCode();
+            if (empty($_SESSION['geoLocData'])) {
+                return [];
+            }
+        }
+
+        // Check if visitor is from another country and if that country
+        // is one for which we have referral links/text available and set
+        // in constants.php
+        $visitorCountry = $_SESSION['geoLocData']['country'];
+        if ($visitorCountry !== Configure::read('country') && in_array($visitorCountry, array_keys(Configure::read('oticonCountries')))) {
+            return [
+                'country' => $_SESSION['geoLocData']['country']
+            ];
+        }
+        $geoLocData = [
+            'zip' => empty($_SESSION['geoLocData']['zip']) ? null : $_SESSION['geoLocData']['zip'],
+            'region' => empty($_SESSION['geoLocData']['state']) ? null : $this->stateRegion($_SESSION['geoLocData']['state']),
+            'city' => empty($_SESSION['geoLocData']['city']) ? null : slugifyCity($_SESSION['geoLocData']['city']),
+        ];
+
+        $sort = $preferredOnly ? 'preferred' : 'distance';
+        $cacheKey = 'top_nav_' . implode('_', $geoLocData) . '_' . $sort . '_' . $limit;
+        if (false/*$TODO: cache = Cache::read($cacheKey)*/) {
+            return $cache;
+        } else {
+            $options['zip'] = $geoLocData['zip'];
+            $options['region'] = $geoLocData['region'];
+            $options['city'] = $geoLocData['city'];
+            $fields = ['Locations.id', 'listing_type', 'lat', 'lon', 'average_rating', 'reviews_approved', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'is_mobile', 'mobile_text'];
+            $conditions = [];
+            if ($preferredOnly) {
+                $conditions['Locations.listing_type !='] = Location::LISTING_TYPE_BASIC;
+            }
+            $cache = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
+            Cache::write($cacheKey, $cache);
+            return $cache;
+        }
+    }
+
+    /**
+    * Find all locations based on lat/lon, zip, or region/city
+    * @param array options (lat/lon, zip, or region/city)
+    * @param int limit (default=40)
+    * @param array conditions
+    * @param array contain
+    * @param array fields
+    * @param int maxRange
+    */
+    public function findAllByGeoLoc($options = [], $limit = null, $conditions = [], $contain = [], $fields = [], $maxRange = null) {
+        $options = array_merge([
+            'lat' => null,
+            'lon' => null,
+            'zip' => null,
+            'region' => null,
+            'city' => null
+        ], $options);
+        // Reverted to old syntax (pre-??) for #16574 fix
+        // $limit = $limit ?? 40;
+        $limit = $limit ? $limit : 40;
+        $conditions = array_merge([
+            'Locations.is_active' => true,
+            'Locations.is_show' => true
+        ], $conditions);
+
+        /*
+        TODO: IMPLEMENT RANGEABLE BEHAVIOR
+
+
+        // Reverted to old syntax (pre-??) for #16574 fix
+        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
+        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
+        if (!empty($options['lat']) && !empty($options['lon'])) {
+            $conditions['Locations.lat'] = $options['lat'];
+            $conditions['Locations.lon'] = $options['lon'];
+        } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
+            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            if (!empty($zip['lat']) && !empty($zip['lon'])) {
+                $conditions['Locations.lat'] = $zip['lat'];
+                $conditions['Locations.lon'] = $zip['lon'];
+            } else {
+                // This zip code does not exist in our zip table
+                return [];
+            }
+        } else if (!empty($options['city']) && !empty($options['region'])) {
+            //force case sensitivity -- google duplicate content issue
+            if (($options['region'] !== slugifyRegion($options['region'])) ||
+                ($options['city'] !== slugifyCity($options['city']))) {
+                return [];
+            }
+            $options['region'] = $this->parseStateSlug($options['region']);
+            $city = ClassRegistry::init('City')->findByCity($options['city'], $options['region']);
+            if (!empty($city) && !empty($city['City']['lat'] && !empty($city['City']['lon']))) {
+                $conditions['Locations.lat'] = $city['City']['lat'];
+                $conditions['Locations.lon'] = $city['City']['lon'];
+            } else {
+                // we can't find lat/lon for this city
+                return [];
+            }
+        } else {
+            // We don't have a lat/lon, zip, or region/city
+            return [];
+        }
+
+        $clinicFindSettings = [
+            'conditions' => $conditions,
+            'fields' => $fields,
+            'range' => $maxRange,
+            'range_out_till_count_is' => false, //disable range-out
+            'order_by_distance' => true,
+            'contain' => $contain,
+            'limit' => $limit
+        ];
+        return $this->find('range', $clinicFindSettings);
+        */
+
+        //TODO TEMPORARY - Just return the first $limit locations in my state
+        // Remove this when rangeable is working
+        //--------------------------------------------------------------
+        $state = $this->parseStateSlug($options['region']);
+        $conditions['Locations.state'] = $state;
+        $locations = $this->find('all', [
+            'conditions' => $conditions,
+            'limit' => $limit
+        ])->all();
+        //--------------------------------------------------------------
+        return $locations;
+    }
+
+    /**
+    * tests a string to see if it is a valid zip code
+    * @param string $input - (query)string which will be tested
+    * @return bool
+    */
+    public function isValidZip($input) {
+        if (Configure::read('country') == 'US') {
+            $regex = '/^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/';
+        } elseif ($settings['country'] == 'CA') {
+            $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
+        }
+        return (preg_match($regex,$input));
     }
 }

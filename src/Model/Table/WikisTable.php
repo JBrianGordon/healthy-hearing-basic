@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * Wikis Model
@@ -57,16 +58,22 @@ class WikisTable extends Table
             ],
         ]);
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('Authors', [
+            'className' => 'Users',
             'foreignKey' => 'user_id',
         ]);
-        $this->hasMany('TagWikis', [
-            'foreignKey' => 'wiki_id',
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'tag_wikis',
         ]);
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'wiki_id',
-            'targetForeignKey' => 'user_id',
+        $this->belongsToMany('Contributors', [
+            'className' => 'Users',
             'joinTable' => 'users_wikis',
+            'targetForeignKey' => 'user_id'
+        ]);
+        $this->belongsToMany('Reviewers', [
+            'className' => 'Users',
+            'joinTable' => 'reviewers_wikis',
+            'targetForeignKey' => 'user_id'
         ]);
     }
 
@@ -276,5 +283,88 @@ class WikisTable extends Table
             $retval = $wikiQuery->first();
         }
         return $retval;
+    }
+
+    public function findRedirectBySlug($slug = null) {
+        $wiki = $this->find('all', [
+            'conditions' => [
+                'slug' => $slug,
+                'is_active' => true
+            ],
+            'fields' => ['slug'],
+        ])->first();
+        if (!empty($wiki) && isset($wiki->hh_url)) {
+            return $wiki->hh_url;
+        }
+        // This slug is not active. Redirect to parent.
+        if (stripos($slug, '/') !== false) {
+            $parentSlug = substr($slug, 0, stripos($slug, '/'));
+            if (in_array($parentSlug, Configure::read('wikiCategories'))) {
+                return ['controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
+            }
+        }
+        // Invalid slug
+        return false;
+    }
+
+    /**
+    * Find a content based off it's id and uri
+    * @param id
+    * @param current here
+    * @return array of result
+    */
+    public function findBySlug($slug, $uri = null, $bypass = false) {
+        $conditions = [
+            'Wikis.is_active' => true,
+            'Wikis.slug' => $slug
+        ];
+        if ($bypass) {
+            unset($conditions['Wikis.is_active']);
+        }
+        $wiki = $this->find('all', [
+            'conditions' => $conditions,
+            'contain' => ['Authors','Tags','Contributors','Reviewers']
+        ])->first();
+        if (!empty($wiki) && $uri == Router::url(['controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
+            return $wiki;
+        }
+        return [];
+    }
+
+    /**
+    * Takes an ID of content or a list of tags and outputs the
+    * @param mixed id | content array with Tag as associated
+    * @return string of tags for custom vars
+    */
+    public function tagsForCustomVar($wiki){
+        if (!is_object($wiki)) {
+            $wiki = $this->find('all', [
+                'conditions' => ['Wikis.id' => $wiki],
+                'contain' => ['Tags']
+            ])->first();
+        }
+        //Parse Tags into string for customVar, wiki tags get a w- appended onto it.
+        $retval = [];
+        $tags = empty($wiki->tags) ? [] : $wiki->tags;
+        foreach ($tags as $tag) {
+            $retval[] = 'w-' . $tag->name;
+        }
+        return implode(',', $retval);
+    }
+
+    /**
+    * Get the word count of the content
+    * @param mixed if string count the string, if int, assume it's an ID
+    * @return int word count of body.
+    */
+    public function getWordCount($body = null) {
+        if (is_numeric($body)) {
+            $body = $this->get($body)->body;
+        }
+        $body = htmlspecialchars_decode($body);
+        $body = html_entity_decode($body);
+        $body = strip_tags($body);
+        $body = trim($body);
+        return str_word_count($body);
     }
 }
