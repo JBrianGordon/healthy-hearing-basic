@@ -15,6 +15,10 @@ $ignoreFields = [];
 // Add additional fields
 $fields['CaCallGroups.status'] = 'string';
 $fields['CaCallGroups.score'] = 'string';
+$fields['CaCallGroups.caller_first_name'] = 'string';
+$fields['CaCallGroups.caller_last'] = 'string';
+//$fields['CaCallGroups.score'] = 'string';
+//$fields['CaCallGroups.score'] = 'string';
 $additionalBlacklist = ['CaCallGroups'];
 foreach ($fields as $field => $type) {
     if (!in_array($field, $ignoreFields)) {
@@ -95,14 +99,14 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 								                <tr>
 								                    <th class="p5" nowrap><?= $this->Paginator->sort('id', 'Call ID') ?><br>
 								                    <?= $this->Paginator->sort('ca_call_group_id', 'Group ID') ?></th>
-								                    <th class="p5"><?= $this->Paginator->sort('CaCallGroup.location_id', 'Clinic') ?></th>
+								                    <th class="p5">Clinic</th>
 								                    <th class="p5"><?= $this->Paginator->sort('user_id', 'Agent') ?></th>
-								                    <th class="p5" nowrap><?= $this->Paginator->sort('CaCallGroup.caller_last_name', 'Caller Name') ?>/<br><?= $this->Paginator->sort('CaCallGroup.patient_last_name', 'Patient Name') ?></th>
+								                    <th class="p5" nowrap>Caller Name/<br>Patient Name</th>
 								                    <th class="p5"><?= $this->Paginator->sort('start_time', 'Call Time') ?>/<br>
 								                        <?= $this->Paginator->sort('duration') ?></th>
 								                    <th class="p5"><?= $this->Paginator->sort('call_type') ?></th>
-								                    <th class="p5"><?= $this->Paginator->sort('CaCallGroup.status', 'Status') ?></th>
-								                    <th class="p5">Flags<br><?= $this->Paginator->sort('CaCallGroup.is_review_needed', 'RN') ?>/<?= $this->Paginator->sort('CaCallGroup.is_prospect_override', 'PO') ?></th>
+								                    <th class="p5">Status</th>
+								                    <th class="p5">Flags:<br>RN/PO</th>
 								                    <th class="actions p5"><?= __('Actions') ?></th>
 								                </tr>
 								            </thead>

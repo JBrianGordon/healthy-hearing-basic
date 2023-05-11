@@ -99,7 +99,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 													<div class="col-md-4 manuf-logo">
 														<div style="display:none"><?= Router::url($corp->facebook_image, true); ?></div>
 														<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
-														<?php if ($isadmin){
+														<?php if ($isAdmin){
 															echo $this->Html->link('Edit', ['controller' => 'admin/corps', 'action' => 'edit', $corp->id], ['class' => 'btn btn-default']);
 														} ?>
 													</div>

@@ -1,6 +1,5 @@
 <?php
 use Cake\Core\Configure;
-$isClinic = $this->App->isClinic();
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
 ?>

@@ -84,11 +84,10 @@ class ContentTable extends Table
             ->setProperty('contributors')
             ->setThrough('ContentUsers');
 
-        // $this->belongsToMany('Tags', [
-        //     'foreignKey' => 'content_id',
-        //     'targetForeignKey' => 'tag_id',
-        //     'joinTable' => 'content_tags',
-        // ]);
+        $this->hasMany('ContentTags');
+
+        $this->belongsToMany('Tags')
+            ->setThrough('ContentTags');
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -334,5 +333,38 @@ class ContentTable extends Table
             ])
             ->limit($options['numArticles'] ?? 4)
             ->order(['last_modified' => 'DESC']);
+    }
+
+    /**
+    * Find content by Tag
+    * @param mixed. array of options or string of single tag.
+    * - tags array of tags
+    * - count (default 5)
+    * - fields
+    * - contain (default Tag)
+    * - strict (default true) if false keep going until we get count popping off tags.
+    * - order (default Content.date DESC)
+    * @return array of results
+    */
+    function findByTags($tagIds=[], $limit=6){
+        // TODO: We previously used find('similar')
+        // Test to see how close this is
+        $contentTags = $this->ContentTags->find('all', [
+            'contain' => ['Content'],
+            'conditions' => [
+                'tag_id IN' => $tagIds,
+            ],
+        ])->all();
+        $contents = [];
+        foreach ($contentTags as $contentTag) {
+            if ($contentTag->content->is_active && ($contentTag->content->last_modified <= date('Y-m-d'))) {
+                $contents[] = $contentTag->content;
+            }
+        }
+        usort ($contents, function($first,$second) {
+            return $first->last_modified < $second->last_modified;
+        });
+        $contents = array_slice($contents, 0, $limit);
+        return $contents;
     }
 }

@@ -104,12 +104,15 @@ class AppController extends Controller
         //$this->Configuration->load('HH');
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
-        //$this->set('user', $this->Auth->user());
-        //$this->set('isadmin', $this->isAdmin());
+        $this->user = $this->request->getSession()->read('Auth');
+        $this->set('user', $this->user);
+        $this->isAdmin = empty($this->user->role) ? false : ($this->user->role == 'admin');
+        $this->set('isAdmin', $this->isAdmin);
+        $this->isClinic = empty($this->user->role) ? false : ($this->user->role == 'clinic');
+        $this->set('isClinic', $this->isClinic);
         //$this->set('isitadmin', $this->isItAdmin());
         //$this->set('isagent', $this->isAgent());
         //$this->set('iscallsupervisor', $this->isCallSupervisor());
-        //$this->set('isclinic', $this->isClinic());
         //$this->set('iscsa', $this->isCSA());
         //$this->set('iswriter', $this->isWriter());
         //$this->set('isreviewer', $this->isReviewer());
@@ -184,6 +187,7 @@ class AppController extends Controller
                 break;
             }
         }
+        //TODO:
         if (empty($host) && $this->Session->host) {
             $host = $this->Session->host;
         }
