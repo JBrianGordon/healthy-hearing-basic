@@ -121,6 +121,12 @@
   }
 }
 
+.panel-parent {
+	@media(max-width: $screen-sm-max) {
+		padding:0;
+	}
+}
+
     .panel-disabled {
 	    opacity: 0.5;
 	    pointer-events: none;
@@ -665,6 +671,10 @@
 					min-height: 0;
 				}
 			}
+		}
+		&.help {
+			padding-left: 0;
+			padding-right: 7.5px;
 		}
 	}
 }

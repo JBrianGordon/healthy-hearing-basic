@@ -3,6 +3,12 @@
 	padding: 40px inherit;
 	position: relative;
 
+	&.row {
+		@media (max-width: $screen-xs-max){
+			margin: 0;
+		}
+	}
+
 	a {
 		color: $brand-primary;
 		font-size: 14px;
@@ -168,6 +174,12 @@
 .site-colophon {
 	background: $body-bg;
 	position: relative;
+
+	&.row {
+		@media (max-width: $screen-xs-max){
+			margin: 0;
+		}
+	}
 }
 
 #footerContainer {

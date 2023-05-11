@@ -4,6 +4,10 @@
   @include transition(all 0.3s ease-in);
   z-index: 1;
   overflow-y: hidden;
+
+	@media(max-width: $screen-sm-max) {
+		width: calc(100% + 5px);
+	}
   
   &.home {
 	  .row {

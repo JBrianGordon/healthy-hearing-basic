@@ -33,7 +33,7 @@ use Cake\Core\Configure;
 					</div>
 				</div>
 			</header>
-			<div class="col-md-9 panel-parent float-start">
+			<div class="col-md-9 panel-parent float-start help">
 				<section class="panel panel-section expanded">
 					<div class="p20 headline">
 						<h1 class="text-primary"><?php echo Configure::read('country') == 'CA' ? 'Hearing Directory' : 'Healthy Hearing'; ?> Help</h1>
