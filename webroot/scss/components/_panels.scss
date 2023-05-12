@@ -5,6 +5,14 @@
   margin-bottom: 30px;
   overflow: hidden;
   background-color: #fff;
+
+  &.panel-primary {
+  	.panel-heading {
+	    color: #fff;
+	    background-color: $brand-primary;
+	    border-color: $brand-primary;
+  	}
+  }
   
   &#adPanel {
 	  background:transparent;

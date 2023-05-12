@@ -136,8 +136,6 @@ $zipLabel = Configure::read('zipLabel');
   </div>
 </div>
 
-<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
-
 <script type="text/javascript">
 $(function() {
   $('#submitReviewForm').submit(function(event) {

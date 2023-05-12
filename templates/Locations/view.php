@@ -84,8 +84,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if(true/*$this->App->isMobileDevice()*/){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
-												<div class="telephone h2">
-													<span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $this->App->isMobileDevice()]); ?>
+												<div class="telephone h2 bi bi-telephone-fill">
+													<?= $this->Clinic->phone($location, ['link' => $this->App->isMobileDevice()]); ?>
 												</div>
 												<!-- Appointment request -->
 												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
@@ -286,9 +286,6 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								<p><?= $covid19Statement ?></p>
 							</div>
 						<?php endif; ?>
-						
-						<?= $this->element('locations/profile/review_section') ?>
-
 						<div class="col-md-8">
 							<!-- About / Services -->
 							<?php
@@ -314,13 +311,13 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									</div>
 								</div>';
 								//*** TODO: build layouts ***
-								/*echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/more_information');
+								/*echo $this->element('layouts/video_gallery');
+								echo $this->element('layouts/photo_gallery');*/
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
+									echo $this->element('locations/profile/services');
 								}
-								echo $this->element('layouts/reviews');
+								echo $this->element('locations/profile/review_section');/*
 								echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);*/
 							} else {
 								//echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);
@@ -335,13 +332,13 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									};
 									echo '</div></div></section>';
 								}
-								/*echo $this->element('layouts/reviews');
-								echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/more_information');
+								/*echo $this->element('layouts/video_gallery');
+								echo $this->element('layouts/photo_gallery');""*/
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
-								}*/
+									echo $this->element('locations/profile/services');
+								}
 							}
 							?>
 							
