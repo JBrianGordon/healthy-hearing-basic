@@ -90,14 +90,13 @@ class LocationsController extends AppController
         //set up and assign the meta tag info
         $request = env('REQUEST_URI');
 
-        // TODO
-        //$this->loadModel('Seo.SeoMetaTag');
-        //$seoMetaTags = $this->SeoMetaTag->findAllTagsByUri($request);
-        //$this->set('seoMetaTags', $seoMetaTags);
+        $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
+        $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+        $this->set('seoMetaTags', $seoMetaTags);
 
-        //$this->loadModel('Seo.SeoTitle');
-        //$seoTitle = $this->SeoTitle->findTitleByUri($request);
-        //$this->set('seoTitle', $seoTitle);
+        $this->SeoTitles = $this->fetchTable('SeoTitles');
+        $seoTitle = $this->SeoTitles->findTitleByUri($request);
+        $this->set('seoTitle', $seoTitle);
 
         //Custom variables for analytics
         if ($location->is_iris_plus) {

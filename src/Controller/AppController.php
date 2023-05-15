@@ -71,6 +71,8 @@ class AppController extends Controller
         //$this->isPPC(); // set isPPC session cookie
         //$this->setLanguage();
         $this->host = env('HTTP_HOST');
+        $this->isMobileDevice = $this->isMobileDevice();
+        $this->set('isMobileDevice', $this->isMobileDevice);
         // special functionality for different RequestHandling
         if (isset($this->RequestHandler)) {
             //if ($this->RequestHandler->isRss() && ($this->request->ext == 'rss')) {
@@ -209,5 +211,9 @@ class AppController extends Controller
         }
         $this->meta[$name] = $content;
         return true;
+    }
+
+    public function isMobileDevice() {
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]); 
     }
 }

@@ -15,14 +15,14 @@ if ($isMobile) {
 	$radius = $location->radius;
 	$city = $location->city;
 	$state = $location->state;
-	$class = $this->App->isMobileDevice() ? 'tac mb5' : 'text-large tac mb5';
+	$class = $isMobileDevice ? 'tac mb5' : 'text-large tac mb5';
 	echo $this->Html->tag('p', "We serve within {$radius} {$miles} of {$city}, {$state}", ['class' => $class]);
 }
 ?>
 <!-- *** TODO: change this back to == 'prod' once all testing is done ***-->
 <?php if (Configure::read('env') != 'prod'): ?>
 	<!--*** TODO: add hideProvider when provider is pulled in to clinic view and clinic admin edit pages ***-->
-	<img id="staticMap" <?php if(true/*!$this->App->isMobileDevice() && !$hideProvider*/){ echo 'loading="lazy" ';} ?>width="300" height="192" alt="Clinic location map">
+	<img id="staticMap" <?php if(true/*!$isMobileDevice && !$hideProvider*/){ echo 'loading="lazy" ';} ?>width="300" height="192" alt="Clinic location map">
 	<?php
 	// Custom mobile icon is the short URL for https://www.healthyhearing.com/img/mobile-clinic.png
 	$markers = $isMobile ? "icon:https://bit.ly/36TTEej" : "color:red";
@@ -88,5 +88,5 @@ if ($isMobile) {
 	</script>
 <?php else: ?>
 	<!-- Dev/QA map -->
-	<img id="staticMap" <?php if(true/*!$this->App->isMobileDevice() && !$hideProvider*/){ echo 'loading="lazy" ';} ?>style="border:1px solid LightGray; min-width:100%" alt="Clinic location map">
+	<img id="staticMap" <?php if(true/*!$isMobileDevice && !$hideProvider*/){ echo 'loading="lazy" ';} ?>style="border:1px solid LightGray; min-width:100%" alt="Clinic location map">
 <?php endif; ?>

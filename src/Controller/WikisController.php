@@ -62,10 +62,7 @@ class WikisController extends AppController
 
         if ($wiki = $this->Wikis->findBySlug($slug, $_SERVER['REQUEST_URI'], $this->isAdmin)) {
             //set up contents for sidebar
-            $tagIds = [];
-            foreach ($wiki->tags as $tag) {
-                $tagIds[] = $tag->id;
-            }
+            $tagIds = array_column($wiki->tags, 'id');
             $this->set('tags', $tagIds);
             $this->Content = $this->fetchTable('Content');
             $contents = $this->Content->findByTags($tagIds, 6);
@@ -79,20 +76,19 @@ class WikisController extends AppController
                 $this->set('ad', $exclusiveAd);
             }
 
-            //TODO
-            //$articles = $this->Content->findLatest(4);
-            //$this->set('articles', $articles);
+            $articles = $this->Content->findLatest(4);
+            $this->set('articles', $articles);
 
             //set up and assign the meta tag info
             $request = env('REQUEST_URI');
 
             $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
-            //$seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
-            //$this->set('seoMetaTags', $seoMetaTags);
+            $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+            $this->set('seoMetaTags', $seoMetaTags);
 
             $this->SeoTitles = $this->fetchTable('SeoTitles');
-            //$seoTitle = $this->SeoTitles->findTitleByUri($request);
-            //$this->set('seoTitle', $seoTitle);
+            $seoTitle = $this->SeoTitles->findTitleByUri($request);
+            $this->set('seoTitle', $seoTitle);
 
             $this->add_title($wiki->title_head);
             if (!empty($wiki->short)) {

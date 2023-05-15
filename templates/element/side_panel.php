@@ -1,10 +1,10 @@
 <?php use Cake\Core\Configure; ?>
 <div class="col-md-3 float-end noprint">
 	<!-- Right content -->
-	<?php if (Configure::read('showAds') && $this->App->isMobileDevice()): ?>
+	<?php if (Configure::read('showAds') && $isMobileDevice): ?>
 		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php endif; ?>
-	<?php //***TODO: uncomment when locations/preferred element added*** if($this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
+	<?php //***TODO: uncomment when locations/preferred element added*** if($isMobileDevice){echo $this->element('locations/preferred');} ?>
 	<section class="panel panel-light help-menu">
 		<header class="panel-heading text-center">Help menu</header>
 		<div class="panel-section condensed">
@@ -21,7 +21,7 @@
 			</div>
 		</div>
 	</section>
-	<?php //***TODO: uncomment when locations/preferred element added***if(!$this->App->isMobileDevice()){echo $this->element('locations/preferred');} ?>
+	<?php //***TODO: uncomment when locations/preferred element added***if(!$isMobileDevice){echo $this->element('locations/preferred');} ?>
 	<section class="panel panel-secondary">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
@@ -71,7 +71,7 @@
 			<?php endforeach; ?>
 		</section>
 	<?php endif; ?>
-	<?php if (Configure::read('showAds') && !$this->App->isMobileDevice()): ?>
+	<?php if (Configure::read('showAds') && !$isMobileDevice): ?>
 		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php endif; ?>
 </div>

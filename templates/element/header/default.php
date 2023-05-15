@@ -42,7 +42,7 @@ $logo = Configure::read('logo');
 		</div>
 	</div>
 
-	<?php if (!$this->App->isMobileDevice()): ?>
+	<?php if (!$isMobileDevice): ?>
 		<div data-hh-mega-nav="find-a-professional">
 			<div class="row mega-nav-inner">
 				<div class="col-md-6 col-sm-6">

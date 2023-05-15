@@ -61,7 +61,7 @@ $isPreview = isset($isPreview) ? $isPreview : false;
 		"name": "' . htmlentities(strip_tags($title)) . '",
 		"url": "https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '",
 		"articleBody": "' . htmlentities(strip_tags($this->Content->getBody())) . '",';
-		if ($author = $this->Content->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])) {
+		if ($author = $this->Editorial->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])) {
 			$contentSchema .= '"author": {
 				"@type": "Person",
 				"name": "' . $content['Author']['first_name'] . ' ' . $content['Author']['last_name'] . '"';
@@ -146,7 +146,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 											<h2 class="text-primary mt0 mb30"><?= $content->subtitle ?></h2>
 										<?php endif; ?>
 										<p class="blog-byline text-caption">
-											<?php if ($author = $this->App->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])): ?>
+											<?php if ($author = $this->Editorial->author($content, ['schema' => false, 'date' => true, 'format' => DateTime::ATOM, 'localAnchor' => true, 'dateNewLine' => true])): ?>
 												<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
 											<?php //else: ?>
 												<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>

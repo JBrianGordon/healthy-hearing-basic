@@ -67,7 +67,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 											<?php if (!empty($displayOpenClosed)): ?>
 												<div class="hours"><span class="glyphicon glyphicon-time small"></span> <?= $displayOpenClosed; ?></div>
 											<?php endif; ?>
-											<?php if(Configure::read('isCallAssistEnabled') || $this->App->isMobileDevice()) : ?>
+											<?php if(Configure::read('isCallAssistEnabled') || $isMobileDevice) : ?>
 												<a href="#mapBuffer" style="text-decoration:underline;cursor:pointer">
 											<?php endif; ?>
 												<div class="address mb5">
@@ -81,11 +81,11 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if(true/*$this->App->isMobileDevice()*/){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
 												<div class="telephone h2">
-													<span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $this->App->isMobileDevice()]); ?>
+													<span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?>
 												</div>
 												<!-- Appointment request -->
 												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
@@ -95,8 +95,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 												<?php endif; ?>
 											</div>
 										</div>
-										<!--*** TODO: Build AppHelper ***-->
-										<?php if (false/*Configure::read('country') == 'CA' && !$this->App->isMobileDevice()*/): ?>
+										<?php if (Configure::read('country') == 'CA' && !$isMobileDevice): ?>
 											<div class="col-md-6">
 												<?= $this->element('locations/map', ['hideProvider' => $hideProvider]) ?>
 											</div>
@@ -293,7 +292,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<!-- About / Services -->
 							<?php
 							$hours = $this->Clinic->hours($location);
-							if ($this->App->isMobileDevice()) {
+							if ($isMobileDevice) {
 								echo "<span id='mapBuffer'></span>";
 								echo '<section id="mobileMap" class="panel panel-primary">';
 								echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
@@ -431,7 +430,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!--*** TODO: layouts -->
-							<?php if(!$this->App->isMobileDevice()){
+							<?php if(!$isMobileDevice){
 								//echo $this->element('layouts/call_clinic');
 							}
 							?>
@@ -444,7 +443,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php if($location->listing_type == 'Premier'){/*echo $this->element('layouts/clinic_links')*/;} ?>
 							
 							<!-- Hours -->
-							<?php if (!$this->App->isMobileDevice() && $hours): ?>
+							<?php if (!$isMobileDevice && $hours): ?>
 								<div id="hours" class="panel panel-light">
 									<div id="earqHours"></div>
 									<header class="panel-heading text-center">
@@ -607,7 +606,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Affiliations -->
-							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $this->App->isMobileDevice()): ?>
+							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $isMobileDevice): ?>
 								<div id="affiliates" class="panel panel-light text-center">
 									<header class="panel-heading text-center">
 										<h2>Affiliations</h2>
@@ -632,7 +631,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 							
 							<!--*** TODO: build layouts -->
-							<?php if ($this->App->isMobileDevice()) {
+							<?php if ($isMobileDevice) {
 								//echo $this->element('layouts/call_clinic');
 							}
 							?>
