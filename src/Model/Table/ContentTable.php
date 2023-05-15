@@ -8,6 +8,7 @@ use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Cache\Cache;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 
@@ -318,21 +319,35 @@ class ContentTable extends Table
     }
 
     /**
-     * Returns a query for the latest N articles/reports/Content items
-     *
-     * @param \Cake\ORM\Query $query The Query object to be modified
-     * @param array $options List of options to pass to the finder
-     * @return \Cake\ORM\Query Modified Query object
-     */
-    public function findLatest(Query $query, array $options)
-    {
-        return $query
-            ->where([
-                'is_active' => 1,
-                'id_draft_parent' => 0,
-            ])
-            ->limit($options['numArticles'] ?? 4)
-            ->order(['last_modified' => 'DESC']);
+    * Find latest content based on date
+    */
+    public function findLatest($count = 0){
+        if ($count) {
+            // TODO: 'short' configuration for cache
+            if ($cache = Cache::read('latest_' . $count/*, 'short'*/)) {
+                return $cache;
+            }
+            $retval = $this->find('all', [
+                'conditions' => ['Content.is_active' => true, 'Content.last_modified <= CURDATE()'],
+                'contain' => ['PrimaryAuthor'],
+                'fields' => [
+                    'Content.old_url',
+                    'Content.title',
+                    'Content.type',
+                    'Content.slug',
+                    'Content.id',
+                    'Content.date',
+                    'Content.short',
+                    'Content.last_modified'
+                ],
+                'order' => 'Content.last_modified DESC',
+                'limit' => $count
+            ])->all();
+
+            Cache::write('latest_' . $count, $retval/*, 'short'*/);
+            return $retval;
+        }
+        return [];
     }
 
     /**

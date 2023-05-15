@@ -130,7 +130,7 @@ echo $wikiSchema;
 							<?php endif; ?>
 							<h1><?= $wiki->title_h1 ?></h1>
 							<p class="text-caption">
-								<em id="authorLine">By <?php echo $this->App->author($wiki, ['schema' => false, 'localAnchor' => true]); ?></em>
+								<em id="authorLine">By <?php echo $this->Editorial->author($wiki, ['schema' => false, 'localAnchor' => true]); ?></em>
 								<?php if (!empty($wiki->reviewers)) : ?>
 									<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
 									<?php
@@ -165,7 +165,7 @@ echo $wikiSchema;
 					<div class="panel panel-section expanded">
 						<div id="wiki-body" class="col-lg-12 pr0 pl0">
 							<?= $wiki->body ?>
-							<?php echo $this->App->getAuthorBio($wiki->author, $wiki->contributors); ?>
+							<?php echo $this->Editorial->getAuthorBio($wiki->author, $wiki->contributors); ?>
 						</div>
 						<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
 					</div>
