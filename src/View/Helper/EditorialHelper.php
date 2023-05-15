@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use Cake\View\Helper;
+use Cake\ORM\TableRegistry;
 
 /**
  * Editorial helper
@@ -23,6 +24,11 @@ class EditorialHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [];
+
+    public function initialize(array $config): void
+    {
+        $this->Content = TableRegistry::getTableLocator()->get('Content');
+    }
 
     /**
      * Return array of authors/contributors
@@ -289,5 +295,16 @@ class EditorialHelper extends Helper
 
         // Return our bio for display on the page.
         return $retval;
+    }
+
+    public function image($content = null) {
+        if (!is_object($content)) {
+            $content = $this->Content->get($content);
+        }
+        if ($image = $content->facebook_image) {
+            $imageAlt = $content->facebook_image_alt ? $content->facebook_image_alt : 'An article image';
+            return $this->Html->link('<img src="' . $image . '" width="340" height="260" loading="lazy" class="img-responsive" alt="' . $imageAlt .'">', $content->hh_url, ['escape' => false]);
+        }
+        return null;
     }
 }

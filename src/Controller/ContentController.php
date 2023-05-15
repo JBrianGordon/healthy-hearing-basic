@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+
 /**
  * Content Controller
  *
@@ -27,6 +30,8 @@ class ContentController extends AppController
             'Content.id',
             'Content.type',
             'Content.is_active',
+            'Content.facebook_image',
+            'Content.facebook_image_alt',
         ],
     ];
 
@@ -38,9 +43,57 @@ class ContentController extends AppController
      */
     public function reportIndex()
     {
-        $reports = $this->paginate($this->Content->findByIsActiveAndIdDraftParent(1, 0));
+        if (!Configure::read('showReports')) {
+            return $this->throw404NotFound();
+        }
+        //if we pass in anything, mark as 301 to root
+        // TODO: DO WE NEED THIS?
+        //if ($ignore !== null) {
+        //    $redirect = array('action' => 'report_index');
+        //    if (isset($this->request->named['page'])) {
+        //        $redirect['page'] = $this->request->named['page'];
+        //    }
+        //    $this->redirect($redirect, 301);
+        //}
+        $page = $this->request->getQuery('page');
+        $ext = $this->request->getParam('_ext');
+        $properUrl = Router::url(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '?'=>['page'=>$page], '_ext'=>$ext]);
+        if ($_SERVER['REQUEST_URI'] != $properUrl) {
+            // Self heal url. Redirect to proper format.
+            $this->redirect($properUrl, 301);
+        }
+        $render = 'report_index';
+        if ($ext == 'rss') {
+            $this->paginate['limit'] = 480;
+            // TODO: The rss index template doesn't exist yet
+            $render = 'index';
+        }
+        $paginateSettings = [
+            'conditions' => [
+                'Content.is_active' => true,
+                'Content.last_modified <= CURDATE()'
+            ]
+        ];
+        try {
+            $reports = $this->paginate('Content', $paginateSettings);
+        } catch(Exception $e) {
+            // Page number no longer exists. Redirect to page 1.
+            $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
+        }
+        if (empty($reports)) {
+            $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
+        }
+        //Add Title
+        $title = "The Healthy Hearing Report";
+        $pageDescription = !empty($page) ? "page " . $page . " of " : "";
+        $this->meta['description'] = "Browse $pageDescription Healthy Hearing's latest news, articles, and information on hearing loss, hearing aids and hearing clinics from around the US.";
+        $this->add_title($title);
+        $this->socialOptions['og:updated_time'] = date('Y-m-d 06:00:00', strtotime('today'));
+        $this->set('reports', $reports);
+        $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
+        $this->set('reportIntro', $this->fetchTable('Pages')->getContent('reportIntro'));
 
-        $this->set(compact('reports'));
+        return $this->render($render);
     }
 
     /**
