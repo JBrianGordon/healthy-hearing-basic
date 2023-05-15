@@ -674,4 +674,25 @@ class ClinicHelper extends Helper
         }
         return $retval;
     }
+
+    public function getProviderTitle($providerCredentials) {
+        // Ignore periods in credentials
+        $providerCredentials = str_replace('.', '', $providerCredentials);
+        $arrayCredentials = explode(", ", $providerCredentials);
+        $title = false;
+        if (in_array('AuD', $arrayCredentials)) {
+            $title = "Audiologist";
+        } else if (in_array('HIS', $arrayCredentials)) {
+            $title = "Hearing Instrument Specialist";
+        } else if (in_array('HAD', $arrayCredentials)) {
+            $title = "Hearing Aid Dispenser/Dealer";
+        } else if (in_array('LHIS', $arrayCredentials)) {
+            $title = "Licensed Hearing Instrument Specialist";
+        } else if (in_array('BC-HIS', $arrayCredentials)) {
+            $title = "Board Certified in Hearing Instrument Sciences";
+        } else if (!empty(array_intersect($arrayCredentials, ['MA','MS','PhD']))) {
+            $title = "Audiologist";
+        }
+        return $title;
+    }
 }

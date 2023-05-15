@@ -14,7 +14,7 @@ use App\Model\Entity\CaCallGroup;
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
 $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
 $firstProvider = empty($location->location_providers[0]) ? null : $location->location_providers[0];
-$hideProvider = empty($firstProvider->title) && empty($firstProvider->credentials) && empty($firstProvider->thumb_url) && empty($firstProvider->description);
+$hideProvider = empty($firstProvider->provider->title) && empty($firstProvider->provider->credentials) && empty($firstProvider->provider->thumb_url) && empty($firstProvider->provider->description);
 $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
@@ -95,8 +95,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 												<?php endif; ?>
 											</div>
 										</div>
-										<!--*** TODO: Build AppHelper ***-->
-										<?php if (false/*Configure::read('country') == 'CA' && !$this->App->isMobileDevice()*/): ?>
+										<?php if (Configure::read('country') == 'CA' && !$this->App->isMobileDevice()): ?>
 											<div class="col-md-6">
 												<?= $this->element('locations/map', ['hideProvider' => $hideProvider]) ?>
 											</div>
@@ -317,10 +316,10 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								if ($isEnhancedOrPremier) {
 									echo $this->element('locations/profile/services');
 								}
-								echo $this->element('locations/profile/review_section');/*
-								echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);*/
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 							} else {
-								//echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 								if (Configure::read('country') != 'CA') {
 									echo "<span id='mapBuffer'></span>";
 									echo '<section id="mobileMap" class="panel panel-primary">';
@@ -426,9 +425,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									</div>
 								</div>
 							<?php endif; ?>
-				
-							<!--*** TODO: layouts -->
 							<?php if(!$this->App->isMobileDevice()){
+								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
 								//echo $this->element('layouts/call_clinic');
 							}
 							?>
@@ -627,9 +625,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									</div>
 								</div>
 							<?php endif; ?>
-							
-							<!--*** TODO: build layouts -->
 							<?php if ($this->App->isMobileDevice()) {
+								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
 								//echo $this->element('layouts/call_clinic');
 							}
 							?>

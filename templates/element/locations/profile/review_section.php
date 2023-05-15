@@ -5,7 +5,7 @@
 ?>
 
 <!-- Reviews -->
-<section id="reviews" class="panel panel-primary">
+<section id="reviews" class="panel panel-primary mb0">
 	<?= $this->element('locations/profile/review_modal', ['location' => $location]) ?>
 	<?php if(!empty($location->reviews) || $location->state != 'ON') : ?>
 	  <!-- Reviews -->
@@ -50,8 +50,8 @@
 	              <a href="" id="more-reviews-button" class="btn btn-light">More Reviews</a>
 	            </p>
 	          <?php endif; ?>
-	        <?php elseif($location['Location']['state'] != 'ON'): ?>
-	          <p>Click on the orange button above and tell others about your experience at <?php echo $location['Location']['title']; ?> to help them find the hearing care they need.</p>
+	        <?php elseif($location->state != 'ON'): ?>
+	          <p>Click on the orange button above and tell others about your experience at <?= $location->title ?> to help them find the hearing care they need.</p>
 	        <?php endif; ?>
 	      </div>
 	    </div>
