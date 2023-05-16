@@ -24,7 +24,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                             <p><?= $content ?></p>
                         </p>
                         <p class="btn-set">
-                            <a href="<?php //***TODO: uncomment when clinic near me functionality built out*** echo $this->Clinic->nearMeLink();?>" class="near-me-link btn btn-default btn-lg">Show clinics near me</a>
+                            <a href="<?= $this->Clinic->nearMeLink() ?>" class="near-me-link btn btn-default btn-lg">Show clinics near me</a>
                             <a href="/help/hearing-loss" class="btn btn-default btn-lg">Learn About Hearing Loss</a>
                             <a href="/help/hearing-aids" class="btn btn-default btn-lg">Learn About Hearing Aids</a>
                         </p>

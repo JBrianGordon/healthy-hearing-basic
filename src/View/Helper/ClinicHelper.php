@@ -9,6 +9,7 @@ use App\Model\Entity\Review;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use DateTime;
 use DateTimeZone;
 
@@ -673,5 +674,22 @@ class ClinicHelper extends Helper
             $retval = null;
         }
         return $retval;
+    }
+
+    public function nearMeLink() {
+        $geoLocData = $_SESSION['geoLocData'];
+        if (isset($geoLocData['state'])) {
+            $region = $this->Locations->stateRegion($geoLocData['state']);
+        }
+        if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+        } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
+        } elseif (isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
+        } else {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+        }
+        return $nearMeLink;
     }
 }
