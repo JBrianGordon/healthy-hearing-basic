@@ -101,6 +101,7 @@ return static function (RouteBuilder $routes) {
 
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
+        $builder->setExtensions(['rss']);
         $builder->connect('/', 'Content::report_index');
         $builder->connect('/{id}-{slug}', 'Content::view')
             ->setPass(['id', 'slug'])

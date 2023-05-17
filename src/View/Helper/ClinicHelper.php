@@ -9,6 +9,7 @@ use App\Model\Entity\Review;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use DateTime;
 use DateTimeZone;
 
@@ -675,24 +676,20 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
-    public function getProviderTitle($providerCredentials) {
-        // Ignore periods in credentials
-        $providerCredentials = str_replace('.', '', $providerCredentials);
-        $arrayCredentials = explode(", ", $providerCredentials);
-        $title = false;
-        if (in_array('AuD', $arrayCredentials)) {
-            $title = "Audiologist";
-        } else if (in_array('HIS', $arrayCredentials)) {
-            $title = "Hearing Instrument Specialist";
-        } else if (in_array('HAD', $arrayCredentials)) {
-            $title = "Hearing Aid Dispenser/Dealer";
-        } else if (in_array('LHIS', $arrayCredentials)) {
-            $title = "Licensed Hearing Instrument Specialist";
-        } else if (in_array('BC-HIS', $arrayCredentials)) {
-            $title = "Board Certified in Hearing Instrument Sciences";
-        } else if (!empty(array_intersect($arrayCredentials, ['MA','MS','PhD']))) {
-            $title = "Audiologist";
+    public function nearMeLink() {
+        $geoLocData = $_SESSION['geoLocData'];
+        if (isset($geoLocData['state'])) {
+            $region = $this->Locations->stateRegion($geoLocData['state']);
         }
-        return $title;
+        if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+        } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
+        } elseif (isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
+        } else {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+        }
+        return $nearMeLink;
     }
 }

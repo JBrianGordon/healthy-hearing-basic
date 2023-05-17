@@ -92,4 +92,12 @@ class PagesTable extends Table
 
         return $rules;
     }
+
+    public function getContent($title) {
+        $page = $this->findByTitle($title)->first();
+        if (!empty($page->content)) {
+            return $page->content;
+        }
+        return false;
+    }
 }

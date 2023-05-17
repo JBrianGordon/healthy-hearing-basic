@@ -1457,10 +1457,7 @@ class LocationsTable extends Table
         $geoLocData = [];
 
         if (empty($_SESSION['geoLocData'])) {
-            $this->getGeoCode();
-            if (empty($_SESSION['geoLocData'])) {
-                return [];
-            }
+            return [];
         }
 
         // Check if visitor is from another country and if that country
