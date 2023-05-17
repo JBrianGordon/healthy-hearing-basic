@@ -96,7 +96,7 @@ class WikisController extends AppController
             }
             $customVars['type'] = 'wiki';
             $customVars['category|2'] = $this->Wikis->tagsForCustomVar($wiki);
-            $customVars['level|3'] = $this->Wikis->getWordCount($wiki->body);
+            $customVars['level|3'] = getWordCount($wiki->body);
             $this->set('background', $wiki->background_file);
             $this->set('customVars', $customVars);
             $this->set('isPreview', false);

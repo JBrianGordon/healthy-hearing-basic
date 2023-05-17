@@ -17,7 +17,7 @@ class ContentController extends AppController
     public $paginate = [
         'limit' => 15,
         'order' => [
-            'Content.modified' => 'DESC',
+            'Content.last_modified' => 'DESC',
         ],
         'fields' => [
             'Content.title',
@@ -100,14 +100,85 @@ class ContentController extends AppController
      * View method
      *
      * @param int|null $id Content id.
+     * @param string|null $slug Content slug
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view(?int $id = null)
+    public function view($id = null, $slug = null)
     {
-        $content = $this->Content->get($id, [
-            'contain' => ['PrimaryAuthor', 'Contributors'],
-        ]);
-        $this->set(compact('content'));
+        if (!Configure::read('showReports')) {
+            return $this->throw404NotFound();
+        }
+        if (!is_numeric($id)) {
+            // Is there a numeric id within the id string?
+            if (preg_match('/[0-9]{2,}/', $id, $matches) == 1) {
+                $id = $matches[0];
+            }
+        }
+        if (empty($id) || !is_numeric($id)) {
+            return $this->executeStatusCode(410);
+        }
+
+        $content = $this->Content->findByIdSlug($id, $_SERVER['REQUEST_URI']);
+        if (empty($content)) {
+            if ($redirect = $this->Content->findForRedirectById($id)) {
+                if ($_SERVER['REQUEST_URI'] != Router::url($redirect) && $this->Content->isActive($id)) {
+                    return $this->redirect($redirect, 301);
+                }
+            }
+            return $this->throw404NotFound();
+        }
+        if ($content->is_gone) {
+            return $this->executeStatusCode(410);
+        }
+
+        //set up and assign the meta tag info
+        $request = env('REQUEST_URI');
+
+        $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
+        $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+        $this->set('seoMetaTags', $seoMetaTags);
+
+        $this->SeoTitles = $this->fetchTable('SeoTitles');
+        $seoTitle = $this->SeoTitles->findTitleByUri($request);
+        $this->set('seoTitle', $seoTitle);
+
+        $this->add_title($content->title_head);
+        $this->meta['description'] = (isset($this->meta['description']) ? $this->meta['description'] : null);
+        $this->meta['description'] = (!empty($content['Content']['meta_description']) ? $content['Content']['meta_description'] : $this->meta['description']);
+        $this->socialOptions['og:type'] = 'article';
+        $this->socialOptions['article:section'] = 'HH Report';
+
+        //Prefetches
+        $this->prefetches[] = '//connect.facebook.com';
+        $this->prefetches[] = '//fbstatic-a.akamaihd.net';
+        $this->prefetches[] = '//s-static.ak.facebook.com';
+        $this->prefetches[] = '//static.ak.facebook.com';
+        $this->prefetches[] = '//www.facebook.com';
+
+        $customVars['type'] = $content->type . '-' . date('Y-m-d', $content->last_modified->timestamp);
+        $customVars['category|2'] = $this->Content->tagsForCustomVar($content);
+        $customVars['level|3'] = getWordCount($content->body);
+
+        // Is there an exclusive advertisement for this content?
+        foreach($content->tags as $tag) {
+            $tags[] = $tag->id;
+        }
+        $exclusiveAd = $this->fetchTable('Advertisements')->findAdByTags($tags);
+        if (!empty($exclusiveAd)) {
+            // Overwrite the generic ad
+            $this->set('ad', $exclusiveAd);
+        }
+
+        $this->set('wikis', $this->Content->findWikisById($id));
+        $this->set('show_header', false);
+        $this->set('content', $content);
+        $this->set('customVars', $customVars);
+        $this->set('cont', $content);
+        $this->set('id', $id);
+        $this->set('slug', $slug);
+        $this->set('isPreview', false);
+        $this->set('sameAsSocialLinks', Configure::read('sameAsSocialLinks'));
+        $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
     }
 }

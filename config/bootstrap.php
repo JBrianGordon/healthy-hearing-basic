@@ -437,3 +437,18 @@ function slugifyZip($zip = null){
     }
     return $zip;
 }
+/**
+* Get the word count of a text block
+* @param string
+* @return int word count of body.
+*/
+function getWordCount($body) {
+    if (!is_string($body)) {
+        return 0;
+    }
+    $body = htmlspecialchars_decode($body);
+    $body = html_entity_decode($body);
+    $body = strip_tags($body);
+    $body = trim($body);
+    return str_word_count($body);
+}

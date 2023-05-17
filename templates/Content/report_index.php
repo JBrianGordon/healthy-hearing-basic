@@ -26,14 +26,14 @@ $this->Html->script('dist/content.min', ['block' => true]);
 									<div class="p10">
 										<span class="subtitle text-light mobile"><?= $report->type; ?></span>
 										<h3 class="blog-title mobile"><?= $this->Html->link($report->title, $report->hh_url, $options = ['class' => 'text-link']) ?></h3>
-										<p class="text-caption blog-byline mobile"><?= date_format($report->modified, 'F j, Y') ?></p>
+										<p class="text-caption blog-byline mobile"><?= date_format($report->last_modified, 'F j, Y') ?></p>
 										<p class="blog-image"><?php echo $this->Editorial->image($report); ?></p>
 										<p class="blog-intro mobile" style="clear: both"><?= $report->short; ?></p>
 									</div>
 									<div class="p10 right-content">
 										<span class="subtitle text-light"><?= $report->type; ?></span>
 										<h3 class="blog-title"><?= $this->Html->link($report->title, $report->hh_url, $options = ['class' => 'text-link']) ?></h3>
-										<p class="text-caption blog-byline"><?= date_format($report->modified, 'F j, Y') ?></p>
+										<p class="text-caption blog-byline"><?= date_format($report->last_modified, 'F j, Y') ?></p>
 										<p class="blog-intro" style="clear: both"><?= $report->short; ?></p>
 									</div>
 								</div>
