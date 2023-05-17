@@ -4,6 +4,7 @@
   @include transition(all 0.3s ease-in);
   z-index: 1;
   overflow-y: hidden;
+  padding: 0 15px;
   
   &.home {
 	  .row {
