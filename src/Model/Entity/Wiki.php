@@ -89,6 +89,8 @@ class Wiki extends Entity
             'controller' => 'Wikis',
             'action' => 'view',
             'slug' => $this->slug,
+            'plugin' => false,
+            'prefix' => false,
         ];
     }
 }
