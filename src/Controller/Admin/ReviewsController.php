@@ -107,8 +107,10 @@ class ReviewsController extends AppController
             }
             $this->Flash->error(__('The review could not be saved. Please, try again.'));
         }
-        $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('review', 'locations'));
+
+        $ipMatches = $this->Reviews->findIpMatches($review->id);
+
+        $this->set(compact('review', 'ipMatches'));
     }
 
     /**

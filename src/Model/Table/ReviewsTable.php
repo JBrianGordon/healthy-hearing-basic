@@ -16,6 +16,7 @@ use Cake\Event\EventInterface;
 use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Reviews Model
@@ -38,6 +39,7 @@ use Cake\Mailer\MailerAwareTrait;
  */
 class ReviewsTable extends Table
 {
+    use LocatorAwareTrait;
     use LogTrait;
     use MailerAwareTrait;
 
@@ -384,5 +386,41 @@ class ReviewsTable extends Table
         $review->status = ReviewStatus::DENIED->value;
 
         return $this->save($review);
+    }
+
+    public function findIpMatches($reviewId) {
+        $data['ipWarningsFound'] = [];
+        $reviewIp = $this->get($reviewId)->ip;
+        if (!empty($reviewIp)) {
+            // Login IP matches
+            $loginMatches = $this->getTableLocator()->get('LoginIps')->find()
+                ->where([
+                    'ip' => $reviewIp
+                ])
+                ->order(['login_date' => 'DESC'])
+                ->all();
+            $data['loginMatches'] = $loginMatches;
+            // Review IP matches
+            $reviewMatches = $this->find()
+                ->where([
+                    'id !=' => $reviewId,
+                    'ip' => $reviewIp
+                ])
+                ->order(['created' => 'DESC'])
+                ->all();
+            $data['reviewMatches'] = $reviewMatches;
+            // LocationNote IP matches
+            $noteMatches = $this->getTableLocator()->get('LocationNotes')->find()
+                ->where([
+                    'body LIKE' => '%'.$reviewIp.'%'
+                ])
+                ->order(['created' => 'DESC'])
+                ->all();
+            $data['noteMatches'] = $noteMatches;
+            if (!empty($loginMatches) || !empty($reviewMatches) || !empty($noteMatches)) {
+                $data['ipWarningsFound'] = true;
+            }
+        }
+        return $data;
     }
 }

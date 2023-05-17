@@ -5,6 +5,8 @@ namespace App\Event;
 
 use Cake\Event\EventListenerInterface;
 use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\Http\Session;
+use DateTime;
 
 class UsersListener implements EventListenerInterface
 {
@@ -26,8 +28,12 @@ class UsersListener implements EventListenerInterface
     public function afterLogin(\Cake\Event\Event $event)
     {
         $user = $event->getData('user');
-        $controller = $event->getSubject();
 
+        $session = new Session();
+        $sessionData = $session->read();
+        $loginIp = $session->read('loginIp');
+
+        // Redirect to role-based panel
         if ($user->role === 'admin') {
             $event->setResult([
                 'plugin' => false,
@@ -36,6 +42,18 @@ class UsersListener implements EventListenerInterface
                 'action' => 'panel',
             ]);
         } elseif ($user->role === 'clinic') {
+            // Record IP of clinic after login
+            $loginIpsTable = $this->fetchTable('LoginIps');
+            $userLoginIpEntity = $loginIpsTable->newEntity(
+                [
+                    'user_id' => $user->id,
+                    'ip' => $loginIp,
+                    'login_date' => new DateTime('now'),
+                ],
+                ['validate' => false],
+            );
+            $loginIpsTable->save($userLoginIpEntity);
+
             $locationsUsersForClinic = $this->fetchTable('LocationsUsers')
                 ->find()
                 ->where(['user_id' => $user->id])

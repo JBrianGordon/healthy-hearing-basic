@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Middleware\BeforeLoginMiddleware;
 use App\Middleware\GeoLocSessionMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
@@ -116,6 +117,13 @@ class Application extends BaseApplication
             // available as array through $request->getData()
             // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
+
+            // This middleware intercepts the 'login' action and sets the 'loginIp' session variable.
+            // 'loginIp' is used in UsersListener to record clinic login IPs.
+            // It may be redundant to the session variable 'clientIp' set in GeoLocSessionMiddleware,
+            // but it **may** be a good idea to explicitly record the IP at login to ensure we're
+            // capturing it and not one already in the session.
+            ->add(new BeforeLoginMiddleware())
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
