@@ -16,22 +16,7 @@ use Cake\Core\Configure;
 
 			<!-- ***TODO: Breadcrumb should be it's own dynamic element *** <div class="row pt0 pb0">-->
 			<header class="col-md-12 inverse">
-				<div class="row noprint pt0 pb0">
-					<div class="col-sm-12 col-xs-9 pl0">
-						<ul class="breadcrumb">
-							<li>
-								<a href="/"><span>Home</span></a>
-							</li>
-							<li>
-								<a href="/help">
-									<span>Healthy Hearing help: Hearing loss, hearing aids, tinnitus and more</span>
-								</a>
-							</li>
-							<script type="application/ld+json">{"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem", "position": "1", "item": {"@id": "/", "name": "Home"}},{"@type": "ListItem", "position": "2", "item": {"@id": "/help", "name": "Healthy Hearing help: Hearing loss, hearing aids, tinnitus and more"}}]}</script>
-						</ul>
-						<div id="ellipses">...</div>
-					</div>
-				</div>
+				<?= $this->element('breadcrumbs') ?>
 			</header>
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
