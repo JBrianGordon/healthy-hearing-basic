@@ -692,4 +692,105 @@ class ClinicHelper extends Helper
         }
         return $nearMeLink;
     }
+
+    /**
+    * Show the clinic url
+    * format for a link
+    */
+    public function website($location, $return = 'link') {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $url = trim($location->url);
+        if (!empty($url)) {
+            // Verify the URL starts with http or https
+            $url = strpos($url, 'http') === false ? 'http://' . $url : $url;
+            if($return == 'uri') {
+                return $url;
+            }
+            $parts = parse_url($url);
+            return $this->Html->link('Clinic website', $url, ['target' => '_blank', 'type' => 'clinic link', 'class' => 'text-link', 'rel' => 'noopener', 'escape' => false]);
+        }
+        return null;
+    }
+
+    /**
+    * Social bar on profile
+    */
+    public function social($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $retval = "";
+        $socials = [];
+        if ($location->facebook || $location->twitter || $location->youtube) {
+            if ($text = $this->socialType($location, 'facebook')) {
+                $socials[] = $text;
+            }
+            if ($text = $this->socialType($location, 'twitter')) {
+                $socials[] = $text;
+            }
+            if ($text = $this->socialType($location, 'youtube')) {
+                $socials[] = $text;
+            }
+            $retval .= implode('<br>',$socials);
+        }
+        return $retval;
+    }
+
+    /**
+    * Get the specific link
+    * Note: This code matches some checks in LocationsShell::redirectClinicWebsites().
+    *       If this code changes, please make sure to update that function as well.
+    */
+    public function socialType($location, $key = 'facebook') {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+
+        $social = $location->$key;
+        if (!$social) {
+            return null;
+        }
+
+        //Not empty, continue.
+        switch ($key) {
+            case 'facebook':
+                $text = str_replace(array('https://','http://','www.facebook.com/','facebook.com/'), '', $social);
+                return '<span class="facebook"><span class="hh-icon-facebook clinic-share"></span> ' . $this->Html->link(
+                    'Facebook',
+                    'https://www.facebook.com/' . $text,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            case 'twitter':
+                $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
+                return '<span class="twitter"><span class="hh-icon-twitter clinic-share"></span> ' . $this->Html->link(
+                    'Twitter',
+                    'https://twitter.com/' . $text,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            case 'youtube':
+                $youtubeLink = 'https://www.youtube.com/';
+                $youtubeSuffix = '';
+                if(preg_match('/^http/', $social)) {
+                    $youtubeLink = $social;
+                } else {
+                    //need to determine if its a channel or a user
+                    if(preg_match('/^(UC|HC)/', $social)) {
+                        $youtubeSuffix = 'channel/' . $social;
+                    } elseif(preg_match('/^channel/', $social)) {
+                        $youtubeSuffix = $social;
+                    } else {
+                        //not a channel, it's a user. Strip out any user prefix and build the URL
+                        $youtubeSuffix = 'user/' . preg_replace('~^user/~', '', $social);
+                    }
+                }
+                return '<span class="youtube"><span class="hh-icon-youtube clinic-share"></span> ' . $this->Html->link(
+                    'YouTube',
+                    $youtubeLink . $youtubeSuffix,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            default: return null;
+        }
+    }
 }

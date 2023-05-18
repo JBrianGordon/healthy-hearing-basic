@@ -434,7 +434,6 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 						<div class="col-md-4">
 							
 							<!-- Clinic Links -->
-							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
 							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Hours -->
@@ -583,7 +582,6 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Clinic Links -->
-							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
 							<?= $location->listing_type != 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Payment -->
