@@ -1,10 +1,11 @@
 <?php
-if (!isset($review['Review']) && isset($review->body)) {
-	$review['Review'] = $review;
+if (!isset($review) && isset($review->body)) {
+	$review = $review;
 }
 // Only show the response after the response has been approved
 $show_response = !empty($review->response) && ($review->response_status == Review::RESPONSE_STATUS_PUBLISHED);
-$clinic_name = isset($clinic_name) ? $clinic_name : $this->Clinic->nameById($review->location_id);
+/*** TODO: build nameById ***/
+//$clinic_name = isset($clinic_name) ? $clinic_name : $this->Clinic->nameById($review->location_id);
 $truncate = isset($truncate) ? $truncate : false;
 $onclick = isset($onclick) ? $onclick : false;
 $min_height = isset($min_height) ? $min_height : false;
@@ -26,7 +27,8 @@ $name = empty($name) ? null : $name;
 
 			echo '<br />';
 			echo date('m/d/Y', strtotime($review->created)) . '&nbsp;&nbsp;&nbsp;';
-			echo $this->Clinic->reviewVerification($review);
+			//*** TODO: uncomment once updates to reviewVerification are made ***/
+			//echo $this->Clinic->reviewVerification($review);
 
 			?>
 		</div>

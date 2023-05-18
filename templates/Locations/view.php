@@ -8,7 +8,7 @@ use App\Model\Entity\Location;
 use Cake\Core\Configure;
 use App\Model\Entity\CaCallGroup;
  
-// $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <?php
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
@@ -21,7 +21,7 @@ $showSpecialAnnouncement = (
 );
 $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
 ?>
-<div class="container-fluid fap-results">
+<div class="site-body container-fluid fap-results">
 	<div class="row">
 		<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -40,7 +40,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 				<div class="col-md-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-md-7 p0"; }?>">
+					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-xs-12 col-md-7 p0"; }?>">
 						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
@@ -311,11 +311,12 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>';
 								//*** TODO: build layouts ***
 								echo $this->element('locations/profile/more_information');
-								/*echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');*/
+								echo $this->element('locations/profile/video_gallery');
+								//echo $this->element('layouts/photo_gallery');
 								if ($isEnhancedOrPremier) {
 									echo $this->element('locations/profile/services');
 								}
+								/*** TODO: Page needs to pull in reviews before this section can be uncommented: ***/
 								echo $this->element('locations/profile/review_section');
 								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 							} else {
@@ -333,8 +334,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								}
 								echo $this->element('locations/profile/review_section');
 								echo $this->element('locations/profile/more_information');
-								/*echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');""*/
+								echo $this->element('locations/profile/video_gallery');
+								//echo $this->element('layouts/photo_gallery');""
 								if ($isEnhancedOrPremier) {
 									echo $this->element('locations/profile/services');
 								}

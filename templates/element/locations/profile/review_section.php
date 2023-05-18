@@ -24,24 +24,24 @@
 	        <p<?php if($location->state == 'ON'){ echo ' style="height:20px"'; } ?>>
 	          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
 	          <?php if (isset($location->reviews) && count($location->reviews)): ?>
-	          <span id="sortSpan">Sort by: <select id="sortSelect">
-	                  <option value="newestArr">Newest</option><option value="highestRating">Highest Rating</option><option value="lowestRating">Lowest Rating</option>
-	                </select>
-	              </span>
+	          	<span id="sortSpan">Sort by: <select id="sortSelect">
+                    <option value="newestArr">Newest</option><option value="highestRating">Highest Rating</option><option value="lowestRating">Lowest Rating</option>
+                  </select>
+                </span>
 	          <?php endif; ?>
 	        </p>
 	        <?php if (isset($location->reviews) && count($location->reviews)): ?>
 	          <?php $reviews = $this->Clinic->sliceReviews($location->reviews); ?>
 	          <?php foreach ($reviews[0] as $review): ?>
 	            <div class="well">
-	              <?php //echo $this->element('locations/review_body', ['review' => $review]); ?>
+	              <?php echo $this->element('locations/review_body', ['review' => $review]); ?>
 	            </div>
 	          <?php endforeach; ?>
 	          <?php if (!empty($reviews[1])): ?>
 	            <div id="more-reviews" style="display:none;">
 	              <?php foreach($reviews[1] as $review): ?>
 	                <div class="well">
-	                  <?php echo $this->element('locations/review_body', array('review' => $review)); ?>
+	                  <?php echo $this->element('locations/review_body', ['review' => $review]); ?>
 	                </div>
 	              <?php endforeach; ?>
 	            </div>

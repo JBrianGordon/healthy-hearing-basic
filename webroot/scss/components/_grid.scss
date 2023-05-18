@@ -38,6 +38,10 @@
 	
 	@media (min-width: 992px) {
 		width: 970px;
+
+		.col-md-7 {
+			width: 58.33333%;
+		}
 	}
 	
 	@media (min-width: 1200px) {

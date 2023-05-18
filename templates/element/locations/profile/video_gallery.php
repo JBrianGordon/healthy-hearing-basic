@@ -1,12 +1,13 @@
 <?php
 	// Videos
-	if (!empty($location['LocationVideo'])) {
+	$locationVideos = $location->location_videos;
+	if ($locationVideos->count() > 0) {
 		$youtubeCode = [];
 		$vimeoCode = [];
 		$dailyCode = [];
 		$wistiaCode = [];
-		foreach ($location['LocationVideo'] as $locationVideo) {
-			$videoFull = parse_url($locationVideo['LocationVideo']['video_url']);
+		foreach ($locationVideos as $locationVideo) {
+			$videoFull = parse_url($locationVideo->video_url);
 			//Most YouTube url's, checking the "v" param
 			if(!empty($videoFull['host'] == 'www.youtube.com')) {
 				parse_str($videoFull['query'], $query);

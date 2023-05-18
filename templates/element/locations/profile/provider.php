@@ -68,7 +68,8 @@ $this->set('hideProvider', $hideProvider);
 									<?php
 									$providerTitle = $provider->title;
 									if (empty($providerTitle)) {
-										$providerTitle = $this->Clinic->getProviderTitle($provider->credentials);
+										/*** TODO: getProviderTitle needs to be created: ***/
+										//$providerTitle = $this->Clinic->getProviderTitle($provider->credentials);
 									}
 									?>
 									<?php if (!empty($providerTitle)): ?>
