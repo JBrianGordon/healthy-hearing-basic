@@ -22,7 +22,7 @@ if (!empty($seoMetaTags)) {
 //$this->Content->setPrint(true);
 
 $this->Breadcrumbs->add([
-    ['title' => 'Report', 'url' => ['controller' => 'content', 'action' => 'report_index']],
+    ['title' => 'Report', 'url' => ['prefix'=>false, 'plugin'=>false, 'controller' => 'content', 'action' => 'report_index']],
     ['title' => $content->title, 'url' => $_SERVER['REQUEST_URI']]
 ]);
 $isPreview = isset($isPreview) ? $isPreview : false;

@@ -300,7 +300,7 @@ class WikisTable extends Table
         if (stripos($slug, '/') !== false) {
             $parentSlug = substr($slug, 0, stripos($slug, '/'));
             if (in_array($parentSlug, Configure::read('wikiCategories'))) {
-                return ['controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
+                return ['prefix'=>false, 'plugin'=>false, 'controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
             }
         }
         // Invalid slug
@@ -325,7 +325,7 @@ class WikisTable extends Table
             'conditions' => $conditions,
             'contain' => ['Authors','Tags','Contributors','Reviewers']
         ])->first();
-        if (!empty($wiki) && $uri == Router::url(['controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
+        if (!empty($wiki) && $uri == Router::url(['prefix'=>false, 'plugin'=>false, 'controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
             return $wiki;
         }
         return [];

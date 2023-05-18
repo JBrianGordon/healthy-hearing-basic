@@ -35,7 +35,7 @@ class CorpsController extends AppController
         $corp = $this->Corps->findBySlug($slug)->first();
 
         if (!$corp) {
-            return $this->redirect(['controller' => 'Corps', 'action' => 'index']);
+            return $this->redirect(['prefix'=>false, 'plugin'=>false, 'controller'=>'Corps', 'action'=>'index']);
         }
 
         $this->set(compact('corp'));

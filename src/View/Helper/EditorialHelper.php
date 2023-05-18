@@ -163,6 +163,9 @@ class EditorialHelper extends Helper
     }
 
     public function adminLink($contentId, $isAdmin) {
+        if (!$isAdmin) {
+            return '';
+        }
         if (is_object($contentId)) {
             $contentId = $contentId->id;
         }
