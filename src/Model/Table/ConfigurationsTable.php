@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
 
 /**
  * Configurations Model
@@ -85,5 +86,17 @@ class ConfigurationsTable extends Table
         $rules->add($rules->isUnique(['name']), ['errorField' => 'name']);
 
         return $rules;
+    }
+
+    public function load($prefix = 'CFG') {
+        $settings = $this->find('all')->all();
+        foreach ($settings as $variable) {
+            Configure::write("$prefix.{$variable->name}",$variable->value);
+        }
+    }
+
+    public function isCallTrackingBypassed() {
+        $this->load('HH');
+        return empty(Configure::read('HH.bypass_call_tracking')) ? false : true;
     }
 }

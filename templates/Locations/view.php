@@ -425,8 +425,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if(!$isMobileDevice){
-								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
-								//echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic');
 							}
 							?>
 						</div>
@@ -623,8 +622,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if ($isMobileDevice) {
-								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
-								//echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic');
 							}
 							?>
 							
