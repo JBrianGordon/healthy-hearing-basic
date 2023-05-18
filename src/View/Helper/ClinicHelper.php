@@ -388,7 +388,7 @@ class ClinicHelper extends Helper
         $retval = $location->phone;
 
         if (is_null($isCallTrackingBypassed)) {
-            $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
+            $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
         }
 
         if (!$isCallTrackingBypassed) {

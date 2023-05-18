@@ -6,6 +6,7 @@
  
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
 $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
@@ -19,7 +20,7 @@ $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
-$isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
+$isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">
@@ -425,7 +426,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if(!$isMobileDevice){
-								echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 						</div>
@@ -622,7 +623,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if ($isMobileDevice) {
-								echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 							
