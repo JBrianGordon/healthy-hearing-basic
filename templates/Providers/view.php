@@ -80,7 +80,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Order') ?></th>
-                    <td><?= $this->Number->format($provider->order) ?></td>
+                    <td><?= $this->Number->format($provider->priority) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id Yhn Provider') ?></th>

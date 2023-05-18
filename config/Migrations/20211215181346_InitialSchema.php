@@ -190,36 +190,6 @@ class InitialSchema extends AbstractMigration
             )
             ->create();
 
-        $this->table('advertisements_clicks')
-            ->addColumn('id', 'integer', [
-                'autoIncrement' => true,
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addPrimaryKey(['id'])
-            ->addColumn('created', 'datetime', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
-            ->addColumn('ad_id', 'integer', [
-                'default' => '0',
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addColumn('ref', 'string', [
-                'default' => '',
-                'limit' => 255,
-                'null' => false,
-            ])
-            ->addColumn('ip', 'string', [
-                'default' => '',
-                'limit' => 16,
-                'null' => false,
-            ])
-            ->create();
-
         $this->table('ca_call_group_notes')
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
@@ -1107,36 +1077,6 @@ class InitialSchema extends AbstractMigration
             ->addIndex(
                 [
                     'is_gone',
-                ]
-            )
-            ->create();
-
-        $this->table('content_locations')
-            ->addColumn('id', 'integer', [
-                'autoIncrement' => true,
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addPrimaryKey(['id'])
-            ->addColumn('content_id', 'integer', [
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addColumn('location_id', 'biginteger', [
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addIndex(
-                [
-                    'location_id',
-                ]
-            )
-            ->addIndex(
-                [
-                    'content_id',
                 ]
             )
             ->create();
@@ -4019,6 +3959,37 @@ class InitialSchema extends AbstractMigration
             )
             ->create();
 
+        $this->table('reviewers_wikis')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => false,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('wiki_id', 'integer', [
+                'default' => '0',
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('user_id', 'integer', [
+                'default' => '0',
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addIndex(
+                [
+                    'wiki_id',
+                ]
+            )
+            ->addIndex(
+                [
+                    'user_id',
+                ]
+            )
+            ->create();
+
         $this->table('reviews')
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
@@ -5357,6 +5328,7 @@ class InitialSchema extends AbstractMigration
         $this->table('queue_task_logs')->drop()->save();
         $this->table('queue_tasks')->drop()->save();
         $this->table('quiz_results')->drop()->save();
+        $this->table('reviewers_wikis')->drop()->save();
         $this->table('reviews')->drop()->save();
         $this->table('schema_migrations')->drop()->save();
         $this->table('seo_blacklists')->drop()->save();

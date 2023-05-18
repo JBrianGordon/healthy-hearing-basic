@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Order') ?></th>
-                    <td><?= $this->Number->format($configuration->order) ?></td>
+                    <td><?= $this->Number->format($configuration->priority) ?></td>
                 </tr>
             </table>
             <div class="text">

@@ -67,8 +67,8 @@ class ConfigurationsTable extends Table
             ->notEmptyString('value');
 
         $validator
-            ->integer('order')
-            ->notEmptyString('order');
+            ->integer('priority')
+            ->notEmptyString('priority');
 
         return $validator;
     }

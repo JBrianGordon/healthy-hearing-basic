@@ -30,6 +30,11 @@ use Cake\Core\Configure;
  */
 class AppController extends Controller
 {
+    public $pageTitle = 'Healthy Hearing';
+    public $prefetches = [];
+    public $meta = [];
+    public $socialOptions = [];
+
     /**
      * Initialization hook method.
      *
@@ -43,7 +48,8 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        // TO-DO: Figure out if we can get rid of the RequestHandler (on deprecation list)
+        //$this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
         /*
@@ -65,6 +71,8 @@ class AppController extends Controller
         //$this->isPPC(); // set isPPC session cookie
         //$this->setLanguage();
         $this->host = env('HTTP_HOST');
+        $this->isMobileDevice = $this->isMobileDevice();
+        $this->set('isMobileDevice', $this->isMobileDevice);
         // special functionality for different RequestHandling
         if (isset($this->RequestHandler)) {
             //if ($this->RequestHandler->isRss() && ($this->request->ext == 'rss')) {
@@ -92,18 +100,21 @@ class AppController extends Controller
         $this->set('siteName', $this->siteName);
 
         // Find a random generic ad with no exclusivity tags
-        //$ad = ClassRegistry::init('Ad')->findGenericAd();
-        //$this->set('ad', $ad);
+        $ad = $this->fetchTable('Advertisements')->findGenericAd();
+        $this->set('ad', $ad);
 
         //$this->Configuration->load('HH');
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
-        //$this->set('user', $this->Auth->user());
-        //$this->set('isadmin', $this->isAdmin());
+        $this->user = $this->request->getSession()->read('Auth');
+        $this->set('user', $this->user);
+        $this->isAdmin = empty($this->user->role) ? false : ($this->user->role == 'admin');
+        $this->set('isAdmin', $this->isAdmin);
+        $this->isClinic = empty($this->user->role) ? false : ($this->user->role == 'clinic');
+        $this->set('isClinic', $this->isClinic);
         //$this->set('isitadmin', $this->isItAdmin());
         //$this->set('isagent', $this->isAgent());
         //$this->set('iscallsupervisor', $this->isCallSupervisor());
-        //$this->set('isclinic', $this->isClinic());
         //$this->set('iscsa', $this->isCSA());
         //$this->set('iswriter', $this->isWriter());
         //$this->set('isreviewer', $this->isReviewer());
@@ -124,5 +135,85 @@ class AppController extends Controller
         //$this->set('html_lang', $this->getLanguage());
         //$this->set('isCookieFooterClosed', $this->isCookieFooterClosed());
         return parent::beforeFilter($event);
+    }
+
+    /**
+    * convenience method for adding to or replacing the HTML title of the page.
+    * @param string $title_text
+    * @param bool $overwrite (if true, replace)
+    * @param string $title_text
+    */
+    public function add_title($title_text=null,$overwrite=false) {
+        if (is_array($title_text)) {
+            $found_title = pluckValid($title_text,array('headtitle','title_head','title','slug','domain','id',));
+            if (empty($found_title)) {
+                foreach ( $title_text as $m => $data ) {
+                    if (empty($found_title)) {
+                        $found_title = pluckValid($data,array('headtitle','title_head','title','slug','domain','id',));
+                    }
+                }
+            }
+            $title_text = $found_title;
+        }
+        if (!empty($title_text)) {
+            if ($this->pageTitle == 'Healthy Hearing') {
+                $this->pageTitle = ''; //remove the generic Healthy Hearing from all page titles
+            }
+            if (empty($this->pageTitle) || $overwrite) {
+                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text)));
+            } else {
+                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text))).' | '.$this->pageTitle;
+            }
+        }
+        return $title_text;
+    }
+
+    /**
+    * checks if host is the host we're on
+    * www1.healthyhearing.com is false
+    * www.healthyhearing.com is true (in production)
+    */
+    public function isPrimaryHost() {
+        $default_host = Configure::read('host');
+        return $default_host == $this->getHost();
+    }
+
+    /**
+    * Get the current host
+    */
+    public function getHost() {
+        $host = "";
+        foreach (array(/*'SERVER_NAME',*/ 'HTTP_HOST') as $key) {
+            if (isset($_SERVER[$key]) && !empty($_SERVER[$key])) {
+                $host = $_SERVER[$key];
+                break;
+            }
+        }
+        //TODO:
+        if (empty($host) && $this->Session->host) {
+            $host = $this->Session->host;
+        }
+        return $host;
+    }
+
+    /**
+    * Sets the Meta Tag for me.
+    * @param string name of key for meta tag
+    * @param string content of the meta tag
+    * @param boolean overwrite, if already set overwrite it, (default false)
+    */
+    public function setMeta($name, $content, $overwrite = false) {
+        if ($name == 'robots' && !$this->isPrimaryHost()) {
+            return false;
+        }
+        if (isset($this->meta[$name]) && !$overwrite) {
+            return false;
+        }
+        $this->meta[$name] = $content;
+        return true;
+    }
+
+    public function isMobileDevice() {
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]); 
     }
 }

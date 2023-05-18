@@ -59,7 +59,7 @@
 									                    <div class="btn-group btn-group-vertical">
 									                        <?= $this->Html->link(__('View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class'=>'btn btn-xs btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 									                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $corp->id], ['class'=>'btn btn-xs btn-default bi bi-pencil-fill']) ?>
-									                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $corp->id], ['class'=>'btn btn-xs btn-danger bi bi-trash-fill'], ['confirm' => __('Are you sure you want to delete # {0}?', $corp->id)]) ?>
+									                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $corp->id], ['class'=>'btn btn-xs btn-danger bi bi-trash-fill', 'confirm' => __('Are you sure you want to delete # {0}?', $corp->id)]) ?>
 									                    </div>
 								                    </td>
 								                </tr>

@@ -65,9 +65,10 @@ foreach ($fields as $field => $type) {
     ];
 }
 
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/admin_content_index.min', ['block' => true]);
 ?>
-
+<span id="count" class="d-none"><?= $count ?></span>
+<span id="exportUrl" class="d-none"><?= $exportUrl ?></span>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
 		<div class="backdrop-container">
@@ -98,7 +99,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 									    <?= $this->element('pagination') ?>
 									    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 									    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
-									
 									    <div class="table-responsive">
 									        <table class="table table-striped table-bordered table-sm mb20">
 									            <thead>
@@ -153,14 +153,14 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 									                        <div class="btn-group-vertical btn-group-sm">
 									                            <?=
 									                                $this->Html->link(
-									                                    __('View'),
+									                                    __(' View'),
 									                                    array_merge(['prefix' => false], $content->hh_url),
-									                                    ['class' => 'btn btn-default bi-eye']
+									                                    ['class' => 'btn btn-default bi-eye-fill']
 									                                )
 									                            ?>
 									                            <?=
 									                                $this->Html->link(
-									                                    __('Edit'),
+									                                    __(' Edit'),
 									                                    ['action' => 'edit', $content->id],
 									                                    ['class' => 'btn btn-default bi-pencil-fill']
 									                                )
@@ -192,30 +192,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								</div>
 							</section>
 						</div>
-			</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<?php
-// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-echo '<script type="text/javascript">
-    function exportBtnClick() {
-        var count = '.$count.';
-        var readableCount = "'.number_format($count).'";
-        var exportUrl = "'.$exportUrl.'";
-        if (count < 100000) {
-            // Small file. Download immediately.
-            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-                window.location.replace(exportUrl);
-            }
-        } else {
-            // Large file
-            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-            alert("Export is too large. Please narrow your results to 100,000 or less.");
-        }
-    }
-    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-</script>';
-?>

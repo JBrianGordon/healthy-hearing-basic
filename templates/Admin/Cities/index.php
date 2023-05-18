@@ -77,7 +77,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								            <tbody>
 								                <?php foreach ($cities as $city): ?>
 								                <tr>
-								                    <td>
+								                    <td class="p5">
 								                        <?= $this->Html->link($city->city,
 								                            [
 								                                'prefix' => false,
@@ -90,12 +90,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                            ])
 								                        ?>
 								                    </td>
-								                    <td><?= h($city->state) ?></td>
-								                    <td><?= $this->Number->format($city->lon) ?></td>
-								                    <td><?= $this->Number->format($city->lat) ?></td>
-								                    <td><?= h($city->country) ?></td>
-								                    <td><?= $this->Number->format($city->population) ?></td>
-								                    <td>
+								                    <td class="p5"><?= h($city->state) ?></td>
+								                    <td class="p5"><?= $this->Number->format($city->lon) ?></td>
+								                    <td class="p5"><?= $this->Number->format($city->lat) ?></td>
+								                    <td class="p5"><?= h($city->country) ?></td>
+								                    <td class="p5"><?= $this->Number->format($city->population) ?></td>
+								                    <td class="p5">
 								                        <?=
 								                            $this->Html->badge(
 								                                $city->is_near_location ? ' Yes' : ' No',
@@ -105,7 +105,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                            );
 								                        ?>
 								                    </td>
-								                    <td class="actions">
+								                    <td class="actions p5">
 								                        <div class="btn-group-vertical btn-group-sm">
 								                            <?= $this->Html->link(__('Edit'),
 								                                ['action' => 'edit', $city->id],

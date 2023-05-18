@@ -2,6 +2,8 @@
 	background: $white;
 	padding: 40px inherit;
 	position: relative;
+	max-width: 100%;
+	left:15px;
 
 	&.row {
 		@media (max-width: $screen-xs-max){
@@ -174,12 +176,8 @@
 .site-colophon {
 	background: $body-bg;
 	position: relative;
-
-	&.row {
-		@media (max-width: $screen-xs-max){
-			margin: 0;
-		}
-	}
+	max-width: 100%;
+	left: 15px;
 }
 
 #footerContainer {

@@ -4,6 +4,7 @@ html {
 body {
 	font-size: 16px;
 	line-height: 1.6;
+  overflow-x: hidden;
 }
 body, html {
   @include font($font-family-primary, 'normal', "400");
@@ -59,6 +60,8 @@ h6 {
 hr {
 	margin: 25px 0;
 	background-color: #eee;
+	border: 0;
+	border-top: 1px solid #777;
 }
 
 th {
