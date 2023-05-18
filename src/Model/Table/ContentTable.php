@@ -383,7 +383,7 @@ class ContentTable extends Table
             }
         }
         usort ($contents, function($first,$second) {
-            return $first->last_modified < $second->last_modified;
+            return $first->last_modified->timestamp <=> $second->last_modified->timestamp;
         });
         $contents = array_slice($contents, 0, $limit);
         return $contents;

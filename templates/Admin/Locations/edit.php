@@ -835,7 +835,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																				<div class="col col-md-offset-3 col-md-9">
 																					<?php /*echo $this->Html->link(
 																						'Delete This Email',
-																						array('admin' => true, 'controller' => 'location_users', 'action' => 'deluser',
+																						array('prefix' => 'Admin', 'controller' => 'location_users', 'action' => 'deluser',
 																						$this->request->data['LocationEmail'][$i]['id']), array(), 'Are you sure?'
 																					);*/ ?>
 																				</div>

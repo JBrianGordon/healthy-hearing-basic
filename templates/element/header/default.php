@@ -144,7 +144,7 @@ $logo = Configure::read('logo');
 								<li><?= $this->Html->link($wiki['name'], $wiki['hh_url'], ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 							<?php if (Configure::read('country') == 'US'): ?>
-								<li><?= $this->Html->link('Hearing aid manufacturers', ['admin' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'], ['class' => 'text-link']); ?></li>
+								<li><?= $this->Html->link('Hearing aid manufacturers', ['prefix' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'], ['class' => 'text-link']); ?></li>
 							<?php endif; ?>
 						</ul>
 					<?php endif; ?>
