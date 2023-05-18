@@ -125,8 +125,8 @@ class ClinicHelper extends Helper
     public function generateHalfStars($rating = 0) {
         //TODO: css for hh-icons
         $stars = [
-            'full' => '<i class="bi bi-star-fill"></i>',//'<span class="hh-icon-full-star"></span>',
-            'half' => '<i class="bi bi-star-half"></i>',//'<span class="hh-icon-half-star"></span>',
+            'full' => '<i class="bi bi-star-fill hh-icon-full-star"></i>',//'<span class="hh-icon-full-star"></span>',
+            'half' => '<i class="bi bi-star-half hh-icon-half-star"></i>',//'<span class="hh-icon-half-star"></span>',
             'empty' => '<i class="bi bi-star"></i>'//'<span class="hh-icon-outline-star"></span>'
         ];
         $retval = null;

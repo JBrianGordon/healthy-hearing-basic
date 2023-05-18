@@ -27,6 +27,10 @@
 
 .container {
 	padding: 0 15px;
+
+	.col-xs-12 {
+		width: 100%;
+	}
 	
 	@media (min-width: 768px) {
 		width: 750px;
@@ -34,16 +38,14 @@
 	
 	@media (min-width: 992px) {
 		width: 970px;
+
+		.col-md-7 {
+			width: 58.33333%;
+		}
 	}
 	
 	@media (min-width: 1200px) {
 		width: 1170px;
-	}
-}
-
-@media (min-width: $screen-xs-min) {
-	.col-xs-12 {
-		width: 100%;
 	}
 }
 

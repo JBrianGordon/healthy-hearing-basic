@@ -5,6 +5,14 @@
   margin-bottom: 30px;
   overflow: hidden;
   background-color: #fff;
+
+  &.panel-primary {
+  	.panel-heading {
+	    color: #fff;
+	    background-color: $brand-primary;
+	    border-color: $brand-primary;
+  	}
+  }
   
   &#adPanel {
 	  background:transparent;
@@ -752,7 +760,7 @@
 			padding: 10px 0;
 			
 			@media only screen and (max-width: $screen-sm-max) {
-				width: 310px;
+				width: 100%;
 			}
 
 			.quick-links {
