@@ -309,14 +309,12 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 										'</div>
 									</div>
 								</div>';
-								//*** TODO: build layouts ***
 								echo $this->element('locations/profile/more_information');
 								echo $this->element('locations/profile/video_gallery');
-								//echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
 									echo $this->element('locations/profile/services');
 								}
-								/*** TODO: Page needs to pull in reviews before this section can be uncommented: ***/
 								echo $this->element('locations/profile/review_section');
 								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 							} else {
@@ -335,7 +333,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								echo $this->element('locations/profile/review_section');
 								echo $this->element('locations/profile/more_information');
 								echo $this->element('locations/profile/video_gallery');
-								//echo $this->element('layouts/photo_gallery');""
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
 									echo $this->element('locations/profile/services');
 								}
@@ -436,8 +434,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 						<div class="col-md-4">
 							
 							<!-- Clinic Links -->
-							<!--*** TODO: build layouts -->
-							<?php if($location->listing_type == 'Premier'){/*echo $this->element('layouts/clinic_links')*/;} ?>
+							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
+							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Hours -->
 							<?php if (!$isMobileDevice && $hours): ?>
@@ -585,8 +583,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Clinic Links -->
-							<!--*** TODO: layouts require Clinic helper -->
-							<?php if($location->listing_type != 'Premier'){/*echo $this->element('layouts/clinic_links');*/} ?>
+							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
+							<?= $location->listing_type != 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Payment -->
 							<?php if ($payment = $this->Clinic->newMethodOfPayment($location)): ?>
@@ -798,8 +796,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 					echo $businessSchema;
 					?>
 				</div>
-				<!--*** TODO: build locations/profile/map_modal -->
-				<?php /*echo $this->element('locations/profile/map_modal');*/ ?>
+				<?= $this->element('locations/profile/map_modal') ?>
 				<?php if (Configure::read('isCallAssistEnabled') && $location->is_call_assist && $isEnhancedOrPremier): ?>
 					<?php $this->append('bs-modals'); ?>
 					<?php $this->end(); ?>
