@@ -371,8 +371,8 @@ function getCurrentEasternTime($format = 'Y-m-d H:i:s') {
 }
 
 /**
-* slugify - makes a string a slug-friendly string
-* (lower case, only dashes, no double-dashes)
+* slugify - makes a string a Slug-Friendly string
+*   Leaves capital letters. For a lowercase-only slug, try Inflector::delimit()
 * @param mixed $input
 * @param string $splitter
 * @return string $slugFormattedInput
@@ -380,11 +380,13 @@ function getCurrentEasternTime($format = 'Y-m-d H:i:s') {
 function slugify($input='', $splitter = "-") {
     if (is_array($input)) {
         foreach ( $input as $key => $val ) {
-            $input[$key] = Inflector::delimit(ucwords(strtolower($val)), $splitter);
+            $val = ucwords(strtolower($val));
+            $input[$key] = trim(preg_replace('/[^A-Za-z0-9-]+/', $splitter, $val));
         }
         return $input;
     } else {
-        return Inflector::delimit(ucwords(strtolower($input)), $splitter);
+        $input = ucwords(strtolower($input));
+        return trim(preg_replace('/[^A-Za-z0-9-]+/', $splitter, $input));
     }
 }
 /**
@@ -436,4 +438,19 @@ function slugifyZip($zip = null){
         $zip = substr($zip, 0, 5);
     }
     return $zip;
+}
+/**
+* Get the word count of a text block
+* @param string
+* @return int word count of body.
+*/
+function getWordCount($body) {
+    if (!is_string($body)) {
+        return 0;
+    }
+    $body = htmlspecialchars_decode($body);
+    $body = html_entity_decode($body);
+    $body = strip_tags($body);
+    $body = trim($body);
+    return str_word_count($body);
 }

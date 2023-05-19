@@ -156,13 +156,13 @@ foreach ($fields as $field => $type) {
                             </td>
                             <td class="actions" nowrap>
                                 <div class="btn-group-vertical btn-group-xs">
-                                    <?php echo $this->Html->link('View/Edit', ['admin' => true, 'action' => 'edit', $review->id], ['escape' => false, 'class' => 'btn btn-default']); ?>
-                                    <?php echo $this->Form->postLink('Publish Positive', ['admin' => true, 'action' => 'approve', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]); ?>
-                                    <?php echo $this->Form->postLink('Publish Negative', ['admin' => true, 'action' => 'deny', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (negative)?"]); ?>
-                                    <?php echo $this->Form->postLink('Quick Spam', ['admin' => true, 'action' => 'spam', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as spam?"]); ?>
+                                    <?php echo $this->Html->link('View/Edit', ['prefix' => 'Admin', 'action' => 'edit', $review->id], ['escape' => false, 'class' => 'btn btn-default']); ?>
+                                    <?php echo $this->Form->postLink('Publish Positive', ['prefix' => 'Admin', 'action' => 'approve', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]); ?>
+                                    <?php echo $this->Form->postLink('Publish Negative', ['prefix' => 'Admin', 'action' => 'deny', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (negative)?"]); ?>
+                                    <?php echo $this->Form->postLink('Quick Spam', ['prefix' => 'Admin', 'action' => 'spam', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as spam?"]); ?>
                                     <!-- Phone reviews will be ignored instead of deleted -->
                                     <?php $ignoreOrDelete = ReviewOrigin::from($review->origin) === ReviewOrigin::ORIGIN_PHONE ? 'Ignore' : 'Delete'; ?>
-                                    <?php echo $this->Form->postLink('<i class="bi bi-trash"></i> ' . $ignoreOrDelete, ['admin' => true, 'action' => $ignoreOrDelete, $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-danger', 'confirm' => "Are you sure you want to {$ignoreOrDelete} #{$review->id}?"]); ?>
+                                    <?php echo $this->Form->postLink('<i class="bi bi-trash"></i> ' . $ignoreOrDelete, ['prefix' => 'Admin', 'action' => $ignoreOrDelete, $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-danger', 'confirm' => "Are you sure you want to {$ignoreOrDelete} #{$review->id}?"]); ?>
                                 </div>
                             </td>
                         </tr>

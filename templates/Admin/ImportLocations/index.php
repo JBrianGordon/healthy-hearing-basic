@@ -219,7 +219,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                <div class="btn-group-xs btn-group-vertical">
 								                                    <?php echo $this->Html->link(
 								                                        'Not Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
 								                                        ['escape' => false, 'class' => 'btn btn-default'],
 								                                        'Are you sure you want to remove this location from junk?'
 								                                    ); ?>
@@ -230,7 +230,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                    <a href="/admin/imports/location_unlink/<?php echo $importLocation->id; ?>" class="btn btn-default js-unlink bi bi-x-circle"> Unlink</a>
 								                                    <?php echo $this->Html->link(
 								                                        ' Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
 								                                        ['escape' => false, 'class' => 'btn btn-default bi bi-slash-circle'],
 								                                        'Are you sure you want to mark this location as junk?'
 								                                    ); ?>
@@ -245,7 +245,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                    </a>
 								                                    <?php echo $this->Html->link(
 								                                        ' Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
 								                                        ['escape' => false, 'class' => 'btn btn-default'],
 								                                        'Are you sure you want to mark this location as junk?'
 								                                    ); ?>

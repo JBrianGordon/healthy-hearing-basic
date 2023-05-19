@@ -2,6 +2,8 @@
 	background: $white;
 	padding: 40px inherit;
 	position: relative;
+	max-width: 100%;
+	left:15px;
 
 	a {
 		color: $brand-primary;
@@ -168,6 +170,8 @@
 .site-colophon {
 	background: $body-bg;
 	position: relative;
+	max-width: 100%;
+	left: 15px;
 }
 
 #footerContainer {
