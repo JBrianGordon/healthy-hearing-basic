@@ -8,15 +8,17 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
+use Cake\Routing\Router;
 
 $parts = explode("/", $wiki->slug);
-$crumbs = [
-	'Help' => '/help',
-	ucfirst(strtolower(Inflector::humanize($parts[0]))) => '/help/' . $parts[0]
-];
-if (count($parts) > 1) {
-	$key = ucfirst(strtolower(Inflector::humanize($parts[1])));
-	$crumbs[$key] = '/help/' . $parts[0] . '/' . $parts[1];
+$this->Breadcrumbs->add('Help', '/help');
+if (!empty($parts[0])) {
+	$url = '/help/'.$parts[0];
+	$url = ($url == $_SERVER['REQUEST_URI']) ? '' : $url;
+	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[0])), $url);
+}
+if (!empty($parts[1])) {
+	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[1])), '');
 }
 $isPreview = isset($isPreview) ? $isPreview : false;
 $navigation = $this->Wiki->findNavBySlug($wiki->slug);
@@ -122,7 +124,7 @@ echo $wikiSchema;
 					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
 				<header class="col-md-12 inverse">
-					<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
+					<?= $this->Breadcrumbs->render() ?>
 					<div class="row header-content pt0 pb0">
 						<div class="col-md-8">
 							<?php if ($isAdmin): ?>
