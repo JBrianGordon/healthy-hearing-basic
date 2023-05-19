@@ -7,7 +7,9 @@ use App\Enums\Model\Location\LocationReviewStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
+use Cake\Database\Expression\QueryExpression;
 use Cake\ORM\RulesChecker;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use ArrayObject;
@@ -16,6 +18,7 @@ use Cake\Event\EventInterface;
 use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
+use Search\Model\Filter\Base;
 
 /**
  * Reviews Model
@@ -121,18 +124,23 @@ class ReviewsTable extends Table
         $this->searchManager()
             ->value('id')
             ->value('location_id')
-            ->value('body')
+            ->like('body', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('first_name')
             ->value('last_name')
             ->value('zip')
-            ->value('rating')
+            ->value('rating', [
+                'multiValue' => true
+            ])
             ->value('status')
             ->value('origin')
-            ->value('response')
+            ->like('response', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('response_status')
-            ->value('created')
-            ->value('modified')
-            ->value('denied_date')
             ->value('ip')
             ->value('character_count')
             ->boolean('is_spam')
@@ -150,6 +158,36 @@ class ReviewsTable extends Table
                     $listingType = $args['listing_type'];
                     $query->matching('Locations', function ($q) use ($listingType) {
                         return $q->where(['Locations.listing_type LIKE' => '%' . $listingType . '%']);
+                    });
+                },
+            ])
+            ->add('modified_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['modified_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.modified', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.created', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->add('denied_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['denied_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.denied_date', $startDate, $endDate, 'date');
                     });
                 },
             ]);
