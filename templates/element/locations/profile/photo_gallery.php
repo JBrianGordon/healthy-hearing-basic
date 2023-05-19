@@ -1,8 +1,5 @@
-<?php
-// Photos
-$locationPhotos = $location->location_photos;
-?>
-<?php if ($locationPhotos->count() > 0): ?>
+<?php if (!empty($location->location_photos)): ?>
+	<?php $locationPhotos = $location->location_photos; ?>
 	<!-- Photo Gallery Modal -->
 	<div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-hidden="true">
 	  <div class="modal-dialog" role="document">

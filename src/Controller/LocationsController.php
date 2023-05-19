@@ -22,26 +22,27 @@ class LocationsController extends AppController
     // {
     //     return [JsonView::class];
     // }
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $locations = $this->paginate($this->Locations);
 
-        $this->set(compact('locations'));
-    }
-
+    // Main /hearing-aids FAC page
     public function states()
     {
         die('TODO states()');
     }
 
+    // State page
     public function cities($region = null)
     {
+        pr('region = '.$region);
         die('TODO cities()');
+    }
+
+    // City/zip page
+    public function index($region=null, $city=null, $zip=null)
+    {
+        pr('region = '.$region);
+        pr('city = '.$city);
+        pr('zip = '.$zip);
+        die('TODO index()');
     }
 
     /**
