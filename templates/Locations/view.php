@@ -21,6 +21,12 @@ $showSpecialAnnouncement = (
 	($location->feature_special_announcement)
 );
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
+$this->Breadcrumbs->add([
+    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
+    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'cities', 'region' => $region]],
+    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city]],
+    ['title' => $location->title, 'url' => ''],
+]);
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">
@@ -30,13 +36,7 @@ $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBy
 		<div class="container">
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse breadcrumb-header">
-					<?php /*** TODO: uncomment when breadcrumbs are built out ***: echo $this->element('layouts/breadcrumbs', ['crumbs' => [
-						'Find a clinic' => '/hearing-aids',
-						$location->state_full => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
-						$location->city => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
-						$location->title => ''
-					]]); */
-					?>
+					<?= $this->Breadcrumbs->render(); ?>
 				</header>
 				<div class="col-md-12 page-content">
 				
