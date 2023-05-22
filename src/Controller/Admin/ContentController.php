@@ -67,22 +67,22 @@ class ContentController extends AppController
 
         // Last modified date range
         $hasLastmodDateRange =
-            array_key_exists('last_mod_start_date', $requestParams) &&
-            array_key_exists('last_mod_end_date', $requestParams);
+            array_key_exists('last_modified_start', $requestParams) &&
+            array_key_exists('last_modified_end', $requestParams);
 
         if ($hasLastmodDateRange) {
             $requestParams['last_mod_date_range'] =
-                $requestParams['last_mod_start_date'] . ',' . $requestParams['last_mod_end_date'];
+                $requestParams['last_modified_start'] . ',' . $requestParams['last_modified_end'];
         }
 
         // Created date range
         $hasCreatedDateRange =
-            array_key_exists('created_start_date', $requestParams) &&
-            array_key_exists('created_end_date', $requestParams);
+            array_key_exists('created_start', $requestParams) &&
+            array_key_exists('created_end', $requestParams);
 
         if ($hasCreatedDateRange) {
             $requestParams['created_date_range'] =
-                $requestParams['created_start_date'] . ',' . $requestParams['created_end_date'];
+                $requestParams['created_start'] . ',' . $requestParams['created_end'];
         }
 
         if (array_key_exists('saved_search', $requestParams)) {

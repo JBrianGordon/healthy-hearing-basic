@@ -7,14 +7,17 @@
 $this->Html->script('dist/wiki.min', ['block' => true]);
 
 use Cake\Core\Configure;
+
+$this->Breadcrumbs->add([
+    ['title' => 'Home', 'url' => '/'],
+    ['title' => 'Healthy Hearing help: Hearing loss, hearing aids, tinnitus and more', 'url' => ''],
+]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
-
-			<!-- ***TODO: Breadcrumb should be it's own dynamic element *** <div class="row pt0 pb0">-->
 			<header class="col-md-12 inverse">
 				<?= $this->element('breadcrumbs') ?>
 			</header>

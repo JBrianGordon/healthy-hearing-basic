@@ -6,6 +6,7 @@
  
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
 $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
@@ -19,7 +20,13 @@ $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
-$isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
+$isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
+$this->Breadcrumbs->add([
+    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
+    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'cities', 'region' => $region]],
+    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city]],
+    ['title' => $location->title, 'url' => ''],
+]);
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">
@@ -29,13 +36,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 		<div class="container">
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse breadcrumb-header">
-					<?php /*** TODO: uncomment when breadcrumbs are built out ***: echo $this->element('layouts/breadcrumbs', ['crumbs' => [
-						'Find a clinic' => '/hearing-aids',
-						$location->state_full => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
-						$location->city => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
-						$location->title => ''
-					]]); */
-					?>
+					<?= $this->Breadcrumbs->render(); ?>
 				</header>
 				<div class="col-md-12 page-content">
 				
@@ -425,8 +426,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if(!$isMobileDevice){
-								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
-								//echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 						</div>
@@ -434,7 +434,6 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 						<div class="col-md-4">
 							
 							<!-- Clinic Links -->
-							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
 							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Hours -->
@@ -583,7 +582,6 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Clinic Links -->
-							<!-- *** TODO: need website and social built out in clinic helper for clinic links: ***-->
 							<?= $location->listing_type != 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Payment -->
@@ -625,8 +623,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 								</div>
 							<?php endif; ?>
 							<?php if ($isMobileDevice) {
-								/*** TODO: rewrite the layout so it no longer requires ClassRegistry: ***/
-								//echo $this->element('layouts/call_clinic');
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 							
