@@ -128,7 +128,7 @@
                     echo $this->Form->control('is_bypassed');
                     echo $this->Form->control('is_call_assist');
                     echo $this->Form->control('timezone');
-                    echo $this->Form->control('covid19_statement');
+                    echo $this->Form->control('optional_message');
                     echo $this->Form->control('is_service_agreement_signed');
                     echo $this->Form->control('is_junk');
                     echo $this->Form->control('id_coupon');

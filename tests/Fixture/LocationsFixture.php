@@ -132,7 +132,7 @@ class LocationsFixture extends TestFixture
                 'is_bypassed' => 1,
                 'is_call_assist' => 1,
                 'timezone' => 'Lorem ipsum dolor sit amet',
-                'covid19_statement' => 'Lorem ipsum dolor sit amet',
+                'optional_message' => 'Lorem ipsum dolor sit amet',
                 'is_service_agreement_signed' => 1,
                 'is_junk' => 1,
                 'id_coupon' => 1,

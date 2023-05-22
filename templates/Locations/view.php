@@ -279,7 +279,7 @@ $this->Breadcrumbs->add([
 						</section>
 					<?php endif; ?>
 					<div class="row" style="clear: both">
-						<?php $covid19Statement = trim($location->covid19_statement); ?>
+						<?php $covid19Statement = trim($location->optional_message); ?>
 						<?php if (!empty($covid19Statement)): ?>
 							<div id="covidStatement" class="col-md-12">
 								<h2>A message from <?= $location->title ?> about COVID-19:</h2>
