@@ -19,15 +19,7 @@ $this->Breadcrumbs->add([
 	</div>
 	<div class="container">
 			<header class="col-md-12 inverse">
-				<div class="row noprint pt0 pb0">
-					<div class="col-sm-12 col-xs-9 pl0">
-						<ul class="breadcrumb">
-							<?= $this->Breadcrumbs->render() ?>
-							<script type="application/ld+json">{"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem", "position": "1", "item": {"@id": "/", "name": "Home"}},{"@type": "ListItem", "position": "2", "item": {"@id": "/help", "name": "Healthy Hearing help: Hearing loss, hearing aids, tinnitus and more"}}]}</script>
-						</ul>
-						<div id="ellipses">...</div>
-					</div>
-				</div>
+				<?= $this->Breadcrumbs->render() ?>
 			</header>
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
