@@ -134,6 +134,7 @@ class AppController extends Controller
         //$this->set('isInactiveClinic', $this->isInactiveClinic());
         //$this->set('html_lang', $this->getLanguage());
         //$this->set('isCookieFooterClosed', $this->isCookieFooterClosed());
+        $this->set('clinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, false));
         return parent::beforeFilter($event);
     }
 
