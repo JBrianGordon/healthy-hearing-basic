@@ -19,7 +19,7 @@ $this->Breadcrumbs->add([
 	</div>
 	<div class="container">
 			<header class="col-md-12 inverse">
-				<?= $this->element('breadcrumbs') ?>
+				<?= $this->Breadcrumbs->render() ?>
 			</header>
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">

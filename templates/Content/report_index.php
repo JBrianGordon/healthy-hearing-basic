@@ -12,7 +12,7 @@ $this->Breadcrumbs->add([
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
-		<header class="col-md-12 inverse">
+		<header class="col-md-12 inverse pl0">
 			<?= $this->Breadcrumbs->render() ?>
 		</header>
 		<div class="row">
