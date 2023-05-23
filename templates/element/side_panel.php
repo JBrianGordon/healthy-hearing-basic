@@ -1,6 +1,13 @@
 <?php use Cake\Core\Configure; ?>
 <div class="col-md-3 float-end noprint">
 	<!-- Right content -->
+	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') != 'quiz_results')): ?>
+		<section class="panel">
+			<a href="/help/online-hearing-test">
+			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
+			</a>
+		</section>
+	<?php endif; ?>
 	<?php if (Configure::read('showAds') && $isMobileDevice): ?>
 		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php endif; ?>
