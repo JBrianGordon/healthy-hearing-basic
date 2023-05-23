@@ -676,6 +676,26 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
+    public function nearMe($clinicsNearMe = [], $template = null) {
+        if ($this->isDifferentCountry()) {
+            return 'locations/near_me/different_country';
+        }
+        if ($template === 'nav_bar') {
+            return 'locations/near_me/nav_bar';
+        } else if ($template === 'details') {
+            return 'locations/near_me/details';
+        }
+        return 'locations/near_me/default';
+    }
+
+    public function isDifferentCountry() {
+        $geoLocData = $_SESSION['geoLocData'];
+        if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
+            return true;
+        }
+        return false;
+    }
+
     public function nearMeLink() {
         $geoLocData = $_SESSION['geoLocData'];
         if (isset($geoLocData['state'])) {
