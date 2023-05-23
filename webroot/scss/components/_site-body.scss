@@ -245,16 +245,33 @@
   &.content-body{
 	overflow-y: visible;
 	overflow-x: hidden;
+
+	article {
+		.row {
+			@media(max-width: $screen-sm-max){
+				display: block;
+				padding: 0 15px;
+			}
+		}
+	}
 	
 	header {
 	  >div:first-child {
+	  	padding: 0 0 22px; 
+
 		  @media only screen and (min-width: $screen-sm-min) {
-			  padding: 0 70px;
+			  padding: 0 60px 25px;
 		  }	  
 	  }
 	}
 	
 	.header-content {
+
+		@media(max-width: $screen-sm-max){
+			display: block;
+			padding: 0 15px;
+		}
+
 	  .col-md-8 {
 		  >div {
 			  @media only screen and (min-width: $screen-sm-min) {

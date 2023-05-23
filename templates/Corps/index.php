@@ -5,10 +5,17 @@
  */
  
 $this->Html->script('dist/common.min', ['block' => true]);
+$this->Breadcrumbs->add([
+    ['title' => 'Home', 'url' => '/'],
+    ['title' => 'Hearing aid and cochlear implant companies', 'url' => ''],
+]);
 ?>
 <div class="container-fluid site-body blog">
     <div class="backdrop backdrop-gradient backdrop-height"></div>
     <div class="container">
+			<header class="col-md-12 inverse">
+				<?= $this->Breadcrumbs->render() ?>
+			</header>
       <div class="row page-content">
 		<div class="col-md-9 float-start">
 		  <section class="panel">

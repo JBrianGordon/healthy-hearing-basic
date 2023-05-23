@@ -487,7 +487,7 @@
                             <td><?= h($locations->is_bypassed) ?></td>
                             <td><?= h($locations->is_call_assist) ?></td>
                             <td><?= h($locations->timezone) ?></td>
-                            <td><?= h($locations->covid19_statement) ?></td>
+                            <td><?= h($locations->optional_message) ?></td>
                             <td><?= h($locations->is_service_agreement_signed) ?></td>
                             <td><?= h($locations->is_junk) ?></td>
                             <td><?= h($locations->id_coupon) ?></td>

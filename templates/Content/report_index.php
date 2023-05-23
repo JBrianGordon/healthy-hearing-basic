@@ -1,13 +1,20 @@
 <?php
 use Cake\Routing\Router;	
 
-$this->Html->script('dist/content.min', ['block' => true]); 
+$this->Html->script('dist/content.min', ['block' => true]);
+$this->Breadcrumbs->add([
+    ['title' => 'Home', 'url' => '/'],
+    ['title' => 'The Healthy Hearing Report', 'url' => ''],
+]);
 ?>
 <div class="container-fluid site-body blog">
 	<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
+		<header class="col-md-12 inverse pl0">
+			<?= $this->Breadcrumbs->render() ?>
+		</header>
 		<div class="row">
 		<div class="col-md-9 float-start">
 			<?php if (!empty($reportIntro)): ?>

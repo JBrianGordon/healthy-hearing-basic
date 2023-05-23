@@ -90,6 +90,12 @@
 		  }
 	  }
   }
+
+  &.related-reports {
+  	td {
+  		padding: 12px 24px;
+  	}
+  }
   
 
 	.hidden {
@@ -254,7 +260,7 @@
 			
 			@media only screen and (max-width:736px) {
 				.table>thead>tr>th, .table>thead>tr>td, .table>tbody>tr>th, .table>tbody>tr>td, .table>tfoot>tr>th, .table>tfoot>tr>td {
-			    		padding: 12px 2px;
+			    padding: 12px 2px;
 					font-size:9px;
 				}
 				.table[summary='Explanations of style acronyms']>tbody>tr>td {

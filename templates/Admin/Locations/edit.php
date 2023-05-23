@@ -522,7 +522,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 												<div class="tab-pane" id="Hours">
 													<div class="row">
 														<div class="col-md-12">
-															<?php echo $this->Form->control('covid19_statement', [
+															<?php echo $this->Form->control('optional_message', [
 																'label' => ['class' => 'col col-md-2 control-label'],
 																'wrapInput' => 'col col-md-10',
 																'rows' => 3,

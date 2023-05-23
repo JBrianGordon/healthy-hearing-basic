@@ -1,7 +1,7 @@
 <?php
 	// Videos
-	$locationVideos = $location->location_videos;
-	if ($locationVideos->count() > 0) {
+	if (!empty($location->location_videos)) {
+		$locationVideos = $location->location_videos;
 		$youtubeCode = [];
 		$vimeoCode = [];
 		$dailyCode = [];

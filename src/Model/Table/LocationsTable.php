@@ -147,7 +147,7 @@ class LocationsTable extends Table
             ->value('id_cqp_practice')
             ->value('id_cqp_office')
             ->value('timezone')
-            ->value('covid19_statement')
+            ->value('optional_message')
             ->value('average_rating')
             ->value('reviews_approved')
             ->value('review_status')
@@ -948,10 +948,10 @@ class LocationsTable extends Table
             ->notEmptyString('timezone');
 
         $validator
-            ->scalar('covid19_statement')
-            ->maxLength('covid19_statement', 400)
-            ->requirePresence('covid19_statement', 'create')
-            ->notEmptyString('covid19_statement');
+            ->scalar('optional_message')
+            ->maxLength('optional_message', 400)
+            ->requirePresence('optional_message', 'create')
+            ->notEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
