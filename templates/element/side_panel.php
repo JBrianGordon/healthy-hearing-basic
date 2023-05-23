@@ -38,17 +38,15 @@
 			<header class="panel-heading text-center">
 				<h4>Related content</h4>
 			</header>
-			<div class="col-lg-12">
-				<table class="table table-bordered" style="margin-bottom: 0;">
-					<?php foreach ($contents as $content): ?>
-						<tr>
-							<td>
-								<?php echo $this->Html->link($content->title, $content->hh_url); ?>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				</table>
-			</div>
+			<table class="table table-bordered" style="margin-bottom: 0;">
+				<?php foreach ($contents as $content): ?>
+					<tr>
+						<td>
+							<?php echo $this->Html->link($content->title, $content->hh_url); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
 		</section>
 	<?php endif; ?>
 	<?php if (!empty($articles)): ?>
