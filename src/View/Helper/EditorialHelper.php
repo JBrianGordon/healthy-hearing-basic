@@ -127,7 +127,7 @@ class EditorialHelper extends Helper
                 $additionalAuthorInfo .= ', '.$author->$field;
             }
         }
-        return '<a href="#about-author-' . $anchorName . '">'.$author->full_name.'</a>'.$additionalAuthorInfo;
+        return '<a href="#about-author-' . $anchorName . '" class="text-link">'.$author->full_name.'</a>'.$additionalAuthorInfo;
     }
 
     public function getAuthorsBio($primaryAuthor, $contributors)

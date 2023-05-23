@@ -18,9 +18,10 @@ $this->Breadcrumbs->add([
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
-			<header class="col-md-12 inverse">
-				<?= $this->Breadcrumbs->render() ?>
-			</header>
+		<header class="col-md-12 inverse pl0">
+			<?= $this->Breadcrumbs->render() ?>
+		</header>
+		<div class="row">
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">
 					<div class="p20 headline">
@@ -50,5 +51,6 @@ $this->Breadcrumbs->add([
 				</section>
 			</div>
 			<?= $this->element('side_panel') ?>
+		</div>
 	</div>
 </div>
