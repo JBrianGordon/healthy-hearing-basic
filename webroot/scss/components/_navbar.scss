@@ -32,6 +32,10 @@
 	
 	.container {
 		display: block;
+
+		> .row {
+			max-width: 100vw;
+		}
 		
 		.navbar-collapse {
 			overflow: visible;

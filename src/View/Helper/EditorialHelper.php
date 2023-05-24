@@ -141,7 +141,10 @@ class EditorialHelper extends Helper
             $bioBlock .= '<div class="about-author-bio">';
             $bioBlock .= '<a class="anchor" name="about-author-' . $anchorName . '"></a>';
             $bioBlock .= '<h3>'.$author->full_personal_info.'</h3>';
-            $bioBlock .= '<p class="bio"><img loading="lazy" src="' .  $author->image_url .'" alt="' . $authorName . '" class="about-team float-start" width="80" height="100" />';
+            $bioBlock .= '<p class="bio">';
+            if(!empty($author->image_url)) {
+                $bioBlock .= '<img loading="lazy" src="' .  $author->image_url .'" alt="' . $authorName . '" class="about-team float-start" width="80" height="100" />';
+            }
             $bioBlock .= strip_tags($author->bio);
             if (!empty($author->url)) {
                 $bioBlock .= '<a href="' . $author->url . ' itemprop="url">Read more about ' . $author->first_name . '</a>';
