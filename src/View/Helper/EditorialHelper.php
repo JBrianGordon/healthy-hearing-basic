@@ -16,7 +16,7 @@ class EditorialHelper extends Helper
      *
      * @var array
      */
-    protected $helpers = ['Html'];
+    protected $helpers = ['Html', 'Text'];
 
     /**
      * Default configuration.
@@ -186,5 +186,40 @@ class EditorialHelper extends Helper
         $retval .= '<time datetime="' . $isoFormatDate . '">' . $modifiedDate . '</time></span>';
         $retval .= '<span style="display:none" itemprop="dateModified">'. $isoFormatDate .'</span>';
         return $retval;
+    }
+
+    public function dateHome($content = null, $options = []) {
+        $options = array_merge([
+            'large' => true
+        ], $options);
+        $lastModified = $content->last_modified->timestamp;
+        if (empty($lastModified)) {
+            return null;
+        }
+        $class = '';
+        if ($options['large']) {
+            $class = ' large';
+        }
+        return '<time class="date'. $class .'">
+            <span class="month">'. date('M', $lastModified) .'</span>
+            <span class="day">'. date('j', $lastModified) .'</span>
+            </time>';
+    }
+
+    public function getType($content = null) {
+        switch ($content->type) {
+            case 'hearingcenterint':
+                return 'Hearing Center Interview';
+            default:
+                return $content->type;
+        }
+    }
+
+    public function titleLink($content = null, $truncate = false, $options = []) {
+        $title = $truncate ? $this->Text->truncate($content->title, $truncate) : $content->title;
+        $options = array_merge([
+            'class' => 'text-link'
+        ], (array) $options);
+        return $this->Html->link($title, $content->hh_url, $options);
     }
 }

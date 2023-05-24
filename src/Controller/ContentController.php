@@ -161,10 +161,8 @@ class ContentController extends AppController
         $customVars['level|3'] = getWordCount($content->body);
 
         // Is there an exclusive advertisement for this content?
-        foreach($content->tags as $tag) {
-            $tags[] = $tag->id;
-        }
-        $exclusiveAd = $this->fetchTable('Advertisements')->findAdByTags($tags);
+        $tagIds = array_column($content->tags, 'id');
+        $exclusiveAd = $this->fetchTable('Advertisements')->findAdByTags($tagIds);
         if (!empty($exclusiveAd)) {
             // Overwrite the generic ad
             $this->set('ad', $exclusiveAd);

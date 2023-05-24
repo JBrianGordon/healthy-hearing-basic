@@ -43,6 +43,7 @@ use Cake\Http\ServerRequest;
 use Cake\Log\Log;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
 use Cake\Utility\Inflector;
@@ -453,4 +454,24 @@ function getWordCount($body) {
     $body = strip_tags($body);
     $body = trim($body);
     return str_word_count($body);
+}
+
+/**
+* Determine if a Configurations-table-based feature is
+* 1) turned ON or OFF,
+* 2) supposed to be on TODAY,
+* 3) and supposed to be on at this TIME
+*/
+function isFeatureOn($featureName) {
+    $configuration = TableRegistry::get('Configurations');
+    if (!$configuration->isFeatureEnabled($featureName)) {
+        return false;
+    }
+    if (!$configuration->isFeatureDay($featureName)) {
+        return false;
+    }
+    if (!$configuration->isFeatureTime($featureName)) {
+        return false;
+    }
+    return true;
 }

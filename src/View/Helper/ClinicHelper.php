@@ -813,4 +813,32 @@ class ClinicHelper extends Helper
             default: return null;
         }
     }
+
+    /**
+    * Address link for responsive sidebar.
+    * @param location (optional)
+    * @return string link
+    */
+    public function addressLink($location = null) {
+        $link = $this->Html->link($location->title, $location->hh_url, ['escape' => false, 'class' => 'text-link']);
+        $retval = $link . '<br>' . $this->address($location, true);
+
+        if ($location->reviews_approved > 0) {
+            $retval .= '<div class="reviews text-small"><a href="' . Router::url($location->hh_url) . '#reviews" style="border:none" onclick="' . $this->zipResultsClickEvent($location) . '">' . $this->basicStarRating($location) . '</a></div>';
+        }
+
+        $retval .= $this->Html->tag('p', $this->Html->link('View Details', $location->hh_url, ['class' => 'btn btn-secondary']), ['class' => 'mt10 mb0 text-small']);
+        return $retval;
+    }
+
+    /**
+    * Generate the onclick event used for the city/zip results page
+    * @param object Location
+    * @return string
+    */
+    public function zipResultsClickEvent($location = null) {
+        $listingType = !empty($location->listing_type) ? $location->listing_type : Location::LISTING_TYPE_NONE;
+        $clickEvent = "dataLayer.hhTrackEvent('CityPageClicks','" . $listingType . "Click', document.location.pathname, 0, false);";
+        return $clickEvent;
+    }
 }

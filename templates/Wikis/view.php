@@ -21,7 +21,6 @@ if (!empty($parts[1])) {
 	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[1])), '');
 }
 $isPreview = isset($isPreview) ? $isPreview : false;
-$navigation = $this->Wiki->findNavBySlug($wiki->slug);
 
 $wikiSchema = '<script type="application/ld+json">{';
 $wikiSchema .= '"@context": "https://schema.org", "@type": "Article", ';

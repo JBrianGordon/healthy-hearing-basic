@@ -11,33 +11,27 @@
 	<?php if (Configure::read('showAds') && $isMobileDevice): ?>
 		<?php echo $this->element('render_ad', ['ad' => $ad]); ?>
 	<?php endif; ?>
-	<?php //***TODO: uncomment when locations/preferred element added*** if($isMobileDevice){echo $this->element('locations/preferred');} ?>
-	<section class="panel panel-light help-menu">
-		<header class="panel-heading text-center">Help menu</header>
-		<div class="panel-section condensed">
-			<div class="col-lg-12">
-				<?php
-				//***TODO: uncomment when nav_box element added***echo $this->element('wikis/nav_box', [
-					//'params' => [
-					//	'navigation' => $navigation,
-					//	'slug' => $wiki->slug,
-					//	'align' => 'text-left'
-					//]
-				//]);
-				?>
+	<?php if ($isMobileDevice) {echo $this->element('locations/preferred');} ?>
+	<?php if (!empty($wiki)): ?>
+		<section class="panel panel-light help-menu">
+			<header class="panel-heading text-center">Help menu</header>
+			<div class="panel-section condensed">
+				<div class="col-lg-12">
+					<?= $this->element('wikis/nav_box'); ?>
+				</div>
 			</div>
-		</div>
-	</section>
-	<?php //***TODO: uncomment when locations/preferred element added***if(!$isMobileDevice){echo $this->element('locations/preferred');} ?>
+		</section>
+	<?php endif; ?>
+	<?php if(!$isMobileDevice){echo $this->element('locations/preferred');} ?>
 	<section class="panel panel-secondary">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
 		</header>
 		<div class="panel-body pt20 pl20 pr20">
-			<?php //***TODO: uncomment when locations/preferred element added***echo $this->element('locations/search', array(
-				//'label' => 'Enter city'
-			//)); ?>
-			<?php //***TODO: uncomment when locations/preferred element added*** echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
+			<?php echo $this->element('locations/search', [
+				'label' => 'Enter city'
+			]); ?>
+			<?php echo $this->element('fac_config_text', ["locationsPage" => false]); ?>
 		</div>
 	</section>
 	<?php if (!empty($contents)): ?>
@@ -64,13 +58,13 @@
 			<?php foreach ($articles as $content): ?>
 				<div class="panel-section condensed blog-preview">
 					<div class="col-md-3">
-						<?php //***TODO: uncomment when $articles is defined*** echo $this->Content->dateHome($content, [
-							//'large' => false
-						//]); ?>
+						<?php echo $this->Editorial->dateHome($content, [
+							'large' => false
+						]); ?>
 					</div>
 					<div class="col-md-9">
-						<div class="subtitle"><?php //***TODO: uncomment when Content is built*** echo $this->Content->getType(); ?></div>
-						<?php //echo $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?>
+						<div class="subtitle"><?php echo $this->Editorial->getType($content); ?></div>
+						<?php echo $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']); ?>
 					</div>
 				</div>
 			<?php endforeach; ?>

@@ -22,8 +22,7 @@ $this->Breadcrumbs->add([
 		    <div class="panel-body">
 		      <div class="panel-section expanded">
 		        <h1 class="text-primary">Hearing aid manufacturers</h1>
-		        <!-- ***TODO: uncomment when $pageContent created*** -->
-				<p><?php //echo $pageContent; ?></p>
+				<p><?php echo $pageContent; ?></p>
 		        <?php foreach ($corps as $corp): ?>
 			        <div class="well manufacturer" id="manufacturer-<?= $corp->id ?>">
 			          <div class="row">
@@ -37,7 +36,7 @@ $this->Breadcrumbs->add([
 			                <?= $corp->short ?>
 			              </p>
 			              <p>
-			              	<a href="hearing-aid-manufacturers/<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
+			              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
 			              </p>
 			            </div>
 			          </div>

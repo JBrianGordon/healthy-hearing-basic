@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -149,24 +150,23 @@ class AdvertisementsTable extends Table
     /**
     * Find an advertisement to display based on exclusivity tag.
     * If more than one found, it will randomly select one. If none are found, returns null.
-    * @param $tags array of tags
+    * @param $tagIds array of tag ids
     */
-    function findAdByTags($tags) {
-        /* TODO:
+    function findAdByTags($tagIds) {
         $allExclusiveAds = [];
         $uniqueAdIds = [];
-        foreach ($tags as $tag) {
-            $ads = ClassRegistry::init('TagAd')->find('all', [
-                'contain' => ['Ad'],
+        foreach ($tagIds as $tagId) {
+            $tagAds = TableRegistry::get('TagAds')->find('all', [
+                'contain' => ['Advertisements'],
                 'conditions' => [
-                    'TagAd.tag_id' => $tag,
-                    'Ad.is_active' => true
+                    'TagAds.tag_id' => $tagId,
+                    'Advertisements.is_active' => true
                 ]
             ]);
-            foreach ($ads as $ad) {
-                if (!in_array($ad['Ad']['id'], $uniqueAdIds)) {
-                    $allExclusiveAds[]['Ad'] = $ad['Ad'];
-                    $uniqueAdIds[] = $ad['Ad']['id'];
+            foreach ($tagAds as $tagAd) {
+                if (!in_array($tagAd->advertisement->id, $uniqueAdIds)) {
+                    $allExclusiveAds[] = $tagAd->advertisement;
+                    $uniqueAdIds[] = $tagAd->advertisement->id;
                 }
             }
         }
@@ -176,7 +176,7 @@ class AdvertisementsTable extends Table
             // Randomly select one of the exclusive ads in this array
             $key = array_rand($allExclusiveAds);
             return $allExclusiveAds[$key];
-        }*/
+        }
     }
 
     /**
@@ -184,21 +184,19 @@ class AdvertisementsTable extends Table
     * If more than one found, it will randomly select one. If none are found, returns null.
     */
     function findAdForCorps() {
-        /* TODO:
-        $allCorpAds = ClassRegistry::init('Ad')->find('all', [
-            'contain' => [],
+        $allCorpAds = $this->find('all', [
             'conditions' => [
-                'Ad.is_active' => true,
-                'Ad.tag_corps' => true,
+                'is_active' => true,
+                'tag_corps' => true,
             ]
-        ]);
+        ])->toArray();
         if (empty($allCorpAds)) {
             return null;
         } else {
             // Randomly select one of the corp ads in this array
             $key = array_rand($allCorpAds);
             return $allCorpAds[$key];
-        }*/
+        }
     }
 
     /**
