@@ -303,6 +303,15 @@
 		}
 		
 		.pagination {
+
+			@media(max-width: $screen-xs-max) {
+				display: inline-block;
+
+				> li {
+					float:left;
+				}
+			}
+
 			> li {
 				> a {
 					padding: 6px 12px;

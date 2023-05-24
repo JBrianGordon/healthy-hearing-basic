@@ -12,11 +12,11 @@ $this->Breadcrumbs->add([
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 	</div>
 	<div class="container">
-		<header class="col-md-12 inverse pl0">
+		<header class="col-md-12 inverse">
 			<?= $this->Breadcrumbs->render() ?>
 		</header>
 		<div class="row">
-		<div class="col-md-9 float-start">
+		<div class="col-lg-9 float-start">
 			<?php if (!empty($reportIntro)): ?>
 				<section class="panel">
 					<div class="panel-body">

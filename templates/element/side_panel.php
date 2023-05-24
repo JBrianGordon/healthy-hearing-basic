@@ -1,5 +1,5 @@
 <?php use Cake\Core\Configure; ?>
-<div class="col-md-3 float-end noprint">
+<div class="col-lg-3 float-end noprint">
 	<!-- Right content -->
 	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') != 'quiz_results')): ?>
 		<section class="panel">
