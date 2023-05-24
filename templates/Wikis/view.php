@@ -125,6 +125,7 @@ echo $wikiSchema;
 				<header class="col-md-12 inverse">
 					<div class="col-sm-12 col-xs-9">
 						<?= $this->Breadcrumbs->render() ?>
+						<div id="ellipses">...</div>
 					</div>
 					<div class="row header-content">
 						<div class="col-md-8 p0">
