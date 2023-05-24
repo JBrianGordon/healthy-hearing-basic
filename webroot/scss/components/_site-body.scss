@@ -240,6 +240,26 @@
   &.blog{
 	  overflow-y: visible;
 	  padding: 0;
+
+	  .row {
+
+		@media(max-width: $screen-sm-max){
+			width:100%;
+			margin: 0 auto;
+
+			.col-md-3, .col-md-9 {
+				padding:0;
+			}
+		}
+
+		.blog-image {
+		  	.img-responsive {
+				display: block;
+				max-width: 100%;
+				height: auto;
+		  	}
+		}
+	  }
   }
   
   &.content-body{
