@@ -20,6 +20,7 @@ $this->Breadcrumbs->add([
 	<div class="container">
 			<header class="col-md-12 inverse">
 				<?= $this->Breadcrumbs->render() ?>
+				<div id="ellipses">...</div>
 			</header>
 			<div class="col-md-9 panel-parent float-start">
 				<section class="panel panel-section expanded">

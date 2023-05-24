@@ -125,6 +125,7 @@ echo $wikiSchema;
 				</div>
 				<header class="col-md-12 inverse">
 					<?= $this->Breadcrumbs->render() ?>
+					<div id="ellipses">...</div>
 					<div class="row header-content pt0 pb0">
 						<div class="col-md-8">
 							<?php if ($isAdmin): ?>

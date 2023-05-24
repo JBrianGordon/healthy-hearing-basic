@@ -120,6 +120,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 			<div class="row noprint">
 				<div class="col-sm-9 inverse">
 					<?= $this->Breadcrumbs->render(); ?>
+					<div id="ellipses">...</div>
 				</div>
 			</div>
 			<div class="row page-content">

@@ -37,6 +37,7 @@ $this->Breadcrumbs->add([
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse breadcrumb-header">
 					<?= $this->Breadcrumbs->render(); ?>
+					<div id="ellipses">...</div>
 				</header>
 				<div class="col-md-12 page-content">
 				
