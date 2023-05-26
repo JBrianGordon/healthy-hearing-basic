@@ -97,34 +97,3 @@ table {
 		}
 	}
 }
-
-.table-responsive {
-	.table {
-		width: 100%;
-		max-width: 100%;
-		caption-side: top;
-
-		thead, tbody, tfoot {
-			th, td {
-				border-width: 1px;
-		    padding: 12px 24px;
-		    line-height: 1.6;
-
-				@media(max-width: $screen-xs-max){
-					white-space: nowrap;
-				}
-			}
-		}
-
-		@media(max-width: $screen-xs-max){
-			margin-bottom: 0;
-		}
-	}
-
-	@media(max-width: $screen-xs-max){
-		width: 100%;
-		margin-bottom: 18.75px;
-		overflow-y: hidden;
-		border: 1px solid #ddd;
-	}
-}
