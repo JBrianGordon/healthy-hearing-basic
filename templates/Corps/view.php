@@ -56,12 +56,13 @@ $this->Html->script('dist/common.min', ['block' => true]);
 			<div class="row noprint">
 				<div class="col-sm-9 inverse">
 					<?= $this->Breadcrumbs->render() ?>
+					<div id="ellipses">...</div>
 				</div>
 			</div>
 			<div class="row page-content">
 				<span style="display:none;" id="corp-id"><?= $corp->id; ?></span>
 				<span style="display:none;" id="is-preview"><?= $isPreview; ?></span>
-				<div class="col-md-9" style="min-height:100vh">
+				<div class="col-lg-9" style="min-height:100vh">
 					<table class="print-wrapper">
 						<thead class="print-head">
 							<tr>
@@ -81,9 +82,9 @@ $this->Html->script('dist/common.min', ['block' => true]);
 													<div class="col-md-8">
 														<h1><?= $corp->title ?></h1>
 														<p class="text-caption">
-															<em id="authorLine"><?= $this->Editorial->getAuthorsByline($corp->author, $corp->contributors) ?></em>
+															<em id="authorLine"><?= $this->Editorial->getAuthorsByline($corp->author, $corp->contributors) ?>
 															<br>Last updated
-															<span><?= date('F jS, Y', strtotime($corp->last_modified)) ?></span>
+															<span><?= date('F j, Y', strtotime($corp->last_modified)) ?></span></em>
 														</p>
 													</div>
 													<div class="col-md-4 manuf-logo">
