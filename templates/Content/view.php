@@ -113,63 +113,61 @@ $this->Html->script('dist/content.min', ['block' => true]);
 <?= $this->element('schema/person', ['author' => $content->primary_author]) ?>
 
 <div class="container-fluid site-body blog">
+  <div class="row">
+	<div class="backdrop backdrop-gradient backdrop-height"></div>
 	<div class="container">
-	  <div class="row">
-		<div class="backdrop backdrop-gradient backdrop-height"></div>
-		<div class="container">
-			<div class="row noprint">
-				<div class="col-sm-9 inverse">
-					<?= $this->Breadcrumbs->render(); ?>
-					<div id="ellipses">...</div>
-				</div>
+		<div class="row noprint">
+			<div class="col-sm-9 inverse">
+				<?= $this->Breadcrumbs->render(); ?>
+				<div id="ellipses">...</div>
 			</div>
-			<div class="row page-content">
-				<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
-				<div class="col-md-9 float-start" style="min-height:100vh">
-					<article class="panel">
-						<div class="print-wrapper">
-							<div class="print-head">
-								<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
-								<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
-							</div>
-							<div class="panel-body">
-								<div class="panel-section expanded">
-									<?php echo $this->Editorial->adminLink($content->id, $isAdmin);	?>
-									<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>">
-										<?= $title ?>
-									</h1>
-									<?php if (isset($subtitle)): ?>
-										<h2 class="text-primary mt0 mb30"><?= $subtitle ?></h2>
+		</div>
+		<div class="row page-content">
+			<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
+			<div class="col-lg-9 float-start" style="min-height:100vh">
+				<article class="panel">
+					<div class="print-wrapper">
+						<div class="print-head">
+							<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
+							<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
+						</div>
+						<div class="panel-body">
+							<div class="panel-section expanded">
+								<?php echo $this->Editorial->adminLink($content->id, $isAdmin);	?>
+								<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>">
+									<?= $title ?>
+								</h1>
+								<?php if (isset($subtitle)): ?>
+									<h2 class="text-primary mt0 mb30"><?= $subtitle ?></h2>
+								<?php endif; ?>
+								<p class="blog-byline text-caption">
+									<?php if (!empty($content->primary_author) || !empty($content->contributors)): ?>
+										<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
+										<?= $this->Editorial->displayDate($content) ?>
+									<?php else: ?>
+										<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
 									<?php endif; ?>
-									<p class="blog-byline text-caption">
-										<?php if (!empty($content->primary_author) || !empty($content->contributors)): ?>
-											<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
-											<?= $this->Editorial->displayDate($content) ?>
-										<?php else: ?>
-											<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
-										<?php endif; ?>
-									</p>
-									<div id="content_body" class="content-body">
-										<?= $content->body ?>
-									</div>
-									<div class="about-author">
-										<?= $this->Editorial->getAuthorsBio($content->primary_author, $content->contributors) ?>
-									</div>
-									<div class="blog-categories noprint mt30">
-										Related Help Pages:
-										<?php foreach ($wikis as $wiki): ?>
-										    <?php echo $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'btn btn-default btn-xs']); ?>
-										<?php endforeach; ?>
-									</div>
+								</p>
+								<div id="content_body" class="content-body">
+									<?= $content->body ?>
+								</div>
+								<div class="about-author">
+									<?= $this->Editorial->getAuthorsBio($content->primary_author, $content->contributors) ?>
+								</div>
+								<div class="blog-categories noprint mt30">
+									Related Help Pages:
+									<?php foreach ($wikis as $wiki): ?>
+									    <?php echo $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'btn btn-default btn-xs']); ?>
+									<?php endforeach; ?>
 								</div>
 							</div>
 						</div>
-						<?php echo $this->element('content/share'); ?>
-					</article>
-				</div>
-				<?= $this->element('side_panel') ?>
+					</div>
+					<?php echo $this->element('content/share'); ?>
+				</article>
 			</div>
+			<?= $this->element('side_panel') ?>
 		</div>
-	  </div>
 	</div>
+  </div>
 </div>
