@@ -9,7 +9,8 @@ if ($cityCount) {
 	$chunkedData = array_chunk($cities, ceil($cityCount / $cityColumns), true);
 }
 $this->Breadcrumbs->add([
-    ['title' => 'Find a clinic', 'url' => ['controller' => 'locations', 'action' => 'states']],
+	['title' => 'Home', 'url' => '/'],
+    ['title' => 'Find a clinic', 'url' => ['controller' => 'locations', 'action' => 'viewFac']],
     ['title' => $stateNice, 'url' => ''],
 ]);
 ?>

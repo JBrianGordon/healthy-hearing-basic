@@ -703,13 +703,13 @@ class ClinicHelper extends Helper
             $region = $this->Locations->stateRegion($geoLocData['state']);
         }
         if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
         } elseif (isset($geoLocData['city']) && !empty($region)) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
         } else {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         }
         return $nearMeLink;
     }
@@ -870,5 +870,20 @@ class ClinicHelper extends Helper
     */
     public function stateSlug($state) {
         return $this->Locations->stateSlug($state);
+    }
+
+    /**
+     * @description Returns the count from the count_metrics data set
+     *
+     * @param $name string Primary selector, usually a city name, state name or zip code
+     * @param string $metric Metric to check
+     * @param string $type Segmentation level
+     * @param string $subName Secondary selector, only used for city
+     *
+     * @return int count value
+     */
+    public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
+    {
+        return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 }

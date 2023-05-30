@@ -10,6 +10,7 @@ use Cake\View\JsonView;
 use Cake\Log\LogTrait;
 use Cake\Log\Log;
 use Cake\Routing\Router;
+use Cake\Core\Configure;
 
 /**
  * Locations Controller
@@ -24,10 +25,29 @@ class LocationsController extends AppController
     //     return [JsonView::class];
     // }
 
-    // Main /hearing-aids FAC page
-    public function states()
+    // Main /hearing-aids FAC page ( previously called states() )
+    public function viewFac()
     {
-        die('TODO states()');
+        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'locations', 'action'=>'viewFac'])) {
+            // Self heal url. Redirect to proper url format.
+            return $this->redirect(array('controller'=>'locations', 'action'=>'viewFac'), 301);
+        }
+
+        //set up and assign the meta tag info
+        $request = env('REQUEST_URI');
+        $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
+        $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+        $this->set('seoMetaTags', $seoMetaTags);
+
+        $this->set('states', Configure::read('states'));
+        $this->set('countries', Configure::read('countries'));
+        $this->set('cities', $this->fetchTable('Cities')->find('all', [
+            'conditions' => [
+                'is_featured' => 1
+            ],
+            'order' => 'city'
+        ])->all());
+        $this->set('fapterm', $this->fapSearchTerm());
     }
 
     // State page ( previously called cities() )

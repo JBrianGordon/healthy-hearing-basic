@@ -90,7 +90,7 @@ return static function (RouteBuilder $routes) {
 
     // hearing-aids routes
     $routes->scope('/hearing-aids', function (RouteBuilder $builder) {
-        $builder->connect('/', 'Locations::states');
+        $builder->connect('/', 'Locations::viewFac');
         $builder->connect('/{region}', 'Locations::viewState')
             ->setPass(['region'])
             ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
