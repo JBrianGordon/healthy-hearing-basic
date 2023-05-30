@@ -24,7 +24,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $phone
- * @property int $order
+ * @property int $priority
  * @property string|null $aud_or_his
  * @property string|null $caqh_number
  * @property string|null $npi_number
@@ -64,7 +64,7 @@ class Provider extends Entity
         'created' => true,
         'modified' => true,
         'phone' => true,
-        'order' => true,
+        'priority' => true,
         'aud_or_his' => true,
         'caqh_number' => true,
         'npi_number' => true,

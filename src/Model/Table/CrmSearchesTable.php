@@ -60,7 +60,7 @@ class CrmSearchesTable extends Table
             ->like('title')
             ->like('search')
             ->boolean('is_public')
-            ->value('order')
+            ->value('priority')
             ->add('created_start', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     $query->andWhere(["created >=" => $args['created_start']]);
@@ -115,8 +115,8 @@ class CrmSearchesTable extends Table
             ->notEmptyString('is_public');
 
         $validator
-            ->integer('order')
-            ->notEmptyString('order');
+            ->integer('priority')
+            ->notEmptyString('priority');
 
         return $validator;
     }

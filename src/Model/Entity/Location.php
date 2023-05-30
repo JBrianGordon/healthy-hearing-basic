@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 /**
  * Location Entity
@@ -109,8 +109,8 @@ use Cake\Utility\Inflector;
  * @property int $email_status
  * @property bool $is_email_ignore
  * @property string $id_yhn_location
- * @property string|null $cqp_practice_id
- * @property string|null $cqp_office_id
+ * @property string|null $id_cqp_practice
+ * @property string|null $id_cqp_office
  * @property int|null $review_needed
  * @property bool $is_retail
  * @property string $direct_book_type
@@ -124,7 +124,7 @@ use Cake\Utility\Inflector;
  * @property bool $is_bypassed
  * @property bool $is_call_assist
  * @property string $timezone
- * @property string $covid19_statement
+ * @property string $optional_message
  * @property bool $is_service_agreement_signed
  * @property bool $is_junk
  * @property int|null $id_coupon
@@ -150,7 +150,7 @@ use Cake\Utility\Inflector;
 class Location extends Entity
 {
     protected $_virtual = ['is_oticon', 'state_full', 'hh_url', 'slug'];
-    protected $__oticonPrefix = '81190';
+    static $oticonPrefix = '81190';
 
     /**
     * Enum - Listing Type
@@ -240,15 +240,14 @@ class Location extends Entity
 
     protected function _getHhUrl()
     {
-        // TODO
         if (!empty($this->title)) {
             $hhUrl = Router::url([
                 'prefix' => false,
                 'plugin' => false,
                 'controller' => 'locations',
-                'action' => 'view_by_id',
-                'id' => preg_replace('/^'. $this->__oticonPrefix .'/', '', (string)$this->id),
-                'title' => Inflector::dasherize(Inflector::camelize($this->title)),
+                'action' => 'view',
+                'id' => preg_replace('/^'. self::$oticonPrefix .'/', '', (string)$this->id),
+                'title' => Text::slug(strtolower($this->title)),
             ]);
             return $hhUrl;
         } else {
@@ -258,7 +257,7 @@ class Location extends Entity
 
     protected function _getSlug()
     {
-        $slug = empty($this->title) ? '' : Inflector::dasherize(Inflector::camelize($this->title));
+        $slug = empty($this->title) ? '' : Text::slug(strtolower($this->title));
         return $slug;
     }
 
@@ -405,8 +404,8 @@ class Location extends Entity
         'email_status' => true,
         'is_email_ignore' => true,
         'id_yhn_location' => true,
-        'cqp_practice_id' => true,
-        'cqp_office_id' => true,
+        'id_cqp_practice' => true,
+        'id_cqp_office' => true,
         'review_needed' => true,
         'is_retail' => true,
         'direct_book_type' => true,
@@ -420,7 +419,7 @@ class Location extends Entity
         'is_bypassed' => true,
         'is_call_assist' => true,
         'timezone' => true,
-        'covid19_statement' => true,
+        'optional_message' => true,
         'is_service_agreement_signed' => true,
         'is_junk' => true,
         'id_coupon' => true,

@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('model_id') ?></th>
+                    <th><?= $this->Paginator->sort('id_model') ?></th>
                     <th><?= $this->Paginator->sort('user_id') ?></th>
                     <th><?= $this->Paginator->sort('model') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
@@ -26,7 +26,7 @@
                 <?php foreach ($icingVersions as $icingVersion): ?>
                 <tr>
                     <td><?= h($icingVersion->id) ?></td>
-                    <td><?= h($icingVersion->model_id) ?></td>
+                    <td><?= h($icingVersion->id_model) ?></td>
                     <td><?= $icingVersion->has('user') ? $this->Html->link($icingVersion->user->id, ['controller' => 'Users', 'action' => 'view', $icingVersion->user->id]) : '' ?></td>
                     <td><?= h($icingVersion->model) ?></td>
                     <td><?= h($icingVersion->created) ?></td>

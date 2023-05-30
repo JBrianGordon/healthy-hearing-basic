@@ -13,8 +13,8 @@ use Cake\ORM\Entity;
  * @property string $id_external
  * @property int|null $location_id
  * @property string|null $id_oticon
- * @property string|null $cqp_practice_id
- * @property string|null $cqp_office_id
+ * @property string|null $id_cqp_practice
+ * @property string|null $id_cqp_office
  * @property string|null $title
  * @property string|null $subtitle
  * @property string|null $email
@@ -49,8 +49,8 @@ class ImportLocation extends Entity
         'id_external' => true,
         'location_id' => true,
         'id_oticon' => true,
-        'cqp_practice_id' => true,
-        'cqp_office_id' => true,
+        'id_cqp_practice' => true,
+        'id_cqp_office' => true,
         'title' => true,
         'subtitle' => true,
         'email' => true,

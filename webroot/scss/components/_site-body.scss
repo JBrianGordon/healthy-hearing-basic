@@ -4,6 +4,7 @@
   @include transition(all 0.3s ease-in);
   z-index: 1;
   overflow-y: hidden;
+  padding: 0 15px;
   
   &.home {
 	  .row {
@@ -239,21 +240,89 @@
   &.blog{
 	  overflow-y: visible;
 	  padding: 0;
+
+	  .row {
+
+		@media(max-width: $screen-sm-max){
+			width:100%;
+			margin: 0 auto;
+
+			.col-md-3, .col-md-9 {
+				padding:0;
+			}
+		}
+
+		.blog-image {
+		  	.img-responsive {
+				display: block;
+				max-width: 100%;
+				height: auto;
+		  	}
+		}
+
+		.table-responsive {
+			.table {
+				width: 100%;
+				max-width: 100%;
+				caption-side: top;
+
+				thead, tbody, tfoot {
+					th, td {
+						border-width: 1px;
+				    padding: 12px 24px;
+				    line-height: 1.6;
+
+						@media(max-width: $screen-xs-max){
+							white-space: nowrap;
+						}
+					}
+				}
+
+				@media(max-width: $screen-xs-max){
+					margin-bottom: 0;
+				}
+			}
+
+			@media(max-width: $screen-xs-max){
+				width: 100%;
+				margin-bottom: 18.75px;
+				overflow-y: hidden;
+				border: 1px solid #ddd;
+			}
+		}
+	  }
   }
   
   &.content-body{
 	overflow-y: visible;
 	overflow-x: hidden;
+
+	article {
+		.row {
+			@media(max-width: $screen-sm-max){
+				display: block;
+				padding: 0 15px;
+			}
+		}
+	}
 	
 	header {
 	  >div:first-child {
+	  	padding: 0 0 22px; 
+
 		  @media only screen and (min-width: $screen-sm-min) {
-			  padding: 0 70px;
+			  padding: 0 60px 25px;
 		  }	  
 	  }
 	}
 	
 	.header-content {
+
+		@media(max-width: $screen-sm-max){
+			display: block;
+			padding: 0 15px;
+		}
+
 	  .col-md-8 {
 		  >div {
 			  @media only screen and (min-width: $screen-sm-min) {

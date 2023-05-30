@@ -441,7 +441,7 @@ class ImportCommand extends Command
             return ['method' => -1, 'locationId' => null];
         }
 
-        $oticonId = (string) $locationData['oticon_id'];
+        $oticonId = (string) $locationData['id_oticon'];
         $trimmedYhnOticonId = ltrim($oticonId, '0');
 
         /*******

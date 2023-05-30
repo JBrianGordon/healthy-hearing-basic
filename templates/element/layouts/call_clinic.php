@@ -1,14 +1,24 @@
+<?php
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use App\Model\Entity\Location;
+
+$isEnhancedOrPremier = isset($isEnhancedOrPremier) ? $isEnhancedOrPremier : $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
+$displayOpenClosed = isset($displayOpenClosed) ? $displayOpenClosed :  $this->Clinic->getOpenClosedByLocationId($location->id);
+$isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypassed : TableRegistry::get('Configurations')->isCallTrackingBypassed();
+$isCallAssistEnabled = Configure::read('isCallAssistEnabled');
+?>
 <!-- Phone number -->
 <section id="callClinic" class="panel">
 	<div class="panel-body">
 		<div class="panel-section expanded">
 			<div class="clinicPhone text-center" data-id="<?= $location->id ?>">
 				<!-- Show number for CA clinics, basic clinics and open Premier clinics -->
-				<?php if (!Configure::read('isCallAssistEnabled') || !$isEnhancedOrPremier || ($displayOpenClosed && $isEnhancedOrPremier)): ?>
-					<div class="telephone h2 text-secondary mt0 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $is_mobile]); ?></div>
+				<?php if (!$isCallAssistEnabled || !$isEnhancedOrPremier || ($displayOpenClosed && $isEnhancedOrPremier)): ?>
+					<div class="telephone h2 text-secondary mt0 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?></div>
 				<?php endif; ?>
 				<!-- Appointment request -->
-				<?php if (Configure::read('isCallAssistEnabled') && !ClassRegistry::init('Configuration')->isCallTrackingBypassed()): ?>
+				<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 					<?php if ($location->is_call_assist && $isEnhancedOrPremier): ?>
 						<div class="tac"><a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" style="min-width:250px;" title="An agent will call you to schedule your appointment">Request my appointment</a></div>
 					<?php endif; ?>

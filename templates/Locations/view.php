@@ -6,22 +6,29 @@
  
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
-// $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <?php
-/*** TODO: uncomment once Provider is pulled in and Clinic methods built ***
-$this->Clinic->set($location);
-$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location['Location']['id']);
-$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location['Location']['id']);
-$hideProvider = empty($location['Provider'][0]['title']) && empty($location['Provider'][0]['credentials']) && empty($location['Provider'][0]['thumb_url']) && empty($location['Provider'][0]['description']);
+$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
+$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
+$firstProvider = empty($location->location_providers[0]) ? null : $location->location_providers[0];
+$hideProvider = empty($firstProvider->provider->title) && empty($firstProvider->provider->credentials) && empty($firstProvider->provider->thumb_url) && empty($firstProvider->provider->description);
 $showSpecialAnnouncement = (
-	($location['Location']['listing_type'] == Location::LISTING_TYPE_PREMIER) ||
-	($location['Location']['feature_special_announcement'])
-);*/
+	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
+	($location->feature_special_announcement)
+);
+$isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
+$this->Breadcrumbs->add([
+    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
+    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'cities', 'region' => $region]],
+    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city]],
+    ['title' => $location->title, 'url' => ''],
+]);
 ?>
-<div class="container-fluid fap-results">
+<div class="site-body container-fluid fap-results">
 	<div class="row">
 		<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -29,33 +36,27 @@ $showSpecialAnnouncement = (
 		<div class="container">
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse breadcrumb-header">
-					<?php /*** TODO: uncomment when breadcrumbs are built out ***: echo $this->element('layouts/breadcrumbs', ['crumbs' => [
-						'Find a clinic' => '/hearing-aids',
-						$location['Location']['state_full'] => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
-						$location['Location']['city'] => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
-						$location['Location']['title'] => ''
-					]]); */
-					?>
+					<?= $this->Breadcrumbs->render(); ?>
+					<div id="ellipses">...</div>
 				</header>
 				<div class="col-md-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<!-- *** TODO: uncomment when admin and clinic checks are added *** -->
-					<div class="<?php if(true/*$isEnhancedOrPremier && Configure::read('country') != 'CA'*/){ echo "col-md-7 p0"; }?>">
-						<section class="panel<?php if(true/*$isEnhancedOrPremier*/){ echo " top-panel left-panel mb20"; }?>">
+					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-xs-12 col-md-7 p0"; }?>">
+						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
 									<div class="row">
 										<div class="<?= Configure::read('country') != 'CA' ? 'col-xs-12' : 'col-md-6'; ?> clinic-info">
-											<?php //if ($isadmin || $isclinic): ?>
+											<?php if ($isAdmin || $isClinic): ?>
 												<div class="btn-group-vertical pull-right pt20">
-													<?php //echo $this->Clinic->adminLink(null, $isadmin);?>
-													<?php //echo $this->Clinic->clinicLink(null, $isclinic, $isadmin); ?>
+													<?php echo $this->Clinic->adminLink($location->id, $isAdmin);?>
+													<?php echo $this->Clinic->clinicLink($location->id, $isClinic, $isAdmin); ?>
 												</div>
-											<?php //endif; ?>
+											<?php endif; ?>
 											<h1 class="text-primary name"><?= $location->title ?></h1>
-											<?php if(!empty($location['Location']['logo_url']) && $location['Location']['listing_type'] == 'Premier'){
-												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location['Location']['logo_url'] .'" alt="'. $location['Location']['title'] .' logo" width="400" height="80">';
+											<?php if(!empty($location->logo_url) && $location->listing_type == 'Premier'){
+												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
 											}; ?>
 											<div class="geo" style="display:none;">
 												<span class="latitude">
@@ -68,52 +69,44 @@ $showSpecialAnnouncement = (
 											<?php if (!empty($displayOpenClosed)): ?>
 												<div class="hours"><span class="glyphicon glyphicon-time small"></span> <?= $displayOpenClosed; ?></div>
 											<?php endif; ?>
-											<!--*** TODO: Build AppHelper ***-->
-											<?php if(Configure::read('isCallAssistEnabled')/* || $this->App->isMobileDevice()*/) : ?>
+											<?php if(Configure::read('isCallAssistEnabled') || $isMobileDevice) : ?>
 												<a href="#mapBuffer" style="text-decoration:underline;cursor:pointer">
 											<?php endif; ?>
 												<div class="address mb5">
-													<!--*** TODO: Build clinic method ***-->
-													<span class="hh-icon-address"></span> <?php /*echo $this->Clinic->address($location);*/ ?>
+													<span class="hh-icon-address"></span> <?= $this->Clinic->address($location); ?>
 												</div>
 											<?php if(Configure::read('isCallAssistEnabled')) : ?>
 												</a>
 											<?php endif; ?>
 											<div class="reviews mb20 pull-left">
-												<!--*** TODO: Build clinic methods ***-->
-												<?php /*echo $this->Clinic->basicStarRating($location, ['showEmpty'=>true, 'showLink'=>true]);*/ ?>
+												<?php echo $this->Clinic->basicStarRating($location, ['showEmpty'=>true, 'showLink'=>true]); ?>
 											</div>
 											<div class="clearfix"></div>
-											<!--*** TODO: set displayOpenClosed and isEnhancedOrPremier ***-->
-											<?php if(true/*!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')*/): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if(true/*$this->App->isMobileDevice()*/){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
-												<div class="telephone h2">
-													<!--*** TODO: Build clinic methods ***-->
-													<span class="glyphicon glyphicon-earphone"></span> <?php /*echo $this->Clinic->phone($location, ['link' => $is_mobile]);*/ ?>
+												<div class="telephone h2 bi bi-telephone-fill">
+													<?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?>
 												</div>
 												<!-- Appointment request -->
-												<!--*** TODO: ClassRegistry is deprecated, rewrite ***-->
-												<?php //if (Configure::read('isCallAssistEnabled') && !ClassRegistry::init('Configuration')->isCallTrackingBypassed()): ?>
+												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
 													<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && !empty($location->direct_book_iframe)): ?>
 														<div><a href="#" class='btn btn-secondary directBookBtn' style="min-width:250px;float:left;height:43px;padding:13px" data-button="<?= $location->id; ?>">Book now!</a></div>
 													<?php endif; ?>
-												<?php //endif; ?>
+												<?php endif; ?>
 											</div>
 										</div>
-										<!--*** TODO: Build AppHelper ***-->
-										<?php if (false/*Configure::read('country') == 'CA' && !$this->App->isMobileDevice()*/): ?>
+										<?php if (Configure::read('country') == 'CA' && !$isMobileDevice): ?>
 											<div class="col-md-6">
-												<?= $this->element('locations/map'/*, ['hideProvider' => $hideProvider]*/) ?>
+												<?= $this->element('locations/map', ['hideProvider' => $hideProvider]) ?>
 											</div>
 										<?php endif; ?>
 									</div>
 								</div>
 							</div>
 							</section>
-							<!--*** TODO: set displayOpenClosed and isEnhancedOrPremier ***-->
-							<?php if (true/*$isEnhancedOrPremier*/): ?>
+							<?php if ($isEnhancedOrPremier): ?>
 								<div id="quickLinkBar" class="col-xs-12 p0">
 									<div class="container">
 										<div id="linkBlock">
@@ -140,10 +133,8 @@ $showSpecialAnnouncement = (
 								</div>
 							<?php endif; ?>
 						</div>
-						<!--*** TODO: ClassRegistry is deprecated, rewrite ***-->
-						<?php if (Configure::read('isCallAssistEnabled')/* && !ClassRegistry::init('Configuration')->isCallTrackingBypassed()*/): ?>
-						<!--*** TODO: set isEnhancedOrPremier ***-->
-							<?php if ($location->is_call_assist/* && $isEnhancedOrPremier*/): ?>
+						<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
+							<?php if ($location->is_call_assist && $isEnhancedOrPremier): ?>
 								<section class="panel top-panel contracted" id="apptRequestPanel">
 								<?php
 								$topicOptions = [
@@ -289,29 +280,23 @@ $showSpecialAnnouncement = (
 						</section>
 					<?php endif; ?>
 					<div class="row" style="clear: both">
-						<?php $covid19Statement = trim($location->covid19_statement); ?>
+						<?php $covid19Statement = trim($location->optional_message); ?>
 						<?php if (!empty($covid19Statement)): ?>
 							<div id="covidStatement" class="col-md-12">
 								<h2>A message from <?= $location->title ?> about COVID-19:</h2>
 								<p><?= $covid19Statement ?></p>
 							</div>
 						<?php endif; ?>
-						
-						<?= $this->element('locations/profile/review_section') ?>
-
 						<div class="col-md-8">
 							<!-- About / Services -->
 							<?php
-							//*** TODO: build clinic method hours ***
-							//$hours = $this->Clinic->hours($location);
-							//*** TODO: Build AppHelper ***
-							if (true/*$this->App->isMobileDevice()*/) {
+							$hours = $this->Clinic->hours($location);
+							if ($isMobileDevice) {
 								echo "<span id='mapBuffer'></span>";
 								echo '<section id="mobileMap" class="panel panel-primary">';
 								echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
 								echo '<div class="panel-body"><div class="panel-section condensed">';
-								//*** TODO: build locations/map ***
-								echo $this->element('locations/map'/*, ['hideProvider' => $hideProvider]*/);
+								echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
 								if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
 									echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
 								};
@@ -322,47 +307,45 @@ $showSpecialAnnouncement = (
 										<h2>Hours of operation</h2>
 									</header>
 									<div class="panel-body">
-										<div class="panel-section condensed">' .//$hours.
+										<div class="panel-section condensed">' .$hours.
 										'</div>
 									</div>
 								</div>';
-								//*** TODO: build layouts ***
-								/*echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/more_information');
+								echo $this->element('locations/profile/video_gallery');
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
+									echo $this->element('locations/profile/services');
 								}
-								echo $this->element('layouts/reviews');
-								echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);*/
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 							} else {
-								//echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 								if (Configure::read('country') != 'CA') {
 									echo "<span id='mapBuffer'></span>";
 									echo '<section id="mobileMap" class="panel panel-primary">';
 									echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
 									echo '<div class="panel-body"><div class="panel-section condensed">';
 									echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
-									if (!$location['Location']['is_mobile'] && ($location['Location']['listing_type'] === 'Premier')) {
+									if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
 										echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
 									};
 									echo '</div></div></section>';
 								}
-								/*echo $this->element('layouts/reviews');
-								echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/more_information');
+								echo $this->element('locations/profile/video_gallery');
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
-								}*/
+									echo $this->element('locations/profile/services');
+								}
 							}
 							?>
 							
 							<!-- Clinic Badges -->
 							<?php
 								//Any changes made here should also be reflected in app/View/Helper/ClinicHelper.ctp
-								//*** TODO: set isEnhancedOrPremier ***-->
-								if (true/*$isEnhancedOrPremier*/) {
+								if ($isEnhancedOrPremier) {
 									$badgeArray = [
 										['isOn' => $location->badge_coffee, 'badgeElement' => '<img loading="lazy" class="badge-img" alt="Free coffee" width="28" height="28" src="/img/coffee.png"><p class="icon-text">Free coffee</p>'],
 										['isOn' => $location->badge_wifi, 'badgeElement' => '<img loading="lazy" class="badge-img" alt="Free wifi" width="28" height="28" src="/img/wifi.png"><p class="icon-text">Free WiFi</p>'],
@@ -443,10 +426,8 @@ $showSpecialAnnouncement = (
 									</div>
 								</div>
 							<?php endif; ?>
-				
-							<!--*** TODO: build AppHelper and layouts -->
-							<?php if(true/*!$this->App->isMobileDevice()*/){
-								//echo $this->element('layouts/call_clinic');
+							<?php if(!$isMobileDevice){
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 						</div>
@@ -454,12 +435,10 @@ $showSpecialAnnouncement = (
 						<div class="col-md-4">
 							
 							<!-- Clinic Links -->
-							<!--*** TODO: build layouts -->
-							<?php if($location->listing_type == 'Premier'){/*echo $this->element('layouts/clinic_links')*/;} ?>
+							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Hours -->
-							<!--*** TODO: build AppHelper and layouts -->
-							<?php //if (!$this->App->isMobileDevice() && $hours): ?>
+							<?php if (!$isMobileDevice && $hours): ?>
 								<div id="hours" class="panel panel-light">
 									<div id="earqHours"></div>
 									<header class="panel-heading text-center">
@@ -467,15 +446,16 @@ $showSpecialAnnouncement = (
 									</header>
 									<div class="panel-body">
 										<div class="panel-section condensed">
-											<?php /*echo $hours; */?>
+											<?php echo $hours; ?>
 										</div>
 									</div>
 								</div>
-							<?php //endif; ?>
+							<?php endif; ?>
 							
-							<?php if($location->is_cq_premier && isset($location['LocationVidscrips'][0]['LocationVidscrips']['vidscrip'])) : ?>
+							<!-- Vidscrips -->
+							<?php if ($location->is_cq_premier && isset($location->location_vidscrip->vidscrip)) : ?>
 								<div class="vidscrip-container" style="margin: 0 auto 20px; max-width: 600px">
-									<div id="vidscrip-embed-<?= $location['LocationVidscrips'][0]['LocationVidscrips']['vidscrip'] ?>"></div>
+									<div id="vidscrip-embed-<?= $location->location_vidscrip->vidscrip ?>"></div>
 									<script src="https://widget.vidscrip.com/vidscrip.js"></script>
 									<script>
 										var vidscripContainer = document.getElementsByClassName("vidscrip-container"),
@@ -495,7 +475,7 @@ $showSpecialAnnouncement = (
 												        vidscripScript[0].setAttribute("src",vidscripScript[0].getAttribute("src"));
 												    } else if (vidscripScript[0].getAttribute("src") != null && isInViewport(vidscripContainer[0])) {
 													    if(typeof(addVidscripWidget) !== 'undefined') {
-												        	addVidscripWidget({ elementId: "vidscrip-embed-<?= $location['LocationVidscrips'][0]['LocationVidscrips']['vidscrip'] ?>", vidscrips: ["<?= $location['LocationVidscrips'][0]['LocationVidscrips']['vidscrip'] ?>"], theme: "v2", email: "<?= $location['LocationVidscrips'][0]['LocationVidscrips']['email'] ?>" });
+															addVidscripWidget({ elementId: "vidscrip-embed-<?= $location->location_vidscrip->vidscrip ?>", vidscrips: ["<?= $location->location_vidscrip->vidscrip ?>"], theme: "v2", email: "<?= $location->location_vidscrip->email ?>" });
 															isInViewport = function(){return false};
 												        	var removeSignIn = setInterval(function(){
 													        		$(".vidscrip-embed button:contains(Sign up)").prev().addClass("hidden");
@@ -514,11 +494,9 @@ $showSpecialAnnouncement = (
 							<?php endif; ?>
 				
 							<!-- Linked Locations -->
-							<!--*** TODO: set isEnhancedOrPremier ***-->
-							<?php if (true/*$isEnhancedOrPremier*/): ?>
-								<!-- *** TODO: uncomment when clinic method built ***-->
-								<?php /*$linkedLocations = $this->Clinic->linkedLocations($location->id);*/ ?>
-								<?php if (false/*!empty($linkedLocations)*/): ?>
+							<?php if ($isEnhancedOrPremier): ?>
+								<?php $linkedLocations = $this->Clinic->linkedLocations($location->id); ?>
+								<?php if (!empty($linkedLocations)): ?>
 									<div id="linkedLocationAnchor" style="position:absolute;margin-top:-70px"></div>
 									<div id="linkedLocations" class="panel panel-light text-center">
 										<div></div>
@@ -527,7 +505,7 @@ $showSpecialAnnouncement = (
 										</header>
 										<div class="panel-body">
 											<div class="panel-section condensed">
-												<?php/*echo $linkedLocations;*/ ?>
+												<?= $linkedLocations; ?>
 											</div>
 										</div>
 									</div>
@@ -535,9 +513,8 @@ $showSpecialAnnouncement = (
 							<?php endif; ?>
 							
 							<!-- Special announcement -->
-							<!-- *** TODO: set showSpecialAnnouncement ***-->
-							<?php //if ($showSpecialAnnouncement): ?>
-								<?php if (!empty($location->coupon_id)): ?>
+							<?php if ($showSpecialAnnouncement): ?>
+								<?php if (!empty($location->id_coupon)): ?>
 									<div class="panel panel-light" id="specialAnnouncement">
 										<header class="panel-heading text-center"><h2>Special Offer</h2></header>
 										<div class="panel-body">
@@ -546,43 +523,44 @@ $showSpecialAnnouncement = (
 													$moneyOffArray = [1,4,7];
 													$freeAccArray = [2,5,8];
 													$freeScreenArray = [3,6,9];	
-													if (in_array($location['Location']['coupon_id'], $moneyOffArray)){
+													if (in_array($location->id_coupon, $moneyOffArray)){
 														$couponAlt = "$200 off premium technology coupon for ";
-													} elseif (in_array($location['Location']['coupon_id'], $freeAccArray)){
+													} elseif (in_array($location->id_coupon, $freeAccArray)){
 														$couponAlt = "Free accessory with purchase coupon for ";
-													} elseif (in_array($location['Location']['coupon_id'], $freeScreenArray)) {
+													} elseif (in_array($location->id_coupon, $freeScreenArray)) {
 														$couponAlt = "Free hearing screening coupon for ";
 													}
-													$couponAlt .= $location['Location']['title'];
+													$couponAlt .= $location->title;
 												?>
-												<img loading="lazy" width="300" height="300" src="<?= '/img/coupons/coupon-'.$location->coupon_id.'.jpg'; ?>" alt="<?= $couponAlt ?>">
+												<img loading="lazy" width="300" height="300" src="<?= '/img/coupons/coupon-'.$location->id_coupon.'.jpg'; ?>" alt="<?= $couponAlt ?>">
 											</div>
 										</div>
 										<footer class="panel-footer">Please mention this Healthy Hearing coupon when you book your appointment.</footer>
 									</div>
-								<?php elseif (!empty($location['LocationAd'])): ?>
+								<?php elseif (!empty($location->location_ad)): ?>
 									<div class="panel panel-light" id="specialAnnouncement">
-										<?php if (!empty($location['LocationAd'][0]['LocationAd']['title'])): ?>
+										<?php if (!empty($location->location_ad->title)): ?>
 											<header class="panel-heading text-center">
-												<h2><?= $location['LocationAd'][0]['LocationAd']['title']; ?></h2>
+												<h2><?= $location->location_ad->title; ?></h2>
 											</header>
 										<?php endif; ?>
-										<?php if (!empty($location['LocationAd'][0]['LocationAd']['photo_url'])): ?>
+										<?php if (!empty($location->location_ad->photo_url)): ?>
 											<div class="panel-body">
 												<div class="panel-section condensed">
-													<img loading="lazy"<?php if(!empty($location['LocationAd'][0]['LocationAd']['border'])){ echo ' class="' . $location['LocationAd'][0]['LocationAd']['border'] . '"';} ?> width="300" height="300" src="/cloudfiles/clinics/<?= $location['LocationAd'][0]['LocationAd']['photo_url']; ?>" alt="Announcement for <?= $location->title ?>">
+													<img loading="lazy"<?php if(!empty($location->location_ad->border)){ echo ' class="' . $location->location_ad->border . '"';} ?> width="300" height="300" src="/cloudfiles/clinics/<?= $location->location_ad->photo_url; ?>" alt="Announcement for <?= $location->title ?>">
 												</div>
 											</div>
 										<?php endif; ?>
-										<?php if (!empty($location['LocationAd'][0]['LocationAd']['description'])): ?>
+										<?php if (!empty($location->location_ad->description)): ?>
 											<footer class="panel-footer tac">
-												<?= $location['LocationAd'][0]['LocationAd']['description']; ?>
+												<?= $location->location_ad->description; ?>
 											</footer>
 										<?php endif; ?>
 									</div>
 								<?php endif; ?>
-							<?php //endif; ?>
+							<?php endif; ?>
 							
+							<!-- Badges -->
 							<?php if(!empty($badgeArray)): ?>
 								<div class="panel panel-light desktop">
 									<div class="panel-heading text-center">
@@ -605,27 +583,24 @@ $showSpecialAnnouncement = (
 							<?php endif; ?>
 				
 							<!-- Clinic Links -->
-							<!--*** TODO: layouts require Clinic helper -->
-							<?php if($location->listing_type != 'Premier'){/*echo $this->element('layouts/clinic_links');*/} ?>
+							<?= $location->listing_type != 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Payment -->
-							<!-- *** TODO: uncomment when clinic method built ***-->
-							<?php if (true/*$payment = $this->Clinic->newMethodOfPayment()*/): ?>
+							<?php if ($payment = $this->Clinic->newMethodOfPayment($location)): ?>
 								<div class="panel panel-light">
 									<div class="panel-heading text-center">
 										<h2>Accepted forms of payment</h2>
 									</div>
 									<div class="panel-body">
 										<div class="panel-section condensed">
-											<?php /*echo $payment;*/ ?>
+											<?= $payment; ?>
 										</div>
 									</div>
 								</div>
 							<?php endif; ?>
 				
 							<!-- Affiliations -->
-							<!--*** TODO: Build AppHelper ***-->
-							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier'/* && $this->App->isMobileDevice()*/): ?>
+							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $isMobileDevice): ?>
 								<div id="affiliates" class="panel panel-light text-center">
 									<header class="panel-heading text-center">
 										<h2>Affiliations</h2>
@@ -648,33 +623,32 @@ $showSpecialAnnouncement = (
 									</div>
 								</div>
 							<?php endif; ?>
-							
-							<!--*** TODO: build AppHelper and layouts -->
-							<?php /*if($this->App->isMobileDevice()){
-								echo $this->element('layouts/call_clinic');
-							}*/
+							<?php if ($isMobileDevice) {
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
+							}
 							?>
 							
 							<!-- Ida Explanation -->
 							<?php
-							//*** TODO: uncomment when Provider pulled in -->
-							/*foreach($location['Provider'] as $provider) {
-								if($provider['is_ida_verified']) {
+							$idaProvider = false;
+							foreach ($location->location_providers as $locationProvider) {
+								if ($locationProvider->provider->is_ida_verified) {
 									$idaProvider = true;
 									break;
 								}
-							}*/
-							if($location->is_ida_verified || isset($idaProvider)): ?>
-							<div id="idaAnchor"></div>
-							<div id="idaExplained" class="panel panel-light">
-								<div class="panel-body">
-									<div class="panel-section condensed">
-										<img loading="lazy" class="ida-badge block" alt="Clinic badge from Ida Institute" src="/img/ida_badge.png" width="80" height="80">
-										<small>Providers who have earned the Inspired by Ida label have taken courses online at the Ida Institute. To earn the label, a provider must take two specific courses that outline best practices for putting the patient first. Clinics may display the Inspired by Ida label if the majority of their providers have earned the provider label. The Ida Institute is a non-profit organization that develops resources to help hearing care professionals around the world strengthen their counseling process.
-										</small>
+							}
+							?>
+							<?php if ($location->is_ida_verified || !empty($idaProvider)): ?>
+								<div id="idaAnchor"></div>
+								<div id="idaExplained" class="panel panel-light">
+									<div class="panel-body">
+										<div class="panel-section condensed">
+											<img loading="lazy" class="ida-badge block" alt="Clinic badge from Ida Institute" src="/img/ida_badge.png" width="80" height="80">
+											<small>Providers who have earned the Inspired by Ida label have taken courses online at the Ida Institute. To earn the label, a provider must take two specific courses that outline best practices for putting the patient first. Clinics may display the Inspired by Ida label if the majority of their providers have earned the provider label. The Ida Institute is a non-profit organization that develops resources to help hearing care professionals around the world strengthen their counseling process.
+											</small>
+										</div>
 									</div>
 								</div>
-							</div>
 							<?php endif; ?>
 				
 							<!-- Disclaimer -->
@@ -688,11 +662,9 @@ $showSpecialAnnouncement = (
 									</div>
 								</div>
 							</div>
-							<!--*** TODO: set displayOpenClosed and isEnhancedOrPremier ***-->
-							<?php if (Configure::read('showAds')/* && !$isEnhancedOrPremier*/): ?>
+							<?php if (Configure::read('showAds') && !$isEnhancedOrPremier): ?>
 								<!-- Ad space -->
-								<!--*** TODO: set $ad variable -->
-								<?php /*echo $this->element('render_ad', ['ad' => $ad])*/ ?>
+								<?= $this->element('render_ad', ['ad' => $ad]) ?>
 							<?php endif; ?>
 							
 						</div>
@@ -720,129 +692,100 @@ $showSpecialAnnouncement = (
 							if (!empty($location->phone)) {
 								$businessSchema .= ', "telephone": "' . $location->phone . '"';
 							}
-							if (!empty($location['Provider'][0])) {
-								$businessSchema .= ', "image": "' . $this->Clinic->providerImage($location['Provider'][0], ['url_only' => true]) . '"';
+							if (!empty($firstProvider)) {
+								$businessSchema .= ', "image": "' . $this->Clinic->providerImage($firstProvider, ['url_only' => true]) . '"';
 							}
-							//*** TODO: uncomment when hideProvider set ***
-							if(false/*!$hideProvider*/) {
+							if(!$hideProvider) {
 								
 								$businessSchema .= ', "employee": [';
-								//*** TODO: uncomment when Provider pulled in ***
-								/*foreach ($location['Provider'] as $key => $provider) {
+								foreach ($location->location_providers as $key => $loocationProvider) {
+									$provider = $loocationProvider->provider;
 									$businessSchema .=  '{"@type": "Person",';
 									
-									if(!empty($provider['thumb_url'])) {
-										$businessSchema .= '"image": "' . $provider['thumb_url'] . '",';
+									if(!empty($provider->thumb_url)) {
+										$businessSchema .= '"image": "' . $provider->thumb_url . '",';
 									}
-									if (!empty($provider['title'])) {
-										$businessSchema .= '"jobTitle": "' . $provider['title'] . '",';
+									if (!empty($provider->title)) {
+										$businessSchema .= '"jobTitle": "' . $provider->title . '",';
 									}
-									if(!empty($provider['credentials'])) {
-										$businessSchema .= '"honorificSuffix": "' . $provider['credentials'] . '",';
+									if(!empty($provider->credentials)) {
+										$businessSchema .= '"honorificSuffix": "' . $provider->credentials . '",';
 									}
 									if(!empty($provider['description'])) {
-										$businessSchema .= '"description": "' . htmlentities(strip_tags($provider['description'])) . '",';
+										$businessSchema .= '"description": "' . htmlentities(strip_tags($provider->description)) . '",';
 									}
 									
-									$businessSchema .= '"name": "' . htmlentities(strip_tags($provider['first_name'] . ' ' . $provider['last_name'])) . '"';
+									$businessSchema .= '"name": "' . htmlentities(strip_tags($provider->first_name . ' ' . $provider->last_name)) . '"';
 									
-									if($key + 1 >= count($location['Provider'])){
+									if ($key + 1 >= count($location->location_providers)){
 										$comma =  '';
 									} else {
 										$comma = ',';
 									}
 									$businessSchema .= '}' . $comma;
-								}*/
+								}
 								
 								$businessSchema .= ']';
 								
 							}
-							
-							//*** TODO: uncomment when clinic method built ***
-							//$businessSchema .= $this->Clinic->reviewSchema($location);
+
+							$businessSchema .= $this->Clinic->reviewSchema($location);
 							
 							$businessSchema .= ', "review": [';
-								//*** TODO: uncomment when clinic method built ***
-								//$reviews = $this->Clinic->sliceReviews($location['Review']);
+								// Limit to 299 reviews in schema
+								$reviews = array_slice($location->reviews, 0, 298);
 								$truncate = isset($truncate) ? $truncate : false;
 								$name = empty($name) ? null : $name;
-								if(!empty($reviews[0])){
-									foreach ($reviews[0] as $key => $review) {
-										$businessSchema .= '{"@type": "Review",
-											"reviewRating": {
-												"@type": "Rating",
-												"ratingValue": "'. $review['rating'] .'",
-												"bestRating": "5",
-												"worstRating": "1"
-											},
-											"datePublished": "' . date('Y-m-d', strtotime($review['created'])) . '",
-											"reviewBody": "' . htmlentities($this->Clinic->formatReview($review['body'], $truncate)) . '"';
-											if(empty($hideName)) {
-												$businessSchema .= ',';
-												$businessSchema .= '"author": {"@type": "Person", "name": "' . htmlentities(strip_tags($this->Clinic->formatReviewSignature($review, ['name' => $name, 'json' => true]))) . '"}';
-											}
-											if($key + 1 >= count($reviews[0])){
-												$comma =  '';
-											} else {
-												$comma = ',';
-											}
-											$businessSchema .= '}' . $comma;
-									}
-								}
-								if(!empty($reviews[1])){
-									$businessSchema .= ',';
-									foreach ($reviews[1] as $key => $review) {
-										$businessSchema .= '{"@type": "Review",
-											"reviewRating": {
-												"@type": "Rating",
-												"ratingValue": "'. $review['rating'] .'",
-												"bestRating": "5",
-												"worstRating": "1"
-											},
-											"datePublished": "' . date('Y-m-d', strtotime($review['created'])) . '",
-											"reviewBody": "' . htmlentities($this->Clinic->formatReview($review['body'], $truncate)) . '"';
-											if(empty($hideName)) {
-												$businessSchema .= ',';
-												$businessSchema .= '"author": {"@type": "Person", "name": "' . htmlentities(strip_tags($this->Clinic->formatReviewSignature($review, ['name' => $name, 'json' => true]))) . '"}';
-											}
-											if($key + 1 >= count($reviews[1])){
-												$comma =  '';
-											} else {
-												$comma = ',';
-											}
-											$businessSchema .= '}' . $comma;
-									}
+								foreach ($reviews as $key => $review) {
+									$businessSchema .= '{"@type": "Review",
+										"reviewRating": {
+											"@type": "Rating",
+											"ratingValue": "'. $review->rating .'",
+											"bestRating": "5",
+											"worstRating": "1"
+										},
+										"datePublished": "' . date('Y-m-d', strtotime($review->created)) . '",
+										"reviewBody": "' . htmlentities($this->Clinic->formatReview($review->body, $truncate)) . '"';
+										if (empty($hideName)) {
+											$businessSchema .= ',';
+											$businessSchema .= '"author": {"@type": "Person", "name": "' . htmlentities(strip_tags($this->Clinic->formatReviewSignature($review, ['name' => $name, 'json' => true]))) . '"}';
+										}
+										if ($key + 1 >= count($reviews)){
+											$comma =  '';
+										} else {
+											$comma = ',';
+										}
+										$businessSchema .= '}' . $comma;
 								}
 							$businessSchema .= ']';
 							
 							$dayCount = 0;
 							$dayArray = ['sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday'];
 							
-							forEach($dayArray as $dayShort => $day) {
+							foreach ($dayArray as $dayShort => $day) {
 								$isClosed = $dayShort . '_is_closed';
-								//*** TODO: uncomment when LocationHour is pulled in *** -->
-								/*if($location['LocationHour'][$isClosed] != true){
+								if ($location->location_hour->$isClosed != true){
 									$dayCount++;
-								}*/
+								}
 							}
 							
-							if($dayCount > 0) {
+							if ($dayCount > 0) {
 								$businessSchema .= ', "openingHoursSpecification": [';
-								forEach($dayArray as $dayShort => $day) {
+								foreach ($dayArray as $dayShort => $day) {
 									$isClosed = $dayShort . '_is_closed';
 									$open = $dayShort . '_open';
 									$close = $dayShort . '_close';
-									/*if($location['LocationHour'][$isClosed] != true){
+									if ($location->location_hour->$isClosed != true) {
 										$businessSchema .= '{"@type": "OpeningHoursSpecification",
 															"dayOfWeek": "' . $day . '",
-															"opens": "' . $location['LocationHour'][$open] . '",
-															"closes": "' . $location['LocationHour'][$close] .'"
+															"opens": "' . $location->location_hour->$open . '",
+															"closes": "' . $location->location_hour->$close .'"
 															}';
-															if($dayCount > 1){
-																$businessSchema .= ',';
-																$dayCount--;
-															}
-									}*/
+										if ($dayCount > 1) {
+											$businessSchema .= ',';
+											$dayCount--;
+										}
+									}
 									
 								}
 								$businessSchema .= ']';
@@ -851,10 +794,8 @@ $showSpecialAnnouncement = (
 					echo $businessSchema;
 					?>
 				</div>
-				<!--*** TODO: build locations/profile/map_modal -->
-				<?php /*echo $this->element('locations/profile/map_modal');*/ ?>
-				<!--*** TODO: set isEnhancedOrPremier ***-->
-				<?php if (Configure::read('isCallAssistEnabled') && $location->is_call_assist/* && $isEnhancedOrPremier*/): ?>
+				<?= $this->element('locations/profile/map_modal') ?>
+				<?php if (Configure::read('isCallAssistEnabled') && $location->is_call_assist && $isEnhancedOrPremier): ?>
 					<?php $this->append('bs-modals'); ?>
 					<?php $this->end(); ?>
 				<?php endif; ?>

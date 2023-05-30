@@ -20,7 +20,7 @@ class IcingVersionsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 'f532a09a-3aa4-4708-818f-001531d6e2fa',
-                'model_id' => 'Lorem ipsum dolor sit amet',
+                'id_model' => 'Lorem ipsum dolor sit amet',
                 'user_id' => 1,
                 'model' => 'Lorem ipsum dolor sit amet',
                 'json' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',

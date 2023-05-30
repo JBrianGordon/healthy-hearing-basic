@@ -112,6 +112,8 @@ class Content extends Entity
             'action' => 'view',
             'id' => $this->id,
             'slug' => $this->slug,
+            'plugin' => false,
+            'prefix' => false,
         ];
     }
 }

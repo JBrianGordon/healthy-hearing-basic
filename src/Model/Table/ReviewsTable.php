@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Enums\Model\Location\LocationReviewStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
+use Cake\Database\Expression\QueryExpression;
 use Cake\ORM\RulesChecker;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use ArrayObject;
@@ -15,6 +18,8 @@ use Cake\Event\EventInterface;
 use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\ORM\Locator\LocatorAwareTrait;
+use Search\Model\Filter\Base;
 
 
 /**
@@ -38,8 +43,17 @@ use Cake\Mailer\MailerAwareTrait;
  */
 class ReviewsTable extends Table
 {
+    use LocatorAwareTrait;
     use LogTrait;
     use MailerAwareTrait;
+
+    public $ratings = array(
+        1 => '1 (Poor)',
+        2 => '2 (Below average)',
+        3 => '3 (Average)',
+        4 => '4 (Above average)',
+        5 => '5 (Excellent)',
+    );
 
     /**
      * Initialize method
@@ -57,6 +71,47 @@ class ReviewsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        $this->addBehavior('CounterCache', [
+            'Locations' => [
+                // Total # of approved reviews for a Location (e.g. 17)
+                'reviews_approved' => [
+                    'conditions' => [
+                        'Reviews.status' => ReviewStatus::APPROVED->value
+                    ],
+                ],
+                // Average review rating for a Location (e.g. 4.2)
+                'average_rating' => function ($event, $entity, $table, $original) {
+                    $reviews = $this->find()
+                        ->where([
+                            'location_id' => $entity->location_id,
+                            'status' => ReviewStatus::APPROVED->value,
+                        ])->all();
+
+                    $numerator = 0;
+                    foreach($reviews as $review) {
+                        $numerator += $review->rating;
+                    }
+                    if (count($reviews) > 0) {
+                        return round($numerator / count($reviews), 2);
+                    }
+                    return false;
+                },
+                // Review status for a Location (e.g. 'Review5Plus, Review4Less')
+                'review_status' => function ($event, $entity, $table, $original) {
+                    $reviewsApprovedCount = $this->find()
+                        ->where([
+                            'location_id' => $entity->location_id,
+                            'status' => ReviewStatus::APPROVED->value,
+                        ])->count();
+                    if ($reviewsApprovedCount >= 5) {
+                        return LocationReviewStatus::REVIEW_STATUS_5_PLUS->value;
+                    } else {
+                        return LocationReviewStatus::REVIEW_STATUS_4_LESS->value;
+                    }
+                },
+            ]
+        ]);
+
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
@@ -72,18 +127,23 @@ class ReviewsTable extends Table
         $this->searchManager()
             ->value('id')
             ->value('location_id')
-            ->value('body')
+            ->like('body', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('first_name')
             ->value('last_name')
             ->value('zip')
-            ->value('rating')
+            ->value('rating', [
+                'multiValue' => true
+            ])
             ->value('status')
             ->value('origin')
-            ->value('response')
+            ->like('response', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('response_status')
-            ->value('created')
-            ->value('modified')
-            ->value('denied_date')
             ->value('ip')
             ->value('character_count')
             ->boolean('is_spam')
@@ -101,6 +161,36 @@ class ReviewsTable extends Table
                     $listingType = $args['listing_type'];
                     $query->matching('Locations', function ($q) use ($listingType) {
                         return $q->where(['Locations.listing_type LIKE' => '%' . $listingType . '%']);
+                    });
+                },
+            ])
+            ->add('modified_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['modified_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.modified', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.created', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->add('denied_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['denied_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Reviews.denied_date', $startDate, $endDate, 'date');
                     });
                 },
             ]);
@@ -231,6 +321,7 @@ class ReviewsTable extends Table
                 $entity->set('denied_date', FrozenTime::now()->format('Y-m-d H:i:s'));
                 $entity->set('status', ReviewStatus::APPROVED->value);
             }
+
             return true;
         }
     }
@@ -334,5 +425,41 @@ class ReviewsTable extends Table
         $review->status = ReviewStatus::DENIED->value;
 
         return $this->save($review);
+    }
+
+    public function findIpMatches($reviewId) {
+        $data['ipWarningsFound'] = [];
+        $reviewIp = $this->get($reviewId)->ip;
+        if (!empty($reviewIp)) {
+            // Login IP matches
+            $loginMatches = $this->getTableLocator()->get('LoginIps')->find()
+                ->where([
+                    'ip' => $reviewIp
+                ])
+                ->order(['login_date' => 'DESC'])
+                ->all();
+            $data['loginMatches'] = $loginMatches;
+            // Review IP matches
+            $reviewMatches = $this->find()
+                ->where([
+                    'id !=' => $reviewId,
+                    'ip' => $reviewIp
+                ])
+                ->order(['created' => 'DESC'])
+                ->all();
+            $data['reviewMatches'] = $reviewMatches;
+            // LocationNote IP matches
+            $noteMatches = $this->getTableLocator()->get('LocationNotes')->find()
+                ->where([
+                    'body LIKE' => '%'.$reviewIp.'%'
+                ])
+                ->order(['created' => 'DESC'])
+                ->all();
+            $data['noteMatches'] = $noteMatches;
+            if (!empty($loginMatches) || !empty($reviewMatches) || !empty($noteMatches)) {
+                $data['ipWarningsFound'] = true;
+            }
+        }
+        return $data;
     }
 }

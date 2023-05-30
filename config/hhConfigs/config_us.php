@@ -92,7 +92,7 @@ return [
     // Location CSV export fields and non-US overrides
     'locationExportFields' => [
         'id',
-        'oticon_id',
+        'id_oticon',
         'title',
         'address',
         'address_2',
@@ -192,5 +192,12 @@ return [
         'WI' => 'Wisconsin',
         'WV' => 'West Virginia',
         'WY' => 'Wyoming',
+    ],
+    'regions' => [
+        'Northeast' => array('MA', 'RI', 'CT', 'ME', 'NH', 'VT'),
+        'MidAtlantic' => array('WV', 'PA', 'NJ', 'NY'),
+        'Southeast' => array('TX', 'LA', 'MS', 'TN', 'AL', 'KY', 'NC', 'SC', 'FL', 'GA', 'MD', 'DE', 'VA', 'VI', 'PR', 'DC'),
+        'Midwest' => array('NE', 'IA', 'OK', 'MO', 'MI', 'OH', 'IL', 'WI', 'MN', 'ND', 'SD', 'AR', 'KS', 'NE'),
+        'West' => array('AK', 'WA', 'ID', 'UT', 'NV', 'WY', 'CO', 'NM', 'MT', 'OR', 'CA', 'AZ', 'HI'),
     ],
 ];

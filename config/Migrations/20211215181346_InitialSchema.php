@@ -3959,6 +3959,37 @@ class InitialSchema extends AbstractMigration
             )
             ->create();
 
+        $this->table('reviewers_wikis')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => false,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('wiki_id', 'integer', [
+                'default' => '0',
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('user_id', 'integer', [
+                'default' => '0',
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addIndex(
+                [
+                    'wiki_id',
+                ]
+            )
+            ->addIndex(
+                [
+                    'user_id',
+                ]
+            )
+            ->create();
+
         $this->table('reviews')
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
@@ -5297,6 +5328,7 @@ class InitialSchema extends AbstractMigration
         $this->table('queue_task_logs')->drop()->save();
         $this->table('queue_tasks')->drop()->save();
         $this->table('quiz_results')->drop()->save();
+        $this->table('reviewers_wikis')->drop()->save();
         $this->table('reviews')->drop()->save();
         $this->table('schema_migrations')->drop()->save();
         $this->table('seo_blacklists')->drop()->save();

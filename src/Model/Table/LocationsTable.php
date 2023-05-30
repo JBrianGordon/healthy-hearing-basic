@@ -6,11 +6,17 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
+use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
+use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
+use Cake\Routing\Router;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Locations Model
@@ -50,6 +56,8 @@ use Cake\Console\ConsoleIo;
  */
 class LocationsTable extends Table
 {
+    public $payments; // Defined in initialize()
+
     /**
      * Initialize method
      *
@@ -136,10 +144,10 @@ class LocationsTable extends Table
             ->value('entity_segment')
             ->value('priority')
             ->value('id_yhn_location')
-            ->value('cqp_practice_id')
-            ->value('cqp_office_id')
+            ->value('id_cqp_practice')
+            ->value('id_cqp_office')
             ->value('timezone')
-            ->value('covid19_statement')
+            ->value('optional_message')
             ->value('average_rating')
             ->value('reviews_approved')
             ->value('review_status')
@@ -429,6 +437,21 @@ class LocationsTable extends Table
                     }
                 }
             ]);
+
+        // Accepted forms of payments options at a clinic
+        $this->payments = [
+            2 => ['name' => 'Visa', 'icon' => 'card2.gif'],
+            4 => ['name' => 'MasterCard', 'icon' => 'card1.gif'],
+            8 => ['name' => 'American Express', 'icon' => 'card4.gif'],
+            16 => ['name' => 'Discover', 'icon' => 'card6.gif'],
+            //32 => array('name' => 'Diners Club', 'icon' => ''),
+            64 => ['name' => 'Cash', 'icon' => ''],
+            128 => ['name' => Configure::read('checkPayment'), 'icon' => ''],
+            256 => ['name' => 'Debit', 'icon' => 'card3.gif'],
+            512 => ['name' => 'Financial aid', 'icon' => ''],
+            1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
+            2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
+        ];
     }
 
     /**
@@ -925,10 +948,10 @@ class LocationsTable extends Table
             ->notEmptyString('timezone');
 
         $validator
-            ->scalar('covid19_statement')
-            ->maxLength('covid19_statement', 400)
-            ->requirePresence('covid19_statement', 'create')
-            ->notEmptyString('covid19_statement');
+            ->scalar('optional_message')
+            ->maxLength('optional_message', 400)
+            ->requirePresence('optional_message', 'create')
+            ->notEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
@@ -1095,7 +1118,7 @@ class LocationsTable extends Table
             return false;
         }
 
-        //FYI Url and reviews are based on Location.url and Location.reviews_approved, Not a filter boolean.
+        //FYI Url and reviews are based on Locations.url and Locations.reviews_approved, Not a filter boolean.
         //This function is only checking for the boolean filters we've setup for the location
         $locationEntity->filter_has_photo = false;
         $locationEntity->filter_insurance = false;
@@ -1137,5 +1160,440 @@ class LocationsTable extends Table
 
         //TODO: Previously this save() used callbacks=false because updateFilters() is called from afterSave(). We need to test if this still functions correctly or creates a loop.
         return $this->save($locationEntity);
+    }
+
+    /**
+    * Build the region from a state abbr or region
+    * @param string state (NM, NM-New, etc..)
+    * @return string NM-New-Mexico
+    */
+    public function stateRegion($state) {
+        $abbr = $this->parseStateSlug($state);
+        $full = $this->stateFull($abbr);
+        if (empty($full)) {
+            return null;
+        }
+        return slugifyRegion($abbr . ' ' . $full);
+    }
+
+    /**
+    * Parse back the abbreviation of a ST-State-Name slug
+    * @param string state slug
+    * @return string ST
+    */
+    public function parseStateSlug($stateslug) {
+        if (strpos($stateslug,"-")) {
+            $array = explode("-", $stateslug);
+            if (strcasecmp(substr($array[0], 0, 1), substr($array[1], 0, 1)) != 0) {
+                // Invalid $stateslug. Abbr and full name do not start with same letter.
+                return null;
+            }
+            return array_shift($array);
+        }   else {
+            return $stateslug;
+        }
+    }
+
+    /**
+    * Handy shortcut function to return a full state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    public function stateFull($state_input) {
+        return $this->state('full',$state_input);
+    }
+
+    /**
+    * Handy shortcut function to return a full/abbr state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    public function state($get,$stateInput) {
+        $stateInput = trim($stateInput);
+        $states = Configure::read('states');
+        foreach ($states as $state => $stateFull) {
+            if (strtoupper($stateInput) == strtoupper($state) || strtoupper($stateInput)==strtoupper($stateFull)) {
+                if ($get=='full') {
+                    return $stateFull;
+                } else {
+                    return $state;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Get the state region based on the state_input
+    * @param string state input (NM, NM-New-Mexico, NM-New)
+    * @return string region the state belongs to (West, Midwest, etc..)
+    */
+    public function googleRegion($state) {
+        $state = $this->parseStateSlug($state);
+        $regions = Configure::read('regions');
+        foreach ($regions as $region => $regionStates) {
+            if (in_array($state, $regionStates)) {
+                return $region;
+            }
+        }
+        return null;
+    }
+
+    /**
+    * Find a location based off it's id and uri
+    * @param int id
+    */
+    public function findByIdSlug($id = null, $uri = null) {
+        if ($uri === Router::url($this->findForRedirectById($id))) {
+            return $this->findByIdForView($id);
+        }
+        return array();
+    }
+
+    /**
+    * Find the redirect based off an id
+    * @param int location id (full or 5-digit)
+    * @return string url or false
+    */
+    public function findForRedirectById($id) {
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id IN' => [$id, Location::$oticonPrefix.$id]
+            ],
+            'contain' => [],
+            'fields' => [
+                'Locations.state',
+                'Locations.city',
+                'Locations.zip',
+                'Locations.id',
+                'Locations.title',
+                'Locations.redirect',
+                'Locations.is_active',
+                'Locations.is_show'
+            ],
+            'order' => ['Locations.id' => 'DESC']
+        ])->first();
+        if (empty($location)) {
+            return false;
+        }
+        if (!empty($location->redirect)) {
+            return $location->redirect;
+        }
+        if (!$location->is_active || !$location->is_show) {
+            // inactive or noshow location
+            return false;
+        }
+        return isset($location->hh_url) ? $location->hh_url : false;
+    }
+
+    /**
+    * Find location for id
+    * @param int id
+    * @return the result of the find
+    */
+    public function findByIdForView($id = null){
+        $locationId = $this->findById(Location::$oticonPrefix.$id)->count() ? Location::$oticonPrefix.$id : $id;
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id' => $locationId,
+                'Locations.listing_type !=' => Location::LISTING_TYPE_NONE,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+            ],
+            'contain' => [
+                'CallSources',
+                'LocationHours',
+                'LocationProviders.Providers' => [
+                    // TODO fix provider order
+                    //'order' => 'Providers.priority ASC, Providers.id ASC'
+                ],
+                'Reviews' => [
+                    'conditions' => [
+                        'Reviews.status' => ReviewStatus::APPROVED->value
+                    ],
+                    'Zips' => [
+                        'fields' => ['city','state']
+                    ],
+                ]
+            ]
+        ])->first();
+        if (!empty($location)) {
+            // Optional premier features for non-Premier locations
+            if ($location->listing_type !== Location::LISTING_TYPE_PREMIER) {
+                // Get ads/coupons/special announcements
+                $location->location_ad = $this->LocationAds->find('all', [
+                    'conditions' => ['location_id' => $locationId]
+                ])->first();
+            }
+            // Premier features ('Premier' listings only)
+            if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
+                // Get videos
+                $location->location_videos = $this->LocationVideos->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+
+                // Get photos
+                $location->location_photos = $this->LocationPhotos->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->all();
+
+                // Get ads/coupons/special announcements
+                $location->location_ad = $this->LocationAds->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->first();
+            }
+            //Get vidscrips
+            if ($location->is_cq_premier) {
+                $location->location_vidscrip = $this->LocationVidscrips->find('all', [
+                    'contain' => [],
+                    'conditions' => ['location_id' => $locationId]
+                ])->first();
+            }
+        }
+        return $location;
+    }
+
+    /**
+    * Find all linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findLocationLinks($locationId) {
+        $links = $this->LocationLinks->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'OR' => [
+                    'location_id' => $locationId,
+                    'id_linked_location' => $locationId
+                ],
+            ],
+        ])->all();
+        return $links;
+    }
+
+    /**
+    * Find unique linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findLocationLinksByDistance($locationId) {
+        $links = $this->findLocationLinks($locationId);
+        $linksByDistance = [];
+        foreach ($links as $link) {
+            if ($link->location_id == $locationId) {
+                $linksByDistance[$link->id_linked_location] = $link->distance;
+            } else {
+                $linksByDistance[$link->location_id] = $link->distance;
+            }
+        }
+        asort($linksByDistance);
+        return $linksByDistance;
+    }
+
+    /**
+    * Get the timezone abbreviation of this clinic (America/New_York, America/Los_Angeles, etc..))
+    * @return string timezone for display
+    */
+    public function getClinicTimezone($id) {
+        $locationEntity = $this->get($id);
+        $timezone = $locationEntity->timezone;
+
+        if (empty($timezone)) {
+            // Get the timezone from Google API for this lat/lon
+            $lat = $locationEntity->lat;
+            $lon = $locationEntity->lon;
+            $timestamp = time();
+            // Only access google api on prod
+            $apiKey = (Configure::read('env') == 'prod') ? Configure::read('googleMapsWebServicesApiKey') : '';
+            $url = "https://maps.googleapis.com/maps/api/timezone/json?location=".$lat.",".$lon."&amp;timestamp=".$timestamp."&sensor=false&key=".$apiKey;
+            $apiResult = json_decode(file_get_contents($url));
+            if (!empty($apiResult->timeZoneId)) {
+                $timezone = $apiResult->timeZoneId;
+                $locationEntity->timezone = $timezone;
+                $this->save($locationEntity);
+            }
+        }
+
+        if (empty($timezone)) {
+            // If we didn't find the timezone, default to eastern timezone for now, but don't save it to database
+            $timezone = 'America/New_York';
+        }
+
+        $date = new DateTime('now', new DateTimeZone($timezone));
+        return $date->format('T');
+    }
+
+    /**
+    * TODO: DELETE
+    */
+    public function getTimezoneByState($state) {
+        // TODO: This function can be deleted. Leaving here temporarily to catch any calls to this function as we pull code over.
+        // Previously we used geoip_time_zone_by_country_and_region() to find the timezone for this state. This isn't accurate or recommended anymore because some states have 2 timezones.
+        // Going forward, let's use getClinicTimezone() which I am updating to call the Google Timestamp API.
+        die('die: getTimezoneByState() should not be used anymore');
+    }
+
+    /**
+    * Get the timezone offset of this clinic
+    * @return int timezone offset
+    */
+    public function getClinicTimezoneOffset($id) {
+        $offset = null;
+        $timezone = $this->getClinicTimezone($id);
+        $dateTimeZone = new DateTimeZone($timezone);
+        $offset = $dateTimeZone->getOffset(new DateTime);
+        $offset = abs($offset/60/60);
+        return $offset;
+    }
+
+    /**
+    * Use geoIP lookup or cached zip to find clinics near you.
+    * @param int limit - Number of clinics to find
+    * @param bool preferredOnly - true to only find Enhanced/Premier clinics
+    * @return array list of clinics near you
+    */
+    public function findClinicsNearMe($limit = 4, $preferredOnly = false) {
+        $geoLocData = [];
+
+        if (empty($_SESSION['geoLocData'])) {
+            return [];
+        }
+
+        // Check if visitor is from another country and if that country
+        // is one for which we have referral links/text available and set
+        // in constants.php
+        $visitorCountry = $_SESSION['geoLocData']['country'];
+        if ($visitorCountry !== Configure::read('country') && in_array($visitorCountry, array_keys(Configure::read('oticonCountries')))) {
+            return [
+                'country' => $_SESSION['geoLocData']['country']
+            ];
+        }
+        $geoLocData = [
+            'zip' => empty($_SESSION['geoLocData']['zip']) ? null : $_SESSION['geoLocData']['zip'],
+            'region' => empty($_SESSION['geoLocData']['state']) ? null : $this->stateRegion($_SESSION['geoLocData']['state']),
+            'city' => empty($_SESSION['geoLocData']['city']) ? null : slugifyCity($_SESSION['geoLocData']['city']),
+        ];
+
+        $sort = $preferredOnly ? 'preferred' : 'distance';
+        $cacheKey = 'top_nav_' . implode('_', $geoLocData) . '_' . $sort . '_' . $limit;
+        if (false/*$TODO: cache = Cache::read($cacheKey)*/) {
+            return $cache;
+        } else {
+            $options['zip'] = $geoLocData['zip'];
+            $options['region'] = $geoLocData['region'];
+            $options['city'] = $geoLocData['city'];
+            $fields = ['Locations.id', 'listing_type', 'lat', 'lon', 'average_rating', 'reviews_approved', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'is_mobile', 'mobile_text'];
+            $conditions = [];
+            if ($preferredOnly) {
+                $conditions['Locations.listing_type !='] = Location::LISTING_TYPE_BASIC;
+            }
+            $cache = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
+            Cache::write($cacheKey, $cache);
+            return $cache;
+        }
+    }
+
+    /**
+    * Find all locations based on lat/lon, zip, or region/city
+    * @param array options (lat/lon, zip, or region/city)
+    * @param int limit (default=40)
+    * @param array conditions
+    * @param array contain
+    * @param array fields
+    * @param int maxRange
+    */
+    public function findAllByGeoLoc($options = [], $limit = null, $conditions = [], $contain = [], $fields = [], $maxRange = null) {
+        $options = array_merge([
+            'lat' => null,
+            'lon' => null,
+            'zip' => null,
+            'region' => null,
+            'city' => null
+        ], $options);
+        // Reverted to old syntax (pre-??) for #16574 fix
+        // $limit = $limit ?? 40;
+        $limit = $limit ? $limit : 40;
+        $conditions = array_merge([
+            'Locations.is_active' => true,
+            'Locations.is_show' => true
+        ], $conditions);
+
+        /*
+        TODO: IMPLEMENT RANGEABLE BEHAVIOR
+
+
+        // Reverted to old syntax (pre-??) for #16574 fix
+        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
+        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
+        if (!empty($options['lat']) && !empty($options['lon'])) {
+            $conditions['Locations.lat'] = $options['lat'];
+            $conditions['Locations.lon'] = $options['lon'];
+        } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
+            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            if (!empty($zip['lat']) && !empty($zip['lon'])) {
+                $conditions['Locations.lat'] = $zip['lat'];
+                $conditions['Locations.lon'] = $zip['lon'];
+            } else {
+                // This zip code does not exist in our zip table
+                return [];
+            }
+        } else if (!empty($options['city']) && !empty($options['region'])) {
+            //force case sensitivity -- google duplicate content issue
+            if (($options['region'] !== slugifyRegion($options['region'])) ||
+                ($options['city'] !== slugifyCity($options['city']))) {
+                return [];
+            }
+            $options['region'] = $this->parseStateSlug($options['region']);
+            $city = ClassRegistry::init('City')->findByCity($options['city'], $options['region']);
+            if (!empty($city) && !empty($city['City']['lat'] && !empty($city['City']['lon']))) {
+                $conditions['Locations.lat'] = $city['City']['lat'];
+                $conditions['Locations.lon'] = $city['City']['lon'];
+            } else {
+                // we can't find lat/lon for this city
+                return [];
+            }
+        } else {
+            // We don't have a lat/lon, zip, or region/city
+            return [];
+        }
+
+        $clinicFindSettings = [
+            'conditions' => $conditions,
+            'fields' => $fields,
+            'range' => $maxRange,
+            'range_out_till_count_is' => false, //disable range-out
+            'order_by_distance' => true,
+            'contain' => $contain,
+            'limit' => $limit
+        ];
+        return $this->find('range', $clinicFindSettings);
+        */
+
+        //TODO TEMPORARY - Just return the first $limit locations in my state
+        // Remove this when rangeable is working
+        //--------------------------------------------------------------
+        $state = $this->parseStateSlug($options['region']);
+        $conditions['Locations.state'] = $state;
+        $locations = $this->find('all', [
+            'conditions' => $conditions,
+            'limit' => $limit
+        ])->all();
+        //--------------------------------------------------------------
+        return $locations;
+    }
+
+    /**
+    * tests a string to see if it is a valid zip code
+    * @param string $input - (query)string which will be tested
+    * @return bool
+    */
+    public function isValidZip($input) {
+        if (Configure::read('country') == 'US') {
+            $regex = '/^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/';
+        } elseif ($settings['country'] == 'CA') {
+            $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
+        }
+        return (preg_match($regex,$input));
     }
 }

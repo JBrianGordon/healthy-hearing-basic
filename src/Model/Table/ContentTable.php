@@ -8,7 +8,10 @@ use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
+use Cake\Cache\Cache;
 use Cake\Validation\Validator;
+use Cake\Routing\Router;
 use Search\Model\Filter\Base;
 
 /**
@@ -84,11 +87,10 @@ class ContentTable extends Table
             ->setProperty('contributors')
             ->setThrough('ContentUsers');
 
-        // $this->belongsToMany('Tags', [
-        //     'foreignKey' => 'content_id',
-        //     'targetForeignKey' => 'tag_id',
-        //     'joinTable' => 'content_tags',
-        // ]);
+        $this->hasMany('ContentTags');
+
+        $this->belongsToMany('Tags')
+            ->setThrough('ContentTags');
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -319,20 +321,164 @@ class ContentTable extends Table
     }
 
     /**
-     * Returns a query for the latest N articles/reports/Content items
-     *
-     * @param \Cake\ORM\Query $query The Query object to be modified
-     * @param array $options List of options to pass to the finder
-     * @return \Cake\ORM\Query Modified Query object
-     */
-    public function findLatest(Query $query, array $options)
-    {
-        return $query
-            ->where([
-                'is_active' => 1,
-                'id_draft_parent' => 0,
-            ])
-            ->limit($options['numArticles'] ?? 4)
-            ->order(['last_modified' => 'DESC']);
+    * Find latest content based on date
+    */
+    public function findLatest($count = 0){
+        if ($count) {
+            // TODO: 'short' configuration for cache
+            if ($cache = Cache::read('latest_' . $count/*, 'short'*/)) {
+                return $cache;
+            }
+            $retval = $this->find('all', [
+                'conditions' => ['Content.is_active' => true, 'Content.last_modified <= CURDATE()'],
+                'contain' => ['PrimaryAuthor'],
+                'fields' => [
+                    'Content.old_url',
+                    'Content.title',
+                    'Content.type',
+                    'Content.slug',
+                    'Content.id',
+                    'Content.date',
+                    'Content.short',
+                    'Content.last_modified'
+                ],
+                'order' => 'Content.last_modified DESC',
+                'limit' => $count
+            ])->all();
+
+            Cache::write('latest_' . $count, $retval/*, 'short'*/);
+            return $retval;
+        }
+        return [];
+    }
+
+    /**
+    * Find content by Tag
+    * @param mixed. array of options or string of single tag.
+    * - tags array of tags
+    * - count (default 5)
+    * - fields
+    * - contain (default Tag)
+    * - strict (default true) if false keep going until we get count popping off tags.
+    * - order (default Content.date DESC)
+    * @return array of results
+    */
+    function findByTags($tagIds=[], $limit=6){
+        // TODO: We previously used find('similar')
+        // Test to see how close this is
+        $contentTags = $this->ContentTags->find('all', [
+            'contain' => ['Content'],
+            'conditions' => [
+                'tag_id IN' => $tagIds,
+                'Content.is_active' => true,
+                'Content.last_modified <= CURDATE()',
+            ],
+        ])->all();
+        $contents = [];
+        $contentIds = [];
+        foreach ($contentTags as $contentTag) {
+            if (!in_array($contentTag->content->id, $contentIds)) {
+                $contentIds[] = $contentTag->content->id;
+                $contents[] = $contentTag->content;
+            }
+        }
+        usort ($contents, function($first,$second) {
+            return $first->last_modified->timestamp <=> $second->last_modified->timestamp;
+        });
+        $contents = array_slice($contents, 0, $limit);
+        return $contents;
+    }
+
+    /**
+    * Find a content based off it's id and uri
+    * @param id
+    * @param current here
+    * @return array of result
+    */
+    function findByIdSlug($id = null, $uri = null){
+        if ($uri == Router::url($this->findForRedirectById($id))) {
+            return $this->find('all', [
+                'conditions' => [
+                    'Content.id' => (int) $id,
+                    'Content.date <= CURDATE()',
+                    'Content.is_active' => true
+                ],
+                'contain' => ['Tags','PrimaryAuthor','Contributors']
+            ])->first();
+        }
+        return array();
+    }
+
+    /**
+    * Find the redirect based off an id and must be published.
+    * @param int id
+    * @return string hh or false
+    */
+    function findForRedirectById($id){
+        $content = $this->find('all', array(
+            'conditions' => [
+                'Content.id' => (int) $id,
+                'Content.date <= CURDATE()'
+            ],
+            'contain' => [],
+            'fields' => [
+                'Content.slug',
+                'Content.id',
+                'Content.type',
+                'Content.old_url',
+                'Content.is_active'
+            ]
+        ))->first();
+        if (isset($content->hh_url)) {
+            return $content->hh_url;
+        }
+        return false;
+    }
+
+    /**
+    * Takes an ID of content or a list of tags and outputs the
+    * @param entity $content with tags associated
+    * @return string of tags for custom vars
+    */
+    public function tagsForCustomVar($content){
+        if (!is_object($content)) {
+            $content = $this->find('all', [
+                'conditions' => ['Content.id' => $content],
+                'contain' => ['Tags']
+            ])->first();
+        }
+        //Parse Tags into string for customVar
+        $retval = [];
+        $tags = empty($content->tags) ? [] : $content->tags;
+        foreach ($tags as $tag) {
+            $retval[] = $tag->name;
+        }
+        return implode(',', $retval);
+    }
+
+    /**
+    * Get all wikis this content belongs to
+    * @param int id
+    * @return array of wiki links.
+    */
+    public function findWikisById($id = null){
+        $retval = [];
+        if ($id) {
+            $contentTags = $this->ContentTags->find('all', array(
+                'conditions' => ['ContentTags.content_id' => $id],
+            ))->all();
+            //$TagWikis = TableRegistry::get('TagWikis');
+            $wikiIds = array();
+            foreach ($contentTags as $tag) {
+                $tagWiki = TableRegistry::get('TagWikis')->find()->where(['tag_id' => $tag->tag_id])->first();
+                if (!empty($tagWiki->wiki_id)) {
+                    $wikiIds[] = $tagWiki->wiki_id;
+                }
+            }
+            if (!empty($wikiIds)) {
+                $retval = TableRegistry::get('Wikis')->findForLinkByIds($wikiIds);
+            }
+        }
+        return $retval;
     }
 }

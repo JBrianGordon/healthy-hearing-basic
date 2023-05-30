@@ -16,7 +16,7 @@ $logo = Configure::read('logo');
 //     $featureContentLibrary = $this->Clinic->get('feature_content_library');
 // }
 
-// $showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isadmin;
+// $showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isAdmin;
 // if (!Configure::read('showSocialMediaContentLibrary')) {
 //     $showLibraryLink = false;
 // }

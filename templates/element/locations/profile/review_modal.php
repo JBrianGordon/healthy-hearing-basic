@@ -9,9 +9,6 @@ use Cake\Core\Configure;
 
 $zipLabel = Configure::read('zipLabel');
 ?>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-
 <div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -135,8 +132,6 @@ $zipLabel = Configure::read('zipLabel');
     </div>
   </div>
 </div>
-
-<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
 
 <script type="text/javascript">
   const form = document.querySelector('#submitReviewForm');

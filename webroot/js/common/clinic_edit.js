@@ -581,7 +581,7 @@ $.addLink = function(locationId, key) {
 				// Add the new row to the LocationLink table
 				var newKey = key+1;
 				var newRow = $('<tr id="tr-link-'+newKey+'">');
-				newRow.append('<td><div id="div-link-'+newKey+'"><input type="hidden" name="data[Location][linked_location_id]" id="LocationLinkedLocationId"><input class="form-control linked-location" data-key="'+newKey+'" data-id="'+locationId+'" /><span class="help-block text-danger" style="display:none;" id="link-error-'+newKey+'"></span></div></td>');
+				newRow.append('<td><div id="div-link-'+newKey+'"><input type="hidden" name="data[Location][id_linked_location]" id="LocationIdLinkedLocation"><input class="form-control linked-location" data-key="'+newKey+'" data-id="'+locationId+'" /><span class="help-block text-danger" style="display:none;" id="link-error-'+newKey+'"></span></div></td>');
 				newRow.append('<td style="width:100px;" align="center"><div id="div-add-delete-'+newKey+'"></div></td>');
 				$("#tr-link-"+key).after(newRow);
 				locationAutocomplete();
