@@ -239,13 +239,11 @@
   
   &.blog{
 	  overflow-y: visible;
-	  padding: 0;
 
 	  .row {
 
 		@media(max-width: $screen-sm-max){
-			width:100%;
-			margin: 0 auto;
+			display: block;
 
 			.col-md-3, .col-md-9 {
 				padding:0;
