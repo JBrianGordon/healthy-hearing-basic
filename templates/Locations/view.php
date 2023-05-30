@@ -35,11 +35,11 @@ $this->Breadcrumbs->add([
 		</div>
 		<div class="container">
 			<div class="row" id="result_content">
-				<header class="col-md-12 inverse breadcrumb-header">
+				<header class="col-lg-12 inverse breadcrumb-header">
 					<?= $this->Breadcrumbs->render(); ?>
 					<div id="ellipses">...</div>
 				</header>
-				<div class="col-md-12 page-content">
+				<div class="col-lg-12 page-content">
 				
 					<!-- Basic clinic info -->
 					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-xs-12 col-md-7 p0"; }?>">
