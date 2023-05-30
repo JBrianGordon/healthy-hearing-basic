@@ -36,6 +36,7 @@ class ClinicHelper extends Helper
     {
         $this->Locations = TableRegistry::getTableLocator()->get('Locations');
         $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+        $this->lettersSeen = [];
     }
 
     /**
@@ -840,5 +841,34 @@ class ClinicHelper extends Helper
         $listingType = !empty($location->listing_type) ? $location->listing_type : Location::LISTING_TYPE_NONE;
         $clickEvent = "dataLayer.hhTrackEvent('CityPageClicks','" . $listingType . "Click', document.location.pathname, 0, false);";
         return $clickEvent;
+    }
+
+    /**
+    * THis will decide if we need to show the city letter header
+    * @param city
+    * @return string html h4 tag or empty string
+    */
+    public function showCityLetterLine($city) {
+        $retval = "";
+        $first_letter = strtoupper($city[0]);
+        if (empty($this->lettersSeen[$first_letter])) {
+            $isFirst = count($this->lettersSeen) == 0;
+            $this->lettersSeen[$first_letter] = true;
+            if ($isFirst) {
+                $retval = '<li><h3 class="list-header">'. $first_letter .'</h3></li>';
+            }   else {
+                $retval = '<li><h3 class="list-header mt30">'. $first_letter .'</h3></li>';
+            }
+        }
+        return $retval;
+    }
+
+    /**
+    * Return a state slug based on state
+    * @param string state
+    * @return string slug
+    */
+    public function stateSlug($state) {
+        return $this->Locations->stateSlug($state);
     }
 }

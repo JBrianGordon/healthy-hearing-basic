@@ -406,7 +406,7 @@ function slugifyRegion($region = null){
 /**
 * Slugify a city Wilkes-Barre and Albuquerque
 */
-function slugifyCity($city = null){
+function slugifyCity($city){
     //todo clean city name
     //$city = ClassRegistry::init('City')->cleanCityName($city);
     $city = str_replace(' ', '-', $city);
