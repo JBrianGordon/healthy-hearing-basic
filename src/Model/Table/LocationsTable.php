@@ -1202,6 +1202,23 @@ class LocationsTable extends Table
     public function stateFull($state_input) {
         return $this->state('full',$state_input);
     }
+    /**
+    * Handy shortcut function to return a abbr state by searching through the states array
+    * @param string $state_input
+    * @return string $state_full
+    */
+    public function stateAbbr($state_input) {
+        return $this->state('abbr',$state_input);
+    }
+
+    /**
+    * Create the stateSlug for URL based on input state
+    * @param string state
+    * @return string slug of state ST_State_Name
+    */
+    public function stateSlug($state) {
+        return strtoupper($this->stateAbbr($state)) . "-" . slugify($this->stateFull($state));
+    }
 
     /**
     * Handy shortcut function to return a full/abbr state by searching through the states array

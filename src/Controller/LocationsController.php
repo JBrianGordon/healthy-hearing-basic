@@ -9,6 +9,8 @@ use App\Enums\Model\Review\ReviewOrigin;
 use Cake\View\JsonView;
 use Cake\Log\LogTrait;
 use Cake\Log\Log;
+use Cake\Routing\Router;
+use Cake\Core\Configure;
 
 /**
  * Locations Controller
@@ -23,17 +25,156 @@ class LocationsController extends AppController
     //     return [JsonView::class];
     // }
 
-    // Main /hearing-aids FAC page
-    public function states()
+    // Main /hearing-aids FAC page ( previously called states() )
+    public function viewFac()
     {
-        die('TODO states()');
+        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'locations', 'action'=>'viewFac'])) {
+            // Self heal url. Redirect to proper url format.
+            return $this->redirect(array('controller'=>'locations', 'action'=>'viewFac'), 301);
+        }
+
+        //set up and assign the meta tag info
+        $request = env('REQUEST_URI');
+        $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
+        $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+        $this->set('seoMetaTags', $seoMetaTags);
+
+        $this->set('states', Configure::read('states'));
+        $this->set('countries', Configure::read('countries'));
+        $this->set('cities', $this->fetchTable('Cities')->find('all', [
+            'conditions' => [
+                'is_featured' => 1
+            ],
+            'order' => 'city'
+        ])->all());
+        $this->set('fapterm', $this->fapSearchTerm());
     }
 
-    // State page
-    public function cities($region = null)
+    // State page ( previously called cities() )
+    public function viewState($region = null)
     {
-        pr('region = '.$region);
-        die('TODO cities()');
+        if (!empty($region)) {
+            // Format the state correctly and make sure it is valid for this country
+            $region = $this->Locations->stateRegion($region);
+        }
+        if (empty($region)) {
+            // An invalid state was passed
+            return $this->throw404NotFound();
+        }
+        if ($region == 'DC-Dist-Of-Columbia') {
+            // Skip the state page for DC
+            return $this->redirect('/hearing-aids/DC-Dist-Of-Columbia/Washington', 301);
+        }
+        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'locations','action'=>'viewState','region'=>$region])) {
+            // Self heal url. Redirect to proper url format.
+            return $this->redirect(['controller'=>'locations','action'=>'viewState','region'=>$region], 301);
+        }
+
+        $citiesTable = $this->fetchTable('Cities');
+        $countMetricsTable = $this->fetchTable('CountMetrics');
+        $state = $this->Locations->parseStateSlug($region);
+        $stateNice = $this->Locations->stateFull($state);
+        $stateAbbr = $this->Locations->stateAbbr($state);
+
+        $limit = $stateAbbr == 'DC' ? 1 : 5;
+
+        $totalClinics = $countMetricsTable->getCount($stateAbbr, 'clinics', 'state');
+
+        $topCities = $citiesTable->find('all', [
+            'conditions' => [
+                'state' => $stateAbbr,
+                'is_near_location' => true,
+            ],
+            'order' => [
+                'population'=>'DESC'
+            ],
+            'limit' => $limit
+        ])->all();
+
+        $this->set('totalClinics', $totalClinics);
+        $this->set('topCities', $topCities);
+
+        // Get state-specific resources
+        $stateInfo = $this->fetchTable('States')->find('all', [
+            'conditions' => [
+                'name' => $stateNice,
+                'is_active' => true
+            ]
+        ])->first();
+
+        if (!empty($stateInfo->body)) {
+            $this->set('stateInfo', $stateInfo->body);
+        }
+
+        $statePageFields = ['id','title','listing_type','address','address_2','city','state','zip','is_mobile','is_call_assist','direct_book_type','direct_book_iframe','average_rating','reviews_approved'];
+
+        // Get mobile clinics in a state
+        $mobileClinicsInState = $this->Locations->find('all', [
+            'conditions' => [
+                'Locations.state' => $stateAbbr,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+                'OR' => [
+                    'AND' => [
+                        'Locations.badge_mobile_clinic' => true,
+                        'Locations.listing_type !=' => Location::LISTING_TYPE_BASIC,
+                    ],
+                    'Locations.is_mobile' => true,
+                ]
+            ],
+            'contain' => ['CallSources'],
+            'fields' => $statePageFields
+        ])->all();
+        $this->set('mobileClinicsInState', $mobileClinicsInState ?: []);
+        $mobileClinicsInStateCount = count($mobileClinicsInState);
+        $this->set('mobileClinicsInStateCount', $mobileClinicsInStateCount);
+        $showMobileClinics = $mobileClinicsInStateCount > 0;
+        $this->set('showMobileClinics', $showMobileClinics);
+
+        // Get telehealth clinics in a state
+        $telehealthClinicsInState  = $this->Locations->find('all', [
+            'conditions' => [
+                'Locations.state' => $stateAbbr,
+                'Locations.badge_telehearing' => true,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+                'Locations.listing_type !=' => Location::LISTING_TYPE_BASIC,
+            ],
+            'contain' => ['CallSources'],
+            'fields' => $statePageFields
+        ])->all();
+        $this->set('telehealthClinicsInState', $telehealthClinicsInState ?: []);
+        $telehealthClinicsInStateCount = count($telehealthClinicsInState);
+        $this->set('telehealthClinicsInStateCount', $telehealthClinicsInStateCount);
+        $showTelehealthClinics = $telehealthClinicsInStateCount > 0;
+        $this->set('showTelehealthClinics', $showTelehealthClinics);
+
+        // Mobile and telehealth conditionals
+        $this->set('stateHasMobileOrTelehealth', ($showMobileClinics || $showTelehealthClinics));
+        $this->set('stateHasMobileAndTelehealth', ($showMobileClinics && $showTelehealthClinics));
+
+        $cities = $citiesTable->findAllByState($state, true);
+        $this->set('region', $this->Locations->stateRegion($state));
+        $this->add_title("Trusted hearing aid specialists & audiologists in $stateNice", true);
+        $this->set(compact('cities','stateNice','stateAbbr'));
+        $this->meta['description'] = 'Looking for a hearing clinic near you? '. $this->siteName .' has unbiased reviews from real patients for over '. $totalClinics .' hearing aid and audiology clinics in '. $stateNice .'. '. $this->siteName .'\'s clinic directory is the best way to find local hearing aid specialists and audiologists to schedule a hearing test at a center near you.';
+        //Custom Variables
+        $customVars['type'] = 'state';
+        $customVars['category|2'] = $stateAbbr . '-' . $this->Locations->googleRegion($state);
+        $this->set('customVars',$customVars);
+
+        // Get the total number of reviews for the country rounded to nearest hundred
+        $reviews = $countMetricsTable->find('all', [
+            'conditions' => [
+                'metric' => 'reviews',
+                'type' => 'state'
+            ]
+        ])->toArray();
+        $reviewCounts = array_column($reviews, 'count');
+        $roundedReviews = round(array_sum($reviewCounts), -2);
+        $this->set('roundedReviews', number_format($roundedReviews));
+        $this->set('preferredClinicsNearMe', $this->Locations->findClinicsNearMe(4, true));
+        $this->set('fapterm', $this->fapSearchTerm());
     }
 
     // City/zip page

@@ -134,28 +134,32 @@ $zipLabel = Configure::read('zipLabel');
 </div>
 
 <script type="text/javascript">
-$(function() {
-  $('#submitReviewForm').submit(function(event) {
-    event.preventDefault();
-    var targeturl = $(this).prop('action');
-    $.ajax({
-      headers: {
-        Accept : "application/json",
-      },
-      type: 'post',
-      url: targeturl,
-      data: $('#submitReviewForm').serialize(),
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      },
-      success: function(response) {
-        $('#reviewSubmitModal').modal('hide');
-      },
-      error: function(e) {
-        alert("An error occurred: " + e.responseText.message);
-      }
-    });
-  });
+  const form = document.querySelector('#submitReviewForm');
 
-});
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const targeturl = event.target.action;
+    const formData = new URLSearchParams(new FormData(form)).toString();
+
+    try {
+      const response = await fetch(targeturl, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const reviewSubmitModal = document.querySelector('#reviewSubmitModal');
+        const bootstrapModal = bootstrap.Modal.getInstance(reviewSubmitModal);
+        bootstrapModal.hide();
+      } else {
+        throw new Error(`An error occurred: ${response.statusText}`);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  });
 </script>

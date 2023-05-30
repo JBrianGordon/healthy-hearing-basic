@@ -23,7 +23,7 @@ $showSpecialAnnouncement = (
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 $this->Breadcrumbs->add([
     ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
-    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'cities', 'region' => $region]],
+    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
     ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city]],
     ['title' => $location->title, 'url' => ''],
 ]);

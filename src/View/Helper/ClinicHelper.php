@@ -36,6 +36,7 @@ class ClinicHelper extends Helper
     {
         $this->Locations = TableRegistry::getTableLocator()->get('Locations');
         $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+        $this->lettersSeen = [];
     }
 
     /**
@@ -702,13 +703,13 @@ class ClinicHelper extends Helper
             $region = $this->Locations->stateRegion($geoLocData['state']);
         }
         if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
         } elseif (isset($geoLocData['city']) && !empty($region)) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
         } else {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'states']);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         }
         return $nearMeLink;
     }
@@ -840,5 +841,49 @@ class ClinicHelper extends Helper
         $listingType = !empty($location->listing_type) ? $location->listing_type : Location::LISTING_TYPE_NONE;
         $clickEvent = "dataLayer.hhTrackEvent('CityPageClicks','" . $listingType . "Click', document.location.pathname, 0, false);";
         return $clickEvent;
+    }
+
+    /**
+    * THis will decide if we need to show the city letter header
+    * @param city
+    * @return string html h4 tag or empty string
+    */
+    public function showCityLetterLine($city) {
+        $retval = "";
+        $first_letter = strtoupper($city[0]);
+        if (empty($this->lettersSeen[$first_letter])) {
+            $isFirst = count($this->lettersSeen) == 0;
+            $this->lettersSeen[$first_letter] = true;
+            if ($isFirst) {
+                $retval = '<li><h3 class="list-header">'. $first_letter .'</h3></li>';
+            }   else {
+                $retval = '<li><h3 class="list-header mt30">'. $first_letter .'</h3></li>';
+            }
+        }
+        return $retval;
+    }
+
+    /**
+    * Return a state slug based on state
+    * @param string state
+    * @return string slug
+    */
+    public function stateSlug($state) {
+        return $this->Locations->stateSlug($state);
+    }
+
+    /**
+     * @description Returns the count from the count_metrics data set
+     *
+     * @param $name string Primary selector, usually a city name, state name or zip code
+     * @param string $metric Metric to check
+     * @param string $type Segmentation level
+     * @param string $subName Secondary selector, only used for city
+     *
+     * @return int count value
+     */
+    public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
+    {
+        return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 }
