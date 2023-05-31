@@ -1,7 +1,22 @@
+.input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate;
+
+  .input-group-btn {
+    position: relative;
+    font-size: 0;
+    white-space: nowrap;
+    display: table-cell;
+    vertical-align: top;
+  }
+}
+
 .input-group-btn:last-child > .btn {
   border-top-right-radius: $border-radius-base;
   border-bottom-right-radius: $border-radius-base;
   font-size: $font-size-base * 0.857;
   font-weight: bold;
-  height: $input-height-base;
+  height: 46px;
+  margin-left: -1px;
 }
