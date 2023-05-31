@@ -455,6 +455,23 @@ class ClinicHelper extends Helper
     }
 
     /**
+    * Return the link back of a particular locations with the title as the text
+    * @param location
+    * @param boolean full link (default false)
+    * @return HtmlLink
+    */
+    public function link($location = null, $full = false, $options = array()) {
+        if ($location) $this->setLocation($location);
+        if ($full) {
+            $url = Router::url($this->get('hh_url'), $full);
+        }   else {
+            $url = $this->get('hh_url');
+        }
+
+        return $this->Html->link($this->get('title'), $url, $options);
+    }
+
+    /**
     * Display the hours of a clinic
     * @param location (optional)
     * @return mixed
@@ -885,5 +902,15 @@ class ClinicHelper extends Helper
     public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
     {
         return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
+    }
+
+    public function isEnhancedOrPremierByLocationArray($location) {
+        // Returns true if this location is Enhanced or Premier
+        return in_array($location->listing_type, ['Premier', 'Enhanced']);
+    }
+
+    public function getOpenClosedByLocationArray($location) {
+        $isEnhancedOrPremier = $this->isEnhancedOrPremierByLocationArray($location);
+        return $this->getOpenClosed($location->id, $isEnhancedOrPremier);
     }
 }
