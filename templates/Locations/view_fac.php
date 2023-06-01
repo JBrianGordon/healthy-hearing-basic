@@ -75,13 +75,13 @@ $this->Breadcrumbs->add([
 									array_shift($sets[$j]);
 									$link = [
 										'controller' => 'locations',
-										'action' => 'cities',
+										'action' => 'viewState',
 										'region' => $region
 									];
 									if ($region == 'DC-Dist-Of-Columbia') {
 										$link = [
 											'controller' => 'locations',
-											'action' => 'index',
+											'action' => 'viewCityZip',
 											'region' => $region,
 											'city' => 'Washington'
 										];
@@ -134,7 +134,7 @@ $this->Breadcrumbs->add([
 											ucwords($name) . ', ' . $stateAbbr,
 											[
 												'controller' => 'locations',
-												'action' => 'index',
+												'action' => 'viewCityZip',
 												'region' => $this->Clinic->stateSlug($stateAbbr),
 												'city' => slugifyCity($name)
 											],

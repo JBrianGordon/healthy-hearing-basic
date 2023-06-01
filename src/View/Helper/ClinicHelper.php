@@ -705,9 +705,9 @@ class ClinicHelper extends Helper
         if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
         } elseif (isset($geoLocData['city']) && !empty($region)) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
         } else {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         }
@@ -885,5 +885,45 @@ class ClinicHelper extends Helper
     public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
     {
         return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
+    }
+
+    /**
+    * Return near text of the closest locations
+    * @param string region
+    * @param string city
+    * @param string zip
+    * @return string text based on all of them
+    */
+    public function nearText($region = null, $city = null, $zip = null) {
+        $retval = "";
+        if ($zip) {
+            $retval .= "$zip, ";
+        }
+        if ($city) {
+            $city = cleanCityName($city);
+            $city = ($city == 'Coeur dAlene') ? "Coeur d'Alene" : $city;
+            $retval .= $city.' ';
+        }
+        if ($region) {
+            $retval .= strtoupper($this->Locations->parseStateSlug($region));
+        }
+        return $retval;
+    }
+
+    /**
+    * Get the higest distance (in miles or km)
+    * @param location
+    * @return float distance
+    */
+    public function highestDistance($locations = null) {
+        end($locations);
+        $distance = round(key($locations),1);
+        if (Configure::read('isMetric')) {
+            $distance = round($distance * 1.60934, 1);
+            $distance .= ' km';
+        } else {
+            $distance .= ' miles';
+        }
+        return $distance;
     }
 }

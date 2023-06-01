@@ -94,10 +94,10 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/{region}', 'Locations::viewState')
             ->setPass(['region'])
             ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
-        $builder->connect('/{region}/{city}', 'Locations::index')
+        $builder->connect('/{region}/{city}', 'Locations::viewCityZip')
             ->setPass(['region', 'city'])
             ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
-        $builder->connect('/{region}/{city}/{zip}', 'Locations::index')
+        $builder->connect('/{region}/{city}/{zip}', 'Locations::viewCityZip')
             ->setPass(['region', 'city', 'zip'])
             ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
         $builder->connect('/{id}-{title}', 'Locations::view')

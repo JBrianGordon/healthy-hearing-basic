@@ -117,7 +117,7 @@ $this->Breadcrumbs->add([
 												<?php echo $this->Html->link("{$city->city}, {$city->state}",
 													[
 														'controller' => 'locations',
-														'action' => 'index',
+														'action' => 'viewCityZip',
 														'region' => $this->Clinic->stateSlug($city->state),
 														'city' => slugifyCity($city->city)
 													],
