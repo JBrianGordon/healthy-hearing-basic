@@ -151,6 +151,7 @@ class Location extends Entity
 {
     protected $_virtual = ['is_oticon', 'state_full', 'hh_url', 'slug'];
     static $oticonPrefix = '81190';
+    static $mobileTextDefault = 'Mobile clinic - we come to you!';
 
     /**
     * Enum - Listing Type

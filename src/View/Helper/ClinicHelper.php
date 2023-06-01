@@ -167,7 +167,7 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
-    public function reviewSchema($location = null, $options = array()) {
+    public function reviewSchema($location, $options = []) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);
         }
@@ -184,6 +184,18 @@ class ClinicHelper extends Helper
                     "ratingValue": "' . $rating . '"
                 }';
         return $retval;
+    }
+
+    public function reviewSchemaHidden($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $averageRating = $location->average_rating;
+        $reviewsApproved = $location->reviews_approved;
+        if (!$averageRating || !$reviewsApproved) {
+            return null;
+        }
+        return '<div style="display:none;"><span>'. $averageRating .'</span><span>'. $reviewsApproved .'</span></div>';
     }
 
     public function sliceReviews($reviews, $by = 5) {
@@ -368,6 +380,10 @@ class ClinicHelper extends Helper
             $retval = $street . $break . $city . ', ' . $state . ' ' . $zip;
         }
         return str_replace("\n", "", $retval);
+    }
+
+    public function addressSchemaHidden($location) {
+        return '<div style="display:none;">'.$this->address($location, ['schema'=>false]).'</div>';
     }
 
     /**
