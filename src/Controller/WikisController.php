@@ -31,6 +31,7 @@ class WikisController extends AppController
         $title = Configure::read('siteName')." help: Hearing loss, hearing aids, tinnitus and more";
         $this->add_title($title);
         $this->backgroundHeight = '1200px';
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         $this->set('wikis', $this->Wikis->findForIndex());
     }
 
