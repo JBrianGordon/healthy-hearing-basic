@@ -1,35 +1,35 @@
 import '../common/common';
 import './search_toggle';
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', () => {
 	// Check IP Address Button
-	$('body').on('click', '.ipCheckBtn', function() {
-		var reviewId = $(this).data('id');
-		$.ajax({
-			url:"/reviews/check_ip/"+reviewId,
-			dataType: 'json',
-			success: function(data, textStatus) {
-				if (data['ipWarningsFound'] === true) {
-					$('#ipSuccess'+reviewId).hide();
-					$('#ipWarning'+reviewId).show();
-				} else {
-					$('#ipSuccess'+reviewId).show();
-					$('#ipWarning'+reviewId).hide();
-				}
-			}
-		});
+	document.body.addEventListener('click', (e) => {
+		if (e.target.classList.contains('ipCheckBtn')) {
+			const reviewId = e.target.dataset.id;
+			fetch(`/reviews/check_ip/${reviewId}`)
+				.then(response => response.json())
+				.then(data => {
+					if (data.ipWarningsFound === true) {
+						document.querySelector(`#ipSuccess${reviewId}`).style.display = 'none';
+						document.querySelector(`#ipWarning${reviewId}`).style.display = 'block';
+					} else {
+						document.querySelector(`#ipSuccess${reviewId}`).style.display = 'block';
+						document.querySelector(`#ipWarning${reviewId}`).style.display = 'none';
+					}
+				});
+		}
 	});
 		
-	$('.checkall').on('click', function () {
-		$('.checkbox').attr('checked', this.checked);
+	document.querySelector('.checkall').addEventListener('click', () => {
+		const checkboxes = document.querySelectorAll('.checkbox');
+		checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
 	});
-	$('#mass_delete').on('click', function() {
-		$('#mass_delete_bool').val('1');
-		$('#ReviewForm').trigger('submit');
+	document.querySelector('#mass_delete').addEventListener('click', () => {
+		document.querySelector('#mass_delete_bool').value = '1';
+		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
 	});
-	$('#mass_approve').on('click', function() {
-		$('#mass_delete_bool').val('0');
-		$('#ReviewForm').trigger('submit');
+	document.querySelector('#mass_approve').addEventListener('click', () => {
+		document.querySelector('#mass_delete_bool').value = '0';
+		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
 	});
-	
 });

@@ -45,6 +45,8 @@ class ReviewsController extends AppController
     public function index()
     {
         $requestParams = $this->request->getQueryParams();
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'Reviews'])->toArray();
         if (array_key_exists('saved_search', $requestParams)) {
             $this->set('savedSearch', true);
         } else {
@@ -55,6 +57,7 @@ class ReviewsController extends AppController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('crmSearches', $crmSearches);
         $this->set('reviews', $this->paginate($reviewsQuery));
         $this->set('fields', $this->Reviews->getSchema()->typeMap());
     }
