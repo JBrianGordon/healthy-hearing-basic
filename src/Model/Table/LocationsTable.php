@@ -1593,6 +1593,7 @@ class LocationsTable extends Table
         $state = $this->parseStateSlug($options['region']);
         $conditions['Locations.state'] = $state;
         $locations = $this->find('all', [
+            'contain' => $contain,
             'conditions' => $conditions,
             'limit' => $limit
         ])->all()->toArray();
@@ -1697,5 +1698,33 @@ class LocationsTable extends Table
             }
         }
         return $reviews;
+    }
+
+    /**
+    * Return the first provider with a photo
+    * @param location id
+    * @return mixed false if failed to find location, array of result
+    */
+    public function firstProviderWithPhoto($locationId) {
+        // Find all providers for this locaton
+        $locationProviders = $this->LocationProviders->find('all', [
+            'contain' => ['Providers'],
+            'conditions' => [
+                'LocationProviders.location_id' => $locationId,
+            ]
+        ])->all();
+        $provider = false;
+        $providerPriority = 99;
+        foreach ($locationProviders as $locationProvider) {
+            if ($locationProvider->provider->thumb_url != '') {
+                // This provider has a photo
+                if ($locationProvider->provider->priority < $providerPriority) {
+                    // Find the provider with the lowest priority number
+                    $provider = $locationProvider->provider;
+                    $providerPriority = $locationProvider->provider->priority;
+                }
+            }
+        }
+        return $provider;
     }
 }

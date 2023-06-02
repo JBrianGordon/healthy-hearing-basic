@@ -89,7 +89,7 @@ if (!empty($zip)) {
 	</section>
 
 	<div id="clinic-results">
-		<?php //TODO: echo $this->element('locations/results', ['locations' => $locations]); ?>
+		<?php echo $this->element('locations/results', ['locations' => $locations]); ?>
 	</div>
 </div>
 

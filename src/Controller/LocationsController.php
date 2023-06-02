@@ -198,13 +198,14 @@ class LocationsController extends AppController
 
         if ($city) {
             // Verify that the city here matches the "clean" version.  If not, redirect so we don't get duplicate pages.
-            $cleanCity = slugifyCity($city);
-            if (strtolower($city) != strtolower($cleanCity)) {
+            $cleanCity = cleanCityName($city);
+            $slugifiedCity = slugifyCity($cleanCity);
+            if (strtolower($city) != strtolower($slugifiedCity)) {
                 return $this->redirect([
                     'controller' => 'locations',
                     'action' => 'viewCityZip',
                     'region' => $region,
-                    'city' => $cleanCity,
+                    'city' => $slugifiedCity,
                     'zip' => slugifyZip($zip)
                 ], 301);
             }
@@ -216,6 +217,7 @@ class LocationsController extends AppController
             ])->first();
             if (empty($cityData)) {
                 // No matching city was found
+                //TODO: define throw404NotFound()
                 return $this->throw404NotFound();
             }
         }
@@ -229,7 +231,7 @@ class LocationsController extends AppController
             // Self-heal URL
             return $this->redirect($redirect, 301);
         }
-        $contain = ['CallSource'];
+        $contain = ['CallSources'];
         $fields = array_merge(['Location.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
         $locations = $this->Locations->findAllByGeoLoc(compact('region','city','zip'), 40, [], $contain, $fields);
 
