@@ -182,6 +182,6 @@ $this->Breadcrumbs->add([
 	</section>
 </div>
 <?php if (isFeatureOn('quick_pick')): ?>
-	<?php //TODO: echo $this->element('responsive_slider'); ?>
+	<?php echo $this->element('responsive_slider'); ?>
 <?php endif; ?>
 <?php //TODO: $this->Html->addJs('/js/dist/cities.min.js?v='.Configure::read("tagVersion")); ?>

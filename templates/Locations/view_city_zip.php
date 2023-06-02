@@ -4,27 +4,16 @@ use Cake\Core\Configure;
 $this->Breadcrumbs->add([
 	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => ['controller' => 'locations', 'action' => 'viewFac']],
-    //['title' => $state, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
-    //['title' => $city, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
 ]);
-$crumbs = array('Find a clinic' => array('controller' => 'locations', 'action' => 'states'));
 if (!empty($region)) {
-	$this->Breadcrumbs->add(
-	    $state,
-	    ['controller'=>'locations', 'action' => 'viewState', 'region' => $region]
-	);
+	$this->Breadcrumbs->add($state, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
 }
 if (!empty($city)) {
-	$cleanCity = cleanCityName($city);
-	$url = empty($zip) ? '' : ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region, 'city'=>$city];
-	$this->Breadcrumbs->add($cleanCity, $url);
+	$url = empty($zip) ? '' : ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city];
+	$this->Breadcrumbs->add(cleanCityName($city), $url);
 }
 if (!empty($zip)) {
-	//$crumbs[$zip] = array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city, 'zip' => str_replace(' ', '-', $zip));
-	$this->Breadcrumbs->add(
-	    $zip,
-	    ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region, 'city'=>$city, 'zip'=>$zip]
-	);
+	$this->Breadcrumbs->add($zip, '');
 }
 ?>
 <header class="col-md-12 inverse">
@@ -94,7 +83,7 @@ if (!empty($zip)) {
 </div>
 
 <?php if (isFeatureOn('quick_pick')): ?>
-	<?php //TODO: echo $this->element('responsive_slider'); ?>
+	<?php echo $this->element('responsive_slider'); ?>
 <?php endif; ?>
 
 <?php

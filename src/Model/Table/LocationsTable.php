@@ -1673,16 +1673,16 @@ class LocationsTable extends Table
             }
         }
         $url = str_replace('%20', ' ', $url);
-
-        //Do not redirect to what we already came in on
         if (empty($url)) {
+            // original url
             $url = Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$options['region'],'city'=>$options['city'],'zip'=>$options['zip']]);
         }
-        if ($url == Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$retval['region'],'city'=>$retval['city'],'zip'=>$retval['zip']])) {
-            $retval = array();
-        }
 
-        return empty($retval) ? false : $retval;
+        // Do not redirect to what we already came in on
+        if ($url == Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$retval['region'],'city'=>$retval['city'],'zip'=>$retval['zip']])) {
+            return false;
+        }
+        return $retval;
     }
 
     /**

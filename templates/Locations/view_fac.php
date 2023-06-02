@@ -158,5 +158,5 @@ $this->Breadcrumbs->add([
 </div>
 <?php echo $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer']); ?>
 <?php if (isFeatureOn('quick_pick')): ?>
-	<?php //TODO: echo $this->element('responsive_slider'); ?>
+	<?php echo $this->element('responsive_slider'); ?>
 <?php endif; ?>
