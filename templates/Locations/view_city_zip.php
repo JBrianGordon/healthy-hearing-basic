@@ -2,8 +2,8 @@
 use Cake\Core\Configure;
 
 $this->Breadcrumbs->add([
-	['title' => 'Home', 'url' => '/'],
-    ['title' => 'Find a clinic', 'url' => ['controller' => 'locations', 'action' => 'viewFac']],
+	['title'=>'Home', 'url'=>'/'],
+    ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
 if (!empty($region)) {
 	$this->Breadcrumbs->add($state, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);

@@ -107,28 +107,26 @@ class AppController extends Controller
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
         $this->user = $this->request->getSession()->read('Auth');
+        $userRole = empty($this->user->role) ? '' : $this->user->role;
+        $this->isAdmin = ($userRole == 'admin');
+        $this->isClinic = ($userRole == 'clinic');
+        $this->isItAdmin = ($userRole == 'it_admin');
+        $this->isAgent = ($userRole == 'agent');
+        $this->isCallSupervisor = ($userRole == 'call_supervisor');
+        $this->isCsa = ($userRole == 'csa');
+        $this->isWriter = ($userRole == 'writer');
+        $this->isReviewer = ($userRole == 'reviewer');
+        $this->adminAccessAllowed = in_array($userRole, ['admin', 'it_admin', 'agent', 'call_supervisor', 'csa', 'writer']);
         $this->set('user', $this->user);
-        $this->isAdmin = empty($this->user->role) ? false : ($this->user->role == 'admin');
         $this->set('isAdmin', $this->isAdmin);
-        $this->isClinic = empty($this->user->role) ? false : ($this->user->role == 'clinic');
         $this->set('isClinic', $this->isClinic);
-        //$this->set('isitadmin', $this->isItAdmin());
-        //$this->set('isagent', $this->isAgent());
-        //$this->set('iscallsupervisor', $this->isCallSupervisor());
-        //$this->set('iscsa', $this->isCSA());
-        //$this->set('iswriter', $this->isWriter());
-        //$this->set('isreviewer', $this->isReviewer());
-
-        // Create an array of the permissions the user has.
-        //$userPermissions = [];
-        //if ($this->isAdmin()) { $userPermissions[] = 'admin'; }
-        //if ($this->isItAdmin()) { $userPermissions[] = 'itadmin'; }
-        //if ($this->isAgent()) { $userPermissions[] = 'agent'; }
-        //if ($this->isCallSupervisor()) { $userPermissions[] = 'callsupervisor'; }
-        //if ($this->isClinic()) { $userPermissions[] = 'clinic'; }
-        //if ($this->isCSA()) { $userPermissions[] = 'csa'; }
-        //if ($this->isWriter()) { $userPermissions[] = 'writer'; }
-        //$this->set('userPermissions', $userPermissions);
+        $this->set('isItAdmin', $this->isItAdmin);
+        $this->set('isAgent', $this->isAgent);
+        $this->set('isCallSupervisor', $this->isCallSupervisor);
+        $this->set('isCsa', $this->isCsa);
+        $this->set('isWriter', $this->isWriter);
+        $this->set('isReviewer', $this->isReviewer);
+        $this->set('adminAccessAllowed', $this->adminAccessAllowed);
 
         $this->set('show_ad', true);
         //$this->set('isInactiveClinic', $this->isInactiveClinic());
