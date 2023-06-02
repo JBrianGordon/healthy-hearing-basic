@@ -103,8 +103,8 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
                                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                                     <div class="table-responsive">
-                                        <?= $this->Form->create(null, ['url' => ['action' => 'approveAll']]); ?>
-                                            <table class="table table-striped table-bordered table-sm">
+                                        <?= $this->Form->create(null, ['url' => ['action' => 'approveAll'], 'class' => 'mb10']); ?>
+                                            <table class="table table-striped table-bordered table-sm mb20">
                                                 <thead>
                                                     <tr>
                                                         <th><input type="checkbox" class="checkall" /></th>
@@ -142,7 +142,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?= $review->is_spam ? '<strong>Spam</strong>' : '' ?><br>
                                                                 <?php if (!empty($review->location->is_yhn)) : ?>
                                                                     <?php if (Configure::read('isYhnImportEnabled')) : ?>
-                                                                        <span class='badge bg-yhn bi bi-globe-americas'> YHN</span>
+                                                                        <span class='badge bg-yhn bi bi-globe2'> YHN</span>
                                                                     <?php endif; ?>
                                                                 <?php endif; ?>
                                                                 <?php if ($review->location->is_oticon) : ?>
@@ -178,22 +178,24 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                             </td>
                                                             <td class="actions p5" nowrap>
                                                                 <div class="btn-group-vertical btn-group-xs">
-                                                                    <?= $this->Html->link('View/Edit', ['admin' => true, 'action' => 'edit', $review->id], ['escape' => false, 'class' => 'btn btn-default']) ?>
-                                                                    <?= $this->Form->postLink('Publish Positive', ['admin' => true, 'action' => 'approve', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]) ?>
-                                                                    <?= $this->Form->postLink('Publish Negative', ['admin' => true, 'action' => 'deny', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (negative)?"]) ?>
-                                                                    <?= $this->Form->postLink('Quick Spam', ['admin' => true, 'action' => 'spam', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as spam?"]) ?>
+                                                                    <?= $this->Html->link('View/Edit', ['action' => 'edit', $review->id], ['escape' => false, 'class' => 'btn btn-default']) ?>
+                                                                    <?= $this->Form->postLink('Publish Positive', ['action' => 'approve', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (positive)?"]) ?>
+                                                                    <?= $this->Form->postLink('Publish Negative', ['action' => 'deny', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to publish ID #{$review->id} (negative)?"]) ?>
+                                                                    <?= $this->Form->postLink('Quick Spam', ['action' => 'spam', $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-default', 'confirm' => "Are you sure you want to mark ID #{$review->id} as spam?"]) ?>
                                                                     <!-- Phone reviews will be ignored instead of deleted -->
                                                                     <?php $ignoreOrDelete = ReviewOrigin::from($review->origin) === ReviewOrigin::ORIGIN_PHONE ? 'Ignore' : 'Delete'; ?>
-                                                                    <?= $this->Form->postLink('<i class="bi bi-trash"></i> ' . $ignoreOrDelete, ['admin' => true, 'action' => $ignoreOrDelete, $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-danger', 'confirm' => "Are you sure you want to {$ignoreOrDelete} #{$review->id}?"]) ?>
+                                                                    <?= $this->Form->postLink('<i class="bi bi-trash"></i> ' . $ignoreOrDelete, ['action' => $ignoreOrDelete, $review->id], ['block' => true, 'escape' => false, 'class' => 'btn btn-danger', 'confirm' => "Are you sure you want to {$ignoreOrDelete} #{$review->id}?"]) ?>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                     <?php endforeach; ?>
                                                 </tbody>
                                             </table>
-                                            <?= $this->Form->submit('Approve selected'); ?>
-                                        <?= $this->Form->end(); ?>
-                                        <?= $this->fetch('postLink'); ?>
+                                            <?= $this->Form->hidden('data[mass_delete]', ['value' => '0', 'id' => 'mass_delete_bool']) ?>
+                                            <?= $this->Form->button('Delete Selected', ['id' => 'mass_delete', 'class' => 'btn btn-danger']) ?>
+                                            <?= $this->Form->button('Publish Positive Selected', ['id' => 'mass_approve', 'class' => 'btn btn-primary']) ?>
+                                        <?= $this->Form->end() ?>
+                                        <?= $this->fetch('postLink') ?>
                                     </div>
                                     <?= $this->element('pagination') ?>
                                 </div>
