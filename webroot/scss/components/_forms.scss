@@ -21,6 +21,7 @@ form {
 .form-control {
   @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
   padding: (10px) $padding-base-horizontal;
+  font-size:16px;
 
   &#LocationSearch {
 	  @media(max-width:$screen-sm-max){
@@ -31,6 +32,10 @@ form {
   &:focus {
     @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
   }
+}
+
+.form-select {
+	font-size: 16px;
 }
 
 .has-warning {

@@ -1,5 +1,8 @@
 import '../common/common';
-import './search_toggle';
+//import './search_toggle';
+// TO-DO: /\ /\ Do we need this here?
+// Main toggling doable with bootrap only?
+// Not all functions may be review-specific?
 
 document.addEventListener('DOMContentLoaded', () => {
 	// Check IP Address Button

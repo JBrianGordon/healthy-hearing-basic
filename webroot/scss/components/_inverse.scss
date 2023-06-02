@@ -2,16 +2,16 @@
   color: $white;
 
   a:not(.btn) {
-    color: tint($brand-light, 70%);
+    color: #d7e7ef;
   }
 
   .text-link {
-    border-bottom-color: tint($brand-light, 70%);
-    color: tint($brand-light, 70%);
+    border-bottom-color: #d7e7ef;
+    color: #d7e7ef;
 
     &:hover, &:active {
-      border-bottom-color: tint($brand-light, 40%);
-      color: tint($brand-light, 40%);
+      border-bottom-color: #aecfdf;
+      color: #aecfdf;
     }
   }
 }

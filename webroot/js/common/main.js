@@ -1,11 +1,4 @@
 import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
-import '../../bootstrap_u_i/js/bootstrap';
-/*
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
-import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
-*/
 
 $(window).ready(function() {
 	$('input.autocomplete').autocomplete({

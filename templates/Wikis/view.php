@@ -8,18 +8,19 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
+use Cake\Routing\Router;
 
 $parts = explode("/", $wiki->slug);
-$crumbs = [
-	'Help' => '/help',
-	ucfirst(strtolower(Inflector::humanize($parts[0]))) => '/help/' . $parts[0]
-];
-if (count($parts) > 1) {
-	$key = ucfirst(strtolower(Inflector::humanize($parts[1])));
-	$crumbs[$key] = '/help/' . $parts[0] . '/' . $parts[1];
+$this->Breadcrumbs->add('Help', '/help');
+if (!empty($parts[0])) {
+	$url = '/help/'.$parts[0];
+	$url = ($url == $_SERVER['REQUEST_URI']) ? '' : $url;
+	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[0])), $url);
+}
+if (!empty($parts[1])) {
+	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[1])), '');
 }
 $isPreview = isset($isPreview) ? $isPreview : false;
-$navigation = $this->Wiki->findNavBySlug($wiki->slug);
 
 $wikiSchema = '<script type="application/ld+json">{';
 $wikiSchema .= '"@context": "https://schema.org", "@type": "Article", ';
@@ -111,7 +112,7 @@ echo $wikiSchema;
 	<div class="row pt0 pb0">
 		<a name="top"></a>
 		<span style="display:none;" id="wiki-id"><?= $wiki->id ?></span>
-		<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
+		<span style="display:none;" id="is-preview"><? $isPreview ?></span>
 		<article class="container">
 			<div class="backdrop-container noprint">
 				<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -122,55 +123,45 @@ echo $wikiSchema;
 					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
 				<header class="col-md-12 inverse">
-					<?php //***TODO: uncomment when breadcrumbs are built*** echo $this->element('layouts/breadcrumbs', array('crumbs' => $crumbs)); ?>
-					<div class="row header-content pt0 pb0">
-						<div class="col-md-8">
-							<?php if ($isAdmin): ?>
-								<?php echo $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right']); ?>
-							<?php endif; ?>
-							<h1><?= $wiki->title_h1 ?></h1>
-							<p class="text-caption">
-								<em id="authorLine">By <?php echo $this->App->author($wiki, ['schema' => false, 'localAnchor' => true]); ?></em>
-								<?php if (!empty($wiki->reviewers)) : ?>
-									<br><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;">Reviewed by 
-									<?php
-										$reviewer = $wiki->reviewers[0]->first_name . ' ' . $wiki->reviewers[0]->last_name . '</a>';
-										$shortBio = '';
-										if (!empty($wiki->reviewers[0]->degrees)) {
-											$reviewer .= ', ' . $wiki->reviewers[0]->degrees;
-										}
-										if (!empty($wiki->reviewers[0]->title_dept_company)) {
-											$reviewer .= ', ' . $wiki->reviewers[0]->title_dept_company;
-										}
-										if (!empty($wiki->reviewers[0]->company)) {
-											$reviewer .= ', ' . $wiki->reviewers[0]->company;
-										}
-										if (!empty($wiki->reviewers[0]->short_bio)) {
-											$shortBio = $wiki->reviewers[0]->short_bio;
-										}
-										echo '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="' . $shortBio . '">' . $reviewer;
-									?>
+					<div class="col-sm-12 col-xs-9">
+						<?= $this->Breadcrumbs->render() ?>
+						<div id="ellipses">...</div>
+					</div>
+					<div class="row header-content">
+						<div class="col-md-8 p0">
+							<div>
+								<?php if ($isAdmin): ?>
+									<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right']) ?>
 								<?php endif; ?>
-								<br />Last updated on:
-								<span><?= date('F jS, Y', strtotime($wiki->last_modified)) ?></span>
-							</p>
-							<p class="lead">
-								<?= $wiki->short ?>
-							</p>
+								<h1><?= $wiki->title_h1 ?></h1>
+								<p class="text-caption">
+									<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>
+									<?= $this->Editorial->getReviewersByline($wiki->reviewers) ?>
+									<br>Last updated on:
+									<span><?= date('F jS, Y', strtotime($wiki->last_modified)) ?></span>
+								</p>
+								<p class="lead">
+									<?= $wiki->short ?>
+								</p>
+								</div>
 							</div>
 						</div>
 					</div>
 				</header>
-				<div class="col-md-9 col-lg-9 float-start">
-					<div class="panel panel-section expanded">
-						<div id="wiki-body" class="col-lg-12 pr0 pl0">
-							<?= $wiki->body ?>
-							<?php echo $this->App->getAuthorBio($wiki->author, $wiki->contributors); ?>
+				<div class="row">
+					<div class="col-md-9 col-lg-9 float-start">
+						<div class="panel panel-section expanded">
+							<div id="wiki-body" class="col-lg-12 pr0 pl0">
+								<?= $wiki->body ?>
+								<div class="about-author">
+									<?= $this->Editorial->getAuthorsBio($wiki->author, $wiki->contributors) ?>
+								</div>
+							</div>
+							<?= $this->element('content/share') ?>
 						</div>
-						<?php //***TODO: uncomment when share element added*** echo $this->element('content/share'); ?>
 					</div>
+					<?= $this->element('side_panel') ?>
 				</div>
-				<?= $this->element('side_panel') ?>
 			</div>
 		</article>
 	</div>

@@ -48,7 +48,7 @@ foreach ($fields as $field => $type) {
             $empty = '(All origins)';
             break;
         case 'rating':
-            $type = 'select';
+            $type = 'selectMultiple';
             $options = Review::$ratings;
             $empty = '(All ratings)';
             break;

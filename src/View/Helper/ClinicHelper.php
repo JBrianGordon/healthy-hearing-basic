@@ -9,6 +9,7 @@ use App\Model\Entity\Review;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use DateTime;
 use DateTimeZone;
 
@@ -35,6 +36,7 @@ class ClinicHelper extends Helper
     {
         $this->Locations = TableRegistry::getTableLocator()->get('Locations');
         $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+        $this->lettersSeen = [];
     }
 
     /**
@@ -124,8 +126,8 @@ class ClinicHelper extends Helper
     public function generateHalfStars($rating = 0) {
         //TODO: css for hh-icons
         $stars = [
-            'full' => '<i class="bi bi-star-fill"></i>',//'<span class="hh-icon-full-star"></span>',
-            'half' => '<i class="bi bi-star-half"></i>',//'<span class="hh-icon-half-star"></span>',
+            'full' => '<i class="bi bi-star-fill hh-icon-full-star"></i>',//'<span class="hh-icon-full-star"></span>',
+            'half' => '<i class="bi bi-star-half hh-icon-half-star"></i>',//'<span class="hh-icon-half-star"></span>',
             'empty' => '<i class="bi bi-star"></i>'//'<span class="hh-icon-outline-star"></span>'
         ];
         $retval = null;
@@ -165,7 +167,7 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
-    public function reviewSchema($location = null, $options = array()) {
+    public function reviewSchema($location, $options = []) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);
         }
@@ -182,6 +184,18 @@ class ClinicHelper extends Helper
                     "ratingValue": "' . $rating . '"
                 }';
         return $retval;
+    }
+
+    public function reviewSchemaHidden($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $averageRating = $location->average_rating;
+        $reviewsApproved = $location->reviews_approved;
+        if (!$averageRating || !$reviewsApproved) {
+            return null;
+        }
+        return '<div style="display:none;"><span>'. $averageRating .'</span><span>'. $reviewsApproved .'</span></div>';
     }
 
     public function sliceReviews($reviews, $by = 5) {
@@ -368,6 +382,10 @@ class ClinicHelper extends Helper
         return str_replace("\n", "", $retval);
     }
 
+    public function addressSchemaHidden($location) {
+        return '<div style="display:none;">'.$this->address($location, ['schema'=>false]).'</div>';
+    }
+
     /**
     * Return the phone number of a clinic, try using the callsource number first, fallback to normal phone number
     * @param location (optional)
@@ -387,15 +405,17 @@ class ClinicHelper extends Helper
         $retval = $location->phone;
 
         if (is_null($isCallTrackingBypassed)) {
-            $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
+            $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
         }
 
         if (!$isCallTrackingBypassed) {
             $callsource = '';
-            foreach ($location->call_sources as $cs) {
-                if (!empty($cs->is_active)) {
-                    $callsource = cleanPhone($cs->phone_number);
-                    break;
+            if (isset($location->call_sources)) {
+                foreach ($location->call_sources as $cs) {
+                    if (!empty($cs->is_active)) {
+                        $callsource = cleanPhone($cs->phone_number);
+                        break;
+                    }
                 }
             }
             if (!empty($callsource)) {
@@ -555,9 +575,9 @@ class ClinicHelper extends Helper
     * @param provider
     * @return string HTML image or empty
     */
-    public function providerImage($provider = null, $options = array()) {
+    public function providerImage($provider, $options = array()) {
         if (!is_object($provider)) {
-            $provider = $this->Providers->get($provider);
+            $provider = TableRegistry::get('Providers')->get($provider);
         }
         //Changing
         if (is_bool($options)) {
@@ -673,5 +693,343 @@ class ClinicHelper extends Helper
             $retval = null;
         }
         return $retval;
+    }
+
+    public function nearMe($clinicsNearMe = [], $template = null) {
+        if ($this->isDifferentCountry()) {
+            return 'locations/near_me/different_country';
+        }
+        if ($template === 'nav_bar') {
+            return 'locations/near_me/nav_bar';
+        } else if ($template === 'details') {
+            return 'locations/near_me/details';
+        }
+        return 'locations/near_me/default';
+    }
+
+    public function isDifferentCountry() {
+        $geoLocData = $_SESSION['geoLocData'];
+        if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function nearMeLink() {
+        $geoLocData = $_SESSION['geoLocData'];
+        if (isset($geoLocData['state'])) {
+            $region = $this->Locations->stateRegion($geoLocData['state']);
+        }
+        if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
+        } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
+        } elseif (isset($geoLocData['city']) && !empty($region)) {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
+        } else {
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
+        }
+        return $nearMeLink;
+    }
+
+    /**
+    * Show the clinic url
+    * format for a link
+    */
+    public function website($location, $return = 'link') {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $url = trim($location->url);
+        if (!empty($url)) {
+            // Verify the URL starts with http or https
+            $url = strpos($url, 'http') === false ? 'http://' . $url : $url;
+            if($return == 'uri') {
+                return $url;
+            }
+            $parts = parse_url($url);
+            return $this->Html->link('Clinic website', $url, ['target' => '_blank', 'type' => 'clinic link', 'class' => 'text-link', 'rel' => 'noopener', 'escape' => false]);
+        }
+        return null;
+    }
+
+    /**
+    * Social bar on profile
+    */
+    public function social($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $retval = "";
+        $socials = [];
+        if ($location->facebook || $location->twitter || $location->youtube) {
+            if ($text = $this->socialType($location, 'facebook')) {
+                $socials[] = $text;
+            }
+            if ($text = $this->socialType($location, 'twitter')) {
+                $socials[] = $text;
+            }
+            if ($text = $this->socialType($location, 'youtube')) {
+                $socials[] = $text;
+            }
+            $retval .= implode('<br>',$socials);
+        }
+        return $retval;
+    }
+
+    /**
+    * Get the specific link
+    * Note: This code matches some checks in LocationsShell::redirectClinicWebsites().
+    *       If this code changes, please make sure to update that function as well.
+    */
+    public function socialType($location, $key = 'facebook') {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+
+        $social = $location->$key;
+        if (!$social) {
+            return null;
+        }
+
+        //Not empty, continue.
+        switch ($key) {
+            case 'facebook':
+                $text = str_replace(array('https://','http://','www.facebook.com/','facebook.com/'), '', $social);
+                return '<span class="facebook"><span class="hh-icon-facebook clinic-share"></span> ' . $this->Html->link(
+                    'Facebook',
+                    'https://www.facebook.com/' . $text,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            case 'twitter':
+                $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
+                return '<span class="twitter"><span class="hh-icon-twitter clinic-share"></span> ' . $this->Html->link(
+                    'Twitter',
+                    'https://twitter.com/' . $text,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            case 'youtube':
+                $youtubeLink = 'https://www.youtube.com/';
+                $youtubeSuffix = '';
+                if(preg_match('/^http/', $social)) {
+                    $youtubeLink = $social;
+                } else {
+                    //need to determine if its a channel or a user
+                    if(preg_match('/^(UC|HC)/', $social)) {
+                        $youtubeSuffix = 'channel/' . $social;
+                    } elseif(preg_match('/^channel/', $social)) {
+                        $youtubeSuffix = $social;
+                    } else {
+                        //not a channel, it's a user. Strip out any user prefix and build the URL
+                        $youtubeSuffix = 'user/' . preg_replace('~^user/~', '', $social);
+                    }
+                }
+                return '<span class="youtube"><span class="hh-icon-youtube clinic-share"></span> ' . $this->Html->link(
+                    'YouTube',
+                    $youtubeLink . $youtubeSuffix,
+                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
+                ) . '</span>';
+            default: return null;
+        }
+    }
+
+    /**
+    * Address link for responsive sidebar.
+    * @param location (optional)
+    * @return string link
+    */
+    public function addressLink($location = null) {
+        $link = $this->Html->link($location->title, $location->hh_url, ['escape' => false, 'class' => 'text-link']);
+        $retval = $link . '<br>' . $this->address($location, true);
+
+        if ($location->reviews_approved > 0) {
+            $retval .= '<div class="reviews text-small"><a href="' . Router::url($location->hh_url) . '#reviews" style="border:none" onclick="' . $this->zipResultsClickEvent($location) . '">' . $this->basicStarRating($location) . '</a></div>';
+        }
+
+        $retval .= $this->Html->tag('p', $this->Html->link('View Details', $location->hh_url, ['class' => 'btn btn-secondary']), ['class' => 'mt10 mb0 text-small']);
+        return $retval;
+    }
+
+    /**
+    * Generate the onclick event used for the city/zip results page
+    * @param object Location
+    * @return string
+    */
+    public function zipResultsClickEvent($location = null) {
+        $listingType = !empty($location->listing_type) ? $location->listing_type : Location::LISTING_TYPE_NONE;
+        $clickEvent = "dataLayer.hhTrackEvent('CityPageClicks','" . $listingType . "Click', document.location.pathname, 0, false);";
+        return $clickEvent;
+    }
+
+    /**
+    * THis will decide if we need to show the city letter header
+    * @param city
+    * @return string html h4 tag or empty string
+    */
+    public function showCityLetterLine($city) {
+        $retval = "";
+        $first_letter = strtoupper($city[0]);
+        if (empty($this->lettersSeen[$first_letter])) {
+            $isFirst = count($this->lettersSeen) == 0;
+            $this->lettersSeen[$first_letter] = true;
+            if ($isFirst) {
+                $retval = '<li><h3 class="list-header">'. $first_letter .'</h3></li>';
+            }   else {
+                $retval = '<li><h3 class="list-header mt30">'. $first_letter .'</h3></li>';
+            }
+        }
+        return $retval;
+    }
+
+    /**
+    * Return a state slug based on state
+    * @param string state
+    * @return string slug
+    */
+    public function stateSlug($state) {
+        return $this->Locations->stateSlug($state);
+    }
+
+    /**
+     * @description Returns the count from the count_metrics data set
+     *
+     * @param $name string Primary selector, usually a city name, state name or zip code
+     * @param string $metric Metric to check
+     * @param string $type Segmentation level
+     * @param string $subName Secondary selector, only used for city
+     *
+     * @return int count value
+     */
+    public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
+    {
+        return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
+    }
+
+    /**
+    * Return near text of the closest locations
+    * @param string region
+    * @param string city
+    * @param string zip
+    * @return string text based on all of them
+    */
+    public function nearText($region = null, $city = null, $zip = null) {
+        $retval = "";
+        if ($zip) {
+            $retval .= "$zip, ";
+        }
+        if ($city) {
+            $city = cleanCityName($city);
+            $city = ($city == 'Coeur dAlene') ? "Coeur d'Alene" : $city;
+            $retval .= $city.' ';
+        }
+        if ($region) {
+            $retval .= strtoupper($this->Locations->parseStateSlug($region));
+        }
+        return $retval;
+    }
+
+    /**
+    * Get the higest distance (in miles or km)
+    * @param location
+    * @return float distance
+    */
+    public function highestDistance($locations = null) {
+        end($locations);
+        $distance = round(key($locations),1);
+        if (Configure::read('isMetric')) {
+            $distance = round($distance * 1.60934, 1);
+            $distance .= ' km';
+        } else {
+            $distance .= ' miles';
+        }
+        return $distance;
+    }
+
+    /**
+    * Round the location's distance (in miles or km)
+    * @param location
+    * @return float distance
+    */
+    public function distance($distance) {
+        $distance = round($distance, 1);
+        if (Configure::read('isMetric')) {
+            $distance = round($distance * 1.60934, 1);
+            $distance .= ' km';
+        } else {
+            $distance .= ' miles';
+        }
+        return $distance;
+    }
+
+    /**
+    * Calculate the provider title based on a comma-seperated list of credentials
+    */
+    public function getProviderTitle($providerCredentials) {
+        // Ignore periods in credentials
+        $providerCredentials = str_replace('.', '', $providerCredentials);
+        $arrayCredentials = explode(", ", $providerCredentials);
+        $title = false;
+        if (in_array('AuD', $arrayCredentials)) {
+            $title = "Audiologist";
+        } else if (in_array('HIS', $arrayCredentials)) {
+            $title = "Hearing Instrument Specialist";
+        } else if (in_array('HAD', $arrayCredentials)) {
+            $title = "Hearing Aid Dispenser/Dealer";
+        } else if (in_array('LHIS', $arrayCredentials)) {
+            $title = "Licensed Hearing Instrument Specialist";
+        } else if (in_array('BC-HIS', $arrayCredentials)) {
+            $title = "Board Certified in Hearing Instrument Sciences";
+        } else if (!empty(array_intersect($arrayCredentials, ['MA','MS','PhD']))) {
+            $title = "Audiologist";
+        }
+        return $title;
+    }
+
+    public function getBadges($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+
+        //Any changes made here should also be reflected in app/View/Locations/view.ctp
+        $badgeArray = [
+            ['isOn' => $location->badge_coffee, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Free Coffee</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Free coffee" width="28" height="28" src="/img/coffee.png"></a>'],
+            ['isOn' => $location->badge_wifi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Free WiFi</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Free wifi" width="28" height="28" src="/img/wifi.png"></a>'],
+            ['isOn' => $location->badge_parking, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Convenient parking</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Convenient parking" width="28" height="28" src="/img/parking-square-sign.png"></a>'],
+            ['isOn' => $location->badge_curbside, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Curbside service</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Curbside service" width="28" height="28" src="/img/car.png"></a>'],
+            ['isOn' => $location->badge_wheelchair, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Wheelchair-accessible</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Wheelchair accessible" width="28" height="28" src="/img/disabled.png"></a>'],
+            ['isOn' => $location->badge_service_pets, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Service pets welcome</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Service pets welcome" width="28" height="28" src="/img/pet.png"></a>'],
+            ['isOn' => $location->badge_cochlear_implants, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Hearing implants</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Hearing implants" width="28" height="28" src="/img/hearing.png"></a>'],
+            ['isOn' => $location->badge_ald, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Assistive listening devices</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Assistive listening devices" width="28" height="28" src="/img/deafness.png"></a>'],
+            ['isOn' => $location->badge_pediatrics, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Pediatrics</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Pediatrics" width="28" height="28" src="/img/man-with-child.png"></a>'],
+            ['isOn' => $location->badge_mobile_clinic, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Mobile clinic</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Mobile clinic" width="32" height="28" src="/img/ear-van.png"></a>'],
+            ['isOn' => $location->badge_financing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Financing available</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Financing available" width="28" height="28" src="/img/credit-card.png"></a>'],
+            ['isOn' => $location->badge_telehearing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Telehealth services</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Telehealth services" width="28" height="28" src="/img/monitor.png"></a>'],
+            ['isOn' => $location->badge_asl, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>American Sign Language</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="American sign language" width="28" height="28" src="/img/sign-language.png"></a>'],
+            ['isOn' => $location->badge_tinnitus, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Tinnitus</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Tinnitus" width="28" height="28" src="/img/ear.png"></a>'],
+            ['isOn' => $location->badge_balance, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Balance testing</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Balance testing" width="28" height="28" src="/img/dizziness.png"></a>'],
+            ['isOn' => $location->badge_home, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Screen/test at home</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Screen at home" width="28" height="28" src="/img/home.png"></a>'],
+            ['isOn' => $location->badge_remote, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Remote hearing aid programming</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Remote hearing aid programming" width="28" height="28" src="/img/laptop.png"></a>'],
+            ['isOn' => $location->badge_mask, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Masks worn here</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Masks worn here" width="28" height="28" src="/img/mask.png"></a>'],
+            ['isOn' => $location->badge_ear_cleaning, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Ear cleaning</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Ear cleaning" width="28" height="28" src="/img/ear-cleaning.png"></a>'],
+            ['isOn' => $location->badge_spanish, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Habla Español</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Spanish" width="28" height="28" src="/img/mexico.png"></a>'],
+            ['isOn' => $location->badge_french, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Parle Français</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="French" width="28" height="28" src="/img/france.png"></a>'],
+            ['isOn' => $location->badge_russian, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>мы говорим по-русски</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Russian" width="28" height="28" src="/img/russia.png"></a>'],
+            ['isOn' => $location->badge_chinese, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>我们说中文</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Chinese" width="28" height="28" src="/img/china.png"></a>'],
+            ['isOn' => $location->badge_punjabi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>ਅਸੀਂ ਪੰਜਾਬੀ ਬੋਲਦੇ ਹਾਂ</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Indian-Punjabi" width="28" height="28" src="/img/india.png"></a>']
+
+        ];
+
+        $badgeString = '';
+
+        for ($i = 0; $i < count($badgeArray); $i++) {
+
+            if ($badgeArray[$i]['isOn'] === true) {
+                $badgeString .= $badgeArray[$i]['fontIcon'];
+            }
+
+        }
+
+        return $badgeString;
+
     }
 }

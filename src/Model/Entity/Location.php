@@ -124,7 +124,7 @@ use Cake\Utility\Text;
  * @property bool $is_bypassed
  * @property bool $is_call_assist
  * @property string $timezone
- * @property string $covid19_statement
+ * @property string $optional_message
  * @property bool $is_service_agreement_signed
  * @property bool $is_junk
  * @property int|null $id_coupon
@@ -151,6 +151,7 @@ class Location extends Entity
 {
     protected $_virtual = ['is_oticon', 'state_full', 'hh_url', 'slug'];
     static $oticonPrefix = '81190';
+    static $mobileTextDefault = 'Mobile clinic - we come to you!';
 
     /**
     * Enum - Listing Type
@@ -419,7 +420,7 @@ class Location extends Entity
         'is_bypassed' => true,
         'is_call_assist' => true,
         'timezone' => true,
-        'covid19_statement' => true,
+        'optional_message' => true,
         'is_service_agreement_signed' => true,
         'is_junk' => true,
         'id_coupon' => true,

@@ -44,22 +44,59 @@ class ReviewsController extends AppController
      */
     public function index()
     {
-        $requestParams = $this->request->getQueryParams();
         $crmSearches = $this->fetchTable('CrmSearches')
-            ->find()->where(['model' => 'Reviews'])->toArray();
+            ->find()
+            ->where([
+                'model' => 'Reviews',
+            ])->toArray();
+
+        $requestParams = $this->request->getQueryParams();
+
+        // Last modified date range
+        $hasModifiedDateRange =
+            array_key_exists('modified_start', $requestParams) &&
+            array_key_exists('modified_end', $requestParams);
+
+        if ($hasModifiedDateRange) {
+            $requestParams['modified_date_range'] =
+                $requestParams['modified_start'] . ',' . $requestParams['modified_end'];
+        }
+
+        // Created date range
+        $hasCreatedDateRange =
+            array_key_exists('created_start', $requestParams) &&
+            array_key_exists('created_end', $requestParams);
+
+        if ($hasCreatedDateRange) {
+            $requestParams['created_date_range'] =
+                $requestParams['created_start'] . ',' . $requestParams['created_end'];
+        }
+
+        // Denied date range
+        $hasDeniedDateRange =
+            array_key_exists('denied_date_start', $requestParams) &&
+            array_key_exists('denied_date_end', $requestParams);
+
+        if ($hasDeniedDateRange) {
+            $requestParams['denied_date_range'] =
+                $requestParams['denied_date_start'] . ',' . $requestParams['denied_date_end'];
+        }
+
         if (array_key_exists('saved_search', $requestParams)) {
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
             $this->set('currentModel', 'Reviews');
         }
+
         $reviewsQuery = $this->Reviews
             ->find('search', [
                 'search' => $requestParams,
             ]);
-        $this->set('crmSearches', $crmSearches);
+
         $this->set('reviews', $this->paginate($reviewsQuery));
         $this->set('fields', $this->Reviews->getSchema()->typeMap());
+        $this->set('crmSearches', $crmSearches);
     }
 
     /**

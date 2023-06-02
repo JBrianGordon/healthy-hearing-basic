@@ -6,41 +6,43 @@
  
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
-// $this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <?php
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
 $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
 $firstProvider = empty($location->location_providers[0]) ? null : $location->location_providers[0];
-$hideProvider = empty($firstProvider->title) && empty($firstProvider->credentials) && empty($firstProvider->thumb_url) && empty($firstProvider->description);
+$hideProvider = empty($firstProvider->provider->title) && empty($firstProvider->provider->credentials) && empty($firstProvider->provider->thumb_url) && empty($firstProvider->provider->description);
 $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
-$isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('Configuration')->isCallTrackingBypassed();*/
+$isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
+$this->Breadcrumbs->add([
+    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
+    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
+    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'viewCityZip', 'region' => $region, 'city' => $city]],
+    ['title' => $location->title, 'url' => ''],
+]);
 ?>
-<div class="container-fluid fap-results">
+<div class="site-body container-fluid fap-results">
 	<div class="row">
 		<div class="backdrop-container">
 			<div class="backdrop backdrop-gradient backdrop-height"></div>
 		</div>
 		<div class="container">
 			<div class="row" id="result_content">
-				<header class="col-md-12 inverse breadcrumb-header">
-					<?php /*** TODO: uncomment when breadcrumbs are built out ***: echo $this->element('layouts/breadcrumbs', ['crumbs' => [
-						'Find a clinic' => '/hearing-aids',
-						$location->state_full => array('controller' => 'locations', 'action' => 'cities', 'region' => $region),
-						$location->city => array('controller' => 'locations', 'action' => 'index', 'region' => $region, 'city' => $city),
-						$location->title => ''
-					]]); */
-					?>
+				<header class="col-lg-12 inverse breadcrumb-header">
+					<?= $this->Breadcrumbs->render(); ?>
+					<div id="ellipses">...</div>
 				</header>
-				<div class="col-md-12 page-content">
+				<div class="col-lg-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-md-7 p0"; }?>">
+					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-xs-12 col-md-7 p0"; }?>">
 						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
@@ -67,7 +69,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 											<?php if (!empty($displayOpenClosed)): ?>
 												<div class="hours"><span class="glyphicon glyphicon-time small"></span> <?= $displayOpenClosed; ?></div>
 											<?php endif; ?>
-											<?php if(Configure::read('isCallAssistEnabled') || $this->App->isMobileDevice()) : ?>
+											<?php if(Configure::read('isCallAssistEnabled') || $isMobileDevice) : ?>
 												<a href="#mapBuffer" style="text-decoration:underline;cursor:pointer">
 											<?php endif; ?>
 												<div class="address mb5">
@@ -81,11 +83,11 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if(true/*$this->App->isMobileDevice()*/){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
-												<div class="telephone h2">
-													<span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $this->App->isMobileDevice()]); ?>
+												<div class="telephone h2 bi bi-telephone-fill">
+													<?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?>
 												</div>
 												<!-- Appointment request -->
 												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
@@ -95,8 +97,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 												<?php endif; ?>
 											</div>
 										</div>
-										<!--*** TODO: Build AppHelper ***-->
-										<?php if (false/*Configure::read('country') == 'CA' && !$this->App->isMobileDevice()*/): ?>
+										<?php if (Configure::read('country') == 'CA' && !$isMobileDevice): ?>
 											<div class="col-md-6">
 												<?= $this->element('locations/map', ['hideProvider' => $hideProvider]) ?>
 											</div>
@@ -152,7 +153,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 										        'controller' => 'CaCalls',
 										        'action' => 'apptRequest'
 										    ],
-										    'class' => 'form-horizontal apptRequestForm'
+										    'class' => 'form-horizontal apptRequestForm',
+										    'id' => 'CaCallApptRequestForm'
 										]); ?>
 											<button type="button" class="close pt10" data-dismiss="modal" aria-hidden="true">X</button>
 											<div class="panel-heading text-center mb10">
@@ -279,21 +281,18 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 						</section>
 					<?php endif; ?>
 					<div class="row" style="clear: both">
-						<?php $covid19Statement = trim($location->covid19_statement); ?>
+						<?php $covid19Statement = trim($location->optional_message); ?>
 						<?php if (!empty($covid19Statement)): ?>
 							<div id="covidStatement" class="col-md-12">
 								<h2>A message from <?= $location->title ?> about COVID-19:</h2>
 								<p><?= $covid19Statement ?></p>
 							</div>
 						<?php endif; ?>
-						
-						<?= $this->element('locations/profile/review_section') ?>
-
 						<div class="col-md-8">
 							<!-- About / Services -->
 							<?php
 							$hours = $this->Clinic->hours($location);
-							if ($this->App->isMobileDevice()) {
+							if ($isMobileDevice) {
 								echo "<span id='mapBuffer'></span>";
 								echo '<section id="mobileMap" class="panel panel-primary">';
 								echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
@@ -313,17 +312,16 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 										'</div>
 									</div>
 								</div>';
-								//*** TODO: build layouts ***
-								/*echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/more_information');
+								echo $this->element('locations/profile/video_gallery');
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
+									echo $this->element('locations/profile/services');
 								}
-								echo $this->element('layouts/reviews');
-								echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);*/
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 							} else {
-								//echo $this->element('layouts/provider', ['hideProvider' => $hideProvider]);
+								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
 								if (Configure::read('country') != 'CA') {
 									echo "<span id='mapBuffer'></span>";
 									echo '<section id="mobileMap" class="panel panel-primary">';
@@ -335,13 +333,13 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									};
 									echo '</div></div></section>';
 								}
-								/*echo $this->element('layouts/reviews');
-								echo $this->element('layouts/more_information');
-								echo $this->element('layouts/video_gallery');
-								echo $this->element('layouts/photo_gallery');
+								echo $this->element('locations/profile/review_section');
+								echo $this->element('locations/profile/more_information');
+								echo $this->element('locations/profile/video_gallery');
+								echo $this->element('locations/profile/photo_gallery');
 								if ($isEnhancedOrPremier) {
-									echo $this->element('layouts/services');
-								}*/
+									echo $this->element('locations/profile/services');
+								}
 							}
 							?>
 							
@@ -429,10 +427,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									</div>
 								</div>
 							<?php endif; ?>
-				
-							<!--*** TODO: layouts -->
-							<?php if(!$this->App->isMobileDevice()){
-								//echo $this->element('layouts/call_clinic');
+							<?php if(!$isMobileDevice){
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 						</div>
@@ -440,11 +436,10 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 						<div class="col-md-4">
 							
 							<!-- Clinic Links -->
-							<!--*** TODO: build layouts -->
-							<?php if($location->listing_type == 'Premier'){/*echo $this->element('layouts/clinic_links')*/;} ?>
+							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Hours -->
-							<?php if (!$this->App->isMobileDevice() && $hours): ?>
+							<?php if (!$isMobileDevice && $hours): ?>
 								<div id="hours" class="panel panel-light">
 									<div id="earqHours"></div>
 									<header class="panel-heading text-center">
@@ -589,8 +584,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Clinic Links -->
-							<!--*** TODO: layouts require Clinic helper -->
-							<?php if($location->listing_type != 'Premier'){/*echo $this->element('layouts/clinic_links');*/} ?>
+							<?= $location->listing_type != 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
 							
 							<!-- Payment -->
 							<?php if ($payment = $this->Clinic->newMethodOfPayment($location)): ?>
@@ -607,7 +601,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 							<?php endif; ?>
 				
 							<!-- Affiliations -->
-							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $this->App->isMobileDevice()): ?>
+							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $isMobileDevice): ?>
 								<div id="affiliates" class="panel panel-light text-center">
 									<header class="panel-heading text-center">
 										<h2>Affiliations</h2>
@@ -630,10 +624,8 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 									</div>
 								</div>
 							<?php endif; ?>
-							
-							<!--*** TODO: build layouts -->
-							<?php if ($this->App->isMobileDevice()) {
-								//echo $this->element('layouts/call_clinic');
+							<?php if ($isMobileDevice) {
+								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
 							
@@ -803,8 +795,7 @@ $isCallTrackingBypassed = false;/* TODO: TableRegistry::getTableLocator()->get('
 					echo $businessSchema;
 					?>
 				</div>
-				<!--*** TODO: build locations/profile/map_modal -->
-				<?php /*echo $this->element('locations/profile/map_modal');*/ ?>
+				<?= $this->element('locations/profile/map_modal') ?>
 				<?php if (Configure::read('isCallAssistEnabled') && $location->is_call_assist && $isEnhancedOrPremier): ?>
 					<?php $this->append('bs-modals'); ?>
 					<?php $this->end(); ?>

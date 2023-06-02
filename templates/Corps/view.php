@@ -7,10 +7,10 @@
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
-$this->Html->setCrumbsArray([
-	'Help' => ['controller' => 'wikis', 'action' => 'index'],
-	'Manufacturers' => ['controller' => 'corps', 'action' => 'index'],
-	$corp->title => ['controller' => 'corps', 'action' => 'view', $corp->slug]
+$this->Breadcrumbs->add([
+    ['title' => 'Help', 'url' => ['controller' => 'wikis', 'action' => 'index']],
+    ['title' => 'Manufacturers', 'url' => ['controller' => 'corps', 'action' => 'index']],
+    ['title' => $corp->title, 'url' => ''],
 ]);
  
 $isPreview = isset($isPreview) ? $isPreview : false;
@@ -19,13 +19,12 @@ $manuSchema = '<script type="application/ld+json">{';
 $manuSchema .= '"@context": "https://schema.org", "@type": "Article",';
 $manuSchema .= '"mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
 $manuSchema .= '"headline": "' . $corp->title . '", "datePublished": "' . $corp->created . '", "dateModified": "' . $corp->modified . '", "image": "' . Router::url($corp->facebook_image, true) . '", "articleBody": "' . h(strip_tags($corp->description)) . '",';
-/*** TODO : update controller to include author name ***/
-$manuSchema .= '"author": {"@type": "Person", "name": "' . $corp->Author->first_name . ' ' . $corp->Author->last_name . '"';
-if(!empty($corp->Author->degrees)) {
-	$manuSchema .= ', "honorificSuffix": "' . $corp->Author->degrees . '"';
+$manuSchema .= '"author": {"@type": "Person", "name": "' . $corp->author->first_name . ' ' . $corp->author->last_name . '"';
+if(!empty($corp->author->degrees)) {
+	$manuSchema .= ', "honorificSuffix": "' . $corp->author->degrees . '"';
 }
-if(!empty($corp->Author->url)) {
-	$manuSchema .= ', "url": "https://www.' . Configure::read('siteUrl') . $corp->Author->url . '"';
+if(!empty($corp->author->url)) {
+	$manuSchema .= ', "url": "https://www.' . Configure::read('siteUrl') . $corp->author->url . '"';
 }
 $manuSchema .= '},';
 $manuSchema .= '"publisher": {"@type": "Organization", "name": "' . Configure::read('siteName') . '", "logo": {"@type": "ImageObject", "url": "https://www.' . Configure::read('siteUrl') . '/img/hh-symbol.png", "width": "400px", "height": "400px"}';
@@ -56,23 +55,14 @@ $this->Html->script('dist/common.min', ['block' => true]);
 		<div class="container">
 			<div class="row noprint">
 				<div class="col-sm-9 inverse">
-					<ul class="breadcrumb">
-						<li>
-							<a href="/"><span>Home</span></a></li><li><a href="/help"><span>Help</span></a>
-						</li>
-						<li>
-							<a href="/hearing-aid-manufacturers"><span>Manufacturers</span></a>
-						</li>
-						<li>
-							<a href="/oticon-hearing-aids"><span>Oticon hearing aids</span></a>
-						</li>
-					</ul>
+					<?= $this->Breadcrumbs->render() ?>
+					<div id="ellipses">...</div>
 				</div>
 			</div>
 			<div class="row page-content">
 				<span style="display:none;" id="corp-id"><?= $corp->id; ?></span>
 				<span style="display:none;" id="is-preview"><?= $isPreview; ?></span>
-				<div class="col-md-9" style="min-height:100vh">
+				<div class="col-lg-9" style="min-height:100vh">
 					<table class="print-wrapper">
 						<thead class="print-head">
 							<tr>
@@ -91,9 +81,10 @@ $this->Html->script('dist/common.min', ['block' => true]);
 												<div class="row">
 													<div class="col-md-8">
 														<h1><?= $corp->title ?></h1>
-														<!--*** TODO : update controller to include author name *** -->
 														<p class="text-caption">
-															<em>Contributed by AUTHOR</em>
+															<em id="authorLine"><?= $this->Editorial->getAuthorsByline($corp->author, $corp->contributors) ?>
+															<br>Last updated
+															<span><?= date('F j, Y', strtotime($corp->last_modified)) ?></span></em>
 														</p>
 													</div>
 													<div class="col-md-4 manuf-logo">
@@ -116,17 +107,19 @@ $this->Html->script('dist/common.min', ['block' => true]);
 										<div class="panel-body">
 											<div class="panel-section expanded">
 												<?= $corp->description ?>
-												<!--*** TODO : update controller to include author name *** -->
+												<div class="about-author">
+													<?= $this->Editorial->getAuthorsBio($corp->author, $corp->contributors) ?>
+												</div>
 											</div>
 										</div>
-										<!--*** TODO : echo content/share when built *** -->
+										<?= $this->element('content/share') ?>
 									</section>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<!-- *** TODO: add sidebar layout when built out ***-->
+				<?= $this->element('side_panel') ?>
 			</div>
 		</div>
 	</div>

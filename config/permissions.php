@@ -109,7 +109,7 @@ return [
         // admin prefix roles
         [
             'role' => 'admin',
-            'prefix' => 'admin',
+            'prefix' => 'Admin',
             'extension' => '*',
             'plugin' => '*',
             'controller' => '*',
@@ -158,6 +158,7 @@ return [
         ],
         // Pages - no auth required
         [
+            'prefix' => false,
             'controller' => 'Pages',
             'action' => [
                 'contactUs',
@@ -171,11 +172,12 @@ return [
         [
             'prefix' => false,
             'controller' => 'Locations',
-            'action' => ['view'],
+            'action' => '*',
             'bypassAuth' => true,
         ],
         // Content - no auth required
         [
+            'prefix' => false,
             'controller' => 'Content',
             'action' => ['reportIndex', 'view'],
             'bypassAuth' => true,
@@ -191,7 +193,7 @@ return [
         [
             'prefix' => false,
             'controller' => 'Reviews',
-            'action' => ['addReview'],
+            'action' => [],
             'bypassAuth' => true,
         ],
         // Wikis - no auth required

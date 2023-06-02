@@ -42,7 +42,7 @@ $logo = Configure::read('logo');
 		</div>
 	</div>
 
-	<?php if (!$this->App->isMobileDevice()): ?>
+	<?php if (!$isMobileDevice): ?>
 		<div data-hh-mega-nav="find-a-professional">
 			<div class="row mega-nav-inner">
 				<div class="col-md-6 col-sm-6">
@@ -144,7 +144,7 @@ $logo = Configure::read('logo');
 								<li><?= $this->Html->link($wiki['name'], $wiki['hh_url'], ['class' => 'text-link']); ?></li>
 							<?php endforeach; ?>
 							<?php if (Configure::read('country') == 'US'): ?>
-								<li><?= $this->Html->link('Hearing aid manufacturers', ['admin' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'], ['class' => 'text-link']); ?></li>
+								<li><?= $this->Html->link('Hearing aid manufacturers', ['prefix' => false, 'plugin' => false, 'controller' => 'corps', 'action' => 'index'], ['class' => 'text-link']); ?></li>
 							<?php endif; ?>
 						</ul>
 					<?php endif; ?>

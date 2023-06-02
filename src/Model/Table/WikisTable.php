@@ -300,7 +300,7 @@ class WikisTable extends Table
         if (stripos($slug, '/') !== false) {
             $parentSlug = substr($slug, 0, stripos($slug, '/'));
             if (in_array($parentSlug, Configure::read('wikiCategories'))) {
-                return ['controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
+                return ['prefix'=>false, 'plugin'=>false, 'controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
             }
         }
         // Invalid slug
@@ -325,7 +325,7 @@ class WikisTable extends Table
             'conditions' => $conditions,
             'contain' => ['Authors','Tags','Contributors','Reviewers']
         ])->first();
-        if (!empty($wiki) && $uri == Router::url(['controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
+        if (!empty($wiki) && $uri == Router::url(['prefix'=>false, 'plugin'=>false, 'controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
             return $wiki;
         }
         return [];
@@ -353,18 +353,21 @@ class WikisTable extends Table
     }
 
     /**
-    * Get the word count of the content
-    * @param mixed if string count the string, if int, assume it's an ID
-    * @return int word count of body.
+    * Find for a link by the id
+    * @param array of wikiIds
+    * @return array of result with only name and slug returned.
     */
-    public function getWordCount($body = null) {
-        if (is_numeric($body)) {
-            $body = $this->get($body)->body;
+    public function findForLinkByIds($wikiIds) {
+        if (!is_array($wikiIds)) {
+            return [];
         }
-        $body = htmlspecialchars_decode($body);
-        $body = html_entity_decode($body);
-        $body = strip_tags($body);
-        $body = trim($body);
-        return str_word_count($body);
+        return $this->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'id IN' => $wikiIds
+            ],
+            'fields' => ['name','title_h1','slug','priority'],
+            'order' => ['priority ASC, name ASC']
+        ])->all();
     }
 }

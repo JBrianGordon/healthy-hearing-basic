@@ -55,6 +55,6 @@ class WikiHelper extends Helper
         $link = '<div class="wiki-parent" style="min-height: 60px;"><strong>Hearing aid manufacturers</strong><br>
                     <span class="short short-parent">Compare products and learn more about hearing device manufacturers before you select hearing aids or cochlear implants.</span>
                 </div>';
-        return $this->Html->link($link, ['controller' => 'corps', 'action' => 'index'], ['escape' => false]);
+        return $this->Html->link($link, ['prefix'=>false, 'plugin'=>false, 'controller'=>'corps', 'action'=>'index'], ['escape' => false]);
     }
 }

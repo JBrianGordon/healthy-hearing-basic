@@ -25,7 +25,7 @@ if (!empty($ad->id) && $show_ad) {
 	echo ''.
 	'<section id="adPanel" class="panel mb0">'.
 		'<a href="'.$dest.'" rel="sponsored nofollow noopener" class="img-responsive" title="'.$alt.'" id="adBlock" target="_blank">'.
-			'<img id="adImage" '.($this->App->isMobileDevice()?'loading="lazy" src="'.$src.'"':'src="'.$src.'"').' data-value="ViewBanner_'.$id.'" alt="'.$alt.'" border="0" '.
+			'<img id="adImage" '.($isMobileDevice?'loading="lazy" src="'.$src.'"':'src="'.$src.'"').' data-value="ViewBanner_'.$id.'" alt="'.$alt.'" border="0" '.
 				($w ? 'width="'.$w.'" ' : '').
 				($h ? 'height="'.$h.'" ' : '').
 				'/>'.

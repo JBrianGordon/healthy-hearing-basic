@@ -54,7 +54,7 @@ $this->loadHelper('Search.Search', [
         </div>
     <?php endif; ?>
     <div class="col col-md-auto mb20">
-        <span id="advanced_search_toggle" class="btn btn-primary btn-sm mb-2" type="button" aria-expanded="false">
+        <span class="btn btn-primary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advanced_search" aria-expanded="false" aria-controls="advanced_search">
             + Advanced
         </span>
     </div>
