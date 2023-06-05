@@ -50,64 +50,12 @@ const formAction = document.querySelector("form").getAttribute("action");
 
 export const locations_crm_searches = () => {
 	if (formAction.includes("/admin/locations") || formAction.includes("/admin/crm-searches")) {
-	  const generalInputs = document.createElement("div");
-	  const reviewInputs = document.createElement("div");
-	  const managementInputs = document.createElement("div");
-	  const upgrades = document.createElement("div");
-	  const genInputsHeadline = "<div><h3 class='crm-group-header'>General demographics</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-minus'></span> Collapse section</span></div>";
-	  const reviewsHeadline = "<div><h3 class='crm-group-header'>Reviews</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>";
-	  const changeManagementHeadline = "<div><h3 class='crm-group-header'>Change management</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>";
-	  const upgradeHeadline = "<div><h3 class='crm-group-header'>Upgrade Features</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>";
-	  
-	  generalInputs.classList.add("filter-group");
-	  reviewInputs.classList.add("filter-group", "hidden");
-	  managementInputs.classList.add("filter-group", "hidden");
-	  upgrades.classList.add("filter-group", "hidden");
-			
-		//send form groups to proper parent divs
-		const arrangeInputs = (modalToggleField, inputGroup) => {
-		  modalToggleField.forEach((field) => {
-		    field.closest(".form-group").appendTo(inputGroup);
-		  });
-		};
-
-		const generalFields = [document.querySelector("#SearchId"), document.querySelector("#SearchOticonId"), document.querySelector("#SearchParentId"), document.querySelector("#SearchSfId"), document.querySelector("#SearchYhnLocationId"), document.querySelector("#SearchCqpPracticeId"), document.querySelector("#SearchCqpOfficeId"), document.querySelector("#SearchTitle"), document.querySelector("#SearchSubtitle"), document.querySelector("#SearchAddress"), document.querySelector("#SearchAddress2"), document.querySelector("#SearchCity"), document.querySelector("#SearchState"), document.querySelector("#SearchZip"), document.querySelector("#SearchIsMobile"), document.querySelector("#SearchPhone"), document.querySelector("#SearchEmail"), document.querySelector("#SearchListingType"), document.querySelector("#SearchPriority"), document.querySelector("#SearchIsActive"), document.querySelector("#SearchIsShow"), document.querySelector("#SearchIsListingTypeFrozen"), document.querySelector("#SearchOticonTier"), document.querySelector("#SearchYhnTier"), document.querySelector("#SearchCqpTier"), document.querySelector("#SearchListingType"), document.querySelector("#SearchIsOticon"), document.querySelector("#SearchIsRetail"), document.querySelector("#SearchIsYhn"), document.querySelector("#SearchIsCqp"), document.querySelector("#SearchIsHh"), document.querySelector("#SearchIsCqPremier"), document.querySelector("#SearchIsIrisPlus"), document.querySelector("#SearchNotes"), document.querySelector("#SearchFullName"), document.querySelector("#SearchIsBypassed"), document.querySelector("#SearchFilterHasPhoto"), document.querySelector("#SearchFilterInsurance"), document.querySelector("#SearchIsCallAssist"), document.querySelector("#SearchTimezone"), document.querySelector("#SearchHasUrl"), document.querySelector("#SearchNpiNumber"), document.querySelector("#SearchLocationSegment"), document.querySelector("#SearchEntitySegment"), document.querySelector("#SearchDirectBookType"), document.querySelector("#SearchFrozenExpirationStart"), document.querySelector("#SearchIsIdaVerified"), document.querySelector("#SearchIsServiceAgreementSigned"), document.querySelector("#SearchCovid19Statement"), document.querySelector("#SearchIsJunk"), document.querySelector("#SearchIsEmailAllowed")];
-		const reviewFields = [document.querySelector("#SearchReviewsApproved"), document.querySelector("#SearchReviewStatus"), document.querySelector("#SearchAverageRating"), document.querySelector("#SearchLastReviewDateStart")];
-		const managementFields = [document.querySelector("#SearchModifiedStart"), document.querySelector("#SearchLastContactDate"), document.querySelector("#SearchIsLastEditByOwner"), document.querySelector("#SearchLastEditByOwnerDate"), document.querySelector("#SearchCompleteness"), document.querySelector("#SearchLastNoteStatus"), document.querySelector("#SearchLastImportStatus"), document.querySelector("#SearchIsGracePeriod"), document.querySelector("#SearchGracePeriodEnd"), document.querySelector("#SearchReviewNeeded"), document.querySelector("#SearchEmailStatus"), document.querySelector("#SearchPhoneStatus"), document.querySelector("#SearchAddressStatus"), document.querySelector("#SearchTitleStatus"), document.querySelector("#SearchIsTitleIgnore"), document.querySelector("#SearchIsAddressIgnore"), document.querySelector("#SearchIsPhoneIgnore"), document.querySelector("#SearchIsEmailIgnore")];
-		const upgradeFields = [document.querySelector("#SearchFeatureContentLibrary"), document.querySelector("#SearchFeatureSpecialAnnouncement"), document.querySelector("#SearchLogoUrl"), document.querySelector("#SearchBadgeCoffee"), document.querySelector("#SearchBadgeWifi"), document.querySelector("#SearchBadgeParking"), document.querySelector("#SearchBadgeCurbside"), document.querySelector("#SearchBadgeWheelchair"), document.querySelector("#SearchBadgeServicePets"), document.querySelector("#SearchBadgeCochlearImplants"), document.querySelector("#SearchBadgeAld"), document.querySelector("#SearchBadgePediatrics"), document.querySelector("#SearchBadgeMobileClinic"), document.querySelector("#SearchBadgeFinancing"), document.querySelector("#SearchBadgeTelehearing"), document.querySelector("#SearchBadgeAsl"), document.querySelector("#SearchBadgeTinnitus"), document.querySelector("#SearchBadgeBalance"), document.querySelector("#SearchBadgeHome"), document.querySelector("#SearchBadgeRemote"), document.querySelector("#SearchBadgeMask"), document.querySelector("#SearchBadgeSpanish"), document.querySelector("#SearchBadgeFrench"), document.querySelector("#SearchBadgeRussian"), document.querySelector("#SearchBadgeChinese"), document.querySelector("#SearchUsingLogo"), document.querySelector("#SearchUsingPhotos"), document.querySelector("#SearchUsingVideos"), document.querySelector("#SearchUsingBadges"), document.querySelector("#SearchUsingFlexSpace"), document.querySelector("#SearchUsingLinkedLocations")];
-			
-		arrangeInputs(generalFields, generalInputs);
-		arrangeInputs(reviewFields, reviewInputs);
-		arrangeInputs(managementFields, managementInputs);
-		arrangeInputs(upgradeFields, upgrades);
-		generalInputs.prepend(...generalFields);
-		reviewInputs.prepend(...reviewFields);
-		managementInputs.prepend(...managementFields);
-		upgrades.prepend(...upgradeFields);
 
 		document.querySelectorAll(".filter-group").forEach((group) => {
 		  if (group.children.length === 0) {
 		    group.remove();
 		  }
 		});
-
-		// Custom labels
-		const emailAllowedLabel = document.querySelector("label[for=SearchIsEmailAllowed]");
-		emailAllowedLabel.textContent = 'Is profile update email allowed';
-
-		// Change boolean inputs into switches
-		const isOticonDropdown = document.querySelector("#SearchIsOticon");
-		const isOticonSwitch = document.createElement("label");
-		isOticonSwitch.classList.add("switch");
-		isOticonSwitch.innerHTML = `
-		  <input name="data[Search][is_oticon]" class="form-control" id="SearchIsOticon" type="text">
-		  <span class="slider">
-		    <span class="switch-negative"></span>
-		    <span class="switch-off"></span>
-		    <span class="switch-positive"></span>
-		  </span>
-		`;
-		isOticonDropdown.replaceWith(isOticonSwitch);
 
 		const filterGroupInputs = document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']");
 		filterGroupInputs.forEach(input => {
@@ -155,12 +103,6 @@ export const locations_crm_searches = () => {
 		    input.classList.add("switch-negative");
 		  }
 		});
-		
-		// Add headlines to groups
-		generalInputs.insertAdjacentHTML("beforebegin", genInputsHeadline);
-		reviewInputs.insertAdjacentHTML("beforebegin", reviewsHeadline);
-		managementInputs.insertAdjacentHTML("beforebegin", changeManagementHeadline);
-		upgrades.insertAdjacentHTML("beforebegin", upgradeHeadline);
 
 		// Expand/collapse button functionality
 		const groupToggleButtons = document.querySelectorAll(".group-toggle");
