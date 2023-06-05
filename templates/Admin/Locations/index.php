@@ -10,7 +10,6 @@ use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Cake\Routing\Router;
 
-
 $siteNameAbbr = Configure::read('siteNameAbbr');
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
