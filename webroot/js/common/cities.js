@@ -5,39 +5,53 @@ import './responsive_slider';
 
 directBookBtn();
 
-$(".quickLink").on("click", function(e) {
-	let targetDiv = $(this).attr("href");
-	$([document.documentElement, document.body]).animate({
-		scrollTop: $(targetDiv).offset().top - $(".navbar").outerHeight()
-	}, 1000);
+const quickLinks = document.querySelectorAll(".quickLink");
+
+quickLinks.forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.preventDefault();
+    const targetDiv = this.getAttribute("href");
+    const navbarHeight = document.querySelector(".navbar").offsetHeight;
+
+    window.scrollTo({
+      top: document.querySelector(targetDiv).offsetTop - navbarHeight,
+      behavior: "smooth"
+    });
+  });
 });
 
-// Back-to-top button
-var windowHeight = window.innerHeight,
-	footerContainer = document.getElementById("footerContainer"),
-	footerHeight = footerContainer.offsetHeight,
-	contentContainer = document.getElementById("top"),
-	scrollCheck = setInterval(function() {
-		var contentWidth = $(contentContainer).outerWidth();
-		var contentOffset = $(contentContainer).offset();
-		var backToTopLeftPosition = contentOffset.left + contentWidth - 125;
-		var backToTopRightPosition = window.outerWidth + 125;
-		if(window.scrollY > windowHeight) {
-			$("#backToTop").animate({left: backToTopLeftPosition},100);
-		} else {
-			$("#backToTop").animate({left: backToTopRightPosition},100);
-		}
-	}, 1000);
-	 
-$("#backToTop").css("bottom", footerHeight + 10);
+const windowHeight = window.innerHeight;
+const footerContainer = document.getElementById("footerContainer");
+const footerHeight = footerContainer.offsetHeight;
+const contentContainer = document.getElementById("top");
 
-//Add recaptcha script on form click
-$(document).on("focus","#CaCallApptRequestForm input",function(){
-	if(!$("#CaCallApptRequestForm").hasClass("focused")) {
-		$("#CaCallApptRequestForm").addClass("focused");
-		var recaptchaScript = document.createElement('script');
-		recaptchaScript.setAttribute('src','https://www.google.com/recaptcha/api.js');
-		document.head.appendChild(recaptchaScript);
-		$("#CaCallApptRequestForm input").off("focus");
-	}
-})
+function scrollCheck() {
+  const contentWidth = contentContainer.offsetWidth;
+  const contentOffset = contentContainer.getBoundingClientRect();
+  const backToTopLeftPosition = contentOffset.left + contentWidth - 125;
+  const backToTopRightPosition = window.outerWidth + 125;
+
+  if (window.scrollY > windowHeight) {
+    document.getElementById("backToTop").style.left = backToTopLeftPosition + "px";
+  } else {
+    document.getElementById("backToTop").style.left = backToTopRightPosition + "px";
+  }
+}
+
+const scrollCheckInterval = setInterval(scrollCheck, 1000);
+	 
+const backToTopButton = document.getElementById("backToTop");
+const footerHeight = footerContainer.offsetHeight;
+
+backToTopButton.style.bottom = footerHeight + 10 + "px";
+
+document.addEventListener("focus", function handleFocus(e) {
+  const target = e.target;
+  if (target.matches("#CaCallApptRequestForm input") && !document.getElementById("CaCallApptRequestForm").classList.contains("focused")) {
+    document.getElementById("CaCallApptRequestForm").classList.add("focused");
+    const recaptchaScript = document.createElement("script");
+    recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
+    document.head.appendChild(recaptchaScript);
+    target.removeEventListener("focus", handleFocus);
+  }
+}, true);
