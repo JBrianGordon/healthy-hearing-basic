@@ -1,8 +1,9 @@
-import '../common/common';
-import './search_toggle';
+import './admin_common';
 
-$('body').on('click', '.js-unlink', function() {
-	if (!confirm('Are you sure you want to unlink this Location?')) {
-		return false;
-	}
+document.querySelector('body').addEventListener('click', function(e) {
+  if (e.target.matches('.js-unlink')) {
+    if (!confirm('Are you sure you want to unlink this Location?')) {
+      e.preventDefault();
+    }
+  }
 });
