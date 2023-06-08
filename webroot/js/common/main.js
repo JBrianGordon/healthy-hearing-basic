@@ -1,4 +1,5 @@
 import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
+//*** TODO: This can probably be rewritten to not use the jQuery plugin ***//
 
 $(window).ready(function() {
 	$('input.autocomplete').autocomplete({

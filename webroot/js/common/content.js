@@ -1,23 +1,27 @@
 import './common';
 import './responsive_slider';
 
-jQuery ('#content_body img').each(function() {
-	var index;
-	var src = $(this).attr('src');
-	var index = src.indexOf('/files');
-	if(index != -1){
-		$(this).attr('src', src.substr(index, src.length));
-	}
+// Modify image source
+const images = document.querySelectorAll('#content_body img');
+images.forEach(image => {
+  const src = image.getAttribute('src');
+  const index = src.indexOf('/files');
+  if (index !== -1) {
+    image.setAttribute('src', src.substr(index, src.length));
+  }
 });
 
-//Open social media links in small window
-$(".btn-share").on("click",function(){
-	window.open(this.href, "", "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600");
-	return false;
-})
+// Open social media links in a small window
+const shareButtons = document.querySelectorAll('.btn-share');
+shareButtons.forEach(button => {
+  button.addEventListener('click', function(event) {
+    event.preventDefault();
+    window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+  });
+});
 
-//Add noprint class to all wistia videos in report pages
-var wistiaEmbed = $(".wistia_embed");
-for(var i=0;i<wistiaEmbed.length;i++){
-	wistiaEmbed.eq(i).addClass("noprint");
-}
+// Add 'noprint' class to all wistia videos in report pages
+const wistiaEmbed = document.querySelectorAll('.wistia_embed');
+wistiaEmbed.forEach(embed => {
+  embed.classList.add('noprint');
+});
