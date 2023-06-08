@@ -250,7 +250,7 @@ class OnlineHearingTest {
 
 	completed() {
 		return this.results.answers.length === this.numberOfQuestions && this.contactInfoFilled();
-	},
+	}
 
 	contactInfoFilled() {
 		return this.results.firstName.length > 0 && this.results.lastName.length > 0 && this.results.email.length > 0;
@@ -344,13 +344,13 @@ class OnlineHearingTest {
 			document.querySelector('#newsletterLastName').value = this.results.lastName;
 			document.querySelector('#newsletterEmail').value = this.results.email;
 		}
-	},
+	}
 
 	addRecaptcha() {
 		const recaptchaScript = document.createElement('script');
 		recaptchaScript.src = 'https://www.google.com/recaptcha/api.js';
 		document.head.appendChild(recaptchaScript);
-	},
+	}
 
 	log(message) {
 		if (this.debug) {

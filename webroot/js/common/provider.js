@@ -55,7 +55,7 @@ class Provider {
     const providerKey = providerDiv.getAttribute('provider');
     const swapKey = parseInt(providerKey) - 1;
     this.swapProviders(providerDiv, providerKey, swapKey);
-  },
+  }
 
   moveProviderDown(obj) {
     const providerDiv = obj.closest('.provider');

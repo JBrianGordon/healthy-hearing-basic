@@ -17,34 +17,32 @@ document.addEventListener('DOMContentLoaded', function() {
   // Coupon Library is currently only available to CQ Premier clinics
   initSpecialAnnouncements();
 		
-	document.addEventListener('DOMContentLoaded', function() {
-	  // Clinic profile completion. Currently we are only checking the first provider
-	  const providerArray = [
-	    document.querySelector("#Provider0FirstName"),
-	    document.querySelector("#Provider0LastName"),
-	    document.querySelector("#Provider0Description"),
-	    document.querySelector("#Provider0ThumbUrl")
-	  ];
-	  const incompleteArray = [];
-	  let completionPercentage = 100;
+  // Clinic profile completion. Currently we are only checking the first provider
+  const providerArray = [
+    document.querySelector("#Provider0FirstName"),
+    document.querySelector("#Provider0LastName"),
+    document.querySelector("#Provider0Description"),
+    document.querySelector("#Provider0ThumbUrl")
+  ];
+  const incompleteArray = [];
+  let completionPercentage = 100;
 
-	  if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
-	    completionPercentage -= 25;
-	    incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
-	    document.querySelector("h2:contains('About us')").classList.add("red");
-	  }
-	  if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
-	    completionPercentage -= 25;
-	    incompleteArray.push("<li><a href='#services'>- Services</a></li>");
-	    document.querySelector("h2:contains('Services')").classList.add("red");
-	  }
-	  providerArray.forEach(function(input) {
-	    if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
-	      input.closest(".form-group").classList.add("has-error");
-	      input.closest(".form-group").previousElementSibling.classList.add("red");
-	    }
-	  });
-	});
+  if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
+    completionPercentage -= 25;
+    incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
+    document.querySelector("h2:contains('About us')").classList.add("red");
+  }
+  if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
+    completionPercentage -= 25;
+    incompleteArray.push("<li><a href='#services'>- Services</a></li>");
+    document.querySelector("h2:contains('Services')").classList.add("red");
+  }
+  providerArray.forEach(function(input) {
+    if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
+      input.closest(".form-group").classList.add("has-error");
+      input.closest(".form-group").previousElementSibling.classList.add("red");
+    }
+  });
 	
 	document.querySelector("#hhtvButton").addEventListener("click", function() {
 	  window.scrollTo({
@@ -181,6 +179,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	  observer.observe(node, config);
 	});
 
+	//*** TODO: Make sure popover still works with this rewrite ***/
+  const popoverElements = document.querySelectorAll('[data-toggle="popover"]');
+  
+  popoverElements.forEach(function(element) {
+    new bootstrap.Popover(element);
+  });
+
 	locationAutocomplete();
 });
 
@@ -204,15 +209,6 @@ submitButton.forEach((button) => {
         lastName.removeAttribute('required');
       }
     });
-  });
-});
-
-//*** TODO: Make sure popover still works with this rewrite ***/
-document.addEventListener('DOMContentLoaded', function() {
-  const popoverElements = document.querySelectorAll('[data-toggle="popover"]');
-  
-  popoverElements.forEach(function(element) {
-    new bootstrap.Popover(element);
   });
 });
 
@@ -335,7 +331,7 @@ document.body.addEventListener("change", (e) => {
 		} else {
 			$.onChangeFileInput(target);
 		}
-	};
+	}
 
 	if (target.matches('#LocationIsMobile')) {
 		$.onChangeIsMobile(target.checked);
@@ -579,9 +575,9 @@ const onChangeFileInput = (obj) => {
   obj.style.background = '';
   document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
   const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
-  for (let i = 0; i < helpBlocks.length; i++) {
-    helpBlocks[i].style.display = 'none';
-  }
+	helpBlocks.forEach((block) => {
+	  block.style.display = 'none';
+	});
   document.getElementById("photo-add-error-" + key).style.display = 'none';
   document.getElementById("btn-photo-delete-" + key).style.display = 'block';
   document.getElementById("photo-description-" + key).style.display = 'block';
@@ -633,7 +629,7 @@ const onChangeFileInput = (obj) => {
     }
   };
   reader.readAsDataURL(files[0]);
-}
+};
 
 const onChangeLocationAdFile = (obj) => {
   const id = obj.id;
@@ -889,3 +885,4 @@ const onChangeIsMobile = (isMobile) => {
     locationRadius.required = false;
   }
 };
+}

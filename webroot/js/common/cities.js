@@ -39,9 +39,7 @@ function scrollCheck() {
 }
 
 const scrollCheckInterval = setInterval(scrollCheck, 1000);
-	 
 const backToTopButton = document.getElementById("backToTop");
-const footerHeight = footerContainer.offsetHeight;
 
 backToTopButton.style.bottom = footerHeight + 10 + "px";
 
