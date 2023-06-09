@@ -117,14 +117,14 @@ const onPageLoad = () => {
 	  if (targetId === 'unlockBtn') {
 	    const caCallGroupId = document.querySelector('#CaCallGroupId').value;
 	    try {
-	      const response = await fetch(`/ca_calls/unlock_call_group/${caCallGroupId}`, {
+	      const response = fetch(`/ca_calls/unlock_call_group/${caCallGroupId}`, {
 	        method: 'post',
 	        headers: {
 	          'Content-Type': 'application/json'
 	        },
 	        dataType: 'json'
 	      });
-	      const data = await response.json();
+	      const data = response.json();
 	      if (data.unlock_status === true) {
 	        onChangeGroupSearch(caCallGroupId);
 	      }
@@ -338,97 +338,60 @@ const validateProspect = () => {
 };
 
 const calculateStatus = () => {
-	const callType = document.querySelector("#CaCallCallType").value;
-	const isVoicemailType = callType === CALL_TYPE_VM_CALLBACK_CLINIC || callType === CALL_TYPE_VM_CALLBACK_CONSUMER;
-	let calculateByScore = false;
+  const callType = document.querySelector("#CaCallCallType").value;
+  const isVoicemailType =
+    callType === CALL_TYPE_VM_CALLBACK_CLINIC ||
+    callType === CALL_TYPE_VM_CALLBACK_CONSUMER;
+  let calculateByScore = false;
 
-	if (IS_CALL_GROUP_EDIT_PAGE) {
-	  // Do not automatically calculate a new status on the Edit Call Group page
-	} else if (
-	  callType === CALL_TYPE_FOLLOWUP_APPT &&
-	  !IS_CLINIC_LOOKUP_PAGE &&
-	  document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no"
-	) {
-	  // Clinic did not answer followup call
-	  if (
-	    Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) <
-	    MAX_CLINIC_FOLLOWUP_ATTEMPTS
-	  ) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	    document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
-	  }
-	} else if (
-	  callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT &&
-	  !IS_CLINIC_LOOKUP_PAGE &&
-	  document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no"
-	) {
-	  // Clinic did not answer followup call
-	  if (
-	    Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) <
-	    MAX_CLINIC_FOLLOWUP_ATTEMPTS
-	  ) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	    document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
-	  }
-	} else if (IS_CALL_GROUP_EDIT_PAGE) {
-  // Do not automatically calculate a new status on the Edit Call Group page
-	} else if (
-	  callType === CALL_TYPE_FOLLOWUP_APPT &&
-	  !IS_CLINIC_LOOKUP_PAGE &&
-	  document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no"
-	) {
-	  // Clinic did not answer followup call
-	  if (
-	    Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) <
-	    MAX_CLINIC_FOLLOWUP_ATTEMPTS
-	  ) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	    document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
-	  }
-	} else if (
-	  callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT &&
-	  !IS_CLINIC_LOOKUP_PAGE
-	) {
-	  if (
-	    document.querySelector("#CaCallGroupDidConsumerAnswer").value === "yes" &&
-	    document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no"
-	  ) {
-	    // Consumer answered but clinic did not. Next attempt will not be direct book.
-	    if (
-	      Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) <
-	      MAX_CLINIC_FOLLOWUP_ATTEMPTS
-	    ) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	      document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
-	    }
-	  } else {
-	    calculateByScore = true;
-	  }
-	} else if (
-	  document.querySelector("#CaCallGroupDidConsumerAnswer").value === "no" &&
-	  document.querySelector("#CaCallGroupDidTheyAnswerFollowup2").value === "no"
-	) {
-	  // Neither consumer nor clinic answered
-	  if (
-	    Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) <
-	    MAX_CLINIC_FOLLOWUP_ATTEMPTS
-	  ) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	    document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
-	  }
-	} else {
-	  calculateByScore = true;
-	} else if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER) {
+  if (IS_CALL_GROUP_EDIT_PAGE) {
+    // Do not automatically calculate a new status on the Edit Call Group page
+  } else if (callType === CALL_TYPE_FOLLOWUP_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no") {
+    // Clinic did not answer followup call
+    if (Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
+    } else {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+      document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
+    }
+  } else if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no") {
+    // Clinic did not answer followup call
+    if (Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
+    } else {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+      document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
+    }
+  } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no") {
+    // Clinic did not answer followup call
+    if (Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+    } else {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+      document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
+    }
+  } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT && !IS_CLINIC_LOOKUP_PAGE) {
+    if (document.querySelector("#CaCallGroupDidConsumerAnswer").value === "yes" && document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "no") {
+      // Consumer answered but clinic did not. Next attempt will not be direct book.
+      if (Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+        document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
+      }
+    } else if (document.querySelector("#CaCallGroupDidConsumerAnswer").value === "no" && document.querySelector("#CaCallGroupDidTheyAnswerFollowup2").value === "no") {
+      // Neither consumer nor clinic answered
+      if (
+        Number(document.querySelector("#CaCallGroupClinicFollowupCount").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+        document.querySelector("#CaCallGroupPatientFollowupCount").value = 0;
+      }
+    } else {
+      calculateByScore = true;
+    }
+  } else if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER) {
 	  if (document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "yes") {
 	    // Patient answered
 	    if (document.querySelector("#CaCallGroupScore").value === SCORE_APPT_SET) {
@@ -445,10 +408,7 @@ const calculateStatus = () => {
 	    document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
 	  } else {
 	    // Patient did not answer
-	    if (
-	      Number(document.querySelector("#CaCallGroupPatientFollowupCount").value) <
-	      MAX_PATIENT_FOLLOWUP_ATTEMPTS
-	    ) {
+	    if (Number(document.querySelector("#CaCallGroupPatientFollowupCount").value) < MAX_PATIENT_FOLLOWUP_ATTEMPTS) {
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
 	    } else {
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
@@ -457,150 +417,90 @@ const calculateStatus = () => {
 	    }
 	  }
 	} else if (callType === CALL_TYPE_OUTBOUND_CLINIC) {
-	  if (
-	    document.querySelector("#CaCallGroupDidTheyAnswerOutbound").value === "1" ||
-	    IS_CLINIC_LOOKUP_PAGE
-	  ) {
-	    if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED
-	    ) {
+	  if (document.querySelector("#CaCallGroupDidTheyAnswerOutbound").value === "1" || IS_CLINIC_LOOKUP_PAGE) {
+	    if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
 	      // Clinic refused to answer our questions
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_DECLINED;
-	    } else if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED
-	    ) {
+	    } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
 	      // Appointment is coming up ..
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	      document.querySelectorAll("[id^=CaCallGroupScheduledCallDate]").forEach(element => {
-	        element.disabled = false;
-	      });
+	      document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
 	      onChangeApptDate();
 	    } else {
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
 	    }
 	  } else {
-	    if (
-	      Number(document.querySelector("#CaCallGroupClinicOutboundCount").value) <
-	      MAX_CLINIC_OUTBOUND_ATTEMPTS
-	    ) {
+	    if (Number(document.querySelector("#CaCallGroupClinicOutboundCount").value) < MAX_CLINIC_OUTBOUND_ATTEMPTS) {
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
 	    } else {
 	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS;
 	    }
 	  }
-	} else if (callType === CALL_TYPE_OUTBOUND_CALLER) {
-	  if (document.querySelector("#CaCallGroupDidTheyAnswerOutbound").value === "1") {
-	    if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED
-	    ) {
-	      // Appointment is coming up ..
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	      document.querySelectorAll("[id^=CaCallGroupScheduledCallDate]").forEach(element => {
-	        element.disabled = false;
-	      });
-	      onChangeApptDate();
-	    } else if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED
-	    ) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CUST_DECLINED;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CUST_SURVEY_COMPLETE;
-	    }
-	  } else {
-	    if (
-	      Number(document.querySelector("#CaCallGroupPatientOutboundCount").value) <
-	      MAX_PATIENT_OUTBOUND_ATTEMPTS
-	    ) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CUST_ATTEMPTED;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CUST_TOO_MANY_ATTEMPTS;
-	    }
-	  }
 	} else if (callType === CALL_TYPE_SURVEY_DIRECT) {
-	  if (document.querySelector("#CaCallGroupDmHasApptInfo").value === "1") {
-	    // DM had appt info
-	    if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED ||
-	      document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED
-	    ) {
-	      // DM was missing some important info. Try calling clinic.
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-	    } else if (
-	      document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED
-	    ) {
-	      // Appointment is coming up ..
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	      document.querySelectorAll("[id^=CaCallGroupScheduledCallDate]").forEach(element => {
-	        element.disabled = false;
-	      });
-	      onChangeApptDate();
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
-	    }
-	  } else {
-	    // DM did not have appt info. Try calling clinic.
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-	  }
-	} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "vm") {
-  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-	} else if (
-	  isVoicemailType &&
-	  (document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "no" ||
-	    document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "")
-	) {
-	  if (
-	    parseInt(document.querySelector("#CaCallGroupVmOutboundCount").value) < MAX_VM_OUTBOUND_ATTEMPTS
-	  ) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-	  }
-	} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "noAttempt") {
-	  let vmCount = parseInt(document.querySelector("#CaCallGroupVmOutboundCount").value);
-	  document.querySelector("#CaCallGroupVmOutboundCount").value = vmCount - 1;
-	  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
-	} else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
-	  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
-	} else if (document.querySelector("#CaCallIsWrongNumber").checked) {
-	  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
-	} else if (document.querySelector("#CaCallGroupRefusedNameAgainQuickPick").checked) {
-	  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
-	} else if (document.querySelector("#CaCallGroupDidClinicAnswer").value === "cr") {
-	  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
-	} else {
-	  // Inbound or Followup call
-	  calculateByScore = true;
-	}
+		  if (document.querySelector("#CaCallGroupDmHasApptInfo").value === "1") {
+		    // DM had appt info
+		    if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
+		      // DM was missing some important info. Try calling clinic.
+		      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
+		    } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
+		      // Appointment is coming up ..
+		      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+		      document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
+		      onChangeApptDate();
+		    } else {
+		      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
+		    }
+		  } else {
+		    // DM did not have appt info. Try calling clinic.
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
+		  }
+		} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "vm") {
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+		} else if (isVoicemailType && (document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "no" || document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "")) {
+		  if (Number(document.querySelector("#CaCallGroupVmOutboundCount").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
+		  } else {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+		  }
+		} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "noAttempt") {
+		  const vmCount = Number(document.querySelector("#CaCallGroupVmOutboundCount").value);
+		  document.querySelector("#CaCallGroupVmOutboundCount").value = vmCount - 1;
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
+		} else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
+		} else if (document.querySelector("#CaCallIsWrongNumber").checked) {
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
+		} else if (document.querySelector("#CaCallGroupRefusedNameAgainQuickPick").checked) {
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
+		} else if (document.querySelector("#CaCallGroupDidClinicAnswer").value === "cr") {
+		  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
+		} else {
+		  // Inbound or Followup call
+		  calculateByScore = true;
+		}
 
-	if (calculateByScore) {
-	  const score = document.querySelector("#CaCallGroupScore").value;
-	  const prospect = document.querySelector("#CaCallGroupProspect").value;
-	  if (prospect === PROSPECT_NO) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_NON_PROSPECT;
-	  } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_INCOMPLETE;
-	    document.querySelector("#CaCallGroupScore").value = SCORE_DISCONNECTED;
-	  } else if (score === SCORE_NOT_REACHED) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
-	  } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	  } else if (score === SCORE_TENTATIVE_APPT) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
-	  } else if (score === SCORE_MISSED_OPPORTUNITY) {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_MISSED_OPPORTUNITY;
-	  } else {
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_NEW;
-	  }
-	}
+		if (calculateByScore) {
+		  const score = document.querySelector("#CaCallGroupScore").value;
+		  const prospect = document.querySelector("#CaCallGroupProspect").value;
+		  if (prospect === PROSPECT_NO) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_NON_PROSPECT;
+		  } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_INCOMPLETE;
+		    document.querySelector("#CaCallGroupScore").value = SCORE_DISCONNECTED;
+		  } else if (score === SCORE_NOT_REACHED) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
+		  } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+		  } else if (score === SCORE_TENTATIVE_APPT) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
+		  } else if (score === SCORE_MISSED_OPPORTUNITY) {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_MISSED_OPPORTUNITY;
+		  } else {
+		    document.querySelector("#CaCallGroupStatus").value = STATUS_NEW;
+		  }
+		}
 }
+
 
 function onChangeLocationId(locationId) {
   doWeHaveLocationAndFrontDesk();
