@@ -1,7 +1,7 @@
 import './admin_common';
-import './datepicker';
 import './nav_tabs';
 
+//Leaving this alone, due to use of datepicker
 $(document).ready(function() {
 	if($('#CorpIsActive').prop('checked')) {
 		//active is checked, is this a draft???

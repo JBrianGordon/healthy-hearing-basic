@@ -1,20 +1,24 @@
 import './admin_common';
-import './datepicker';
 import './nav_tabs';
 
-let toggleContentShow = type => {
-	$('#file').hide();
-	$('#text').hide();
-	switch(type){
-			case 'flv':
-				$('#file').show();
-				break;
-			default:
-				$('#text').show();
-				break;
-		}
-}
+const toggleContentShow = (type) => {
+	const fileElement = document.querySelector("#file");
+	const textElement = document.querySelector("#text");
+	
+	fileElement.style.display = "none";
+	textElement.style.display = "none";
+	
+	switch (type) {
+		case "flv":
+			fileElement.style.display = "block";
+			break;
+		default:
+			textElement.style.display = "block";
+			break;
+	}
+};
 
+//Leaving this function alone, due to dependence on datepicker
 $(document).ready(function() {
 		toggleContentShow($('#ContentType').val());
 		$(document).on('change', '#ContentType', function(){

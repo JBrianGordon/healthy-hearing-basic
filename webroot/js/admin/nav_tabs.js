@@ -1,180 +1,178 @@
-$(document).ready(function() {
-	
-  var Tab = function (element) {
-    this.element = $(element)
+class Tab {
+  constructor(element) {
+    this.element = element;
   }
 
-  Tab.VERSION = '3.4.1'
+  static VERSION = '3.4.1';
+  static TRANSITION_DURATION = 150;
 
-  Tab.TRANSITION_DURATION = 150
-
-  Tab.prototype.show = function () {
-    var $this    = this.element
-    var $ul      = $this.closest('ul:not(.dropdown-menu)')
-    var selector = $this.data('target')
+  show() {
+    const $this = this.element;
+    const $ul = $this.closest('ul:not(.dropdown-menu)');
+    let selector = $this.data('target');
 
     if (!selector) {
-      selector = $this.attr('href')
-      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+      selector = $this.attr('href');
+      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ''); // strip for ie7
     }
 
-    if ($this.parent('li').hasClass('active')) return
+    if ($this.parent('li').hasClass('active')) return;
 
-    var $previous = $ul.find('.active:last a')
-    var hideEvent = $.Event('hide.bs.tab', {
+    const $previous = $ul.find('.active:last a');
+    const hideEvent = new Event('hide.bs.tab', {
       relatedTarget: $this[0]
-    })
-    var showEvent = $.Event('show.bs.tab', {
+    });
+    const showEvent = new Event('show.bs.tab', {
       relatedTarget: $previous[0]
-    })
+    });
 
-    $previous.trigger(hideEvent)
-    $this.trigger(showEvent)
+    $previous.dispatchEvent(hideEvent);
+    $this.dispatchEvent(showEvent);
 
-    if (showEvent.isDefaultPrevented() || hideEvent.isDefaultPrevented()) return
+    if (showEvent.defaultPrevented || hideEvent.defaultPrevented) return;
 
-    var $target = $(document).find(selector)
+    const $target = document.querySelector(selector);
 
-    this.activate($this.closest('li'), $ul)
-    this.activate($target, $target.parent(), function () {
-      $previous.trigger({
-        type: 'hidden.bs.tab',
+    this.activate($this.closest('li'), $ul);
+    this.activate($target, $target.parentElement, () => {
+      $previous.dispatchEvent(new Event('hidden.bs.tab', {
         relatedTarget: $this[0]
-      })
-      $this.trigger({
-        type: 'shown.bs.tab',
+      }));
+      $this.dispatchEvent(new Event('shown.bs.tab', {
         relatedTarget: $previous[0]
-      })
-    })
+      }));
+    });
   }
 
-  Tab.prototype.activate = function (element, container, callback) {
-    var $active    = container.find('> .active')
-    var transition = callback
-      && $.support.transition
-      && ($active.length && $active.hasClass('fade') || !!container.find('> .fade').length)
+  activate(element, container, callback) {
+    const $active = container.querySelector('> .active');
+    const transition = callback
+      && ($active?.classList.contains('fade') || !!container.querySelector('> .fade'));
 
-    function next() {
-      $active
-        .removeClass('active')
-        .find('> .dropdown-menu > .active')
-        .removeClass('active')
-        .end()
-        .find('[data-toggle="tab"]')
-        .attr('aria-expanded', false)
+    const next = () => {
+      $active?.classList.remove('active');
+      $active?.querySelector('> .dropdown-menu > .active')?.classList.remove('active');
+      $active?.querySelectorAll('[data-toggle="tab"]')?.forEach(tab => {
+        tab.setAttribute('aria-expanded', false);
+      });
 
-      element
-        .addClass('active')
-        .find('[data-toggle="tab"]')
-        .attr('aria-expanded', true)
+      element.classList.add('active');
+      element.querySelectorAll('[data-toggle="tab"]')?.forEach(tab => {
+        tab.setAttribute('aria-expanded', true);
+      });
 
       if (transition) {
-        element[0].offsetWidth // reflow for transition
-        element.addClass('in')
+        element.offsetWidth; // reflow for transition
+        element.classList.add('in');
       } else {
-        element.removeClass('fade')
+        element.classList.remove('fade');
       }
 
-      if (element.parent('.dropdown-menu').length) {
-        element
-          .closest('li.dropdown')
-          .addClass('active')
-          .end()
-          .find('[data-toggle="tab"]')
-          .attr('aria-expanded', true)
+      if (element.parentElement?.classList.contains('dropdown-menu')) {
+        element.closest('li.dropdown')?.classList.add('active');
+        element.querySelectorAll('[data-toggle="tab"]')?.forEach(tab => {
+          tab.setAttribute('aria-expanded', true);
+        });
       }
 
-      callback && callback()
+      callback?.();
+    };
+
+    if ($active && transition) {
+      $active.addEventListener('bsTransitionEnd', next, { once: true });
+      emulateTransitionEnd($active, Tab.TRANSITION_DURATION);
+    } else {
+      next();
     }
 
-    $active.length && transition ?
-      $active
-        .one('bsTransitionEnd', next)
-        .emulateTransitionEnd(Tab.TRANSITION_DURATION) :
-      next()
-
-    $active.removeClass('in')
+    $active?.classList.remove('in');
   }
-
-
-  // TAB PLUGIN DEFINITION
-  // =====================
-
-  function Plugin(option) {
-    return this.each(function () {
-      var $this = $(this)
-      var data  = $this.data('bs.tab')
-
-      if (!data) $this.data('bs.tab', (data = new Tab(this)))
-      if (typeof option == 'string') data[option]()
-    })
-  }
-
-  var old = $.fn.tab
-
-  $.fn.tab             = Plugin
-  $.fn.tab.Constructor = Tab
-
-
-  // TAB NO CONFLICT
-  // ===============
-
-  $.fn.tab.noConflict = function () {
-    $.fn.tab = old
-    return this
-  }
-
-
-  // TAB DATA-API
-  // ============
-
-  var clickHandler = function (e) {
-    e.preventDefault()
-    Plugin.call($(this), 'show')
-  }
-
-  $(document)
-    .on('click.bs.tab.data-api', '[data-toggle="tab"]', clickHandler)
-    .on('click.bs.tab.data-api', '[data-toggle="pill"]', clickHandler)
-	
-	// Display the selected tab
-	var hash = window.location.hash;
-	if (hash.length > 0) {
-		var parentTabId = $('a[href="' + hash + '"]').closest('.tab-pane').attr('id');
-		if (typeof parentTabId != 'undefined') {
-			// If tab is nested with a parent tab, click both
-			$('a[href="#' + parentTabId + '"]').trigger('click');
-		}
-		$('a[href="' + hash + '"]').trigger('click');
-	}
-
-	// When a tab is clicked, change the URL to our new hash
-	$('.nav-tabs a').on('click', function() {
-		var scrollmem = $('body').scrollTop() || $('html').scrollTop();
-		window.location.hash = this.hash;
-		$('html,body').scrollTop(scrollmem);
-	});
-
-	// On submit, make any validation errors on tabs visible
-	$('input[type=submit]').on('click', function() {
-		if ($(this).closest('form').get(0).checkValidity() == false) {
-			displayErrorsOnTabs();
-		}
-	});
-});
-
-// Make validation errors on tabs more visible
-function displayErrorsOnTabs() {
-	$('input:invalid').each(function() {
-		$(this).parent('div').addClass('has-error');
-	});
-	$('input.form-error').each(function() {
-		$(this).parent('div').addClass('has-error');
-	});
-	$('.nav-tabs li a').each(function() {
-		var tab = $(this).attr('href');
-		if ($(tab+' div.has-error').length || $(tab+' span.has-error').length || $(tab+' input.form-error').length) {
-			$('a[href="' + tab + '"]').addClass('tab-has-error').click();
-		}
-	});
 }
+
+// Helper function to emulate transition end event
+function emulateTransitionEnd(element, duration) {
+  let called = false;
+  const durationPadding = 5;
+  const transitionEndEvent = new Event('bsTransitionEnd');
+
+  const handleTransitionEnd = () => {
+    called = true;
+    element.removeEventListener('transitionend', handleTransitionEnd);
+    element.removeEventListener('webkitTransitionEnd', handleTransitionEnd);
+    element.dispatchEvent(transitionEndEvent);
+  };
+
+  element.addEventListener('transitionend', handleTransitionEnd);
+  element.addEventListener('webkitTransitionEnd', handleTransitionEnd);
+
+  setTimeout(() => {
+    if (!called) {
+      element.dispatchEvent(transitionEndEvent);
+    }
+  }, duration + durationPadding);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const clickHandler = function(e) {
+    e.preventDefault();
+    const tab = new Tab(this);
+    tab.show();
+  };
+
+  document.querySelectorAll('[data-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('click', clickHandler);
+  });
+
+  // Display the selected tab
+  const hash = window.location.hash;
+  if (hash.length > 0) {
+    const parentTabId = document.querySelector(`a[href="${hash}"]`).closest('.tab-pane')?.id;
+    if (typeof parentTabId !== 'undefined') {
+      // If tab is nested with a parent tab, click both
+      document.querySelector(`a[href="#${parentTabId}"]`)?.click();
+    }
+    document.querySelector(`a[href="${hash}"]`)?.click();
+  }
+
+  // When a tab is clicked, change the URL to our new hash
+  document.querySelectorAll('.nav-tabs a').forEach(link => {
+    link.addEventListener('click', function() {
+      const scrollmem = document.body.scrollTop || document.documentElement.scrollTop;
+      window.location.hash = this.hash;
+      document.documentElement.scrollTop = document.body.scrollTop = scrollmem;
+    });
+  });
+
+  // On submit, make any validation errors on tabs visible
+  document.querySelectorAll('input[type=submit]').forEach(submitBtn => {
+    submitBtn.addEventListener('click', function() {
+      const form = this.closest('form');
+      if (form && !form.checkValidity()) {
+        displayErrorsOnTabs();
+      }
+    });
+  });
+
+  // Make validation errors on tabs more visible
+  function displayErrorsOnTabs() {
+    document.querySelectorAll('input:invalid').forEach(input => {
+      const parentDiv = input.parentElement;
+      if (parentDiv) {
+        parentDiv.classList.add('has-error');
+      }
+    });
+    document.querySelectorAll('input.form-error').forEach(input => {
+      const parentDiv = input.parentElement;
+      if (parentDiv) {
+        parentDiv.classList.add('has-error');
+      }
+    });
+    document.querySelectorAll('.nav-tabs li a').forEach(link => {
+      const tab = document.querySelector(link.getAttribute('href'));
+      if (tab && (tab.querySelector('div.has-error') || tab.querySelector('span.has-error') || tab.querySelector('input.form-error'))) {
+        link.classList.add('tab-has-error');
+        link.click();
+      }
+    });
+  }
+});
