@@ -309,6 +309,20 @@ class LocationsTable extends Table
                     $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end'])]);
                 }
             ])
+            ->add('has_url', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['has_url']) {
+                        $query->andWhere(['LENGTH(Locations.url) >' => 0]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.url' => '',
+                                'Locations.url IS NULL'
+                            ]
+                        ]);
+                    }
+                }
+            ])
             ->add('using_logo', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     if ($args['using_logo']) {
