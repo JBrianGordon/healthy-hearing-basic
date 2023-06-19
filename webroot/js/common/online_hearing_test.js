@@ -2,6 +2,7 @@
 // Results JSON object includes:
 // answers, email, firstName, emailSymptoms,
 // firstName, lastName, hearingResult
+/*** TODO: check this when online hearing test view built out ***/
 import './common';
 
 class OnlineHearingTest {

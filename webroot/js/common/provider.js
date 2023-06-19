@@ -1,6 +1,7 @@
 /***
  * Provider Tab Code -- used on admin/location/edit && clinic/locations/edit
  ***/
+/*** TODO: check this once on main branch ***/
 class Provider {
   constructor() {
     this.errorStyle = {

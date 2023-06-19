@@ -1,5 +1,6 @@
 import './common';
 import './responsive_slider';
+/*** TODO: most or all of this file can likely be deleted ***/
 
 // Add "mobile_table" class to each table
 document.querySelectorAll('table').forEach(table => {
