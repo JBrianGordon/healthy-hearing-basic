@@ -1,5 +1,5 @@
 import './datepicker';
-
+/*** TODO: check this code again once admin search bar is in place ***/
 class SearchToggle {
   constructor(options) {
     const defaults = {
@@ -48,144 +48,79 @@ if (document.querySelector("#advanced_search_toggle")) {
 }
 
 // Reorganize search options and change booleans into a toggle
-if (
-  document.querySelector("form").action.includes("/admin/locations") ||
-  document.querySelector("form").action.includes("/admin/crm-searches")
-) {
-  const generalInputs = document.createElement("div");
-  const reviewInputs = document.createElement("div");
-  const managementInputs = document.createElement("div");
-  const upgrades = document.createElement("div");
-  const genInputsHeadline = `<div><h3 class='crm-group-header'>General demographics</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-minus'></span> Collapse section</span></div>`;
-  const reviewsHeadline = `<div><h3 class='crm-group-header'>Reviews</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>`;
-  const changeManagementHeadline = `<div><h3 class='crm-group-header'>Change management</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>`;
-  const upgradeHeadline = `<div><h3 class='crm-group-header'>Upgrade Features</h3><span class='group-toggle btn btn-primary btn-sm'><span class='glyphicon glyphicon-plus'></span> Expand section</span></div>`;
-  generalInputs.classList.add("filter-group");
-  reviewInputs.classList.add("filter-group", "hidden");
-  managementInputs.classList.add("filter-group", "hidden");
-  upgrades.classList.add("filter-group", "hidden");
-
-  // Send form groups to proper parent divs
-  const arrangeInputs = (modalToggleField, inputGroup) => {
-    modalToggleField.forEach((field) => {
-      field.closest(".form-group").appendChild(inputGroup);
-    });
-  };
-
-  const generalFields = [
-    document.querySelector("#SearchId"),
-    document.querySelector("#SearchOticonId"),
-    document.querySelector("#SearchParentId"),
-    document.querySelector("#SearchSfId"),
-    document.querySelector("#SearchYhnLocationId"),
-    document.querySelector("#SearchCqpPracticeId"),
-    document.querySelector("#SearchXneCrmId"),
-    document.querySelector("#SearchOticonComplaintId"),
-    document.querySelector("#SearchExactLocationId"),
-  ];
-  const reviewFields = [
-    document.querySelector("#SearchReviewResponse"),
-    document.querySelector("#SearchReviewVendorId"),
-  ];
-  const managementFields = [
-    document.querySelector("#SearchLastSentEmailId"),
-    document.querySelector("#SearchLastSentDateId"),
-    document.querySelector("#SearchNextFollowUpDateId"),
-    document.querySelector("#SearchLastModifiedDateId"),
-  ];
-  const upgradeFields = [
-    document.querySelector("#SearchCtaId"),
-    document.querySelector("#SearchCtaDateId"),
-  ];
-
-  arrangeInputs(generalFields, generalInputs);
-  arrangeInputs(reviewFields, reviewInputs);
-  arrangeInputs(managementFields, managementInputs);
-  arrangeInputs(upgradeFields, upgrades);
-
-  if (generalInputs.innerHTML.trim() === "") {
-    generalInputs.remove();
-  }
-  if (reviewInputs.innerHTML.trim() === "") {
-    reviewInputs.remove();
-  }
-  if (managementInputs.innerHTML.trim() === "") {
-    managementInputs.remove();
-  }
-  if (upgrades.innerHTML.trim() === "") {
-    upgrades.remove();
-  }
-
-  document.querySelector("#admin_search .form-horizontal").appendChild(generalInputs);
-  document.querySelector("#admin_search .form-horizontal").appendChild(reviewInputs);
-  document.querySelector("#admin_search .form-horizontal").appendChild(managementInputs);
-  document.querySelector("#admin_search .form-horizontal").appendChild(upgrades);
+if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
 
   // Update labels for specific elements
   const updateLabels = () => {
-    document.querySelector("label[for='SearchCqpPracticeId']").textContent = "Practice";
-    document.querySelector("label[for='SearchReviewResponse']").textContent = "Review Response";
+    document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
   };
 
   updateLabels();
 
-  // Transform boolean inputs into switches
-  const createSwitch = (input) => {
-    const switchContainer = document.createElement("label");
-    switchContainer.classList.add("switch");
+  //Wrap binary search options in spans
+	const inputElements = Array.from(document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']"));
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = input.id + "_switch";
+	inputElements.forEach((input) => {
+	  const label = document.createElement("label");
+	  label.classList.add("switch");
 
-    const slider = document.createElement("span");
-    slider.classList.add("slider", "round");
+	  const slider = document.createElement("span");
+	  slider.classList.add("slider");
 
-    switchContainer.appendChild(checkbox);
-    switchContainer.appendChild(slider);
+	  const switchNegative = document.createElement("span");
+	  switchNegative.classList.add("switch-negative");
 
-    const inputParent = input.parentNode;
-    inputParent.insertBefore(switchContainer, input);
-    inputParent.removeChild(input);
+	  const switchOff = document.createElement("span");
+	  switchOff.classList.add("switch-off");
 
-    checkbox.checked = input.value === "true";
+	  const switchPositive = document.createElement("span");
+	  switchPositive.classList.add("switch-positive");
 
-    checkbox.addEventListener("change", () => {
-      input.value = checkbox.checked ? "true" : "false";
-      slider.classList.toggle("switch-positive", checkbox.checked);
-      slider.classList.toggle("switch-negative", !checkbox.checked);
-    });
-  };
+	  slider.appendChild(switchNegative);
+	  slider.appendChild(switchOff);
+	  slider.appendChild(switchPositive);
 
-  const booleanInputs = document.querySelectorAll(
-    "input[type='hidden'][value='true'], input[type='hidden'][value='false']"
-  );
-  booleanInputs.forEach((input) => createSwitch(input));
+	  input.parentNode.insertBefore(label, input);
+	  label.appendChild(input);
+	  label.appendChild(slider);
+	});
 
-  // Load styles for switches
-  const loadSwitchStyles = () => {
-    const switches = document.querySelectorAll(".switch input[type='checkbox']");
-    switches.forEach((checkbox) => {
-      const slider = checkbox.nextElementSibling;
-      slider.classList.toggle("switch-positive", checkbox.checked);
-      slider.classList.toggle("switch-negative", !checkbox.checked);
-    });
-  };
+	// Add value to hidden inputs when sliders are interacted with
+	const sliders = Array.from(document.querySelectorAll("label .slider span"));
 
-  loadSwitchStyles();
+	sliders.forEach((slider) => {
+	  slider.addEventListener("mouseup", function () {
+	    const slideClass = this.classList.value;
 
-  // Add headlines to groups
-  const addHeadlines = () => {
-    const groups = document.querySelectorAll(".filter-group");
-    const headlines = [genInputsHeadline, reviewsHeadline, changeManagementHeadline, upgradeHeadline];
-    groups.forEach((group, index) => {
-      const headline = document.createElement("div");
-      headline.innerHTML = headlines[index];
-      group.insertAdjacentElement("beforebegin", headline);
-    });
-  };
+	    const input = this.closest("label").querySelector("input");
 
-  addHeadlines();
+	    if (slideClass === "switch-positive") {
+	      input.classList.remove("switch-negative");
+	      input.classList.add("switch-positive");
+	      input.value = 1;
+	    } else if (slideClass === "switch-negative") {
+	      input.classList.remove("switch-positive");
+	      input.classList.add("switch-negative");
+	      input.value = 0;
+	    } else {
+	      input.classList.remove("switch-negative", "switch-positive");
+	      input.removeAttribute("value");
+	    }
+	  });
+	});
+
+	// Load styles when sliders have been used in a previous search
+	const switchInputs = Array.from(document.querySelectorAll("label.switch input"));
+
+	switchInputs.forEach((input) => {
+	  const value = input.value;
+
+	  if (value === "1") {
+	    input.classList.add("switch-positive");
+	  } else if (value !== "") {
+	    input.classList.add("switch-negative");
+	  }
+	});
 
   // Expand/collapse button functionality
   const toggleGroup = (button) => {
