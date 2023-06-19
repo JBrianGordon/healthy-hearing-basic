@@ -9,7 +9,7 @@ $lat = $location->lat;
 $lon = $location->lon;
 $title = $location->title;
 $isMobile = $location->is_mobile;
-$this->set('hideProvider', $hideProvider);
+$hideProvider = isset($hideProvider) ? $hideProvider : false;
 if ($isMobile) {
 	$miles = Configure::read('isMetric') ? ' km' : ' miles';
 	$radius = $location->radius;

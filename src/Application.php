@@ -87,6 +87,21 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrf = new CsrfProtectionMiddleware(['httponly'=>true]);
+        // Token check will be skipped when callback returns `true`.
+        $csrf->skipCheckCallback(function($request) {
+            $controller = $request->getParam('controller');
+            $action = $request->getParam('action');
+            if (is_null($controller) || is_null($action)) {
+                return false;
+            }
+            // TODO: Is it okay to skip CSRF for ajax?
+            // Skip CSRF token check for inlineajax
+            if (($controller=='Utils') && ($action=='inlineajax')) {
+                return true;
+            }
+            return false;
+        });
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -127,9 +142,7 @@ class Application extends BaseApplication
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            ->add($csrf);
 
         return $middlewareQueue;
     }
