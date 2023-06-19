@@ -65,11 +65,13 @@ window.addEventListener('pageshow', (event) => {
 
 const enlargeMapModal = document.getElementById('enlargeMap');
 
-enlargeMapModal.addEventListener('shown.bs.modal', () => {
-  enableInteractiveMap('big');
-});
+if(enlargeMapModal){
+  enlargeMapModal.addEventListener('shown.bs.modal', () => {
+    enableInteractiveMap('big');
+  });
 
-enlargeMapModal.addEventListener('hidden.bs.modal', () => {
-  const bigMap = document.getElementById('bigMap');
-  bigMap.setAttribute('data-enabled', '0');
-});
+  enlargeMapModal.addEventListener('hidden.bs.modal', () => {
+    const bigMap = document.getElementById('bigMap');
+    bigMap.setAttribute('data-enabled', '0');
+  });
+}

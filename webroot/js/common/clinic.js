@@ -58,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Add Google Maps link to Get Directions button
 	const clinicAddr = document.querySelector(".address").textContent.trim().replace(/ /g, "+").replace("#", "");
 	const directionsLink = document.querySelector(".directions-link");
-	directionsLink.href = `https://www.google.com/maps/dir//${clinicAddr}`;
+	if(directionsLink){
+		directionsLink.href = `https://www.google.com/maps/dir//${clinicAddr}`;
+	}
 
 	// Add recaptcha script on form click
 	const formInputs = Array.from(document.querySelectorAll("#CaCallApptRequestForm input"));
@@ -75,60 +77,64 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	const moreReviewsContainer = document.getElementById("more-reviews");
-	const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
+	if(moreReviewsContainer){
+		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
 
-	hiddenReviews.forEach(review => {
-	  review.classList.add("hidden-review");
-	});
+		hiddenReviews.forEach(review => {
+		  review.classList.add("hidden-review");
+		});
 
-	const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
-	let hiddenRevNum = hiddenReviewElements.length;
+		const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
+		let hiddenRevNum = hiddenReviewElements.length;
 
-	const moreReviewsButton = document.getElementById("more-reviews-button");
-	moreReviewsButton.addEventListener("click", function() {
-	  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
-	  fewerReviewsButton.style.display = "block";
+		const moreReviewsButton = document.getElementById("more-reviews-button");
+		moreReviewsButton.addEventListener("click", function(e) {
+			e.preventDefault();
+		  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		  fewerReviewsButton.style.display = "block";
 
-	  for (let i = 0; i < 5; i++) {
-	    hiddenReviewElements[0].classList.remove("hidden-review");
-	    hiddenRevNum--;
+		  for (let i = 0; i < 5; i++) {
+		    hiddenReviewElements[0].classList.remove("hidden-review");
+		    hiddenRevNum--;
 
-	    if (hiddenRevNum === 0) {
-	      moreReviewsButton.style.display = "none";
-	      break;
-	    }
-	  }
+		    if (hiddenRevNum === 0) {
+		      moreReviewsButton.style.display = "none";
+		      break;
+		    }
+		  }
 
-	  const moreReviewsContainer = document.getElementById("more-reviews");
-	  moreReviewsContainer.style.display = "block";
+		  const moreReviewsContainer = document.getElementById("more-reviews");
+		  moreReviewsContainer.style.display = "block";
 
-	  return false;
-	});
+		  return false;
+		});
 
-	const fewerReviewsButton = document.getElementById("fewer-reviews-button");
-	fewerReviewsButton.addEventListener("click", function() {
-	  const moreReviewsContainer = document.getElementById("more-reviews");
-	  moreReviewsContainer.style.display = "none";
+		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		fewerReviewsButton.addEventListener("click", function(e) {
+			e.preventDefault();
+		  const moreReviewsContainer = document.getElementById("more-reviews");
+		  moreReviewsContainer.style.display = "none";
 
-	  this.style.display = "none";
+		  this.style.display = "none";
 
-	  const moreReviewsButton = document.getElementById("more-reviews-button");
-	  moreReviewsButton.style.display = "block";
+		  const moreReviewsButton = document.getElementById("more-reviews-button");
+		  moreReviewsButton.style.display = "block";
 
-	  window.scrollTo({
-	    top: document.querySelector(".panel-section.reviews").offsetTop - 114,
-	    behavior: "smooth"
-	  });
+		  window.scrollTo({
+		    top: document.querySelector(".panel-section.reviews").offsetTop - 114,
+		    behavior: "smooth"
+		  });
 
-	  setTimeout(function() {
-	    hiddenReviewElements.forEach(element => {
-	      element.classList.add("hidden-review");
-	    });
-	    hiddenRevNum = document.querySelectorAll(".hidden-review").length;
-	  }, 1100);
+		  setTimeout(function() {
+		    hiddenReviewElements.forEach(element => {
+		      element.classList.add("hidden-review");
+		    });
+		    hiddenRevNum = document.querySelectorAll(".hidden-review").length;
+		  }, 1100);
 
-	  return false;
-	});
+		  return false;
+		});
+	}
 	
 	const newestArr = Array.from(document.querySelectorAll(".well"));
 	const ratingArr = [];
@@ -201,14 +207,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	
 	const sortSelect = document.getElementById("sortSelect");
 
-	sortSelect.addEventListener("change", function() {
-	  if (this.value === "newestArr") {
-	    sortReviews(newestArr);
-	  } else {
-	    sortByRating(this.value);
-	  }
-	});
+	if(sortSelect){
+		sortSelect.addEventListener("change", function() {
+		  if (this.value === "newestArr") {
+		    sortReviews(newestArr);
+		  } else {
+		    sortByRating(this.value);
+		  }
+		});
+	}
 	
+	/*** TODO: uncomment once "Open now!"" is pulled in on view: ***
 	const clinicIsOpen = document.querySelector(".hours span").classList.contains("open");
 	const currentDate = new Date();
 	const currentDay = currentDate.getDay();
@@ -221,28 +230,32 @@ document.addEventListener('DOMContentLoaded', () => {
 	  dayElement.style.color = "#065903";
 	  dayElement.style.backgroundColor = "#eff5f5";
 	  dayElement.style.fontWeight = "bold";
-	}
+	}*/
 	
 	const caCallGroupEmail = document.getElementById("CaCallGroupEmail");
-	caCallGroupEmail.addEventListener("change", function() {
-	  const pattern = new RegExp('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}');
-	  if (pattern.test(this.value)) {
-	    this.setCustomValidity("");
-	  } else {
-	    this.setCustomValidity("Please enter a valid email address.");
-	  }
-	});
+	if(caCallGroupEmail){
+		caCallGroupEmail.addEventListener("change", function() {
+		  const pattern = new RegExp('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}');
+		  if (pattern.test(this.value)) {
+		    this.setCustomValidity("");
+		  } else {
+		    this.setCustomValidity("Please enter a valid email address.");
+		  }
+		});
+	}
 
 	const caCallGroupCallerPhone = document.getElementById("CaCallGroupCallerPhone");
-	caCallGroupCallerPhone.addEventListener("change", function() {
-	  // Phone number must be at least 10 numerical digits
-	  const digits = this.value.replace(/\D/g, '');
-	  if (digits.length < 10) {
-	    this.setCustomValidity('Please enter a valid phone number.');
-	  } else {
-	    this.setCustomValidity('');
-	  }
-	});
+	if(caCallGroupCallerPhone){
+		caCallGroupCallerPhone.addEventListener("change", function() {
+		  // Phone number must be at least 10 numerical digits
+		  const digits = this.value.replace(/\D/g, '');
+		  if (digits.length < 10) {
+		    this.setCustomValidity('Please enter a valid phone number.');
+		  } else {
+		    this.setCustomValidity('');
+		  }
+		});
+	}
 	
 	const credList = {
 	  "AuD": "Doctor of Audiology",
@@ -478,6 +491,6 @@ window.addEventListener('load', function () {
     medium = match[1];
     medium = medium.replace(/[()]/g, '');
   }
-  document.querySelector('#CaCallGroupTrafficSource').value = source;
-  document.querySelector('#CaCallGroupTrafficMedium').value = medium;
+  document.querySelectorAll('CaCallGroup[traffic_source]').value = source;
+  document.querySelectorAll('CaCallGroup[traffic_medium]').value = medium;
 });

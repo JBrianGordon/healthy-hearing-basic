@@ -1,3 +1,4 @@
+/*** TODO: check this on city page, there's likely more that needs to be updated in that ticket ***/
 export function directBookBtn() {
   // Global variable for direct book clinic id
   let directBookClinicId = 0;

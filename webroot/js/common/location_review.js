@@ -3,11 +3,13 @@ class LocationReview {
 		//globals
 		this.addReviewButton = '.show_clinic';
 		this.updateDiv = '#review_error';
-		this.submitButton = '#submit_review';
-		this.modal = '#review_form';
+		this.submitButton = '#submitReview';
+		this.modal = '#reviewSubmitModal';
+		/*** TODO: uncomment when thank you modal functionality built: ***
 		this.infoDiv = '#review_thank';
 		this.modalThank = '#review_form_thankyou';
 		this.subscribeButton = '#subscribe_button';
+		*/
 		this.newsletterForm = '#newsletter_form';
 		this.subscribeError = '.subscribe_error';
 		this.submittedReview = false;
@@ -99,8 +101,9 @@ class LocationReview {
 
 	startListeners() {
 	  document.querySelector(this.submitButton).addEventListener('click', this.submitReview.bind(this));
+	  /*** TODO: uncomment when thank you modal functionality built: ***
 	  document.querySelector(this.subscribeButton).addEventListener('click', this.submitSubscribe.bind(this));
-	  document.querySelector(this.modal).addEventListener('hide.bs.modal', this.modalHide.bind(this));
+	  document.querySelector(this.modal).addEventListener('hide.bs.modal', this.modalHide.bind(this));*/
 	  document.querySelector(this.addReviewButton).addEventListener('click', this.reviewButtonClick.bind(this));
 	}
 }

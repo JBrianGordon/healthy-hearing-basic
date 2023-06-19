@@ -1,6 +1,7 @@
 import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
+/*** TODO: check this code when clinic edit view is added: ***/
 
 document.addEventListener('DOMContentLoaded', function() {
   // If there are any errors on the page, scroll down
