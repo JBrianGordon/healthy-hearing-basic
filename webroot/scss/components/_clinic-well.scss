@@ -368,6 +368,10 @@
 	}
 }
 
+.modal-backdrop {
+	display: none;
+}
+
 iframe[title='recaptcha challenge'] {
 	@media only screen and (max-width: $screen-md-max) {
 		position: fixed;

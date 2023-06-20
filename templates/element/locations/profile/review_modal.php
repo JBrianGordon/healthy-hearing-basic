@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 
 $zipLabel = Configure::read('zipLabel');
 ?>
-<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true">
+<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">

@@ -1,32 +1,52 @@
 import './common';
 import './responsive_slider';
+/*** TODO: most or all of this file can likely be deleted ***/
 
-$("table").each(function(index) {
-	$(this).addClass("mobile_table");
-	$("table.mobile_table span").removeAttr("style");
+// Add "mobile_table" class to each table
+document.querySelectorAll('table').forEach(table => {
+  table.classList.add('mobile_table');
+  table.querySelectorAll('table.mobile_table span').forEach(span => {
+    span.removeAttribute('style');
+  });
 });
 
-//Open social media links in small window
-$(".btn-share").on("click",function(){
-	window.open(this.href, "", "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600");
-	return false;
-})
+// Open social media links in a new window
+document.querySelectorAll('.btn-share').forEach(btn => {
+  btn.addEventListener('click', function(event) {
+    event.preventDefault();
+    window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+  });
+});
 
-//Add noprint class to all wistia videos in help pages
-var wistiaEmbed = $(".wistia_embed");
-for(var i=0;i<wistiaEmbed.length;i++){
-	wistiaEmbed.eq(i).addClass("noprint");
-}
+// Add "noprint" class to all wistia videos in help pages
+const wistiaEmbeds = document.querySelectorAll('.wistia_embed');
+wistiaEmbeds.forEach(embed => {
+  embed.classList.add('noprint');
+});
 
-$(".accordion-handle").click(function(){
-	let accordion_id = "#" + $(this).attr("rel");
-	if($(accordion_id).hasClass("hidden")){
-		$("#accordion ul:visible").slideUp("normal").addClass("hidden");
-		$(accordion_id).slideDown().removeClass("hidden");
-		$(accordion_id + "-icon").removeClass("icon-chevron-right").addClass("icon-chevron-down");
-	} else {
-		$(accordion_id).slideUp().addClass("hidden");
-		$(accordion_id + "-icon").removeClass("icon-chevron-down").addClass("icon-chevron-right");
-	}
-	return false;
+// Accordion functionality
+const accordionHandles = document.querySelectorAll('.accordion-handle');
+accordionHandles.forEach(handle => {
+  handle.addEventListener('click', function() {
+    const accordionId = "#" + this.getAttribute("rel");
+    const accordionContent = document.querySelector(accordionId);
+
+    if (accordionContent.classList.contains('hidden')) {
+      const visibleAccordion = document.querySelector("#accordion ul:not(.hidden)");
+      visibleAccordion.style.display = 'none';
+      visibleAccordion.classList.add('hidden');
+      
+      accordionContent.style.display = 'block';
+      accordionContent.classList.remove('hidden');
+      document.querySelector(accordionId + "-icon").classList.remove('icon-chevron-right');
+      document.querySelector(accordionId + "-icon").classList.add('icon-chevron-down');
+    } else {
+      accordionContent.style.display = 'none';
+      accordionContent.classList.add('hidden');
+      document.querySelector(accordionId + "-icon").classList.remove('icon-chevron-down');
+      document.querySelector(accordionId + "-icon").classList.add('icon-chevron-right');
+    }
+
+    return false;
+  });
 });

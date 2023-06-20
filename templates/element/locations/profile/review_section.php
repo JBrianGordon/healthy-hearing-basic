@@ -22,7 +22,7 @@
 	          <?php /*** TODO: uncomment when reviewText built in clinic helper*** :echo $this->Clinic->reviewText($location);*/ ?>
 	        </p>
 	        <p<?php if($location->state == 'ON'){ echo ' style="height:20px"'; } ?>>
-	          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
+	          <button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
 	          <?php if (isset($location->reviews) && count($location->reviews)): ?>
 	          	<span id="sortSpan">Sort by: <select id="sortSelect">
                     <option value="newestArr">Newest</option><option value="highestRating">Highest Rating</option><option value="lowestRating">Lowest Rating</option>

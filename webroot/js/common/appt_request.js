@@ -1,49 +1,75 @@
-//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
-
 window.submitApptRequest = () => {
-    if ($("#CaCallApptRequestForm").get(0).reportValidity()) {
-        $("#apptRequestSubmitBtn").prop("disabled", !0);
-        let t = $("#CaCallApptRequestForm").serialize();
-        $.ajax({
-            type: "POST",
-            url: "/ca_calls/appt_request",
-            data: t,
-            dataType: "json",
-            success: function(t) {
-                if ($("#apptRequestSubmitBtn").prop("disabled", !1), !0 === t.success) $("#apptRequestModal").hide(), $("#apptRequestThankYouModal").show();
-                else {
-                    let e = "Error";
-                    t.errorMessage && (e = t.errorMessage), $("#apptRequestSubmitErrorMessage").html(e), $("#apptRequestSubmitError").show()
-                }
-                grecaptcha.reset();
-            }
-        })
-    }
-}
+  const form = document.getElementById("CaCallApptRequestForm");
+  if (form.reportValidity()) {
+    const submitBtn = document.getElementById("apptRequestSubmitBtn");
+    submitBtn.disabled = true;
+
+    const formData = new FormData(form);
+    const serializedData = new URLSearchParams(formData).toString();
+
+    fetch("/ca_calls/appt_request", {
+      method: "POST",
+      body: serializedData,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      dataType: "json"
+    })
+      .then(response => response.json())
+      .then(data => {
+        submitBtn.disabled = false;
+        
+        if (data.success === true) {
+          document.getElementById("apptRequestModal").style.display = "none";
+          document.getElementById("apptRequestThankYouModal").style.display = "block";
+        } else {
+          let errorMessage = "Error";
+          if (data.errorMessage) {
+            errorMessage = data.errorMessage;
+          }
+          document.getElementById("apptRequestSubmitErrorMessage").innerHTML = errorMessage;
+          document.getElementById("apptRequestSubmitError").style.display = "block";
+        }
+
+        if (typeof grecaptcha !== "undefined" && typeof grecaptcha.reset === "function") {
+          grecaptcha.reset();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        submitBtn.disabled = false;
+      });
+  }
+};
 
 window.onSubmit = e => {
-	e.preventDefault();
-	var appReqPanel = document.getElementById("apptRequestPanel"),
-		modalThankYou = document.getElementById("apptRequestThankYouModal"),
-		closeModalButtons = modalThankYou.querySelectorAll("[data-dismiss='modal']"),
-		pageBody = document.getElementsByTagName("body");
-	if (!grecaptcha.getResponse()) {
-		grecaptcha.execute();
-	}
-	if (appReqPanel != null && appReqPanel.classList.contains("fixed")) {
-		appReqPanel.classList.remove("fixed");
-	}
-	modalThankYou.classList.remove("fade");
-	for(var i = 0;i < closeModalButtons.length; i++) {
-		closeModalButtons[i].addEventListener("click", function(){
-			modalThankYou.remove();
-			pageBody[0].classList.remove("modal-open");
-		})
-	}
-}
+  e.preventDefault();
+
+  const appReqPanel = document.getElementById("apptRequestPanel");
+  const modalThankYou = document.getElementById("apptRequestThankYouModal");
+  const closeModalButtons = modalThankYou.querySelectorAll("[data-dismiss='modal']");
+  const pageBody = document.getElementsByTagName("body");
+
+  if (!grecaptcha.getResponse()) {
+    grecaptcha.execute();
+  }
+
+  if (appReqPanel !== null && appReqPanel.classList.contains("fixed")) {
+    appReqPanel.classList.remove("fixed");
+  }
+
+  modalThankYou.classList.remove("fade");
+
+  closeModalButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      modalThankYou.remove();
+      pageBody[0].classList.remove("modal-open");
+    });
+  });
+};
 
 window.addSubmitListener = () => {
-	var form = document.getElementById('CaCallApptRequestForm');
+	const form = document.getElementById('CaCallApptRequestForm');
 	form.addEventListener('submit', onSubmit);
 }
 
@@ -65,30 +91,57 @@ if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 	}
 }
 
-$(document).ready(function() {
-	$('.apptRequestBtn').on('click', function() {
-		var locationId = $(this).attr('data-id'),
-			apptReqPanel = $("#apptRequestPanel");
-			
-		if (locationId) {
-			$.ajax({
-				url:"/locations/ajax_appt_request_modal/"+locationId,
-				success: function(data, status) {
-					$('#ajaxModals').html(data);
-					$('#apptRequestModal').modal("show");
-					addSubmitListener();
-				}
-			});
-		} else if (apptReqPanel) {
-			$('html, body').animate({scrollTop: $("#apptRequestModal").offset().top -70}, 1000);
-		} else if($("#apptRequestThankYouModal").attr("style") != "") {
-			$("#apptRequestPanel").addClass("fixed");
-			$(".fixed .close").on("click",function(){
-				$("#apptRequestPanel").removeClass("fixed");
-			})
-		}
-	});
-	if($('#apptRequestModal').length > 0) {
-		addSubmitListener();
-	}
+document.addEventListener("DOMContentLoaded", function() {
+  const apptRequestBtns = document.querySelectorAll(".apptRequestBtn");
+  const apptRequestPanel = document.getElementById("apptRequestPanel");
+  const apptRequestThankYouModal = document.getElementById("apptRequestThankYouModal");
+  const apptRequestModal = document.getElementById("apptRequestModal");
+
+  function addSubmitListener() {
+    // Add submit listener code here
+  }
+
+  function scrollToApptRequestModal() {
+    if (apptRequestModal) {
+      window.scrollTo({
+        top: apptRequestModal.offsetTop - 70,
+        behavior: "smooth"
+      });
+    }
+  }
+
+  apptRequestBtns.forEach(btn => {
+    btn.addEventListener("click", function() {
+      const locationId = this.getAttribute("data-id");
+
+      if (locationId) {
+        fetch("/locations/ajax_appt_request_modal/" + locationId)
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("ajaxModals").innerHTML = data;
+            if (apptRequestModal) {
+              const closeModalButton = apptRequestModal.querySelector(".close");
+              closeModalButton.addEventListener("click", function() {
+                apptRequestPanel.classList.remove("fixed");
+              });
+              addSubmitListener();
+              $("#apptRequestModal").modal("show");
+            }
+          })
+          .catch(error => console.error(error));
+      } else if (apptRequestPanel) {
+        scrollToApptRequestModal();
+      } else if (apptRequestThankYouModal.style.display !== "none") {
+        apptRequestPanel.classList.add("fixed");
+        const closeModalButton = document.querySelector(".fixed .close");
+        closeModalButton.addEventListener("click", function() {
+          apptRequestPanel.classList.remove("fixed");
+        });
+      }
+    });
+  });
+
+  if (apptRequestModal) {
+    addSubmitListener();
+  }
 });
