@@ -1,7 +1,7 @@
 import './admin_common';
-import './datepicker';
 import './nav_tabs';
-
+/*** TODO: check this when admin edit view is available ***/
+//Leaving this largely alone due to use of datepicker
 $(document).ready(function() {
 
 	$(document).on('click', '#WikiFacebookImageBypass', function(e) {

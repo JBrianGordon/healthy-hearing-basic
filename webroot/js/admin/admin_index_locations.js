@@ -1,4 +1,4 @@
-import '../common/common';
+import './admin_common';
 import '../jquery/jquery.jeditable.mini';
 import {locations_crm_searches} from './search_toggle';
 

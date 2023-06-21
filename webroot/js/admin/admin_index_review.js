@@ -6,9 +6,9 @@ import { datepickerFunctions } from './search_toggle';
 
 document.addEventListener('DOMContentLoaded', () => {
 	// Check IP Address Button
-	document.body.addEventListener('click', (e) => {
-		if (e.target.classList.contains('ipCheckBtn')) {
-			const reviewId = e.target.dataset.id;
+	document.body.addEventListener('click', event => {
+		if (event.target.classList.contains('ipCheckBtn')) {
+			const reviewId = event.target.dataset.id;
 			fetch(`/reviews/check_ip/${reviewId}`)
 				.then(response => response.json())
 				.then(data => {
@@ -19,19 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
 						document.querySelector(`#ipSuccess${reviewId}`).style.display = 'block';
 						document.querySelector(`#ipWarning${reviewId}`).style.display = 'none';
 					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
 				});
 		}
 	});
-		
-	document.querySelector('.checkall').addEventListener('click', () => {
+
+	// Check All Checkbox
+	const checkAllCheckbox = document.querySelector('.checkall');
+	checkAllCheckbox.addEventListener('click', () => {
 		const checkboxes = document.querySelectorAll('.checkbox');
-		checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+		checkboxes.forEach(checkbox => {
+			checkbox.checked = checkAllCheckbox.checked;
+		});
 	});
-	document.querySelector('#mass_delete').addEventListener('click', () => {
+
+	// Mass Delete Button
+	const massDeleteButton = document.querySelector('#mass_delete');
+	massDeleteButton.addEventListener('click', () => {
 		document.querySelector('#mass_delete_bool').value = '1';
 		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
 	});
-	document.querySelector('#mass_approve').addEventListener('click', () => {
+
+	// Mass Approve Button
+	const massApproveButton = document.querySelector('#mass_approve');
+	massApproveButton.addEventListener('click', () => {
 		document.querySelector('#mass_delete_bool').value = '0';
 		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
 	});

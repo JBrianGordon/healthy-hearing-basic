@@ -6,6 +6,7 @@
 
 use Cake\Core\Configure;
 use App\Model\Entity\Location;
+use App\Model\Entity\ImportStatus;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Cake\Routing\Router;
@@ -13,10 +14,7 @@ use Cake\Routing\Router;
 $siteNameAbbr = Configure::read('siteNameAbbr');
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
-/*
-TODO: add search functionality for has_url, using_logo, using_photos, etc...
-add search functionality for date ranges
-*/
+
 // Add additional search fields
 $fields['is_oticon'] = 'boolean';
 $fields['has_url'] = 'boolean';
@@ -42,7 +40,7 @@ if (!Configure::read('isOticonImportEnabled')) {
     $ignore_fields = array_merge($ignore_fields, ['is_oticon', 'oticon_tier', 'location_segment', 'entity_segment', 'is_title_ignore', 'is_address_ignore', 'is_phone_ignore', 'is_email_ignore']);
 }
 if (!Configure::read('isTieringEnabled')) {
-    $ignore_fields = array_merge($ignore_fields, ['is_listing_type_frozen', 'is_grace_period', 'grace_period_end', 'listing_type', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'is_service_agreement_signed', 'using_logo', 'using_photos', 'using_videos', 'using_flex_space', 'using_badges', 'using_linked_locations']);
+    $ignore_fields = array_merge($ignore_fields, ['is_listing_type_frozen', 'is_grace_period', 'grace_period_end', 'listing_type', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_ear_cleaning', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'badge_punjabi', 'is_service_agreement_signed', 'using_logo', 'using_photos', 'using_videos', 'using_flex_space', 'using_badges', 'using_linked_locations']);
 }
 foreach ($fields as $field => $type) {
     if (in_array($field, $ignore_fields)) {
@@ -53,7 +51,7 @@ foreach ($fields as $field => $type) {
 $generalFieldList = ['q', 'id', 'id_oticon', 'id_parent', 'id_sf', 'id_yhn_location', 'id_cqp_practice', 'id_cqp_office', 'title', 'subtitle', 'address', 'address_2', 'city', 'state', 'zip', 'is_mobile', 'phone', 'email', 'priority', 'is_active', 'is_show', 'is_listing_type_frozen', 'oticon_tier', 'yhn_tier', 'cqp_tier', 'listing_type', 'is_oticon', 'is_retail', 'is_yhn', 'is_cqp', 'is_hh', 'is_cq_premier', 'is_iris_plus', 'notes', 'full_name', 'is_bypassed', 'filter_has_photo', 'filter_insurance', 'is_call_assist', 'timezone', 'has_url', 'npi_number', 'location_segment', 'entity_segment', 'direct_book_type', 'frozen_expiration', 'is_ida_verified', 'is_service_agreement_signed', 'optional_message', 'is_junk', 'is_email_allowed'];
 $reviewFieldList = ['reviews_approved', 'review_status', 'average_rating', 'last_review_date'];
 $changeMgmtFieldList = ['modified', 'last_contact_date', 'is_last_edit_by_owner', 'last_edit_by_owner_date', 'completeness', 'last_note_status', 'last_import_status', 'is_grace_period', 'grace_period_end', 'review_needed', 'email_status', 'phone_status', 'address_status', 'title_status', 'is_title_ignore', 'is_address_ignore', 'is_phone_ignore', 'is_email_ignore'];
-$upgradeFieldList = ['feature_content_library', 'feature_special_announcement', 'logo_url', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'using_logo', 'using_photos', 'using_videos', 'using_badges', 'using_flex_space', 'using_linked_locations'];
+$upgradeFieldList = ['feature_content_library', 'feature_special_announcement', 'logo_url', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_ear_cleaning', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'badge_punjabi', 'using_logo', 'using_photos', 'using_videos', 'using_badges', 'using_flex_space', 'using_linked_locations'];
 $generalFields = $reviewFields = $changeMgmtFields = $upgradeFields = $otherFields = [];
 // Advanced search details
 foreach ($fields as $field => $type) {
@@ -99,6 +97,11 @@ foreach ($fields as $field => $type) {
             $options = Location::$completenessFields;
             $empty = 'Select One';
             break;
+        case 'last_import_status':
+            $type = 'select';
+            $options = ImportStatus::$statuses;
+            $empty = 'Select One';
+            break;
         case 'email_status':
         case 'phone_status':
         case 'address_status':
@@ -113,11 +116,12 @@ foreach ($fields as $field => $type) {
         case 'is_email_allowed':
             $label = 'Is profile update email allowed';
             break;
+        case 'has_url':
+            $label = 'Has URL';
+            break;
         case 'q':
             $label = 'Location search';
             break;
-        // TODO: options for last_note_status (after baking LocationNotes)
-        // TODO: options for last_import_status (after baking Import)
     }
     $advancedSearchField = [
         'field' => $field,
@@ -296,7 +300,7 @@ $groupedFields = [
 								                        <?php endif; ?>
 								                    </td>
 								                    <td>
-								                        <?php echo $this->Admin->inlineAjax("Location.priority", $location); ?>
+								                        <?php echo $this->Admin->inlineAjax("Locations.priority", $location); ?>
 								                    </td>
 								                    <td>
 								                        <?= $location->title ?><br />
@@ -334,10 +338,6 @@ $groupedFields = [
 								        </table>
 								    </div>
 								    <?= $this->element('pagination') ?>
-								    <?php
-								    // TODO: Update this when jquery is installed. This will allow certain fields (like priority) to be editable from index page. 
-								    //echo $this->element('inline_ajax');
-								    ?>
 								</div>
 							</div>
 						</div>

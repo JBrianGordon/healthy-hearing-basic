@@ -1,5 +1,5 @@
 import './datepicker';
-
+/*** TODO: check this code again once admin search bar is in place ***/
 class SearchToggle {
   constructor(options) {
     const defaults = {
@@ -13,130 +13,133 @@ class SearchToggle {
     this.toggle_on_focus = this.options.toggle_on_focus;
     this.advanced_search = document.querySelector(this.options.elem_id);
     this.search_toggle = document.querySelector(this.options.toggle_id);
-    if (this.options.toggle_text_id) {
-      this.search_text = document.querySelector(this.options.toggle_text_id);
-    } else {
-      this.search_text = document.querySelector(this.options.toggle_id);
-    }
+    this.search_text = this.options.toggle_text_id
+      ? document.querySelector(this.options.toggle_text_id)
+      : document.querySelector(this.options.toggle_id);
 
-    this.search_toggle.addEventListener('click', this.toggleSearch.bind(this));
+    this.search_toggle.addEventListener("click", this.toggleSearch.bind(this));
   }
 
-  toggleSearch(event) {
-    if (this.advanced_search.style.display === 'block') {
-      this.search_text.textContent = '+';
-      this.advanced_search.style.display = 'none';
+  toggleSearch() {
+    if (this.advanced_search.style.display === "block") {
+      this.search_text.innerHTML = "+";
+      this.advanced_search.style.display = "none";
     } else {
-      this.search_text.textContent = '-';
-      this.advanced_search.style.display = 'block';
+      this.search_text.innerHTML = "-";
+      this.advanced_search.style.display = "block";
     }
   }
 }
 
 // Check for search toggle element on page
-const adminSearchToggle = document.querySelector('#admin_search_toggle');
-const advancedSearchToggle = document.querySelector('#advanced_search_toggle');
-
-if (adminSearchToggle) {
-  new SearchToggle({ toggle_id: "#admin_search_toggle", elem_id: "#admin_search", toggle_text_id: "#admin_search_text" });
+if (document.querySelector("#admin_search_toggle")) {
+  new SearchToggle({
+    toggle_id: "#admin_search_toggle",
+    elem_id: "#admin_search",
+    toggle_text_id: "#admin_search_text",
+  });
 }
-
-if (advancedSearchToggle) {
-  new SearchToggle({ toggle_id: "#advanced_search_toggle", elem_id: "#advanced_search", toggle_text_id: "#advanced_search_text" });
+if (document.querySelector("#advanced_search_toggle")) {
+  new SearchToggle({
+    toggle_id: "#advanced_search_toggle",
+    elem_id: "#advanced_search",
+    toggle_text_id: "#advanced_search_text",
+  });
 }
 
 // Reorganize search options and change booleans into a toggle
-const formAction = document.querySelector("form").getAttribute("action");
+if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
 
-export const locations_crm_searches = () => {
-	if (formAction.includes("/admin/locations") || formAction.includes("/admin/crm-searches")) {
+  // Update labels for specific elements
+  const updateLabels = () => {
+    document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
+  };
 
-		document.querySelectorAll(".filter-group").forEach((group) => {
-		  if (group.children.length === 0) {
-		    group.remove();
-		  }
-		});
+  updateLabels();
 
-		const filterGroupInputs = document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']");
-		filterGroupInputs.forEach(input => {
-		  const switchContainer = document.createElement("label");
-		  switchContainer.classList.add("switch");
-		  input.parentNode.insertBefore(switchContainer, input);
-		  switchContainer.appendChild(input);
-		  const slider = document.createElement("span");
-		  slider.classList.add("slider");
-		  switchContainer.appendChild(slider);
-		  slider.innerHTML = `
-		    <span class="switch-negative"></span>
-		    <span class="switch-off"></span>
-		    <span class="switch-positive"></span>
-		  `;
-		});
+  //Wrap binary search options in spans
+	const inputElements = Array.from(document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']"));
 
-		// Add value to hidden inputs when sliders are interacted with
-		const sliderSpans = document.querySelectorAll("label .slider span");
-		sliderSpans.forEach(span => {
-		  span.addEventListener("mouseup", function() {
-		    const slideClass = this.classList[0];
-		    const input = this.parentNode.parentNode.querySelector("input");
-		    if (slideClass === "switch-positive") {
-		      input.classList.remove("switch-negative");
-		      input.classList.add("switch-positive");
-		      input.value = 1;
-		    } else if (slideClass === "switch-negative") {
-		      input.classList.remove("switch-positive");
-		      input.classList.add("switch-negative");
-		      input.value = 0;
-		    } else {
-		      input.classList.remove("switch-negative", "switch-positive");
-		      input.removeAttribute("value");
-		    }
-		  });
-		});
+	inputElements.forEach((input) => {
+	  const label = document.createElement("label");
+	  label.classList.add("switch");
 
-		// Load styles when sliders have been used in a previous search
-		const switchInputs = document.querySelectorAll("label.switch input");
-		switchInputs.forEach(input => {
-		  if (input.value == 1) {
-		    input.classList.add("switch-positive");
-		  } else if (input.value !== "") {
-		    input.classList.add("switch-negative");
-		  }
-		});
+	  const slider = document.createElement("span");
+	  slider.classList.add("slider");
 
-		// Expand/collapse button functionality
-		const groupToggleButtons = document.querySelectorAll(".group-toggle");
-		groupToggleButtons.forEach(button => {
-		  button.addEventListener("click", function() {
-		    const filterGroup = this.closest("div").nextElementSibling;
-		    if (filterGroup.classList.contains("hidden")) {
-		      this.innerHTML = "<span class='bi-minus-lg'> Collapse section</span>";
-		      filterGroup.classList.remove("hidden");
-		    } else {
-		      this.innerHTML = "<span class='bi-plus-lg'> Expand section</span>";
-		      filterGroup.classList.add("hidden");
-		    }
-		  });
-		});
-	}
+	  const switchNegative = document.createElement("span");
+	  switchNegative.classList.add("switch-negative");
+
+	  const switchOff = document.createElement("span");
+	  switchOff.classList.add("switch-off");
+
+	  const switchPositive = document.createElement("span");
+	  switchPositive.classList.add("switch-positive");
+
+	  slider.appendChild(switchNegative);
+	  slider.appendChild(switchOff);
+	  slider.appendChild(switchPositive);
+
+	  input.parentNode.insertBefore(label, input);
+	  label.appendChild(input);
+	  label.appendChild(slider);
+	});
+
+	// Add value to hidden inputs when sliders are interacted with
+	const sliders = Array.from(document.querySelectorAll("label .slider span"));
+
+	sliders.forEach((slider) => {
+	  slider.addEventListener("mouseup", function () {
+	    const slideClass = this.classList.value;
+
+	    const input = this.closest("label").querySelector("input");
+
+	    if (slideClass === "switch-positive") {
+	      input.classList.remove("switch-negative");
+	      input.classList.add("switch-positive");
+	      input.value = 1;
+	    } else if (slideClass === "switch-negative") {
+	      input.classList.remove("switch-positive");
+	      input.classList.add("switch-negative");
+	      input.value = 0;
+	    } else {
+	      input.classList.remove("switch-negative", "switch-positive");
+	      input.removeAttribute("value");
+	    }
+	  });
+	});
+
+	// Load styles when sliders have been used in a previous search
+	const switchInputs = Array.from(document.querySelectorAll("label.switch input"));
+
+	switchInputs.forEach((input) => {
+	  const value = input.value;
+
+	  if (value === "1") {
+	    input.classList.add("switch-positive");
+	  } else if (value !== "") {
+	    input.classList.add("switch-negative");
+	  }
+	});
+
+  // Expand/collapse button functionality
+  const toggleGroup = (button) => {
+    const group = button.parentNode.nextElementSibling;
+    group.classList.toggle("hidden");
+    button.querySelector("span").classList.toggle("glyphicon-minus");
+    button.querySelector("span").classList.toggle("glyphicon-plus");
+  };
+
+  const toggleButtons = document.querySelectorAll(".group-toggle");
+  toggleButtons.forEach((button) => {
+    button.addEventListener("click", () => toggleGroup(button));
+  });
 }
 
-// Export button modal and functionality
-export const exportButtonFunctions = () => {
-	const exportButton = document.getElementById("exportButton");
-	const exportModal = document.getElementById("exportModal");
-	const exportClose = document.getElementById("exportClose");
-
-	exportButton.addEventListener("click", e => {
-	  e.preventDefault();
-	  exportModal.style.display = "block";
-	  exportModal.classList.add("in");
-	});
-
-	exportClose.addEventListener("click", () => {
-	  exportModal.style.display = "none";
-	  exportModal.classList.remove("in");
-	});
+let minDate = '';
+let maxDate = '';
+if ($('.datepicker').attr('minDate')) {
+	minDate = $('.datepicker').attr('minDate');
 }
 
 // Toggle values for switches

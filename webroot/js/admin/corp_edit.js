@@ -1,7 +1,7 @@
 import './admin_common';
-import './datepicker';
 import './nav_tabs';
 
+/*** TODO: update this code when view is built: ***
 $(document).ready(function() {
 	if($('#CorpIsActive').prop('checked')) {
 		//active is checked, is this a draft???
@@ -22,4 +22,4 @@ $(document).ready(function() {
 		dateFormat: 'mm/dd/yy',
 		minDate: new Date(Date.now()+24*60*60*1000)
 	});
-});
+});*/

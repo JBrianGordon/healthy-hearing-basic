@@ -3330,7 +3330,7 @@ class InitialSchema extends AbstractMigration
                 'limit' => 50,
                 'null' => false,
             ])
-            ->addColumn('covid19_statement', 'string', [
+            ->addColumn('optional_message', 'string', [
                 'default' => null,
                 'limit' => 400,
                 'null' => false,
