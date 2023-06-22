@@ -178,5 +178,6 @@ class ContentController extends AppController
         $this->set('isPreview', false);
         $this->set('sameAsSocialLinks', Configure::read('sameAsSocialLinks'));
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
+        $this->set('articles', $this->Content->findLatest(4));
     }
 }

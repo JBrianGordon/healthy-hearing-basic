@@ -75,13 +75,13 @@ $this->Breadcrumbs->add([
 									array_shift($sets[$j]);
 									$link = [
 										'controller' => 'locations',
-										'action' => 'cities',
+										'action' => 'viewState',
 										'region' => $region
 									];
 									if ($region == 'DC-Dist-Of-Columbia') {
 										$link = [
 											'controller' => 'locations',
-											'action' => 'index',
+											'action' => 'viewCityZip',
 											'region' => $region,
 											'city' => 'Washington'
 										];
@@ -134,7 +134,7 @@ $this->Breadcrumbs->add([
 											ucwords($name) . ', ' . $stateAbbr,
 											[
 												'controller' => 'locations',
-												'action' => 'index',
+												'action' => 'viewCityZip',
 												'region' => $this->Clinic->stateSlug($stateAbbr),
 												'city' => slugifyCity($name)
 											],
@@ -158,5 +158,5 @@ $this->Breadcrumbs->add([
 </div>
 <?php echo $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer']); ?>
 <?php if (isFeatureOn('quick_pick')): ?>
-	<?php //TODO: echo $this->element('responsive_slider'); ?>
+	<?php echo $this->element('responsive_slider'); ?>
 <?php endif; ?>

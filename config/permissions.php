@@ -172,7 +172,7 @@ return [
         [
             'prefix' => false,
             'controller' => 'Locations',
-            'action' => ['view'],
+            'action' => '*',
             'bypassAuth' => true,
         ],
         // Content - no auth required
@@ -193,7 +193,7 @@ return [
         [
             'prefix' => false,
             'controller' => 'Reviews',
-            'action' => ['addReview'],
+            'action' => [],
             'bypassAuth' => true,
         ],
         // Wikis - no auth required

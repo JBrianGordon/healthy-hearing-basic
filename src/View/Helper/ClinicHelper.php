@@ -167,7 +167,7 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
-    public function reviewSchema($location = null, $options = array()) {
+    public function reviewSchema($location, $options = []) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);
         }
@@ -184,6 +184,18 @@ class ClinicHelper extends Helper
                     "ratingValue": "' . $rating . '"
                 }';
         return $retval;
+    }
+
+    public function reviewSchemaHidden($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $averageRating = $location->average_rating;
+        $reviewsApproved = $location->reviews_approved;
+        if (!$averageRating || !$reviewsApproved) {
+            return null;
+        }
+        return '<div style="display:none;"><span>'. $averageRating .'</span><span>'. $reviewsApproved .'</span></div>';
     }
 
     public function sliceReviews($reviews, $by = 5) {
@@ -370,6 +382,10 @@ class ClinicHelper extends Helper
         return str_replace("\n", "", $retval);
     }
 
+    public function addressSchemaHidden($location) {
+        return '<div style="display:none;">'.$this->address($location, ['schema'=>false]).'</div>';
+    }
+
     /**
     * Return the phone number of a clinic, try using the callsource number first, fallback to normal phone number
     * @param location (optional)
@@ -394,10 +410,12 @@ class ClinicHelper extends Helper
 
         if (!$isCallTrackingBypassed) {
             $callsource = '';
-            foreach ($location->call_sources as $cs) {
-                if (!empty($cs->is_active)) {
-                    $callsource = cleanPhone($cs->phone_number);
-                    break;
+            if (isset($location->call_sources)) {
+                foreach ($location->call_sources as $cs) {
+                    if (!empty($cs->is_active)) {
+                        $callsource = cleanPhone($cs->phone_number);
+                        break;
+                    }
                 }
             }
             if (!empty($callsource)) {
@@ -574,9 +592,9 @@ class ClinicHelper extends Helper
     * @param provider
     * @return string HTML image or empty
     */
-    public function providerImage($provider = null, $options = array()) {
+    public function providerImage($provider, $options = array()) {
         if (!is_object($provider)) {
-            $provider = $this->Providers->get($provider);
+            $provider = TableRegistry::get('Providers')->get($provider);
         }
         //Changing
         if (is_bool($options)) {
@@ -722,9 +740,9 @@ class ClinicHelper extends Helper
         if (isset($geoLocData['country']) && ($geoLocData['country'] != Configure::read('country'))) {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         } elseif (isset($geoLocData['zip']) && isset($geoLocData['city']) && !empty($region)) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city']), 'zip' => $geoLocData['zip']]);
         } elseif (isset($geoLocData['city']) && !empty($region)) {
-            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'index', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
+            $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewCityZip', 'region' => $region, 'city' => slugifyCity($geoLocData['city'])]);
         } else {
             $nearMeLink = Router::url(['controller' => 'locations', 'prefix'=>false, 'plugin'=>false, 'action' => 'viewFac']);
         }
@@ -904,13 +922,131 @@ class ClinicHelper extends Helper
         return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 
-    public function isEnhancedOrPremierByLocationArray($location) {
-        // Returns true if this location is Enhanced or Premier
-        return in_array($location->listing_type, ['Premier', 'Enhanced']);
+    /**
+    * Return near text of the closest locations
+    * @param string region
+    * @param string city
+    * @param string zip
+    * @return string text based on all of them
+    */
+    public function nearText($region = null, $city = null, $zip = null) {
+        $retval = "";
+        if ($zip) {
+            $retval .= "$zip, ";
+        }
+        if ($city) {
+            $city = cleanCityName($city);
+            $city = ($city == 'Coeur dAlene') ? "Coeur d'Alene" : $city;
+            $retval .= $city.' ';
+        }
+        if ($region) {
+            $retval .= strtoupper($this->Locations->parseStateSlug($region));
+        }
+        return $retval;
     }
 
-    public function getOpenClosedByLocationArray($location) {
-        $isEnhancedOrPremier = $this->isEnhancedOrPremierByLocationArray($location);
-        return $this->getOpenClosed($location->id, $isEnhancedOrPremier);
+    /**
+    * Get the higest distance (in miles or km)
+    * @param location
+    * @return float distance
+    */
+    public function highestDistance($locations = null) {
+        end($locations);
+        $distance = round(key($locations),1);
+        if (Configure::read('isMetric')) {
+            $distance = round($distance * 1.60934, 1);
+            $distance .= ' km';
+        } else {
+            $distance .= ' miles';
+        }
+        return $distance;
+    }
+
+    /**
+    * Round the location's distance (in miles or km)
+    * @param location
+    * @return float distance
+    */
+    public function distance($distance) {
+        $distance = round($distance, 1);
+        if (Configure::read('isMetric')) {
+            $distance = round($distance * 1.60934, 1);
+            $distance .= ' km';
+        } else {
+            $distance .= ' miles';
+        }
+        return $distance;
+    }
+
+    /**
+    * Calculate the provider title based on a comma-seperated list of credentials
+    */
+    public function getProviderTitle($providerCredentials) {
+        // Ignore periods in credentials
+        $providerCredentials = str_replace('.', '', $providerCredentials);
+        $arrayCredentials = explode(", ", $providerCredentials);
+        $title = false;
+        if (in_array('AuD', $arrayCredentials)) {
+            $title = "Audiologist";
+        } else if (in_array('HIS', $arrayCredentials)) {
+            $title = "Hearing Instrument Specialist";
+        } else if (in_array('HAD', $arrayCredentials)) {
+            $title = "Hearing Aid Dispenser/Dealer";
+        } else if (in_array('LHIS', $arrayCredentials)) {
+            $title = "Licensed Hearing Instrument Specialist";
+        } else if (in_array('BC-HIS', $arrayCredentials)) {
+            $title = "Board Certified in Hearing Instrument Sciences";
+        } else if (!empty(array_intersect($arrayCredentials, ['MA','MS','PhD']))) {
+            $title = "Audiologist";
+        }
+        return $title;
+    }
+
+    public function getBadges($location) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+
+        //Any changes made here should also be reflected in app/View/Locations/view.ctp
+        $badgeArray = [
+            ['isOn' => $location->badge_coffee, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Free Coffee</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Free coffee" width="28" height="28" src="/img/coffee.png"></a>'],
+            ['isOn' => $location->badge_wifi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Free WiFi</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Free wifi" width="28" height="28" src="/img/wifi.png"></a>'],
+            ['isOn' => $location->badge_parking, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Convenient parking</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Convenient parking" width="28" height="28" src="/img/parking-square-sign.png"></a>'],
+            ['isOn' => $location->badge_curbside, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Curbside service</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Curbside service" width="28" height="28" src="/img/car.png"></a>'],
+            ['isOn' => $location->badge_wheelchair, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Wheelchair-accessible</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Wheelchair accessible" width="28" height="28" src="/img/disabled.png"></a>'],
+            ['isOn' => $location->badge_service_pets, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Service pets welcome</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Service pets welcome" width="28" height="28" src="/img/pet.png"></a>'],
+            ['isOn' => $location->badge_cochlear_implants, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Hearing implants</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Hearing implants" width="28" height="28" src="/img/hearing.png"></a>'],
+            ['isOn' => $location->badge_ald, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Assistive listening devices</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Assistive listening devices" width="28" height="28" src="/img/deafness.png"></a>'],
+            ['isOn' => $location->badge_pediatrics, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Pediatrics</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Pediatrics" width="28" height="28" src="/img/man-with-child.png"></a>'],
+            ['isOn' => $location->badge_mobile_clinic, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Mobile clinic</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Mobile clinic" width="32" height="28" src="/img/ear-van.png"></a>'],
+            ['isOn' => $location->badge_financing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Financing available</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Financing available" width="28" height="28" src="/img/credit-card.png"></a>'],
+            ['isOn' => $location->badge_telehearing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Telehealth services</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Telehealth services" width="28" height="28" src="/img/monitor.png"></a>'],
+            ['isOn' => $location->badge_asl, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>American Sign Language</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="American sign language" width="28" height="28" src="/img/sign-language.png"></a>'],
+            ['isOn' => $location->badge_tinnitus, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Tinnitus</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Tinnitus" width="28" height="28" src="/img/ear.png"></a>'],
+            ['isOn' => $location->badge_balance, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Balance testing</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Balance testing" width="28" height="28" src="/img/dizziness.png"></a>'],
+            ['isOn' => $location->badge_home, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Screen/test at home</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Screen at home" width="28" height="28" src="/img/home.png"></a>'],
+            ['isOn' => $location->badge_remote, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Remote hearing aid programming</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Remote hearing aid programming" width="28" height="28" src="/img/laptop.png"></a>'],
+            ['isOn' => $location->badge_mask, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Masks worn here</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Masks worn here" width="28" height="28" src="/img/mask.png"></a>'],
+            ['isOn' => $location->badge_ear_cleaning, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Ear cleaning</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Ear cleaning" width="28" height="28" src="/img/ear-cleaning.png"></a>'],
+            ['isOn' => $location->badge_spanish, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Habla Español</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Spanish" width="28" height="28" src="/img/mexico.png"></a>'],
+            ['isOn' => $location->badge_french, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>Parle Français</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="French" width="28" height="28" src="/img/france.png"></a>'],
+            ['isOn' => $location->badge_russian, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>мы говорим по-русски</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Russian" width="28" height="28" src="/img/russia.png"></a>'],
+            ['isOn' => $location->badge_chinese, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>我们说中文</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Chinese" width="28" height="28" src="/img/china.png"></a>'],
+            ['isOn' => $location->badge_punjabi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-trigger="hover click" data-content="<span>ਅਸੀਂ ਪੰਜਾਬੀ ਬੋਲਦੇ ਹਾਂ</span>" data-html="true" data-placement="top"><img loading="lazy" class="badge-img" alt="Indian-Punjabi" width="28" height="28" src="/img/india.png"></a>']
+
+        ];
+
+        $badgeString = '';
+
+        for ($i = 0; $i < count($badgeArray); $i++) {
+
+            if ($badgeArray[$i]['isOn'] === true) {
+                $badgeString .= $badgeArray[$i]['fontIcon'];
+            }
+
+        }
+
+        return $badgeString;
+
     }
 }

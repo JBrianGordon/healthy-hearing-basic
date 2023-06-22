@@ -309,6 +309,20 @@ class LocationsTable extends Table
                     $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end'])]);
                 }
             ])
+            ->add('has_url', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['has_url']) {
+                        $query->andWhere(['LENGTH(Locations.url) >' => 0]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.url' => '',
+                                'Locations.url IS NULL'
+                            ]
+                        ]);
+                    }
+                }
+            ])
             ->add('using_logo', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     if ($args['using_logo']) {
@@ -1593,9 +1607,10 @@ class LocationsTable extends Table
         $state = $this->parseStateSlug($options['region']);
         $conditions['Locations.state'] = $state;
         $locations = $this->find('all', [
+            'contain' => $contain,
             'conditions' => $conditions,
             'limit' => $limit
-        ])->all();
+        ])->all()->toArray();
         //--------------------------------------------------------------
         return $locations;
     }
@@ -1612,5 +1627,118 @@ class LocationsTable extends Table
             $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
         }
         return (preg_match($regex,$input));
+    }
+
+    /**
+    * Find a redirect array based on zip, region, and city
+    * @param array of options
+    * @return array of slugged zip, region, and city
+    */
+    public function findRedirectByRegionCityZip($options = array(), $url=null) {
+        $options = array_merge(
+            array(
+                'zip' => null,
+                'region' => null,
+                'city' => null
+            ),
+            $options
+        );
+        $retval = $options;
+        if (!empty($options['region'])) {
+            $retval['region'] = slugifyRegion($options['region']);
+        }
+        if (!empty($options['city'])) {
+            $retval['city'] = slugifyCity($options['city']);
+        }
+        if (!empty($options['zip'])) {
+            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            $zip_city = $zip->city;
+            if ($zip_city) {
+                $retval['city'] = slugifyCity($zip_city);
+            }
+            if (Configure::read('country') == 'CA' && strlen($options['zip']) == 6) {
+                $options['zip'] = substr($options['zip'], 0, 3) . '-' . substr($options['zip'], 3, 3);
+            }
+            // Change "A1A 1A1" to "A1A-1A1" in the URL
+            $retval['zip'] = str_replace(' ', '-', $options['zip']);
+        }
+
+        //Special Case for tier 0 issues, pull out the city from the title-city-st format in city
+        /*
+        /hearing-aids/MA-Massachusetts/Quincy-Center-Quincy-Ma
+        /hearing-aids/OH-Ohio/Audiology-Associates-Ltd-Toledo-Ohio
+        /hearing-aids/MA-Massachusetts/Service-Inc-Brockton-Ma
+        /hearing-aids/WI-Wisconsin/Lakeshore-Medical-Clinic-Mequon-Wi
+        /hearing-aids/NJ-New-Jersey/Advanced-Solutions-Englishtown-Nj
+        /hearing-aids/OH-Ohio/Roger-Isla-Md-Inc-Pleasant-City-Oh -> Pleasant-City
+        /hearing-aids//UT-Utah/House-Of-West-Jordan-Ut -> West Jordan (but Jordan is a valid city)
+        */
+        if ($retval['city'] && $retval['region'] && strpos($retval['city'], "-")) {
+            $title = explode("-",$retval['city']);
+            $st = array_pop($title);
+            list($region_st, $region_state) = explode("-", $retval['region']);
+            if (strtolower($st) == strtolower($region_st) || strtolower($st) == strtolower($region_state)) {
+                $city = array_pop($title);
+                if (!TableRegistry::get('Cities')->hasAny(array('City.city' => $city, 'City.state' => $region_st))) {
+                    $retval['city'] = array_pop($title) . "-" . $city;
+                } else {
+                    $retval['city'] = $city;
+                }
+            }
+        }
+        $url = str_replace('%20', ' ', $url);
+        if (empty($url)) {
+            // original url
+            $url = Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$options['region'],'city'=>$options['city'],'zip'=>$options['zip']]);
+        }
+
+        // Do not redirect to what we already came in on
+        if ($url == Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$retval['region'],'city'=>$retval['city'],'zip'=>$retval['zip']])) {
+            return false;
+        }
+        return $retval;
+    }
+
+    /**
+    * Extract the total count of reviews from a set of locations returned by the zip finder
+    * @param array of locations
+    * @return int of total approved reviews for the set
+    */
+    public function reviewCountLocations($locations) {
+        $reviews = 0;
+        foreach ($locations as $location) {
+            if ($location->listing_type != Location::LISTING_TYPE_NONE) {
+                $reviews += $location->reviews_approved;
+            }
+        }
+        return $reviews;
+    }
+
+    /**
+    * Return the first provider with a photo
+    * @param location id
+    * @return mixed false if failed to find location, array of result
+    */
+    public function firstProviderWithPhoto($locationId) {
+        // Find all providers for this locaton
+        $locationProviders = $this->LocationProviders->find('all', [
+            'contain' => ['Providers'],
+            'conditions' => [
+                'LocationProviders.location_id' => $locationId,
+            ]
+        ])->all();
+        $provider = false;
+        $providerPriority = 99;
+        foreach ($locationProviders as $locationProvider) {
+            if ($locationProvider->provider->thumb_url != '') {
+                // This provider has a photo
+                if ($locationProvider->provider->priority < $providerPriority) {
+                    // Find the provider with the lowest priority number
+                    $provider = $locationProvider->provider;
+                    $providerPriority = $locationProvider->provider->priority;
+                }
+            }
+        }
+        return $provider;
     }
 }
