@@ -479,14 +479,14 @@ class ClinicHelper extends Helper
     * @return HtmlLink
     */
     public function link($location = null, $full = false, $options = array()) {
-        if ($location) $this->setLocation($location);
+        /*** TODO: uncomment when setLocation is made *** if ($location) $this->setLocation($location);
         if ($full) {
             $url = Router::url($this->get('hh_url'), $full);
         }   else {
             $url = $this->get('hh_url');
         }
 
-        return $this->Html->link($this->get('title'), $url, $options);
+        return $this->Html->link($this->get('title'), $url, $options);*/
     }
 
     /**
@@ -496,7 +496,7 @@ class ClinicHelper extends Helper
     */
     public function hours($location = null) {
         if (!is_object($location)) {
-            $location = $this->Locations->get($location);
+            //$location = $this->Locations->get($location);
         }
         $retval = null;
         if (!empty($location->location_hour)) {
@@ -922,6 +922,16 @@ class ClinicHelper extends Helper
         return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 
+    public function isEnhancedOrPremierByLocationArray($location) {
+        // Returns true if this location is Enhanced or Premier
+        return in_array($location->listing_type, ['Premier', 'Enhanced']);
+    }
+
+    public function getOpenClosedByLocationArray($location) {
+        $isEnhancedOrPremier = $this->isEnhancedOrPremierByLocationArray($location);
+        return $this->getOpenClosed($location->id, $isEnhancedOrPremier);
+    }
+    
     /**
     * Return near text of the closest locations
     * @param string region

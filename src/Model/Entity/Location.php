@@ -167,7 +167,6 @@ class Location extends Entity
         self::LISTING_TYPE_NONE => 'None (not shown in directory)'
     ];
     static $preferredListingTypes = [self::LISTING_TYPE_ENHANCED, self::LISTING_TYPE_PREMIER];
-    static $mobileTextDefault = 'Mobile clinic - we come to you!';
 
     /**
     * Enum - Status of address, phone, title, and email fields. Comparing Oticon import values
