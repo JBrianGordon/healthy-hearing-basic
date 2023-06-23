@@ -922,16 +922,6 @@ class ClinicHelper extends Helper
         return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 
-    public function isEnhancedOrPremierByLocationArray($location) {
-        // Returns true if this location is Enhanced or Premier
-        return in_array($location->listing_type, ['Premier', 'Enhanced']);
-    }
-
-    public function getOpenClosedByLocationArray($location) {
-        $isEnhancedOrPremier = $this->isEnhancedOrPremierByLocationArray($location);
-        return $this->getOpenClosed($location->id, $isEnhancedOrPremier);
-    }
-    
     /**
     * Return near text of the closest locations
     * @param string region
