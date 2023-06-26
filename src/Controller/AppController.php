@@ -68,7 +68,7 @@ class AppController extends Controller
         //$this->goneFullSite();
         //$this->removeIndex();
         //$this->isFullSite(); //handle fullsite rendering conditions
-        //$this->isPPC(); // set isPPC session cookie
+        $this->isPPC(); // set isPPC session cookie
         //$this->setLanguage();
         $this->host = env('HTTP_HOST');
         $this->isMobileDevice = $this->isMobileDevice();
@@ -107,28 +107,26 @@ class AppController extends Controller
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
         $this->user = $this->request->getSession()->read('Auth');
+        $userRole = empty($this->user->role) ? '' : $this->user->role;
+        $this->isAdmin = ($userRole == 'admin');
+        $this->isClinic = ($userRole == 'clinic');
+        $this->isItAdmin = ($userRole == 'it_admin');
+        $this->isAgent = ($userRole == 'agent');
+        $this->isCallSupervisor = ($userRole == 'call_supervisor');
+        $this->isCsa = ($userRole == 'csa');
+        $this->isWriter = ($userRole == 'writer');
+        $this->isReviewer = ($userRole == 'reviewer');
+        $this->adminAccessAllowed = in_array($userRole, ['admin', 'it_admin', 'agent', 'call_supervisor', 'csa', 'writer']);
         $this->set('user', $this->user);
-        $this->isAdmin = empty($this->user->role) ? false : ($this->user->role == 'admin');
         $this->set('isAdmin', $this->isAdmin);
-        $this->isClinic = empty($this->user->role) ? false : ($this->user->role == 'clinic');
         $this->set('isClinic', $this->isClinic);
-        //$this->set('isitadmin', $this->isItAdmin());
-        //$this->set('isagent', $this->isAgent());
-        //$this->set('iscallsupervisor', $this->isCallSupervisor());
-        //$this->set('iscsa', $this->isCSA());
-        //$this->set('iswriter', $this->isWriter());
-        //$this->set('isreviewer', $this->isReviewer());
-
-        // Create an array of the permissions the user has.
-        //$userPermissions = [];
-        //if ($this->isAdmin()) { $userPermissions[] = 'admin'; }
-        //if ($this->isItAdmin()) { $userPermissions[] = 'itadmin'; }
-        //if ($this->isAgent()) { $userPermissions[] = 'agent'; }
-        //if ($this->isCallSupervisor()) { $userPermissions[] = 'callsupervisor'; }
-        //if ($this->isClinic()) { $userPermissions[] = 'clinic'; }
-        //if ($this->isCSA()) { $userPermissions[] = 'csa'; }
-        //if ($this->isWriter()) { $userPermissions[] = 'writer'; }
-        //$this->set('userPermissions', $userPermissions);
+        $this->set('isItAdmin', $this->isItAdmin);
+        $this->set('isAgent', $this->isAgent);
+        $this->set('isCallSupervisor', $this->isCallSupervisor);
+        $this->set('isCsa', $this->isCsa);
+        $this->set('isWriter', $this->isWriter);
+        $this->set('isReviewer', $this->isReviewer);
+        $this->set('adminAccessAllowed', $this->adminAccessAllowed);
 
         $this->set('show_ad', true);
         //$this->set('isInactiveClinic', $this->isInactiveClinic());
@@ -216,5 +214,25 @@ class AppController extends Controller
 
     public function isMobileDevice() {
         return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]); 
+    }
+
+    /**
+    * Is the source PPC?
+    * @return true if referrer is PPC
+    */
+    public function isPPC() {
+        if (isset($_COOKIE['isPPC'])) {
+            return true;
+        }
+        $gclid = isset($this->request->query['gclid']) ? $this->request->query['gclid'] : '';
+        $utm_source = isset($this->request->query['utm_source']) ? $this->request->query['utm_source'] : '';
+        $utm_medium = isset($this->request->query['utm_medium']) ? $this->request->query['utm_medium'] : '';
+        if (!empty($gclid) ||
+            ($utm_medium == 'cpc') ||
+            ($utm_source == 'adroll')) {
+            setcookie('isPPC', 1, 0, "/", "", true, ""); // expires at end of session
+            return true;
+        }
+        return false;
     }
 }

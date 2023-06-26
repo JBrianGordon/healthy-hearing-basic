@@ -407,8 +407,7 @@ function slugifyRegion($region = null){
 * Slugify a city Wilkes-Barre and Albuquerque
 */
 function slugifyCity($city){
-    //todo clean city name
-    //$city = ClassRegistry::init('City')->cleanCityName($city);
+    $city = cleanCityName($city);
     $city = str_replace(' ', '-', $city);
     $city_parts = explode('-',$city);
     for($i = 0; $i < count($city_parts); $i++){
@@ -416,6 +415,45 @@ function slugifyCity($city){
     }
     $city = implode('-',$city_parts);
     $city = ($city == 'Coeur-Dalene') ? 'Coeur-dAlene' : $city;
+    return $city;
+}
+function cleanCityName($city) {
+    // Remove accents
+    $city = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $city);
+
+    // No apostrophes, periods or hyphens.  This breaks things.
+    $find = ["'", "’", "‛", "`", "."];
+    $city = str_replace($find, "", $city);
+    $city = str_replace("-", " ", $city);
+
+    // Remove accents
+    $city = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $city);
+
+    // Each word is upper case
+    $city = ucwords(strtolower($city));
+
+    // Remove spaces from beginning/end
+    $city = trim($city);
+
+    // Remove space from Mc (Should be McCity not Mc City)
+    $city = str_replace('Mc ', 'Mc', $city);
+    // Uppercase after Mc
+    if (strpos($city, 'Mc') === 0) {
+        $city = 'Mc'.ucwords(substr($city, 2));
+    }
+
+    // Fort should not be spelled out
+    $city = str_replace('Fort ', 'Ft ', $city);
+
+    // Saint should not be spelled out
+    $city = str_replace('Saint ', 'St ', $city);
+    $city = str_replace('Sainte ', 'Ste ', $city);
+
+    // Special case for Coeur d'Alene
+    if ($city == 'Coeur Dalene') {
+        $city = 'Coeur dAlene';
+    }
+
     return $city;
 }
 /**

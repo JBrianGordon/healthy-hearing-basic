@@ -76,7 +76,7 @@ $here = $_SERVER['REQUEST_URI'];
 			<?php endforeach ;?>
 			<?php if (Configure::read('showManufacturers')): ?>
 				<?php if (strtolower(substr($slug, 0, 12)) == 'hearing-aids'): ?>
-					<li><?php echo $this->Html->link('Hearing aid manufacturers', ['admin' => false, 'controller' => 'corps', 'action' => 'index'], ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link('Hearing aid manufacturers', ['prefix' => false, 'controller' => 'corps', 'action' => 'index'], ['escape' => false]); ?></li>
 				<?php endif; ?>
 			<?php endif; ?>
 		</ul>

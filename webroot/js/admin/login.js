@@ -2,14 +2,17 @@ const stdTimezoneOffset = () => {
 	let jan = new Date(Date.prototype.getFullYear(), 0, 1),
 		jul = new Date(Date.prototype.getFullYear(), 6, 1);
 	return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-},
-dst = () => {
+}
+
+const dst = () => {
 	return Date.prototype.getTimezoneOffset() < stdTimezoneOffset();
-},
-getUserTimezoneOffset = () => {
+}
+
+const getUserTimezoneOffset = () => {
 	return new Date().getTimezoneOffset()/60;
-},
-getUserTimezone = () => {
+}
+
+const getUserTimezone = () => {
 	return new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
 };
 

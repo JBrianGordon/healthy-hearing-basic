@@ -117,7 +117,7 @@ $this->Breadcrumbs->add([
 												<?php echo $this->Html->link("{$city->city}, {$city->state}",
 													[
 														'controller' => 'locations',
-														'action' => 'index',
+														'action' => 'viewCityZip',
 														'region' => $this->Clinic->stateSlug($city->state),
 														'city' => slugifyCity($city->city)
 													],
@@ -182,6 +182,6 @@ $this->Breadcrumbs->add([
 	</section>
 </div>
 <?php if (isFeatureOn('quick_pick')): ?>
-	<?php //TODO: echo $this->element('responsive_slider'); ?>
+	<?php echo $this->element('responsive_slider'); ?>
 <?php endif; ?>
 <?php //TODO: $this->Html->addJs('/js/dist/cities.min.js?v='.Configure::read("tagVersion")); ?>
