@@ -14,7 +14,7 @@
 		</section>
 	<?php endif; ?>
 	<?= $isMobileDevice ? null : $this->element('locations/preferred') ?>
-	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') == 'Content' || $this->getRequest()->getParam('controller') == 'Wikis') && empty($wiki)): ?>
+	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') == 'Content' || $this->getRequest()->getParam('controller') == 'Wikis' || $this->getRequest()->getParam('controller') == 'Corps') && empty($wiki)): ?>
 		<section class="panel">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
