@@ -7,7 +7,7 @@ $this->Breadcrumbs->add([
 ]);
 $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer']);
 ?>
-<div class="container-fluid site-body blog">
+<div class="container-fluid site-body fap-results">
   <div class="row">
 	<div class="backdrop backdrop-gradient backdrop-height"></div>
 	<div class="container">
