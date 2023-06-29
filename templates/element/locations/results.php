@@ -126,13 +126,13 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
 												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
+												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
+													<div>
+														<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' data-button="<?= $location->id ?>">Book now!</a>
+													</div>
+													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
+												<?php endif; ?>
 											</div>
-											<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
-												<div>
-													<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' data-button="<?= $location->id ?>">Book now!</a>
-												</div>
-												<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
-											<?php endif; ?>
 										</div>
 										<div class="col-md-6">
 											<div class="address mt5 hidden-sm hidden-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
