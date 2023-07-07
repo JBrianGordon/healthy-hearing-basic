@@ -99,7 +99,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                     <?php if(/*** TODO: add $isAdmin variable *** $isAdmin && !isset($locationId) */false): ?>
                                         <div class="row">
                                             <div class="col col-lg-6 noprint">
-                                                <?= $this->Form->input('LocationUser.username', [
+                                                <?= $this->Form->control('LocationUser.username', [
                                                     'label' => 'Username',
                                                     'type' => 'text',
                                                     'required' => true,
@@ -136,19 +136,19 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 </tr>
                                                 <tr>
                                                     <th>Clinic phone number</th>
-                                                    <td><?= $this->Clinic->formatNumber($location->phone) ?></td>
+                                                    <td><? /*TODO: need formatNumber function $this->Clinic->formatNumber($location->phone) */?></td>
                                                 </tr>
                                                 <tr>
                                                     <th>Tracking phone number on profile</th>
                                                     <td>
                                                         <?php
-                                                        foreach ($location->CallSource as $cs) {
+                                                        /*** TODO: need CallSource pulled in *** foreach ($CallSource as $cs) {
                                                             if ($cs['is_active']) {
-                                                                echo $this->Clinic->formatNumber($cs['phone_number']).' ';
+                                                                /*** TODO: need formatNumber function ***echo $this->Clinic->formatNumber($cs['phone_number']).' ';
                                                                 echo $this->Html->link('Why is this different?', ['clinic' => true, 'controller' => 'pages', 'action' => 'faq', '#' => 'phone'], ['target' => '_blank']);
                                                                 break;
                                                             }
-                                                        }
+                                                        }*/
                                                         ?>
                                                     </td>
                                                 </tr>
@@ -186,7 +186,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 <a href="/clinic/ca_call_groups/report" class="btn btn-light">Call reports</a>
                                                 <a href="/clinic/pages/faq" class="btn btn-light">FAQ</a>
                                                 <?= $this->Html->link('View my profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-light']) ?>
-                                                <?php if (($location->listing_type == Location::LISTING_TYPE_PREMIER && $location->is_cq_premier == true) || $this->Clinic->get('feature_content_library')): ?>
+                                                <?php if (($location->listing_type == Location::LISTING_TYPE_PREMIER && $location->is_cq_premier == true) /*** TODO: Clinic->get() needs to be built ***|| $this->Clinic->get('feature_content_library')*/): ?>
                                                     <a href="/clinic/library" class="btn btn-light">Social Media Sharing Library</a>
                                                 <?php endif; ?>
                                             </div>
@@ -198,57 +198,66 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         
                                         <h2 class="mt20">Profile information</h2>
                                         <?php
-                                        echo $this->Form->input('Location.id', ['type' => 'hidden']);
-                                        echo $this->Form->input('Location.oticon_id', ['type' => 'hidden']);
-                                        echo $this->Form->input('Location.title');
-                                        echo $this->Form->input('Location.slogan', ['type' => 'text']);
+                                        echo $this->Form->hidden('Location.id');
+                                        echo $this->Form->hidden('Location.oticon_id');
+                                        echo $this->Form->control('Location.title', ['value' => $location->title]);
+                                        echo $this->Form->control('Location.slogan', ['value' => $location->slogan]);
                                         ?>
                                         <div class="form-group">
                                             <label class="col col-md-3 control-label">Mobile-only clinic?</label>
-                                            <?= $this->Form->input('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>'], 'div' => 'col col-md-9'])?>
+                                            <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'escape' => false], 'div' => 'col col-md-9', 'value' => $location->is_mobile])?>
                                         </div>
                                         <div id="radius" class="hidden">
-                                                <?= $this->Form->input('radius', [
+                                                <?= $this->Form->control('radius', [
                                                     'label' => Configure::read('isMetric') ? 'Radius (km)' : 'Radius (miles)',
                                                     'div' => 'form-group required',
                                                     'min' => 0,
-                                                    'help_block' => 'How far are you willing to travel from '.$location->city.'?'
+                                                    'help_block' => 'How far are you willing to travel from '.$location->city.'?',
+                                                    'value' => $location->radius
                                                 ]) ?>
-                                                <?= $this->Form->input('mobile_text', [
+                                                <?= $this->Form->control('mobile_text', [
                                                     'label' => 'Mobile clinic description',
                                                     'placeholder' => Location::$mobileTextDefault,
                                                     'help_block' => 'This will be displayed instead of street address',
-                                                    'required' => false
+                                                    'required' => false,
+                                                    'value' => $location->mobile_text
                                                 ]) ?>
                                         </div>
                                         <?php
-                                        echo $this->Form->input('Location.landmarks', [
-                                            'label' => 'Landmarks <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" data-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
-                                            'rows' => 2
+                                        echo $this->Form->control('Location.landmarks', [
+                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" data-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
+                                                'escape' => false
+                                            ],
+                                            'rows' => 2,
+                                            'value' => $location->landmarks
                                             ]);
                                         echo '<span id="urlAnchor" class="clinic-anchor"></span>';
-                                        echo $this->Form->input('Location.url', [
+                                        echo $this->Form->control('Location.url', [
                                             'label' => 'Website URL',
                                             'help_block' => 'Must start with http:// or https://',
-                                            'div' => 'form-group mb5'
+                                            'div' => 'form-group mb5',
+                                            'value' => $location->url
                                         ]);
-                                        echo $this->Form->input('Location.facebook', [
+                                        echo $this->Form->control('Location.facebook', [
                                             'label' => 'Facebook',
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
-                                            'afterInput' => '</div>'
+                                            'afterInput' => '</div>',
+                                            'value' => $location->facebook
                                             ]);
-                                        echo $this->Form->input('Location.twitter', [
+                                        echo $this->Form->control('Location.twitter', [
                                             'label' => 'Twitter',
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
-                                            'afterInput' => '</div>'
+                                            'afterInput' => '</div>',
+                                            'value' => $location->twitter
                                             ]);
-                                        echo $this->Form->input('Location.youtube', [
+                                        echo $this->Form->control('Location.youtube', [
                                             'label' => 'YouTube',
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
-                                            'afterInput' => '</div>'
+                                            'afterInput' => '</div>',
+                                            'value' => $location->youtube
                                             ]);
                                         ?>
                                         <hr>
@@ -266,17 +275,15 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">About us</h2>
                                         <small>Please limit your description to an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
-                                        <?php echo $this->Form->input('Location.about_us', [
-                                            'wrapInput' => 'col col-md-12',
-                                        ]); 
+                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us]); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
 
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">Services</h2>
                                         <small>This should be an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
-                                        <?php echo $this->Form->input('Location.services', [
+                                        <?php echo $this->Form->control('Location.services', [
                                             'label' => false,
-                                            'wrapInput' => 'col col-md-12'
+                                            'value' => $location->services
                                         ]); 
                                         echo '<span id="upsellMessageServices" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
                                         ?>
@@ -292,71 +299,75 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 <th>By appointment</th>
                                             </tr>
                                             <?= $this->Form->hidden("LocationHour.id") ?>
-                                            <?php foreach ($days as $day): ?>
-                                                <tr>
-                                                    <td><?= date("l", strtotime($day)) ?></td>
+                                            <?php /*** TODO: days needs to be pulled in: foreach ($days as $day): ***/?>
+                                                <!--<tr>
+                                                    <td><?//= date("l", strtotime($day)) ?></td>
                                                     <td>
-                                                        <?= $this->Form->input("LocationHour.".$day."_open", [
+                                                        <?/*= $this->Form->control("LocationHour.".$day."_open", [
                                                             'type' => 'time',
                                                             'empty' => true,
                                                             'selected' => $this->Clinic->convert24hours("LocationHour.".$day."_open"),
                                                             'div' => false,
                                                             'class' => false
-                                                        ]) ?>
+                                                        ])*/ ?>
                                                     </td>
                                                     <td>
-                                                        <?= $this->Form->input("LocationHour.".$day."_close", [
+                                                        <?/*= $this->Form->control("LocationHour.".$day."_close", [
                                                             'type' => 'time',
                                                             'empty' => true,
                                                             'selected' => $this->Clinic->convert24hours("LocationHour.".$day."_close"),
                                                             'div' => false,
                                                             'class' => false
-                                                        ]) ?>
+                                                        ])*/ ?>
                                                     </td>
                                                     <td>
-                                                        <?= $this->Form->input("LocationHour.".$day."_is_closed", [
+                                                        <?/*= $this->Form->control("LocationHour.".$day."_is_closed", [
                                                             'type' => 'checkbox',
                                                             'div' => false,
                                                             'class' => 'is-closed-checkbox',
                                                             'data-day' => ucfirst($day)
-                                                        ]) ?>
+                                                        ])*/ ?>
                                                     </td>
                                                     <td>
-                                                        <?= $this->Form->input("LocationHour.".$day."_is_byappt", [
+                                                        <?/*= $this->Form->control("LocationHour.".$day."_is_byappt", [
                                                             'type' => 'checkbox',
                                                             'div' => false,
                                                             'class' => false,
-                                                        ]) ?>
+                                                        ])*/ ?>
                                                     </td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                                </tr>-->
+                                            <?php //endforeach; ?>
                                             <tr>
                                                 <td colspan="5">
-                                                    <?= $this->Form->input('LocationHour.is_evening_weekend_hours', [
+                                                    <?= $this->Form->control('LocationHour.is_evening_weekend_hours', [
                                                         'type' => 'checkbox',
                                                         'div' => false,
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
+                                                            'escape' => false,
                                                             'class' => 'col col-md-12 control-label tal',
                                                         ],
+                                                        'value' => $location->is_evening_weekend_hours
                                                     ]) ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="5">
-                                                    <?= $this->Form->input('LocationHour.is_closed_lunch', [
+                                                    <?= $this->Form->control('LocationHour.is_closed_lunch', [
                                                         'type' => 'checkbox',
                                                         'div' => false,
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Closed for lunch</strong>',
+                                                            'escape' => false,
                                                             'class' => 'col col-md-12 control-label tal',
                                                         ],
+                                                        'value' => $location->is_closed_lunch
                                                     ]) ?>
                                                     <div id="closedLunch" class="col col-md-12 hidden">
                                                         <div class="form-group required">
                                                             <label class="col col-md-2 tal">Lunch break</label>
                                                             <div class="col col-md-10">
-                                                                <?= $this->Form->input('LocationHour.lunch_start', [
+                                                                <?= $this->Form->control('LocationHour.lunch_start', [
                                                                     'type' => 'time',
                                                                     'label' => false,
                                                                     'div' => false,
@@ -364,9 +375,10 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                     'autocomplete' => 'off',
                                                                     'interval' => 15,
                                                                     'selected' => $this->Clinic->convert24hours('LocationHour.lunch_start'),
+                                                                    'value' => $location->lunch_start
                                                                 ]) ?>
                                                                 <span class="mr5 ml5">-</span>
-                                                                <?= $this->Form->input('LocationHour.lunch_end', [
+                                                                <?= $this->Form->control('LocationHour.lunch_end', [
                                                                     'type' => 'time',
                                                                     'label' => false,
                                                                     'div' => false,
@@ -374,6 +386,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                     'autocomplete' => 'off',
                                                                     'interval' => 15,
                                                                     'selected' => $this->Clinic->convert24hours('LocationHour.lunch_end'),
+                                                                    'value' => $location->lunch_end
                                                                 ]) ?>
                                                             </div>
                                                         </div>
@@ -385,21 +398,22 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <span id="payment" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb20">Accepted methods of payment</h2>
                                         <div class="ml20">
-                                            <?= $this->Clinic->paymentForm($location->payment) ?>
+                                            <?/*** TODO: build paymentForm method ***: = $this->Clinic->paymentForm($location->payment) ?>
                                         </div>
                                         
                                         <?php if($location->listing_type != Location::LISTING_TYPE_BASIC): ?>
                                             <div class="row">
                                                 <h2 class="mt20 mb20 ml10">Optional message</h2>
                                                 <div class="col-md-12">
-                                                    <?= $this->Form->input('optional_message', [
+                                                    <?= $this->Form->control('optional_message', [
                                                         'label' => false,
                                                         'rows' => 3,
                                                         'maxlength' => 400,
                                                         'required' => false,
                                                         'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
                                                         'div' => 'form-group mb0',
-                                                        'class' => 'col-md-12'
+                                                        'class' => 'col-md-12',
+                                                        'value' => $location->optional_message
                                                     ]) ?>
                                                 </div>
                                             </div>
@@ -436,16 +450,16 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                     </tr>
                                                                 <?php endforeach; ?>
                                                                 <?/*** TODO: $uniqueLocationLinks needs to be set ***php$key = count($uniqueLocationLinks); */?>
-                                                                <tr id="tr-link-<?= $key ?>">
+                                                                <tr id="tr-link-<?//= $key ?>">
                                                                     <td>
-                                                                        <div id="div-link-<?= $key ?>">
+                                                                        <div id="div-link-<?//= $key ?>">
                                                                             <?= $this->Form->hidden('linked_location_id') ?>
-                                                                            <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
-                                                                            <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
+                                                                            <input class="form-control linked-location" data-key="<?//= $key ?>" data-id="<?//= $locationId ?>" />
+                                                                            <span class="help-block text-danger hidden" id="link-error-<?//= $key ?>"></span>
                                                                         </div>
                                                                     </td>
                                                                     <td style="width:100px;" align="center">
-                                                                        <div id="div-add-delete-<?= $key ?>">
+                                                                        <div id="div-add-delete-<?//= $key ?>">
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -474,22 +488,22 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                     <div class="panel-heading">
                                                         <div class="panel-title">Premier membership features</div>
                                                     </div>
-                                                    <?php if ($showSpecialAnnouncement && ($location->listing_type !== Location::LISTING_TYPE_PREMIER)): ?>
+                                                    <?php if (/*** TODO: make sure this variable is set above ***: $showSpecialAnnouncement && */($location->listing_type !== Location::LISTING_TYPE_PREMIER)): ?>
                                                         <p class="m10">Would you like to learn more about all of Healthy Hearing's <strong><em>Premier</em></strong> profile features? <a href="/clinic">Check them out here</a> or <a href="mailto:<?= Configure::read('customer-support-email') ?>">contact us</a> for more details today!</p>
                                                     <?php elseif ($location->listing_type !== Location::LISTING_TYPE_PREMIER):  ?>
                                                         <p class="m10"><a href="/clinic">Click here</a> to learn more about Healthy Hearing's <strong><em>Premier</em></strong> profile features or <a href="mailto:<?= Configure::read('customer-support-email') ?>">Contact us</a> for more details today!</p>
                                                     <?php endif; ?>
                                                     <div class="panel-body m10<?= ($location->listing_type !== Location::LISTING_TYPE_PREMIER) ? " panel-disabled" : ''  ?>">
                                                             <!-- Special announcements / Flex space / Coupons -->
-                                                            <div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier ?>" data-adid="<?= $adId ?>" data-couponid="<?= $couponId ?>">
+                                                            <div id="specialAnnouncements" data-iscqpremier="<?/*** TODO: All these variables on this line and below need to be set ***: = $isCqPremier ?>" data-adid="<?//= $adId ?>" data-couponid="<?//= $couponId ?>">
                                                                 <h2 class="mt20 mb10">Special Announcement</h2>
                                                                 <?php
                                                                 $helpText = "This is your \"flex space\" to use to promote any aspect of your business you wish. You can use the space with or without an image.";
-                                                                if ($isCqPremier) {
+                                                                /*if ($isCqPremier) {
                                                                     $helpText .= " As a courtesy, CQ Partners has provided offers you may choose to use in this space if they apply to your clinic.";
-                                                                }
+                                                                }*/
                                                                 ?>
-                                                                <span class="help-block col-md-11 ml20"><?= $helpText ?></span>
+                                                                <span class="help-block col-md-11 ml20"><?//= $helpText ?></span>
                                                                 <div class="clearfix"></div>
                                                                 <div id="couponLibrary" class="hidden">
                                                                     <div class="row mb20 pr20 pl20">
@@ -546,7 +560,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                 </div>
                                                                 <div id="uploadCoupon" class="hidden">
                                                                     <?php if ($adId): ?>
-                                                                        <?= $this->Form->input('LocationAd.id',
+                                                                        <?= $this->Form->control('LocationAd.id',
                                                                             [
                                                                                 'type' => 'hidden',
                                                                                 'value' => $adId
@@ -576,7 +590,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                             </div>
                                                                         </div>
                                                                     <?php endif; ?>
-                                                                    <?= $this->Form->input("LocationAd.photo_url", [
+                                                                    <?= $this->Form->control("LocationAd.photo_url", [
                                                                             'label' => 'File name',
                                                                             'readonly' => 'readonly',
                                                                             'wrapInput' => 'col-md-7',
@@ -586,33 +600,36 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                                 <input type="file" name="data[LocationAd][file]" class="form-control hidden" id="LocationAdFile">
                                                                                 </label>',
                                                                             'help_block' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
-                                                                                <span class="text-danger hidden" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
+                                                                                <span class="text-danger hidden" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>',
+                                                                            // *** TODO: uncomment when locationAd pulled in ***: 'value' => $locationAd->photo_url
                                                                         ])
                                                                     ?>
                                                                     <?php
-                                                                        echo $this->Form->input("LocationAd.title", [
+                                                                        echo $this->Form->control("LocationAd.title", [
                                                                             'label' => 'Title',
                                                                             'maxlength' => 50,
                                                                             'required' => false,
-                                                                            'help_block' => 'This text will appear in the header of this space. 50 characters max.'
+                                                                            'help_block' => 'This text will appear in the header of this space. 50 characters max.',
+                                                                            // *** TODO: uncomment when locationAd pulled in ***: 'value' => $locationAd->title
                                                                         ]);
-                                                                        echo $this->Form->input("LocationAd.description", [
+                                                                        echo $this->Form->control("LocationAd.description", [
                                                                             'type' => 'textarea',
                                                                             'rows' => 2,
                                                                             'label' => 'Message',
                                                                             'maxlength' => 500,
                                                                             'required' => false,
-                                                                            'help_block' => 'This text will appear below the image in this space. 500 characters max.'
+                                                                            'help_block' => 'This text will appear below the image in this space. 500 characters max.',
+                                                                            // *** TODO: uncomment when locationAd pulled in ***: 'value' => $locationAd->description
                                                                         ]);
                                                                     ?>
                                                                     <div class="form-group">
                                                                         <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
                                                                         <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
                                                                         <div class="col col-md-9">
-                                                                            <div class="col-md-3 border-radio<?= $locationAd->border == 'blank' ? ' selected-border' : '' ?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?= $locationAd->border == 'blank' ? ' checked' : '' ?>> No Border</label></div>
-                                                                            <div class="col-md-3 border-radio<?= $locationAd->border == 'border-dashed' ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= $locationAd->border == 'border-dashed' ? ' checked' : '' ?>> Dashed</label></div>
-                                                                            <div class="col-md-3 border-radio<?= $locationAd->border == 'border-dotted' ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= $locationAd->border == 'border-dotted' ? ' checked' : '' ?>> Dotted</label></div>
-                                                                            <div class="col-md-3 border-radio<?= $locationAd->border == 'border-inset' ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= $locationAd->border == 'border-inset' ? ' checked' : '' ?>> Inset</label></div>
+                                                                            <div class="col-md-3 border-radio<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'blank' ? ' selected-border' : '' ?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'blank' ? ' checked' : '' ?>> No Border</label></div>
+                                                                            <div class="col-md-3 border-radio<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-dashed' ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-dashed' ? ' checked' : '' ?>> Dashed</label></div>
+                                                                            <div class="col-md-3 border-radio<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-dotted' ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-dotted' ? ' checked' : '' ?>> Dotted</label></div>
+                                                                            <div class="col-md-3 border-radio<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-inset' ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?// *** TODO: uncomment when locationAd pulled in ***: = $locationAd->border == 'border-inset' ? ' checked' : '' ?>> Inset</label></div>
                                                                             <span class="help-block">Select a border for the image.</span>
                                                                         </div>
                                                                     </div>
@@ -620,24 +637,24 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                             </div>
                                                             <div class="clearfix"></div>
                                                             <hr>
-                                                            <?php if ($isCqPremier): ?>
+                                                            <?// *** TODO: uncomment when isCqPremier ***: php if ($isCqPremier): ?>
                                                                 <!-- Vidscrips -->
                                                             <div>
                                                                 <h2 class="mt20 mb20">Vidscrips</h2>
-                                                                <?= $this->Form->input('LocationVidscrips.id',
+                                                                <?= $this->Form->control('LocationVidscrips.id',
                                                                     [
                                                                         'type' => 'hidden',
-                                                                        'value' => $locationVidscrips->id
+                                                                        // *** TODO: uncomment when locationVidscrips is pulled in'value' => $locationVidscrips->id
                                                                     ])
                                                                 ?>
                                                                 <div class="clearfix"></div>
-                                                                <?= $this->Form->input("LocationVidscrips.vidscrip", [
+                                                                <?= $this->Form->control("LocationVidscrips.vidscrip", [
                                                                         'label' => 'Vidscrip ID',
                                                                         'maxlength' => 30,
                                                                         'required' => false
                                                                     ])
                                                                 ?>
-                                                                <?= $this->Form->input("LocationVidscrips.email", [
+                                                                <?= $this->Form->control("LocationVidscrips.email", [
                                                                         'label' => 'Vidscrip related email',
                                                                         'required' => false
                                                                     ])
@@ -654,7 +671,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                         <tr>
                                                                             <td>
                                                                                 <img class="ml60 mb10" id="photo-thumb-logo" src="<?= (!empty($location->logo_url)) ? '/cloudfiles/clinics/' . $location->logo_url : '' ?>">
-                                                                                <?= $this->Form->input("logo_file", [
+                                                                                <?= $this->Form->control("logo_file", [
                                                                                         'type' => 'file',
                                                                                         'label' => 'File name',
                                                                                         'class' => 'form-control photo-url',
@@ -679,7 +696,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                             <td style="width:80%;">
                                                                                 <?= $this->Form->hidden("LocationVideo.$key.id") ?>
                                                                                 <div>
-                                                                                    <?= $this->Form->input("LocationVideo.$key.video_url", [
+                                                                                    <?= $this->Form->control("LocationVideo.$key.video_url", [
                                                                                         'label' => false,
                                                                                         'div' => false
                                                                                     ]) ?>
@@ -710,33 +727,33 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                             <div>
                                                                 <h2 class="mt20 mb20">Photos</h2>
                                                                 <table class="table-striped table-bordered col-md-11 ml20">
-                                                                    <?php foreach ($locationPhoto as $key => $photo): ?>
-                                                                        <tr>
+                                                                    <?// *** TODO: uncomment when locationPhoto pulled in ***: php foreach ($locationPhoto as $key => $photo): ?>
+                                                                        <!--<tr>
                                                                             <td style="width:80%;">
-                                                                                <?= $this->Form->hidden("LocationPhoto.$key.id") ?>
+                                                                                <?/*= $this->Form->hidden("LocationPhoto.$key.id") ?>
                                                                                 <div>
-                                                                                    <?= $this->Form->input("LocationPhoto.$key.photo_url", [
+                                                                                    <?/*= $this->Form->control("LocationPhoto.$key.photo_url", [
                                                                                         'label' => false,
                                                                                         'div' => false
                                                                                     ]) ?>
                                                                                 </div>
-                                                                                <img src="/cloudfiles/clinics/<?= $photo['photo_url'] ?>" alt>
+                                                                                <img src="/cloudfiles/clinics/<?/*= $photo['photo_url'] ?>" alt>
                                                                                 <div id="photo-description-<?= $key ?>">
-                                                                                    <?= $this->Form->input("LocationPhoto.$key.alt", [
+                                                                                    <?/*= $this->Form->control("LocationPhoto.$key.alt", [
                                                                                         'label' => 'Description',
                                                                                         'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.',
                                                                                         'required' =>true,
                                                                                         'oninput' => 'validatePhotoAlt('.$key.')'
                                                                                     ])
                                                                                     ?>
-                                                                                    <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
+                                                                                    <span class="help-block-desc-<?//= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td align="center">
-                                                                                <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>">Delete</button>
+                                                                                <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?//= $key ?>">Delete</button>
                                                                             </td>
-                                                                        </tr>
-                                                                    <?php endforeach; ?>
+                                                                        </tr>-->
+                                                                    <?//php endforeach; ?>
                                                                     <tr>
                                                                         <td>
                                                                             <?/*** TODO: set locationPhoto ***php $key = count($locationPhoto); */?>
@@ -749,7 +766,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                                 <div class="col col-md-3" id="file-input-<?= $key ?>">
                                                                                     <label class="btn btn-default pull-right">
                                                                                         <span>Add a new photo</span>
-                                                                                        <?= $this->Form->input("LocationPhoto." . $key . ".file", [
+                                                                                        <?= $this->Form->control("LocationPhoto." . $key . ".file", [
                                                                                             'type' => 'file',
                                                                                             'label' => false,
                                                                                             'div' => false,
@@ -764,7 +781,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                                 </div>
                                                                             </div>
                                                                             <div id="photo-description-<?= $key ?>" class="hidden">
-                                                                                <?= $this->Form->input("LocationPhoto.$key.alt", [
+                                                                                <?= $this->Form->control("LocationPhoto.$key.alt", [
                                                                                     'label' => 'Description',
                                                                                     'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc.',
                                                                                     'disabled' => true,
@@ -846,7 +863,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 </div>
                                             </div>
                                         <?php endif; ?>
-                                    <?php endif; ?>
+                                    <?//php endif; ?>
                                     <?= $this->Form->end() ?>
                                     <div id="newUserModal" class="modal-dialog modal-lg modal fade <?= ($showModal) ? 'show in' : '' ?>">
                                         <div class="modal-content">

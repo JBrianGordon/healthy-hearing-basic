@@ -213,6 +213,10 @@
 		    display: block;
 		    margin: 0 auto 20px;
 		    width: 250px;
+
+		    &:hover {
+		    	color: #fff;
+		    }
 	    }
     }
 }
