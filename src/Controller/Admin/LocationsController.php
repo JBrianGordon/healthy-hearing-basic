@@ -132,4 +132,46 @@ class LocationsController extends AppController
         $this->Export->exportCsv('export_locations.csv');
         die();
     }
+
+    /**
+    * Export a list of emails for the selected locations
+    */
+    public function emails() {
+        //TODO
+        /*
+        $this->helpers[] = 'Icing.Csv';
+        $this->layout = 'csv';
+        if ($this->request->ext != 'csv') {
+            $this->redirect(['action' => 'export', 'ext' => 'csv']);
+        }
+        $options = [
+            'contain' => ['LocationUser', 'LocationEmail', 'Provider'],
+            'fields' => ['Location.id','Location.title','Location.email','LocationUser.first_name','LocationUser.last_name','LocationUser.email'],
+        ];
+        if (isset($this->request->params['named']['search'])) {
+            $options['conditions'] = $this->Location->search($this->request->params['named']['search']);
+        }
+        $count = $this->Location->find('count', ['conditions' => $options['conditions']]);
+        // We run into memory errors if we try to download a file that is too large
+        if ($count <= 2000) {
+            // Small file. Download immediately.
+            $this->set('filename','export_location_emails.csv');
+            $this->set('data', $this->Location->exportEmails($options));
+        } else {
+            // Large file. Dispatch shell.
+            App::uses('Queue','Queue.Lib');
+            $email = $this->Auth->user('email');
+            $exportParams = [
+                'email' => $email,
+                'options' => $options
+            ];
+            $cmd = "locations exportEmails ".json_encode($exportParams);
+            if (Queue::add($cmd, 'shell')) {
+                $this->goodFlash('Large file export. Results will be emailed.');
+            } else {
+                $this->badFlash('Unable to add to queue: '.$cmd);
+            }
+            return $this->redirect(['action' => 'index']);
+        }*/
+    }
 }

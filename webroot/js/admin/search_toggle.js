@@ -196,6 +196,16 @@ export const exportSubmissionsFunctions = () => {
 	  
 	  window.location.pathname = "admin/locations/export" + searchAndExcludedFieldArray + excludedFields + ".csv";
 	});
+
+	//export button modal and functionality
+	$("#exportButton").on("click",function(e) {
+		e.preventDefault();
+		$("#exportModal").show().addClass("in");
+	});
+
+	$("#exportClose").on("click",function() {
+		$("#exportModal").hide().removeClass("in");
+	});
 }
 
 export const datepickerFunctions = () => {
