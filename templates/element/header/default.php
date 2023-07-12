@@ -65,8 +65,7 @@ $logo = Configure::read('logo');
 					<?php else: ?>
 						<object data="<?= Configure::read('map'); ?>" type="image/svg+xml" id="headerMap"></object>
 					<?php endif; ?>
-					<div class="tac mt20">
-						<!-- *** TODO: add search bar when it's built out *** -->
+					<div class="tac mt20 col-md-10 col-md-offset-1">
 						<?= $this->element('locations/search', [
 							'label' => 'Enter city, '.$stateLabel.' or '.$zipShort,
 							'form_id' => 'fapdropdownform',
