@@ -53,6 +53,10 @@
 	}
 	
 	&.navbar-expand-lg {
+
+		.active {
+			background-color: #f9f9f9;
+		}
 		
 		.navbar-toggler {
 			float: right;
@@ -60,6 +64,10 @@
 		}
 		.navbar-nav .nav-link {
 			color: $brand-primary;
+
+			&:hover {
+				background-color: #f9f9f9;
+			}
 			
 			.hidden-sm {
 				@media (max-width: $screen-sm-max) {
@@ -163,6 +171,7 @@
 		 .navbar-right {
 			@media only screen and (min-width: $screen-sm-min) {
 				margin-right: 0;
+				float: right;
 			}
 		}
 	

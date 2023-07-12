@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
 ?>
-<nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12" id="navParent">
