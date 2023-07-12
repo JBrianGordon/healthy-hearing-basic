@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 	<div class="row noprint">
 		<div class="col-sm-12">
 			<ul class="side-nav-links">
-				<li><span><strong>Menu</strong></span></li>
+				<li><span><strong class="invisible">Menu</strong></span></li>
 				<?php //TODO: review this logic. It matches existing code, but doesn't quite seem right. ?>
 				<?php if ($adminAccessAllowed && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')): ?>
 					<li><a href="/clinic/locations/edit"><span class="glyphicon glyphicon-globe"></span> My Profile</a></li>

@@ -13,6 +13,11 @@ $logo = Configure::read('logo');
 					</a>
 				</div>
 				<div class="nav navbar-right" id="navContainer">
+					<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
+						<div class="navbar-side-nav-trigger" data-hh-side-nav-trigger>
+							<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
+						</div>
+					</div>
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 						<li data-hh-mega-nav-trigger="find-a-professional">
 							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
