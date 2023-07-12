@@ -136,6 +136,8 @@
 	  
 		 .navbar-nav {
 			  display: none;
+			  float: left;
+			  margin: 0;
 			  
 			  @media only screen and (min-width: $screen-sm-min) {
 				   display: block;

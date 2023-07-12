@@ -18,6 +18,20 @@ $logo = Configure::read('logo');
 							<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
 						</div>
 					</div>
+					<!-- *** TODO: all the following variable needed by the conditional have to be pulled in *** -->
+					<?php if (/*Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)*/true): ?>
+						<div class="navbar-search" data-hh-search>
+							<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
+							<div class="search-wrapper" id="searchWrapper">
+							  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
+							  <form id="MegaSearch" action="/search" method="POST">
+								<label for="ContentSearch">Search the site</label>
+							  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
+							  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
+							  </form>
+							</div>
+						</div>
+					<?php endif; ?>
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 						<li data-hh-mega-nav-trigger="find-a-professional">
 							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
@@ -41,7 +55,6 @@ $logo = Configure::read('logo');
 							<?= $this->element('header/clinic_panel_link') ?>
 						<?php endif; ?>
 					</ul>
-					<!-- TODO: SEARCH/MAGNIFYING GLASS -->
 				</div>
 			</div>
 		</div>
