@@ -7,8 +7,8 @@ $isCallAssistEnabled = Configure::read('isCallAssistEnabled');
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 
 $locationId = $location->id;
-$displayOpenClosed = $this->Clinic->getOpenClosedByLocationArray($location);
-$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationArray($location);
+$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($locationId);
+$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationId);
 ?>
 <div class="col-md-12 gutter-below">
 	<div class="well clinic-info">

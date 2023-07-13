@@ -479,14 +479,16 @@ class ClinicHelper extends Helper
     * @return HtmlLink
     */
     public function link($location = null, $full = false, $options = array()) {
-        /*** TODO: uncomment when setLocation is made *** if ($location) $this->setLocation($location);
+        if (!is_object($location)) {
+           $location = $this->Locations->get($location);
+        }
         if ($full) {
-            $url = Router::url($this->get('hh_url'), $full);
+            $url = Router::url($location->hh_url, $full);
         }   else {
-            $url = $this->get('hh_url');
+            $url = $location->hh_url;
         }
 
-        return $this->Html->link($this->get('title'), $url, $options);*/
+        return $this->Html->link($location->title, $url, $options);
     }
 
     /**
@@ -496,7 +498,7 @@ class ClinicHelper extends Helper
     */
     public function hours($location = null) {
         if (!is_object($location)) {
-            //$location = $this->Locations->get($location);
+           $location = $this->Locations->get($location);
         }
         $retval = null;
         if (!empty($location->location_hour)) {
