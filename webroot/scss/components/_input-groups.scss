@@ -11,6 +11,12 @@
     display: table-cell;
     vertical-align: top;
   }
+
+  > .form-control:focus {
+    z-index: 1;
+    border-color: #03a9f4;
+    box-shadow: none;
+  }
 }
 
 .input-group-btn:last-child > .btn {
