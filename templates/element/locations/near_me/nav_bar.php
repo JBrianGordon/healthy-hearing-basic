@@ -10,7 +10,7 @@ $nearMeLink = $this->Clinic->nearMeLink();
     </strong>
 </p>
 <div>
-    <table class="table table-striped table-bordered">
+    <table class="table table-bordered mb25">
         <?php foreach ($clinicsNearMe as $distance => $location): ?>
             <tr><td><?php echo $this->Text->truncate($this->Html->link($location->title, $location->hh_url, ['class' => 'text-link']), 40, ['html' => true]); ?></td></tr>
         <?php endforeach; ?>
