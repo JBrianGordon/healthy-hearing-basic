@@ -38,6 +38,7 @@
 			<?= $this->element('fac_config_text', ["locationsPage" => false]) ?>
 		</div>
 	</section>
+	<?= isset($stateNice) ? $this->element('learn_more') : null; ?>
 	<?php if (!empty($contents)): ?>
 		<section class="panel panel-light related-reports">
 			<header class="panel-heading text-center">
