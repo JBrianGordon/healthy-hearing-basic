@@ -128,51 +128,72 @@ if($("form").attr("action").match("/admin/locations") || $("form").attr("action"
 
 }
 
-//export button modal and functionality
-$("#exportButton").on("click",function(e) {
-	e.preventDefault();
-	$("#exportModal").show().addClass("in");
-})
+// Export button modal and functionality
+const exportBtn = document.getElementById("exportBtn");
+const exportModal = document.getElementById("exportModal");
 
-$("#exportClose").on("click",function() {
-	$("#exportModal").hide().removeClass("in");
-})
-
-//Toggle values for switches
-$("#exportModal .form-control").on("click", function() {
-	if($(this).val(0)) {
-		$(this).val(1);
-	} else {
-		$(this).val(0);
-	}
+exportBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  exportModal.style.display = "block";
+  exportModal.classList.add("show", "in");
 });
 
-//Toggle classes and values for all switches, based on #allFieldsInput active class
-$("#allFieldsInput").on("click",function() {
-	setTimeout(function(){
-		if ($("#allFieldsInput").hasClass("switch-positive")) {
-			$(".export-label input").removeClass("switch-negative").addClass("switch-positive").attr("value",1);
-		} else if ($("#allFieldsInput").hasClass("switch-negative")) {
-			$(".export-label input").removeClass("switch-positive").addClass("switch-negative").attr("value",0);
-		}
-	}, 200);
-})
+const exportClose = document.getElementById("exportClose");
+exportClose.addEventListener("click", () => {
+  exportModal.style.display = "none";
+  exportModal.classList.remove("show", "in");
+});
 
-$("#exportModal #exportSubmit").on("click", function() {
-	var searchAndExcludedFieldArray = $("#exportButton").attr("href").split("/admin/locations/crm").pop();
-	
-	//Construct params for csv. The "field" params represent fields disabled in the export modal
-	
-	for (var i = 0;i < $("#exportModal .form-control").length; i++) {
-		if ($("#exportModal .form-control").eq(i).attr("value") == 0) {
-			var excludedFieldName = $("#exportModal .form-control").eq(i).attr("name");
-			
-			searchAndExcludedFieldArray += ("/field%5B" + excludedFieldName + "%5D:" + excludedFieldName);
-		}
-	}
+// Toggle values for switches
+const formControls = document.querySelectorAll("#exportModal .form-control");
+formControls.forEach((control) => {
+  control.addEventListener("click", () => {
+    if (control.value === "0") {
+      control.value = "1";
+    } else {
+      control.value = "0";
+    }
+  });
+});
 
-	window.location.pathname = "admin/locations/export" + searchAndExcludedFieldArray + ".csv";
-})
+// Toggle classes and values for all switches, based on #allFieldsInput active class
+const allFieldsInput = document.getElementById("allFieldsInput");
+allFieldsInput.addEventListener("click", () => {
+  setTimeout(() => {
+    const exportLabelInputs = document.querySelectorAll(".export-label input");
+    if (allFieldsInput.classList.contains("switch-positive")) {
+      exportLabelInputs.forEach((input) => {
+        input.classList.remove("switch-negative");
+        input.classList.add("switch-positive");
+        input.value = "1";
+      });
+    } else if (allFieldsInput.classList.contains("switch-negative")) {
+      exportLabelInputs.forEach((input) => {
+        input.classList.remove("switch-positive");
+        input.classList.add("switch-negative");
+        input.value = "0";
+      });
+    }
+  }, 200);
+});
+
+// Handle export submit
+const exportSubmit = document.getElementById("exportSubmit");
+exportSubmit.addEventListener("click", () => {
+  const searchAndExcludedFieldArray = exportBtn.getAttribute("href").split("/admin/locations/crm").pop();
+  
+  let params = "";
+  const formControlElements = document.querySelectorAll("#exportModal .form-control");
+  formControlElements.forEach((element) => {
+    if (element.value === "0") {
+      const excludedFieldName = element.name;
+      params += `/field%5B${excludedFieldName}%5D:${excludedFieldName}`;
+    }
+  });
+  
+  window.location.pathname = `admin/locations/export${searchAndExcludedFieldArray}${params}.csv`;
+});
+
 
 var minDate = '';
 var maxDate = '';

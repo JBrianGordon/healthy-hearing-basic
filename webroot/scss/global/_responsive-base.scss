@@ -57,6 +57,24 @@ th a.desc:after { content: ' ⇡'; }
 }
 .modal-dialog {
 	margin-top: 100px;
+	padding-bottom: 100px;
+
+    &#exportModal {
+	    overflow-y: scroll;
+	    text-transform: capitalize;
+	    
+	    #admin_search {
+		    display: block;
+		    
+		    .control-group {
+			    display: none;
+		    }
+	    }
+	    
+	    .border-right {
+		    border-right: 1px solid #000;
+	    }
+    }
 }
 .btn-link {
 	text-decoration: underline;
