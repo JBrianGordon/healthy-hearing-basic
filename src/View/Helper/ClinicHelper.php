@@ -23,7 +23,7 @@ class ClinicHelper extends Helper
      *
      * @var array
      */
-    protected $helpers = ['Identity', 'Html'];
+    protected $helpers = ['Identity', 'Html', 'Form'];
 
     /**
      * Default configuration.
@@ -1031,5 +1031,118 @@ class ClinicHelper extends Helper
 
         return $badgeString;
 
+    }
+
+    /**
+    * Credential selection
+    * @param string field ID to update (required)
+    * @param array of options
+    *  - list array of credentials to use (optional)
+    *  - sep string seperator between credential links (default |)
+    *  - after string to be placed after the list
+    * @return html and javascript to click and update a field.
+    */
+    public function credSelect($fieldId, $options = []) {
+        $options = array_merge([
+            'list' => [
+                'AuD',
+                'BC-HIS',
+                'CCC-A/SLP',
+                'CCC-A',
+                'FAAA',
+                'HAD',
+                'HIS',
+                'LHIS',
+                'MA',
+                'MD',
+                'MS',
+                'PhD',
+            ],
+            'before' => "<div><small>Click your selection in the list below. If you don't see your credential in the list, type it in.</small></div>",
+            'sep' => ' ',
+            'after' => '',
+        ], (array) $options);
+        $retval = "<nav><div><ul class='pagination pagination-small pagination-sm m0'>";
+        $retval .= $options['before'];
+        $last = end($options['list']); reset($options['list']);
+        foreach ($options['list'] as $cred) {
+            $linkId = $fieldId . '_' . slugify($cred);
+            $retval .= '<li>'.$this->Html->link($cred, '#', ['class' => 'credLink', 'id' => $linkId, 'field' => $fieldId]).'</li>';
+            if($cred != $last){
+                $retval .= $options['sep'];
+            }
+
+        }
+        $retval .= $options['after'] . "</ul></div></nav>";
+        return $retval;
+    }
+
+    /**
+    * Convert to 24h time format.
+    * @param string time as (4:00 PM)
+    */
+    public function convert24hours($time) {
+        if (empty($time)) {
+            return $time;
+        }
+        if (is_array($time)) {
+            if (empty($time['hour'])) {
+                return $time;
+            }
+            $time = date('g:i a', strtotime($time['hour'] . ':' . $time['min'] . ' ' . $time['meridian']));
+        }
+        return trim(date("H:i", strtotime($time)));
+    }
+
+    /**
+    * Take in a json payment object, and create a form of checkboxes
+    */
+    public function paymentForm($paymentJson, $options = []) {
+        $retval = "";
+        if (is_array($paymentJson)) {
+            $paymentArray = $paymentJson;
+        } else {
+            $paymentArray = json_decode($paymentJson, true);
+        }
+        $payments = $this->Locations->payments;
+        $defaultChecked = ['Cash', Configure::read('checkPayment')];
+        foreach ($payments as $keyIndex => $nameIcon) {
+            $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
+            $formOptions = array_merge([
+                'label' => $nameIcon['name'],
+                'type' => 'checkbox',
+                'checked' => $checked,
+                'default' => in_array($nameIcon['name'], $defaultChecked),
+                'div' => 'form-group col-md-6',
+            ], $options);
+            $retval .= $this->Form->input("Payment.$keyIndex", $formOptions);
+        }
+        return $retval;
+    }
+
+    // Display info about a linked location in admin and clinic portal
+    public function linkedLocationInfo($linkedLocationId) {
+        return $this->Locations->linkedLocationInfo($linkedLocationId);
+    }
+
+    /**
+    * Display a coupon preview with select or remove button
+    */
+    public function previewCoupon($couponId, $showSelectBtn=true, $showRemoveBtn=false) {
+        $retval = '<div class="panel panel-light text-center mb5">';
+            $retval .= '<div class="panel-heading">Special Offer</div>';
+                $retval .= '<div class="panel-body">';
+                    $imgSrc = empty($couponId) ? "" : "/img/coupons/coupon-".$couponId.".jpg";
+                    $retval .= '<img class="coupon-image" src='.$imgSrc.'>';
+                $retval .= '</div>';
+                $retval .= '<div class="panel-footer">Please mention this Healthy Hearing coupon when you book your appointment.</div>';
+            $retval .= '</div>';
+        if ($showSelectBtn) {
+            $retval .= '<div class="text-center"><button type="button" class="btn btn-large btn-primary text-center js-coupon-select" data-coupon-id="'.$couponId.'">Select</button></div>';
+        }
+        if ($showRemoveBtn) {
+            $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>';
+        }
+        return $retval;
     }
 }
