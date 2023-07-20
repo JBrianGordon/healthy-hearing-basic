@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 ?>
-<div id="exportModal" class="modal-dialog modal-lg modal fade" style="position:fixed; max-height:100vh">
+<div id="exportModal" class="modal-dialog modal-lg modal fade" style="position:fixed; max-height:100vh; right:0">
   <div class="modal-content">
     <div class="modal-body tac" style="width: 100%">
       <h4>Please choose which fields you would like to appear in your export:</h4>
