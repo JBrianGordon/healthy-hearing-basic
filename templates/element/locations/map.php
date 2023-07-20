@@ -3,8 +3,6 @@ use Cake\Core\Configure;
 
 $width = isset($width) ? $width : '100%';
 $height = isset($height) ? $height : '300px';
-/*** TODO: add setLocation to clinic helper ***/
-//$this->Clinic->setLocation($location);
 $lat = $location->lat;
 $lon = $location->lon;
 $title = $location->title;
@@ -84,7 +82,7 @@ if ($isMobile) {
 				});
 				infoWindow.open(map, marker);
 			}
-		<? endif; ?>
+		<?php endif; ?>
 	</script>
 <?php else: ?>
 	<!-- Dev/QA map -->
