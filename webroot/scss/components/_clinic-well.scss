@@ -32,7 +32,7 @@
 	}
 
 	.address {
-		color: tint($text-color, 20%);
+		color: #555657;
 		min-height: 50px;
 		
 		@media only screen and (max-width: $screen-md-max){
@@ -40,7 +40,7 @@
 		}
 
 		[class*="hh-icon-"] {
-			color: tint($text-color, 75%);
+			color: #cacacb;
 			display: inline-block;
 			margin-top: -7px;
 			vertical-align: middle;
@@ -48,7 +48,7 @@
 	}
 
 	.hours {
-		color: tint($text-color, 20%);
+		color: #555657;
 
 		.glyphicon-time {
 			color: #999;
@@ -70,11 +70,11 @@
 	}
 
 	.reviews {
-		color: tint($text-color, 20%);
+		color: #555657;
 		margin-bottom: 5px;
 		
 		blockquote{
-			color: tint($text-color, 20%);
+			color: #555657;
 		}
 
 		[class*="hh-icon-"] {
@@ -181,6 +181,7 @@
 		.patient-praise {
 			display:none;
 			font-size: 16px;
+			float: none;
 		}
 	}
 }
@@ -366,6 +367,10 @@
 			padding: 10px;
 		}
 	}
+}
+
+.modal-backdrop {
+	display: none;
 }
 
 iframe[title='recaptcha challenge'] {
@@ -601,9 +606,9 @@ iframe[title='recaptcha challenge'] {
 
 .linked-location {
 	.text-caption {
-		color: tint($text-color, 20%);
+		color: #555657;
 		.hh-icon-address {
-			color: tint($text-color, 75%);
+			color: #555657;
 		}
 	}
 }

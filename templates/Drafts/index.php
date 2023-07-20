@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('model_id') ?></th>
+                    <th><?= $this->Paginator->sort('id_model') ?></th>
                     <th><?= $this->Paginator->sort('model') ?></th>
                     <th><?= $this->Paginator->sort('user_id') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
@@ -24,7 +24,7 @@
                 <?php foreach ($drafts as $draft): ?>
                 <tr>
                     <td><?= h($draft->id) ?></td>
-                    <td><?= h($draft->model_id) ?></td>
+                    <td><?= h($draft->id_model) ?></td>
                     <td><?= h($draft->model) ?></td>
                     <td><?= $draft->has('user') ? $this->Html->link($draft->user->id, ['controller' => 'Users', 'action' => 'view', $draft->user->id]) : '' ?></td>
                     <td><?= h($draft->created) ?></td>

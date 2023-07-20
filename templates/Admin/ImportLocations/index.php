@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use App\Model\Entity\Import;
 
 $queryParams = $this->request->getQueryParams();
+$externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 // Advanced search details
 $advancedSearchFields = [];
 $ignoreFields = [];
@@ -203,11 +204,11 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                            <?php if (!empty($importLocation->id_external)): ?>
 								                                <span class="badge bg-yhn"><?php echo $importLocation->id_external; ?></span><br>
 								                            <?php endif; ?>
-								                            <?php if (!empty($importLocation->cqp_practice_id)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_practice_id; ?></span><br>
+								                            <?php if (!empty($importLocation->id_cqp_practice)): ?>
+								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_practice; ?></span><br>
 								                            <?php endif; ?>
-								                            <?php if (!empty($importLocation->cqp_office_id)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->cqp_office_id; ?></span><br>
+								                            <?php if (!empty($importLocation->id_cqp_office)): ?>
+								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_office; ?></span><br>
 								                            <?php endif; ?>
 								                        </td>
 								                        <td class="p5"><?php echo $importLocation->address; ?></td>
@@ -218,7 +219,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                <div class="btn-group-xs btn-group-vertical">
 								                                    <?php echo $this->Html->link(
 								                                        'Not Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
 								                                        ['escape' => false, 'class' => 'btn btn-default'],
 								                                        'Are you sure you want to remove this location from junk?'
 								                                    ); ?>
@@ -229,7 +230,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                    <a href="/admin/imports/location_unlink/<?php echo $importLocation->id; ?>" class="btn btn-default js-unlink bi bi-x-circle"> Unlink</a>
 								                                    <?php echo $this->Html->link(
 								                                        ' Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
 								                                        ['escape' => false, 'class' => 'btn btn-default bi bi-slash-circle'],
 								                                        'Are you sure you want to mark this location as junk?'
 								                                    ); ?>
@@ -244,7 +245,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                    </a>
 								                                    <?php echo $this->Html->link(
 								                                        ' Junk',
-								                                        ['admin' => true, 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
+								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
 								                                        ['escape' => false, 'class' => 'btn btn-default'],
 								                                        'Are you sure you want to mark this location as junk?'
 								                                    ); ?>

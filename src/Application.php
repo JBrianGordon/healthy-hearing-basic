@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Middleware\BeforeLoginMiddleware;
 use App\Middleware\GeoLocSessionMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
@@ -73,6 +74,9 @@ class Application extends BaseApplication
         $this->addPlugin('Search');
         $this->addPlugin('Sitemap', ['routes' => true]);
         $this->addPlugin('Recaptcha');
+
+        // Listener for CakeDC/users plugin Events
+        $this->getEventManager()->on(new \App\Event\UsersListener());
     }
 
     /**
@@ -83,6 +87,21 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrf = new CsrfProtectionMiddleware(['httponly'=>true]);
+        // Token check will be skipped when callback returns `true`.
+        $csrf->skipCheckCallback(function($request) {
+            $controller = $request->getParam('controller');
+            $action = $request->getParam('action');
+            if (is_null($controller) || is_null($action)) {
+                return false;
+            }
+            // TODO: Is it okay to skip CSRF for ajax?
+            // Skip CSRF token check for inlineajax
+            if (($controller=='Utils') && ($action=='inlineajax')) {
+                return true;
+            }
+            return false;
+        });
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -114,11 +133,16 @@ class Application extends BaseApplication
             // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
 
+            // This middleware intercepts the 'login' action and sets the 'loginIp' session variable.
+            // 'loginIp' is used in UsersListener to record clinic login IPs.
+            // It may be redundant to the session variable 'clientIp' set in GeoLocSessionMiddleware,
+            // but it **may** be a good idea to explicitly record the IP at login to ensure we're
+            // capturing it and not one already in the session.
+            ->add(new BeforeLoginMiddleware())
+
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            ->add($csrf);
 
         return $middlewareQueue;
     }

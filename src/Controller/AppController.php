@@ -30,6 +30,11 @@ use Cake\Core\Configure;
  */
 class AppController extends Controller
 {
+    public $pageTitle = 'Healthy Hearing';
+    public $prefetches = [];
+    public $meta = [];
+    public $socialOptions = [];
+
     /**
      * Initialization hook method.
      *
@@ -43,7 +48,8 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        // TO-DO: Figure out if we can get rid of the RequestHandler (on deprecation list)
+        //$this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
         /*
@@ -62,9 +68,11 @@ class AppController extends Controller
         //$this->goneFullSite();
         //$this->removeIndex();
         //$this->isFullSite(); //handle fullsite rendering conditions
-        //$this->isPPC(); // set isPPC session cookie
+        $this->isPPC(); // set isPPC session cookie
         //$this->setLanguage();
         $this->host = env('HTTP_HOST');
+        $this->isMobileDevice = $this->isMobileDevice();
+        $this->set('isMobileDevice', $this->isMobileDevice);
         // special functionality for different RequestHandling
         if (isset($this->RequestHandler)) {
             //if ($this->RequestHandler->isRss() && ($this->request->ext == 'rss')) {
@@ -92,37 +100,139 @@ class AppController extends Controller
         $this->set('siteName', $this->siteName);
 
         // Find a random generic ad with no exclusivity tags
-        //$ad = ClassRegistry::init('Ad')->findGenericAd();
-        //$this->set('ad', $ad);
+        $ad = $this->fetchTable('Advertisements')->findGenericAd();
+        $this->set('ad', $ad);
 
         //$this->Configuration->load('HH');
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
-        //$this->set('user', $this->Auth->user());
-        //$this->set('isadmin', $this->isAdmin());
-        //$this->set('isitadmin', $this->isItAdmin());
-        //$this->set('isagent', $this->isAgent());
-        //$this->set('iscallsupervisor', $this->isCallSupervisor());
-        //$this->set('isclinic', $this->isClinic());
-        //$this->set('iscsa', $this->isCSA());
-        //$this->set('iswriter', $this->isWriter());
-        //$this->set('isreviewer', $this->isReviewer());
-
-        // Create an array of the permissions the user has.
-        //$userPermissions = [];
-        //if ($this->isAdmin()) { $userPermissions[] = 'admin'; }
-        //if ($this->isItAdmin()) { $userPermissions[] = 'itadmin'; }
-        //if ($this->isAgent()) { $userPermissions[] = 'agent'; }
-        //if ($this->isCallSupervisor()) { $userPermissions[] = 'callsupervisor'; }
-        //if ($this->isClinic()) { $userPermissions[] = 'clinic'; }
-        //if ($this->isCSA()) { $userPermissions[] = 'csa'; }
-        //if ($this->isWriter()) { $userPermissions[] = 'writer'; }
-        //$this->set('userPermissions', $userPermissions);
+        $this->user = $this->request->getSession()->read('Auth');
+        $userRole = empty($this->user->role) ? '' : $this->user->role;
+        $this->isAdmin = ($userRole == 'admin');
+        $this->isClinic = ($userRole == 'clinic');
+        $this->isItAdmin = ($userRole == 'it_admin');
+        $this->isAgent = ($userRole == 'agent');
+        $this->isCallSupervisor = ($userRole == 'call_supervisor');
+        $this->isCsa = ($userRole == 'csa');
+        $this->isWriter = ($userRole == 'writer');
+        $this->isReviewer = ($userRole == 'reviewer');
+        $this->adminAccessAllowed = in_array($userRole, ['admin', 'it_admin', 'agent', 'call_supervisor', 'csa', 'writer']);
+        $this->set('user', $this->user);
+        $this->set('isAdmin', $this->isAdmin);
+        $this->set('isClinic', $this->isClinic);
+        $this->set('isItAdmin', $this->isItAdmin);
+        $this->set('isAgent', $this->isAgent);
+        $this->set('isCallSupervisor', $this->isCallSupervisor);
+        $this->set('isCsa', $this->isCsa);
+        $this->set('isWriter', $this->isWriter);
+        $this->set('isReviewer', $this->isReviewer);
+        $this->set('adminAccessAllowed', $this->adminAccessAllowed);
 
         $this->set('show_ad', true);
         //$this->set('isInactiveClinic', $this->isInactiveClinic());
         //$this->set('html_lang', $this->getLanguage());
         //$this->set('isCookieFooterClosed', $this->isCookieFooterClosed());
+        $this->set('clinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, false));
         return parent::beforeFilter($event);
+    }
+
+    /**
+    * convenience method for adding to or replacing the HTML title of the page.
+    * @param string $title_text
+    * @param bool $overwrite (if true, replace)
+    * @param string $title_text
+    */
+    public function add_title($title_text=null,$overwrite=false) {
+        if (is_array($title_text)) {
+            $found_title = pluckValid($title_text,array('headtitle','title_head','title','slug','domain','id',));
+            if (empty($found_title)) {
+                foreach ( $title_text as $m => $data ) {
+                    if (empty($found_title)) {
+                        $found_title = pluckValid($data,array('headtitle','title_head','title','slug','domain','id',));
+                    }
+                }
+            }
+            $title_text = $found_title;
+        }
+        if (!empty($title_text)) {
+            if ($this->pageTitle == 'Healthy Hearing') {
+                $this->pageTitle = ''; //remove the generic Healthy Hearing from all page titles
+            }
+            if (empty($this->pageTitle) || $overwrite) {
+                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text)));
+            } else {
+                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text))).' | '.$this->pageTitle;
+            }
+        }
+        return $title_text;
+    }
+
+    /**
+    * checks if host is the host we're on
+    * www1.healthyhearing.com is false
+    * www.healthyhearing.com is true (in production)
+    */
+    public function isPrimaryHost() {
+        $default_host = Configure::read('host');
+        return $default_host == $this->getHost();
+    }
+
+    /**
+    * Get the current host
+    */
+    public function getHost() {
+        $host = "";
+        foreach (array(/*'SERVER_NAME',*/ 'HTTP_HOST') as $key) {
+            if (isset($_SERVER[$key]) && !empty($_SERVER[$key])) {
+                $host = $_SERVER[$key];
+                break;
+            }
+        }
+        //TODO:
+        if (empty($host) && $this->Session->host) {
+            $host = $this->Session->host;
+        }
+        return $host;
+    }
+
+    /**
+    * Sets the Meta Tag for me.
+    * @param string name of key for meta tag
+    * @param string content of the meta tag
+    * @param boolean overwrite, if already set overwrite it, (default false)
+    */
+    public function setMeta($name, $content, $overwrite = false) {
+        if ($name == 'robots' && !$this->isPrimaryHost()) {
+            return false;
+        }
+        if (isset($this->meta[$name]) && !$overwrite) {
+            return false;
+        }
+        $this->meta[$name] = $content;
+        return true;
+    }
+
+    public function isMobileDevice() {
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]); 
+    }
+
+    /**
+    * Is the source PPC?
+    * @return true if referrer is PPC
+    */
+    public function isPPC() {
+        if (isset($_COOKIE['isPPC'])) {
+            return true;
+        }
+        $gclid = isset($this->request->query['gclid']) ? $this->request->query['gclid'] : '';
+        $utm_source = isset($this->request->query['utm_source']) ? $this->request->query['utm_source'] : '';
+        $utm_medium = isset($this->request->query['utm_medium']) ? $this->request->query['utm_medium'] : '';
+        if (!empty($gclid) ||
+            ($utm_medium == 'cpc') ||
+            ($utm_source == 'adroll')) {
+            setcookie('isPPC', 1, 0, "/", "", true, ""); // expires at end of session
+            return true;
+        }
+        return false;
     }
 }

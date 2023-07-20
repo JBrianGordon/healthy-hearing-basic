@@ -109,11 +109,31 @@ return [
         // admin prefix roles
         [
             'role' => 'admin',
-            'prefix' => 'admin',
+            'prefix' => 'Admin',
             'extension' => '*',
             'plugin' => '*',
             'controller' => '*',
             'action' => '*',
+        ],
+        // clinic-prefixed routes
+        [
+        // Clinics can only access their clinic's info when logged in
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Locations',
+            'action' => 'edit',
+            'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'table' => 'LocationsUsers',
+                'id' => 'location_id',
+                'ownerForeignKey' => 'user_id',
+            ]),
+        ],
+        // Logged in clinics can access Reviews controller pages
+        [
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Reviews',
+            'action' => ['index', 'respond'],
         ],
         //specific actions allowed for the all roles in Users plugin
         [
@@ -138,18 +158,26 @@ return [
         ],
         // Pages - no auth required
         [
+            'prefix' => false,
             'controller' => 'Pages',
             'action' => [
                 'contactUs',
                 'home',
                 'newsletter',
                 'newsletterSuccess',
-                'clinicInfo'
+                'clinicInfo',
             ],
+            'bypassAuth' => true,
+        ],
+        [
+            'prefix' => false,
+            'controller' => 'Locations',
+            'action' => '*',
             'bypassAuth' => true,
         ],
         // Content - no auth required
         [
+            'prefix' => false,
             'controller' => 'Content',
             'action' => ['reportIndex', 'view'],
             'bypassAuth' => true,
@@ -159,6 +187,13 @@ return [
             'prefix' => false,
             'controller' => 'Corps',
             'action' => ['index', 'view'],
+            'bypassAuth' => true,
+        ],
+        // Reviews - no auth required
+        [
+            'prefix' => false,
+            'controller' => 'Reviews',
+            'action' => [],
             'bypassAuth' => true,
         ],
         // Wikis - no auth required

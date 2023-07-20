@@ -7,9 +7,14 @@
   > li {
     line-height: 40px;
     display: inline-block;
+
+    &.breadcrumb-item {
+      &.active {
+        color: #ebebeb;
+      }
+    }
     
-    +li:before {
-	    content: "/ ";
+    +.breadcrumb-item:before {
 	    padding: 0 5px;
 	    color: #ccc;
     }

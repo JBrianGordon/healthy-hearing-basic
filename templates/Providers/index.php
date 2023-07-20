@@ -26,7 +26,7 @@
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th><?= $this->Paginator->sort('phone') ?></th>
-                    <th><?= $this->Paginator->sort('order') ?></th>
+                    <th><?= $this->Paginator->sort('priority') ?></th>
                     <th><?= $this->Paginator->sort('aud_or_his') ?></th>
                     <th><?= $this->Paginator->sort('caqh_number') ?></th>
                     <th><?= $this->Paginator->sort('npi_number') ?></th>
@@ -55,7 +55,7 @@
                     <td><?= h($provider->created) ?></td>
                     <td><?= h($provider->modified) ?></td>
                     <td><?= h($provider->phone) ?></td>
-                    <td><?= $this->Number->format($provider->order) ?></td>
+                    <td><?= $this->Number->format($provider->priority) ?></td>
                     <td><?= h($provider->aud_or_his) ?></td>
                     <td><?= h($provider->caqh_number) ?></td>
                     <td><?= h($provider->npi_number) ?></td>

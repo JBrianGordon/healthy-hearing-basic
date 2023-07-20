@@ -1,17 +1,40 @@
 import '../common/common';
-import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
 import './nav_tabs';
 
-$('#ReviewLocationSearch').autocomplete({
-	source: "/reviewautocomplete",
-	minLength: "2",
-	select: function(event, ui){
-		if(ui.item.id){
-			$('#ReviewLocationId').val(ui.item.id);
-		}
-	}
+const reviewLocationSearch = document.querySelector('#ReviewLocationSearch');
+const reviewLocationId = document.querySelector('#ReviewLocationId');
+const clearClinic = document.querySelector('#ClearClinic');
+
+reviewLocationSearch.addEventListener('input', async () => {
+  const query = reviewLocationSearch.value;
+  if (query.length >= 2) {
+    const response = await fetch('/reviewautocomplete?query=' + query);
+    const data = await response.json();
+    initializeAutocomplete(data);
+  }
 });
-$('#ClearClinic').on('click', function(){
-	$('#ReviewLocationId').val('');
-	return false;
+
+function initializeAutocomplete(data) {
+  new autoComplete({
+    selector: '#ReviewLocationSearch',
+    minChars: 2,
+    cache: false,
+    source: function (term, suggest) {
+      term = term.toLowerCase();
+      const matches = data.filter(function (entry) {
+        return entry.value.toLowerCase().indexOf(term) !== -1;
+      });
+      suggest(matches);
+    },
+    onSelect: function (event, suggestion) {
+      if (suggestion.data.id) {
+        reviewLocationId.value = suggestion.data.id;
+      }
+    }
+  });
+}
+
+clearClinic.addEventListener('click', function (event) {
+  reviewLocationId.value = '';
+  event.preventDefault();
 });

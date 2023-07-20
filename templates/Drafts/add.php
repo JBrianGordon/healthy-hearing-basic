@@ -18,7 +18,7 @@
             <fieldset>
                 <legend><?= __('Add Draft') ?></legend>
                 <?php
-                    echo $this->Form->control('model_id');
+                    echo $this->Form->control('id_model');
                     echo $this->Form->control('model');
                     echo $this->Form->control('user_id', ['options' => $users, 'empty' => true]);
                     echo $this->Form->control('json');

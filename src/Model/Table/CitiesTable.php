@@ -142,4 +142,32 @@ class CitiesTable extends Table
 
         return $rules;
     }
+
+    /**
+    * Find cities by state
+    * @param state abbreviation
+    * @return array of cities.
+    */
+    public function findAllByState($state = null, $ignore_near_location = false) {
+        $order = ['city'=>'ASC'];
+        $retval = $this->find('all', [
+            'conditions' => [
+                'is_near_location' => true,
+                'state LIKE' => $state
+            ],
+            'order' => $order,
+        ])->all();
+
+        if ($ignore_near_location && empty($retval)) {
+            $retval = $this->find('all', [
+                'conditions' => [
+                    'state LIKE' => $state
+                ],
+                'fields' => $fields,
+                'order' => $order
+            ])->all();
+        }
+
+        return $retval;
+    }
 }

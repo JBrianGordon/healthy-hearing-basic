@@ -44,14 +44,8 @@ class ContentTagsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Contents', [
-            'foreignKey' => 'content_id',
-            'joinType' => 'LEFT',
-        ]);
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'LEFT',
-        ]);
+        $this->belongsTo('Content');
+        $this->belongsTo('Tags');
     }
 
     /**

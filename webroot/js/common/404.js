@@ -2,9 +2,9 @@ function insertAfter(el, referenceNode) {
     referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
 }
 
-var mainPanel = document.getElementsByClassName("col-md-12 mt20")[0],
-	sidePanel = document.getElementsByClassName("col-md-3 noprint")[0],
-	sliderPanel = document.getElementById("hh-sticky-panel");
+const mainPanel = document.getElementsByClassName("col-md-12 mt20")[0];
+const sidePanel = document.getElementsByClassName("col-md-3 noprint")[0];
+const sliderPanel = document.getElementById("hh-sticky-panel");
 
 //remove slider panel from 404 pages
 if(sliderPanel) {
