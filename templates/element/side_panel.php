@@ -1,7 +1,14 @@
 <?php use Cake\Core\Configure; ?>
+<!-- *** TODO: Check the side_panel on state pages -->
 <div class="col-lg-3 float-end noprint">
 	<!-- Right content -->
-	<?= (Configure::read('showAds') && $isMobileDevice && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') == 'Locations')): ?>
+		<section class="panel">
+			<a href="/help/online-hearing-test">
+			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
+			</a>
+		</section>
+	<?php endif; ?>
 	<?= $isMobileDevice ? $this->element('locations/preferred') : null ?>
 	<?php if (!empty($wiki)): ?>
 		<section class="panel panel-light help-menu">
@@ -31,6 +38,7 @@
 			<?= $this->element('fac_config_text', ["locationsPage" => false]) ?>
 		</div>
 	</section>
+	<?= isset($stateNice) ? $this->element('learn_more') : null; ?>
 	<?php if (!empty($contents)): ?>
 		<section class="panel panel-light related-reports">
 			<header class="panel-heading text-center">

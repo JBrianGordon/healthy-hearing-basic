@@ -473,13 +473,32 @@ class ClinicHelper extends Helper
     }
 
     /**
+    * Return the link back of a particular locations with the title as the text
+    * @param location
+    * @param boolean full link (default false)
+    * @return HtmlLink
+    */
+    public function link($location = null, $full = false, $options = array()) {
+        if (!is_object($location)) {
+           $location = $this->Locations->get($location);
+        }
+        if ($full) {
+            $url = Router::url($location->hh_url, $full);
+        }   else {
+            $url = $location->hh_url;
+        }
+
+        return $this->Html->link($location->title, $url, $options);
+    }
+
+    /**
     * Display the hours of a clinic
     * @param location (optional)
     * @return mixed
     */
     public function hours($location = null) {
         if (!is_object($location)) {
-            $location = $this->Locations->get($location);
+           $location = $this->Locations->get($location);
         }
         $retval = null;
         if (!empty($location->location_hour)) {
