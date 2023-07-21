@@ -84,7 +84,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
 									                       /*** TODO: Add CKEditor when ready ***/
-								                            echo $this->Form->control('body');
+								                            echo $this->Form->control('body', ['class' => 'editor']);
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');
 								                        ?>

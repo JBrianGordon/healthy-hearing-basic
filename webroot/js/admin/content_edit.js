@@ -1,5 +1,6 @@
 import './admin_common';
 import './nav_tabs';
+import {Editor, EditorWatchdog} from './ckeditor';
 
 const toggleContentShow = (type) => {
 	const fileElement = document.querySelector("#file");
@@ -51,6 +52,12 @@ $(document).ready(function() {
 	    }
 	  }
 	});
+
+Editor
+.create( document.querySelector( '.editor' ) )
+.catch( error => {
+    console.error( error );
+} );
 	/*** TODO: Check if this code still relevant after CKEditor updated (same with datepicker code at bottom): ***
 		if($('#is-active').prop('checked')) {
 			//active is checked, is this a draft???
