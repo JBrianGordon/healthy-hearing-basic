@@ -17,7 +17,7 @@ if ($isMobile) {
 	echo "<p class='".$class."'>We serve within ".$radius." ".$miles." of ".$city.", ".$state."</p>";
 }
 ?>
-<?php if (Configure::read('env') != 'prod'): ?>
+<?php if (Configure::read('env') == 'prod'): ?>
 	<img id="staticMap" <?= (!$this->App->isMobileDevice() && !$hideProvider) ? 'loading="lazy" ' : null ?>width="300" height="192" alt="Clinic location map">
 	<?php
 	// Custom mobile icon is the short URL for https://www.healthyhearing.com/img/mobile-clinic.png
