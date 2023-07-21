@@ -12,6 +12,7 @@ use Cake\Log\Log;
 use Cake\Routing\Router;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
+use Cake\Utility\Hash;
 
 /**
  * Locations Controller
@@ -21,10 +22,10 @@ use Cake\Utility\Inflector;
  */
 class LocationsController extends AppController
 {
-    // public function viewClasses(): array
-    // {
-    //     return [JsonView::class];
-    // }
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
+    }
 
     // Main /hearing-aids FAC page ( previously called states() )
     public function viewFac()
@@ -461,6 +462,8 @@ class LocationsController extends AppController
      */
     public function addReview()
     {
+        $this->viewBuilder()->setLayout('ajax');
+
         $review = $this->Locations->Reviews->newEmptyEntity();
 
         $jsonRequestData = $this->request->getData('reviews');
@@ -470,11 +473,28 @@ class LocationsController extends AppController
 
         $review = $this->Locations->Reviews->patchEntity($review, $jsonRequestData);
 
-        if ($this->Locations->Reviews->save($review)) {
-            return $this->response->withStringBody('Successfully saved!');
+        if ($reviewErrors = $review->getErrors()) {
+            $response = [
+                    'success' => false,
+                    'errors' => Hash::flatten($reviewErrors)
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
         }
 
-        return $this->response->withStringBody('Failure on save!');
+        if ($this->Locations->Reviews->save($review)) {
+            $response = [
+                'success' => true,
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        }
     }
 
     /**

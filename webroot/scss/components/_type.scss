@@ -5,6 +5,7 @@ body {
 	font-size: 16px;
 	line-height: 1.6;
   overflow-x: hidden;
+  background-color: $body-bg;
 }
 body, html {
   @include font($font-family-primary, 'normal', "400");
@@ -109,6 +110,10 @@ a.print-link {
     margin: -4% 0.5em 0 0;
     vertical-align: middle;
   }
+}
+
+.hidden {
+  display: none;
 }
 
 .text-primary {

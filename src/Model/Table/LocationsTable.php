@@ -110,6 +110,10 @@ class LocationsTable extends Table
         $this->hasMany('LocationProviders', [
             'foreignKey' => 'location_id',
         ]);
+        $this->belongsToMany('Providers', [
+            'through' => 'LocationProviders',
+            'sort' => ['Providers.priority' => 'ASC']
+        ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
         ]);
@@ -1752,5 +1756,42 @@ class LocationsTable extends Table
             }
         }
         return $provider;
+    }
+
+    /**
+    * Find unique linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findUniqueLocationLinks($locationId) {
+        $links = $this->findLocationLinks($locationId);
+        $uniqueLinks = [];
+        foreach ($links as $link) {
+            if ($link->location_id == $locationId) {
+                $uniqueLinks[] = $link->id_linked_location;
+            } else {
+                $uniqueLinks[] = $link->location_id;
+            }
+        }
+        $uniqueLinks = array_unique($uniqueLinks);
+        return $uniqueLinks;
+    }
+
+    public function linkedLocationInfo($linkedLocationId) {
+        $location = $this->find('all', [
+            'contain' => [],
+            'fields' => ['id', 'title', 'address', 'address_2', 'city', 'state', 'zip'],
+            'conditions' => [
+                'id' => $linkedLocationId,
+            ]
+        ])->first();
+        if ($location) {
+            $retval = '<strong>'.$location->id.'</strong><br>'.
+                $location->title.'<br>'.
+                $location->address.' '. $location->address_2.'<br>'.
+                $location->city.', '.$location->state.' '.$location->zip;
+        } else {
+            $retval = 'Location '.$linkedLocationId.' not found.';
+        }
+        return $retval;
     }
 }
