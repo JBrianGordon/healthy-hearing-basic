@@ -86,8 +86,9 @@ class LocationsController extends AppController
      */
     public function edit($id = null)
     {
+        $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
         $location = $this->Locations->get($id, [
-            'contain' => [],
+            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
@@ -99,6 +100,7 @@ class LocationsController extends AppController
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
         $this->set(compact('location'));
+        $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
     }
 
     /**

@@ -9,6 +9,7 @@ use Cake\Core\Configure;
 
 $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
+$id = $locaton->id;
 ?>
 <div class="container-fluid site-body fap-cities default">
 	<div class="row">
@@ -192,8 +193,46 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																</div>
 															</div>
 														</div>
-											            <hr class="mt25">
-											            <!-- ***TODO: Add linked locations ***-->
+														<!-- Linked Locations -->
+														<hr class="mt25">
+														<div class="row">
+															<div class="col-md-12">
+																<label class="col col-md-2 control-label">Linked Locations</label><div class="clearfix"></div>
+																<table class="table-striped table-bordered col-md-offset-2 col-md-10">
+																	<?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
+																		<tr id="tr-link-<?php echo $key; ?>">
+																			<td>
+																				<div id="div-link-<?php echo $key; ?>">
+																					<?php echo $this->Clinic->linkedLocationInfo($linkedLocationId); ?>
+																					<span class="help-block text-danger" style="display:none;" id="link-error-<?php echo $key; ?>"></span>
+																				</div>
+																			</td>
+																			<td style="width:100px;" align="center">
+																				<button type="button" class="btn btn-md btn-danger js-link-delete" data-key="<?php echo $key; ?>" data-id="<?php echo $id; ?>" data-link="<?php echo $linkedLocationId; ?>">Delete</button>
+																			</td>
+																		</tr>
+																	<?php endforeach; ?>
+																	<?php $key = count($uniqueLocationLinks); ?>
+																	<tr id="tr-link-<?php echo $key; ?>">
+																		<td>
+																			<div id="div-link-<?php echo $key; ?>">
+																				<?php echo $this->Form->hidden('linked_location_id'); ?>
+																				<input class="form-control linked-location" data-key="<?php echo $key; ?>" data-id="<?php echo $id; ?>" />
+																				<span class="help-block text-danger" style="display:none;" id="link-error-<?php echo $key; ?>"></span>
+																			</div>
+																		</td>
+																		<td style="width:100px;" align="center">
+																			<div id="div-add-delete-<?php echo $key; ?>">
+																			</div>
+																		</td>
+																	</tr>
+																</table>
+																<span class="help-block col-md-offset-2 col-md-10">
+																	<?php if (Configure::read('isTieringEnabled')): ?>These are displayed on Enhanced/Premier profiles only. <?php endif; ?>
+																	Search by typing in clinic name, <?php echo $zipShort; ?>, or <?php echo Configure::read('siteNameAbbr'); ?> ID. Select the correct clinic from the drop-down list.
+																</span>
+															</div>
+														</div>
 													</div>
 												</div>
 												<!-- Details tab -->

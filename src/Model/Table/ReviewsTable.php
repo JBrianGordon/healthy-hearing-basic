@@ -53,6 +53,8 @@ class ReviewsTable extends Table
         5 => '5 (Excellent)',
     );
 
+    public $reviewLimit = 10;
+
     /**
      * Initialize method
      *
