@@ -1,22 +1,24 @@
 import './admin_common';
 
-var importsLocationAdd = {
-	init: function() {
-		var addObj = this;
-		$('#submitBtn').click(function() { addObj.disableSubmit(this); });
-	},
-	disableSubmit: function(btn) {
-		if ($(btn).attr('disabled') == 'disabled') { return false; }
-		$(btn).attr('disabled', 'disabled');
-		$(btn).parents('form').submit();
-		console.log('form submitted.');
+const init = () => {
+	const addObj = this;
+	document.getElementById('submitBtn').addEventListener('click', function() {
+	  addObj.disableSubmit(this);
+	});
+}
+const disableSubmit = btn => {
+	if (btn.disabled) {
+	  return false;
 	}
-};
+	btn.disabled = true;
+	btn.closest('form').submit();
+	console.log('form submitted.');
+}
 
-importsLocationAdd.init();
+init();
 
-//Change title and subtitle labels (US only)
-if($("meta[name='application-name']").attr("content") == "Healthy Hearing"){
-	$("label[for='ImportLocationTitle']").html("Practice Name");
-	$("label[for='ImportLocationSubtitle']").html("Location Name");
+// Change title and subtitle labels (US only)
+if (document.querySelector("meta[name='application-name']").getAttribute("content") === "Healthy Hearing") {
+  document.querySelector("label[for='ImportLocationTitle']").innerHTML = "Practice Name";
+  document.querySelector("label[for='ImportLocationSubtitle']").innerHTML = "Location Name";
 }

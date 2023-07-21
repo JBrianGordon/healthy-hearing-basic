@@ -110,6 +110,10 @@ class LocationsTable extends Table
         $this->hasMany('LocationProviders', [
             'foreignKey' => 'location_id',
         ]);
+        $this->belongsToMany('Providers', [
+            'through' => 'LocationProviders',
+            'sort' => ['Providers.priority' => 'ASC']
+        ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
         ]);
@@ -124,42 +128,45 @@ class LocationsTable extends Table
         ]);
         $this->belongsToMany('Users');
 
+        // Allow us to search for multiple values using '[or]'
+        $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];
+
         // Setup search filter using search manager
         $this->searchManager()
-            ->value('id')
-            ->value('id_oticon')
-            ->value('id_parent')
-            ->value('id_sf')
-            ->value('state')
-            ->value('zip')
-            ->value('phone')
-            ->value('email')
-            ->value('oticon_tier')
-            ->value('yhn_tier')
-            ->value('cqp_tier')
-            ->value('listing_type')
-            ->value('notes')
-            ->value('full_name')
-            ->value('location_segment')
-            ->value('entity_segment')
-            ->value('priority')
-            ->value('id_yhn_location')
-            ->value('id_cqp_practice')
-            ->value('id_cqp_office')
-            ->value('timezone')
-            ->value('optional_message')
-            ->value('average_rating')
-            ->value('reviews_approved')
-            ->value('review_status')
-            ->value('completeness')
-            ->value('last_note_status')
-            ->value('last_import_status')
-            ->value('grace_period_end')
-            ->value('review_needed')
-            ->value('email_status')
-            ->value('phone_status')
-            ->value('address_status')
-            ->value('title_status')
+            ->value('id', $defaultOptions)
+            ->value('id_oticon', $defaultOptions)
+            ->value('id_parent', $defaultOptions)
+            ->value('id_sf', $defaultOptions)
+            ->value('state', $defaultOptions)
+            ->value('zip', $defaultOptions)
+            ->value('phone', $defaultOptions)
+            ->value('email', $defaultOptions)
+            ->value('oticon_tier', $defaultOptions)
+            ->value('yhn_tier', $defaultOptions)
+            ->value('cqp_tier', $defaultOptions)
+            ->value('listing_type', $defaultOptions)
+            ->value('notes', $defaultOptions)
+            ->value('full_name', $defaultOptions)
+            ->value('location_segment', $defaultOptions)
+            ->value('entity_segment', $defaultOptions)
+            ->value('priority', $defaultOptions)
+            ->value('id_yhn_location', $defaultOptions)
+            ->value('id_cqp_practice', $defaultOptions)
+            ->value('id_cqp_office', $defaultOptions)
+            ->value('timezone', $defaultOptions)
+            ->value('optional_message', $defaultOptions)
+            ->value('average_rating', $defaultOptions)
+            ->value('reviews_approved', $defaultOptions)
+            ->value('review_status', $defaultOptions)
+            ->value('completeness', $defaultOptions)
+            ->value('last_note_status', $defaultOptions)
+            ->value('last_import_status', $defaultOptions)
+            ->value('grace_period_end', $defaultOptions)
+            ->value('review_needed', $defaultOptions)
+            ->value('email_status', $defaultOptions)
+            ->value('phone_status', $defaultOptions)
+            ->value('address_status', $defaultOptions)
+            ->value('title_status', $defaultOptions)
             ->boolean('is_mobile')
             ->boolean('is_listing_type_frozen')
             ->boolean('is_ida_verified')
@@ -307,6 +314,29 @@ class LocationsTable extends Table
             ->add('last_edit_by_owner_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end'])]);
+                }
+            ])
+            ->add('has_url', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['has_url']) {
+                        $query->andWhere(['LENGTH(Locations.url) >' => 0]);
+                    } else {
+                        $query->andWhere([
+                            'OR' => [
+                                'Locations.url' => '',
+                                'Locations.url IS NULL'
+                            ]
+                        ]);
+                    }
+                }
+            ])
+            ->add('is_oticon', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['is_oticon']) {
+                        $query->andWhere(['Locations.last_xml IS NOT NULL']);
+                    } else {
+                        $query->andWhere(['Locations.last_xml IS NULL']);
+                    }
                 }
             ])
             ->add('using_logo', 'Search.Callback', [
@@ -1673,16 +1703,16 @@ class LocationsTable extends Table
             }
         }
         $url = str_replace('%20', ' ', $url);
-
-        //Do not redirect to what we already came in on
         if (empty($url)) {
+            // original url
             $url = Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$options['region'],'city'=>$options['city'],'zip'=>$options['zip']]);
         }
-        if ($url == Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$retval['region'],'city'=>$retval['city'],'zip'=>$retval['zip']])) {
-            $retval = array();
-        }
 
-        return empty($retval) ? false : $retval;
+        // Do not redirect to what we already came in on
+        if ($url == Router::url(['prefix'=>false,'plugin'=>false,'controller'=>'locations','action'=>'viewCityZip','region'=>$retval['region'],'city'=>$retval['city'],'zip'=>$retval['zip']])) {
+            return false;
+        }
+        return $retval;
     }
 
     /**
@@ -1726,5 +1756,42 @@ class LocationsTable extends Table
             }
         }
         return $provider;
+    }
+
+    /**
+    * Find unique linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findUniqueLocationLinks($locationId) {
+        $links = $this->findLocationLinks($locationId);
+        $uniqueLinks = [];
+        foreach ($links as $link) {
+            if ($link->location_id == $locationId) {
+                $uniqueLinks[] = $link->id_linked_location;
+            } else {
+                $uniqueLinks[] = $link->location_id;
+            }
+        }
+        $uniqueLinks = array_unique($uniqueLinks);
+        return $uniqueLinks;
+    }
+
+    public function linkedLocationInfo($linkedLocationId) {
+        $location = $this->find('all', [
+            'contain' => [],
+            'fields' => ['id', 'title', 'address', 'address_2', 'city', 'state', 'zip'],
+            'conditions' => [
+                'id' => $linkedLocationId,
+            ]
+        ])->first();
+        if ($location) {
+            $retval = '<strong>'.$location->id.'</strong><br>'.
+                $location->title.'<br>'.
+                $location->address.' '. $location->address_2.'<br>'.
+                $location->city.', '.$location->state.' '.$location->zip;
+        } else {
+            $retval = 'Location '.$linkedLocationId.' not found.';
+        }
+        return $retval;
     }
 }

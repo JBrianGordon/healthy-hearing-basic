@@ -1,66 +1,72 @@
 import './admin_common';
-import './datepicker';
 import './nav_tabs';
 
-let toggleContentShow = type => {
-	$('#file').hide();
-	$('#text').hide();
-	switch(type){
-			case 'flv':
-				$('#file').show();
-				break;
-			default:
-				$('#text').show();
-				break;
-		}
-}
+const toggleContentShow = (type) => {
+	const fileElement = document.querySelector("#file");
+	const textElement = document.querySelector("#text");
+	
+	fileElement.style.display = "none";
+	textElement.style.display = "none";
+	
+	switch (type) {
+		case "flv":
+			fileElement.style.display = "block";
+			break;
+		default:
+			textElement.style.display = "block";
+			break;
+	}
+};
 
 $(document).ready(function() {
-		toggleContentShow($('#ContentType').val());
-		$(document).on('change', '#ContentType', function(){
-				toggleContentShow(this.value);
-		});
+	/*** TODO: uncomment when CKEditor updated: ***
+	toggleContentShow(document.querySelector('#type').value);*/
+	document.addEventListener('change', (event) => {
+	  if (event.target.matches('#type')) {
+	    toggleContentShow(event.target.value);
+	  }
+	});
 
-		$('#ContentCategoryId').trigger("change");
+	document.addEventListener('click', (event) => {
+	  if (event.target.matches('#facebook-image-width-override')) {
+	    if (event.target.checked) {
+	      document.querySelector('#facebook-image-width').removeAttribute('required');
+	      document.querySelector('#facebook-image-width').parentElement.parentElement.classList.remove('required');
+	    } else {
+	      document.querySelector('#facebook-image-width').setAttribute('required', 'required');
+	      document.querySelector('#facebook-image-width').parentElement.parentElement.classList.add('required');
+	    }
+	  } else if (event.target.matches('#ApproveLink')) {
+	    document.querySelector('#facebook-image-width').removeAttribute('required');
+	    document.querySelector('#facebook-image-width').parentElement.parentElement.classList.remove('required');
+	  }
+	});
 
-		$(document).on('click', '#ContentFacebookImageWidthOverride', function(e) {
-			if($('#ContentFacebookImageWidthOverride').prop('checked')) {
-				$('#ContentFacebookImageWidth').removeAttr('required');
-				$('#ContentFacebookImageWidth').parent().parent().removeClass('required');
-			}
-			else {
-				$('#ContentFacebookImageWidth').attr('required', 'required');
-				$('#ContentFacebookImageWidth').parent().parent().addClass('required');
-			}
-		});
-		$(document).on('click', '#ApproveLink', function(e) {
-			$('#ContentFacebookImageWidth').removeAttr('required');
-			$('#ContentFacebookImageWidth').parent().parent().removeClass('required');
-		});
-		$(document).on('change', '#ContentDate', function(e) {
-			$('#ContentLastModified').val($('#ContentDate').val());
-		});
-		$(document).on('change', '#ContentLastModified', function(e) {
-			if($('#ContentDate').val() == '') {
-				$('#ContentDate').val($('#ContentLastModified').val());
-			}
-
-		});
-		if($('#ContentIsActive').prop('checked')) {
+	document.addEventListener('change', (event) => {
+	  if (event.target.matches('#date')) {
+	    document.querySelector('#last-modified').value = document.querySelector('#date').value;
+	  } else if (event.target.matches('#last-modified')) {
+	    if (document.querySelector('#date').value === '') {
+	      document.querySelector('#date').value = document.querySelector('#last-modified').value;
+	    }
+	  }
+	});
+	/*** TODO: Check if this code still relevant after CKEditor updated (same with datepicker code at bottom): ***
+		if($('#is-active').prop('checked')) {
 			//active is checked, is this a draft???
-			if($('#ContentDraftParentId').val() > 0) {
+			if($('#id_draft_parent').val() > 0) {
 				//yep, it's a draft.
 				$("datepicker_future").datepicker({
 					minDate: new Date(Date.now()+24*60*60*1000)
 				});
 			}
 		}
-		$(document).on("change", "#ContentIsActive", function() {
-			if($('#ContentDraftParentId').val() > 0) {
+		$(document).on("change", "#is-active", function() {
+			if($('#id_draft_parent').val() > 0) {
 				$('.datepicker_future').datepicker('option', 'minDate', new Date(Date.now() + 24 * 60 * 60 * 1000));
 			}
-		});
-		
+		});*/
+		/***TODO: rewrite this when CKEditor updated: ***
 		$(document).on("click", ".ck_file_browser", function(event) {
 			CKFinder.setupCKEditor();
 			CKFinder.basePath = '/ckfinder/';	// The path for the installation of CKFinder (default = "/ckfinder/").
@@ -103,7 +109,7 @@ $(document).ready(function() {
 					} );
 				}
 			});
-		});
+		});*/
 		
 		$('.datepicker_future').datepicker({
 			//dateFormat: 'yy-mm-dd',

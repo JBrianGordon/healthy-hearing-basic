@@ -54,6 +54,9 @@ class ProvidersTable extends Table
         $this->hasMany('LocationProviders', [
             'foreignKey' => 'provider_id',
         ]);
+        $this->belongsToMany('Locations', [
+            'through' => 'LocationProviders',
+        ]);
     }
 
     /**

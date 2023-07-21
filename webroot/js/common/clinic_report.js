@@ -1,24 +1,32 @@
 import './common';
 import '../../../node_modules/jquery-ui/ui/widgets/datepicker';
-//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown';
-//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip';
-//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover';
 import '../admin/nav_tabs';
 
 $('[data-toggle=\"popover\"]').popover();
 $('.datepicker').datepicker();
+
 // Click the default tab
-if ($('a[href=\"#callConcierge\"]').data('default') === true) {
-	$('a[href=\"#callConcierge\"]').tab('show');
+const callConciergeTab = document.querySelector('a[href="#callConcierge"]');
+const callTrackingTab = document.querySelector('a[href="#callTracking"]');
+if (callConciergeTab.dataset.default === "true") {
+  callConciergeTab.click();
 } else {
-	$('a[href=\"#callTracking\"]').tab('show');
+  callTrackingTab.click();
 }
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    sessionStorage.setItem('clinicReportActiveTab', $(e.target).attr('href'));
+// Handle tab selection
+const tabElements = document.querySelectorAll('a[data-toggle="tab"]');
+tabElements.forEach(element => {
+  element.addEventListener('shown.bs.tab', e => {
+    sessionStorage.setItem('clinicReportActiveTab', e.target.getAttribute('href'));
+  });
 });
 
-var clinicReportActiveTab = sessionStorage.getItem('clinicReportActiveTab');
+// Show the previously active tab
+const clinicReportActiveTab = sessionStorage.getItem('clinicReportActiveTab');
 if (clinicReportActiveTab) {
-    $('.nav-tabs a[href="' + clinicReportActiveTab + '"]').tab('show');
+  const activeTab = document.querySelector(`.nav-tabs a[href="${clinicReportActiveTab}"]`);
+  if (activeTab) {
+    activeTab.click();
+  }
 }

@@ -188,8 +188,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<div class="row">
 															<div class="col-md-offset-2 col-md-10">
 																<div class="thumbnail">
-																	<!-- *** TODO: uncomment when hideProvider set *** -->
-																	<?= $this->element('locations/map', ['location' => $location/*, 'hideProvider' => $hideProvider*/]); ?>
+																	<?= $this->element('locations/map', ['location' => $location]); ?>
 																</div>
 															</div>
 														</div>
@@ -756,13 +755,13 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																<?php //foreach ($this->request->data['CallSource'] as $callSource): ?>
 																	<tr>
 																		<td>
-																			<?php //echo formatNumber($callSource['phone_number']); ?>
+																			<?php //echo formatPhoneNumber($callSource['phone_number']); ?>
 																		</td>
 																		<td>
-																			<?php //echo formatNumber($callSource['target_number']); ?>
+																			<?php //echo formatPhoneNumber($callSource['target_number']); ?>
 																		</td>
 																		<td>
-																			<?php //echo formatNumber($callSource['clinic_number']); ?>
+																			<?php //echo formatPhoneNumber($callSource['clinic_number']); ?>
 																		</td>
 																		<td>
 																			<?php //echo $callSource['is_active']; ?>

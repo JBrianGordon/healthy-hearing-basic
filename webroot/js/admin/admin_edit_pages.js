@@ -1,7 +1,7 @@
 import './admin_common';
 
-let titleUnlock = document.querySelector('#titleUnlock'),
-	pageTitle = document.querySelector('#PageTitle')
+const titleUnlock = document.querySelector('#titleUnlock');
+const pageTitle = document.querySelector('#PageTitle');
 
 titleUnlock.addEventListener('click', () => {
 	pageTitle.toggleAttribute('disabled');

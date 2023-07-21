@@ -6,13 +6,13 @@ use Cake\Core\Configure;
 	<?php if ($locationsPage): // Locations page ?>
 		<p class="text-large">Need a hearing test but not sure which clinic to choose?</p>
 		<p class="message-800-number" class="text-large mt60 mb20">
-			<span class="telephone">Call <a href=<?php echo "tel:+".$quickPickNumber; ?>><?php echo $quickPickNumber; ?></a></span> to book a hearing test with a clinic near you.
+			<span class="telephone">Call <a href=<?= "tel:+".$quickPickNumber ?>><?= $quickPickNumber ?></a></span> to book a hearing test with a clinic near you.
 		</p>
 	<?php else: ?>
 		<?php if (isFeatureOn('quick_pick')): // Wiki/Content page ?>
 			<p class="question-800-number" class="text-large">Need a hearing test but not sure which clinic to choose?</p>
 			<p class="message-800-number" class="text-large">
-				<span class="telephone">Call <a href=<?php echo "tel:+".$quickPickNumber; ?>><?php echo $quickPickNumber; ?></a></span> for help setting up a hearing test appointment.
+				<span class="telephone">Call <a href=<?= "tel:+".$quickPickNumber ?>><?= $quickPickNumber ?></a></span> for help setting up a hearing test appointment.
 			</p>
 		<?php else: ?>
 			<?php if (Configure::read('showReviewsByCity')): ?>

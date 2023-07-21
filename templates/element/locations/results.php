@@ -40,60 +40,58 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 									<div class="row">
 										<?php if(!empty($location->logo_url) && $isMobileDevice && $location->listing_type == 'Premier'): ?>
 											<h2 class="name mt0 mr10 pull-left">
-												<?php echo $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]); ?> <small><?php echo '(' . $this->Clinic->distance($distance) .')'; ?></small>
+												<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
 											</h2>
 											<div class="logo-container mr10">
-												<img loading="lazy" class="clinic-logo" src="/cloudfiles/clinics/<?php echo $location->logo_url;?>" alt="<?php echo $location->title;?> logo" width="180" height="60">
+												<img loading="lazy" class="clinic-logo" src="/cloudfiles/clinics/<?= $location->logo_url ?>" alt="<?= $location->title ?> logo" width="180" height="60">
 											</div>
 											<div class="clearfix"></div>
 											<div class="col-md-6">
 										<?php else: ?>
 											<div class="col-md-6">
 												<h2 class="name mt0 mr10">
-													<?php echo $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]); ?> <small><?php echo '(' . $this->Clinic->distance($distance) .')'; ?></small>
+													<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
 												</h2>
 										<?php endif; ?>
 											<div class="clearfix"></div>
 											<?php if (!empty($displayOpenClosed)): ?>
-												<div class="hours mb5"><span class="glyphicon glyphicon-time small"></span> <?php echo $displayOpenClosed; ?></div>
+												<div class="hours mb5"><span class="glyphicon glyphicon-time small"></span> <?= $displayOpenClosed ?></div>
 											<?php endif; ?>
-											<?php echo $this->Clinic->addressSchemaHidden($location); ?>
-											<div class="address mb5"><span class="hh-icon-address"></span> <?php echo $this->Clinic->address($location); ?></div>
-											<?php echo $this->Clinic->reviewSchemaHidden($location); ?>
+											<?= $this->Clinic->addressSchemaHidden($location) ?>
+											<div class="address mb5"><span class="hh-icon-address"></span> <?= $this->Clinic->address($location) ?></div>
+											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
 												<div class="reviews">
-													<a href="<?php echo $locationUrl . '#reviews'; ?>" onclick="<?php echo $this->Clinic->zipResultsClickEvent($location); ?>">
-														<?php echo $this->Clinic->basicStarRating($location); ?>
+													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+														<?= $this->Clinic->basicStarRating($location) ?>
 													</a>
 												</div>
 											<?php endif; ?>
 											<?php $linkedLocations = $this->Clinic->linkedLocations($location->id); ?>
 											<?php if (!empty($linkedLocations) && $location->is_iris_plus): ?>
-												<a href="<?php echo $locationUrl . '#linkedLocationAnchor'; ?>" onclick="<?php echo $this->Clinic->zipResultsClickEvent($location); ?>" class="text-link">More locations available</a>
+												<a href="<?= $locationUrl . '#linkedLocationAnchor' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>" class="text-link">More locations available</a>
 											<?php endif; ?>
-											<div class="clinicPhone mb5<?php echo !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?php echo $locationId; ?>">
-												<div class="telephone h2"><span class="glyphicon glyphicon-earphone"></span> <?php echo $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?></div>
+											<div class="clinicPhone mb5<?= !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?= $locationId ?>">
+												<div class="telephone h2"><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
 												<!-- Appointment request -->
 												<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 													<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
-														<a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?php echo $locationId; ?>">
+														<a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>">
 															Request my appointment
 														</a>
 													<?php endif; ?>
 												<?php endif; ?>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 													<div>
-														<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' style="min-width:250px;" data-button="<?php echo $location->id; ?>">Book now!</a>
+														<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' style="min-width:250px;" data-button="<?= $location->id ?>">Book now!</a>
 													</div>
-													<?php echo $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]); ?>
+													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 												<?php endif; ?>
 											</div>
 											<?php if (empty($linkedLocations) || !$location->is_iris_plus): ?>
-												<div class="details mb5"><a href="<?= $locationUrl ?>" onclick="<?php echo $this->Clinic->zipResultsClickEvent($location); ?>" class="text-link">View clinic details</a></div>
+												<div class="details mb5"><a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location); ?>" class="text-link">View clinic details</a></div>
 											<?php endif; ?>
-											<?php if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
-												echo $this->Clinic->getBadges($location);
-											} ?>
+											<?= $location->listing_type == Location::LISTING_TYPE_PREMIER ? $this->Clinic->getBadges($location) : null ?>
 										</div>
 										<div class="col-md-6">
 											<?php
@@ -111,38 +109,34 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 							</div>
 						<?php elseif ($location->listing_type == Location::LISTING_TYPE_BASIC): ?>
 							<div class="col-md-12 gutter-below">
-								<?php if($location->reviews_approved > 0 && $location->reviews_approved <= 10){
-										echo '<div class="well clinic-info t2 reviewed">';
-									} else {
-										echo '<div class="well clinic-info t2">';
-									}
+								<?= ($location->reviews_approved > 0 && $location->reviews_approved <= 10) ? '<div class="well clinic-info t2 reviewed">' : '<div class="well clinic-info t2">'
 								?>
 									<div class="row">
 										<div class="col-md-6">
-											<h3 class="name"><?php echo $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape'=>false]); ?> <small><?php echo '(' . $this->Clinic->distance($distance) .')'; ?></small></h3>
-											<?php echo $this->Clinic->addressSchemaHidden($location); ?>
-											<div class="address visible-sm visible-xs"><span class="hh-icon-address"></span> <?php echo $this->Text->truncate($this->Clinic->address($location), 59); ?></div>
-											<?php echo $this->Clinic->reviewSchemaHidden($location); ?>
+											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
+											<?= $this->Clinic->addressSchemaHidden($location) ?>
+											<div class="address visible-sm visible-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
+											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
 												<div class="reviews">
-													<a href="<?php echo $locationUrl . '#reviews'; ?>" onclick="<?php echo $this->Clinic->zipResultsClickEvent($location); ?>">
-														<?php echo $this->Clinic->basicStarRating($location); ?>
+													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+														<?= $this->Clinic->basicStarRating($location) ?>
 													</a>
 												</div>
 											<?php endif; ?>
-											<div class="clinicPhone" data-id="<?php echo $locationId; ?>">
-												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?php echo $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed); ?></span></div>
+											<div class="clinicPhone" data-id="<?= $locationId ?>">
+												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 											</div>
 											<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 												<div>
-													<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' data-button="<?php echo $location->id; ?>">Book now!</a>
+													<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' data-button="<?= $location->id ?>">Book now!</a>
 												</div>
-												<?php echo $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]); ?>
+												<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 											<?php endif; ?>
 										</div>
 										<div class="col-md-6">
-											<div class="address mt5 hidden-sm hidden-xs"><span class="hh-icon-address"></span> <?php echo $this->Text->truncate($this->Clinic->address($location), 59); ?></div>
-											<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link" onclick="<?php echo $this->Clinic->zipResultsClickEvent($location); ?>">View clinic details</a></div>
+											<div class="address mt5 hidden-sm hidden-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
+											<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">View clinic details</a></div>
 										</div>
 									</div>
 								</div>
@@ -162,11 +156,9 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 					$searchPlaceholder = "Search by city or ".$zipShort;
 				}
 				?>
-				<h3 class="text-center text-primary"><em><?php echo $searchTitle; ?></em></h3>
+				<h3 class="text-center text-primary"><em><?= $searchTitle ?></em></h3>
 				<div class="col-md-offset-3 col-md-6">
-					<?php echo $this->element('locations/search', array(
-						'label' => $searchPlaceholder
-					)); ?>
+					<?= $this->element('locations/search', ['label' => $searchPlaceholder]) ?>
 				</div>
 				<div class="clearfix"></div>
 
