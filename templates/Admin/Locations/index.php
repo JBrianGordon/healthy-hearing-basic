@@ -181,7 +181,7 @@ $groupedFields = [
 								<!-- TODO : Export functionality -->
 						        <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'index'], ['id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
 						        <!-- TODO : Email functionality -->
-						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emails'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emailsCsv', '?' => $queryParams], ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("YHN", '/admin/locations/index?is_show=1&is_active=1&is_yhn=1&yhn_tier=2', ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&oticon_tier=1[or]2[or]3', ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("YHN & Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&is_yhn=1&listing_type=Basic[or]Enhanced[or]Premier', ['class' => 'btn btn-default', 'escape' => false]) ?>
