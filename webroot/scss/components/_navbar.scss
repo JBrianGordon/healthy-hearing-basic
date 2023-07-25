@@ -171,6 +171,21 @@
 					   }
 				   }
 			}
+
+			.login {
+				margin-top: 15px;
+				
+				& > a {
+					font-size: 100%;
+					padding: 0;
+					color: #fff;
+					
+					&:hover {
+						color: #fff;
+						background-color: transparent;
+					}
+				}
+			}
 		 }
 		 
 		.navbar-right {
@@ -229,59 +244,6 @@
   .clinic-portal-logo.CA img {
 	margin-bottom: -25px;
   }
-}
-
-.navbar-upgrade {
-	.navbar-nav {
-		display: block;
-		@media (max-width:768px) {
-			margin: 0;
-		}
-		
-		[data-hh-mega-nav] {
-			@media (min-width:$screen-lg-min) {
-				   max-width: 880px;
-				   position: absolute;
-				   right: calc(50% - 570px);
-			}
-		}
-		
-		li[data-hh-mega-nav-trigger='clinic-menu']{
-			display: block;
-		}
-		
-		.clinic-link {
-			@media (max-width:768px) {
-				display: none;
-			}
-		}
-		
-		.login {
-			margin-top: 15px;
-			
-			& > a {
-				font-size: 100%;
-				padding: 0;
-				color: #fff;
-				
-				&:hover {
-					color: #fff;
-					background-color: transparent;
-				}
-			}
-		}
-		
-		small {
-			clear: both;
-			float: right;
-			line-height: 16px;
-			
-			a {
-				padding: 0;
-				float: none;
-			}
-		}
-	}
 }
 
 .secondary-nav {

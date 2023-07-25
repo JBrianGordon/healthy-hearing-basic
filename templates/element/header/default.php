@@ -50,6 +50,11 @@ $logo = Configure::read('logo');
 								<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 							</li>
 						<?php endif; ?>
+						<?php if(isset($clinicPage) /*&& !$isadmin*/ && !$isClinic) : ?>
+							<li class="login btn btn-light bi bi-box-arrow-in-right mt15">
+								<a href="/clinic/users/login"> Login</a>
+							</li>
+						<?php endif; ?>
 						<?= $this->element('header/admin_panel_link') ?>
 						<?php if ($isClinic): ?>
 							<?= $this->element('header/clinic_panel_link') ?>
