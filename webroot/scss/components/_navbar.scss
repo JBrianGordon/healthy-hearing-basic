@@ -143,7 +143,15 @@
 				   display: block;
 				   
 				   li {
-					float: left;
+						float: left;
+
+						&.clinic-link {
+							margin-top: 22px;
+
+							>a {
+								color: #304369;
+							}
+						}
 				   }
 				   
 				   .dropdown-menu {
