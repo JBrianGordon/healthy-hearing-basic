@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/1.5.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this

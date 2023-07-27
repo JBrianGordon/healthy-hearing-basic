@@ -1,6 +1,6 @@
 import './admin_common';
 import './nav_tabs';
-import {Editor, EditorWatchdog} from './ckeditor';
+import './ckeditor';
 
 const toggleContentShow = (type) => {
 	const fileElement = document.querySelector("#file");
@@ -52,71 +52,6 @@ $(document).ready(function() {
 	    }
 	  }
 	});
-
-Editor
-.create( document.querySelector( '.editor' ) )
-.catch( error => {
-    console.error( error );
-} );
-	/*** TODO: Check if this code still relevant after CKEditor updated (same with datepicker code at bottom): ***
-		if($('#is-active').prop('checked')) {
-			//active is checked, is this a draft???
-			if($('#id_draft_parent').val() > 0) {
-				//yep, it's a draft.
-				$("datepicker_future").datepicker({
-					minDate: new Date(Date.now()+24*60*60*1000)
-				});
-			}
-		}
-		$(document).on("change", "#is-active", function() {
-			if($('#id_draft_parent').val() > 0) {
-				$('.datepicker_future').datepicker('option', 'minDate', new Date(Date.now() + 24 * 60 * 60 * 1000));
-			}
-		});*/
-		/***TODO: rewrite this when CKEditor updated: ***
-		$(document).on("click", ".ck_file_browser", function(event) {
-			CKFinder.setupCKEditor();
-			CKFinder.basePath = '/ckfinder/';	// The path for the installation of CKFinder (default = "/ckfinder/").
-			CKFinder.startupPath = "Images:/";
-			CKFinder.resourceType = "Images";
-			CKFinder.popup({
-				chooseFiles: true,
-				resizeImages: false,
-				onInit: function( finder ) {
-					finder.on( 'files:choose', function( evt ) {
-						var file = evt.data.files.first(),
-							output = document.getElementById('ContentFacebookImage'),
-							span = document.getElementById('facebook_image_span');
-							
-							output.value = file.getUrl();
-							span.innerHTML = file.getUrl();
-							let fileUrl = $("#ContentFacebookImage").val();
-							if(fileUrl != "") {
-								$.ajax({
-									url: "/admin/content/get_image_info",
-									type: "POST",
-									data: {
-										uri: fileUrl
-									},
-									dataType: "json",
-									success: function(data) {
-										if(data.width) {
-											$("#ContentFacebookImageWidth").val(data.width);
-											$("#ContentFacebookImageHeight").val(data.height);
-										}
-										else {
-											alert("Cannot find data for Facebook/Schema image. Please look in the Details tab to update.");
-										}
-									},
-									error: function() {
-										alert("Cannot find data for Facebook/Schema image. Please look in the Details tab to update.");
-									}
-								});
-							}
-					} );
-				}
-			});
-		});*/
 		
 		$('.datepicker_future').datepicker({
 			//dateFormat: 'yy-mm-dd',
