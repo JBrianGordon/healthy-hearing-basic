@@ -69,7 +69,7 @@ import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
 //Importing custom CSS
-import '../../css/ckeditor.css';
+import '../../scss/utilities/ckeditor.css';
 
 class Editor extends ClassicEditor {}
 
