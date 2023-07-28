@@ -5,6 +5,14 @@
   margin-bottom: 30px;
   overflow: hidden;
   background-color: #fff;
+
+  &.panel-primary {
+  	.panel-heading {
+	    color: #fff;
+	    background-color: $brand-primary;
+	    border-color: $brand-primary;
+  	}
+  }
   
   &#adPanel {
 	  background:transparent;
@@ -82,6 +90,12 @@
 		  }
 	  }
   }
+
+  &.related-reports {
+  	td {
+  		padding: 12px 24px;
+  	}
+  }
   
 
 	.hidden {
@@ -119,6 +133,14 @@
 		  border-bottom: dotted 1px #fff;
 	  }
   }
+}
+
+.panel-default {
+	.panel-heading {
+		color: #515254;
+	    background-color: #eee;
+	    border-color: transparent;
+	}
 }
 
     .panel-disabled {
@@ -238,7 +260,7 @@
 			
 			@media only screen and (max-width:736px) {
 				.table>thead>tr>th, .table>thead>tr>td, .table>tbody>tr>th, .table>tbody>tr>td, .table>tfoot>tr>th, .table>tfoot>tr>td {
-			    		padding: 12px 2px;
+			    padding: 12px 2px;
 					font-size:9px;
 				}
 				.table[summary='Explanations of style acronyms']>tbody>tr>td {
@@ -281,6 +303,15 @@
 		}
 		
 		.pagination {
+
+			@media(max-width: $screen-xs-max) {
+				display: inline-block;
+
+				> li {
+					float:left;
+				}
+			}
+
 			> li {
 				> a {
 					padding: 6px 12px;
@@ -536,23 +567,6 @@
       border-top: solid 1px darken($white, 8%);
     }
     
-    #exportModal {
-	    overflow-y: scroll;
-	    text-transform: capitalize;
-	    
-	    #admin_search {
-		    display: block;
-		    
-		    .control-group {
-			    display: none;
-		    }
-	    }
-	    
-	    .border-right {
-		    border-right: 1px solid #000;
-	    }
-    }
-    
     #newUserModal {
 	    position:fixed;
 	    max-height:100vh;
@@ -666,6 +680,10 @@
 				}
 			}
 		}
+		&.help {
+			padding-left: 0;
+			padding-right: 7.5px;
+		}
 	}
 }
 
@@ -744,7 +762,7 @@
 			padding: 10px 0;
 			
 			@media only screen and (max-width: $screen-sm-max) {
-				width: 310px;
+				width: 100%;
 			}
 
 			.quick-links {

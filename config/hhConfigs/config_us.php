@@ -73,6 +73,10 @@ return [
     'isTieringEnabled' => true,
     'isYhnAutoMatched' => false,
     'importTag' => 'YHN',
+	// Google Maps API
+	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
+	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',
+	'googleMapsWebServicesApiKey' => 'AIzaSyDwFnCP8X_TM8j4rlRZohfW2-D9bG_-Ryg',
     // Misc
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',
@@ -88,7 +92,7 @@ return [
     // Location CSV export fields and non-US overrides
     'locationExportFields' => [
         'id',
-        'oticon_id',
+        'id_oticon',
         'title',
         'address',
         'address_2',
@@ -123,7 +127,7 @@ return [
         'LocationUser.lastlogin',
         'location_segment',
         'entity_segment',
-        'yhn_location_id',
+        'id_yhn_location',
         'is_yhn',
         'is_oticon',
         'is_retail',
@@ -188,5 +192,12 @@ return [
         'WI' => 'Wisconsin',
         'WV' => 'West Virginia',
         'WY' => 'Wyoming',
+    ],
+    'regions' => [
+        'Northeast' => array('MA', 'RI', 'CT', 'ME', 'NH', 'VT'),
+        'MidAtlantic' => array('WV', 'PA', 'NJ', 'NY'),
+        'Southeast' => array('TX', 'LA', 'MS', 'TN', 'AL', 'KY', 'NC', 'SC', 'FL', 'GA', 'MD', 'DE', 'VA', 'VI', 'PR', 'DC'),
+        'Midwest' => array('NE', 'IA', 'OK', 'MO', 'MI', 'OH', 'IL', 'WI', 'MN', 'ND', 'SD', 'AR', 'KS', 'NE'),
+        'West' => array('AK', 'WA', 'ID', 'UT', 'NV', 'WY', 'CO', 'NM', 'MT', 'OR', 'CA', 'AZ', 'HI'),
     ],
 ];

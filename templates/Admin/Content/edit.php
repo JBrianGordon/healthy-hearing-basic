@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/1.5.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -88,7 +89,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
 									                       /*** TODO: Add CKEditor when ready ***/
-								                            echo $this->Form->control('body');
+								                            echo $this->Form->control('body', ['label' => '', 'class' => 'editor', 'required' => false]);
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');
 								                        ?>

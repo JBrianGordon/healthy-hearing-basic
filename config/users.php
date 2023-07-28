@@ -201,7 +201,7 @@ $config = [
                 ],
                 'resolver' => [
                     'className' => 'Authentication.Orm',
-                    'finder' => 'active',
+                    'finder' => ['active', 'auth'],
                 ],
             ],
             'Social' => [

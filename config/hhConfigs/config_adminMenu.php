@@ -41,7 +41,7 @@ if (Configure::read('showReports')) {
 }
 $editorialItems['Misc. pages'] = [
     'url' => '/admin/pages',
-    'icon' => 'bi bi-book',
+    'icon' => 'bi bi-book-fill',
 ];
 $editorialItems['Tags'] = [
     'url' => '/admin/tags',
@@ -73,7 +73,7 @@ if (Configure::read('isCallTrackingEnabled')) {
 }
 $locationsItems['Clinic portal'] = [
     'url' => '/clinic/login',
-    'icon' => 'bi bi-person-workspace',
+    'icon' => 'bi bi-box-arrow-in-right',
 ];
 $locationsItems['Clinic users'] = [
     'url' => '/admin/location-users',
@@ -221,7 +221,7 @@ if (Configure::read('showImageSitemap')) {
     ];
 }
 $seoToolsMenu = [
-    'icon' => 'bi bi-briefcase',
+    'icon' => 'bi bi-briefcase-fill',
     'items' => $seoItems,
 ];
 
@@ -414,6 +414,7 @@ $metricsRequestForm = [
 return [
     'adminMenu' => [
         'Admin' => [
+            'permissions' => ['admin', 'it_admin'],
             'Editorial' => $editorialMenu,
             'Locations - FAC' => $locationsMenu,
             'Imports' => $importsMenu,
@@ -424,24 +425,29 @@ return [
             'Utilities' => $utilitiesMenu,
         ],
         'IT Admin' => [
+            'permissions' => ['it_admin'],
             'IT - Utilities' => $itUtilitiesMenu,
             'IT - Call Concierge' => $itConciergeLegacyMenu,
         ],
         'Writer' => [
+            'permissions' => ['writer', 'it_admin', 'admin'],
             'Editorial' => $writerEditorialMenu,
         ],
         'Customer Support Assistant' => [
+            'permissions' => ['csa', 'it_admin', 'admin'],
             'Locations - FAC' => $csaLocationsMenu,
             'Imports' => $csaImportsMenu,
             'Reviews' => $csaReviewsMenu,
         ],
         'Call Concierge Agent' => [
+            'permissions' => ['agent', 'call_supervisor', 'it_admin', 'admin'],
             'Outbound Calls' => $outboundCalls,
             'Add Inbound Call' => $addInboundCall,
             'Return Call From Clinic' => $returnCallFromClinic,
             'Activation Dashboard' => $activationDashboard,
         ],
         'Call Concierge Supervisor' => [
+            'permissions' => ['call_supervisor', 'it_admin', 'admin'],
             'Browse Call Groups' => $browseCallGroups,
             'Browse Calls' => $browseCalls,
             'Metrics (Calls)' => $callMetrics,

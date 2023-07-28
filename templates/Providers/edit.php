@@ -35,7 +35,7 @@
                     echo $this->Form->control('image_url');
                     echo $this->Form->control('is_active');
                     echo $this->Form->control('phone');
-                    echo $this->Form->control('order');
+                    echo $this->Form->control('priority');
                     echo $this->Form->control('aud_or_his');
                     echo $this->Form->control('caqh_number');
                     echo $this->Form->control('npi_number');

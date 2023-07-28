@@ -18,7 +18,7 @@
 }
 
 .btn-light {
-  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+  @include button-variant($btn-light-bg, $btn-light-border, $btn-light-color);
 }
 
 .btn-neutral {

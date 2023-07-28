@@ -94,4 +94,33 @@ class SeoMetaTagsTable extends Table
 
         return $rules;
     }
+
+    /**
+    * Find all the tags by a specific request,
+    * This takes in a request URI and finds all matching meta_tags for this URI
+    * @param incoming request URI
+    * @return array of results
+    */
+    function findAllTagsByUri($request = null){
+        $retval = $this->find('all', [
+            'conditions' => [
+                'SeoUris.uri' => $request,
+                'SeoUris.is_approved' => true
+            ],
+            'contain' => ['SeoUris']
+        ])->all();
+        if ($retval->count()) {
+            return $retval;
+        }
+        $uri_ids = $this->SeoUris->findRegexUri($request);
+        if (empty($uri_ids)) {
+            return [];
+        }
+        $retval = $this->find('all', [
+            'conditions' => [
+                'seo_uri_id IN' => $uri_ids
+            ]
+        ])->all();
+        return $retval;
+    }
 }

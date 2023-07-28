@@ -5,32 +5,41 @@
  */
  
 $this->Html->script('dist/common.min', ['block' => true]);
+$this->Breadcrumbs->add([
+    ['title' => 'Home', 'url' => '/'],
+    ['title' => 'Hearing aid and cochlear implant companies', 'url' => ''],
+]);
 ?>
 <div class="container-fluid site-body blog">
     <div class="backdrop backdrop-gradient backdrop-height"></div>
     <div class="container">
+    	<div class="row noprint">
+			<header class="col-md-12 inverse">
+				<?= $this->Breadcrumbs->render() ?>
+				<div id="ellipses">...</div>
+			</header>
+		</div>
       <div class="row page-content">
-		<div class="col-md-9 float-start">
+		<div class="col-lg-9 float-start">
 		  <section class="panel">
 		    <div class="panel-body">
 		      <div class="panel-section expanded">
 		        <h1 class="text-primary">Hearing aid manufacturers</h1>
-		        <!-- ***TODO: uncomment when $pageContent created*** -->
-				<p><?php //echo $pageContent; ?></p>
+				<p><?php echo $pageContent; ?></p>
 		        <?php foreach ($corps as $corp): ?>
 			        <div class="well manufacturer" id="manufacturer-<?= $corp->id ?>">
 			          <div class="row">
-			            <div class="col-md-3 gutter-below">
+			            <div class="col-lg-3 gutter-below">
 				            <div class="logo-container">
 			            		<img src="<?= $corp->thumb_url ?>" loading="lazy" alt="<?= $corp->title ?>" class="img-responsive align-center" width="150px">
 				            </div>
 			            </div>
-			            <div class="col-md-9">
+			            <div class="col-lg-9">
 			              <p>
 			                <?= $corp->short ?>
 			              </p>
 			              <p>
-			              	<a href="hearing-aid-manufacturers/<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
+			              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
 			              </p>
 			            </div>
 			          </div>

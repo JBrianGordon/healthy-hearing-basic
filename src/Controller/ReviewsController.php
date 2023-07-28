@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewOrigin;
+
 /**
  * Reviews Controller
  *
@@ -25,27 +28,5 @@ class ReviewsController extends AppController
         ]);
 
         $this->set(compact('review'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    //TODO: THIS WILL BE AN AJAX FUNCTION TO ADD A NEW REVIEW FROM FRONT END
-    public function add()
-    {
-        $review = $this->Reviews->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $review = $this->Reviews->patchEntity($review, $this->request->getData());
-            if ($this->Reviews->save($review)) {
-                $this->Flash->success(__('The review has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The review could not be saved. Please, try again.'));
-        }
-        $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('review', 'locations'));
     }
 }

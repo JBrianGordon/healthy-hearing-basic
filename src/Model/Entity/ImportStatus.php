@@ -23,6 +23,18 @@ use Cake\ORM\Entity;
 class ImportStatus extends Entity
 {
     /**
+    * Enum - Status options for import
+    */
+    const IMPORT_STATUS_NO_CHANGE = 0;
+    const IMPORT_STATUS_NEW_LOCATION = 1;
+    const IMPORT_STATUS_TIER_CHANGED = 2;
+    static $statuses = [
+        self::IMPORT_STATUS_NO_CHANGE => 'No Change',
+        self::IMPORT_STATUS_NEW_LOCATION => 'New Location',
+        self::IMPORT_STATUS_TIER_CHANGED => 'Tier Changed',
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

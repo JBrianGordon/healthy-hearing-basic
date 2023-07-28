@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-md-2">
 				<ul class="no-bullets">
-					<li><a href="<?php //***TODO: uncomment when Clinic model is built*** echo $this->Clinic->nearMeLink();?>" class="text-link action-link">Find a clinic near me</a></li>
+					<li><a href="<?= $this->Clinic->nearMeLink() ?>" class="text-link action-link">Find a clinic near me</a></li>
 					<li><a href="/help/hearing-loss" class="text-link">Hearing loss help</a></li>
 					<li><a href="/help/hearing-aids" class="text-link">Hearing aids help</a></li>
 					<?php if (Configure::read('showManufacturers')): ?>

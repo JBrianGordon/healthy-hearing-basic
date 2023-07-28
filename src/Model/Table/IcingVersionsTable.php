@@ -48,10 +48,6 @@ class IcingVersionsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Models', [
-            'foreignKey' => 'model_id',
-            'joinType' => 'LEFT',
-        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
@@ -75,6 +71,11 @@ class IcingVersionsTable extends Table
             ->maxLength('model', 255)
             ->requirePresence('model', 'create')
             ->notEmptyString('model');
+
+        $validator
+            ->scalar('id_model')
+            ->maxLength('id_model', 50)
+            ->allowEmptyString('id_model');
 
         $validator
             ->scalar('json')
@@ -106,7 +107,6 @@ class IcingVersionsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('model_id', 'Models'), ['errorField' => 'model_id']);
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;

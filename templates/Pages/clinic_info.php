@@ -15,7 +15,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 						<div class="panel-body clinicLayout">
 							<div class="panel-section expanded">
 								<h1 class="tac">Information for clinics</h1>
-								<div class="col-md-12"><?php echo $clinicPage; ?></div>
+								<div class="col-md-12"><?= $clinicPage ?></div>
 								<?php if(Configure::read('isCallAssistEnabled')) : ?>
 									<div id="upgradeBlock">
 										<div class="col-md-4 mt20 upgrade-panel show-plan" id="basicProfile">
@@ -29,7 +29,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 														<div class="tac">
 															<h2 class="annual-plan"><small style="color:#2b2c2d">Free to eligible clinics</small></h2>
 														</div>
-														<?php echo $basicFeatures; ?>
+														<?= $basicFeatures ?>
 													</div>
 												</div>
 											</div>
@@ -43,9 +43,9 @@ $this->Html->script('dist/common.min', ['block' => true]);
 												<div class="panel-body">
 													<div class="col-md-12">
 														<div class="tac">
-															<h2 class="annual-plan">$<?php echo $monthly_enhanced; ?><small>/month</small></h2>
+															<h2 class="annual-plan">$<?= $monthly_enhanced ?><small>/month</small></h2>
 														</div>
-														<?php echo $enhancedFeatures; ?>
+														<?= $enhancedFeatures ?>
 														<a href="https://app.smartsheet.com/b/form/133c44392f0849a68e16efc7bf8ce30f" class="btn btn-secondary btn-sm mt10 mb20 upgrade-button" rel="noopener noreferrer" target="_blank">Purchase Enhanced</a>
 													</div>
 												</div>
@@ -60,9 +60,9 @@ $this->Html->script('dist/common.min', ['block' => true]);
 												<div class="panel-body">
 													<div class="col-md-12">
 														<div class="tac">
-															<h2 class="annual-plan">$<?php echo $monthly_premier; ?><small>/month</small></h2>
+															<h2 class="annual-plan">$<?= $monthly_premier ?><small>/month</small></h2>
 														</div>
-														<?php echo $premierFeatures; ?>
+														<?= $premierFeatures ?>
 														<a href="https://app.smartsheet.com/b/form/cfe81cc0d51e4cde89169341264ff241" class="btn btn-secondary btn-sm mt10 mb20 upgrade-button" rel="noopener noreferrer" target="_blank">Purchase Premier</a>
 													</div>
 												</div>

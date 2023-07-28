@@ -2,6 +2,16 @@
 	background: $white;
 	padding: 40px inherit;
 	position: relative;
+	max-width: 100%;
+	left:15px;
+
+	&.row {
+		@media (max-width: $screen-xs-max){
+			margin: 0;
+			width: 100%;
+			left:0;
+		}
+	}
 
 	a {
 		color: $brand-primary;
@@ -23,9 +33,14 @@
 			border: none;
 		}
 	}
+	
+	.row {
+		max-width: 100vw;
+	}
 
 	.footer-row {
 		text-align: center;
+		max-width: 100vw;
 		
 		@media only screen and (min-width: $screen-sm-min) {
 			background: url('../img/hh-symbol.svg') top left no-repeat;
@@ -168,6 +183,8 @@
 .site-colophon {
 	background: $body-bg;
 	position: relative;
+	max-width: 100%;
+	left: 15px;
 }
 
 #footerContainer {

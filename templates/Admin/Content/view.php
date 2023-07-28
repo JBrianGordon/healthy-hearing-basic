@@ -230,7 +230,7 @@
                             <td><?= h($users->created) ?></td>
                             <td><?= h($users->modified) ?></td>
                             <td><?= h($users->modified_by) ?></td>
-                            <td><?= h($users->lastlogin) ?></td>
+                            <td><?= h($users->last_login) ?></td>
                             <td><?= h($users->active) ?></td>
                             <td><?= h($users->is_hardened_password) ?></td>
                             <td><?= h($users->is_admin) ?></td>
@@ -487,7 +487,7 @@
                             <td><?= h($locations->is_bypassed) ?></td>
                             <td><?= h($locations->is_call_assist) ?></td>
                             <td><?= h($locations->timezone) ?></td>
-                            <td><?= h($locations->covid19_statement) ?></td>
+                            <td><?= h($locations->optional_message) ?></td>
                             <td><?= h($locations->is_service_agreement_signed) ?></td>
                             <td><?= h($locations->is_junk) ?></td>
                             <td><?= h($locations->id_coupon) ?></td>

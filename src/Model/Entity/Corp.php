@@ -107,6 +107,8 @@ class Corp extends Entity
             'controller' => 'Corps',
             'action' => 'view',
             'slug' => $this->slug,
+            'plugin' => false,
+            'prefix' => false,
         ];
     }
 }

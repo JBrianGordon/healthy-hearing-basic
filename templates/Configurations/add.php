@@ -19,7 +19,7 @@
                 <?php
                     echo $this->Form->control('name');
                     echo $this->Form->control('value');
-                    echo $this->Form->control('order');
+                    echo $this->Form->control('priority');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

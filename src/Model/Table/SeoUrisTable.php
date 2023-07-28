@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Cache\Cache;
 
 /**
  * SeoUris Model
@@ -105,5 +106,66 @@ class SeoUrisTable extends Table
         $rules->add($rules->isUnique(['uri'], ['allowMultipleNulls' => true]), ['errorField' => 'uri']);
 
         return $rules;
+    }
+
+    /**
+    * This is a simple function to return all possible RegEx URIs from the DB
+    * (it has to return all of them, since we can't know which it's going to match)
+    * So we've wrapped the DB request in a simple cache request,
+    *   configured by setting the config key cacheEngine
+    *
+    * @return array $uris array(id => uri)
+    */
+    public function findAllRegexUris() {
+        $cacheEngine = false; /* TODO: SeoUtil::getConfig('cacheEngine'); */
+        if (!empty($cacheEngine)) {
+            $cacheKey = 'seo_findallregexuris';
+            $uris = Cache::read($cacheKey, $cacheEngine);
+        }
+        if (!isset($uris) || empty($uris)) {
+            $uris = $this->find('all', [
+                'conditions' => [
+                    'OR' => [
+                        ['uri LIKE' => '#%'],
+                        ['uri LIKE' => '%*'],
+                    ],
+                    'is_approved' => true
+                ],
+            ])->all();
+            if (!empty($uris) && !empty($cacheEngine)) {
+                Cache::write($cacheKey, $uris, $cacheEngine);
+            }
+        }
+        return $uris;
+    }
+
+    /**
+     * Checks an input $request against regex urls
+     *
+     * @param string $request
+     * @return array $uri_ids array(id)
+     */
+    public function findRegexUri($request = null) {
+        $uri_ids = [];
+        $uris = $this->findAllRegexUris();
+        foreach ($uris as $uri) {
+            //Wildcard match
+            if (strpos($request, str_replace('*','', $uri->uri)) !== false) {
+                $uri_ids[] = $uri->id;
+            } elseif ($this->isRegex($uri->uri) && preg_match($uri->uri, $request)) {
+                //Regex match
+                $uri_ids[] = $uri->id;
+            }
+        }
+        return $uri_ids;
+    }
+
+    /**
+    * Return if the incoming URI is a regular expression
+    * @param string
+    * @return boolean if is regular expression (as two # marks)
+    */
+    static function isRegEx($uri){
+        return preg_match('/^#(.*)#(.*)/', $uri);
     }
 }

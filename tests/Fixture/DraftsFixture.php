@@ -20,7 +20,7 @@ class DraftsFixture extends TestFixture
         $this->records = [
             [
                 'id' => '60bcd461-1b9f-4fae-bf2f-89155afe3338',
-                'model_id' => 'Lorem ipsum dolor sit amet',
+                'id_model' => 'Lorem ipsum dolor sit amet',
                 'model' => 'Lorem ipsum dolor sit amet',
                 'user_id' => 'Lorem ipsum dolor sit am',
                 'created' => '2021-12-10 21:24:01',
