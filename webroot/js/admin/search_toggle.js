@@ -51,17 +51,21 @@ if (document.querySelector("#advanced_search_toggle")) {
 const exportBtn = document.getElementById("exportBtn");
 const exportModal = document.getElementById("exportModal");
 
-exportBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  exportModal.style.display = "block";
-  exportModal.classList.add("show", "in");
-});
+if(exportBtn !=== null){
+	exportBtn.addEventListener("click", (e) => {
+	  e.preventDefault();
+	  exportModal.style.display = "block";
+	  exportModal.classList.add("show", "in");
+	});
+}
 
-const exportClose = document.getElementById("exportClose");
-exportClose.addEventListener("click", () => {
-  exportModal.style.display = "none";
-  exportModal.classList.remove("show", "in");
-});
+if(exportClose !== null){
+	const exportClose = document.getElementById("exportClose");
+	exportClose.addEventListener("click", () => {
+	  exportModal.style.display = "none";
+	  exportModal.classList.remove("show", "in");
+	});
+}
 
 // Toggle values for switches
 const formControls = document.querySelectorAll("#exportModal .form-control");
