@@ -51,7 +51,7 @@ if (document.querySelector("#advanced_search_toggle")) {
 const exportBtn = document.getElementById("exportBtn");
 const exportModal = document.getElementById("exportModal");
 
-if(exportBtn !=== null){
+if(exportBtn !== null){
 	exportBtn.addEventListener("click", (e) => {
 	  e.preventDefault();
 	  exportModal.style.display = "block";
