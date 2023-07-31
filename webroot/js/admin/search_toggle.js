@@ -59,8 +59,8 @@ if(exportBtn !== null){
 	});
 }
 
+const exportClose = document.getElementById("exportClose");
 if(exportClose !== null){
-	const exportClose = document.getElementById("exportClose");
 	exportClose.addEventListener("click", () => {
 	  exportModal.style.display = "none";
 	  exportModal.classList.remove("show", "in");
@@ -81,41 +81,45 @@ formControls.forEach((control) => {
 
 // Toggle classes and values for all switches, based on #allFieldsInput active class
 const allFieldsInput = document.getElementById("allFieldsInput");
-allFieldsInput.addEventListener("click", () => {
-  setTimeout(() => {
-    const exportLabelInputs = document.querySelectorAll(".export-label input");
-    if (allFieldsInput.classList.contains("switch-positive")) {
-      exportLabelInputs.forEach((input) => {
-        input.classList.remove("switch-negative");
-        input.classList.add("switch-positive");
-        input.value = "1";
-      });
-    } else if (allFieldsInput.classList.contains("switch-negative")) {
-      exportLabelInputs.forEach((input) => {
-        input.classList.remove("switch-positive");
-        input.classList.add("switch-negative");
-        input.value = "0";
-      });
-    }
-  }, 200);
-});
+if(allFieldsInput !== null){
+	allFieldsInput.addEventListener("click", () => {
+	  setTimeout(() => {
+	    const exportLabelInputs = document.querySelectorAll(".export-label input");
+	    if (allFieldsInput.classList.contains("switch-positive")) {
+	      exportLabelInputs.forEach((input) => {
+	        input.classList.remove("switch-negative");
+	        input.classList.add("switch-positive");
+	        input.value = "1";
+	      });
+	    } else if (allFieldsInput.classList.contains("switch-negative")) {
+	      exportLabelInputs.forEach((input) => {
+	        input.classList.remove("switch-positive");
+	        input.classList.add("switch-negative");
+	        input.value = "0";
+	      });
+	    }
+	  }, 200);
+	});
+}
 
 // Handle export submit
 const exportSubmit = document.getElementById("exportSubmit");
-exportSubmit.addEventListener("click", () => {
-  const searchAndExcludedFieldArray = exportBtn.getAttribute("href").split("/admin/locations/crm").pop();
-  
-  let params = "";
-  const formControlElements = document.querySelectorAll("#exportModal .form-control");
-  formControlElements.forEach((element) => {
-    if (element.value === "0") {
-      const excludedFieldName = element.name;
-      params += `/field%5B${excludedFieldName}%5D:${excludedFieldName}`;
-    }
-  });
-  
-  window.location.pathname = `admin/locations/export${searchAndExcludedFieldArray}${params}.csv`;
-});
+if(exportSubmit !== null){
+	exportSubmit.addEventListener("click", () => {
+	  const searchAndExcludedFieldArray = exportBtn.getAttribute("href").split("/admin/locations/crm").pop();
+	  
+	  let params = "";
+	  const formControlElements = document.querySelectorAll("#exportModal .form-control");
+	  formControlElements.forEach((element) => {
+	    if (element.value === "0") {
+	      const excludedFieldName = element.name;
+	      params += `/field%5B${excludedFieldName}%5D:${excludedFieldName}`;
+	    }
+	  });
+	  
+	  window.location.pathname = `admin/locations/export${searchAndExcludedFieldArray}${params}.csv`;
+	});
+}
 
 // Reorganize search options and change booleans into a toggle
 if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
