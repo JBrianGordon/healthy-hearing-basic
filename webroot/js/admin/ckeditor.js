@@ -218,7 +218,7 @@ Editor.create(document.querySelector(".editor"), {
     },
     placeholder: 'Welcome to CKEditor 5 + CKBox!',
     ckbox: {
-        tokenUrl: 'https://14278.cke-cs.com/token/dev/79QEOd4qhNDt5bIrwH8pk45oiAKR6gzuYU0W?limit=10'
+        tokenUrl: "https://14278.cke-cs.com/token/dev/79QEOd4qhNDt5bIrwH8pk45oiAKR6gzuYU0W?limit=10"
     }
 	}).catch( error => {
 	    console.error( error );

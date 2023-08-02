@@ -1,4 +1,4 @@
-<script src="https://cdn.ckbox.io/CKBox/1.5.0/ckbox.js"></script>
+<script src="https://cdn.ckbox.io/CKBox/1.6.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -49,11 +49,11 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    echo $this->Form->hidden('id_draft_parent');
 								                    echo $this->Form->control('title');
 								                    echo $this->Form->control('subtitle');
-								                    echo $this->Form->control('date', ['empty' => true]);
-								                    echo $this->Form->control('last_modified', ['empty' => true]);
+								                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
+								                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true]);
 								                    echo $this->Form->control('type');
+								                    /*** TODO: primary author needs to be a dropdown with all possible authors as options: ***/
 								                    echo $this->Form->control('primary_author');
-								                    echo $this->Form->control('hh_url');
 								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_active');
 								                    echo '</div>';
@@ -61,7 +61,8 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    echo $this->Form->control('is_library_item');
 								                    echo '</div>';
 								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-								                    echo $this->Form->control('is_gone');
+								                    echo $this->Form->control('is_gone', ['label' => '410 This Content']);
+								                    echo '<span class="help-block"><strong>Note:</strong> If checked, this content will serve a 410 GONE instead of rendering the content.</span>';
 								                    echo '</div>';
 								                ?>
 								                <ul class="nav nav-tabs mb-3 clearfix" role="tablist">
@@ -88,8 +89,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    <!-- Content Tab -->
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
-									                       /*** TODO: Add CKEditor when ready ***/
-								                            echo $this->Form->control('body', ['label' => '', 'class' => 'editor', 'required' => false]);
+								                            echo $this->Form->control('body', ['label' => ['text' => '', 'class' => 'hidden'], 'class' => 'editor', 'required' => false]);
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');
 								                        ?>
@@ -97,16 +97,25 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                    <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
 								                        <?php
 								                            echo $this->Form->control('slug');
-								                            echo $this->Form->control('alt_title');
-								                            echo $this->Form->control('title_head');
+								                            echo $this->Form->control('alt_title', ['label' => 'Alt Headline (hidden)']);
+								                            echo $this->Form->control('title_head', ['label' => 'Title Tag']);
 								                            echo $this->Form->control('meta_description');
 								                            echo $this->Form->control('facebook_title');
 								                            echo $this->Form->control('facebook_description');
-								                            echo $this->Form->control('facebook_image');
-								                            echo $this->Form->control('facebook_image_width');
-								                            echo $this->Form->control('facebook_image_height');
-								                            echo $this->Form->control('facebook_image_alt', ['required' => false]);
 								                        ?>
+								                        <div class="row">
+    														<div class="col-sm-9 col-sm-offset-3">
+									                        <?php
+									                            echo $this->Form->control('facebook_image_width_override', ['type' => 'checkbox', 'label' => 'Bypass image selection, width and alt text errors']);
+									                        ?>
+										                    </div>
+										                </div>
+										                <?php
+								                            echo $this->Form->control('facebook_image', ['label' => 'Schema/Facebook Image<br><a class="btn btn-xs btn-info ck-box">Select New Image</a>', 'escape' => false]);
+								                            echo $this->Form->control('facebook_image_width', ['label' => 'Image Width']);
+								                            echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
+								                            echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
+							                        	?>
 								                    </div>
 								                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
 								                        <?php

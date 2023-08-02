@@ -58,6 +58,11 @@
 		width: 1170px;
 	}
 }
+@media (min-width: 576px) {
+	.col-sm-offset-3 {
+		margin-left: 25%;
+	}
+}
 
 @media (min-width: 768px) {
 	.container {

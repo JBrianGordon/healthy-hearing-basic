@@ -80,6 +80,8 @@
 }
 
 .btn-group {
+  flex-wrap: wrap;
+  
 	>.btn:not(:first-child), >.btn-group:not(:first-child) {
 		margin-left: 0;
 	}
