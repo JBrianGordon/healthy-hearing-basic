@@ -66,7 +66,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 						<?php endif; ?>
 						<?php if(isset($clinicPage) && empty($user)) : ?>
 							<li class="login btn btn-light bi bi-box-arrow-in-right mt15">
-								<a href="/clinic/users/login"> Login</a>
+								<a href="/login"> Login</a>
 							</li>
 						<?php elseif($clinicPageUser): ?>
 							<li class="dropdown clinic-link">
