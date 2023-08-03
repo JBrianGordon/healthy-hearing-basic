@@ -167,6 +167,10 @@
 
 		@media(max-width: $screen-sm-max){
 			flex-direction: column;
+
+			&.checkbox {
+				flex-direction: initial;
+			}
 		}
 	}
 }
