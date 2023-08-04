@@ -909,9 +909,9 @@ $btn-secondary-color: $white;
 $btn-secondary-bg: $brand-secondary;
 $btn-secondary-border: darken($btn-secondary-bg, 5%);
 
-$btn-light-color: $white;
-$btn-light-bg: $brand-light;
-$btn-light-border: darken($btn-light-bg, 5%);
+$btn-light-color: $brand-light;
+$btn-light-bg: darken($btn-light-color, 5%);
+$btn-light-border: $white;
 
 $btn-neutral-color: $white;
 $btn-neutral-bg: $gray;

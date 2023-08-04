@@ -110,6 +110,10 @@ class LocationsTable extends Table
         $this->hasMany('LocationProviders', [
             'foreignKey' => 'location_id',
         ]);
+        $this->belongsToMany('Providers', [
+            'through' => 'LocationProviders',
+            'sort' => ['Providers.priority' => 'ASC']
+        ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
         ]);
@@ -124,42 +128,45 @@ class LocationsTable extends Table
         ]);
         $this->belongsToMany('Users');
 
+        // Allow us to search for multiple values using '[or]'
+        $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];
+
         // Setup search filter using search manager
         $this->searchManager()
-            ->value('id')
-            ->value('id_oticon')
-            ->value('id_parent')
-            ->value('id_sf')
-            ->value('state')
-            ->value('zip')
-            ->value('phone')
-            ->value('email')
-            ->value('oticon_tier')
-            ->value('yhn_tier')
-            ->value('cqp_tier')
-            ->value('listing_type')
-            ->value('notes')
-            ->value('full_name')
-            ->value('location_segment')
-            ->value('entity_segment')
-            ->value('priority')
-            ->value('id_yhn_location')
-            ->value('id_cqp_practice')
-            ->value('id_cqp_office')
-            ->value('timezone')
-            ->value('optional_message')
-            ->value('average_rating')
-            ->value('reviews_approved')
-            ->value('review_status')
-            ->value('completeness')
-            ->value('last_note_status')
-            ->value('last_import_status')
-            ->value('grace_period_end')
-            ->value('review_needed')
-            ->value('email_status')
-            ->value('phone_status')
-            ->value('address_status')
-            ->value('title_status')
+            ->value('id', $defaultOptions)
+            ->value('id_oticon', $defaultOptions)
+            ->value('id_parent', $defaultOptions)
+            ->value('id_sf', $defaultOptions)
+            ->value('state', $defaultOptions)
+            ->value('zip', $defaultOptions)
+            ->value('phone', $defaultOptions)
+            ->value('email', $defaultOptions)
+            ->value('oticon_tier', $defaultOptions)
+            ->value('yhn_tier', $defaultOptions)
+            ->value('cqp_tier', $defaultOptions)
+            ->value('listing_type', $defaultOptions)
+            ->value('notes', $defaultOptions)
+            ->value('full_name', $defaultOptions)
+            ->value('location_segment', $defaultOptions)
+            ->value('entity_segment', $defaultOptions)
+            ->value('priority', $defaultOptions)
+            ->value('id_yhn_location', $defaultOptions)
+            ->value('id_cqp_practice', $defaultOptions)
+            ->value('id_cqp_office', $defaultOptions)
+            ->value('timezone', $defaultOptions)
+            ->value('optional_message', $defaultOptions)
+            ->value('average_rating', $defaultOptions)
+            ->value('reviews_approved', $defaultOptions)
+            ->value('review_status', $defaultOptions)
+            ->value('completeness', $defaultOptions)
+            ->value('last_note_status', $defaultOptions)
+            ->value('last_import_status', $defaultOptions)
+            ->value('grace_period_end', $defaultOptions)
+            ->value('review_needed', $defaultOptions)
+            ->value('email_status', $defaultOptions)
+            ->value('phone_status', $defaultOptions)
+            ->value('address_status', $defaultOptions)
+            ->value('title_status', $defaultOptions)
             ->boolean('is_mobile')
             ->boolean('is_listing_type_frozen')
             ->boolean('is_ida_verified')
@@ -320,6 +327,15 @@ class LocationsTable extends Table
                                 'Locations.url IS NULL'
                             ]
                         ]);
+                    }
+                }
+            ])
+            ->add('is_oticon', 'Search.Callback', [
+                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
+                    if ($args['is_oticon']) {
+                        $query->andWhere(['Locations.last_xml IS NOT NULL']);
+                    } else {
+                        $query->andWhere(['Locations.last_xml IS NULL']);
                     }
                 }
             ])
@@ -1740,5 +1756,104 @@ class LocationsTable extends Table
             }
         }
         return $provider;
+    }
+
+    /**
+    * Find unique linked locations for the given locationId
+    * @param int locationId
+    */
+    public function findUniqueLocationLinks($locationId) {
+        $links = $this->findLocationLinks($locationId);
+        $uniqueLinks = [];
+        foreach ($links as $link) {
+            if ($link->location_id == $locationId) {
+                $uniqueLinks[] = $link->id_linked_location;
+            } else {
+                $uniqueLinks[] = $link->location_id;
+            }
+        }
+        $uniqueLinks = array_unique($uniqueLinks);
+        return $uniqueLinks;
+    }
+
+    public function linkedLocationInfo($linkedLocationId) {
+        $location = $this->find('all', [
+            'contain' => [],
+            'fields' => ['id', 'title', 'address', 'address_2', 'city', 'state', 'zip'],
+            'conditions' => [
+                'id' => $linkedLocationId,
+            ]
+        ])->first();
+        if ($location) {
+            $retval = '<strong>'.$location->id.'</strong><br>'.
+                $location->title.'<br>'.
+                $location->address.' '. $location->address_2.'<br>'.
+                $location->city.', '.$location->state.' '.$location->zip;
+        } else {
+            $retval = 'Location '.$linkedLocationId.' not found.';
+        }
+        return $retval;
+    }
+
+    /**
+    * Generate an array of email data for a list of clinics. This will be exported to a CSV file.
+    */
+    public function exportEmails($options = []) {
+        $locations = $this->find('search', $options)->all();
+        $uniqueEmails = [];
+        $data = [];
+        foreach ($locations as $location) {
+            // Get email from Provider
+            foreach ($location->providers as $provider) {
+                if (!empty($provider->email) && !in_array($provider->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $provider->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $provider->first_name,
+                        'last_name' => $provider->last_name,
+                        'email' => $provider->email,
+                    ];
+                }
+            }
+            // Get email from LocationEmail
+            foreach ($location->location_emails as $locationEmail) {
+                if (!empty($locationEmail->email) && !in_array($locationEmail->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationEmail->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationEmail->first_name,
+                        'last_name' => $locationEmail->last_name,
+                        'email' => $locationEmail->email,
+                    ];
+                }
+            }
+            // Get email from LocationUser recovery email
+            foreach ($location->location_users as $locationUser) {
+                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationUser->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationUser->first_name,
+                        'last_name' => $locationUser->last_name,
+                        'email' => $locationUser->email,
+                    ];
+                }
+            }
+            // Get email from Location
+            if (!empty($location->email) && !in_array($location->email, $uniqueEmails)) {
+                $uniqueEmails[] = $location->email;
+                $data[] = [
+                    'hhid' => $location->id,
+                    'clinic_title' => $location->title,
+                    'first_name' => '',
+                    'last_name' => '',
+                    'email' => $location->email,
+                ];
+            }
+        }
+        return $data;
     }
 }

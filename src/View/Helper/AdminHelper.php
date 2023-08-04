@@ -93,7 +93,6 @@ class AdminHelper extends Helper
                 ]);
                 break;
             case 'boolean':
-                // TODO: Make this a prettier 3-way switch
                 $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
                 $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$label.'">';
                 break;

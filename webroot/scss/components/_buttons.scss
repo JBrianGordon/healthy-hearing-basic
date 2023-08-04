@@ -18,7 +18,7 @@
 }
 
 .btn-light {
-  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+  @include button-variant($btn-light-bg, $btn-light-border, $btn-light-color);
 }
 
 .btn-neutral {
@@ -80,6 +80,8 @@
 }
 
 .btn-group {
+  flex-wrap: wrap;
+  
 	>.btn:not(:first-child), >.btn-group:not(:first-child) {
 		margin-left: 0;
 	}

@@ -72,7 +72,7 @@ if (Configure::read('isCallTrackingEnabled')) {
     ];
 }
 $locationsItems['Clinic portal'] = [
-    'url' => '/clinic/login',
+    'url' => '/login',
     'icon' => 'bi bi-box-arrow-in-right',
 ];
 $locationsItems['Clinic users'] = [

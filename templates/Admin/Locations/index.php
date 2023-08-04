@@ -60,8 +60,10 @@ foreach ($fields as $field => $type) {
     $empty = false;
     $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     if (in_array($type, ['date', 'datetime'])) {
-        $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
-        $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
+        if (empty($value)) {
+            $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
+            $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
+        }
     }
     switch ($field) {
         case 'id_parent':
@@ -160,6 +162,8 @@ $groupedFields = [
 
 ?>
 <?php $this->Html->script('dist/admin_index_locations.min', ['block' => true]); ?>
+<span id="count" class="d-none"><?= $count ?></span>
+<span id="exportUrl" class="d-none"><?= $exportUrl ?></span>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
 		<div class="backdrop-container">
@@ -174,14 +178,15 @@ $groupedFields = [
 						<div class="panel-body p10">
 							<div class="btn-group">
 						        <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-						        <!-- TODO : ADD FUNCTIONALITY FOR THSE BUTTONS -->
-						        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
-						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emails'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-						        <?= $this->Html->link("YHN", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-						        <?= $this->Html->link("Oticon", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-						        <?= $this->Html->link("YHN & Oticon", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-						        <?= $this->Html->link("One Retail", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-						        <?= $this->Html->link("CQP", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<!-- TODO : Export functionality -->
+						        <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'index'], ['id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
+						        <!-- TODO : Email functionality -->
+						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emailsCsv', '?' => $queryParams], ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("YHN", '/admin/locations/index?is_show=1&is_active=1&is_yhn=1&yhn_tier=2', ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&oticon_tier=1[or]2[or]3', ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("YHN & Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&is_yhn=1&listing_type=Basic[or]Enhanced[or]Premier', ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("One Retail", '/admin/locations/index?is_show=1&is_active=1&is_retail=1', ['class' => 'btn btn-default', 'escape' => false]) ?>
+						        <?= $this->Html->link("CQP", '/admin/locations/index?is_show=1&is_active=1&is_cqp=1&cqp_tier=2', ['class' => 'btn btn-default', 'escape' => false]) ?>
 							</div>
 						</div>
 					</div>
@@ -324,12 +329,12 @@ $groupedFields = [
 								                            <?= $this->Html->link("<i class='bi bi-wrench'></i> Manage",
 								                                ['action' => 'edit', $location->id],
 								                                ['class' => 'btn btn-default', 'escape' => false]) ?>
-								                            <?= $this->Html->link(__('View'),
+								                            <?= $this->Html->link("View",
 								                                $location->hh_url,
 								                                ['class' => 'btn btn-default']) ?>
-								                            <?php /*= $this->Html->link(__('Clinic Edit'),
-								                                ['action' => 'edit', 'prefix' => 'clinic', $location->id],
-								                                ['class' => 'btn btn-default']) */ ?>
+								                            <?= $this->Html->link("Clinic Edit",
+								                                ['action' => 'edit', 'prefix' => 'Clinic', $location->id],
+								                                ['class' => 'btn btn-default']) ?>
 								                        </div>
 								                    </td>
 								                </tr>
@@ -339,6 +344,7 @@ $groupedFields = [
 								    </div>
 								    <?= $this->element('pagination') ?>
 								</div>
+								<?= $this->element('locations/admin_export_modal') ?>
 							</div>
 						</div>
 					</section>
@@ -347,24 +353,3 @@ $groupedFields = [
 		</div>
 	</div>
 </div>
-<?php
-// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-echo '<script type="text/javascript">
-    function exportBtnClick() {
-        var count = '.$count.';
-        var readableCount = "'.number_format($count).'";
-        var exportUrl = "'.$exportUrl.'";
-        if (count < 100000) {
-            // Small file. Download immediately.
-            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-                window.location.replace(exportUrl);
-            }
-        } else {
-            // Large file
-            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-            alert("Export is too large. Please narrow your results to 100,000 or less.");
-        }
-    }
-    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-</script>';
-?>

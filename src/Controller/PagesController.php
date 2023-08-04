@@ -155,7 +155,7 @@ class PagesController extends AppController
      */
     public function clinicInfo()
     {
-        // $clinicPage = $this->Pages->findByTitle('clinicPage')->first()->content;
+        $clinicPage = $this->Pages->findByTitle('clinicPage')->first()->content;
         $basicFeatures = $this->Pages->findByTitle('basicFeatures')->first()->content;
         $enhancedFeatures = $this->Pages->findByTitle('enhancedFeatures')->first()->content;
         $premierFeatures = $this->Pages->findByTitle('premierFeatures')->first()->content;
@@ -174,7 +174,7 @@ class PagesController extends AppController
         $this->set('monthly_enhanced', '85');
         $this->set('monthly_premier', '160');
 
-        // $this->set('clinicPage', $clinicPage);
+        $this->set('clinicPage', $clinicPage);
         $this->set('basicFeatures', $basicFeatures);
         $this->set('enhancedFeatures', $enhancedFeatures);
         $this->set('premierFeatures', $premierFeatures);

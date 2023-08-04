@@ -7,6 +7,8 @@ use Cake\Core\Configure;
 Configure::load('hhConfigs/config_adminMenu', 'default');
 $adminMenu = Configure::read('adminMenu');
 $userRole = isset($user->role) ? $user->role : '';
+
+$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer', 'block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
   <div class="row">

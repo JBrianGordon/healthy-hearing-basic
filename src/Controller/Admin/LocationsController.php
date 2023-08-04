@@ -132,4 +132,27 @@ class LocationsController extends AppController
         $this->Export->exportCsv('export_locations.csv');
         die();
     }
+
+    /**
+    * Export a list of emails for the selected locations
+    */
+    public function emailsCsv() {
+        $this->response = $this->response->withDownload('export_location_emails.csv');
+        $requestParams = $this->request->getQueryParams();
+        $options = [
+            'search' => $requestParams,
+            'contain' => ['LocationUsers', 'LocationEmails', 'Providers'],
+        ];
+        // TODO: So far, this seems to work okay even for larger exports.
+        //     : But in Cake2 we sent large exports to the queue. Do we need to do the same?
+        //$locationsQuery = $this->Locations->find('search', $options);
+        //$count = $locationsQuery->count();
+        $emails = $this->Locations->exportEmails($options);
+        $_serialize = 'emails';
+        $_header = ['ID', 'Clinic Title', 'First Name', 'Last Name', 'Email'];
+        $_extract = ['hhid', 'clinic_title', 'first_name', 'last_name', 'email'];
+
+        $this->viewBuilder()->setClassName('CsvView.Csv');
+        $this->set(compact('emails', '_serialize', '_header', '_extract'));
+    }
 }
