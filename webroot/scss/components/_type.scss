@@ -69,6 +69,12 @@ th {
 	vertical-align: top;
 }
 
+small {
+  font-size: 0.65em;
+  line-height: 1;
+  color: #777;
+}
+
 @media only screen and (max-width: $screen-sm-max) {
   h1, .h1 {
     font-size: $font-size-h1 * 0.8;
