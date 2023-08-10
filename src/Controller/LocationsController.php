@@ -6,9 +6,8 @@ use App\Model\Entity\Location;
 
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewOrigin;
+use App\Form\NewsletterForm;
 use Cake\View\JsonView;
-use Cake\Log\LogTrait;
-use Cake\Log\Log;
 use Cake\Routing\Router;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -22,6 +21,29 @@ use Cake\Utility\Hash;
  */
 class LocationsController extends AppController
 {
+    /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent(
+            'Recaptcha.Recaptcha',
+            [
+                'enable' => true,
+                'sitekey' => Configure::read('recaptchaPublicKey'),
+                'secret' => Configure::read('recaptchaPrivateKey'),
+                'type' => 'image',
+                'theme' => 'light',
+                'lang' => 'en',
+                'size' => 'normal',
+            ]
+        );
+    }
+
     public function viewClasses(): array
     {
         return [JsonView::class];
@@ -358,7 +380,7 @@ class LocationsController extends AppController
         $this->prefetches[] = '//fonts.google.com';
         $this->prefetches[] = '//maps.googleapis.com';
 
-        //set up and assign the meta tag info
+        // Set up and assign the meta tag info
         $request = env('REQUEST_URI');
 
         $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
@@ -369,7 +391,7 @@ class LocationsController extends AppController
         $seoTitle = $this->SeoTitles->findTitleByUri($request);
         $this->set('seoTitle', $seoTitle);
 
-        //Custom variables for analytics
+        // Custom variables for analytics
         if ($location->is_iris_plus) {
             $membership = 'EQ';
         } elseif ($location->is_cq_premier) {
@@ -425,7 +447,7 @@ class LocationsController extends AppController
         $this->socialOptions['article:section'] = 'Find A Hearing Clinic';
         $this->socialOptions['og:updated_time'] = $location->modified;
 
-        //Title
+        // Title
         $this->add_title($title, true);
 
         // Look for exclusive ad for basic profiles
@@ -437,7 +459,13 @@ class LocationsController extends AppController
             }
         }
 
-        //Setting Variables
+        // Newsletter form
+        if (Configure::read('showNewsletter')) {
+            $newsletterForm = new newsletterForm();
+            $this->set(compact('newsletterForm'));
+        }
+
+        // Setting Variables
         $this->set('ratings', $this->Locations->Reviews->ratings);
         $this->set('customVars', $customVars);
         $this->set('location', $location);
@@ -476,7 +504,7 @@ class LocationsController extends AppController
         if ($reviewErrors = $review->getErrors()) {
             $response = [
                     'success' => false,
-                    'errors' => Hash::flatten($reviewErrors)
+                    'errors' => Hash::flatten($reviewErrors),
             ];
 
             $this->set(compact('response'));
@@ -486,6 +514,53 @@ class LocationsController extends AppController
         }
 
         if ($this->Locations->Reviews->save($review)) {
+            $response = [
+                'success' => true,
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        }
+    }
+
+    /**
+     * Newsletter sign-up method
+     *
+     * @return \Cake\Http\Response|null|void
+     */
+    public function newsletterSignup()
+    {
+        $this->viewBuilder()->setLayout('ajax');
+
+        if (!$this->Recaptcha->verify()) {
+            $response = [
+                'success' => false,
+                'errors' => ['reCAPTCHA test failed ("I\'m not a robot"). Please try again!'],
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        }
+
+        $newsletterForm = new newsletterForm();
+
+        $requestData = $this->request->getData();
+        if (!$newsletterForm->execute($requestData)) {
+            $newsletterSignupErrors = $newsletterForm->getErrors();
+            $response = [
+                    'success' => false,
+                    'errors' => Hash::flatten($newsletterSignupErrors),
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        } else {
             $response = [
                 'success' => true,
             ];
