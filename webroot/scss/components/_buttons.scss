@@ -11,6 +11,11 @@
 		border-bottom-left-radius: 3rem !important;
 		border-top-left-radius: 3rem !important;
 	}
+
+  &.btn-block {
+    width: 100%;
+    display: block;
+  }
 }
 
 .btn-secondary {
@@ -19,6 +24,10 @@
 
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .btn-neutral {

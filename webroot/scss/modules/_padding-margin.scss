@@ -1,4 +1,4 @@
-@each $i in 0, 5, 10, 20, 25, 30, 40, 60, 80, 100, 150 {
+@each $i in 0, 5, 10, 20, 25, 30, 40, 60, 70, 80, 100, 150 {
 	.pt#{$i} { padding-top: #{$i}px !important; }
 	.pr#{$i} { padding-right: #{$i}px !important; }
 	.pb#{$i} { padding-bottom: #{$i}px !important; }

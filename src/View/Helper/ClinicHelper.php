@@ -1081,8 +1081,8 @@ class ClinicHelper extends Helper
             'sep' => ' ',
             'after' => '',
         ], (array) $options);
-        $retval = "<nav><div><ul class='pagination pagination-small pagination-sm m0'>";
-        $retval .= $options['before'];
+        $retval = $options['before'];
+        $retval .= "<nav><div><ul class='pagination pagination-small pagination-sm'>";
         $last = end($options['list']); reset($options['list']);
         foreach ($options['list'] as $cred) {
             $linkId = $fieldId . '_' . slugify($cred);
@@ -1127,14 +1127,15 @@ class ClinicHelper extends Helper
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
         foreach ($payments as $keyIndex => $nameIcon) {
             $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
+            $retval .= '<div class="form-group col-md-6 flex mb20"><label class="control-label p0" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
             $formOptions = array_merge([
-                'label' => $nameIcon['name'],
                 'type' => 'checkbox',
                 'checked' => $checked,
                 'default' => in_array($nameIcon['name'], $defaultChecked),
-                'div' => 'form-group col-md-6',
+                'id' => 'Payment'.$keyIndex,
+                'class' => 'checkbox-left mr5'
             ], $options);
-            $retval .= $this->Form->input("Payment.$keyIndex", $formOptions);
+            $retval .= $this->Form->input("Payment.$keyIndex", $formOptions).'</div>';
         }
         return $retval;
     }

@@ -116,6 +116,35 @@ a.print-link {
   display: none;
 }
 
+.flex {
+  display: flex;
+
+  .checkbox-left {
+    order: -1;
+  }
+}
+
+.form-group {
+  clear: both;
+}
+
+.pull-right {
+  float: right;
+}
+
+table {
+
+  &.basic-info {
+    th, td {
+      padding: 12px 24px;
+    }
+  }
+
+  &.table-bordered {
+    border: 1px solid #ddd
+  }
+}
+
 .text-primary {
   color: $brand-primary;
   
