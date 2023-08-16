@@ -71,9 +71,11 @@ class Application extends BaseApplication
             $this->addPlugin('IdeHelper');
         }
         $this->addPlugin('BootstrapUI');
+        $this->addPlugin('Cake/Localized');
         $this->addPlugin('Search');
         $this->addPlugin('Sitemap', ['routes' => true]);
         $this->addPlugin('Recaptcha');
+        $this->addPlugin('CsvView');
 
         // Listener for CakeDC/users plugin Events
         $this->getEventManager()->on(new \App\Event\UsersListener());

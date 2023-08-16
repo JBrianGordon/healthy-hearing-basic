@@ -47,6 +47,80 @@ if (document.querySelector("#advanced_search_toggle")) {
   });
 }
 
+// Export button modal and functionality
+const exportBtn = document.getElementById("exportBtn");
+const exportModal = document.getElementById("exportModal");
+
+if(exportBtn !== null){
+	exportBtn.addEventListener("click", (e) => {
+	  e.preventDefault();
+	  exportModal.style.display = "block";
+	  exportModal.classList.add("show", "in");
+	});
+}
+
+const exportClose = document.getElementById("exportClose");
+if(exportClose !== null){
+	exportClose.addEventListener("click", () => {
+	  exportModal.style.display = "none";
+	  exportModal.classList.remove("show", "in");
+	});
+}
+
+// Toggle values for switches
+const formControls = document.querySelectorAll("#exportModal .form-control");
+formControls.forEach((control) => {
+  control.addEventListener("click", () => {
+    if (control.value === "0") {
+      control.value = "1";
+    } else {
+      control.value = "0";
+    }
+  });
+});
+
+// Toggle classes and values for all switches, based on #allFieldsInput active class
+const allFieldsInput = document.getElementById("allFieldsInput");
+if(allFieldsInput !== null){
+	allFieldsInput.addEventListener("click", () => {
+	  setTimeout(() => {
+	    const exportLabelInputs = document.querySelectorAll(".export-label input");
+	    if (allFieldsInput.classList.contains("switch-positive")) {
+	      exportLabelInputs.forEach((input) => {
+	        input.classList.remove("switch-negative");
+	        input.classList.add("switch-positive");
+	        input.value = "1";
+	      });
+	    } else if (allFieldsInput.classList.contains("switch-negative")) {
+	      exportLabelInputs.forEach((input) => {
+	        input.classList.remove("switch-positive");
+	        input.classList.add("switch-negative");
+	        input.value = "0";
+	      });
+	    }
+	  }, 200);
+	});
+}
+
+// Handle export submit
+const exportSubmit = document.getElementById("exportSubmit");
+if(exportSubmit !== null){
+	exportSubmit.addEventListener("click", () => {
+	  const searchAndExcludedFieldArray = exportBtn.getAttribute("href").split("/admin/locations/crm").pop();
+	  
+	  let params = "";
+	  const formControlElements = document.querySelectorAll("#exportModal .form-control");
+	  formControlElements.forEach((element) => {
+	    if (element.value === "0") {
+	      const excludedFieldName = element.name;
+	      params += `/field%5B${excludedFieldName}%5D:${excludedFieldName}`;
+	    }
+	  });
+	  
+	  window.location.pathname = `admin/locations/export${searchAndExcludedFieldArray}${params}.csv`;
+	});
+}
+
 // Reorganize search options and change booleans into a toggle
 if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
 

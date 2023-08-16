@@ -590,23 +590,6 @@
       border-top: solid 1px darken($white, 8%);
     }
     
-    #exportModal {
-	    overflow-y: scroll;
-	    text-transform: capitalize;
-	    
-	    #admin_search {
-		    display: block;
-		    
-		    .control-group {
-			    display: none;
-		    }
-	    }
-	    
-	    .border-right {
-		    border-right: 1px solid #000;
-	    }
-    }
-    
     #newUserModal {
 	    position:fixed;
 	    max-height:100vh;

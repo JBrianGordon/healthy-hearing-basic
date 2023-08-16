@@ -1794,4 +1794,66 @@ class LocationsTable extends Table
         }
         return $retval;
     }
+
+    /**
+    * Generate an array of email data for a list of clinics. This will be exported to a CSV file.
+    */
+    public function exportEmails($options = []) {
+        $locations = $this->find('search', $options)->all();
+        $uniqueEmails = [];
+        $data = [];
+        foreach ($locations as $location) {
+            // Get email from Provider
+            foreach ($location->providers as $provider) {
+                if (!empty($provider->email) && !in_array($provider->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $provider->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $provider->first_name,
+                        'last_name' => $provider->last_name,
+                        'email' => $provider->email,
+                    ];
+                }
+            }
+            // Get email from LocationEmail
+            foreach ($location->location_emails as $locationEmail) {
+                if (!empty($locationEmail->email) && !in_array($locationEmail->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationEmail->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationEmail->first_name,
+                        'last_name' => $locationEmail->last_name,
+                        'email' => $locationEmail->email,
+                    ];
+                }
+            }
+            // Get email from LocationUser recovery email
+            foreach ($location->location_users as $locationUser) {
+                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationUser->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationUser->first_name,
+                        'last_name' => $locationUser->last_name,
+                        'email' => $locationUser->email,
+                    ];
+                }
+            }
+            // Get email from Location
+            if (!empty($location->email) && !in_array($location->email, $uniqueEmails)) {
+                $uniqueEmails[] = $location->email;
+                $data[] = [
+                    'hhid' => $location->id,
+                    'clinic_title' => $location->title,
+                    'first_name' => '',
+                    'last_name' => '',
+                    'email' => $location->email,
+                ];
+            }
+        }
+        return $data;
+    }
 }

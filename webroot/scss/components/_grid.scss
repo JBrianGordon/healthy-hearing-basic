@@ -18,6 +18,10 @@
     }
 }
 
+.col-xs-4 {
+	width: 33.33333%;
+}
+
 .col-md-3 {
 	width: 100%;
 	padding: 0 15px;
@@ -52,6 +56,11 @@
 	
 	@media (min-width: 1200px) {
 		width: 1170px;
+	}
+}
+@media (min-width: 576px) {
+	.col-sm-offset-3 {
+		margin-left: 25%;
 	}
 }
 

@@ -3,8 +3,6 @@ use Cake\Core\Configure;
 
 $width = isset($width) ? $width : '100%';
 $height = isset($height) ? $height : '300px';
-/*** TODO: add setLocation to clinic helper ***/
-//$this->Clinic->setLocation($location);
 $lat = $location->lat;
 $lon = $location->lon;
 $title = $location->title;
@@ -19,7 +17,7 @@ if ($isMobile) {
 	echo "<p class='".$class."'>We serve within ".$radius." ".$miles." of ".$city.", ".$state."</p>";
 }
 ?>
-<?php if (Configure::read('env') != 'prod'): ?>
+<?php if (Configure::read('env') == 'prod'): ?>
 	<img id="staticMap" <?= (!$this->App->isMobileDevice() && !$hideProvider) ? 'loading="lazy" ' : null ?>width="300" height="192" alt="Clinic location map">
 	<?php
 	// Custom mobile icon is the short URL for https://www.healthyhearing.com/img/mobile-clinic.png
@@ -84,7 +82,7 @@ if ($isMobile) {
 				});
 				infoWindow.open(map, marker);
 			}
-		<? endif; ?>
+		<?php endif; ?>
 	</script>
 <?php else: ?>
 	<!-- Dev/QA map -->

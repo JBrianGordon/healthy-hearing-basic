@@ -68,7 +68,7 @@ use Cake\Core\Configure;
 						<li><a href="/newsletter" tabindex="-1">Sign up for our newsletter</a></li>
 					<?php endif; ?>
 					<?php if (($this->layout == 'upgrade') && !$adminAccessAllowed): ?>
-						<li><a href="/clinic/users/login">Login</a></li>
+						<li><a href="/login">Login</a></li>
 					<?php endif; ?>
 					<?php if ($adminAccessAllowed): ?>
 						<li><a href="/admin-panel"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>

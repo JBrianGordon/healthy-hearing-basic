@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var \App\Form\NewsletterForm $newsletterForm
  */
 
 use App\Enums\Model\Review\ReviewRating;
@@ -9,7 +10,9 @@ use Cake\Core\Configure;
 
 $zipLabel = Configure::read('zipLabel');
 ?>
-<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true" data-backdrop="false">
+
+<!-- Review submit modal -->
+<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -21,7 +24,6 @@ $zipLabel = Configure::read('zipLabel');
           $this->Form->create($location, [
             'id' => 'submitReviewForm',
             'url' => [
-              // 'controller' => 'Reviews',
               'action' => 'addReview'
             ],
             'context' => [
@@ -104,17 +106,18 @@ $zipLabel = Configure::read('zipLabel');
         <p class="col-md-9 offset-md-3 small text-muted">Describe your experience for other readers on <?= Configure::read('siteUrl') ?></p>
         <?php
           echo $this->Form->control(
-            'Review.verify', [
+            'reviews.verify', [
               'label' => [
-                // 'class' => 'col-md-10 offset-md-2',
                 'text' => 'By checking this box, I certify that I am not an owner or employee of this clinic or a competitor and that this review is my genuine opinion of this clinic based on my experience as a customer.',
               ],
+              'required' => false, // Removes HTML 5 required message
               'type' => 'checkbox',
             ],
           );
         ?>
       </div>
       <div class="modal-footer">
+        <div id="review-error" class="text-white pt-4 px-4 my-2"></div>
         <?php
           echo $this->Form->button(
             'Submit review', [
@@ -133,33 +136,200 @@ $zipLabel = Configure::read('zipLabel');
   </div>
 </div>
 
+<!-- Review thank you modal -->
+<div class="modal fade" id="reviewThankYouModal" tabindex="-1" aria-labelledby="reviewThankYouModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="reviewThankYouModalLabel">Thank you for sharing your experience at <?= $location->title ?>:</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          <strong>All submissions are moderated.</strong> Reviews are typically published on clinic profiles within <strong>one to three business days.</strong>
+        </p>
+
+        <h4>Subscribe to the <?= Configure::read('siteName'); ?> newsletter</h4>
+        <?=
+          $this->Form->create($newsletterForm, [
+            'id' => 'newsletterSignupForm',
+            'url' => [
+              'action' => 'newsletterSignup'
+            ],
+            'align' => [
+                FormHelper::GRID_COLUMN_ONE => 3, // first column (span over 4 columns)
+                FormHelper::GRID_COLUMN_TWO => 9, // second column (span over 8 columns)
+            ],
+          ])
+        ?>
+        <?php
+            echo $this->Form->control(
+                'first_name', [
+                  'placeholder' => 'First name',
+                  'label' => [
+                    'class' => 'text-end',
+                    'text' => 'First name:',
+                  ]
+                ],
+            );
+            echo $this->Form->control(
+                'last_name', [
+                  'placeholder' => 'Last name',
+                  'label' => [
+                    'class' => 'text-end',
+                    'text' => 'Last name:',
+                  ]
+                ],
+            );
+            echo $this->Form->control(
+                'email', [
+                  'placeholder' => 'Email',
+                  'label' => [
+                    'class' => 'text-end',
+                    'text' => 'Email:',
+                  ]
+                ],
+            );
+        ?>
+        <div class="col-md-9 offset-md-3">
+            <?php
+                echo $this->Recaptcha->display();
+            ?>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div id="newsletter-error" class="text-white py-4 px-4 my-4"></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No Thanks</button>
+        <?php
+          echo $this->Form->button(
+            'Submit review', [
+              'type' => 'submit',
+              'class' => [
+                'btn',
+                'btn-primary',
+              ],
+            ]
+          );
+        ?>
+      </div>
+        <?= $this->Form->end() ?>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
-  const form = document.querySelector('#submitReviewForm');
+    const reviewForm = document.querySelector('#submitReviewForm');
+    const newsletterSignupForm = document.querySelector('#newsletterSignupForm');
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const targeturl = event.target.action;
-    const formData = new URLSearchParams(new FormData(form)).toString();
+    reviewForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const addReviewUrl = event.target.action;
+        const reviewFormData = new URLSearchParams(new FormData(reviewForm)).toString();
 
-    try {
-      const response = await fetch(targeturl, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/x-www-form-urlencoded'
-        },
-        method: 'POST',
-        body: formData
-      });
+        try {
+            const response = await fetch(addReviewUrl, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/x-www-form-urlencoded'
+                },
+                method: 'POST',
+                body: reviewFormData
+            });
 
-      if (response.ok) {
-        const reviewSubmitModal = document.querySelector('#reviewSubmitModal');
-        const bootstrapModal = bootstrap.Modal.getInstance(reviewSubmitModal);
-        bootstrapModal.hide();
-      } else {
-        throw new Error(`An error occurred: ${response.statusText}`);
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  });
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            let jsonResponse = await response.json();
+
+            if (!jsonResponse.success && jsonResponse.errors) {
+                let reviewErrorDiv = document.getElementById('review-error');
+                reviewErrorDiv.replaceChildren(); // Clear any previous content
+
+                for (let key in jsonResponse.errors) {
+                    if (jsonResponse.errors.hasOwnProperty(key)) {
+                        let errorMessage = jsonResponse.errors[key];
+
+                        // Create a <p> element for the error message
+                        let errorParagraph = document.createElement('p');
+                        errorParagraph.textContent = errorMessage;
+
+                        // Append the <p> element to the reviewErrorDiv
+                        reviewErrorDiv.appendChild(errorParagraph);
+                    }
+                }
+                reviewErrorDiv.classList.add('bg-danger', 'w-100');
+            } else {
+                reviewForm.reset();
+
+                let reviewErrorDiv = document.getElementById('review-error');
+                reviewErrorDiv.replaceChildren();
+                reviewErrorDiv.classList.remove('bg-danger', 'w-100');
+
+                const reviewSubmitModal = document.querySelector('#reviewSubmitModal');
+                const bootstrapReviewSubmitModal = bootstrap.Modal.getInstance(reviewSubmitModal);
+                bootstrapReviewSubmitModal.hide();
+
+                let thankYouModal = new bootstrap.Modal(document.getElementById('reviewThankYouModal'));
+                thankYouModal.show();
+            }
+        } catch {
+            alert("We're sorry, but there was an error while processing your review. If you continue to see this error, please try again later. Thank you and sorry for the inconvenience.");
+        }
+    });
+
+    newsletterSignupForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newsletterSubscribeUrl = event.target.action;
+        const newsletterSubscribeFormData = new URLSearchParams(new FormData(newsletterSignupForm)).toString();
+
+        try {
+            const response = await fetch(newsletterSubscribeUrl, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/x-www-form-urlencoded'
+                },
+                method: 'POST',
+                body: newsletterSubscribeFormData
+            });
+
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            let jsonResponse = await response.json();
+
+            if (!jsonResponse.success && jsonResponse.errors) {
+                let newsletterErrorDiv = document.getElementById('newsletter-error');
+                newsletterErrorDiv.replaceChildren(); // Clear any previous content
+
+                for (let key in jsonResponse.errors) {
+                    if (jsonResponse.errors.hasOwnProperty(key)) {
+                      let errorMessage = jsonResponse.errors[key];
+
+                      // Create a <p> element for the error message
+                      let errorParagraph = document.createElement('p');
+                      errorParagraph.textContent = errorMessage;
+
+                      // Append the <p> element to the newsletterErrorDiv
+                      newsletterErrorDiv.appendChild(errorParagraph);
+                    }
+                }
+                newsletterErrorDiv.classList.add('bg-danger', 'w-100');
+            } else {
+                newsletterSignupForm.reset();
+
+                let newsletterErrorDiv = document.getElementById('newsletter-error');
+                newsletterErrorDiv.replaceChildren(); // Clear any previous content
+                newsletterErrorDiv.classList.remove('bg-danger', 'w-100');
+
+                const thankYouModalElement = document.getElementById('reviewThankYouModal')
+                const bootstrapReviewThankYouModal = bootstrap.Modal.getInstance(thankYouModalElement)
+                bootstrapReviewThankYouModal.hide();
+            }
+        } catch {
+            alert("We're sorry, but an error occured while signing you up for our newsletter. Thank you and sorry for the inconvenience.");
+        }
+    });
 </script>

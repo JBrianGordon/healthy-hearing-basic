@@ -7,6 +7,7 @@ use App\Enums\Model\Location\LocationReviewStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
+use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Query;
@@ -15,12 +16,10 @@ use Cake\Validation\Validator;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
-use Cake\Log\LogTrait;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Search\Model\Filter\Base;
-
 
 /**
  * Reviews Model
@@ -44,7 +43,6 @@ use Search\Model\Filter\Base;
 class ReviewsTable extends Table
 {
     use LocatorAwareTrait;
-    use LogTrait;
     use MailerAwareTrait;
 
     public $ratings = array(
@@ -206,7 +204,7 @@ class ReviewsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+            ->notEmptyString('id');
 
         $validator
             ->scalar('body')
@@ -219,16 +217,23 @@ class ReviewsTable extends Table
             ->requirePresence('first_name')
             ->notEmptyString('first_name');
 
+
+        // Country-specific postal code validation
+        $country = ucfirst(strtolower(Configure::read('country')));
+        $countryValidator = 'Cake\\Localized\\Validation\\' . $country . 'Validation';
+        $validator->setProvider(
+            'postalCodeValidationProvider',
+            $countryValidator
+        );
         $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 255)
-            ->requirePresence('last_name');
+            ->add('zip', 'postalCodeRule', [
+                'rule' => 'postal',
+                'provider' => 'postalCodeValidationProvider',
+                'message' => 'Please provide a properly formatted ' . Configure::read('zipLabel') . '.',
+            ]);
 
         $validator
-            ->scalar('zip')
-            ->maxLength('zip', 10)
-            ->requirePresence('zip')
-            ->notEmptyString('first_name');
+            ->equals('verify', 1, 'Please verify you visited this clinic by checking the box above.');
 
         $validator
             ->integer('rating')
