@@ -433,31 +433,31 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <p><?= Configure::read('isTieringEnabled') ? "For enhanced or premier members only, " : '' ?><?= $siteName ?> will display up to five clinic locations associated with this one. In the case of larger chains, we suggest linking the five closest locations.</p>
-                                                        <table class="table-striped table-bordered col-sm-offset-2 col-sm-10 mb40 p0">
-                                                            <tbody class="col-sm-12 p0">
+                                                        <table class="table-striped table-bordered col-sm-offset-3 col-sm-9 mb40 p0">
+                                                            <tbody class="col-xs-12 p0">
                                                                 <?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
-                                                                    <tr id="tr-link-<?= $key ?>" class="col-sm-12 p0">
-                                                                        <td class="col-sm-10">
+                                                                    <tr id="tr-link-<?= $key ?>" class="col-xs-12 p0 flex">
+                                                                        <td class="col-xs-8">
                                                                             <div id="div-link-<?= $key ?>">
                                                                                 <?= $this->Clinic->linkedLocationInfo($linkedLocationId) ?>
                                                                                 <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="col-sm-2 mt5" align="center">
-                                                                            <button type="button" class="btn btn-md btn-danger js-link-delete" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
+                                                                        <td class="col-xs-4 mt5" align="center">
+                                                                            <button type="button" class="btn btn-md btn-danger js-link-delete alignment-content-stretch" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 <?php endforeach; ?>
                                                                 <?php $key = count($uniqueLocationLinks); ?>
-                                                                <tr id="tr-link-<?= $key ?>" class="col-sm-12 p0">
-                                                                    <td class="col-sm-10 p0">
+                                                                <tr id="tr-link-<?= $key ?>" class="col-xs-12 p0">
+                                                                    <td class="col-sm-8 p0">
                                                                         <div id="div-link-<?= $key ?>">
                                                                             <?= $this->Form->hidden('linked_location_id') ?>
                                                                             <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
                                                                             <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="col-sm-2" align="center">
+                                                                    <td class="col-sm-4" align="center">
                                                                         <div id="div-add-delete-<?= $key ?>">
                                                                         </div>
                                                                     </td>
@@ -672,9 +672,9 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         <div>
                                                             <h2 class="mt20 mb20">Clinic logo</h2>
                                                             <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
-                                                                <tbody class="col-sm-12 p0">
-                                                                    <tr class="col-sm-12 p0">
-                                                                        <td class="col-sm-12 p20">
+                                                                <tbody class="col-xs-12 p0">
+                                                                    <tr class="col-xs-12 p0">
+                                                                        <td class="col-xs-12 p20">
                                                                             <img class="ml60 mb10" id="photo-thumb-logo" src="<?= (!empty($location->logo_url)) ? '/cloudfiles/clinics/' . $location->logo_url : '' ?>">
                                                                             <?= $this->Form->control("logo_file", [
                                                                                     'type' => 'file',
@@ -733,9 +733,9 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         <div>
                                                             <h2 class="mt20 mb20">Photos</h2>
                                                             <table class="table-striped table-bordered col-md-11 ml20 p0">
-                                                                <tbody class="col-sm-12 p0">
+                                                                <tbody class="col-xs-12 p0">
                                                                     <?php foreach ($location->location_photos as $key => $photo): ?>
-                                                                        <tr class="col-sm-12 p0">
+                                                                        <tr class="col-xs-12 p0 flex">
                                                                             <td class="col-sm-10 p0">
                                                                                 <?= $this->Form->hidden("LocationPhoto.$key.id") ?>
                                                                                 <div>
@@ -759,12 +759,12 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                                     <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
                                                                                 </div>
                                                                             </td>
-                                                                            <td align="center" class="col-sm-2 pt20">
+                                                                            <td align="center" class="col-sm-2 pt20 alignment-content-stretch">
                                                                                 <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>">Delete</button>
                                                                             </td>
                                                                         </tr>
                                                                     <?php endforeach; ?>
-                                                                    <tr class="col-sm-12 p0">
+                                                                    <tr class="col-xs-12 p0">
                                                                         <td class="col-sm-10 p0">
                                                                             <?php $key = count($location->location_photos); ?>
                                                                             <div class='row mt5 mb10'>
@@ -774,8 +774,8 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <div class="col col-sm-3 mb20" id="file-input-<?= $key ?>">
-                                                                                    <label class="btn btn-default pull-right col-sm-12 p0">
-                                                                                        <span class="col-sm-12 p0 pt10 pb10" style="margin-bottom:-10px">Add a new photo</span>
+                                                                                    <label class="btn btn-default pull-right col-xs-12 p0">
+                                                                                        <span class="col-xs-12 p0 pt10 pb10" style="margin-bottom:-10px">Add a new photo</span>
                                                                                         <?= $this->Form->control("LocationPhoto." . $key . ".file", [
                                                                                             'type' => 'file',
                                                                                             'label' => false,
@@ -804,7 +804,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                             <span class="help-block text-danger hidden" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
                                                                         </td>
                                                                         <td align="center" class="col-sm-2">
-                                                                            <button class="btn btn-md btn-danger js-photo-delete hidden" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>">Delete</button>
+                                                                            <button class="btn btn-md btn-danger js-photo-delete hidden mb20" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -818,12 +818,12 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         <hr>
                                                         <div>
                                                             <h2 class="mt20 mb20">Social Media Sharing Library</h2>
-                                                            <div class="col-md-8">
+                                                            <div class="col-sm-8">
                                                                 <p>Need content for your social media channels? Browse our curated content library to find easy-to-share articles. We've hand-picked a selection of our most recent, relevant and popular articles that may be of interest to your followers.</p>
                                                                 <a href="/clinic/library" target="_blank" class="btn btn-print btn-light">Go to Social Media Library</a>
                                                             </div>
-                                                            <div class="col-md-4">
-                                                                <img style="width:200px;height:210px;margin:0 auto;display:block" src="/img/library-facebook-example.png" alt="Library item example usage">
+                                                            <div class="col-sm-4">
+                                                                <img style="width:200px;height:210px;margin:0 auto;display:block" src="/img/library-facebook-example.png" class="mb20" alt="Library item example usage">
                                                             </div>
                                                         </div>
                                                     <?php endif; ?>
@@ -846,9 +846,9 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <?php endif; ?>
                                         <div class="clearfix"></div>
                                         <hr>
-                                        <?= $this->Form->submit('Save and Publish Profile', ['class' => 'btn btn-lg btn-primary']) ?>
+                                        <?= $this->Form->submit('Save and Publish Profile', ['class' => 'btn btn-lg btn-primary mb10']) ?>
                                         <?= $this->Form->submit('Save Profile', ['id' => 'floatingSave', 'class' => 'btn btn-lg btn-primary']) ?>
-                                        <?= $this->Html->link('View Your Public Profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-default']) ?>
+                                        <?= $this->Html->link('View Your Public Profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-default mb10']) ?>
                                         <?php if(!$isAdmin && $isClinic) : ?>
                                             <div id="incompleteModal" class="modal-dialog modal-lg modal fade" style="position:fixed; max-height:100vh">
                                                 <div class="modal-content">

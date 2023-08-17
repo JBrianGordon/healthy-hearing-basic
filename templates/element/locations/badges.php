@@ -1,4 +1,4 @@
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_coffee', [
 	    'label' => [
 	        'class' => 'col control-label p0',
@@ -9,7 +9,7 @@
 	    'class' => '',
 	]) ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_wifi', array(
 		'div' => false,
 		'label' => array(
@@ -20,7 +20,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_parking', array(
 		'div' => false,
 		'label' => array(
@@ -31,7 +31,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_curbside', array(
 		'div' => false,
 		'label' => array(
@@ -42,7 +42,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_wheelchair', array(
 		'div' => false,
 		'label' => array(
@@ -53,7 +53,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_service_pets', array(
 		'div' => false,
 		'label' => array(
@@ -64,7 +64,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_cochlear_implants', array(
 		'div' => false,
 		'label' => array(
@@ -76,7 +76,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_ald', array(
 		'div' => false,
 		'label' => array(
@@ -87,7 +87,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_pediatrics', array(
 		'div' => false,
 		'label' => array(
@@ -98,7 +98,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_mobile_clinic', array(
 		'div' => false,
 		'label' => array(
@@ -109,7 +109,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_financing', array(
 		'div' => false,
 		'label' => array(
@@ -120,7 +120,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_telehearing', array(
 		'div' => false,
 		'label' => array(
@@ -133,7 +133,7 @@
 </div>
 </div>
 <div class="col col-md-4">
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_asl', array(
 		'div' => false,
 		'label' => array(
@@ -144,7 +144,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_tinnitus', array(
 		'div' => false,
 		'label' => array(
@@ -155,7 +155,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_balance', array(
 		'div' => false,
 		'label' => array(
@@ -166,7 +166,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_home', array(
 		'div' => false,
 		'label' => array(
@@ -177,7 +177,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_remote', array(
 		'div' => false,
 		'label' => array(
@@ -188,7 +188,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_mask', array(
 		'div' => false,
 		'label' => array(
@@ -199,7 +199,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_ear_cleaning', array(
 		'div' => false,
 		'label' => array(
@@ -210,7 +210,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_spanish', array(
 		'div' => false,
 		'label' => array(
@@ -221,7 +221,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_french', array(
 		'div' => false,
 		'label' => array(
@@ -232,7 +232,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_russian', array(
 		'div' => false,
 		'label' => array(
@@ -243,7 +243,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_chinese', array(
 		'div' => false,
 		'label' => array(
@@ -254,7 +254,7 @@
 		'class' => ''
 	)); ?>
 </div>
-<div class="col-md-12 p0">
+<div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_punjabi', array(
 		'div' => false,
 		'label' => array(
