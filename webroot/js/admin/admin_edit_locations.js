@@ -1,4 +1,4 @@
-import '../common/common';
+import './admin_common';
 import '../common/provider';
 import './nav_tabs';
 import './datepicker';

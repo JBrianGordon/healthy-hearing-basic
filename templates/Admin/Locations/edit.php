@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 
 $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
-$id = $locaton->id;
+$id = $location->id;
 ?>
 <div class="container-fluid site-body fap-cities default">
 	<div class="row">
@@ -116,19 +116,43 @@ $id = $locaton->id;
 										</table>
 										<?= $this->Form->control('priority', ['label' => ['class' => 'col col-md-3 control-label'], 'class' => 'col col-md-9 mb10']); ?>
 						                <div class="tabbable">
-											<ul class="nav nav-tabs location-tabs clearfix">
-												<li class="active"><a href="#Location" data-toggle="tab" aria-expanded="true">Location</a></li>
-												<li><a href="#Details" data-toggle="tab">Details</a></li>
-												<li><a href="#Provider" data-toggle="tab">Provider</a></li>
-												<li><a href="#Hours" data-toggle="tab">Hours</a></li>
-												<li><a href="#Payment" data-toggle="tab">Payment</a></li>
-												<li><a href="#Notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
-												<li><a href="#CallAssist" data-toggle="tab">Call Assist</a></li>
-												<li><a href="#User" data-toggle="tab">User</a></li>
-												<li><a href="#Reviews" data-toggle="tab">Reviews</a></li>
-												<li><a href="#Imports" data-toggle="tab">Imports</a></li>
-												<li><a href="#Filters" data-toggle="tab">Filters</a></li>
-												<li><a href="#Admin" data-toggle="tab">Admin</a></li>
+											<ul class="nav nav-tabs location-tabs clearfix" role="tablist">
+												<li class="nav-item">
+													<button class="nav-link active" data-bs-target="#Location" data-bs-toggle="tab" aria-controls="Location" aria-expanded="true" type="button" role="tab">Location</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Details" data-bs-toggle="tab" aria-controls="Details" aria-expanded="false" type="button" role="tab">Details</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Provider" data-bs-toggle="tab" aria-controls="Provider" aria-expanded="false" type="button" role="tab">Provider</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Hours" data-bs-toggle="tab" aria-controls="Hours" aria-expanded="false" type="button" role="tab">Hours</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Payment" data-bs-toggle="tab" aria-controls="Payment" aria-expanded="false" type="button" role="tab">Payment</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Notes" data-bs-toggle="tab" aria-controls="Notes"  aria-expanded="false" type="button" role="tab">Notes</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#CallAssist" data-bs-toggle="tab" aria-controls="CallAssist" aria-expanded="false" type="button" role="tab">Call Assist</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#User" data-bs-toggle="tab" aria-controls="User" aria-expanded="false" type="button" role="tab">User</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Reviews" data-bs-toggle="tab" aria-controls="Reviews" aria-expanded="false" type="button" role="tab">Reviews</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Imports" data-bs-toggle="tab" aria-controls="Imports" aria-expanded="false" type="button" role="tab">Imports</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Filters" data-bs-toggle="tab" aria-controls="Filters" aria-expanded="false" type="button" role="tab">Filters</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Admin" data-bs-toggle="tab" aria-controls="Admin" aria-expanded="false" type="button" role="tab">Admin</button>
+												</li>
 											</ul>
 											<div class="tab-content mt10">
 												<!-- Location Tab -->
@@ -255,8 +279,8 @@ $id = $locaton->id;
 									                    echo $this->Form->control('twitter');
 									                    echo $this->Form->control('youtube');
 									                    /*** TODO: replace with CKEditor ***/
-									                    echo $this->Form->control('services', ['required' => true]);
-									                    echo $this->Form->control('about_us', ['required' => true]);
+									                    //echo $this->Form->control('services', ['required' => true]);
+									                    //echo $this->Form->control('about_us', ['required' => true]);
 													?>
 													<div class="panel panel-default pb20">
 														<div class="panel-heading">Enhanced features</div>
