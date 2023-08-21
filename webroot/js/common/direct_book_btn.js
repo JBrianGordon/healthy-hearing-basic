@@ -32,6 +32,14 @@ export function directBookBtn() {
   const directBookButtons = document.querySelectorAll('.directBookBtn');
   directBookButtons.forEach(button => {
     button.addEventListener('click', function() {
+      const directBookClinicId = button.dataset.button;
+      const modalId = button.dataset.bsTarget;
+
+      // Remove comments from direct-book-body element
+      const directBookBody = document.querySelector(`${modalId} .direct-book-body`);
+      directBookBody.innerHTML = directBookBody.innerHTML.replace('<!--', '').replace('-->', '');
+      const modalElement = new bootstrap.Modal(document.querySelector(modalId));
+      modalElement.show();
       // Event listener for EarQ appointment confirmation
       window.addEventListener("message", onMessage, false);
     });

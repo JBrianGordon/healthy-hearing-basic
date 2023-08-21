@@ -131,7 +131,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 													<div>
-														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" data-bs-toggle="modal" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
+														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" data-bs-toggle="modal" data-button="<?= $location->id ?>" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
 													</div>
 													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 												<?php endif; ?>
