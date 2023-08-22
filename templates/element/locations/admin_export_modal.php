@@ -6,7 +6,7 @@ use Cake\Core\Configure;
     <div class="modal-body tac" style="width: 100%">
       <h4>Please choose which fields you would like to appear in your export:</h4>
       <span id="exportClose">X</span>
-      <label class="switch" id="allFields">
+      <label class="switch export-label" id="allFields">
         <p>Toggle all on/off</p>
         <input class="form-control switch-positive" placeholder="0 [or] 1" type="text" id="allFieldsInput">
         <span class="slider">
