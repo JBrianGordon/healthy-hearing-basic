@@ -18,7 +18,12 @@
 }
 
 .btn-light {
-  @include button-variant($btn-light-bg, $btn-light-border, $btn-light-color);
+  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+
+  &:hover {
+    background-color: #5499ba;
+    color: #fff;
+  }
 }
 
 .btn-neutral {
