@@ -30,7 +30,7 @@
     <?= $this->fetch('content') ?>
     <?= $this->fetch('bs-modals') ?>
     <?= $this->element('footer') ?>
-    <?= $this->element('cookie_footer') ?>
+    <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
 </body>
 <?= $this->fetch('script') ?>
 </html>
