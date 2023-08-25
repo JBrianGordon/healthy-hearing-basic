@@ -44,7 +44,7 @@ class TagAdsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Ads', [
+        $this->belongsTo('Advertisements', [
             'foreignKey' => 'ad_id',
             'joinType' => 'LEFT',
         ]);

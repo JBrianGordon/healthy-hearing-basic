@@ -48,6 +48,14 @@ showNav = (thisTrigger) => {
 	document.addEventListener('keyup', autoClose);
 }
 
+const dropDown = document.querySelector(".dropdown");
+const dropDownToggle = document.querySelector(".dropdown-toggle");
+dropDownToggle.addEventListener('click', () => {
+	const isOpen = dropDown.classList.contains("open");
+	dropDown.classList.toggle('open');
+	dropDownToggle.setAttribute("aria-expanded", isOpen);
+})
+
 for(let navTrigger of navTriggers) {
 	navTrigger.addEventListener('click', (e) => {
 		e.preventDefault();

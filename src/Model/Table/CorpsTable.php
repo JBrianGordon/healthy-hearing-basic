@@ -64,21 +64,16 @@ class CorpsTable extends Table
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
             'priority' => 0.7,
         ]);
+        $this->belongsTo('Author')
+            ->setClassName('Users')
+            ->setForeignKey('user_id');
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-        ]);
-        $this->hasMany('Advertisements', [
-            'foreignKey' => 'corp_id',
-        ]);
-        $this->hasMany('Users', [
-            'foreignKey' => 'corp_id',
-        ]);
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'corp_id',
-            'targetForeignKey' => 'user_id',
-            'joinTable' => 'corps_users',
-        ]);
+        $this->belongsToMany('Contributors')
+            ->setClassName('Users')
+            ->setForeignKey('corp_id')
+            ->setTargetForeignKey('user_id')
+            ->setProperty('contributors')
+            ->setThrough('CorpsUsers');
     }
 
     /**
@@ -248,5 +243,19 @@ class CorpsTable extends Table
         // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    function findBySlug($slug){
+        $corp = $this->find('all', [
+            'conditions' => [
+                'slug' => $slug,
+                'is_active' => true
+            ],
+            'contain' => [
+                'Author',
+                'Contributors'
+            ]
+        ])->first();
+        return $corp;
     }
 }

@@ -83,7 +83,7 @@ class ImportProvidersTable extends Table
             ->allowEmptyString('last_name');
 
         $validator
-            ->email('email')
+            ->scalar('email')   // We are not going to validate email in this table. We may recieve invalid emails in import.
             ->allowEmptyString('email');
 
         $validator

@@ -20,7 +20,9 @@
   text-align: center !important;
 }
 .btn-xs {
-  @include button-size(3px, 5px, 12px, 0.2rem);
+	padding: 3px 5px;
+	font-size: 12px;
+	border-radius: 3em;
 }
 .btn-group-xs > .btn { @extend .btn-xs; }
 .btn-default {
@@ -31,7 +33,7 @@
   }
 }
 .bg-default {
-  background: #fff;
+  background-color: #fff!important;
   border: solid 1px #7b7e80;
   color: #7b7380;
 }

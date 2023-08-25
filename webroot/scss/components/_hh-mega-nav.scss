@@ -41,13 +41,16 @@
   }
 
   .mega-nav-inner {
-    /*padding: 60px 80px; */
-    padding: 30px 40px;
+    padding: 30px 25px;
     
     p {
 	    .flag {
 		    display: none;
 	    }
+    }
+
+    td {
+      padding: 12px 24px;
     }
     
     .flag-link {

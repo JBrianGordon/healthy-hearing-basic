@@ -156,8 +156,8 @@
                             <td><?= h($importLocations->id_external) ?></td>
                             <td><?= h($importLocations->location_id) ?></td>
                             <td><?= h($importLocations->id_oticon) ?></td>
-                            <td><?= h($importLocations->cqp_practice_id) ?></td>
-                            <td><?= h($importLocations->cqp_office_id) ?></td>
+                            <td><?= h($importLocations->id_cqp_practice) ?></td>
+                            <td><?= h($importLocations->id_cqp_office) ?></td>
                             <td><?= h($importLocations->title) ?></td>
                             <td><?= h($importLocations->subtitle) ?></td>
                             <td><?= h($importLocations->email) ?></td>

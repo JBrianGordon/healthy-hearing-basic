@@ -13,6 +13,13 @@ use App\Controller\AppController;
  */
 class StatesController extends AppController
 {
+	
+	public $paginate = [
+        'order' => [
+            'States.name' => 'asc',
+        ],
+    ];
+	
     /**
      * Index method
      *

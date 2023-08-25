@@ -1,5 +1,39 @@
 .locations {
-	margin: 0 -20px;
+	label {
+		width: 41.66667%;
+		text-align: right;
+		padding: 7px 15px 0;
+		font-weight: bold;
+	}
+	
+	.form-control:not([type='date']), .form-select {
+		display: inline-block;
+		width: 58.33333%;
+		padding: 10px 12px;
+		font-size: 1.5rem;
+	}
+	
+	.form-check {
+		padding-left: 0;
+		
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 25px;
+			top: 5px;
+		}
+	}
+	
+	&.crmsearches {
+		label {
+			width: 25%;
+			float: left;
+		}
+		
+		.form-control:not([type='date']), .form-select {
+			width: 75%;
+		}
+	}
 }
 
 .status-unlinked {
@@ -45,4 +79,5 @@ th small {
 a {
 	cursor: pointer;
 	color: $link-color;
+	text-decoration: none;
 }

@@ -1,378 +1,496 @@
 import './appt_request';
-import './location_review';
+// import './location_review';
 import {directBookBtn} from './direct_book_btn';
 import './common';
 
 directBookBtn();
 
-//Create clinic object
-$.Clinic = {
-	time: null,
-	/**
-	* Start the timer on the current time
-	*/
-	start_time: function(){
-		this.time = new Date;
-	},
-	/**
-	* Get the diff time
-	*/
-	diff_time: function(){
-		var now = new Date;
-		var retval = Math.round((now - this.time) * .001);
-		return retval;
-	}
+class Clinic {
+  constructor() {
+    this.time = null;
+    this.start_time();
+  }
+
+  start_time() {
+    this.time = new Date();
+  }
+
+  diff_time() {
+    const now = new Date();
+    return Math.round((now - this.time) * 0.001);
+  }
 }
-//Start the timer by default
-$.Clinic.start_time();
 
-$(document).ready(function(){
-	$(window).on('hashchange', function(){
-		var offset = $(window).scrollTop();
-		$(window).scrollTop(offset-70);
-	});
-	
-	//Rearrange clinic elements on mobile
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		$("#disclaimer").before($("#callClinic"));
-	}
-	
-	//EarQ and ida link functionality
-	 $(".earq-link, .ida-link").on("click", function(e){
-		 e.preventDefault();
-		 let targetDiv = $(this).attr("href");
-		 $(".closing-animation").removeClass("closing-animation");
-	     $([document.documentElement, document.body]).animate({
-	        scrollTop: $(targetDiv).offset().top
-	     }, 1000);
-	 })
-	
-	//Add Google Maps link to Get Directions button
-	var clinicAddr = $(".address").text().trim().replace(/ /g, "+").replace("#","");	
-	$(".directions-link").attr("href", ("https://www.google.com/maps/dir//" + clinicAddr));
-	
-	//Add recaptcha script on form click
-	$("#CaCallApptRequestForm input").on("focus",function(){
-		if(!$("#CaCallApptRequestForm").hasClass("focused")) {
-			$("#CaCallApptRequestForm").addClass("focused");
-			var recaptchaScript = document.createElement('script');
-			recaptchaScript.setAttribute('src','https://www.google.com/recaptcha/api.js');
-			document.head.appendChild(recaptchaScript);
-			$("#CaCallApptRequestForm input").off("focus");
-		}
-	})
+const clinic = new Clinic();
 
-	$("#more-reviews > div").addClass("hidden-review");
-	var hiddenRevNum = $(".hidden-review").length;
-	$("#more-reviews-button").on("click",function(){
-		$("#fewer-reviews-button").show();
-		for(var i =0; i < 5; i++){
-			$(".hidden-review").first().removeClass("hidden-review");
-			hiddenRevNum--;
-			if(hiddenRevNum == 0){
-				$("#more-reviews-button").hide();
-				break;
-			}
-		}
-		$("#more-reviews").slideDown();
-		return false;
-	});
-	
-	$("#fewer-reviews-button").on("click",function(){
-		$("#more-reviews").slideUp(1000);
-		$(this).hide();
-		$("#more-reviews-button").show();
-		$('html, body').animate({
-		    scrollTop: ($(".panel-section.reviews").offset().top - 114)
-		}, 1000);
-		setTimeout(function(){
-			$("#more-reviews > div").addClass("hidden-review");
-			hiddenRevNum = $(".hidden-review").length;
-		},1100);
-		return false;
-	})
-	
-	var newestArr = $(".well"),
-		ratingArr = [];
-	
-	var sortReviews = function(chosenArray){
-		for(var i = 0; i < chosenArray.length; i++){
-			if($("#more-reviews").length > 0){
-				if(i < 5){
-					chosenArray[i].classList.remove("hidden-review");
-					$("#more-reviews").before(chosenArray[i]);
-				} else {
-					chosenArray[i].classList.add("hidden-review");
-					$("#more-reviews").append(chosenArray[i]);
-				}
-			} else {
-				$(".panel-section.reviews").append(chosenArray[i]);
-			}
-		}
-		$("#more-reviews-button").show();
-		$("#fewer-reviews-button").hide();
-	},
-	sortByRating = function(chosenRating){
-		var ratingArray = [],
-			fiveStar = [],
-			fourHalfStar = [],
-			fourStar = [],
-			threeHalfStar = [],
-			threeStar = [],
-			twoHalfStar = [],
-			twoStar = [],
-			oneHalfStar = [],
-			oneStar = [];
-		for(var i = 0; i < newestArr.length; i++){
-			if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 5){
-				fiveStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 4 && newestArr[i].getElementsByClassName("hh-icon-half-star").length === 1) {
-				fourHalfStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 4) {
-				fourStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 3 && newestArr[i].getElementsByClassName("hh-icon-half-star").length === 1) {
-				threeHalfStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 3) {
-				threeStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 2 && newestArr[i].getElementsByClassName("hh-icon-half-star").length === 1) {
-				twoHalfStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 2) {
-				twoStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 1 && newestArr[i].getElementsByClassName("hh-icon-half-star").length === 1) {
-				oneHalfStar.push(newestArr[i]);
-			} else if(newestArr[i].getElementsByClassName("hh-icon-full-star").length === 1) {
-				oneStar.push(newestArr[i]);
-			}
-		}
-		if(chosenRating == "lowestRating"){
-			ratingArray.push(oneStar.concat(oneHalfStar.concat(twoStar.concat(twoHalfStar.concat(threeStar.concat(threeHalfStar.concat(fourStar.concat(fourHalfStar.concat(fiveStar)))))))));
-		} else {
-			ratingArray.push(fiveStar.concat(fourHalfStar.concat(fourStar.concat(threeHalfStar.concat(threeStar.concat(twoHalfStar.concat(twoStar.concat(oneHalfStar.concat(oneStar)))))))));
-		}
-		var sortedRatingArray = sortReviews(ratingArray[0]);
-		return sortedRatingArray;
-	}
-	
-	$("#sortSelect").on("change", function(){
-		if($(this).val() == "newestArr"){
-			sortReviews(newestArr);
-		} else {
-			sortByRating($(this).val());
-		}
-	})
-	//End button code
-	
-	//Date checker for hours of operation
-	var clinicIsOpen = $(".hours span").hasClass("open"),
-		currentDate = new Date,
-		currentDay = currentDate.getDay(),
-		dayArray = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-		dayElement = $("tr:contains('" + dayArray[currentDay] + "')");
-	
-	if(clinicIsOpen){
-		dayElement.css({"color":"#065903","background-color":"#eff5f5","font-weight":"bold"});
-	}
-	//End hours of operation check
-	
-	$("#CaCallGroupEmail").on('change', function(){
-		var pattern = new RegExp('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}');
-		if (pattern.test(this.value) === true) {
-			this.setCustomValidity('');
-		} else {
-			this.setCustomValidity('Please enter a valid email address.');
-		}
+document.addEventListener('DOMContentLoaded', () => {
+
+	window.addEventListener('hashchange', () => {
+	  const offset = window.pageYOffset;
+	  window.scrollTo({
+	    top: offset - 70,
+	    behavior: 'smooth'
+	  });
 	});
 
-	$("#CaCallGroupCallerPhone").on('change', function(){
-		// Phone number must be at least 10 numerical digits
-		var digits = this.value.replace(/\D/g, '');
-		if (digits.length < 10) {
-			this.setCustomValidity('Please enter a valid phone number.');
-		} else {
-			this.setCustomValidity('');
-		}
+	// Rearrange clinic elements on mobile
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+	  const disclaimer = document.getElementById('disclaimer');
+	  const callClinic = document.getElementById('callClinic');
+	  disclaimer.parentNode.insertBefore(callClinic, disclaimer);
+	}
+
+	// EarQ and ida link functionality
+	const earqLinks = document.querySelectorAll('.earq-link, .ida-link');
+	earqLinks.forEach(link => {
+	  link.addEventListener('click', e => {
+	    e.preventDefault();
+	    const targetDiv = link.getAttribute('href');
+	    const closingAnimation = document.querySelectorAll('.closing-animation');
+	    closingAnimation.forEach(element => element.classList.remove('closing-animation'));
+	    window.scrollTo({
+	      top: document.querySelector(targetDiv).offsetTop,
+	      behavior: 'smooth'
+	    });
+	  });
 	});
 	
-	//Add cred popup on hover for clinicians
-	var credList = {
-		"AuD":"Doctor of Audiology",
-		"BC-HIS":"Board Certified in Hearing Instrument Sciences",
-		"CCC-A/SLP":"Certificate of Clinical Competence in Audiology/Speech Language Pathology",
-		"CCC-A":"Certificate of Clinical Competence in Audiology",
-		"FAAA":"Fellow of the American Academy of Audiology",
-		"HAD":"Hearing Aid Dispenser/Dealer",
-		"HIS":"Hearing Instrument Specialist",
-		"LHIS":"Licensed Hearing Instrument Specialist",
-		"MA":"Master of Arts",
-		"MD":"Medical Doctor",
-		"MS":"Master of Science",
-		"PhD":"Doctor of Philosophy"
+	// Add Google Maps link to Get Directions button
+	const clinicAddr = document.querySelector(".address").textContent.trim().replace(/ /g, "+").replace("#", "");
+	const directionsLink = document.querySelector(".directions-link");
+	if(directionsLink){
+		directionsLink.href = `https://www.google.com/maps/dir//${clinicAddr}`;
+	}
+
+	// Add recaptcha script on form click
+	const formInputs = Array.from(document.querySelectorAll("#CaCallApptRequestForm input"));
+	formInputs.forEach(input => {
+	  input.addEventListener("focus", function handleFocus() {
+	    if (!document.getElementById("CaCallApptRequestForm").classList.contains("focused")) {
+	      document.getElementById("CaCallApptRequestForm").classList.add("focused");
+	      const recaptchaScript = document.createElement('script');
+	      recaptchaScript.src = 'https://www.google.com/recaptcha/api.js';
+	      document.head.appendChild(recaptchaScript);
+	      input.removeEventListener("focus", handleFocus);
+	    }
+	  });
+	});
+
+	const moreReviewsContainer = document.getElementById("more-reviews");
+	if(moreReviewsContainer){
+		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
+
+		hiddenReviews.forEach(review => {
+		  review.classList.add("hidden-review");
+		});
+
+		const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
+		let hiddenRevNum = hiddenReviewElements.length;
+
+		const moreReviewsButton = document.getElementById("more-reviews-button");
+		moreReviewsButton.addEventListener("click", function(e) {
+			e.preventDefault();
+		  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		  fewerReviewsButton.style.display = "block";
+
+		  for (let i = 0; i < 5; i++) {
+		    hiddenReviewElements[0].classList.remove("hidden-review");
+		    hiddenRevNum--;
+
+		    if (hiddenRevNum === 0) {
+		      moreReviewsButton.style.display = "none";
+		      break;
+		    }
+		  }
+
+		  const moreReviewsContainer = document.getElementById("more-reviews");
+		  moreReviewsContainer.style.display = "block";
+
+		  return false;
+		});
+
+		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		fewerReviewsButton.addEventListener("click", function(e) {
+			e.preventDefault();
+		  const moreReviewsContainer = document.getElementById("more-reviews");
+		  moreReviewsContainer.style.display = "none";
+
+		  this.style.display = "none";
+
+		  const moreReviewsButton = document.getElementById("more-reviews-button");
+		  moreReviewsButton.style.display = "block";
+
+		  window.scrollTo({
+		    top: document.querySelector(".panel-section.reviews").offsetTop - 114,
+		    behavior: "smooth"
+		  });
+
+		  setTimeout(function() {
+		    hiddenReviewElements.forEach(element => {
+		      element.classList.add("hidden-review");
+		    });
+		    hiddenRevNum = document.querySelectorAll(".hidden-review").length;
+		  }, 1100);
+
+		  return false;
+		});
+	}
+	
+	const newestArr = Array.from(document.querySelectorAll(".well"));
+	const ratingArr = [];
+
+	const sortReviews = (chosenArray) => {
+	  chosenArray.forEach((review, i) => {
+	    if (document.getElementById("more-reviews")) {
+	      if (i < 5) {
+	        review.classList.remove("hidden-review");
+	        document.getElementById("more-reviews").insertAdjacentElement("beforebegin", review);
+	      } else {
+	        review.classList.add("hidden-review");
+	        document.getElementById("more-reviews").appendChild(review);
+	      }
+	    } else {
+	      document.querySelector(".panel-section.reviews").appendChild(review);
+	    }
+	  });
+
+	  document.getElementById("more-reviews-button").style.display = "block";
+	  document.getElementById("fewer-reviews-button").style.display = "none";
 	};
-	for (var i = 0; i < $(".provider-qualifications").length; i++) {
-		var credArray = $(".provider-qualifications").eq(i).html().replace(/\s+/g, '').replace(/\./g, '').split(",");
-		var popoverData = '';
-		for (var j = 0; j < credArray.length; j++) {
-			var currentCred = credArray[j];
-			if (credList[currentCred] !== undefined) {
-				popoverData += "<span class='cred-text'>"+currentCred+' - '+credList[currentCred]+'</span><br>';
-			}
-		}
-		if(popoverData != "") {
-			$(".cred-popover-"+i).attr("data-content", popoverData);
-		} else {
-			$(".cred-popover-"+i).remove();
-		}
-	}
-	$(".provider-qualifications a[data-content='']").remove();
-	
-	//Function to check if videos are in viewport
-	var isInViewport = function (el) {
-	    var elementTop = $(el).offset().top,
-	    	elementBottom = elementTop + $(el).outerHeight(),
-			viewportTop = $(window).scrollTop(),
-			viewportBottom = viewportTop + $(window).height();
-	
-	    return elementBottom > viewportTop && elementTop < viewportBottom;
+
+	const sortByRating = (chosenRating) => {
+	  const ratingArray = [];
+	  const fiveStar = [];
+	  const fourHalfStar = [];
+	  const fourStar = [];
+	  const threeHalfStar = [];
+	  const threeStar = [];
+	  const twoHalfStar = [];
+	  const twoStar = [];
+	  const oneHalfStar = [];
+	  const oneStar = [];
+
+	  newestArr.forEach((review) => {
+	    const fullStars = review.getElementsByClassName("hh-icon-full-star").length;
+	    const halfStars = review.getElementsByClassName("hh-icon-half-star").length;
+
+	    if (fullStars === 5) {
+	      fiveStar.push(review);
+	    } else if (fullStars === 4 && halfStars === 1) {
+	      fourHalfStar.push(review);
+	    } else if (fullStars === 4) {
+	      fourStar.push(review);
+	    } else if (fullStars === 3 && halfStars === 1) {
+	      threeHalfStar.push(review);
+	    } else if (fullStars === 3) {
+	      threeStar.push(review);
+	    } else if (fullStars === 2 && halfStars === 1) {
+	      twoHalfStar.push(review);
+	    } else if (fullStars === 2) {
+	      twoStar.push(review);
+	    } else if (fullStars === 1 && halfStars === 1) {
+	      oneHalfStar.push(review);
+	    } else if (fullStars === 1) {
+	      oneStar.push(review);
+	    }
+	  });
+
+	  if (chosenRating === "lowestRating") {
+	    ratingArray.push(oneStar.concat(oneHalfStar.concat(twoStar.concat(twoHalfStar.concat(threeStar.concat(threeHalfStar.concat(fourStar.concat(fourHalfStar.concat(fiveStar)))))))));
+	  } else {
+	    ratingArray.push(fiveStar.concat(fourHalfStar.concat(fourStar.concat(threeHalfStar.concat(threeStar.concat(twoHalfStar.concat(twoStar.concat(oneHalfStar.concat(oneStar)))))))));
+	  }
+
+	  const sortedRatingArray = sortReviews(ratingArray[0]);
+	  return sortedRatingArray;
 	};
 	
-	if($(".video-frame").length >= 1) {
-		
-		if($(".video-frame").length > 2) {
-			
-			//Scroll function to detect if gallery div is in view
-			$(window).scroll(function () {
-			    if (isInViewport($(".video-gallery"))) {
-			        for(var i = 0; i < $(".video-frame").length; i++) {
-			        	$(".video-frame").eq(i).attr("src",$(".video-frame").eq(i).attr("data-src"));
-			        }
-			        //Turn scroll function off once video sources are loaded
-			        $(window).off("scroll");
-			    }
-			});
-			
-			$(".video-gallery").after("<button id='videoGalleryButton' class='btn btn-light mt20 show-videos' style='margin:20px auto; display:block; clear:both'>View more videos</button><div id='moreVideos' style='display:none'></div>");
+	const sortSelect = document.getElementById("sortSelect");
 
-			$(document).on("click", "#videoGalleryButton", function(){
-				if($(this).hasClass('show-videos')) {
-					$(this).toggleClass('show-videos').text('View fewer videos');
-					$("#moreVideos").slideDown();
-					return false;
-				} else{
-					$(this).toggleClass('show-videos').text('View more videos');
-					$("#moreVideos").slideUp(1000);
-					$('html, body').animate({
-					    scrollTop: ($("#videoGallery").offset().top - 114)
-					}, 1000);
-					return false;
-				}
-			})
-			
-			for(var i = 2; i < $(".video-frame").length; i++) {
-				$(".video-frame").eq(2).appendTo($("#moreVideos"));
-			}
-			
-		} else{
-			$(window).scroll(function () {
-			    if (isInViewport($("#videoGallery"))) {
-			        for(var i = 0; i < $(".video-frame").length; i++) {
-			        	$(".video-frame").eq(i).attr("src",$(".video-frame").eq(i).attr("data-src"));
-			        }
-			        $(window).off("scroll");
-			    }
-			});
-		}
+	if(sortSelect){
+		sortSelect.addEventListener("change", function() {
+		  if (this.value === "newestArr") {
+		    sortReviews(newestArr);
+		  } else {
+		    sortByRating(this.value);
+		  }
+		});
+	}
+	
+	/*** TODO: uncomment once "Open now!"" is pulled in on view: ***
+	const clinicIsOpen = document.querySelector(".hours span").classList.contains("open");
+	const currentDate = new Date();
+	const currentDay = currentDate.getDay();
+	const dayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	const dayElement = Array.from(document.querySelectorAll("tr")).find(row =>
+	  row.textContent.includes(dayArray[currentDay])
+	);
+
+	if (clinicIsOpen) {
+	  dayElement.style.color = "#065903";
+	  dayElement.style.backgroundColor = "#eff5f5";
+	  dayElement.style.fontWeight = "bold";
+	}*/
+	
+	const caCallGroupEmail = document.getElementById("CaCallGroupEmail");
+	if(caCallGroupEmail){
+		caCallGroupEmail.addEventListener("change", function() {
+		  const pattern = new RegExp('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}');
+		  if (pattern.test(this.value)) {
+		    this.setCustomValidity("");
+		  } else {
+		    this.setCustomValidity("Please enter a valid email address.");
+		  }
+		});
+	}
+
+	const caCallGroupCallerPhone = document.getElementById("CaCallGroupCallerPhone");
+	if(caCallGroupCallerPhone){
+		caCallGroupCallerPhone.addEventListener("change", function() {
+		  // Phone number must be at least 10 numerical digits
+		  const digits = this.value.replace(/\D/g, '');
+		  if (digits.length < 10) {
+		    this.setCustomValidity('Please enter a valid phone number.');
+		  } else {
+		    this.setCustomValidity('');
+		  }
+		});
+	}
+	
+	const credList = {
+	  "AuD": "Doctor of Audiology",
+	  "BC-HIS": "Board Certified in Hearing Instrument Sciences",
+	  "CCC-A/SLP": "Certificate of Clinical Competence in Audiology/Speech Language Pathology",
+	  "CCC-A": "Certificate of Clinical Competence in Audiology",
+	  "FAAA": "Fellow of the American Academy of Audiology",
+	  "HAD": "Hearing Aid Dispenser/Dealer",
+	  "HIS": "Hearing Instrument Specialist",
+	  "LHIS": "Licensed Hearing Instrument Specialist",
+	  "MA": "Master of Arts",
+	  "MD": "Medical Doctor",
+	  "MS": "Master of Science",
+	  "PhD": "Doctor of Philosophy"
+	};
+
+	const providerQualifications = document.querySelectorAll(".provider-qualifications");
+	for (let i = 0; i < providerQualifications.length; i++) {
+	  const credArray = providerQualifications[i].innerHTML.replace(/\s+/g, '').replace(/\./g, '').split(",");
+	  let popoverData = '';
+	  for (let j = 0; j < credArray.length; j++) {
+	    const currentCred = credArray[j];
+	    if (credList[currentCred] !== undefined) {
+	      popoverData += "<span class='cred-text'>" + currentCred + ' - ' + credList[currentCred] + '</span><br>';
+	    }
+	  }
+	  if (popoverData !== "") {
+	    const popoverElement = document.querySelector(".cred-popover-" + i);
+	    popoverElement.setAttribute("data-content", popoverData);
+	  } else {
+	    const emptyPopoverElement = document.querySelector(".cred-popover-" + i);
+	    if (emptyPopoverElement) {
+	      emptyPopoverElement.remove();
+	    }
+	  }
+	}
+
+	const emptyLinks = document.querySelectorAll(".provider-qualifications a[data-content='']");
+	emptyLinks.forEach(function(link) {
+	  link.remove();
+	});
+	
+	const isInViewport = function (element) {
+	  const elementTop = element.offsetTop;
+	  const elementBottom = elementTop + element.offsetHeight;
+	  const viewportTop = window.pageYOffset || document.documentElement.scrollTop;
+	  const viewportBottom = viewportTop + window.innerHeight;
+
+	  return elementBottom > viewportTop && elementTop < viewportBottom;
+	};
+	
+	const videoFrames = document.querySelectorAll('.video-frame');
+
+	if (videoFrames.length >= 1) {
+	  if (videoFrames.length > 2) {
+	    // Scroll function to detect if gallery div is in view
+	    window.addEventListener('scroll', function () {
+	      if (isInViewport(document.querySelector('.video-gallery'))) {
+	        for (let i = 0; i < videoFrames.length; i++) {
+	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
+	        }
+	        // Turn scroll function off once video sources are loaded
+	        window.removeEventListener('scroll', arguments.callee);
+	      }
+	    });
+
+	    const videoGallery = document.querySelector('.video-gallery');
+	    const videoGalleryButton = document.createElement('button');
+	    videoGalleryButton.id = 'videoGalleryButton';
+	    videoGalleryButton.className = 'btn btn-light mt20 show-videos';
+	    videoGalleryButton.style.margin = '20px auto';
+	    videoGalleryButton.style.display = 'block';
+	    videoGalleryButton.style.clear = 'both';
+	    videoGalleryButton.textContent = 'View more videos';
+
+	    const moreVideos = document.createElement('div');
+	    moreVideos.id = 'moreVideos';
+	    moreVideos.style.display = 'none';
+
+	    videoGallery.parentNode.insertBefore(videoGalleryButton, videoGallery.nextSibling);
+	    videoGallery.parentNode.insertBefore(moreVideos, videoGallery.nextSibling);
+
+	    videoGalleryButton.addEventListener('click', function () {
+	      if (this.classList.contains('show-videos')) {
+	        this.classList.toggle('show-videos');
+	        this.textContent = 'View fewer videos';
+	        moreVideos.style.display = 'block';
+	      } else {
+	        this.classList.toggle('show-videos');
+	        this.textContent = 'View more videos';
+	        moreVideos.style.display = 'none';
+	        window.scrollTo({
+	          top: videoGallery.offsetTop - 114,
+	          behavior: 'smooth'
+	        });
+	      }
+	    });
+
+	    for (let i = 2; i < videoFrames.length; i++) {
+	      moreVideos.appendChild(videoFrames[i]);
+	    }
+	  } else {
+	    window.addEventListener('scroll', function () {
+	      if (isInViewport(document.querySelector('#videoGallery'))) {
+	        for (let i = 0; i < videoFrames.length; i++) {
+	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
+	        }
+	        window.removeEventListener('scroll', arguments.callee);
+	      }
+	    });
+	  }
 	}
 	
 	//photo gallery functions
-	if($(".photo-gallery").length > 0){
-		
-		for(var i=0;i < $(".photo-button").length; i++){
-			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-				$(".photo-button").eq(i).attr("disabled","disabled");
-			}
-			if ($(".photo-button").length == 1) {
-				$(".photo-button").addClass("col-xs-12 col-sm-6 offset-sm-3").attr("disabled","disabled");
-				break;
-			} else if ($(".photo-button").length == 2) {
-				$(".photo-button").eq(i).addClass("col-xs-12 col-sm-6").attr("disabled","disabled");
-			} else if ($(".photo-button").length == 3) {
-				$(".photo-button").eq(i).attr("disabled","disabled");
-			} else if(i < 3){
-				$(".photo-button").eq(i).addClass("col-xs-12 col-sm-4");
-			} else {
-				$(".photo-button").eq(i).addClass("hidden");
-			}
-		}
-    
-		if($(".photo-button").length > 3){
-			$(".photo-gallery").after("<button id='galleryButton' class='btn btn-secondary mt20' style='margin:20px auto; display:block; clear:both' data-target='#photoModal'>View more photos</button>");
+	const photoGallery = document.querySelector('.photo-gallery');
 
-			$(document).on("click", "#galleryButton", function(){
-				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && $(".photo-button.hidden").length < 1 ) {
-					for(var i=3;i < $(".photo-button").length; i++){
-						$(".photo-button").eq(i).addClass("hidden");
-					}
-					$("#galleryButton").text("View more photos");
-				} else if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && $(".photo-button").length >= 4) {
-					for(var i=0;i < $(".photo-button.hidden").length; i++){
-						$(".photo-button.hidden").removeClass("hidden");
-					}
-					$("#galleryButton").text("View fewer photos");
-				} else {
-					$("#photoModal").addClass("in").show();
-				}
-			})
+	if (photoGallery) {
+		
+		const photoButtons = document.querySelectorAll('.photo-button');
 
-			$(document).on("click", "#photoModal .close", function(){
-				$("#photoModal").removeClass("in").hide();
-			})
+		for (let i = 0; i < photoButtons.length; i++) {
+		  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		    photoButtons[i].disabled = true;
+		  }
+		  if (photoButtons.length === 1) {
+		    photoButtons[i].classList.add('col-xs-12', 'col-sm-6', 'offset-sm-3');
+		    photoButtons[i].disabled = true;
+		    break;
+		  } else if (photoButtons.length === 2) {
+		    photoButtons[i].classList.add('col-xs-12', 'col-sm-6');
+		    photoButtons[i].disabled = true;
+		  } else if (photoButtons.length === 3) {
+		    photoButtons[i].disabled = true;
+		  } else if (i < 3) {
+		    photoButtons[i].classList.add('col-xs-12', 'col-sm-4');
+		  } else {
+		    photoButtons[i].classList.add('hidden');
+		  }
 		}
+
+		if (photoButtons.length > 3) {
+		  const galleryButton = document.createElement('button');
+		  galleryButton.id = 'galleryButton';
+		  galleryButton.className = 'btn btn-secondary mt20';
+		  galleryButton.style.margin = '20px auto';
+		  galleryButton.style.display = 'block';
+		  galleryButton.style.clear = 'both';
+		  galleryButton.setAttribute('data-target', '#photoModal');
+		  galleryButton.textContent = 'View more photos';
+
+		  photoGallery.after(galleryButton);
+
+		  galleryButton.addEventListener('click', function () {
+		    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && document.querySelectorAll('.photo-button.hidden').length < 1) {
+		      for (let i = 3; i < photoButtons.length; i++) {
+		        photoButtons[i].classList.add('hidden');
+		      }
+		      galleryButton.textContent = 'View more photos';
+		    } else if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && photoButtons.length >= 4) {
+		      const hiddenButtons = document.querySelectorAll('.photo-button.hidden');
+		      for (let i = 0; i < hiddenButtons.length; i++) {
+		        hiddenButtons[i].classList.remove('hidden');
+		      }
+		      galleryButton.textContent = 'View fewer photos';
+		    } else {
+		      const photoModal = document.querySelector('#photoModal');
+		      photoModal.classList.add('in');
+		      photoModal.style.display = 'block';
+		    }
+		  });
+
+		  const closeButtons = document.querySelectorAll('#photoModal .close');
+		  for (let i = 0; i < closeButtons.length; i++) {
+		    closeButtons[i].addEventListener('click', function () {
+		      const photoModal = document.querySelector('#photoModal');
+		      photoModal.classList.remove('in');
+		      photoModal.style.display = 'none';
+		    });
+		  }
+		}
+
 		
-		$(".modal-body .photo.gallery").css({"width":"100%","margin":"0"});
-		
-		//Reset photo gallery in case of orientation change
-		$(window).on("orientationchange",function(){
-			setTimeout(function(){
-				setArrow(".photo-gallery");
-			},200);
-		})
-		
-		$("#photoModal").on("click", function(){
-			setTimeout(function(){
-				if(!$("body").hasClass("modal-open")){
-					$(".photo-button").removeAttr("disabled");
-					if(/Android|webOS|iPhone|iPad/i.test(navigator.userAgent)) {
-						$(".sticky-footer").show();
-					}
-					
-					//send user back to gallery
-					if($(".video-gallery").length > 0) {
-						$([document.documentElement, document.body]).animate({
-							scrollTop: $(".video-gallery").offset().top
-						});
-					}
-				}
-			},500)
-		});	
+		const modalBody = document.querySelector('.modal-body');
+
+		photoGallery.style.width = '100%';
+		photoGallery.style.margin = '0';
+
+		window.addEventListener('orientationchange', function () {
+		  setTimeout(function () {
+		    setArrow('.photo-gallery');
+		  }, 200);
+		});
+
+		const photoModal = document.querySelector('#photoModal');
+		photoModal.addEventListener('click', function () {
+		  setTimeout(function () {
+		    if (!document.body.classList.contains('modal-open')) {
+		      const photoButtons = document.querySelectorAll('.photo-button');
+		      for (let i = 0; i < photoButtons.length; i++) {
+		        photoButtons[i].removeAttribute('disabled');
+		      }
+
+		      if (/Android|webOS|iPhone|iPad/i.test(navigator.userAgent)) {
+		        const stickyFooter = document.querySelector('.sticky-footer');
+		        stickyFooter.style.display = 'block';
+		      }
+
+		      if (document.querySelector('.video-gallery')) {
+		        const videoGalleryOffsetTop = document.querySelector('.video-gallery').offsetTop;
+		        window.scrollTo({
+		          top: videoGalleryOffsetTop,
+		          behavior: 'smooth'
+		        });
+		      }
+		    }
+		  }, 500);
+		});
 	}
 	
 	$('[data-toggle="popover"]').popover();
 });
-$(window).on('load', function(){
-	// The '__utmzz' cookie should be present when the page is fully loaded
-	// It should contain 'utmcsr=(xxx)' and 'utmcmd=(xxx)'
-	var source = 'unknown';
-	var match = document.cookie.match(new RegExp('utmcsr=(.*?)[|]'));
-	if (match) {
-		source = match[1];
-		source = source.replace(/[()]/g, '');
-	}
-	var medium = 'unknown';
-	match = document.cookie.match(new RegExp('utmcmd=(.*?)[|]'));
-	if (match) {
-		medium = match[1];
-		medium = medium.replace(/[()]/g, '');
-	}
-	$("#CaCallGroupTrafficSource").val(source);
-	$("#CaCallGroupTrafficMedium").val(medium);
+
+window.addEventListener('load', function () {
+  var source = 'unknown';
+  var match = document.cookie.match(/utmcsr=(.*?)[|]/);
+  if (match) {
+    source = match[1];
+    source = source.replace(/[()]/g, '');
+  }
+  var medium = 'unknown';
+  match = document.cookie.match(/utmcmd=(.*?)[|]/);
+  if (match) {
+    medium = match[1];
+    medium = medium.replace(/[()]/g, '');
+  }
+  document.querySelectorAll('CaCallGroup[traffic_source]').value = source;
+  document.querySelectorAll('CaCallGroup[traffic_medium]').value = medium;
 });

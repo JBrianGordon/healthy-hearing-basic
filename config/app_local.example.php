@@ -98,4 +98,13 @@ return [
     'localIp' => '_my_ip_',
     'country' => 'US',
     //'country' => 'CA',
+
+    // reCAPTCHA keys
+    'recaptchaPublicKey' => '_recaptcha_public_key_',
+    'recaptchaPrivateKey' => '_recaptcha_private_key_',
+
+    // Mailchimp API 3.0 API
+    'mailchimpApiKey' => '_mailchimp_api_key_',
+    'mailchimpListIdNewsletter' => '_mailchimp_list_id_',
+    'mailchimpServerPrefix' => '_mailchimp_server_prefix_', // e.g. 'us10'
 ];

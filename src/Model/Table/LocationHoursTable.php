@@ -29,6 +29,8 @@ use Cake\Validation\Validator;
  */
 class LocationHoursTable extends Table
 {
+    public $days = ['sun','mon','tue','wed','thu','fri','sat'];
+
     /**
      * Initialize method
      *

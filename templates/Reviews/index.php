@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Review[]|\Cake\Collection\CollectionInterface $reviews
  */
+
+$this->Html->script('dist/admin_index_review.min', ['block' => true]);
 ?>
 <div class="reviews index content">
     <?= $this->Html->link(__('New Review'), ['action' => 'add'], ['class' => 'button float-right']) ?>

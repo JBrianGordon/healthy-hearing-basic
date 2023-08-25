@@ -27,10 +27,5 @@
   }
 }
 .inline-date {
-  display: inline-block;
-  width:auto;
-  
-  &#SearchModifiedStart, &#SearchModifiedEnd, &#SearchFrozenExpirationStart, &#SearchFrozenExpirationEnd, &#SearchLastReviewDateStart, &#SearchLastReviewDateEnd {
-	  width: 46%;
-  }
+    display: inline-block;
 }

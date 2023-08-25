@@ -5,7 +5,7 @@
 	height: 34px;
 	
 	&.export-label {
-		width: 275px;
+		width: 235px;
 		float: left;
 		
 		p {
@@ -135,7 +135,7 @@
 	color: #fff;
 	margin-left: 5px;
 	
-	&[for="LocationIsIdaVerified"], &[for="LocationIsEarq4y"] {
+	&[for="location-is-ida-verified"] {
 		color: inherit;
 		font-weight: bold;
 		width: 100%;

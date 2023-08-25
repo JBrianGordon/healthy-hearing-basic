@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\Admin\ReviewsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -24,7 +23,50 @@ class ReviewsControllerTest extends TestCase
     protected $fixtures = [
         'app.Reviews',
         'app.Locations',
+        'app.Users',
     ];
+
+    /**
+     * Test subject
+     *
+     * @var \App\Model\Table\ReviewsTable
+     */
+    protected $Reviews;
+
+    /**
+     * login method to set session Auth
+     *
+     * @return void
+     */
+    protected function login($userId = 1): void
+    {
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get($userId);
+        $this->session(['Auth' => $user]);
+    }
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+        $this->Reviews = $this->getTableLocator()->get('Reviews');
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->cleanup();
+        parent::tearDown();
+    }
 
     /**
      * Test index method
@@ -60,14 +102,36 @@ class ReviewsControllerTest extends TestCase
     }
 
     /**
-     * Test delete method
+     * Delete method redirects to admin/reviews after successful delete
      *
      * @return void
      * @uses \App\Controller\Admin\ReviewsController::delete()
+     * @test
+     * @testdox Delete method redirects to admin/reviews after successful delete
      */
-    public function testDelete(): void
+    public function successfulDeleteRedirectsToIndex(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $this->post('/admin/reviews/delete/1');
+        $this->assertRedirect('admin/reviews');
+    }
+
+    /**
+     * Delete method reduces review count by 1 after successful delete
+     *
+     * @return void
+     * @uses \App\Controller\Admin\ReviewsController::delete()
+     * @test
+     * @testdox Delete method reduces review count by 1 after successful delete
+     */
+    public function successfulDeleteReducesReviewCountByOne(): void
+    {
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+        $originalReviewCount = $this->Reviews->find()->count();
+        $this->post('/admin/reviews/delete/1');
+        $this->assertEquals($originalReviewCount - 1, $this->Reviews->find()->count());
     }
 
     /**

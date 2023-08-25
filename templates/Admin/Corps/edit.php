@@ -4,60 +4,94 @@
  * @var \App\Model\Entity\Corp $corp
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+ 
+$this->Html->script('dist/corp_edit.min', ['block' => true]);
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $corp->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Corps'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="corps form content">
-            <?= $this->Form->create($corp) ?>
-            <fieldset>
-                <legend><?= __('Edit Corp') ?></legend>
-                <?php
-                    echo $this->Form->control('user_id');
-                    echo $this->Form->control('type');
-                    echo $this->Form->control('last_modified', ['empty' => true]);
-                    echo $this->Form->control('modified_by');
-                    echo $this->Form->control('title');
-                    echo $this->Form->control('title_long');
-                    echo $this->Form->control('slug');
-                    echo $this->Form->control('abbr');
-                    echo $this->Form->control('short');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('notify_email');
-                    echo $this->Form->control('approval_email');
-                    echo $this->Form->control('phone');
-                    echo $this->Form->control('website_url');
-                    echo $this->Form->control('website_url_description');
-                    echo $this->Form->control('pdf_all_url');
-                    echo $this->Form->control('favicon');
-                    echo $this->Form->control('address');
-                    echo $this->Form->control('thumb_url');
-                    echo $this->Form->control('facebook_title');
-                    echo $this->Form->control('facebook_description');
-                    echo $this->Form->control('facebook_image');
-                    echo $this->Form->control('date_approved', ['empty' => true]);
-                    echo $this->Form->control('id_old');
-                    echo $this->Form->control('is_approvalrequired');
-                    echo $this->Form->control('is_active');
-                    echo $this->Form->control('is_featured');
-                    echo $this->Form->control('id_draft_parent');
-                    echo $this->Form->control('wbc_config');
-                    echo $this->Form->control('priority');
-                    echo $this->Form->control('users._ids', ['options' => $users]);
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
+<div class="container-fluid site-body fap-cities">
+	<div class="row">
+		<div class="backdrop-container">
+			<div class="backdrop backdrop-gradient backdrop-height"></div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="clear"></div>
+				<header class="col-md-12 mt10">
+					<div class="panel panel-light">
+						<div class="panel-heading"><?= __('Company Actions') ?></div>
+						<div class="panel-body p10">
+							<div class="btn-group">
+								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+								<?= $this->Form->postLink(__(' Delete'),['action' => 'delete', $corp->id],['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'btn btn-danger bi bi-trash-fill', 'id' => 'deleteBtn']) ?>
+								<?= /*** TODO: add preview to controller ***/ $this->Html->link(__(' Preview'), ['action' => 'preview'], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+								<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+								<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft'], ['class' => 'btn btn-default']) ?>
+							</div>
+						</div>
+					</div>
+				</header>
+				<div class="col-md-12">
+					<section class="panel">
+						<div class="panel-body">
+							<div class="panel-section expanded">
+								<div class="row">
+								    <div class="column-responsive column-80">
+								        <div class="corps form content">
+											<div class="logo-container">
+												<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
+											</div>
+											<div class="clearfix"></div>
+								            <?= $this->Form->create($corp) ?>
+								            <fieldset>
+								                <?php
+									                echo $this->Form->control('title');
+									                //*** TODO: Add primary authors ***
+									                echo $this->Form->control('priority', ['label' => 'Order']);
+									                echo $this->Form->control('last_modified', ['empty' => true]);
+									                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
+									                echo $this->Form->control('is_active');
+									                echo '</div>';
+								                ?>
+												<div class="tabbable clearfix">
+													<ul class="nav nav-tabs">
+														<li class="active"><a href="#Corp" data-toggle="tab" aria-expanded="true">Company</a></li>
+														<li class=""><a href="#Admin" data-toggle="tab" aria-expanded="false">Admin</a></li>
+													</ul>
+													<div class="tab-content">
+														<br>
+														<div class="tab-pane active" id="Corp">
+															<?php
+																echo $this->Form->control('description');
+																echo $this->Form->control('short');
+															?>
+														</div>
+														<div class="tab-pane" id="Admin">
+															<?php
+																echo $this->Form->control('title_long');
+																echo $this->Form->control('slug');
+																echo $this->Form->control('thumb_url');
+																//*** TODO: add upload file functionality ***
+																echo $this->Form->control('facebook_title');
+																echo $this->Form->control('facebook_description');
+																echo $this->Form->control('facebook_image');
+																echo $this->Form->control('date_approved', ['empty' => true]);
+																//*** TODO: Add Contributors list ***
+															?>
+														</div>
+													</div>
+												</div>
+								            </fieldset>
+								            <div class="form-actions tar">
+								            <?= $this->Form->button(__('Save company'), ['class' => 'btn btn-primary btn-lg']) ?>
+								            <?= $this->Form->end() ?>
+								        </div>
+								    </div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

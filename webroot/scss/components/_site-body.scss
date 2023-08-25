@@ -4,6 +4,7 @@
   @include transition(all 0.3s ease-in);
   z-index: 1;
   overflow-y: hidden;
+  padding: 0 15px;
   
   &.home {
 	  .row {
@@ -75,6 +76,113 @@
 	}
 	
   }
+  
+&.fap-cities {
+	//If this is breaking styling, find another solution
+	//padding: 0;
+	
+	.container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	  
+	label {
+		width: 25%;
+		float: left;
+		text-align: right;
+		padding: 7px 15px 0;
+		font-weight: bold;
+
+		@media(max-width: $screen-sm-max){
+			width: 100%;
+			text-align: left;
+		}
+		
+		&.col-md-2-override {
+			width: 16.66666%;
+		}
+		
+		&.col-md-4-override {
+			width: 33.33333%;
+		}
+	}
+	
+	.form-control, .form-select {
+		width: 75%;
+		font-size: 16px;
+		flex-flow: row-reverse;
+
+		@media(max-width: $screen-sm-max){
+			width: 100%;
+		}
+		
+		&.inline-date {
+			width: 46%;
+		}
+		
+		&.col-md-8-override {
+			width: 66.66666%;
+		}
+		
+		&.col-md-10-override {
+			width: 83.33333%;
+		}
+	}
+	
+	.date {  
+		display: block;
+		color: #212529;
+	}
+	
+	.form-check {
+		padding-left: 0;
+		
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 25px;
+			top: 8px;
+		}
+		
+		&.checkbox {
+			label {
+				min-height: 25px;
+				padding-left: 20px;
+				margin-bottom: 0;
+				font-weight: normal;
+				cursor: pointer;
+				width: auto;
+			}
+			
+			input[type=checkbox] {
+				position: relative;
+				margin-right: 10px;
+				float: left;
+			}
+		}
+	}
+
+	.form-group{
+		display: flex;
+
+		@media(max-width: $screen-sm-max){
+			flex-direction: column;
+
+			&.checkbox {
+				flex-direction: initial;
+			}
+		}
+	}
+}
+
+.clearfix {
+	display: block;
+	clear: both
+}
+
+.pull-right {
+	float: right;
+}
   
 	.read-more-row {
 	  max-width: 100%;
@@ -154,21 +262,88 @@
   
   &.blog{
 	  overflow-y: visible;
+
+	  .row {
+
+		@media(max-width: $screen-sm-max){
+			display: block;
+
+			.col-md-3, .col-md-9 {
+				padding:0;
+			}
+		}
+
+		.blog-image {
+		  	.img-responsive {
+				display: block;
+				max-width: 100%;
+				height: auto;
+		  	}
+		}
+
+		.table-responsive {
+			.table {
+				width: 100%;
+				max-width: 100%;
+				caption-side: top;
+
+				thead, tbody, tfoot {
+					th, td {
+						border-width: 1px;
+				    padding: 12px 24px;
+				    line-height: 1.6;
+
+						@media(max-width: $screen-xs-max){
+							white-space: nowrap;
+						}
+					}
+				}
+
+				@media(max-width: $screen-xs-max){
+					margin-bottom: 0;
+				}
+			}
+
+			@media(max-width: $screen-xs-max){
+				width: 100%;
+				margin-bottom: 18.75px;
+				overflow-y: hidden;
+				border: 1px solid #ddd;
+			}
+		}
+	  }
   }
   
   &.content-body{
 	overflow-y: visible;
 	overflow-x: hidden;
+
+	article {
+		.row {
+			@media(max-width: $screen-sm-max){
+				display: block;
+				padding: 0 15px;
+			}
+		}
+	}
 	
 	header {
 	  >div:first-child {
+	  	padding: 0 0 22px; 
+
 		  @media only screen and (min-width: $screen-sm-min) {
-			  padding: 0 70px;
+			  padding: 0 60px 25px;
 		  }	  
 	  }
 	}
 	
 	.header-content {
+
+		@media(max-width: $screen-sm-max){
+			display: block;
+			padding: 0 15px;
+		}
+
 	  .col-md-8 {
 		  >div {
 			  @media only screen and (min-width: $screen-sm-min) {

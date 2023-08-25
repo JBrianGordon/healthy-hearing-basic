@@ -4,6 +4,8 @@ html {
 body {
 	font-size: 16px;
 	line-height: 1.6;
+  overflow-x: hidden;
+  background-color: $body-bg;
 }
 body, html {
   @include font($font-family-primary, 'normal', "400");
@@ -27,6 +29,7 @@ h1, .h1 {
 h2, .h2 {
   margin-top: 1em;
   margin-bottom: 15px;
+  font-size: 3rem;
 }
 
 h3 {
@@ -53,6 +56,17 @@ h5, .h5 {
 
 h6 {
 	line-height: 1.5
+}
+
+hr {
+	margin: 25px 0;
+	background-color: #eee;
+	border: 0;
+	border-top: 1px solid #777;
+}
+
+th {
+	vertical-align: top;
 }
 
 @media only screen and (max-width: $screen-sm-max) {
@@ -96,6 +110,10 @@ a.print-link {
     margin: -4% 0.5em 0 0;
     vertical-align: middle;
   }
+}
+
+.hidden {
+  display: none;
 }
 
 .text-primary {
@@ -183,6 +201,10 @@ a.print-link {
 	.popover-content {
 		color: #2b2c2d;
 	}
+}
+
+.dropdown-item {
+	font-size: 16px;
 }
 
 blockquote {

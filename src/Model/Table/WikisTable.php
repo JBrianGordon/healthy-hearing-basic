@@ -6,6 +6,8 @@ namespace App\Model\Table;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * Wikis Model
@@ -56,16 +58,22 @@ class WikisTable extends Table
             ],
         ]);
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('Authors', [
+            'className' => 'Users',
             'foreignKey' => 'user_id',
         ]);
-        $this->hasMany('TagWikis', [
-            'foreignKey' => 'wiki_id',
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'tag_wikis',
         ]);
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'wiki_id',
-            'targetForeignKey' => 'user_id',
+        $this->belongsToMany('Contributors', [
+            'className' => 'Users',
             'joinTable' => 'users_wikis',
+            'targetForeignKey' => 'user_id'
+        ]);
+        $this->belongsToMany('Reviewers', [
+            'className' => 'Users',
+            'joinTable' => 'reviewers_wikis',
+            'targetForeignKey' => 'user_id'
         ]);
     }
 
@@ -206,5 +214,160 @@ class WikisTable extends Table
         // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    public function findForIndex() {
+        //Grab all the parents first in the order we want them in.
+        $parents = $this->find('all', array(
+            'conditions' => array(
+                'Wikis.is_active' => true,
+                'Wikis.slug NOT LIKE' => '%/%'
+            ),
+            'fields' => array('Wikis.slug'),
+            'order' => ['Wikis.priority' => 'ASC', 'Wikis.slug' => 'ASC']
+        ))->all();
+        $retval = array();
+        $hideSlugs = [];
+        if (!Configure::read('showAssistiveListening')) {
+            $hideSlugs[] = 'assistive-listening-devices';
+        }
+        if (!Configure::read('showTinnitus')) {
+            $hideSlugs[] = 'tinnitus';
+        }
+        foreach($parents as $parent) {
+            if (in_array($parent->slug, $hideSlugs)) {
+                continue;
+            }
+            $retval[] = $this->findNavBySlug($parent->slug);
+        }
+        return $retval;
+    }
+
+    /**
+    * Find navigation bar of other wikis based on the given slug.
+    * @param string slug.
+    * @return array of navigation.
+    */
+    public function findNavBySlug($slug = null) {
+        $retval = array(
+            'parent' => [],
+            'children' => []
+        );
+        $parts = explode("/",$slug);
+        $parentSlug = array_shift($parts);
+        $retval = array(
+            'parent' => $this->findForLinkBySlug($parentSlug),
+            'children' => $this->findForLinkBySlug($parentSlug.'/%', true)
+        );
+        return $retval;
+    }
+
+    /**
+    * Find for a link by the slug
+    * @param string slug
+    * @param bool findAll - true to find all, false to find first (default)
+    * @return array of result with only name and slug returned.
+    */
+    public function findForLinkBySlug($slug = null, $findAll=false) {
+        $wikiQuery = $this->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'slug LIKE' => $slug
+            ],
+            'fields' => ['name', 'slug', 'short'],
+            'order' => ['priority ASC, name ASC']
+        ]);
+        if ($findAll) {
+            $retval = $wikiQuery->all();
+        } else {
+            $retval = $wikiQuery->first();
+        }
+        return $retval;
+    }
+
+    public function findRedirectBySlug($slug = null) {
+        $wiki = $this->find('all', [
+            'conditions' => [
+                'slug' => $slug,
+                'is_active' => true
+            ],
+            'fields' => ['slug'],
+        ])->first();
+        if (!empty($wiki) && isset($wiki->hh_url)) {
+            return $wiki->hh_url;
+        }
+        // This slug is not active. Redirect to parent.
+        if (stripos($slug, '/') !== false) {
+            $parentSlug = substr($slug, 0, stripos($slug, '/'));
+            if (in_array($parentSlug, Configure::read('wikiCategories'))) {
+                return ['prefix'=>false, 'plugin'=>false, 'controller'=>'wikis', 'action'=>'view', 'slug'=>$parentSlug];
+            }
+        }
+        // Invalid slug
+        return false;
+    }
+
+    /**
+    * Find a content based off it's id and uri
+    * @param id
+    * @param current here
+    * @return array of result
+    */
+    public function findBySlug($slug, $uri = null, $bypass = false) {
+        $conditions = [
+            'Wikis.is_active' => true,
+            'Wikis.slug' => $slug
+        ];
+        if ($bypass) {
+            unset($conditions['Wikis.is_active']);
+        }
+        $wiki = $this->find('all', [
+            'conditions' => $conditions,
+            'contain' => ['Authors','Tags','Contributors','Reviewers']
+        ])->first();
+        if (!empty($wiki) && $uri == Router::url(['prefix'=>false, 'plugin'=>false, 'controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
+            return $wiki;
+        }
+        return [];
+    }
+
+    /**
+    * Takes an ID of content or a list of tags and outputs the
+    * @param mixed id | content array with Tag as associated
+    * @return string of tags for custom vars
+    */
+    public function tagsForCustomVar($wiki){
+        if (!is_object($wiki)) {
+            $wiki = $this->find('all', [
+                'conditions' => ['Wikis.id' => $wiki],
+                'contain' => ['Tags']
+            ])->first();
+        }
+        //Parse Tags into string for customVar, wiki tags get a w- appended onto it.
+        $retval = [];
+        $tags = empty($wiki->tags) ? [] : $wiki->tags;
+        foreach ($tags as $tag) {
+            $retval[] = 'w-' . $tag->name;
+        }
+        return implode(',', $retval);
+    }
+
+    /**
+    * Find for a link by the id
+    * @param array of wikiIds
+    * @return array of result with only name and slug returned.
+    */
+    public function findForLinkByIds($wikiIds) {
+        if (!is_array($wikiIds)) {
+            return [];
+        }
+        return $this->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'id IN' => $wikiIds
+            ],
+            'fields' => ['name','title_h1','slug','priority'],
+            'order' => ['priority ASC, name ASC']
+        ])->all();
     }
 }

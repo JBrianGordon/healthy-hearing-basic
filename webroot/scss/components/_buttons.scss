@@ -1,9 +1,16 @@
 .btn {
-  @include button-size(6px, 1.25em, 85%, $btn-border-radius);
-  @include box-shadow(rgba(0,0,0,0.15) 0px 1px 2px);
-  text-transform: uppercase;
-  font-weight: bold;
-  line-height: 1.4;
+	padding: 6px 17px;
+	font-size: 85%;
+	border-radius: 3em;
+	box-shadow:rgba(0,0,0,0.15) 0px 1px 2px;
+	text-transform: uppercase;
+	font-weight: bold;
+	line-height: 1.4;
+	
+	&.rounded-start {
+		border-bottom-left-radius: 3rem !important;
+		border-top-left-radius: 3rem !important;
+	}
 }
 
 .btn-secondary {
@@ -11,7 +18,7 @@
 }
 
 .btn-light {
-  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+  @include button-variant($btn-light-bg, $btn-light-border, $btn-light-color);
 }
 
 .btn-neutral {
@@ -30,15 +37,17 @@
 }
 .btn-sm {
   // line-height: ensure proper height of button next to small input
-  @include button-size(5px, 12px, 12px, $btn-border-radius);
+  padding: 5px 12px;
+  font-size: 12px;
   line-height: 1.5;
+  border-radius: 3em;
   
   &.group-toggle {
 	  float: right;
   }
 }
 .btn-xs {
-  @include button-size(3px, 6px, 1.5, $btn-border-radius);
+  @include button-size(3px, 6px, 12px, $btn-border-radius);
 }
 
 .btn-print{
@@ -67,6 +76,14 @@
 	ul.dropdown-menu.show {
 	    transform: none!important;
 	    top:100%!important;
+	}
+}
+
+.btn-group {
+  flex-wrap: wrap;
+  
+	>.btn:not(:first-child), >.btn-group:not(:first-child) {
+		margin-left: 0;
 	}
 }
 
@@ -190,4 +207,9 @@ span#exportClose {
     background: #fff;
     color: $text-color;
     z-index: 2;
+}
+
+#titleUnlock {
+    position: absolute;
+    left: 75%;
 }

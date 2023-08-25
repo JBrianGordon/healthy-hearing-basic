@@ -56,9 +56,7 @@ class TagsTable extends Table
             'foreignKey' => 'tag_id',
         ]);
         $this->belongsToMany('Content', [
-            'foreignKey' => 'tag_id',
-            'targetForeignKey' => 'content_id',
-            'joinTable' => 'content_tags',
+            'through' => 'ContentTags',
         ]);
     }
 

@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  * @property string $value
- * @property int $order
+ * @property int $priority
  */
 class Configuration extends Entity
 {
@@ -27,6 +27,6 @@ class Configuration extends Entity
     protected $_accessible = [
         'name' => true,
         'value' => true,
-        'order' => true,
+        'priority' => true,
     ];
 }

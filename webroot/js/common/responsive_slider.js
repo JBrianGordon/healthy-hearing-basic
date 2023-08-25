@@ -1,6 +1,8 @@
 import '../../../node_modules/jquery-ui/ui/effects/effect-slide';
 import '../jquery/jquery.cookie';
 
+/*** TODO: check when slider built into views ***/
+
     var hhstickypanel = jQuery("#hh-sticky-panel");
 
     jQuery(".sticky-panel-handle").on("click", function(e) {
