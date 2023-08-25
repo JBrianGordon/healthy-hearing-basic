@@ -37,7 +37,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						                <?php
 							                echo '<div class="mb-3 form-group text"><label class="form-label" for="id">ID</label><div class="form-control border-0 pl0">' . $crmSearch->id . '</div></div><div class="clearfix"></div>';
 						                    echo $this->Form->control('model');
-						                    echo $this->Form->control('order');
+						                    echo $this->Form->control('priority');
 						                    echo $this->Form->control('title');
 						                    echo $this->Form->control('search');
 						                    echo $this->Form->control('is_public');

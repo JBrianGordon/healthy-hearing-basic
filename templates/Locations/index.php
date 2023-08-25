@@ -112,7 +112,7 @@
                     <th><?= $this->Paginator->sort('is_bypassed') ?></th>
                     <th><?= $this->Paginator->sort('is_call_assist') ?></th>
                     <th><?= $this->Paginator->sort('timezone') ?></th>
-                    <th><?= $this->Paginator->sort('covid19_statement') ?></th>
+                    <th><?= $this->Paginator->sort('optional_message') ?></th>
                     <th><?= $this->Paginator->sort('is_service_agreement_signed') ?></th>
                     <th><?= $this->Paginator->sort('is_junk') ?></th>
                     <th><?= $this->Paginator->sort('id_coupon') ?></th>
@@ -224,7 +224,7 @@
                     <td><?= h($location->is_bypassed) ?></td>
                     <td><?= h($location->is_call_assist) ?></td>
                     <td><?= h($location->timezone) ?></td>
-                    <td><?= h($location->covid19_statement) ?></td>
+                    <td><?= h($location->optional_message) ?></td>
                     <td><?= h($location->is_service_agreement_signed) ?></td>
                     <td><?= h($location->is_junk) ?></td>
                     <td><?= $this->Number->format($location->id_coupon) ?></td>

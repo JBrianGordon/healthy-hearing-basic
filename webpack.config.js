@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const UglifyJS = require('uglify-js');
 const penthouse = require('penthouse');
 const fs = require('fs');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const adminFolder = './webroot/js/admin/';
 const commonFolder = './webroot/js/common/';
 const adminFiles= fs.readdirSync(adminFolder);
@@ -26,6 +27,43 @@ module.exports = {
 	mode: 'production',
 	entry: entries,
 	devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "raw-loader"
+          }
+        ]
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
+  optimization: {
+    minimizer: [
+      "...",
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.svgoMinify,
+          options: {
+            encodeOptions: {
+              // Pass over SVGs multiple times to ensure all optimizations are applied. False by default
+              multipass: true,
+              plugins: [
+                // set of built-in plugins enabled by default
+                // see: https://github.com/svg/svgo#default-preset
+                "preset-default",
+              ],
+            },
+          },
+        },
+      }),
+    ],
+  },
 	resolve: {
 		extensions: [ '.tsx', '.ts', '.js' ],
 		alias: {
@@ -35,13 +73,13 @@ module.exports = {
 	performance: {
 	    hints: false
 	},
-    plugins: [
+  plugins: [
 		new webpack.ProvidePlugin({
 		  $: 'jquery',
 		  jQuery: 'jquery',
 		  Popper: ['dist/umd/popper.js', 'default']
-		})
-    ],
+		}),
+	],
 	output: {
 		filename: '[name].min.js',
 		path: path.resolve(__dirname, 'webroot/js/dist')

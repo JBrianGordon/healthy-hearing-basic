@@ -76,7 +76,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Order') ?></th>
-                    <td><?= $this->Number->format($wiki->order) ?></td>
+                    <td><?= $this->Number->format($wiki->priority) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Facebook Image Width') ?></th>
@@ -202,8 +202,8 @@
                             <td><?= h($users->created) ?></td>
                             <td><?= h($users->modified) ?></td>
                             <td><?= h($users->modified_by) ?></td>
-                            <td><?= h($users->lastlogin) ?></td>
-                            <td><?= h($users->is_active) ?></td>
+                            <td><?= h($users->last_login) ?></td>
+                            <td><?= h($users->active) ?></td>
                             <td><?= h($users->is_hardened_password) ?></td>
                             <td><?= h($users->is_admin) ?></td>
                             <td><?= h($users->is_it_admin) ?></td>

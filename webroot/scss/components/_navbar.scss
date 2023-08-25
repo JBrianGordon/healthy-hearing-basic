@@ -12,7 +12,6 @@
 			position: relative;
 			display: block;
 			padding: 10px 13px;
-			color: #304369;
 		}
 		
 		&.active {
@@ -33,6 +32,10 @@
 	
 	.container {
 		display: block;
+
+		> .row {
+			max-width: 100vw;
+		}
 		
 		.navbar-collapse {
 			overflow: visible;
@@ -44,8 +47,16 @@
 			}
 		}
 	}
+
+	@media(max-width: $screen-sm-max) {
+		width: calc(100% + 5px);
+	}
 	
 	&.navbar-expand-lg {
+
+		.active {
+			background-color: #f9f9f9;
+		}
 		
 		.navbar-toggler {
 			float: right;
@@ -53,6 +64,10 @@
 		}
 		.navbar-nav .nav-link {
 			color: $brand-primary;
+
+			&:hover {
+				background-color: #f9f9f9;
+			}
 			
 			.hidden-sm {
 				@media (max-width: $screen-sm-max) {
@@ -78,34 +93,38 @@
 	&.navbar-default {
 	  border: 0;
 	  overflow: visible;
+	  width:100%;
+	  background-color: #fff;
 	
 	  &.has-shadow {
 		 @include box-shadow(0px 2px 8px rgba(0,0,0,0.15));
 	  }
 	  
 	
-	  .navbar-logo {
-		 float: left;
-		 height: $navbar-height;
-		 @media only screen and (min-width: $screen-lg-min) {
-		   /*margin-left: -30px;*/
-		 }
-	
-		 img {
-		   display: block;
-		   height: 100%;
-		   margin: 0;
-		   max-height: 40px;
-		   position: relative;
-		   top: calc(50% - 20px);
-		   
-		   @media only screen and (max-width: $screen-sm-max) {
-				max-height: 45px;
-				top: calc(50% - 23px);
-		   }
-		   
-		 }
-	  }
+		.navbar-header {
+	    float: left;
+	    max-width: 70%;
+
+		  .navbar-logo {
+			 float: left;
+			 height: $navbar-height;
+		
+			 img {
+			   display: block;
+			   height: 100%;
+			   margin: 0;
+			   max-height: 40px;
+			   position: relative;
+			   top: calc(50% - 20px);
+			   
+			   @media only screen and (max-width: $screen-sm-max) {
+					max-height: 45px;
+					top: calc(50% - 23px);
+			   }
+			   
+			 }
+		  }
+		}
 	
 	  .navbar-logo.CA {
 		 img {
@@ -117,12 +136,22 @@
 	  
 		 .navbar-nav {
 			  display: none;
+			  float: left;
+			  margin: 0;
 			  
 			  @media only screen and (min-width: $screen-sm-min) {
 				   display: block;
 				   
 				   li {
-					float: left;
+						float: left;
+
+						&.clinic-link {
+							margin-top: 22px;
+
+							>a {
+								color: #304369;
+							}
+						}
 				   }
 				   
 				   .dropdown-menu {
@@ -150,12 +179,26 @@
 					   }
 				   }
 			}
+
+			.login {
+				margin-top: 15px;
+				
+				& > a {
+					font-size: 100%;
+					padding: 0;
+					color: #fff;
+					
+					&:hover {
+						color: #fff;
+						background-color: transparent;
+					}
+				}
+			}
 		 }
 		 
-		 .navbar-right {
-			@media only screen and (min-width: $screen-sm-min) {
-				margin-right: 0;
-			}
+		.navbar-right {
+			margin-right: 0;
+			float: right;
 		}
 	
 	  .navbar-nav > li > a {
@@ -164,6 +207,7 @@
 		 text-transform: uppercase;
 		 padding: 10px 13px;
 		 line-height: 25px;
+		 color: $link-color;
 		 
 		 @media (min-width:$screen-sm-min) {
 			padding-top: 22.5px;
@@ -208,59 +252,6 @@
   .clinic-portal-logo.CA img {
 	margin-bottom: -25px;
   }
-}
-
-.navbar-upgrade {
-	.navbar-nav {
-		display: block;
-		@media (max-width:768px) {
-			margin: 0;
-		}
-		
-		[data-hh-mega-nav] {
-			@media (min-width:$screen-lg-min) {
-				   max-width: 880px;
-				   position: absolute;
-				   right: calc(50% - 570px);
-			}
-		}
-		
-		li[data-hh-mega-nav-trigger='clinic-menu']{
-			display: block;
-		}
-		
-		.clinic-link {
-			@media (max-width:768px) {
-				display: none;
-			}
-		}
-		
-		.login {
-			margin-top: 15px;
-			
-			& > a {
-				font-size: 100%;
-				padding: 0;
-				color: #fff;
-				
-				&:hover {
-					color: #fff;
-					background-color: transparent;
-				}
-			}
-		}
-		
-		small {
-			clear: both;
-			float: right;
-			line-height: 16px;
-			
-			a {
-				padding: 0;
-				float: none;
-			}
-		}
-	}
 }
 
 .secondary-nav {
@@ -352,6 +343,12 @@
 			line-height: 1.6;
 			border: 1px solid transparent;
 			border-radius: 2px 2px 0 0;
+		}
+
+		:hover {
+			border-color: #eee #eee #ddd;
+			text-decoration: none;
+			background-color: #eee;
 		}
 	}
 }

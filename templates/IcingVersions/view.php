@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Model Id') ?></th>
-                    <td><?= h($icingVersion->model_id) ?></td>
+                    <td><?= h($icingVersion->id_model) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('User') ?></th>

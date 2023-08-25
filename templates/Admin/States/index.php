@@ -48,7 +48,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                        <?= $this->Html->link(h($state->name), [
 								                            'prefix' => false,
 								                            'controller' => 'locations',
-								                            'action' => 'cities',
+								                            'action' => 'viewState',
 								                            'region' => $state->name
 								                            // TODO:
 								                            //'region' =>  $this->Clinic->stateSlug($state->name)
@@ -68,7 +68,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                                [
 								                                    'prefix' => false,
 								                                    'controller' => 'locations',
-								                                    'action' => 'cities',
+								                                    'action' => 'viewState',
 								                                    'region' => $state->name,
 								                                    // TODO:
 								                                    //'region' =>  $this->Clinic->stateSlug($state->name)

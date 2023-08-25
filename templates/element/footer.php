@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-md-2">
 				<ul class="no-bullets">
-					<li><a href="<?php //***TODO: uncomment when Clinic model is built*** echo $this->Clinic->nearMeLink();?>" class="text-link action-link">Find a clinic near me</a></li>
+					<li><a href="<?= $this->Clinic->nearMeLink() ?>" class="text-link action-link">Find a clinic near me</a></li>
 					<li><a href="/help/hearing-loss" class="text-link">Hearing loss help</a></li>
 					<li><a href="/help/hearing-aids" class="text-link">Hearing aids help</a></li>
 					<?php if (Configure::read('showManufacturers')): ?>
@@ -91,17 +91,11 @@
 				<!-- Digital Health Awards -->
 				<div class="dha-block col-md-6">
 					<div class="mobile-row">
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2017.jpg" alt="Digital Health Award winner for Fall 2017" border="0" width="80" height="80" style="width:auto;height:auto" />
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2018.jpg" alt="Digital Health Award winner for Fall 2018" border="0" width="80" height="80" style="width:auto;height:auto" />
+						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2023.jpg" alt="Digital Health Award winner for 2023" border="0" width="97" height="80" />
+						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2022.jpg" alt="Digital Health Award winner for Fall 2022" border="0" width="97" height="80" />
 					</div>
 					<div class="mobile-row">
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2019.jpg" alt="Digital Health Award winner for Fall 2019" border="0" width="80" height="80" />
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2020.jpg" alt="Digital Health Award winner for Fall 2020" border="0" width="80" height="80" />
-					</div>
-					<div class="mobile-row">
-						<a href="/about">
-							<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2021.jpg" alt="Digital Health Award winner for Fall 2021" border="0" width="80" height="80" />
-						</a>
+						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2021.jpg" alt="Digital Health Award winner for Fall 2021" border="0" width="80" height="80" />
 					</div>
 				</div>
 			<?php endif; ?>

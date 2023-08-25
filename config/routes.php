@@ -71,6 +71,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/{slug}', 'Corps::view')
             ->setPass(['slug'])
             ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
+
         /*
          * Connect catchall routes for all controllers.
          *
@@ -87,8 +88,25 @@ return static function (RouteBuilder $routes) {
         $builder->fallbacks();
     });
 
+    // hearing-aids routes
+    $routes->scope('/hearing-aids', function (RouteBuilder $builder) {
+        $builder->connect('/', 'Locations::viewFac');
+        $builder->connect('/{region}', 'Locations::viewState')
+            ->setPass(['region'])
+            ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
+        $builder->connect('/{region}/{city}/{zip}', 'Locations::viewCityZip')
+            ->setPass(['region', 'city', 'zip'])
+            ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
+        $builder->connect('/{region}/{city}', 'Locations::viewCityZip')
+            ->setPass(['region', 'city'])
+            ->setPatterns(['region' => '[a-zA-Z][a-zA-Z]\-[a-zA-Z\-]+']);
+        $builder->connect('/{id}-{title}', 'Locations::view')
+            ->setPass(['id', 'title'])
+            ->setPatterns(['id' => '[0-9]+']);
+    });
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
+        $builder->setExtensions(['rss']);
         $builder->connect('/', 'Content::report_index');
         $builder->connect('/{id}-{slug}', 'Content::view')
             ->setPass(['id', 'slug'])

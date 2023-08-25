@@ -87,4 +87,20 @@ class SeoTitlesTable extends Table
 
         return $rules;
     }
+
+    /**
+    * Find the first title tag that matches this URI
+    *
+    * @param string incoming reuqest uri
+    * @return the first title tag to match
+    */
+    public function findTitleByUri($request = null) {
+        return $this->find('all', [
+            'conditions' => [
+                'uri' => $request,
+                'is_approved' => true
+            ],
+            'contain' => ['SeoUris'],
+        ])->first();
+    }
 }

@@ -54,7 +54,7 @@ $this->loadHelper('Search.Search', [
         </div>
     <?php endif; ?>
     <div class="col col-md-auto mb20">
-        <span id="advanced_search_toggle" class="btn btn-primary btn-sm mb-2" type="button" aria-expanded="false">
+        <span class="btn btn-primary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advanced_search" aria-expanded="false" aria-controls="advanced_search">
             + Advanced
         </span>
     </div>
@@ -75,7 +75,7 @@ $this->loadHelper('Search.Search', [
 	                <h3 class="crm-group-header"><?= $groupNameReadable ?></h3>
                     <button class="btn btn-sm btn-primary mb20 group-toggle" type="button" style="min-width:178px;"><span class="bi-plus-lg"> Expand section</span></button>
                 </div>
-                <div class="mb-3 filter-group hidden" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
+                <div class="mb-3 filter-group<?= $groupName == "generalDemographics" ? "" : " hidden"?>" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
                     <?php $column = 1; ?>
                     <?php foreach ($groupFields as $field): ?>
                         <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>

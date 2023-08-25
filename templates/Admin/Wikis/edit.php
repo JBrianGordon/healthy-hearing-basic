@@ -61,7 +61,7 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 												</div>
 												<div class="tab-pane" id="admin">
 													<?php
-									                    echo $this->Form->control('order', ['required' => true]);
+									                    echo $this->Form->control('priority', ['required' => true]);
 									                    echo $this->Form->control('title_head');
 									                    echo $this->Form->control('title_h1');
 									                    echo $this->Form->control('meta_description');

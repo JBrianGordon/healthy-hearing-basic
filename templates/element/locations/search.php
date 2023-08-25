@@ -8,7 +8,7 @@ $auto_id = isset($auto_id) ? $auto_id : 'LocationSearchId';
 $search_id = isset($search_id) ? $search_id : 'LocationSearch';
 $btnId = isset($btnId) ? $btnId : 'LocationSearchBtn';
 $inline = isset($inline) ? $inline : false;
-$class = $autocomplete ? 'form-control autocomplete' : 'form-control'; 
+$class = $autocomplete ? 'form-control autocomplete col-xs-12 mb30' : 'form-control'; 
 ?>
 
 
@@ -36,10 +36,10 @@ $class = $autocomplete ? 'form-control autocomplete' : 'form-control';
 			'placeholder' => $label,
 			'id' => $search_id,
 			'label' => 'Enter city or zip/postal code',
-			'wrapInput' => false
+			'style' => 'height:46px;width:100%'
 		]); ?>
-		<span class="input-group-btn">
-			<button class="btn btn-secondary" id="<?= $btnId; ?>" type="submit">Search</button>
+		<span class="input-group-btn ml0">
+			<button class="btn btn-secondary rounded-0" id="<?= $btnId; ?>" type="submit">Search</button>
 		</span>
 	</div>
 <?= $this->Form->end(); ?>

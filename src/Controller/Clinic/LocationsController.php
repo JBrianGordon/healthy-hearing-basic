@@ -21,7 +21,7 @@ class LocationsController extends BaseClinicController
     public function edit($id = null)
     {
         $location = $this->Locations->get($id, [
-            'contain' => [],
+            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
@@ -33,5 +33,9 @@ class LocationsController extends BaseClinicController
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
         $this->set(compact('location'));
+        $this->set('days', $this->Locations->LocationHours->days);
+        $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
+        $this->set('isCqPremier', $location->is_cq_premier);
+        $this->set('couponId', $location->coupon_id);
     }
 }

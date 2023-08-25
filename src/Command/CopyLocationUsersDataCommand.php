@@ -41,6 +41,7 @@ class CopyLocationUsersDataCommand extends Command
 
         $locationUsersTable = $this->fetchTable('LocationUsers');
         $usersTable = $this->fetchTable('Users');
+        $loginIpsTable = $this->fetchTable('LoginIps');
 
         $locationUsersQuery = $locationUsersTable->find()->all();
 
@@ -71,6 +72,11 @@ class CopyLocationUsersDataCommand extends Command
                         $copiedUser->username,
                         $copiedUser->location_id
                     )
+                );
+            } else {
+                $loginIpsTable->updateAll(
+                    ['user_id' => $copiedUser->id],
+                    ['location_user_id' => $locationUser->id],
                 );
             }
         }

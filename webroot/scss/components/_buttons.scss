@@ -19,6 +19,11 @@
 
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+
+  &:hover {
+    background-color: #5499ba;
+    color: #fff;
+  }
 }
 
 .btn-neutral {
@@ -80,6 +85,8 @@
 }
 
 .btn-group {
+  flex-wrap: wrap;
+  
 	>.btn:not(:first-child), >.btn-group:not(:first-child) {
 		margin-left: 0;
 	}
@@ -169,6 +176,13 @@
 
 .btn-google-plus {
   background: $color-google-plus;
+}
+
+.btn-cookie {
+  @media(max-width: $screen-sm-max){
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 .directions-link{

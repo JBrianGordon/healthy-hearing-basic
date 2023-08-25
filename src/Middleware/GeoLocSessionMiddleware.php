@@ -39,6 +39,7 @@ class GeoLocSessionMiddleware implements MiddlewareInterface
         $ipGeoLocResult = $ipGeocoder->byIp($clientIp);
 
         $session->write('geoLocData', $ipGeoLocResult);
+        $session->write('clientIp', $clientIp);
 
         return $handler->handle($request);
     }

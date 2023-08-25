@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * Draft Entity
  *
  * @property string $id
- * @property string|null $model_id
+ * @property string|null $id_model
  * @property string|null $user_id
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -30,7 +30,7 @@ class Draft extends Entity
      * @var array<bool>
      */
     protected $_accessible = [
-        'model_id' => true,
+        'id_model' => true,
         'model' => true,
         'user_id' => true,
         'created' => true,
