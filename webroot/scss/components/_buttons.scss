@@ -178,6 +178,13 @@
   background: $color-google-plus;
 }
 
+.btn-cookie {
+  @media(max-width: $screen-sm-max){
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 .directions-link{
     margin: 10px auto 0;
     display: block;
