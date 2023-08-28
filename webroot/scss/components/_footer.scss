@@ -3,7 +3,6 @@
 	padding: 40px inherit;
 	position: relative;
 	max-width: 100%;
-	left:15px;
 
 	&.row {
 		@media (max-width: $screen-xs-max){
@@ -184,7 +183,6 @@
 	background: $body-bg;
 	position: relative;
 	max-width: 100%;
-	left: 15px;
 }
 
 #footerContainer {
