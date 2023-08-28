@@ -64,7 +64,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 															<div class="col-sm-6"><?= $this->Form->control('honorific_prefix') ?></div>
 														</div>
 														<div class="row">
-															<div class="col-sm-6"><?= $this->Form->control('title_dept_company') ?></div>
+															<div class="col-sm-6"><?= $this->Form->control('title_dept_company', ['type' => 'text']) ?></div>
 															<div class="col-sm-6"><?= $this->Form->control('credentials') ?></div>
 														</div>
 														<div class="row">
