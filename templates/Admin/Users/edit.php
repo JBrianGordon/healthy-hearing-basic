@@ -111,7 +111,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 													<div class="tab-pane fade" aria-expanded="false" id="Admin" role="tabpanel">
 														<div class="row">
 															<label class="col col-sm-3 control-label">User Types<span class="red">*</span></label>
-															<div class="col col-sm-9">
+															<div class="col-sm-9">
 																<div class="col-sm-6"><?= $this->Form->control('is_admin', ['label' => 'Admin']) ?></div>
 																<div class="col-sm-6"><?= $this->Form->control('is_it_admin', ['label' => 'IT Admin']) ?></div>
 																<div class="col-sm-6"><?= $this->Form->control('is_agent', ['label' => 'Call Assist Agent']) ?></div>
