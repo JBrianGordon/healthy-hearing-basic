@@ -126,11 +126,17 @@ class LocationsController extends AppController
     */
     function export() {
         $this->autoRender = false;
-        $requestParams = $this->request->getQueryParams();
+        $queryString = str_replace('?', '', $this->request->getData('queryString'));
+        parse_str(str_replace('?', '', $queryString), $query);
+        $excludedFields = $this->request->getData('excludedFields');
 
+        // Becky TODO #16839: call LocationsTable::export() with $query and $excludedFields to get the export data.
         // TODO: set ignore fields, additional fields, and overwrite fields. See CaCallsController for example.
-        $this->Export->exportCsv('export_locations.csv');
-        die();
+        //$this->response = $this->response->withDownload('export_locations.csv');
+
+        //TODO: Remove this. Temporary test response
+        $return = ['success' => true, 'query' => $query, 'excludedFields' => $excludedFields];
+        return $this->response->withStringBody(json_encode($return));
     }
 
     /**
