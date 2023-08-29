@@ -119,7 +119,6 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 																<div class="col-sm-6"><?= $this->Form->control('is_csa', ['label' => 'Customer Support Assistant']) ?></div>
 																<div class="col-sm-6"><?= $this->Form->control('is_writer', ['label' => 'Content Writer']) ?></div>
 																<div class="col-sm-6"><?= $this->Form->control('is_author', ['label' => 'Author']) ?></div>
-																<!-- *** TODO: check why Reviewer isn't a boolean ***-->
 																<div class="col-sm-6"><?= $this->Form->control('is_reviewer', ['label' => 'Reviewer']) ?></div>
 															</div>
 														</div>
