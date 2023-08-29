@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Provider $provider
+ * @var \Cake\Collection\CollectionInterface|string[] $locations
  */
 ?>
 <div class="row">
@@ -32,13 +33,9 @@
                     echo $this->Form->control('phone');
                     echo $this->Form->control('priority');
                     echo $this->Form->control('aud_or_his');
-                    echo $this->Form->control('caqh_number');
-                    echo $this->Form->control('npi_number');
-                    echo $this->Form->control('show_npi');
                     echo $this->Form->control('is_ida_verified');
-                    echo $this->Form->control('licenses');
-                    echo $this->Form->control('show_license');
                     echo $this->Form->control('id_yhn_provider');
+                    echo $this->Form->control('locations._ids', ['options' => $locations]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

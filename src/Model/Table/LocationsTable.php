@@ -74,6 +74,7 @@ class LocationsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        // Associations
         $this->hasMany('CaCallGroups', [
             'foreignKey' => 'location_id',
         ]);
@@ -107,12 +108,11 @@ class LocationsTable extends Table
         $this->hasMany('LocationPhotos', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationProviders', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->belongsToMany('Providers', [
-            'through' => 'LocationProviders',
-            'sort' => ['Providers.priority' => 'ASC']
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'provider_id',
+            'joinTable' => 'locations_providers',
+            // 'sort' => ['Providers.priority' => 'ASC']
         ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
