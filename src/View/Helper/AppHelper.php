@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use Cake\View\Helper;
+use Cake\ORM\TableRegistry;
 
 /**
  * Admin helper
@@ -41,5 +42,16 @@ class AppHelper extends Helper
         }
         $length = (int)ceil(count($array)/$by);
         return array_chunk($array, $length, true);
+    }
+
+    /**
+    * Return the username from userId
+    */
+    public function getUserName($userId = null){
+        if (!$userId) {
+            return null;
+        }
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        return $user->username;
     }
 }
