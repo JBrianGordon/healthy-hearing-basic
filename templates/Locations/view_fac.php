@@ -5,7 +5,7 @@ $this->Breadcrumbs->add([
 	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => ''],
 ]);
-$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer']);
+$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['block' => true, 'defer' => 'defer']);
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">
