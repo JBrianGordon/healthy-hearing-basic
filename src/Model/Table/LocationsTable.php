@@ -111,7 +111,10 @@ class LocationsTable extends Table
             'foreignKey' => 'location_id',
             'targetForeignKey' => 'provider_id',
             'joinTable' => 'locations_providers',
-            'sort' => ['Providers.priority' => 'ASC']
+            'sort' => [
+                'Providers.priority' => 'ASC',
+                'Providers.id' => 'ASC',
+            ]
         ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
@@ -1349,10 +1352,7 @@ class LocationsTable extends Table
             'contain' => [
                 'CallSources',
                 'LocationHours',
-                'LocationProviders.Providers' => [
-                    // TODO fix provider order
-                    //'order' => 'Providers.priority ASC, Providers.id ASC'
-                ],
+                'Providers',
                 'Reviews' => [
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
