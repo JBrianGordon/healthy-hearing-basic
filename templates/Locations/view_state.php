@@ -125,7 +125,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 																<?= $this->Html->link("{$city->city}, {$city->state}",
 																	[
 																		'controller' => 'locations',
-																		'action' => 'index',
+																		'action' => 'viewCityZip',
 																		'region' => $this->Clinic->stateSlug($city->state),
 																		'city' => slugifyCity($city->city)
 																	],
