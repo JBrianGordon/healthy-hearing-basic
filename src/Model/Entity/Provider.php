@@ -33,9 +33,10 @@ use Cake\ORM\Entity;
  * @property string|null $licenses
  * @property bool $show_license
  * @property int|null $id_yhn_provider
+ * @property int $location_count
  *
  * @property \App\Model\Entity\ImportProvider[] $import_providers
- * @property \App\Model\Entity\LocationProvider[] $location_providers
+ * @property \App\Model\Entity\LocationProvider[] $locations_providers
  */
 class Provider extends Entity
 {
@@ -74,6 +75,6 @@ class Provider extends Entity
         'show_license' => true,
         'id_yhn_provider' => true,
         'import_providers' => true,
-        'location_providers' => true,
+        'locations' => true,
     ];
 }

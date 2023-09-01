@@ -17,7 +17,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
         <div class="container">
             <div class="row">
                 <?php //***TODO: uncomment when flash elements added*** echo $this->element('flashes'); ?>
-                <div class="col-md-7 col-lg-6 over-backdrop">
+                <div class="col-sm-7 col-lg-6 over-backdrop">
                     <section class="intro-text inverse">
                         <h1 class="hero-headline"><em>Be part of the </em><br>conversation</h1>
                         <p class="lead">
@@ -41,7 +41,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     <?php endif; ?>
                 </div>
-            <div class="col-md-5 col-lg-offset-1 over-backdrop right-desktop">
+            <div class="col-sm-5 col-lg-offset-1 over-backdrop right-desktop">
                 <div class="panel panel-secondary">
                     <header class="panel-heading text-center">
                       Find a clinic
@@ -91,7 +91,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                 <?php endif; ?>
             </div>
             <?php if (Configure::read('showReports')): ?>
-                <div class="col-md-7 col-lg-6 mobile-clear">
+                <div class="col-sm-7 col-lg-6 mobile-clear">
                     <div class="panel panel-light">
                         <?php //echo $this->element('content/latest'); ?>
                     </div>

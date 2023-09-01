@@ -87,7 +87,7 @@ class LocationsController extends AppController
     public function edit($id = null)
     {
         $location = $this->Locations->get($id, [
-            'contain' => [],
+            'contain' => ['Providers'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());

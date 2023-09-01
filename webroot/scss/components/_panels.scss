@@ -189,6 +189,14 @@
 
   .panel-section {
     padding: 30px 15px;
+
+    .users {
+    	.tab-pane {
+    		input[type=text] {
+    			height: 47px;
+    		}
+    	}
+    }
     
 	.slogan {
 		color: tint($text-color, 45%);
