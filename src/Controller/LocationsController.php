@@ -100,6 +100,7 @@ class LocationsController extends AppController
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
+        $show_ad = false;
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 
@@ -118,6 +119,7 @@ class LocationsController extends AppController
 
         $this->set('totalClinics', $totalClinics);
         $this->set('topCities', $topCities);
+        $this->set('show_ad', $show_ad);
 
         // Get state-specific resources
         $stateInfo = $this->fetchTable('States')->find('all', [
