@@ -71,6 +71,8 @@ import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 //Importing custom CSS
 import '../../scss/utilities/ckeditor.css';
 
+const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
+
 class Editor extends ClassicEditor {}
 
 // Plugins to include in the build.
@@ -217,8 +219,11 @@ Editor.create(document.querySelector(".editor"), {
         ]
     },
     placeholder: 'Welcome to CKEditor 5 + CKBox!',
+    CloudServices: {
+        tokenUrl: ckTokenUrl
+    },
     ckbox: {
-        tokenUrl: "https://14278.cke-cs.com/token/dev/79QEOd4qhNDt5bIrwH8pk45oiAKR6gzuYU0W?limit=10"
+        tokenUrl: ckTokenUrl
     }
 	}).catch( error => {
 	    console.error( error );

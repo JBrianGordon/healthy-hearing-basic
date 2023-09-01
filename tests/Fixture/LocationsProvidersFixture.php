@@ -6,9 +6,9 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * LocationProvidersFixture
+ * LocationsProvidersFixture
  */
-class LocationProvidersFixture extends TestFixture
+class LocationsProvidersFixture extends TestFixture
 {
     /**
      * Init method

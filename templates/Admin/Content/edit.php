@@ -20,17 +20,14 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 						<div class="panel-heading">Content Actions</div>
 						<div class="panel-body p10">
 							<div class="btn-group">
-								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
-								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
-								<?= $this->Form->postLink(
-					                __('Delete'),
-					                ['action' => 'delete', $content->id],
-					                ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']
+								<?= $this->Html->link( 'Browse', ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
+								<!--*** TODO: Add button not functioning correctly ***-->
+								<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+								<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']
 					            ) ?>
-								<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-								<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'report', 'action' => $content->id . '-' . $content->hh_url['slug']], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-								<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-clipboard-check']) ?>
-								<?= $this->Html->link(__(' Sync Photos'), ['action' => 'rsync'], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
+					            <!--*** TODO: Preview button not functioning correctly ***-->
+								<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
+								<?= $this->Html->link(' Sync Photos', ['action' => 'rsync'], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 							</div>
 						</div>
 					</div>
@@ -127,8 +124,8 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								
 								            </fieldset>
 								            <div class="form-actions tar">
-								            <?= $this->Form->button(__('Save For Approval'), ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info']) ?>
-								            <?= $this->Form->button(__('Save Content'), ['class' => 'btn btn-primary btn-lg']) ?>
+								            <?= $this->Form->button('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info']) ?>
+								            <?= $this->Form->button('Save Content', ['class' => 'btn btn-primary btn-lg']) ?>
 								            </div>
 								            <?= $this->Form->end() ?>
 								        </div>

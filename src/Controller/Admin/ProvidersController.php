@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
+
+use App\Controller\AppController;
 
 /**
  * Providers Controller
@@ -12,31 +14,77 @@ namespace App\Controller;
 class ProvidersController extends AppController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $providers = $this->paginate($this->Providers);
+        $requestParams = $this->request->getQueryParams();
 
-        $this->set(compact('providers'));
+        // Last modified date range
+        $hasLastmodDateRange =
+            array_key_exists('modified_start', $requestParams) &&
+            array_key_exists('modified_end', $requestParams);
+
+        if ($hasLastmodDateRange) {
+            $requestParams['mod_date_range'] =
+                $requestParams['modified_start'] . ',' . $requestParams['modified_end'];
+        }
+
+        // Created date range
+        $hasCreatedDateRange =
+            array_key_exists('created_start', $requestParams) &&
+            array_key_exists('created_end', $requestParams);
+
+        if ($hasCreatedDateRange) {
+            $requestParams['created_date_range'] =
+                $requestParams['created_start'] . ',' . $requestParams['created_end'];
+        }
+
+        $providerQuery = $this->Providers
+            ->find('search', [
+                'search' => $requestParams,
+            ])
+            ->contain(['Locations']);
+        $this->set('fields', $this->Providers->getSchema()->typeMap());
+        $this->set('providers', $this->paginate($providerQuery));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Provider id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
+    public function duplicateEmailProvidersCsv()
     {
-        $provider = $this->Providers->get($id, [
-            'contain' => ['ImportProviders', 'LocationProviders'],
-        ]);
+        $query = $this->Providers->find();
+        $duplicateEmails = $query
+            ->select([
+                'email',
+                'count' => $query->func()->count('*')]
+            )
+            ->group(['email'])
+            ->order(['count' => 'DESC'])
+            ->all()
+            ->skip(2); // Removes the first two rows which have summed values from the COUNT operation.
 
-        $this->set(compact('provider'));
+        $this->setResponse($this->getResponse()->withDownload('duplicateEmailProviders.csv'));
+
+        $this->set(compact('duplicateEmails'));
+
+        $this->viewBuilder()
+            ->setClassName('CsvView.Csv')
+            ->setOption('serialize', 'duplicateEmails');
     }
 
     /**
@@ -56,7 +104,8 @@ class ProvidersController extends AppController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
-        $this->set(compact('provider'));
+        $locations = $this->Providers->Locations->find('list', ['limit' => 200])->all();
+        $this->set(compact('provider', 'locations'));
     }
 
     /**
@@ -69,7 +118,7 @@ class ProvidersController extends AppController
     public function edit($id = null)
     {
         $provider = $this->Providers->get($id, [
-            'contain' => [],
+            'contain' => ['Locations'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $provider = $this->Providers->patchEntity($provider, $this->request->getData());
@@ -80,7 +129,8 @@ class ProvidersController extends AppController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
-        $this->set(compact('provider'));
+        $locations = $this->Providers->Locations->find('list')->all();
+        $this->set(compact('provider', 'locations'));
     }
 
     /**

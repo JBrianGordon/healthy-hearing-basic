@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * LocationProvider Entity
+ * LocationsProvider Entity
  *
  * @property int $id
  * @property int|null $location_id
@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Location $location
  * @property \App\Model\Entity\Provider $provider
  */
-class LocationProvider extends Entity
+class LocationsProvider extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -24,7 +24,7 @@ class LocationProvider extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array<bool>
+     * @var array<string, bool>
      */
     protected $_accessible = [
         'location_id' => true,

@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Admin;
 
-use App\Controller\ProvidersController;
+use App\Controller\Admin\ProvidersController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\ProvidersController Test Case
+ * App\Controller\Admin\ProvidersController Test Case
  *
- * @uses \App\Controller\ProvidersController
+ * @uses \App\Controller\Admin\ProvidersController
  */
 class ProvidersControllerTest extends TestCase
 {
@@ -19,32 +19,22 @@ class ProvidersControllerTest extends TestCase
     /**
      * Fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'app.Providers',
         'app.ImportProviders',
         'app.LocationProviders',
+        'app.Locations',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\ProvidersController::index()
+     * @uses \App\Controller\Admin\ProvidersController::index()
      */
     public function testIndex(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\ProvidersController::view()
-     */
-    public function testView(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -53,7 +43,7 @@ class ProvidersControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\ProvidersController::add()
+     * @uses \App\Controller\Admin\ProvidersController::add()
      */
     public function testAdd(): void
     {
@@ -64,7 +54,7 @@ class ProvidersControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\ProvidersController::edit()
+     * @uses \App\Controller\Admin\ProvidersController::edit()
      */
     public function testEdit(): void
     {
@@ -75,7 +65,7 @@ class ProvidersControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\ProvidersController::delete()
+     * @uses \App\Controller\Admin\ProvidersController::delete()
      */
     public function testDelete(): void
     {

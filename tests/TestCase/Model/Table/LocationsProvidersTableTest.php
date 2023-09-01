@@ -3,28 +3,28 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\LocationProvidersTable;
+use App\Model\Table\LocationsProvidersTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\LocationProvidersTable Test Case
+ * App\Model\Table\LocationsProvidersTable Test Case
  */
-class LocationProvidersTableTest extends TestCase
+class LocationsProvidersTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\LocationProvidersTable
+     * @var \App\Model\Table\LocationsProvidersTable
      */
-    protected $LocationProviders;
+    protected $LocationsProviders;
 
     /**
      * Fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
-        'app.LocationProviders',
+        'app.LocationsProviders',
         'app.Locations',
         'app.Providers',
     ];
@@ -34,11 +34,11 @@ class LocationProvidersTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('LocationProviders') ? [] : ['className' => LocationProvidersTable::class];
-        $this->LocationProviders = $this->getTableLocator()->get('LocationProviders', $config);
+        $config = $this->getTableLocator()->exists('LocationsProviders') ? [] : ['className' => LocationsProvidersTable::class];
+        $this->LocationsProviders = $this->getTableLocator()->get('LocationsProviders', $config);
     }
 
     /**
@@ -46,9 +46,9 @@ class LocationProvidersTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
-        unset($this->LocationProviders);
+        unset($this->LocationsProviders);
 
         parent::tearDown();
     }
@@ -57,7 +57,7 @@ class LocationProvidersTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\LocationProvidersTable::validationDefault()
+     * @uses \App\Model\Table\LocationsProvidersTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -68,7 +68,7 @@ class LocationProvidersTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\LocationProvidersTable::buildRules()
+     * @uses \App\Model\Table\LocationsProvidersTable::buildRules()
      */
     public function testBuildRules(): void
     {
