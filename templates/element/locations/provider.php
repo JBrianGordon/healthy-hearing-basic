@@ -118,8 +118,7 @@ use Cake\Core\Configure;
 				echo $this->Form->control("Provider." . $key . ".thumb_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->thumb_url ?? '']);
 				echo '<div class="btn btn-danger btn-xs provider-photo-delete pull-right m10" data-target="Provider' . $key . 'ThumbUrl">Delete Photo</div>';
 			}
-			/*** TODO: providerImage function causing error: ***/
-			//echo "<div class='form-group'><div class='col col-sm-9 col-md-offset-3'>" . $this->Clinic->providerImage($provider) . "</div></div>";
+			echo "<div class='form-group'><div class='col col-sm-9 col-md-offset-3'>" . $this->Clinic->providerImage($provider) . "</div></div>";
 		}
 		if (function_exists("imagecreate")) {
 			echo $this->Form->control("Provider." . $key . ".file", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'value' => $provider->image_url ?? '', 'class' => 'col-sm-9 p15']);

@@ -595,8 +595,8 @@ class ClinicHelper extends Helper
     * @return string HTML image or empty
     */
     public function providerImage($provider, $options = array()) {
-        if (!is_object($provider)) {
-            $provider = TableRegistry::get('Providers')->get($provider);
+        if (is_numeric($provider)) {
+            $provider = $this->Locations->Providers->get($provider);
         }
         //Changing
         if (is_bool($options)) {
