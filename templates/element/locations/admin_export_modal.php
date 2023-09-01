@@ -8,7 +8,7 @@ use Cake\Core\Configure;
       <span id="exportClose">X</span>
       <label class="switch export-label" id="allFields">
         <p>Toggle all on/off</p>
-        <input class="form-control switch-positive" placeholder="0 [or] 1" type="text" id="allFieldsInput">
+        <input class="form-control switch-positive hidden" placeholder="0 [or] 1" type="text" id="allFieldsInput">
         <span class="slider">
           <span class="switch-negative"></span>
           <span class="switch-positive"></span>
@@ -58,7 +58,7 @@ use Cake\Core\Configure;
           if (strpos($spacedField, 'Hd') >= 0 && strpos($spacedField, 'Hd') < 3) {
             $spacedField = str_replace('Hd', 'HD', $spacedField);
           }
-          echo '<label class="switch export-label mb10"><p>' . $spacedField . '</p><input class="form-control switch-positive" type="text" value="1" name="' . $searchField . '"><span class="slider"><span class="switch-negative"></span><span class="switch-positive"></span></span></label></div>';
+          echo '<label class="switch export-label mb10"><p>' . $spacedField . '</p><input class="form-control switch-positive hidden" type="text" value="1" name="' . $searchField . '"><span class="slider"><span class="switch-negative"></span><span class="switch-positive"></span></span></label></div>';
         }
       ?>
       <button type="button" class="close-modal btn btn-lg btn-light" data-dismiss="modal" aria-hidden="true" id="exportSubmit">Ok</button>
