@@ -97,9 +97,12 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 											<?php
 											// Display provider photo if we have one
 											if ($location->filter_has_photo) {
-												$provider = TableRegistry::get('Locations')->firstProviderWithPhoto($locationId);
-												if (!empty($provider)) {
-													echo $this->element('locations/provider_right', ['location'=>$location, 'provider'=>$provider]);
+												if (!empty($location->providers)) {
+													// Grab first provider with picture
+													echo $this->element('locations/provider_right', [
+														'location'=>$location,
+														'provider'=>$location->providers[0]
+													]);
 												}
 											}
 											?>

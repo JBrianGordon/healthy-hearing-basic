@@ -189,6 +189,14 @@
 
   .panel-section {
     padding: 30px 15px;
+
+    .users {
+    	.tab-pane {
+    		input[type=text] {
+    			height: 47px;
+    		}
+    	}
+    }
     
 	.slogan {
 		color: tint($text-color, 45%);
@@ -313,8 +321,31 @@
 			}
 
 			> li {
-				> a {
-					padding: 6px 12px;
+				> a, span {
+					position: relative;
+			    float: left;
+			    padding: 6px 12px;
+			    line-height: 1.6;
+			    text-decoration: none;
+			    color: #304369;
+			    background-color: #fff;
+			    border: 1px solid #ddd;
+			    margin-left: -1px;
+
+			    &:hover {
+				    color: #113350;
+				    background-color: #eee;
+				    border-color: #ddd;
+			    }
+				}
+			}
+
+			&.pagination-sm {
+				li {
+					a {
+				    padding: 5px 10px;
+				    font-size: 14px;
+					}
 				}
 			}
 		}
@@ -565,23 +596,6 @@
 
     &:not(:first-child) {
       border-top: solid 1px darken($white, 8%);
-    }
-    
-    #exportModal {
-	    overflow-y: scroll;
-	    text-transform: capitalize;
-	    
-	    #admin_search {
-		    display: block;
-		    
-		    .control-group {
-			    display: none;
-		    }
-	    }
-	    
-	    .border-right {
-		    border-right: 1px solid #000;
-	    }
     }
     
     #newUserModal {

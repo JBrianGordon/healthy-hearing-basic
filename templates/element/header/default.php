@@ -2,6 +2,20 @@
 use Cake\Core\Configure;
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
+$clinicPageUser = (isset($clinicPage) && !empty($user));
+
+$isCqPremier = $listing_type = $featureContentLibrary = $showLibraryLink = false;
+if (!empty($user['location_id'])) {
+	$this->Clinic->setLocation($user['location_id']);
+	$isCqPremier = $this->Clinic->get('is_cq_premier');
+	$listing_type = $this->Clinic->get('listing_type');
+	$featureContentLibrary = $this->Clinic->get('feature_content_library');
+}
+
+$showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary/* || $isadmin*/;
+if (!Configure::read('showSocialMediaContentLibrary')) {
+	$showLibraryLink = false;
+}
 ?>
 <nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light">
 	<div class="container">
@@ -33,21 +47,43 @@ $logo = Configure::read('logo');
 						</div>
 					<?php endif; ?>
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						<li data-hh-mega-nav-trigger="find-a-professional">
+						<li data-hh-mega-nav-trigger="find-a-professional"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
 							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
 								<span class="hidden-md hidden-lg">Clinics</span>
 								<span class="hidden-sm">Find a clinic</span>
 							</a>
 						</li>
-						<li data-hh-mega-nav-trigger="hearing-loss-help">
+						<li data-hh-mega-nav-trigger="hearing-loss-help"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
 							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 						</li>
-						<li data-hh-mega-nav-trigger="hearing-aid-help">
+						<li data-hh-mega-nav-trigger="hearing-aid-help"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
 							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 						</li>
-						<?php if (Configure::read('showReports')): ?>
+						<?php if (Configure::read('showReports') && !$clinicPageUser): ?>
 							<li>
 								<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+							</li>
+						<?php endif; ?>
+						<?php if(isset($clinicPage) && empty($user)) : ?>
+							<li class="login btn btn-light bi bi-box-arrow-in-right mt15">
+								<a href="/login"> Login</a>
+							</li>
+						<?php elseif($clinicPageUser): ?>
+							<li class="dropdown clinic-link">
+								<a href="#" class="dropdown-toggle bi bi-person-fill" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> My Account <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><?= $this->Html->link(' My Profile', '/clinic/locations/edit', ['escape' => false, 'class' => 'bi bi-globe2']); ?></li>
+									<li><?= $this->Html->link(' Reporting', '/clinic/ca_call_groups/report', ['escape' => false, 'class' => 'bi bi-list-task']); ?></li>
+									<li><?= $this->Html->link(' Reviews', '/clinic/reviews', ['escape' => false, 'class' => 'bi bi-star-fill']); ?></li>
+									<?php if ($showLibraryLink): ?>
+										<li><?= $this->Html->link(' Library', '/clinic/library', ['escape' => false, 'class' => 'bi bi-book-fill']); ?></li>
+									<?php endif; ?>
+									<li><?= $this->Html->link(' Help', '/clinic/pages/faq', ['escape' => false, 'class' => 'bi bi-question-circle-fill']); ?></li>
+									<li><?= $this->Html->link(' Inspired by Ida', '/clinic/pages/about-ida', ['escape' => false, 'class' => 'bi bi-award-fill']); ?></li>
+									<hr class="mt10 mb10">
+									<li><?= $this->Html->link(' My Account', '/clinic/users/account', ['escape' => false, 'class' => 'bi bi-person-fill']); ?></li>
+									<li><?= $this->Html->link(' Logout', '/logout', ['escape' => false, 'class' => 'bi bi-power']); ?></li>
+								</ul>
 							</li>
 						<?php endif; ?>
 						<?= $this->element('header/admin_panel_link') ?>

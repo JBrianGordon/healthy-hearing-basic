@@ -61,6 +61,10 @@ $locationsItems['CRM'] = [
 $locationsItems['CRM searches'] = [
     'url' => '/admin/crm-searches',
 ];
+$locationsItems['Providers'] = [
+    'url' => '/admin/providers',
+    'icon' => 'bi bi-people-fill',
+];
 if (Configure::read('isCallAssistEnabled')) {
     $locationsItems['CallSource numbers'] = [
         'url' => '/admin/call-sources',
@@ -72,7 +76,7 @@ if (Configure::read('isCallTrackingEnabled')) {
     ];
 }
 $locationsItems['Clinic portal'] = [
-    'url' => '/clinic/login',
+    'url' => '/login',
     'icon' => 'bi bi-box-arrow-in-right',
 ];
 $locationsItems['Clinic users'] = [

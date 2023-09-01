@@ -32,7 +32,6 @@ use DateTimeZone;
  * @property \App\Model\Table\LocationLinksTable&\Cake\ORM\Association\HasMany $LocationLinks
  * @property \App\Model\Table\LocationNotesTable&\Cake\ORM\Association\HasMany $LocationNotes
  * @property \App\Model\Table\LocationPhotosTable&\Cake\ORM\Association\HasMany $LocationPhotos
- * @property \App\Model\Table\LocationProvidersTable&\Cake\ORM\Association\HasMany $LocationProviders
  * @property \App\Model\Table\LocationUsersTable&\Cake\ORM\Association\HasMany $LocationUsers
  * @property \App\Model\Table\LocationVideosTable&\Cake\ORM\Association\HasMany $LocationVideos
  * @property \App\Model\Table\LocationVidscripsTable&\Cake\ORM\Association\HasMany $LocationVidscrips
@@ -74,6 +73,7 @@ class LocationsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        // Associations
         $this->hasMany('CaCallGroups', [
             'foreignKey' => 'location_id',
         ]);
@@ -107,12 +107,14 @@ class LocationsTable extends Table
         $this->hasMany('LocationPhotos', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationProviders', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->belongsToMany('Providers', [
-            'through' => 'LocationProviders',
-            'sort' => ['Providers.priority' => 'ASC']
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'provider_id',
+            'joinTable' => 'locations_providers',
+            'sort' => [
+                'Providers.priority' => 'ASC',
+                'Providers.id' => 'ASC',
+            ]
         ]);
         $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
@@ -1350,10 +1352,7 @@ class LocationsTable extends Table
             'contain' => [
                 'CallSources',
                 'LocationHours',
-                'LocationProviders.Providers' => [
-                    // TODO fix provider order
-                    //'order' => 'Providers.priority ASC, Providers.id ASC'
-                ],
+                'Providers',
                 'Reviews' => [
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
@@ -1731,34 +1730,6 @@ class LocationsTable extends Table
     }
 
     /**
-    * Return the first provider with a photo
-    * @param location id
-    * @return mixed false if failed to find location, array of result
-    */
-    public function firstProviderWithPhoto($locationId) {
-        // Find all providers for this locaton
-        $locationProviders = $this->LocationProviders->find('all', [
-            'contain' => ['Providers'],
-            'conditions' => [
-                'LocationProviders.location_id' => $locationId,
-            ]
-        ])->all();
-        $provider = false;
-        $providerPriority = 99;
-        foreach ($locationProviders as $locationProvider) {
-            if ($locationProvider->provider->thumb_url != '') {
-                // This provider has a photo
-                if ($locationProvider->provider->priority < $providerPriority) {
-                    // Find the provider with the lowest priority number
-                    $provider = $locationProvider->provider;
-                    $providerPriority = $locationProvider->provider->priority;
-                }
-            }
-        }
-        return $provider;
-    }
-
-    /**
     * Find unique linked locations for the given locationId
     * @param int locationId
     */
@@ -1793,5 +1764,67 @@ class LocationsTable extends Table
             $retval = 'Location '.$linkedLocationId.' not found.';
         }
         return $retval;
+    }
+
+    /**
+    * Generate an array of email data for a list of clinics. This will be exported to a CSV file.
+    */
+    public function exportEmails($options = []) {
+        $locations = $this->find('search', $options)->all();
+        $uniqueEmails = [];
+        $data = [];
+        foreach ($locations as $location) {
+            // Get email from Provider
+            foreach ($location->providers as $provider) {
+                if (!empty($provider->email) && !in_array($provider->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $provider->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $provider->first_name,
+                        'last_name' => $provider->last_name,
+                        'email' => $provider->email,
+                    ];
+                }
+            }
+            // Get email from LocationEmail
+            foreach ($location->location_emails as $locationEmail) {
+                if (!empty($locationEmail->email) && !in_array($locationEmail->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationEmail->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationEmail->first_name,
+                        'last_name' => $locationEmail->last_name,
+                        'email' => $locationEmail->email,
+                    ];
+                }
+            }
+            // Get email from LocationUser recovery email
+            foreach ($location->location_users as $locationUser) {
+                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $locationUser->email;
+                    $data[] = [
+                        'hhid' => $location->id,
+                        'clinic_title' => $location->title,
+                        'first_name' => $locationUser->first_name,
+                        'last_name' => $locationUser->last_name,
+                        'email' => $locationUser->email,
+                    ];
+                }
+            }
+            // Get email from Location
+            if (!empty($location->email) && !in_array($location->email, $uniqueEmails)) {
+                $uniqueEmails[] = $location->email;
+                $data[] = [
+                    'hhid' => $location->id,
+                    'clinic_title' => $location->title,
+                    'first_name' => '',
+                    'last_name' => '',
+                    'email' => $location->email,
+                ];
+            }
+        }
+        return $data;
     }
 }

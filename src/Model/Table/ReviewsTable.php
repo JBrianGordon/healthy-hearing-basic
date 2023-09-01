@@ -219,10 +219,6 @@ class ReviewsTable extends Table
             ->requirePresence('first_name')
             ->notEmptyString('first_name');
 
-        $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 255)
-            ->requirePresence('last_name');
 
         // Country-specific postal code validation
         $country = ucfirst(strtolower(Configure::read('country')));

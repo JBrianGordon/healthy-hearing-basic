@@ -128,52 +128,39 @@ class LocationsController extends AppController
     */
     function export() {
         $this->autoRender = false;
-        $requestParams = $this->request->getQueryParams();
+        $queryString = str_replace('?', '', $this->request->getData('queryString'));
+        parse_str(str_replace('?', '', $queryString), $query);
+        $excludedFields = $this->request->getData('excludedFields');
 
+        // Becky TODO #16839: call LocationsTable::export() with $query and $excludedFields to get the export data.
         // TODO: set ignore fields, additional fields, and overwrite fields. See CaCallsController for example.
-        $this->Export->exportCsv('export_locations.csv');
-        die();
+        //$this->response = $this->response->withDownload('export_locations.csv');
+
+        //TODO: Remove this. Temporary test response
+        $return = ['success' => true, 'query' => $query, 'excludedFields' => $excludedFields];
+        return $this->response->withStringBody(json_encode($return));
     }
 
     /**
     * Export a list of emails for the selected locations
     */
-    public function emails() {
-        //TODO
-        /*
-        $this->helpers[] = 'Icing.Csv';
-        $this->layout = 'csv';
-        if ($this->request->ext != 'csv') {
-            $this->redirect(['action' => 'export', 'ext' => 'csv']);
-        }
+    public function emailsCsv() {
+        $this->response = $this->response->withDownload('export_location_emails.csv');
+        $requestParams = $this->request->getQueryParams();
         $options = [
-            'contain' => ['LocationUser', 'LocationEmail', 'Provider'],
-            'fields' => ['Location.id','Location.title','Location.email','LocationUser.first_name','LocationUser.last_name','LocationUser.email'],
+            'search' => $requestParams,
+            'contain' => ['LocationUsers', 'LocationEmails', 'Providers'],
         ];
-        if (isset($this->request->params['named']['search'])) {
-            $options['conditions'] = $this->Location->search($this->request->params['named']['search']);
-        }
-        $count = $this->Location->find('count', ['conditions' => $options['conditions']]);
-        // We run into memory errors if we try to download a file that is too large
-        if ($count <= 2000) {
-            // Small file. Download immediately.
-            $this->set('filename','export_location_emails.csv');
-            $this->set('data', $this->Location->exportEmails($options));
-        } else {
-            // Large file. Dispatch shell.
-            App::uses('Queue','Queue.Lib');
-            $email = $this->Auth->user('email');
-            $exportParams = [
-                'email' => $email,
-                'options' => $options
-            ];
-            $cmd = "locations exportEmails ".json_encode($exportParams);
-            if (Queue::add($cmd, 'shell')) {
-                $this->goodFlash('Large file export. Results will be emailed.');
-            } else {
-                $this->badFlash('Unable to add to queue: '.$cmd);
-            }
-            return $this->redirect(['action' => 'index']);
-        }*/
+        // TODO: So far, this seems to work okay even for larger exports.
+        //     : But in Cake2 we sent large exports to the queue. Do we need to do the same?
+        //$locationsQuery = $this->Locations->find('search', $options);
+        //$count = $locationsQuery->count();
+        $emails = $this->Locations->exportEmails($options);
+        $_serialize = 'emails';
+        $_header = ['ID', 'Clinic Title', 'First Name', 'Last Name', 'Email'];
+        $_extract = ['hhid', 'clinic_title', 'first_name', 'last_name', 'email'];
+
+        $this->viewBuilder()->setClassName('CsvView.Csv');
+        $this->set(compact('emails', '_serialize', '_header', '_extract'));
     }
 }

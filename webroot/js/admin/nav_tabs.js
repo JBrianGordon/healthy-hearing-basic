@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
         parentDiv.classList.add('has-error');
       }
     });
-    document.querySelectorAll('.nav-tabs li button').forEach(link => {
-      const tab = document.querySelector(link.getAttribute('data-bs-target'));
+    document.querySelectorAll('.nav-tabs li button').forEach(button => {
+      const tab = document.querySelector(button.getAttribute('data-bs-target'));
       if (tab && (tab.querySelector('div.has-error') || tab.querySelector('span.has-error') || tab.querySelector('input.form-error'))) {
-        link.classList.add('tab-has-error');
-        link.click();
+        button.classList.add('tab-has-error');
+        button.click();
       }
     });
   }

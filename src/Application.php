@@ -67,6 +67,7 @@ class Application extends BaseApplication
          */
         if (Configure::read('debug')) {
             Configure::write('DebugKit.safeTld', ['com', 'loc']);
+            //Configure::write('DebugKit.variablesPanelMaxDepth', 4);
             $this->addPlugin('DebugKit');
             $this->addPlugin('IdeHelper');
         }
@@ -75,6 +76,7 @@ class Application extends BaseApplication
         $this->addPlugin('Search');
         $this->addPlugin('Sitemap', ['routes' => true]);
         $this->addPlugin('Recaptcha');
+        $this->addPlugin('CsvView');
 
         // Listener for CakeDC/users plugin Events
         $this->getEventManager()->on(new \App\Event\UsersListener());

@@ -23,23 +23,28 @@ $logo = Configure::read('logo');
 ?>
 <!-- TODO: set background color variable in CSS -->
 <div class="navbar navbar-expand-lg navbar-clinic sticky-top" style="background-color: #fff;">
-    <div class="container-fluid">
-        <a href="/" class="navbar-brand clinic-portal-logo ms-5 <?php echo Configure::read('country'); ?>" <?php echo $logoBorder; ?>>
+    <div class="container">
+        <a href="/" class="navbar-brand clinic-portal-logo d-inline-block float-start <?php echo Configure::read('country'); ?>" <?php echo $logoBorder; ?>>
             <img src="<?php echo $logo; ?>" alt="<?php echo $siteName; ?>"><br />
             <div class="portal-title">Clinic Administration Portal</div>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse show d-inline-block float-end pt20" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item ms-auto dropdown clinic-link">
-                    <a href="#" id="navbarDropdown" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" id="navbarDropdown" class="nav-link dropdown-toggle d-inline-block" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="bi bi-person-fill"></span>
                             My Account
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <?= $this->AuthLink->link(
+                        '<i class="bi bi-gear-fill"></i>',
+                        '/admin',
+                        [
+                                'escape' => false,
+                                'class' => 'nav-link d-inline-block',
+                            ]
+                    ) ?>
+                    <ul class="dropdown-menu dropdown-menu-end pt20" aria-labelledby="navbarDropdown">
                         <!-- TODO: MAKE SURE LINKS BELOW WORK; CREATE ROUTES -->
                         <!-- TODO: USE ROUTING ARRAYS WHERE APPROPRIATE -->
                         <li>
@@ -79,7 +84,7 @@ $logo = Configure::read('logo');
                         </li>
                     </ul>
                 </li>
-                <?= $this->element('header/admin_panel_link') ?>
+
             </ul>
         </div>
     </div>

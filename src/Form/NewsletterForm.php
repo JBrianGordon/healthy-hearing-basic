@@ -36,8 +36,10 @@ class NewsletterForm extends Form
      */
     public function validationDefault(Validator $validator): Validator
     {
-        return $validator->email('email')
+        $validator->email('email')
             ->notBlank('email');
+
+        return $validator;
     }
 
     /**

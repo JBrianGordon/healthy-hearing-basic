@@ -162,6 +162,8 @@ $groupedFields = [
 
 ?>
 <?php $this->Html->script('dist/admin_index_locations.min', ['block' => true]); ?>
+<span id="count" class="d-none"><?= $count ?></span>
+<span id="exportUrl" class="d-none"><?= $exportUrl ?></span>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
 		<div class="backdrop-container">
@@ -176,10 +178,10 @@ $groupedFields = [
 						<div class="panel-body p10">
 							<div class="btn-group">
 						        <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-                                <!-- TODO : Export functionality -->
-						        <?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportButton', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
-                                <!-- TODO : Email functionality -->
-						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emails'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+								<!-- TODO : Export functionality -->
+						        <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'index'], ['id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
+						        <!-- TODO : Email functionality -->
+						        <?= $this->Html->link("<i class='bi bi-download'></i> Emails", ['action' => 'emailsCsv', '?' => $queryParams], ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("YHN", '/admin/locations/index?is_show=1&is_active=1&is_yhn=1&yhn_tier=2', ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&oticon_tier=1[or]2[or]3', ['class' => 'btn btn-default', 'escape' => false]) ?>
 						        <?= $this->Html->link("YHN & Oticon", '/admin/locations/index?is_show=1&is_active=1&is_oticon=1&is_yhn=1&listing_type=Basic[or]Enhanced[or]Premier', ['class' => 'btn btn-default', 'escape' => false]) ?>
@@ -351,27 +353,3 @@ $groupedFields = [
 		</div>
 	</div>
 </div>
-
-<?php
-// TODO: This should be moved into a js file and simplified with jQuery once we have that working.
-/*
-echo '<script type="text/javascript">
-    function exportBtnClick() {
-        var count = '.$count.';
-        var readableCount = "'.number_format($count).'";
-        var exportUrl = "'.$exportUrl.'";
-        if (count < 100000) {
-            // Small file. Download immediately.
-            if (confirm("Downloading export file with "+readableCount+" entries. This may take up to 30 seconds. Stay on this page until download is complete.")) {
-                window.location.replace(exportUrl);
-            }
-        } else {
-            // Large file
-            // TODO - Large files take over 30 seconds and page times out. Send to queue when queue is working.
-            alert("Export is too large. Please narrow your results to 100,000 or less.");
-        }
-    }
-    document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
-</script>';
-*/
-?>
