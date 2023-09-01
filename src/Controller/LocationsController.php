@@ -12,6 +12,7 @@ use Cake\Routing\Router;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use Cake\Utility\Hash;
+use Cake\ORM\Query;
 
 /**
  * Locations Controller
@@ -254,7 +255,12 @@ class LocationsController extends AppController
             // Self-heal URL
             return $this->redirect($redirect, 301);
         }
-        $contain = ['CallSources'];
+        $contain = [
+            'CallSources',
+            'Providers' => function (Query $q) {
+                return $q->where(['Providers.thumb_url !=' => '']); // Get providers with a picture
+            },
+        ];
         $fields = array_merge(['Location.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
         $locations = $this->Locations->findAllByGeoLoc(compact('region','city','zip'), 40, [], $contain, $fields);
 

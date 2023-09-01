@@ -121,13 +121,7 @@ class ProvidersController extends AppController
             'contain' => ['Locations'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $provider = $this->Providers->patchEntity(
-                $provider,
-                $this->request->getData(), [
-                'associated' => ['Locations']
-            ]);
-            // dd($this->request->getData());
-            // dd($provider);
+            $provider = $this->Providers->patchEntity($provider, $this->request->getData());
             if ($this->Providers->save($provider)) {
                 $this->Flash->success(__('The provider has been saved.'));
 
@@ -135,7 +129,7 @@ class ProvidersController extends AppController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
-        $locations = $this->Providers->Locations->find('list', ['limit' => 200])->all();
+        $locations = $this->Providers->Locations->find('list')->all();
         $this->set(compact('provider', 'locations'));
     }
 
