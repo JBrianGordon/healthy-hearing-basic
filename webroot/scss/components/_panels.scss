@@ -322,7 +322,30 @@
 
 			> li {
 				> a {
-					padding: 6px 12px;
+					position: relative;
+			    float: left;
+			    padding: 6px 12px;
+			    line-height: 1.6;
+			    text-decoration: none;
+			    color: #304369;
+			    background-color: #fff;
+			    border: 1px solid #ddd;
+			    margin-left: -1px;
+
+			    &:hover {
+				    color: #113350;
+				    background-color: #eee;
+				    border-color: #ddd;
+			    }
+				}
+			}
+
+			&.pagination-sm {
+				li {
+					a {
+				    padding: 5px 10px;
+				    font-size: 14px;
+					}
 				}
 			}
 		}

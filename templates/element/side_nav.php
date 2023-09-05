@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 ?>
+<?php if(!$isClinic): ?>
 <div data-hh-side-nav>
 	<div class="row noprint">
 		<div class="col-sm-12">
@@ -78,3 +79,4 @@ use Cake\Core\Configure;
 		</div>
 	</div>
 </div>
+<?php endif; ?>

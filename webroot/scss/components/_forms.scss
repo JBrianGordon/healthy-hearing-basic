@@ -16,6 +16,15 @@ form {
 			position: absolute;
 	    }
 	}
+
+	&.form-horizontal {
+		.control-label {
+			text-align: right;
+    	margin-bottom: 0;
+    	padding-top: 7px;
+    	font-weight: bold;
+		}
+	}
 }
 
 .form-control {
@@ -105,4 +114,8 @@ form {
 .max-chars{
 	color: #e51c23;
 	font-weight: bold;
+}
+
+.submit {
+	display: inline-block;
 }

@@ -13,7 +13,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $shortId[0];
 $locationAd = $location->location_ad;
 $adId = $location->location_ad->id ?? null;
 
-$this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
+$this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <div class="container-fluid site-body">
     <div class="row">
@@ -97,7 +97,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                     ?>
                                     <h1>Welcome to your <?= Configure::read('siteName') ?> profile!</h1>
                                     <h2><strong><?= $location->title ?></strong></h2>
-                                    <?= $this->Form->create($location); ?>
+                                    <?= $this->Form->create($location, ['class' => 'form-horizontal']); ?>
                                     <?php if ($isAdmin && !isset($locationId)): ?>
                                         <div class="row">
                                             <div class="col col-lg-6 noprint">
@@ -116,7 +116,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                     <?php else: ?>
                                         <h2>Basic information</h2>
                                         <div>
-                                            <table class="table table-bordered table-striped mb0 basic-info">
+                                            <table class="table table-bordered mb0 basic-info">
                                                 <tr>
                                                     <th><?= $siteName ?> ID</th>
                                                     <td><?= $location->id ?></td>
@@ -201,12 +201,12 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <?php
                                         echo $this->Form->hidden('Location.id');
                                         echo $this->Form->hidden('Location.oticon_id');
-                                        echo $this->Form->control('Location.title', ['value' => $location->title]);
-                                        echo $this->Form->control('Location.slogan', ['value' => $location->slogan]);
+                                        echo $this->Form->control('Location.title', ['value' => $location->title, 'class' => 'col-sm-9 mb10', 'label' => ['class' => 'col-sm-3 control-label']]);
+                                        echo $this->Form->control('Location.slogan', ['value' => $location->slogan, 'class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         ?>
                                         <div class="form-group">
                                             <label class="col col-md-3 control-label">Mobile-only clinic?</label>
-                                            <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'escape' => false], 'div' => 'col col-md-9', 'value' => $location->is_mobile])?>
+                                            <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false], 'value' => $location->is_mobile, 'class' => 'ml0 mt10'])?>
                                         </div>
                                         <div id="radius" class="hidden">
                                             <?= $this->Form->control('radius', [
@@ -227,38 +227,43 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <?php
                                         echo $this->Form->control('Location.landmarks', [
                                             'label' => ['text' => 'Landmarks <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" data-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
-                                                'escape' => false
+                                                'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,
-                                            'value' => $location->landmarks
+                                            'value' => $location->landmarks,
+                                            'class' => 'col-sm-9 mb10'
                                             ]);
                                         echo '<span id="urlAnchor" class="clinic-anchor"></span>';
                                         echo $this->Form->control('Location.url', [
-                                            'label' => 'Website URL',
+                                            'label' => ['text' => 'Website URL', 'class' => 'col-sm-3 control-label'],
                                             'help_block' => 'Must start with http:// or https://',
                                             'div' => 'form-group mb5',
-                                            'value' => $location->url
+                                            'value' => $location->url,
+                                            'class' => 'col-sm-9 mb10'
                                         ]);
                                         echo $this->Form->control('Location.facebook', [
-                                            'label' => 'Facebook',
+                                            'label' => ['text' => 'Facebook', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
                                             'afterInput' => '</div>',
-                                            'value' => $location->facebook
+                                            'value' => $location->facebook,
+                                            'class' => 'col-sm-9 mb10'
                                             ]);
                                         echo $this->Form->control('Location.twitter', [
-                                            'label' => 'Twitter',
+                                            'label' => ['text' => 'Twitter', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
                                             'afterInput' => '</div>',
-                                            'value' => $location->twitter
+                                            'value' => $location->twitter,
+                                            'class' => 'col-sm-9 mb10'
                                             ]);
                                         echo $this->Form->control('Location.youtube', [
-                                            'label' => 'YouTube',
+                                            'label' => ['text' => 'YouTube', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-xs-12">',
                                             'afterInput' => '</div>',
-                                            'value' => $location->youtube
+                                            'value' => $location->youtube,
+                                            'class' => 'col-sm-9 mb10'
                                             ]);
                                         ?>
                                         <hr>
@@ -270,13 +275,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <?php endforeach; ?>
                                         <?= $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => true, 'isBasicClinic' => $isBasicClinic]) ?>
                                         <hr>
-                                        
+                                        <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">About us</h2>
                                         <small>Please limit your description to an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
-                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us]); 
+                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false]); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
-
+                                        <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">Services</h2>
                                         <small>This should be an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
@@ -304,26 +309,24 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                     <td><?= date("l", strtotime($day)) ?></td>
                                                     <td>
                                                         <?= $this->Form->control("LocationHour.".$day."_open", [
+                                                            'label' => false,
                                                             'type' => 'time',
                                                             'empty' => true,
-                                                            'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'}),
-                                                            'div' => false,
-                                                            //'class' => false
+                                                            'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'})
                                                         ]) ?>
                                                     </td>
                                                     <td>
                                                         <?= $this->Form->control("LocationHour.".$day."_close", [
+                                                            'label' => false,
                                                             'type' => 'time',
                                                             'empty' => true,
-                                                            'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'}),
-                                                            'div' => false,
-                                                            //'class' => false
+                                                            'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'})
                                                         ]) ?>
                                                     </td>
                                                     <td>
                                                         <?= $this->Form->control("LocationHour.".$day."_is_closed", [
+                                                            'label' => false,
                                                             'type' => 'checkbox',
-                                                            'div' => false,
                                                             'class' => 'is-closed-checkbox',
                                                             'data-day' => ucfirst($day),
                                                             'checked' => $location->location_hour->{$day.'_is_closed'}
@@ -331,9 +334,8 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                     </td>
                                                     <td>
                                                         <?= $this->Form->control("LocationHour.".$day."_is_byappt", [
+                                                            'label' => false,
                                                             'type' => 'checkbox',
-                                                            'div' => false,
-                                                            //'class' => false,
                                                             'checked' => $location->location_hour->{$day.'_is_byappt'}
                                                         ]) ?>
                                                     </td>
@@ -343,11 +345,10 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 <td colspan="5">
                                                     <?= $this->Form->control('LocationHour.is_evening_weekend_hours', [
                                                         'type' => 'checkbox',
-                                                        'div' => false,
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
                                                             'escape' => false,
-                                                            'class' => 'col col-md-12 control-label tal',
+                                                            'class' => 'col col-md-12 control-label tal p0',
                                                         ],
                                                         'checked' => $location->location_hour->is_evening_weekend_hours
                                                     ]) ?>
@@ -357,14 +358,14 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 <td colspan="5">
                                                     <?= $this->Form->control('LocationHour.is_closed_lunch', [
                                                         'type' => 'checkbox',
-                                                        'div' => false,
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Closed for lunch</strong>',
                                                             'escape' => false,
-                                                            'class' => 'col col-md-12 control-label tal',
+                                                            'class' => 'col col-md-12 control-label tal p0',
                                                         ],
                                                         'checked' => $location->location_hour->is_closed_lunch
                                                     ]) ?>
+                                                    <!--*** TODO: add lunch break logic: -->
                                                     <div id="closedLunch" class="col col-md-12 hidden">
                                                         <div class="form-group required">
                                                             <label class="col col-md-2 tal">Lunch break</label>
@@ -372,7 +373,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                 <?= $this->Form->control('LocationHour.lunch_start', [
                                                                     'type' => 'time',
                                                                     'label' => false,
-                                                                    'div' => false,
                                                                     'empty' => true,
                                                                     'autocomplete' => 'off',
                                                                     'interval' => 15,
@@ -382,7 +382,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                 <?= $this->Form->control('LocationHour.lunch_end', [
                                                                     'type' => 'time',
                                                                     'label' => false,
-                                                                    'div' => false,
                                                                     'empty' => true,
                                                                     'autocomplete' => 'off',
                                                                     'interval' => 15,
@@ -397,7 +396,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
 
                                         <span id="payment" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb20">Accepted methods of payment</h2>
-                                        <div class="ml20">
+                                        <div class="ml20 row">
                                             <?= $this->Clinic->paymentForm($location->payment) ?>
                                         </div>
                                         
@@ -410,11 +409,10 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                         'rows' => 3,
                                                         'maxlength' => 400,
                                                         'required' => false,
-                                                        'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
-                                                        'div' => 'form-group mb0',
                                                         'class' => 'col-md-12',
                                                         'value' => $location->optional_message
                                                     ]) ?>
+                                                    <span class="help-block">Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.</span>
                                                 </div>
                                             </div>
                                         <?php endif; ?>
@@ -422,7 +420,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <!-- Linked Locations -->
                                         <div class="clearfix"></div>
                                         <?php if(Configure::read('isTieringEnabled')): ?>
-                                            <div class="panel panel-default mt10">
+                                            <div class="panel panel-default mt20">
                                                 <div class="panel-heading">
                                                     <div class="panel-title">Enhanced membership features</div>
                                                 </div>
@@ -435,34 +433,36 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <p><?= Configure::read('isTieringEnabled') ? "For enhanced or premier members only, " : '' ?><?= $siteName ?> will display up to five clinic locations associated with this one. In the case of larger chains, we suggest linking the five closest locations.</p>
-                                                        <table class="table-striped table-bordered col-md-offset-2 col-md-10 mb40">
-                                                            <?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
-                                                                <tr id="tr-link-<?= $key ?>">
-                                                                    <td>
+                                                        <table class="table-striped table-bordered col-sm-offset-3 col-sm-9 mb40 p0">
+                                                            <tbody class="col-xs-12 p0">
+                                                                <?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
+                                                                    <tr id="tr-link-<?= $key ?>" class="col-xs-12 p0 flex">
+                                                                        <td class="col-xs-8">
+                                                                            <div id="div-link-<?= $key ?>">
+                                                                                <?= $this->Clinic->linkedLocationInfo($linkedLocationId) ?>
+                                                                                <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="col-xs-4 mt5" align="center">
+                                                                            <button type="button" class="btn btn-md btn-danger js-link-delete alignment-content-stretch" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php endforeach; ?>
+                                                                <?php $key = count($uniqueLocationLinks); ?>
+                                                                <tr id="tr-link-<?= $key ?>" class="col-xs-12 p0">
+                                                                    <td class="col-sm-8 p0">
                                                                         <div id="div-link-<?= $key ?>">
-                                                                            <?= $this->Clinic->linkedLocationInfo($linkedLocationId) ?>
+                                                                            <?= $this->Form->hidden('linked_location_id') ?>
+                                                                            <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
                                                                             <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width:100px;" align="center">
-                                                                        <button type="button" class="btn btn-md btn-danger js-link-delete" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
+                                                                    <td class="col-sm-4" align="center">
+                                                                        <div id="div-add-delete-<?= $key ?>">
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
-                                                            <?php endforeach; ?>
-                                                            <?php $key = count($uniqueLocationLinks); ?>
-                                                            <tr id="tr-link-<?= $key ?>">
-                                                                <td>
-                                                                    <div id="div-link-<?= $key ?>">
-                                                                        <?= $this->Form->hidden('linked_location_id') ?>
-                                                                        <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
-                                                                        <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
-                                                                    </div>
-                                                                </td>
-                                                                <td style="width:100px;" align="center">
-                                                                    <div id="div-add-delete-<?= $key ?>">
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                            </tbody>
                                                         </table>
                                                         <span class="help-block col-md-offset-2 col-md-10">
                                                             Search by typing in clinic name, <?= $zipShort ?>, or <?= $siteName ?> ID. Select the correct clinic from the drop-down list.
@@ -649,15 +649,17 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                                 ?>
                                                                 <div class="clearfix"></div>
                                                                 <?= $this->Form->control("LocationVidscrips.vidscrip", [
-                                                                        'label' => 'Vidscrip ID',
+                                                                        'label' => ['text' => 'Vidscrip ID', 'class' => 'col-sm-3 control-label'],
                                                                         'maxlength' => 30,
                                                                         'required' => false,
+                                                                        'class' => 'col-sm-9 mb10',
                                                                         'value' => $location->location_vidscrip->vidscrip ?? null
                                                                     ])
                                                                 ?>
                                                                 <?= $this->Form->control("LocationVidscrips.email", [
-                                                                        'label' => 'Vidscrip related email',
+                                                                        'label' => ['text' => 'Vidscrip related email', 'class' => 'col-sm-3 control-label'],
                                                                         'required' => false,
+                                                                        'class' => 'col-sm-9',
                                                                         'value' => $location->location_vidscrip->email ?? null
                                                                     ])
                                                                 ?>
@@ -669,19 +671,21 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                         <!-- Clinic logo -->
                                                         <div>
                                                             <h2 class="mt20 mb20">Clinic logo</h2>
-                                                            <table class="table-striped table-bordered col-md-offset-3 col-md-9">
-                                                                <tr>
-                                                                    <td>
-                                                                        <img class="ml60 mb10" id="photo-thumb-logo" src="<?= (!empty($location->logo_url)) ? '/cloudfiles/clinics/' . $location->logo_url : '' ?>">
-                                                                        <?= $this->Form->control("logo_file", [
-                                                                                'type' => 'file',
-                                                                                'label' => 'File name',
-                                                                                'class' => 'form-control photo-url',
-                                                                                'id' => 'LocationLogo0Url'
-                                                                            ])
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
+                                                            <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
+                                                                <tbody class="col-xs-12 p0">
+                                                                    <tr class="col-xs-12 p0">
+                                                                        <td class="col-xs-12 p20">
+                                                                            <img class="ml60 mb10" id="photo-thumb-logo" src="<?= (!empty($location->logo_url)) ? '/cloudfiles/clinics/' . $location->logo_url : '' ?>">
+                                                                            <?= $this->Form->control("logo_file", [
+                                                                                    'type' => 'file',
+                                                                                    'label' => ['text' => 'File name', 'class' => 'col-sm-3 control-label'],
+                                                                                    'class' => 'form-control photo-url col-sm-9',
+                                                                                    'id' => 'LocationLogo0Url'
+                                                                                ])
+                                                                            ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                             <span class="help-block col-md-9 col-md-offset-3">Logos must be JPG format and less than 500KB. To add a logo, click on "Choose File" then select the logo from your computer. For best results, please use logo images that are a minimum of 250 x 250 pixels and a maximum of 800 x 800 pixels. Logos with icons or images are highly recommended over text based logos.</span>
                                                         </div>
@@ -728,79 +732,82 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                         <!-- Photo Album -->
                                                         <div>
                                                             <h2 class="mt20 mb20">Photos</h2>
-                                                            <table class="table-striped table-bordered col-md-11 ml20">
-                                                                <?php foreach ($location->location_photos as $key => $photo): ?>
-                                                                    <tr>
-                                                                        <td style="width:80%;">
-                                                                            <?= $this->Form->hidden("LocationPhoto.$key.id") ?>
-                                                                            <div>
-                                                                                <?= $this->Form->control("LocationPhoto.$key.photo_url", [
-                                                                                    'label' => false,
-                                                                                    'div' => false,
-                                                                                    'value' => $photo->photo_url
-                                                                                ]) ?>
+                                                            <table class="table-striped table-bordered col-md-11 ml20 p0">
+                                                                <tbody class="col-xs-12 p0">
+                                                                    <?php foreach ($location->location_photos as $key => $photo): ?>
+                                                                        <tr class="col-xs-12 p0 flex">
+                                                                            <td class="col-sm-10 p0">
+                                                                                <?= $this->Form->hidden("LocationPhoto.$key.id") ?>
+                                                                                <div>
+                                                                                    <?= $this->Form->control("LocationPhoto.$key.photo_url", [
+                                                                                        'label' => false,
+                                                                                        'div' => false,
+                                                                                        'value' => $photo->photo_url
+                                                                                    ]) ?>
+                                                                                </div>
+                                                                                <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>" alt>
+                                                                                <div id="photo-description-<?= $key ?>">
+                                                                                    <?= $this->Form->control("LocationPhoto.$key.alt", [
+                                                                                        'label' => ['text' => 'Description', 'class' => 'col-sm-3 control-label'],
+                                                                                        'required' =>true,
+                                                                                        'class' => 'col-sm-9',
+                                                                                        'oninput' => 'validatePhotoAlt('.$key.')',
+                                                                                        'value' => $photo->alt
+                                                                                    ])
+                                                                                    ?>
+                                                                                    <span class="help-block col-sm-9 col-sm-offset-3">Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.</span>
+                                                                                    <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td align="center" class="col-sm-2 pt20 alignment-content-stretch">
+                                                                                <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php endforeach; ?>
+                                                                    <tr class="col-xs-12 p0">
+                                                                        <td class="col-sm-10 p0">
+                                                                            <?php $key = count($location->location_photos); ?>
+                                                                            <div class='row mt5 mb10'>
+                                                                                <div class='col-sm-offset-3 col-sm-9'>
+                                                                                    <img id="photo-thumb-<?= $key ?>">
+                                                                                </div>
                                                                             </div>
-                                                                            <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>" alt>
-                                                                            <div id="photo-description-<?= $key ?>">
+                                                                            <div class="form-group">
+                                                                                <div class="col col-sm-3 mb20" id="file-input-<?= $key ?>">
+                                                                                    <label class="btn btn-default pull-right col-xs-12 p0">
+                                                                                        <span class="col-xs-12 p0 pt10 pb10" style="margin-bottom:-10px">Add a new photo</span>
+                                                                                        <?= $this->Form->control("LocationPhoto." . $key . ".file", [
+                                                                                            'type' => 'file',
+                                                                                            'label' => false,
+                                                                                            'div' => false,
+                                                                                            'class' => 'form-control photo-url hidden'
+                                                                                        ])
+                                                                                        ?>
+                                                                                    </label>
+                                                                                </div>
+                                                                                <label class="col col-sm-3 control-label hidden" id="filename-label-<?= $key ?>">File name</label>
+                                                                                <div class="col col-md-9">
+                                                                                    <span class="upload-text-<?= $key ?>"> Click the button to choose a photo from your computer.</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div id="photo-description-<?= $key ?>" class="hidden">
                                                                                 <?= $this->Form->control("LocationPhoto.$key.alt", [
                                                                                     'label' => 'Description',
-                                                                                    'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.',
+                                                                                    'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc.',
+                                                                                    'disabled' => true,
                                                                                     'required' =>true,
-                                                                                    'oninput' => 'validatePhotoAlt('.$key.')',
-                                                                                    'value' => $photo->alt
+                                                                                    'oninput' => 'validatePhotoAlt('.$key.')'
                                                                                 ])
                                                                                 ?>
                                                                                 <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
                                                                             </div>
+                                                                            <span class="help-block text-danger hidden" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
                                                                         </td>
-                                                                        <td align="center">
-                                                                            <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>">Delete</button>
+                                                                        <td align="center" class="col-sm-2">
+                                                                            <button class="btn btn-md btn-danger js-photo-delete hidden mb20" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
-                                                                <?php endforeach; ?>
-                                                                <tr>
-                                                                    <td>
-                                                                        <?php $key = count($location->location_photos); ?>
-                                                                        <div class='row mt5 mb10'>
-                                                                            <div class='col-md-offset-3 col-md-9'>
-                                                                                <img id="photo-thumb-<?= $key ?>">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <div class="col col-md-3" id="file-input-<?= $key ?>">
-                                                                                <label class="btn btn-default pull-right">
-                                                                                    <span>Add a new photo</span>
-                                                                                    <?= $this->Form->control("LocationPhoto." . $key . ".file", [
-                                                                                        'type' => 'file',
-                                                                                        'label' => false,
-                                                                                        'div' => false,
-                                                                                        'class' => 'form-control photo-url hidden'
-                                                                                    ])
-                                                                                    ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <label class="col col-md-3 control-label hidden" id="filename-label-<?= $key ?>">File name</label>
-                                                                            <div class="col col-md-9">
-                                                                                <span class="upload-text-<?= $key ?>"> Click the button to choose a photo from your computer.</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div id="photo-description-<?= $key ?>" class="hidden">
-                                                                            <?= $this->Form->control("LocationPhoto.$key.alt", [
-                                                                                'label' => 'Description',
-                                                                                'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc.',
-                                                                                'disabled' => true,
-                                                                                'required' =>true,
-                                                                                'oninput' => 'validatePhotoAlt('.$key.')'
-                                                                            ])
-                                                                            ?>
-                                                                            <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
-                                                                        </div>
-                                                                        <span class="help-block text-danger hidden" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
-                                                                    </td>
-                                                                    <td align="center" style="width:120px;">
-                                                                        <button class="btn btn-md btn-danger js-photo-delete hidden" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>">Delete</button>
-                                                                    </td>
-                                                                </tr>
+                                                                </tbody>
                                                             </table>
                                                             <div class="clearfix"></div>
                                                             <span class="help-block col-md-11 ml20">Photos must be JPG format and less than 2MB. To add a photo, click on "Add a new photo." To remove a photo, click on "Delete."</span>
@@ -811,12 +818,12 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                                         <hr>
                                                         <div>
                                                             <h2 class="mt20 mb20">Social Media Sharing Library</h2>
-                                                            <div class="col-md-8">
+                                                            <div class="col-sm-8">
                                                                 <p>Need content for your social media channels? Browse our curated content library to find easy-to-share articles. We've hand-picked a selection of our most recent, relevant and popular articles that may be of interest to your followers.</p>
                                                                 <a href="/clinic/library" target="_blank" class="btn btn-print btn-light">Go to Social Media Library</a>
                                                             </div>
-                                                            <div class="col-md-4">
-                                                                <img style="width:200px;height:210px;margin:0 auto;display:block" src="/img/library-facebook-example.png" alt="Library item example usage">
+                                                            <div class="col-sm-4">
+                                                                <img style="width:200px;height:210px;margin:0 auto;display:block" src="/img/library-facebook-example.png" class="mb20" alt="Library item example usage">
                                                             </div>
                                                         </div>
                                                     <?php endif; ?>
@@ -839,9 +846,9 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"));
                                         <?php endif; ?>
                                         <div class="clearfix"></div>
                                         <hr>
-                                        <?= $this->Form->submit('Save and Publish Profile', ['div' => false, 'class' => 'btn btn-lg btn-primary']) ?>
-                                        <?= $this->Form->submit('Save Profile', ['div' => false, 'id' => 'floatingSave', 'class' => 'btn btn-lg btn-primary']) ?>
-                                        <?= $this->Html->link('View Your Public Profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-default']) ?>
+                                        <?= $this->Form->submit('Save and Publish Profile', ['class' => 'btn btn-lg btn-primary mb10']) ?>
+                                        <?= $this->Form->submit('Save Profile', ['id' => 'floatingSave', 'class' => 'btn btn-lg btn-primary']) ?>
+                                        <?= $this->Html->link('View Your Public Profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-default mb10']) ?>
                                         <?php if(!$isAdmin && $isClinic) : ?>
                                             <div id="incompleteModal" class="modal-dialog modal-lg modal fade" style="position:fixed; max-height:100vh">
                                                 <div class="modal-content">
