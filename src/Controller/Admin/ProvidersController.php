@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\View\JsonView;
 
 /**
  * Providers Controller
@@ -25,6 +26,11 @@ class ProvidersController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+    }
+
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
     }
 
     /**
@@ -152,4 +158,19 @@ class ProvidersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function search()
+    {
+        $this->viewBuilder()->setLayout('ajax');
+
+        $query = $this->request->getQueryParams();
+
+        $searchQuery = $this->Providers->Locations->find('search', ['search' => $query]);
+
+        $locations = $this->paginate($searchQuery);
+
+        $this->set(compact('locations'));
+        $this->viewBuilder()->setOption('serialize', 'locations');
+    }
+
 }

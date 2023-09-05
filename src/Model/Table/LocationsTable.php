@@ -468,6 +468,15 @@ class LocationsTable extends Table
                         ]);
                     }
                 }
+            ])
+            ->add('providerLocation', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title'],
             ]);
 
         // Accepted forms of payments options at a clinic
