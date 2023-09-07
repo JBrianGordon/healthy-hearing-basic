@@ -48,7 +48,7 @@
                 <legend><strong><?= __('Associated Locations') ?></strong></legend>
                 <div id="location-association-list">
                     <?php foreach ($provider->locations as $key => $location): ?>
-                        <div class=<?= "clinic-thing data-location-key={$key}" ?>>
+                        <div class=<?= "associated-location data-location-key={$key}" ?>>
                             <?php
                                 echo $this->Form->control("locations.{$key}.id");
                                 echo $this->Form->label("locations.{$key}.id", $location->title);
@@ -102,7 +102,7 @@
 
                     let list = '';
                     for (i=0; i < jsonArray.length; i++) {
-                        list += '<li class="clinic-clickable" data-location-id="' + jsonArray[i].id + '" data-location-title="' + jsonArray[i].title + '">' + jsonArray[i].title + ' -- ' + jsonArray[i].id + '</li>';
+                        list += '<li class="location-clickable" data-location-id="' + jsonArray[i].id + '" data-location-title="' + jsonArray[i].title + '">' + jsonArray[i].title + ' -- ' + jsonArray[i].id + '</li>';
                     }
 
                     queryResults.innerHTML = '<ul>' + list + '</ul>';
@@ -113,7 +113,7 @@
         });
 
         queryResults.addEventListener('click', function (event) {
-            if (event.target.classList.contains('clinic-clickable')) {
+            if (event.target.classList.contains('location-clickable')) {
                 const itemId = event.target.getAttribute('data-location-id');
                 const itemTitle = event.target.getAttribute('data-location-title');
                 handleItemClick(itemId, itemTitle);
@@ -127,10 +127,10 @@
             // const newKey = generateNewKey();
             const newKey = generateNewKey();
 
-            // Create a new clinic thing div element
-            const newClinicThing = document.createElement('div');
-            newClinicThing.classList.add('clinic-thing');
-            newClinicThing.setAttribute('data-location-key', newKey);
+            // Create a new associated location div element
+            const newAssociatedLocation = document.createElement('div');
+            newAssociatedLocation.classList.add('associated-location');
+            newAssociatedLocation.setAttribute('data-location-key', newKey);
 
             // Create an input element for the 'id' field
             const idInput = document.createElement('input');
@@ -151,23 +151,23 @@
             deleteButton.textContent = 'Delete';
             deleteButton.setAttribute('data-location-key', newKey);
 
-            // Append the elements to the new clinic thing div
-            newClinicThing.appendChild(idInput);
-            newClinicThing.appendChild(label);
-            newClinicThing.appendChild(deleteButton);
+            // Append the elements to the new associated location div
+            newAssociatedLocation.appendChild(idInput);
+            newAssociatedLocation.appendChild(label);
+            newAssociatedLocation.appendChild(deleteButton);
 
-            // Append the new clinic thing to the location-association-list
-            associationList.appendChild(newClinicThing);
+            // Append the new associated location to the location-association-list
+            associationList.appendChild(newAssociatedLocation);
         }
 
         function generateNewKey() {
-            const clinicThingElements = document.querySelectorAll('.clinic-thing');
+            const associatedLocationElements = document.querySelectorAll('.associated-location');
 
-            if (clinicThingElements.length === 0) {
+            if (associatedLocationElements.length === 0) {
                 return 0;
             }
 
-            const locationKeys = Array.from(clinicThingElements).map((element) => {
+            const locationKeys = Array.from(associatedLocationElements).map((element) => {
                 return element.getAttribute('data-location-key');
             });
 
@@ -180,7 +180,7 @@
         locationAssociations.addEventListener('click', function (event) {
             if (event.target.classList.contains('delete-location-association')) {
                 // Find the parent div with class 'location-item'
-                let locationItem = event.target.closest(".clinic-thing");
+                let locationItem = event.target.closest(".associated-location");
 
                 if (locationItem) {
                     // Remove the parent div
