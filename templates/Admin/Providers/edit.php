@@ -2,7 +2,6 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Provider $provider
- * @var string[]|\Cake\Collection\CollectionInterface $locations
  */
 ?>
 <div class="row">
@@ -66,8 +65,12 @@
                 </div>
             </fieldset>
 
-            <?= $this->Form->text('q', ['id' => 'q']) ?>
-            <div id="result"></div>
+            <?= $this->Form->text('locations-query', [
+                    'id' => 'locations-query',
+                    'placeholder' => 'Add an associated clinic'
+                ])
+            ?>
+            <div id="query-results"></div>
 
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
@@ -77,17 +80,15 @@
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        const queryInput = document.getElementById('q');
-        const queryResults = document.getElementById('result');
+        const queryInput = document.getElementById('locations-query');
+        const queryResults = document.getElementById('query-results');
 
-        // Attach an event listener to the input field for input events
+        // Perform locations AJAX search on 'keyup' events
         queryInput.addEventListener('keyup', function () {
             queryResults.innerHTML = '';
 
-            // Get the current search query from the input field
             const query = queryInput.value;
 
-            // Send a Fetch API request to the server to fetch search results
             fetch(`/admin/providers/search?providerLocation=${query}`, {
                 method: 'GET',
                 headers: {
@@ -112,6 +113,7 @@
                 });
         });
 
+        // 'click' listener for locations query results items
         queryResults.addEventListener('click', function (event) {
             if (event.target.classList.contains('location-clickable')) {
                 const itemId = event.target.getAttribute('data-location-id');
@@ -120,11 +122,11 @@
             }
         });
 
+        // Add location item to provider's associated locations list
         function handleItemClick(itemId, itemTitle) {
             const associationList = document.querySelector('#location-association-list');
 
             // Generate a new key that doesn't conflict with existing ones
-            // const newKey = generateNewKey();
             const newKey = generateNewKey();
 
             // Create a new associated location div element
@@ -132,16 +134,16 @@
             newAssociatedLocation.classList.add('associated-location');
             newAssociatedLocation.setAttribute('data-location-key', newKey);
 
-            // Create an input element for the 'id' field
+            // Create an input element for the hidden 'location.#.id' field
             const idInput = document.createElement('input');
             idInput.type = 'hidden';
             idInput.name = `locations[${newKey}][id]`;
             idInput.id = `locations-${newKey}-id`;
-            idInput.value = itemId; // Set the initial value here if needed
+            idInput.value = itemId;
 
-            // Create a label element
+            // Create a label element with location 'title'/name
             const label = document.createElement('label');
-            label.textContent = `${itemTitle}`; // Set the label text here
+            label.textContent = `${itemTitle}`;
             label.htmlFor = `locations-${newKey}-id`;
 
             // Create a delete button
@@ -156,13 +158,14 @@
             newAssociatedLocation.appendChild(label);
             newAssociatedLocation.appendChild(deleteButton);
 
-            // Append the new associated location to the location-association-list
+            // Append the new associated location div to the location-association-list
             associationList.appendChild(newAssociatedLocation);
         }
 
         function generateNewKey() {
             const associatedLocationElements = document.querySelectorAll('.associated-location');
 
+            // Start with index = 0 if adding first associated location
             if (associatedLocationElements.length === 0) {
                 return 0;
             }
@@ -171,19 +174,19 @@
                 return element.getAttribute('data-location-key');
             });
 
+            // Make new location key 1 larger than highest value
             const newKey = Math.max(...locationKeys) + 1;
 
             return newKey;
         }
 
+        // Delete button removes location from associated locations list
         const locationAssociations = document.getElementById('location-association-list');
         locationAssociations.addEventListener('click', function (event) {
             if (event.target.classList.contains('delete-location-association')) {
-                // Find the parent div with class 'location-item'
                 let locationItem = event.target.closest(".associated-location");
 
                 if (locationItem) {
-                    // Remove the parent div
                     locationItem.parentNode.removeChild(locationItem);
                 }
             }
@@ -197,23 +200,23 @@
     #q {
         width: 500px;
     }
-    #result {
+    #query-results {
       border: 1px dotted #ccc;
       padding: 3px;
       width: 500px;
     }
 
-    #result ul {
+    #query-results ul {
       list-style-type: none;
       padding: 0;
       margin: 0;
     }
 
-    #result ul li {
+    #query-results ul li {
       padding: 5px 0;
     }
 
-    #result ul li:hover {
+    #query-results ul li:hover {
       background: #eee;
     }
 </style>
