@@ -135,8 +135,7 @@ class ProvidersController extends AppController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
-        $locations = $this->Providers->Locations->find('list')->all();
-        $this->set(compact('provider', 'locations'));
+        $this->set(compact('provider'));
     }
 
     /**

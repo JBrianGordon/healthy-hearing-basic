@@ -40,64 +40,43 @@
                     echo $this->Form->control('aud_or_his');
                     echo $this->Form->control('is_ida_verified');
                     echo $this->Form->control('id_yhn_provider');
-                    echo $this->Form->control('locations._ids', ['options' => $locations]);
                 ?>
             </fieldset>
+
+            <!-- Associated Locations Section -->
+            <fieldset>
+                <legend><strong><?= __('Associated Locations') ?></strong></legend>
+                <div id="location-association-list">
+                    <?php foreach ($provider->locations as $key => $location): ?>
+                        <div class=<?= "clinic-thing data-location-key={$key}" ?>>
+                            <?php
+                                echo $this->Form->control("locations.{$key}.id");
+                                echo $this->Form->label("locations.{$key}.id", $location->title);
+                            ?>
+                            <?= $this->Form->button(
+                                'Delete',
+                                [
+                                    'data-location-key' => $key,
+                                    'class' => 'delete-location-association',
+                                    'type' => 'button'
+                                ]
+                            ) ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+
+            <?= $this->Form->text('q', ['id' => 'q']) ?>
+            <div id="result"></div>
+
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>
 </div>
 
-<!-- <div class="search-form">
-    <?= $this->Form->input('search', [
-        'id' => 'search-input',
-        'label' => false,
-        'placeholder' => 'Search Locations',
-    ]) ?>
-</div>
-<div id="search-results"></div>
-
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        // Cache the search input field and results container
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-
-        // Attach an event listener to the input field for input events
-        searchInput.addEventListener('input', function () {
-            // Get the current search query from the input field
-            const query = searchInput.value;
-
-            // Send a Fetch API request to the server to fetch search results
-            fetch(`/admin/providers/search?providerLocation=${query}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/x-www-form-urlencoded'
-                },
-            })
-                .then((response) => response.text())
-                .then((data) => {
-                    searchResults.replaceChildren();
-                    // Update the search results container with the retrieved data
-                    searchResults.innerHTML = data;
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        });
-    });
-</script> -->
-
-
-<form autocomplete="off"><input type="text" name="q" id="q" />
-<div id="result"></div>
-</form>
-
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        // Cache the search input field and results container
         const queryInput = document.getElementById('q');
         const queryResults = document.getElementById('result');
 
@@ -123,7 +102,7 @@
 
                     let list = '';
                     for (i=0; i < jsonArray.length; i++) {
-                        list += '<li>' + jsonArray[i].title + ' -- ' + jsonArray[i].id + '</li>';
+                        list += '<li class="clinic-clickable" data-location-id="' + jsonArray[i].id + '" data-location-title="' + jsonArray[i].title + '">' + jsonArray[i].title + ' -- ' + jsonArray[i].id + '</li>';
                     }
 
                     queryResults.innerHTML = '<ul>' + list + '</ul>';
@@ -132,6 +111,85 @@
                     console.error('Error:', error);
                 });
         });
+
+        queryResults.addEventListener('click', function (event) {
+            if (event.target.classList.contains('clinic-clickable')) {
+                const itemId = event.target.getAttribute('data-location-id');
+                const itemTitle = event.target.getAttribute('data-location-title');
+                handleItemClick(itemId, itemTitle);
+            }
+        });
+
+        function handleItemClick(itemId, itemTitle) {
+            const associationList = document.querySelector('#location-association-list');
+
+            // Generate a new key that doesn't conflict with existing ones
+            // const newKey = generateNewKey();
+            const newKey = generateNewKey();
+
+            // Create a new clinic thing div element
+            const newClinicThing = document.createElement('div');
+            newClinicThing.classList.add('clinic-thing');
+            newClinicThing.setAttribute('data-location-key', newKey);
+
+            // Create an input element for the 'id' field
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = `locations[${newKey}][id]`;
+            idInput.id = `locations-${newKey}-id`;
+            idInput.value = itemId; // Set the initial value here if needed
+
+            // Create a label element
+            const label = document.createElement('label');
+            label.textContent = `${itemTitle}`; // Set the label text here
+            label.htmlFor = `locations-${newKey}-id`;
+
+            // Create a delete button
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-location-association', 'btn', 'btn-secondary');
+            deleteButton.type = 'button';
+            deleteButton.textContent = 'Delete';
+            deleteButton.setAttribute('data-location-key', newKey);
+
+            // Append the elements to the new clinic thing div
+            newClinicThing.appendChild(idInput);
+            newClinicThing.appendChild(label);
+            newClinicThing.appendChild(deleteButton);
+
+            // Append the new clinic thing to the location-association-list
+            associationList.appendChild(newClinicThing);
+        }
+
+        function generateNewKey() {
+            const clinicThingElements = document.querySelectorAll('.clinic-thing');
+
+            if (clinicThingElements.length === 0) {
+                return 0;
+            }
+
+            const locationKeys = Array.from(clinicThingElements).map((element) => {
+                return element.getAttribute('data-location-key');
+            });
+
+            const newKey = Math.max(...locationKeys) + 1;
+
+            return newKey;
+        }
+
+        const locationAssociations = document.getElementById('location-association-list');
+        locationAssociations.addEventListener('click', function (event) {
+            if (event.target.classList.contains('delete-location-association')) {
+                // Find the parent div with class 'location-item'
+                let locationItem = event.target.closest(".clinic-thing");
+
+                if (locationItem) {
+                    // Remove the parent div
+                    locationItem.parentNode.removeChild(locationItem);
+                }
+            }
+        });
+
+
     });
 </script>
 
