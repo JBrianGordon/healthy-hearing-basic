@@ -25,7 +25,7 @@ use Cake\Core\Configure;
           array_push($searchFields, 'call_groups', 'usable_calls', 'prospects', 'appt_set', 'all_calls' , 'all_usable_calls', 'all_prospects', 'all_appt_set');
         }
         if (Configure::read('isTieringEnabled')) {
-          array_push($searchFields, 'add_on_flex_space', 'add_on_content_library', 'using_logo', 'using_flex_space', 'using_photos', 'using_videos', 'using_badges', 'using_linked_locations');
+          array_push($searchFields, 'add_on_flex_space', 'add_on_content_library', 'using_logo', 'using_flex_space', 'using_photos', 'using_badges', 'using_linked_locations');
         }
         foreach ($searchFields as $searchField) {
           if ($indexCount++ % 3 == 0) {

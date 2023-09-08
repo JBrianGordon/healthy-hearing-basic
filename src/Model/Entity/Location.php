@@ -143,7 +143,6 @@ use Cake\Utility\Text;
  * @property \App\Model\Entity\LocationPhoto[] $location_photos
  * @property \App\Model\Entity\LocationsProvider[] $locations_providers
  * @property \App\Model\Entity\LocationUser[] $location_users
- * @property \App\Model\Entity\LocationVideo[] $location_videos
  * @property \App\Model\Entity\LocationVidscrip[] $location_vidscrips
  * @property \App\Model\Entity\Review[] $reviews
  */
@@ -438,7 +437,6 @@ class Location extends Entity
         'location_photos' => true,
         'providers' => true,
         'location_users' => true,
-        'location_videos' => true,
         'location_vidscrips' => true,
         'reviews' => true,
         'is_oticon' => true,
