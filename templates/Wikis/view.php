@@ -11,7 +11,7 @@ use Cake\Utility\Inflector;
 use Cake\Routing\Router;
 
 $parts = explode("/", $wiki->slug);
-$this->Breadcrumbs->add('Help', '/help');
+$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => 'Help', 'url' => '/help']]);
 if (!empty($parts[0])) {
 	$url = '/help/'.$parts[0];
 	$url = ($url == $_SERVER['REQUEST_URI']) ? '' : $url;
@@ -129,7 +129,7 @@ echo $wikiSchema;
 					</div>
 					<div class="row header-content col-sm-8">
 						<?php if ($isAdmin): ?>
-							<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right']) ?>
+							<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right', 'style' => 'width:66px']) ?>
 						<?php endif; ?>
 						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
 						<p class="text-caption p0">
