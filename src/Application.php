@@ -67,7 +67,7 @@ class Application extends BaseApplication
          */
         if (Configure::read('debug')) {
             Configure::write('DebugKit.safeTld', ['com', 'loc']);
-            //Configure::write('DebugKit.variablesPanelMaxDepth', 4);
+            Configure::write('DebugKit.variablesPanelMaxDepth', 8);
             $this->addPlugin('DebugKit');
             $this->addPlugin('IdeHelper');
         }

@@ -87,6 +87,9 @@ class UsersTable extends CakeDcUsersTable
         $this->hasMany('LocationNotes', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('LoginIps', [
+            'foreignKey' => 'user_id',
+        ]);
         $this->hasMany('Pages', [
             'foreignKey' => 'user_id',
         ]);
