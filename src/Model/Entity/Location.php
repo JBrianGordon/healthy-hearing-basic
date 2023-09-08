@@ -141,9 +141,8 @@ use Cake\Utility\Text;
  * @property \App\Model\Entity\LocationLink[] $location_links
  * @property \App\Model\Entity\LocationNote[] $location_notes
  * @property \App\Model\Entity\LocationPhoto[] $location_photos
- * @property \App\Model\Entity\LocationProvider[] $location_providers
+ * @property \App\Model\Entity\LocationsProvider[] $locations_providers
  * @property \App\Model\Entity\LocationUser[] $location_users
- * @property \App\Model\Entity\LocationVideo[] $location_videos
  * @property \App\Model\Entity\LocationVidscrip[] $location_vidscrips
  * @property \App\Model\Entity\Review[] $reviews
  */
@@ -436,9 +435,8 @@ class Location extends Entity
         'location_links' => true,
         'location_notes' => true,
         'location_photos' => true,
-        'location_providers' => true,
+        'providers' => true,
         'location_users' => true,
-        'location_videos' => true,
         'location_vidscrips' => true,
         'reviews' => true,
         'is_oticon' => true,

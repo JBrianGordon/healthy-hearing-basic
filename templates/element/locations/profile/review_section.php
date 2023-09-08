@@ -5,7 +5,7 @@
 ?>
 
 <!-- Reviews -->
-<section id="reviews" class="panel panel-primary mb0">
+<section id="reviewSection" class="panel panel-primary mb0">
 	<?= $this->element('locations/profile/review_modal', ['location' => $location]) ?>
 	<?php if(!empty($location->reviews) || $location->state != 'ON') : ?>
 	  <!-- Reviews -->
@@ -46,8 +46,8 @@
 	              <?php endforeach; ?>
 	            </div>
 	            <p class="text-center">
-	              <a href="" id="fewer-reviews-button" class="btn btn-light">Fewer Reviews</a>
-	              <a href="" id="more-reviews-button" class="btn btn-light">More Reviews</a>
+	              <button  id="fewer-reviews-button" class="btn btn-light mb10">Fewer Reviews</button>
+	              <button  id="more-reviews-button" class="btn btn-light">More Reviews</button>
 	            </p>
 	          <?php endif; ?>
 	        <?php elseif($location->state != 'ON'): ?>

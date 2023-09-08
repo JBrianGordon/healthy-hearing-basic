@@ -106,23 +106,47 @@ if(allFieldsInput !== null){
 const exportSubmit = document.getElementById("exportSubmit");
 if(exportSubmit !== null){
 	exportSubmit.addEventListener("click", () => {
-	  const searchAndExcludedFieldArray = exportBtn.getAttribute("href").split("/admin/locations/crm").pop();
-	  
-	  let params = "";
+    // Read CSRF Token
+    var csrfToken = $('input[name="_csrfToken"]').val();
+
+    var excludedFields = [];
 	  const formControlElements = document.querySelectorAll("#exportModal .form-control");
 	  formControlElements.forEach((element) => {
 	    if (element.value === "0") {
 	      const excludedFieldName = element.name;
-	      params += `/field%5B${excludedFieldName}%5D:${excludedFieldName}`;
+	      excludedFields.push(element.name);
 	    }
 	  });
-	  
-	  window.location.pathname = `admin/locations/export${searchAndExcludedFieldArray}${params}.csv`;
+
+    var exportData = [];
+    exportData['excludedFields'] = excludedFields;
+    exportData['queryString'] = location.search;
+
+    fetch("/admin/locations/export", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      },
+      body: JSON.stringify({excludedFields: excludedFields, queryString: location.search}),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success == true) {
+          console.debug('success');q
+          console.debug(data);
+        } else {
+          console.log('failed');q
+        }
+      })
+      .catch(error => {
+        console.log('Error: ', error);
+      });
 	});
 }
 
 // Reorganize search options and change booleans into a toggle
-if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
+if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches") || exportModal !== null) {
 
   // Update labels for specific elements
   const updateLabels = () => {
@@ -164,9 +188,9 @@ if (document.querySelector("form").action.includes("/admin/locations") || docume
 
 	sliders.forEach((slider) => {
 	  slider.addEventListener("mouseup", function () {
-	    const slideClass = this.classList.value;
+	    const slideClass = slider.classList.value;
 
-	    const input = this.closest("label").querySelector("input");
+	    const input = slider.closest("label").querySelector("input");
 
 	    if (slideClass === "switch-positive") {
 	      input.classList.remove("switch-negative");
@@ -217,21 +241,19 @@ if ($('.datepicker').attr('minDate')) {
 }
 
 // Toggle values for switches
-export const exportSwitchesFunctions = () => {
+if(exportModal !== null) {
 	const exportSwitches = document.querySelectorAll("#exportModal .form-control");
 	exportSwitches.forEach(switchElement => {
 	  switchElement.addEventListener("click", () => {
-	    if (this.value === "0") {
-	      this.value = "1";
+	    if (switchElement.value === "0") {
+	      switchElement.value = "1";
 	    } else {
-	      this.value = "0";
+	      switchElement.value = "0";
 	    }
 	  });
 	});
-}
 
 // Toggle classes and values for all switches, based on #allFieldsInput active class
-export const allFieldsFunctions = () => {
 	const allFieldsInput = document.getElementById("allFieldsInput");
 	allFieldsInput.addEventListener("click", function() {
 	  setTimeout(function() {
@@ -251,12 +273,11 @@ export const allFieldsFunctions = () => {
 	    }
 	  }, 200);
 	});
-}
 
-export const exportSubmissionsFunctions = () => {
 	const exportSubmit = document.querySelector("#exportModal #exportSubmit");
 	const exportModalFormControls = document.querySelectorAll("#exportModal .form-control");
 
+	/* TODO: I THINK THIS CAN BE DELETED
 	exportSubmit.addEventListener("click", function() {
 	  const searchAndExcludedFieldArray = exportButton.getAttribute("href").split("/admin/locations/crm").pop();
 	  
@@ -269,7 +290,7 @@ export const exportSubmissionsFunctions = () => {
 	  });
 	  
 	  window.location.pathname = "admin/locations/export" + searchAndExcludedFieldArray + excludedFields + ".csv";
-	});
+	});*/
 
 	//export button modal and functionality
 	$("#exportButton").on("click",function(e) {
@@ -280,6 +301,7 @@ export const exportSubmissionsFunctions = () => {
 	$("#exportClose").on("click",function() {
 		$("#exportModal").hide().removeClass("in");
 	});
+
 }
 
 export const datepickerFunctions = () => {

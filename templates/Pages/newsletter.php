@@ -2,7 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Page $page
- * @var \App\Form\ContactUsForm $newsletterForm
+ * @var \App\Form\NewsletterForm $newsletterForm
  */
 ?>
 
@@ -17,7 +17,7 @@ echo $this->Form->control('email', [
     'placeholder' => 'Email',
 ]);
 echo $this->Recaptcha->display();
-echo $this->Form->button('Send Message');
+echo $this->Form->button('Sign Up');
 echo $this->Form->end();
 
 

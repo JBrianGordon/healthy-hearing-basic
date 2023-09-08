@@ -2,6 +2,7 @@
 if(document.querySelector('.ck-box') !== null) {
     document.querySelector('.ck-box').addEventListener('click', () => {
         const imagePathInput = document.getElementById("facebook-image");
+        const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 
     	const ckboxDiv = document.createElement('div');
     	const firstContainer = document.querySelector(".site-body > .row > .container");
@@ -9,7 +10,7 @@ if(document.querySelector('.ck-box') !== null) {
     	firstContainer.appendChild(ckboxDiv);
 
         CKBox.mount(ckboxDiv, {
-            tokenUrl: "https://14278.cke-cs.com/token/dev/79QEOd4qhNDt5bIrwH8pk45oiAKR6gzuYU0W?limit=10",
+            tokenUrl: ckTokenUrl,
             dialog: {
                 width: 700,
                 height: 500,

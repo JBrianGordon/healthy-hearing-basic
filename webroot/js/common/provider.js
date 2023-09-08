@@ -172,7 +172,7 @@ const provider = new Provider();
 
 document.querySelectorAll(".provider").forEach((element, index) => {
   const audOrHisElement = document.getElementById("Provider" + index + "AudOrHis");
-  if (audOrHisElement.value === "AUD") {
+  if (audOrHisElement !== null && audOrHisElement.value === "AUD") {
     audOrHisElement.value = "Audiologist";
   }
 });

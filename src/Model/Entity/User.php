@@ -136,6 +136,7 @@ class User extends CakeDcUser
         'is_agent' => true,
         'is_call_supervisor' => true,
         'is_author' => true,
+        'is_reviewer' => true,
         'notes' => true,
         'corp_id' => true,
         'is_deleted' => true,

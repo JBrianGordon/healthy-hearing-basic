@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Database\Expression\QueryExpression;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Filter\Base;
 
 /**
  * Providers Model
  *
  * @property \App\Model\Table\ImportProvidersTable&\Cake\ORM\Association\HasMany $ImportProviders
- * @property \App\Model\Table\LocationProvidersTable&\Cake\ORM\Association\HasMany $LocationProviders
+ * @property \App\Model\Table\LocationsProvidersTable&\Cake\ORM\Association\HasMany $LocationsProviders
  *
  * @method \App\Model\Entity\Provider newEmptyEntity()
  * @method \App\Model\Entity\Provider newEntity(array $data, array $options = [])
@@ -46,17 +49,90 @@ class ProvidersTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors([
+            'Search.Search',
+            'Timestamp',
+        ]);
 
+        // Associations
         $this->hasMany('ImportProviders', [
             'foreignKey' => 'provider_id',
         ]);
-        $this->hasMany('LocationProviders', [
-            'foreignKey' => 'provider_id',
-        ]);
         $this->belongsToMany('Locations', [
-            'through' => 'LocationProviders',
+            'foreignKey' => 'provider_id',
+            'targetForeignKey' => 'location_id',
+            'joinTable' => 'locations_providers',
+            'through' => 'LocationsProviders',
+            'cascadeCallbacks' => true
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->like('first_name', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('middle_name', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('last_name', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('credentials', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('title', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('email', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('description', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->boolean('is_active')
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Providers.created', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->add('mod_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['mod_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Providers.modified', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
+            ->like('aud_or_his', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->callback('location_listing_type', [
+                'callback' => function (\Cake\ORM\Query $query, array $args,  \Search\Model\Filter\Base $filter) {
+                    $query
+                        ->innerJoinWith('Locations', function (\Cake\ORM\Query $query) use ($args) {
+                            return $query->where(['Locations.listing_type =' => $args['location_listing_type']]);
+                        })
+                        ->group('Providers.id');
+
+                    return true;
+                }
+            ]);
     }
 
     /**

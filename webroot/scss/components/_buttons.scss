@@ -11,6 +11,11 @@
 		border-bottom-left-radius: 3rem !important;
 		border-top-left-radius: 3rem !important;
 	}
+
+  &.btn-block {
+    width: 100%;
+    display: block;
+  }
 }
 
 .btn-secondary {
@@ -18,7 +23,12 @@
 }
 
 .btn-light {
-  @include button-variant($btn-light-bg, $btn-light-border, $btn-light-color);
+  @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+
+  &:hover {
+    background-color: #5499ba;
+    color: #fff;
+  }
 }
 
 .btn-neutral {
@@ -173,14 +183,26 @@
   background: $color-google-plus;
 }
 
+.btn-cookie {
+  @media(max-width: $screen-sm-max){
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 .directions-link{
     margin: 10px auto 0;
     display: block;
     max-width: 220px;
 }
 
+#more-reviews-button {
+  margin: 0 auto;
+}
+
 #fewer-reviews-button {
 	display: none;
+  margin: 0 auto;
 }
 
 span#exportClose {

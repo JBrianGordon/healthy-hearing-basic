@@ -63,6 +63,7 @@ hr {
 	background-color: #eee;
 	border: 0;
 	border-top: 1px solid #777;
+  width: 100%;
 }
 
 th {
@@ -120,6 +121,35 @@ a.print-link {
 
 .hidden {
   display: none;
+}
+
+.flex {
+  display: flex;
+
+  .checkbox-left {
+    order: -1;
+  }
+}
+
+.form-group {
+  clear: both;
+}
+
+.pull-right {
+  float: right;
+}
+
+table {
+
+  &.basic-info {
+    th, td {
+      padding: 12px 24px;
+    }
+  }
+
+  &.table-bordered {
+    border: 1px solid #ddd
+  }
 }
 
 .text-primary {

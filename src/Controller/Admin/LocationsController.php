@@ -86,9 +86,19 @@ class LocationsController extends AppController
      */
     public function edit($id = null)
     {
+        $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
         $location = $this->Locations->get($id, [
-            'contain' => [],
+            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers', 'LocationNotes', 'LocationUsers', 'LocationEmails', 'Reviews'],
         ]);
+        $lastOticonImport = $this->Locations->ImportStatus->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $id,
+                'oticon_tier >' => 0
+            ],
+            'order' => ['ImportStatus.created DESC']
+        ])->first();
+        $lastOticonImportDate = empty($lastOticonImport->created) ? 'N/A' : dateTimeCentralToEastern($lastOticonImport->created);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
             if ($this->Locations->save($location)) {
@@ -98,7 +108,9 @@ class LocationsController extends AppController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $this->set(compact('location'));
+        $this->set(compact('location', 'lastOticonImportDate'));
+        $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
+        $this->set('days', $this->Locations->LocationHours->days);
     }
 
     /**
@@ -126,11 +138,17 @@ class LocationsController extends AppController
     */
     function export() {
         $this->autoRender = false;
-        $requestParams = $this->request->getQueryParams();
+        $queryString = str_replace('?', '', $this->request->getData('queryString'));
+        parse_str(str_replace('?', '', $queryString), $query);
+        $excludedFields = $this->request->getData('excludedFields');
 
+        // Becky TODO #16839: call LocationsTable::export() with $query and $excludedFields to get the export data.
         // TODO: set ignore fields, additional fields, and overwrite fields. See CaCallsController for example.
-        $this->Export->exportCsv('export_locations.csv');
-        die();
+        //$this->response = $this->response->withDownload('export_locations.csv');
+
+        //TODO: Remove this. Temporary test response
+        $return = ['success' => true, 'query' => $query, 'excludedFields' => $excludedFields];
+        return $this->response->withStringBody(json_encode($return));
     }
 
     /**

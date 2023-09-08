@@ -14,6 +14,186 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+	const initSpecialAnnouncements = () => {
+	  const specialAnnouncements = document.querySelector("#specialAnnouncements");
+	  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
+	  const adId = specialAnnouncements.dataset.adid;
+	  const couponId = specialAnnouncements.dataset.couponid;
+
+	  const couponLibrary = document.querySelector("#couponLibrary");
+	  const couponSelected = document.querySelector("#couponSelected");
+	  const uploadCoupon = document.querySelector("#uploadCoupon");
+
+	  if (isCqPremier && !adId) {
+	    if (couponId) {
+	      couponLibrary.style.display = "none";
+	      couponSelected.style.display = "block";
+	      uploadCoupon.style.display = "none";
+	    } else {
+	      couponLibrary.style.display = "block";
+	      couponSelected.style.display = "none";
+	      uploadCoupon.style.display = "none";
+	    }
+	  } else {
+	    couponLibrary.style.display = "none";
+	    couponSelected.style.display = "none";
+	    uploadCoupon.style.display = "block";
+	  }
+	};
+
+	const addLink = async (locationId, key) => {
+	  const newLink = document.querySelector('.linked-location');
+	  const linkedLocationId = document.querySelector('#LocationLinkedLocationId').value;
+	  
+	  // Remove the error style from the input.
+	  newLink.style.background = '';
+	  document.querySelector("#link-error-" + key).style.display = "none";
+	  
+	  try {
+	    const response = await fetch(`/locations/ajax_add_linked_location/${locationId}/${linkedLocationId}`);
+	    const data = await response.json();
+	    
+	    if (data.error) {
+	      newLink.style.background = 'rgba(200, 100, 100, .5)';
+	      document.querySelector("#link-error-" + key).innerHTML = data.error;
+	      document.querySelector("#link-error-" + key).style.display = "block";
+	    } else {
+	      document.querySelector("#div-link-" + key).innerHTML = data.locationData;
+	      document.querySelector("#div-add-delete-" + key).innerHTML = '<td style="width:100px;" align="center"><button type="button" class="btn btn-md btn-danger js-link-delete" data-key="' + key + '" data-id="' + locationId + '" data-link="' + linkedLocationId + '">delete</button></td>';
+	      
+	      // Add the new row to the LocationLink table
+	      const newKey = key + 1;
+	      const newRow = document.createElement('tr');
+	      newRow.id = "tr-link-" + newKey;
+	      newRow.innerHTML = '<td><div id="div-link-' + newKey + '"><input type="hidden" name="data[Location][id_linked_location]" id="LocationIdLinkedLocation"><input class="form-control linked-location" data-key="' + newKey + '" data-id="' + locationId + '" /><span class="help-block text-danger" style="display:none;" id="link-error-' + newKey + '"></span></div></td><td style="width:100px;" align="center"><div id="div-add-delete-' + newKey + '"></div></td>';
+	      document.querySelector("#tr-link-" + key).after(newRow);
+	      
+	      locationAutocomplete();
+	    }
+	  } catch (error) {
+	    newLink.style.background = 'rgba(200, 100, 100, .5)';
+	    document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to add linked location.';
+	    document.querySelector("#link-error-" + key).style.display = "block";
+	  }
+	};
+
+	const deleteLink = async (obj) => {
+	  const key = obj.dataset.key;
+	  const locationId = obj.dataset.id;
+	  const linkedLocationId = obj.dataset.link;
+	  
+	  try {
+	    const response = await fetch(`/locations/ajax_delete_linked_location/${locationId}/${linkedLocationId}`);
+	    const data = await response.json();
+	    
+	    if (response.ok) {
+	      document.querySelector("#tr-link-" + key).remove();
+	    } else {
+	      document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to delete linked location.';
+	      document.querySelector("#link-error-" + key).style.display = "block";
+	    }
+	  } catch (error) {
+	    document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to delete linked location.';
+	    document.querySelector("#link-error-" + key).style.display = "block";
+	  }
+	};
+
+	const locationAutocomplete = () => {
+	  const linkedLocationInput = document.querySelector("input.linked-location");
+	  const locationId = linkedLocationInput.dataset.id;
+	  const key = linkedLocationInput.dataset.key;
+
+	  linkedLocationInput.addEventListener("input", async () => {
+	    const inputValue = linkedLocationInput.value.trim();
+	    if (inputValue.length >= 2) {
+	      try {
+	        const response = await fetch("/caautocomplete");
+	        const data = await response.json();
+	        
+	        if (response.ok) {
+	          const autocompleteResults = data.filter(item => item.label.toLowerCase().includes(inputValue.toLowerCase()));
+	          renderAutocompleteResults(autocompleteResults);
+	        }
+	      } catch (error) {
+	        console.error("Error fetching autocomplete data:", error);
+	      }
+	    }
+	  });
+
+	  const renderAutocompleteResults = (results) => {
+	    // Clear previous results
+	    const autocompleteResultsContainer = document.querySelector("#autocomplete-results");
+	    autocompleteResultsContainer.innerHTML = "";
+
+	    // Render new results
+	    results.forEach(item => {
+	      const option = document.createElement("div");
+	      option.classList.add("autocomplete-option");
+	      option.textContent = item.label;
+	      option.addEventListener("click", () => {
+	        linkedLocationInput.value = item.label;
+	        document.querySelector("#LocationLinkedLocationId").value = item.id;
+	        addLink(locationId, key);
+	        autocompleteResultsContainer.innerHTML = "";
+	      });
+	      autocompleteResultsContainer.appendChild(option);
+	    });
+	  };
+	};
+
+	const scrollTo = (selector, offset = 90) => {
+	  const element = document.querySelector(selector);
+	  if (element) {
+	    window.scrollTo({
+	      top: element.offsetTop - offset,
+	      behavior: "smooth"
+	    });
+	    return true;
+	  }
+	  return false;
+	};
+
+	const onChangeIsClosedLunch = (isClosedLunch) => {
+	  const closedLunch = document.querySelector("#closedLunch");
+	  const lunchStartHour = document.querySelector("#LocationHourLunchStartHour");
+	  const lunchStartMin = document.querySelector("#LocationHourLunchStartMin");
+	  const lunchStartMeridian = document.querySelector("#LocationHourLunchStartMeridian");
+	  const lunchEndHour = document.querySelector("#LocationHourLunchEndHour");
+	  const lunchEndMin = document.querySelector("#LocationHourLunchEndMin");
+	  const lunchEndMeridian = document.querySelector("#LocationHourLunchEndMeridian");
+
+	  if (isClosedLunch) {
+	    closedLunch.style.display = "block";
+	    lunchStartHour.required = true;
+	    lunchStartMin.required = true;
+	    lunchStartMeridian.required = true;
+	    lunchEndHour.required = true;
+	    lunchEndMin.required = true;
+	    lunchEndMeridian.required = true;
+	  } else {
+	    closedLunch.style.display = "none";
+	    lunchStartHour.required = false;
+	    lunchStartMin.required = false;
+	    lunchStartMeridian.required = false;
+	    lunchEndHour.required = false;
+	    lunchEndMin.required = false;
+	    lunchEndMeridian.required = false;
+	  }
+	};
+
+	const onChangeIsMobile = (isMobile) => {
+	  const radius = document.querySelector("#radius");
+	  const locationRadius = document.querySelector("#LocationRadius");
+
+	  if (isMobile) {
+	    radius.style.display = "block";
+	    locationRadius.required = true;
+	  } else {
+	    radius.style.display = "none";
+	    locationRadius.required = false;
+	  }
+	};
+
   // Initialize the "Special Announcements" section.
   // Coupon Library is currently only available to CQ Premier clinics
   initSpecialAnnouncements();
@@ -28,6 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const incompleteArray = [];
   let completionPercentage = 100;
 
+  /*** TODO: rewrite this when CKEditor 5 is added:
   if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
     completionPercentage -= 25;
     incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
@@ -44,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
       input.closest(".form-group").previousElementSibling.classList.add("red");
     }
   });
+  */
 	
 	document.querySelector("#hhtvButton").addEventListener("click", function() {
 	  window.scrollTo({
@@ -53,52 +235,51 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	// Remove error class if at least one photo field has a value
+	/*** TODO: uncomment when providerImage function is fixed in template/element/locations/provider.php:
 	if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.querySelector("#Provider0File").value !== "") {
 	  document.querySelector("#Provider0ThumbUrl").closest(".form-group").classList.remove("has-error");
 	  document.querySelector("#Provider0File").closest(".form-group").classList.remove("has-error");
 	  document.querySelector("#Provider0ThumbUrl").closest(".form-group").previousElementSibling.classList.remove("red");
 	  document.querySelector("#Provider0File").closest(".form-group").previousElementSibling.classList.remove("red");
-	}
+	}*/
 
 	// Provider first name
-	if (document.querySelector("#Provider0FirstName").value === "") {
+	if (document.querySelector("#provider-0-first-name").value === "") {
 	  completionPercentage -= 5;
 	  incompleteArray.push("<li><a href='#provider0First'>- Provider first name</a></li>");
 	}
 
 	// Provider last name
-	if (document.querySelector("#Provider0LastName").value === "") {
+	if (document.querySelector("#providers-0-last-name").value === "") {
 	  completionPercentage -= 5;
 	  incompleteArray.push("<li><a href='#provider0Last'>- Provider last name</a></li>");
 	}
 
 	// Provider description
-	if (document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "") {
+	/*** TODO: uncomment when CKEditor added:
+	if (document.querySelector("#provider-0-description iframe").contentDocument.body.textContent.trim() === "") {
 	  completionPercentage -= 5;
 	  incompleteArray.push("<li><a href='#provider0Desc'>- Provider description</a></li>");
-	}
+	}*/
 
 	// Provider photo
+	/*** TODO: uncomment when ~line 85 is uncommented above
 	if ((document.querySelector("#Provider0ThumbUrl").value === "" && document.querySelector("#Provider0File").value === "") || document.querySelector("#Provider0ThumbUrl") === undefined) {
 	  completionPercentage -= 10;
 	  incompleteArray.push("<li><a href='#provider0Photo'>- Provider photo</a></li>");
-	}
+	}*/
 
-	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	let isHoursIncomplete = false;
 
 	days.forEach((day) => {
 	  if (!isHoursIncomplete) {
-	    const isOpenHourEmpty = document.querySelector(`#LocationHour${day}OpenHour`).value === "";
-	    const isOpenMinEmpty = document.querySelector(`#LocationHour${day}OpenMin`).value === "";
-	    const isOpenMeridianEmpty = document.querySelector(`#LocationHour${day}OpenMeridian`).value === "";
-	    const isCloseHourEmpty = document.querySelector(`#LocationHour${day}CloseHour`).value === "";
-	    const isCloseMinEmpty = document.querySelector(`#LocationHour${day}CloseMin`).value === "";
-	    const isCloseMeridianEmpty = document.querySelector(`#LocationHour${day}CloseMeridian`).value === "";
-	    const isClosedChecked = !document.querySelector(`#LocationHour${day}IsClosed`).checked;
-	    const isByAppointmentChecked = !document.querySelector(`#LocationHour${day}IsByappt`).checked;
+	    const isOpenHourEmpty = document.querySelector(`#locationhour-${day}-open`).value === "";
+	    const isCloseHourEmpty = document.querySelector(`#locationhour-${day}-close`).value === "";
+	    const isClosedChecked = !document.querySelector(`#locationhour-${day}-is-closed`).checked;
+	    const isByAppointmentChecked = !document.querySelector(`#locationhour-${day}-is-byappt`).checked;
 
-	    if (isOpenHourEmpty && isOpenMinEmpty && isOpenMeridianEmpty && isCloseHourEmpty && isCloseMinEmpty && isCloseMeridianEmpty && isClosedChecked && isByAppointmentChecked) {
+	    if (isOpenHourEmpty && isCloseHourEmpty && isClosedChecked && isByAppointmentChecked) {
 	      completionPercentage -= 10;
 	      incompleteArray.push(`<li><a href='#hoursOfOperation'>- Hours of operation</a></li>`);
 	      document.querySelector("h2:contains('Hours of operation')").classList.add("red");
@@ -119,16 +300,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	// Website url check
-	if (document.querySelector("#LocationUrl").value === "") {
+	if (document.querySelector("#location-url").value === "") {
 	  completionPercentage -= 5;
 	  incompleteArray.push("<li><a href='#urlAnchor'>- Website URL</a></li>");
-	  document.querySelector("#LocationUrl").parentElement.classList.add("has-error");
-	  document.querySelector("#LocationUrl").previousElementSibling.classList.add("red");
+	  document.querySelector("#location-url").parentElement.classList.add("has-error");
+	  document.querySelector("#location-url").previousElementSibling.classList.add("red");
 	}
 
 	// Vidscrip validation
-	const vidscripsVidscripInput = document.querySelector("#LocationVidscripsVidscrip");
-	const vidscripsEmailInput = document.querySelector("#LocationVidscripsEmail");
+	const vidscripsVidscripInput = document.querySelector("#locationvidscrips-vidscrip");
+	const vidscripsEmailInput = document.querySelector("#locationvidscrips-email");
 
 	const handleVidscripBlur = () => {
 	  if (vidscripsVidscripInput.value === "" && vidscripsEmailInput.value === "") {
@@ -144,6 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	vidscripsEmailInput.addEventListener("blur", handleVidscripBlur);
 
 	// Only display the completion modal once per session. Display again if the percentage changes.
+	/*** TODO: uncomment when isClinic check added:
 	const sessionCompletionPercentage = sessionStorage.getItem("sessionCompletionPercentage");
 	if (sessionCompletionPercentage !== String(completionPercentage)) {
 	  if (completionPercentage < 100) {
@@ -156,11 +338,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	    document.getElementById("completeModal").classList.add("in");
 	  }
 	  sessionStorage.setItem("sessionCompletionPercentage", completionPercentage);
-	}
+	}*/
 
 	// Trigger change events
-	document.getElementById("LocationHourIsClosedLunch").dispatchEvent(new Event("change"));
-	document.getElementById("LocationIsMobile").dispatchEvent(new Event("change"));
+	document.getElementById("locationhour-is-closed-lunch").dispatchEvent(new Event("change"));
+	document.getElementById("is-mobile").dispatchEvent(new Event("change"));
 	
 	const elements = document.querySelectorAll("span.cke_path_item");
 
@@ -271,10 +453,6 @@ function hhGetFileSize(fileid) {
   }
 }
 
-const fileid = "your-file-input-id";
-const fileSize = hhGetFileSize(fileid);
-alert("Uploaded File Size is " + fileSize + " MB");
-
 function hhCanSubmit(completeCheck) {
   let totalUpload = 0;
   let uploadLimit = 0;
@@ -300,15 +478,12 @@ function hhCanSubmit(completeCheck) {
   return true;
 }
 
-const completeCheck = true;
-const canSubmit = hhCanSubmit(completeCheck);
-alert(`Can Submit: ${canSubmit}`);
-
+/*** TODO: possibly deletable block: ***/
 // Allow form submission if user clicks modal continue
-document.querySelector("#saveAndContinue").addEventListener("click", () => {
-	document.querySelector("#LocationClinicEditForm").setAttribute("onsubmit", "return $.hhCanSubmit('Continue');");
-	document.querySelector("#LocationClinicEditForm").submit();
-});
+// document.querySelector("#saveAndContinue").addEventListener("click", () => {
+// 	document.querySelector("#LocationClinicEditForm").setAttribute("onsubmit", "return $.hhCanSubmit('Continue');");
+// 	document.querySelector("#LocationClinicEditForm").submit();
+// });
 
 // Notice on input.
 document.querySelectorAll(".input_file").forEach((element) => {
@@ -318,12 +493,6 @@ document.querySelectorAll(".input_file").forEach((element) => {
 });
 
 document.body.addEventListener("change", (e) => {
-	if (event.target.classList.contains("video-url")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-
 	const { target } = e;
 
 	if (target.matches('input[type="file"]')) {
@@ -345,16 +514,6 @@ document.body.addEventListener("change", (e) => {
 });
 
 document.body.addEventListener("click", (e) => {
-	if (e.target.classList.contains("js-video-add")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-video-delete')) {
-		$.removeVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
 	if (e.target.classList.contains('js-photo-delete')) {
 		$.removePhotoRow(e.target, 'photo');
 		e.preventDefault();
@@ -398,53 +557,6 @@ deletePhotoButtons.forEach(button => {
 		img.setAttribute('src', '');
 	});
 });
-
-const addVideoRow = (obj) => {
-  const editObj = this;
-  const row = obj.closest('tr');
-  const newRow = document.createElement('tr');
-  const newVideo = document.querySelector('.video-url');
-  const newVideoValue = document.querySelector('.video-url').value;
-  const newVideoKey = parseInt(document.querySelector('.videoKey').value, 10);
-  document.querySelector('.videoKey').value = parseInt(document.querySelector('.videoKey').value, 10) + 1;
-
-  // Check for errors in the inputs.
-  let errors = false;
-  if (newVideoValue.length === 0) {
-    errors = true;
-  }
-  const pattern = new RegExp("^https?://([da-z.-]+).([a-z.]{2,6})([/w.-=?]*)*/?");
-  if (!pattern.test(newVideoValue)) {
-    errors = true;
-  }
-  if (errors === true) {
-    // Apply the error style to the input
-    newVideo.style.background = 'rgba(200,100,100,.5)';
-    document.getElementById('video-add-error').style.display = 'block';
-    return false;
-  } else {
-    // Remove the error style from the input.
-    newVideo.style.background = '';
-    document.getElementById('video-add-error').style.display = 'none';
-  }
-
-  // Add the new row to the videos table
-  newRow.innerHTML = `
-    <td><div><input name="data[LocationVideo][${newVideoKey}][video_url]" class="form-control" maxlength="255" type="text" value="${newVideoValue}" id="LocationVideo${newVideoKey}VideoUrl"></div></td>
-    <td align="center"><button class="btn btn-md btn-danger js-video-delete" data-key="${newVideoKey}">delete</button></td>
-  `;
-  row.before(newRow);
-
-  // Clear out the input
-  newVideo.value = '';
-};
-
-const removeVideoRow = (obj) => {
-  const row = obj.closest('tr');
-  const key = obj.dataset.key;
-  document.getElementById(`LocationVideo${key}VideoUrl`).value = '';
-  row.style.display = 'none';
-};
 
 const removePhotoRow = (obj, type) => {
   const row = obj.closest('tr');
@@ -706,184 +818,4 @@ document.querySelectorAll(".border-radio").forEach((radio) => {
     radio.classList.add("selected-border");
   });
 });
-
-const addLink = async (locationId, key) => {
-  const newLink = document.querySelector('.linked-location');
-  const linkedLocationId = document.querySelector('#LocationLinkedLocationId').value;
-  
-  // Remove the error style from the input.
-  newLink.style.background = '';
-  document.querySelector("#link-error-" + key).style.display = "none";
-  
-  try {
-    const response = await fetch(`/locations/ajax_add_linked_location/${locationId}/${linkedLocationId}`);
-    const data = await response.json();
-    
-    if (data.error) {
-      newLink.style.background = 'rgba(200, 100, 100, .5)';
-      document.querySelector("#link-error-" + key).innerHTML = data.error;
-      document.querySelector("#link-error-" + key).style.display = "block";
-    } else {
-      document.querySelector("#div-link-" + key).innerHTML = data.locationData;
-      document.querySelector("#div-add-delete-" + key).innerHTML = '<td style="width:100px;" align="center"><button type="button" class="btn btn-md btn-danger js-link-delete" data-key="' + key + '" data-id="' + locationId + '" data-link="' + linkedLocationId + '">delete</button></td>';
-      
-      // Add the new row to the LocationLink table
-      const newKey = key + 1;
-      const newRow = document.createElement('tr');
-      newRow.id = "tr-link-" + newKey;
-      newRow.innerHTML = '<td><div id="div-link-' + newKey + '"><input type="hidden" name="data[Location][id_linked_location]" id="LocationIdLinkedLocation"><input class="form-control linked-location" data-key="' + newKey + '" data-id="' + locationId + '" /><span class="help-block text-danger" style="display:none;" id="link-error-' + newKey + '"></span></div></td><td style="width:100px;" align="center"><div id="div-add-delete-' + newKey + '"></div></td>';
-      document.querySelector("#tr-link-" + key).after(newRow);
-      
-      locationAutocomplete();
-    }
-  } catch (error) {
-    newLink.style.background = 'rgba(200, 100, 100, .5)';
-    document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to add linked location.';
-    document.querySelector("#link-error-" + key).style.display = "block";
-  }
-};
-
-const deleteLink = async (obj) => {
-  const key = obj.dataset.key;
-  const locationId = obj.dataset.id;
-  const linkedLocationId = obj.dataset.link;
-  
-  try {
-    const response = await fetch(`/locations/ajax_delete_linked_location/${locationId}/${linkedLocationId}`);
-    const data = await response.json();
-    
-    if (response.ok) {
-      document.querySelector("#tr-link-" + key).remove();
-    } else {
-      document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to delete linked location.';
-      document.querySelector("#link-error-" + key).style.display = "block";
-    }
-  } catch (error) {
-    document.querySelector("#link-error-" + key).innerHTML = 'Error. Unable to delete linked location.';
-    document.querySelector("#link-error-" + key).style.display = "block";
-  }
-};
-
-const locationAutocomplete = () => {
-  const linkedLocationInput = document.querySelector("input.linked-location");
-  const locationId = linkedLocationInput.dataset.id;
-  const key = linkedLocationInput.dataset.key;
-
-  linkedLocationInput.addEventListener("input", async () => {
-    const inputValue = linkedLocationInput.value.trim();
-    if (inputValue.length >= 2) {
-      try {
-        const response = await fetch("/caautocomplete");
-        const data = await response.json();
-        
-        if (response.ok) {
-          const autocompleteResults = data.filter(item => item.label.toLowerCase().includes(inputValue.toLowerCase()));
-          renderAutocompleteResults(autocompleteResults);
-        }
-      } catch (error) {
-        console.error("Error fetching autocomplete data:", error);
-      }
-    }
-  });
-
-  const renderAutocompleteResults = (results) => {
-    // Clear previous results
-    const autocompleteResultsContainer = document.querySelector("#autocomplete-results");
-    autocompleteResultsContainer.innerHTML = "";
-
-    // Render new results
-    results.forEach(item => {
-      const option = document.createElement("div");
-      option.classList.add("autocomplete-option");
-      option.textContent = item.label;
-      option.addEventListener("click", () => {
-        linkedLocationInput.value = item.label;
-        document.querySelector("#LocationLinkedLocationId").value = item.id;
-        addLink(locationId, key);
-        autocompleteResultsContainer.innerHTML = "";
-      });
-      autocompleteResultsContainer.appendChild(option);
-    });
-  };
-};
-
-const initSpecialAnnouncements = () => {
-  const specialAnnouncements = document.querySelector("#specialAnnouncements");
-  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
-  const adId = specialAnnouncements.dataset.adid;
-  const couponId = specialAnnouncements.dataset.couponid;
-
-  const couponLibrary = document.querySelector("#couponLibrary");
-  const couponSelected = document.querySelector("#couponSelected");
-  const uploadCoupon = document.querySelector("#uploadCoupon");
-
-  if (isCqPremier && !adId) {
-    if (couponId) {
-      couponLibrary.style.display = "none";
-      couponSelected.style.display = "block";
-      uploadCoupon.style.display = "none";
-    } else {
-      couponLibrary.style.display = "block";
-      couponSelected.style.display = "none";
-      uploadCoupon.style.display = "none";
-    }
-  } else {
-    couponLibrary.style.display = "none";
-    couponSelected.style.display = "none";
-    uploadCoupon.style.display = "block";
-  }
-};
-
-const scrollTo = (selector, offset = 90) => {
-  const element = document.querySelector(selector);
-  if (element) {
-    window.scrollTo({
-      top: element.offsetTop - offset,
-      behavior: "smooth"
-    });
-    return true;
-  }
-  return false;
-};
-
-const onChangeIsClosedLunch = (isClosedLunch) => {
-  const closedLunch = document.querySelector("#closedLunch");
-  const lunchStartHour = document.querySelector("#LocationHourLunchStartHour");
-  const lunchStartMin = document.querySelector("#LocationHourLunchStartMin");
-  const lunchStartMeridian = document.querySelector("#LocationHourLunchStartMeridian");
-  const lunchEndHour = document.querySelector("#LocationHourLunchEndHour");
-  const lunchEndMin = document.querySelector("#LocationHourLunchEndMin");
-  const lunchEndMeridian = document.querySelector("#LocationHourLunchEndMeridian");
-
-  if (isClosedLunch) {
-    closedLunch.style.display = "block";
-    lunchStartHour.required = true;
-    lunchStartMin.required = true;
-    lunchStartMeridian.required = true;
-    lunchEndHour.required = true;
-    lunchEndMin.required = true;
-    lunchEndMeridian.required = true;
-  } else {
-    closedLunch.style.display = "none";
-    lunchStartHour.required = false;
-    lunchStartMin.required = false;
-    lunchStartMeridian.required = false;
-    lunchEndHour.required = false;
-    lunchEndMin.required = false;
-    lunchEndMeridian.required = false;
-  }
-};
-
-const onChangeIsMobile = (isMobile) => {
-  const radius = document.querySelector("#radius");
-  const locationRadius = document.querySelector("#LocationRadius");
-
-  if (isMobile) {
-    radius.style.display = "block";
-    locationRadius.required = true;
-  } else {
-    radius.style.display = "none";
-    locationRadius.required = false;
-  }
-};
 }
