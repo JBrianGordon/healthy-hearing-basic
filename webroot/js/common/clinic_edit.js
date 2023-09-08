@@ -493,12 +493,6 @@ document.querySelectorAll(".input_file").forEach((element) => {
 });
 
 document.body.addEventListener("change", (e) => {
-	if (event.target.classList.contains("video-url")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-
 	const { target } = e;
 
 	if (target.matches('input[type="file"]')) {
@@ -520,16 +514,6 @@ document.body.addEventListener("change", (e) => {
 });
 
 document.body.addEventListener("click", (e) => {
-	if (e.target.classList.contains("js-video-add")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-video-delete')) {
-		$.removeVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
 	if (e.target.classList.contains('js-photo-delete')) {
 		$.removePhotoRow(e.target, 'photo');
 		e.preventDefault();
@@ -573,53 +557,6 @@ deletePhotoButtons.forEach(button => {
 		img.setAttribute('src', '');
 	});
 });
-
-const addVideoRow = (obj) => {
-  const editObj = this;
-  const row = obj.closest('tr');
-  const newRow = document.createElement('tr');
-  const newVideo = document.querySelector('.video-url');
-  const newVideoValue = document.querySelector('.video-url').value;
-  const newVideoKey = parseInt(document.querySelector('.videoKey').value, 10);
-  document.querySelector('.videoKey').value = parseInt(document.querySelector('.videoKey').value, 10) + 1;
-
-  // Check for errors in the inputs.
-  let errors = false;
-  if (newVideoValue.length === 0) {
-    errors = true;
-  }
-  const pattern = new RegExp("^https?://([da-z.-]+).([a-z.]{2,6})([/w.-=?]*)*/?");
-  if (!pattern.test(newVideoValue)) {
-    errors = true;
-  }
-  if (errors === true) {
-    // Apply the error style to the input
-    newVideo.style.background = 'rgba(200,100,100,.5)';
-    document.getElementById('video-add-error').style.display = 'block';
-    return false;
-  } else {
-    // Remove the error style from the input.
-    newVideo.style.background = '';
-    document.getElementById('video-add-error').style.display = 'none';
-  }
-
-  // Add the new row to the videos table
-  newRow.innerHTML = `
-    <td><div><input name="data[LocationVideo][${newVideoKey}][video_url]" class="form-control" maxlength="255" type="text" value="${newVideoValue}" id="LocationVideo${newVideoKey}VideoUrl"></div></td>
-    <td align="center"><button class="btn btn-md btn-danger js-video-delete" data-key="${newVideoKey}">delete</button></td>
-  `;
-  row.before(newRow);
-
-  // Clear out the input
-  newVideo.value = '';
-};
-
-const removeVideoRow = (obj) => {
-  const row = obj.closest('tr');
-  const key = obj.dataset.key;
-  document.getElementById(`LocationVideo${key}VideoUrl`).value = '';
-  row.style.display = 'none';
-};
 
 const removePhotoRow = (obj, type) => {
   const row = obj.closest('tr');

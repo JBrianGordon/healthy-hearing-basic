@@ -33,7 +33,6 @@ use DateTimeZone;
  * @property \App\Model\Table\LocationNotesTable&\Cake\ORM\Association\HasMany $LocationNotes
  * @property \App\Model\Table\LocationPhotosTable&\Cake\ORM\Association\HasMany $LocationPhotos
  * @property \App\Model\Table\LocationUsersTable&\Cake\ORM\Association\HasMany $LocationUsers
- * @property \App\Model\Table\LocationVideosTable&\Cake\ORM\Association\HasMany $LocationVideos
  * @property \App\Model\Table\LocationVidscripsTable&\Cake\ORM\Association\HasMany $LocationVidscrips
  * @property \App\Model\Table\ReviewsTable&\Cake\ORM\Association\HasMany $Reviews
  *
@@ -117,9 +116,6 @@ class LocationsTable extends Table
             ]
         ]);
         $this->hasMany('LocationUsers', [
-            'foreignKey' => 'location_id',
-        ]);
-        $this->hasMany('LocationVideos', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasOne('LocationVidscrips', [
@@ -217,7 +213,6 @@ class LocationsTable extends Table
             ->boolean('badge_chinese')
             ->boolean('using_logo')
             ->boolean('using_photos')
-            ->boolean('using_videos')
             ->boolean('using_badges')
             ->boolean('using_flex_space')
             ->boolean('using_linked_locations')
@@ -362,24 +357,6 @@ class LocationsTable extends Table
                     $locationList = $this->LocationPhotos->find('list', ['valueField' => 'location_id'])->toArray();
                     $uniqueList = array_unique($locationList);
                     if ($args['using_photos']) {
-                        $query->andWhere([
-                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
-                            'Locations.id IN' => $uniqueList]);
-                    } else {
-                        $query->andWhere([
-                            'OR' => [
-                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
-                                'Locations.id NOT IN' => $uniqueList,
-                            ]
-                        ]);
-                    }
-                }
-            ])
-            ->add('using_videos', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $locationList = $this->LocationVideos->find('list', ['valueField' => 'location_id'])->toArray();
-                    $uniqueList = array_unique($locationList);
-                    if ($args['using_videos']) {
                         $query->andWhere([
                             'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
                             'Locations.id IN' => $uniqueList]);
@@ -1382,12 +1359,6 @@ class LocationsTable extends Table
             }
             // Premier features ('Premier' listings only)
             if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
-                // Get videos
-                $location->location_videos = $this->LocationVideos->find('all', [
-                    'contain' => [],
-                    'conditions' => ['location_id' => $locationId]
-                ])->all();
-
                 // Get photos
                 $location->location_photos = $this->LocationPhotos->find('all', [
                     'contain' => [],

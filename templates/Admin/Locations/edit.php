@@ -332,45 +332,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																</div>
 																<div class="clearfix"></div>
 																<hr>
-																<!-- Videos -->
-																<div>
-																	<label class="col col-md-3 control-label">Videos</label><div class="clearfix"></div>
-																	<table class="table-striped table-bordered col-md-offset-3 col-md-9">
-																		<tbody>
-																			<!-- *** TODO: This code will need to be updated once locationvideo added *** -->
-																			<?php //foreach ($this->request->data['LocationVideo'] as $key => $video): ?>
-																				<tr>
-																					<td>
-																						<span class="hidden"><?php //=$LocationVideo.$key.id ?></span>
-																						<div>
-																							<?php /*$this->Form->control("LocationVideo.$key.video_url", [
-																								'label' => false,
-																								'div' => false,
-																								'wrapInput' => false
-																							]);*/ ?>
-																						</div>
-																					</td>
-																					<td style="width:100px;" align="center">
-																						<button type="button" class="btn btn-md btn-danger js-video-delete" data-key="<?php //echo $key; ?>">Delete</button>
-																					</td>
-																				</tr>
-																			<?php //endforeach; ?>
-																			<tr class="footer">
-																				<td>
-																					<input class="form-control video-url" />
-																					<span class="help-block text-danger" style="display:none;" id="video-add-error">Video URL is invalid. Must start with http: or https:</span>
-																				</td>
-																				<td style="width:100px;" align="center">
-																					<button type="button" class="btn btn-md btn-success js-video-add">add</button>
-																					<input type="hidden" class="videoKey" value="<?php //echo count($locationVideo); ?>" />
-																				</td>
-																			</tr>
-																		</tbody>
-																	</table>
-																	<span class="help-block col-md-9 col-md-offset-3">Please copy and paste the URL from the YouTube, Vimeo, Dailymotion or Wistia video you'd like to add. Alternatively, you can go to the video and click "share", then copy and paste the link generated. After adding the link, please click ADD.</span>
-																</div>
-																<div class="clearfix"></div>
-																<hr>
 																<!-- Photo Album -->
 																<div>
 																	<label class="col col-md-3 control-label">Photos</label><div class="clearfix"></div>
@@ -628,7 +589,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																'rows' => 3,
 																'maxlength' => 400,
 																'required' => false,
-																'help_block' => 'Use this field to leave an update for patients about any changes this clinic is implementing regarding COVID-19.',
+																'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
 																'div' => 'form-group mb0']); ?>
 														</div>
 													</div>

@@ -692,43 +692,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         <div class="clearfix"></div>
                                                         <hr>
 
-                                                        <!-- Videos -->
-                                                        <!-- Hiding this until we decide whether to keep videos or not
-                                                        <div>
-                                                            <h2 class="mt20 mb20">Videos</h2>
-                                                            <table class="table-striped table-bordered col-md-11 ml20">
-                                                                php //foreach ($locationVideo as $key => $video): ?>
-                                                                    <tr>
-                                                                        <td style="width:80%;">
-                                                                            <?= $this->Form->hidden("LocationVideo.$key.id") ?>
-                                                                            <div>
-                                                                                <?= $this->Form->control("LocationVideo.$key.video_url", [
-                                                                                    'label' => false,
-                                                                                    'div' => false
-                                                                                ]) ?>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            <button type="button" class="btn btn-md btn-danger js-video-delete" data-key="<?= $key ?>">Delete</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                php //endforeach; ?>
-                                                                <tr class="footer">
-                                                                    <td>
-                                                                        <input class="form-control video-url" />
-                                                                        <span class="help-block text-danger hidden" id="video-add-error">Video URL is invalid. Must start with http: or https:</span>
-                                                                    </td>
-                                                                    <td align="center">
-                                                                        <button type="button" class="btn btn-md btn-success js-video-add">add</button>
-                                                                        <input type="hidden" class="videoKey" value="<//?= count($locationVideo) ?>" />
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                            <span class="help-block col-md-9 col-md-offset-3">Please copy and paste the URL from the YouTube, Vimeo, Dailymotion or Wistia video you'd like to add. Alternatively, you can go to the video and click "share", then copy and paste the link generated. After adding the link, please click ADD.</span>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <hr>-->
-
                                                         <!-- Photo Album -->
                                                         <div>
                                                             <h2 class="mt20 mb20">Photos</h2>
