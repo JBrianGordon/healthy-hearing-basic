@@ -238,7 +238,7 @@
 			}
 	    }
 	    
-	    .col-md-4 {
+	    .col-sm-4 {
 		    .earq-affiliate-img {
 			    width: auto;
 			    max-width: 100%;
@@ -720,6 +720,10 @@
 
 .panel-footer {
 	padding: 15px;
+	background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  border-bottom-right-radius: 1px;
+  border-bottom-left-radius: 1px;
 
 	.btn {
 		@media only screen and (max-width: $screen-xs-max) {
@@ -737,36 +741,6 @@
 
 .panel-light {
   @include panel-variant($panel-light-border, $panel-light-text, $panel-light-heading-bg, $panel-light-border);
-}
-
-.panel-video {
-  display: inline-block;
-
-  a {
-    color: $white;
-  }
-
-  .img-responsive {
-    width: 100%;
-  }
-
-  .panel-figure {
-    position: relative;
-  }
-
-  .panel-footer {
-    background-color: $gray-darker;
-    border-top: none;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  @media only screen and (min-width: $screen-md-min) {
-    display: block;
-
-    .img-responsive {
-      width: auto;
-    }
-  }
 }
 
 #panel-tabs {

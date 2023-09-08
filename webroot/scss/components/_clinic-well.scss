@@ -6,7 +6,7 @@
 		-webkit-box-shadow: 0px 1.5px 3px rgba(0,0,0,0.3);
 		box-shadow: 0px 1.5px 3px rgba(0,0,0,0.3);
 		
-		&[href='#review_form']{
+		&[data-bs-target='#reviewSubmitModal']{
 			margin: 0 auto!important;
 			display: block;
 			max-width: 160px;
@@ -569,7 +569,7 @@ iframe[title='recaptcha challenge'] {
 	
 }
 
-#covidStatement {
+#optionalMessage {
 	min-height: 152px;
 	
 	@media screen and (max-width:$screen-md-max){

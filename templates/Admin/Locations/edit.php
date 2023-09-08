@@ -628,7 +628,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																'rows' => 3,
 																'maxlength' => 400,
 																'required' => false,
-																'help_block' => 'Use this field to leave an update for patients about any changes this clinic is implementing regarding COVID-19.',
+																'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
 																'div' => 'form-group mb0']); ?>
 														</div>
 													</div>
