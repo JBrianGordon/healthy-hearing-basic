@@ -12,7 +12,7 @@ if (!empty($user['location_id'])) {
 	$featureContentLibrary = $this->Clinic->get('feature_content_library');
 }
 
-$showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary/* || $isadmin*/;
+$showLibraryLink = ($isCqPremier && $listing_type === 'Premier') || $featureContentLibrary || $isAdmin;
 if (!Configure::read('showSocialMediaContentLibrary')) {
 	$showLibraryLink = false;
 }
@@ -32,8 +32,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
 						</div>
 					</div>
-					<!-- *** TODO: all the following variable needed by the conditional have to be pulled in *** -->
-					<?php if (/*Configure::read('showReports') && ($isadmin || $isitadmin || $isagent || $iscallsupervisor || $iswriter || $iscsa)*/true): ?>
+					<?php if (Configure::read('showReports') && ($isAdmin || $isItAdmin || $isAgent || $isCallSupervisor || $isWriter || $isCsa)): ?>
 						<div class="navbar-search" data-hh-search>
 							<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
 							<div class="search-wrapper" id="searchWrapper">
