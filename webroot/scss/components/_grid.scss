@@ -1,5 +1,9 @@
 body .flex {
 	display: flex;
+
+	&#sidePanel {
+		flex-direction: column;
+	}
 }
 
 .gutter-above {
