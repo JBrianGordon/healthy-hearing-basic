@@ -31,6 +31,26 @@ $controller = $this->getRequest()->getParam('controller');
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !$isMobileDevice && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if (!empty($articles) && empty($wiki)): ?>
+		<section class="panel panel-light blog-previews">
+			<header class="panel-heading text-center">
+				<h4>The Healthy Hearing Report</h4>
+			</header>
+			<?php foreach ($articles as $content): ?>
+				<div class="panel-section condensed blog-preview">
+					<div class="row">
+						<div class="col-lg-3">
+							<?= $this->Editorial->dateHome($content, ['large' => false]) ?>
+						</div>
+						<div class="col-lg-9">
+							<div class="subtitle"><?= $this->Editorial->getType($content) ?></div>
+							<?= $this->Editorial->titleLink($content, false, ['class' => 'text-link']) ?>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</section>
+	<?php endif; ?>
 	<section class="panel panel-secondary">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
@@ -55,24 +75,6 @@ $controller = $this->getRequest()->getParam('controller');
 					</tr>
 				<?php endforeach; ?>
 			</table>
-		</section>
-	<?php endif; ?>
-	<?php if (!empty($articles) && empty($wiki)): ?>
-		<section class="panel panel-light blog-previews">
-			<header class="panel-heading text-center">
-				<h4>The Healthy Hearing Report</h4>
-			</header>
-			<?php foreach ($articles as $content): ?>
-				<div class="panel-section condensed blog-preview">
-					<div class="col-lg-3">
-						<?= $this->Editorial->dateHome($content, ['large' => false]) ?>
-					</div>
-					<div class="col-lg-9">
-						<div class="subtitle"><?= $this->Editorial->getType($content) ?></div>
-						<?= $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']) ?>
-					</div>
-				</div>
-			<?php endforeach; ?>
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki) && !$isMobileDevice) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
