@@ -96,6 +96,12 @@
   		padding: 12px 24px;
   	}
   }
+
+  &.blog-previews {
+  	.panel-section {
+  		display: inline-block;
+  	}
+  }
   
 
 	.hidden {
@@ -189,6 +195,14 @@
 
   .panel-section {
     padding: 30px 15px;
+
+    .users {
+    	.tab-pane {
+    		input[type=text] {
+    			height: 47px;
+    		}
+    	}
+    }
     
 	.slogan {
 		color: tint($text-color, 45%);
@@ -230,7 +244,7 @@
 			}
 	    }
 	    
-	    .col-md-4 {
+	    .col-sm-4 {
 		    .earq-affiliate-img {
 			    width: auto;
 			    max-width: 100%;
@@ -314,7 +328,30 @@
 
 			> li {
 				> a {
-					padding: 6px 12px;
+					position: relative;
+			    float: left;
+			    padding: 6px 12px;
+			    line-height: 1.6;
+			    text-decoration: none;
+			    color: #304369;
+			    background-color: #fff;
+			    border: 1px solid #ddd;
+			    margin-left: -1px;
+
+			    &:hover {
+				    color: #113350;
+				    background-color: #eee;
+				    border-color: #ddd;
+			    }
+				}
+			}
+
+			&.pagination-sm {
+				li {
+					a {
+				    padding: 5px 10px;
+				    font-size: 14px;
+					}
 				}
 			}
 		}
@@ -567,23 +604,6 @@
       border-top: solid 1px darken($white, 8%);
     }
     
-    #exportModal {
-	    overflow-y: scroll;
-	    text-transform: capitalize;
-	    
-	    #admin_search {
-		    display: block;
-		    
-		    .control-group {
-			    display: none;
-		    }
-	    }
-	    
-	    .border-right {
-		    border-right: 1px solid #000;
-	    }
-    }
-    
     #newUserModal {
 	    position:fixed;
 	    max-height:100vh;
@@ -706,6 +726,10 @@
 
 .panel-footer {
 	padding: 15px;
+	background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  border-bottom-right-radius: 1px;
+  border-bottom-left-radius: 1px;
 
 	.btn {
 		@media only screen and (max-width: $screen-xs-max) {
@@ -723,36 +747,6 @@
 
 .panel-light {
   @include panel-variant($panel-light-border, $panel-light-text, $panel-light-heading-bg, $panel-light-border);
-}
-
-.panel-video {
-  display: inline-block;
-
-  a {
-    color: $white;
-  }
-
-  .img-responsive {
-    width: 100%;
-  }
-
-  .panel-figure {
-    position: relative;
-  }
-
-  .panel-footer {
-    background-color: $gray-darker;
-    border-top: none;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  @media only screen and (min-width: $screen-md-min) {
-    display: block;
-
-    .img-responsive {
-      width: auto;
-    }
-  }
 }
 
 #panel-tabs {

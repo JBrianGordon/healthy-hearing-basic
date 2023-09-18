@@ -1,8 +1,10 @@
-<?php use Cake\Core\Configure; ?>
-<!-- *** TODO: Check the side_panel on state pages -->
+<?php
+use Cake\Core\Configure;
+$controller = $this->getRequest()->getParam('controller');
+?>
 <div class="col-lg-3 float-end noprint">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') == 'Locations')): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations')): ?>
 		<section class="panel">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
@@ -21,14 +23,34 @@
 		</section>
 	<?php endif; ?>
 	<?= $isMobileDevice ? null : $this->element('locations/preferred') ?>
-	<?php if (Configure::read('showHearingTest') && ($this->getRequest()->getParam('controller') == 'Content' || $this->getRequest()->getParam('controller') == 'Wikis' || $this->getRequest()->getParam('controller') == 'Corps') && empty($wiki)): ?>
+	<?php if (Configure::read('showHearingTest') && in_array($controller, ['Content', 'Wikis', 'Corps'])): ?>
 		<section class="panel">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
 			</a>
 		</section>
 	<?php endif; ?>
-	<?= (Configure::read('showAds') && !$isMobileDevice && $this->getRequest()->getParam('controller') != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?= (Configure::read('showAds') && !$isMobileDevice && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if (!empty($articles) && empty($wiki)): ?>
+		<section class="panel panel-light blog-previews">
+			<header class="panel-heading text-center">
+				<h4>The Healthy Hearing Report</h4>
+			</header>
+			<?php foreach ($articles as $content): ?>
+				<div class="panel-section condensed blog-preview">
+					<div class="row">
+						<div class="col-lg-3">
+							<?= $this->Editorial->dateHome($content, ['large' => false]) ?>
+						</div>
+						<div class="col-lg-9">
+							<div class="subtitle"><?= $this->Editorial->getType($content) ?></div>
+							<?= $this->Editorial->titleLink($content, false, ['class' => 'text-link']) ?>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</section>
+	<?php endif; ?>
 	<section class="panel panel-secondary">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
@@ -55,24 +77,5 @@
 			</table>
 		</section>
 	<?php endif; ?>
-	<?php if (!empty($articles) && empty($wiki)): ?>
-		<section class="panel panel-light blog-previews hidden">
-			<header class="panel-heading text-center">
-				<h4>The Healthy Hearing Report</h4>
-			</header>
-			<?php foreach ($articles as $content): ?>
-				<div class="panel-section condensed blog-preview">
-					<div class="col-lg-3">
-						<?= $this->Editorial->dateHome($content, ['large' => false]) ?>
-					</div>
-					<div class="col-lg-9">
-						<div class="subtitle"><?= $this->Editorial->getType($content) ?></div>
-						<?= $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']) ?>
-					</div>
-				</div>
-			<?php endforeach; ?>
-		</section>
-	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki) && !$isMobileDevice) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<!--*** TODO: add recent articles for report view pages ***-->
 </div>

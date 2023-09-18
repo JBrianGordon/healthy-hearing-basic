@@ -78,7 +78,8 @@
   }
   
 &.fap-cities {
-	padding: 0;
+	//If this is breaking styling, find another solution
+	//padding: 0;
 	
 	.container {
 		padding-left: 15px;
@@ -91,6 +92,11 @@
 		text-align: right;
 		padding: 7px 15px 0;
 		font-weight: bold;
+
+		@media(max-width: $screen-sm-max){
+			width: 100%;
+			text-align: left;
+		}
 		
 		&.col-md-2-override {
 			width: 16.66666%;
@@ -102,9 +108,13 @@
 	}
 	
 	.form-control, .form-select {
-		width: 100%;
+		width: 75%;
 		font-size: 16px;
-		display: table-cell;
+		flex-flow: row-reverse;
+
+		@media(max-width: $screen-sm-max){
+			width: 100%;
+		}
 		
 		&.inline-date {
 			width: 46%;
@@ -117,11 +127,6 @@
 		&.col-md-10-override {
 			width: 83.33333%;
 		}
-	}
-	
-	.date {  
-		display: block;
-		color: #212529;
 	}
 	
 	.form-check {
@@ -151,15 +156,23 @@
 			}
 		}
 	}
+
+	.form-group{
+		display: flex;
+
+		@media(max-width: $screen-sm-max){
+			flex-direction: column;
+
+			&.checkbox {
+				flex-direction: initial;
+			}
+		}
+	}
 }
 
 .clearfix {
 	display: block;
 	clear: both
-}
-
-.pull-right {
-	float: right;
 }
   
 	.read-more-row {
