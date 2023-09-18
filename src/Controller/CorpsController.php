@@ -56,6 +56,7 @@ class CorpsController extends AppController
             return $this->throw404NotFound();
         }
         $corp = $this->Corps->findBySlug($slug);
+        $this->Content = $this->fetchTable('Content');
         $this->set('corp', $corp);
 
         if (empty($corp)) {
@@ -105,6 +106,9 @@ class CorpsController extends AppController
         $this->SeoTitles = $this->fetchTable('SeoTitles');
         $seoTitle = $this->SeoTitles->findTitleByUri($request);
         $this->set('seoTitle', $seoTitle);
+
+        $articles = $this->Content->findLatest(4);
+        $this->set('articles', $articles);
 
         $customVars['type'] = 'manuf';
         $customVars['level|3'] = getWordCount($corp->description);
