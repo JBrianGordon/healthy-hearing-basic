@@ -203,6 +203,5 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 				</div>
 			</div>
 		</div>
-		<?php //TODO: echo $this->element('nav_wiki_menu', [], ['cache' => ['config' => 'view_short']]); ?>
 	<?php endif; ?>
 </nav>
