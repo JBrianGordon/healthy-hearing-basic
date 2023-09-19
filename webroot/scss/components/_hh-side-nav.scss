@@ -45,9 +45,7 @@
   overflow-x: hidden;
   transform:translateZ(0);
   width: calc(100vw - ($navbar-height / 1.75));
-  @media only screen and (min-width: $screen-sm-min) {
-    display: none;
-  }
+  display: none;
   
     .col-sm-12 {
 	    padding: 0;
