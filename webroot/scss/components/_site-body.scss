@@ -397,4 +397,8 @@
 
 html.show-side-nav {
   overflow: hidden;
+
+  [data-hh-side-nav] {
+  	display: block;
+  }
 }
