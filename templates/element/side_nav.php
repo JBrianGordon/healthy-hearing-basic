@@ -18,45 +18,45 @@ use Cake\Core\Configure;
 					<li><a href="/clinic/users/account"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
 					<li><a href="/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 				<?php else: ?>
-					<li class="mt70"><a href="/hearing-aids" tabindex="-1">Find a clinic</a></li>
+					<li><a href="/hearing-aids" tabindex="-1">Find a clinic</a></li>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing loss</a>
 						<ul class="dropdown-menu">
-							<li><a tabindex="-1" href="/help/hearing-loss">Hearing loss overview</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-loss">Hearing loss overview</a></li>
 							<?php if(Configure::read('country') == 'US'): ?>
-								<li><a tabindex="-1" href="/help/hearing-loss/symptoms">Symptoms</a></li>
-								<li><a tabindex="-1" href="/help/hearing-loss/causes">Causes</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/hearing-loss/symptoms">Symptoms</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/hearing-loss/causes">Causes</a></li>
 							<?php endif; ?>
-							<li><a tabindex="-1" href="/help/hearing-loss/tests">Tests</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-loss/tests">Tests</a></li>
 						</ul>
 					</li>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing aids</a>
 						<ul class="dropdown-menu">
-							<li><a tabindex="-1" href="/help/hearing-aids">Hearing aids overview</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-aids">Hearing aids overview</a></li>
 							<?php if(Configure::read('country') == 'US'): ?>
-								<li><a tabindex="-1" href="/help/hearing-aids/health-benefits">Health benefits</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/hearing-aids/health-benefits">Health benefits</a></li>
 							<?php endif; ?>
-							<li><a tabindex="-1" href="/help/hearing-aids/types">Types & styles</a></li>
-							<li><a tabindex="-1" href="/help/hearing-aids/prices">Prices</a></li>
-							<li><a tabindex="-1" href="/help/hearing-aids/insurance-financial-assistance">Insurance & financial assistance</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-aids/types">Types & styles</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-aids/prices">Prices</a></li>
+							<li><a class="text-link" tabindex="-1" href="/help/hearing-aids/insurance-financial-assistance">Insurance & financial assistance</a></li>
 						</ul>
 					</li>
 					<?php if (Configure::read('showTinnitus')): ?>
 						<li>
 							<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Tinnitus</a>
 							<ul class="dropdown-menu">
-								<li><a tabindex="-1" href="/help/tinnitus">Tinnitus overview</a></li>
-								<li><a tabindex="-1" href="/help/tinnitus/symptoms">Symptoms</a></li>
-								<li><a tabindex="-1" href="/help/tinnitus/treatment">Diagnosis & treatment</a></li>
-								<li><a tabindex="-1" href="/help/tinnitus/relief">Relief</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/tinnitus">Tinnitus overview</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/symptoms">Symptoms</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/treatment">Diagnosis & treatment</a></li>
+								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/relief">Relief</a></li>
 							</ul>
 						</li>
 					<?php else: ?>
 						<li>
 							<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Tinnitus</a>
 								<ul class="dropdown-menu">
-									<li><a tabindex="-1" href="/help/hearing-loss/tinnitus-treatment">Diagnosis & treatment</a></li>
+									<li><a class="text-link" tabindex="-1" href="/help/hearing-loss/tinnitus-treatment">Diagnosis & treatment</a></li>
 								</ul>
 						</li>
 					<?php endif; ?>
