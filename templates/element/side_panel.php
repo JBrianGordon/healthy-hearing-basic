@@ -77,10 +77,10 @@ if($controller == 'Corps'){
 	<?php endif; ?>
 		<section class="panel" style="order:6">
 			<a href="/help/online-hearing-test">
-			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
+			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive block">
 			</a>
 		</section>
-	<?= (Configure::read('showAds') && !$isMobileDevice && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 	<?php if (!empty($articles) && empty($wiki)): ?>
 		<section class="panel panel-light blog-previews" style="order:<?= $reportDisplay ?>">
 			<header class="panel-heading text-center">

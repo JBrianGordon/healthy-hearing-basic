@@ -29,6 +29,7 @@ class CorpsController extends AppController
         }
         $this->pageTitle = 'Hearing aid and cochlear implant companies';
         $this->meta['description'] = "Before buying hearing aids or cochlear implants, it is wise to compare hearing aid manufacturers. Learn more about them here.";
+        $this->Content = $this->fetchTable('Content');
         $exclusiveAd = $this->fetchTable('Advertisements')->findAdForCorps();
         if (!empty($exclusiveAd)) {
             // Overwrite the generic ad
@@ -41,6 +42,9 @@ class CorpsController extends AppController
         $this->set('corps', $corps);
         $this->set('pageContent', $this->fetchTable('Pages')->getContent('manufacturers'));
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
+        
+        $articles = $this->Content->findLatest(4);
+        $this->set('articles', $articles);
     }
 
     /**
