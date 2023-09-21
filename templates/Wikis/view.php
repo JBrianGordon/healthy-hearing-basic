@@ -145,16 +145,16 @@ echo $wikiSchema;
 					</div>
 				</header>
 				<div class="row">
-					<div class="col-sm-9 float-start">
-						<div class="panel panel-section expanded p0">
+					<div class="col-sm-9 float-start mb70">
+						<div class="panel panel-section expanded mb0">
 							<div id="wiki-body">
 								<?= $wiki->body ?>
 								<div class="about-author">
 									<?= $this->Editorial->getAuthorsBio($wiki->author, $wiki->contributors) ?>
 								</div>
 							</div>
-							<?= $this->element('content/share') ?>
 						</div>
+						<?= $this->element('content/share') ?>
 					</div>
 					<?= $this->element('side_panel') ?>
 				</div>

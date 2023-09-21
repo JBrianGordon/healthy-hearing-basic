@@ -379,11 +379,6 @@
 	#wiki-body {
 		padding: 15px;
 
-
-		@media(min-width: $screen-sm-min){
-			padding: 60px 70px;
-		}
-
 		.aside aside {
 			@media only screen and (min-width: $screen-sm-min) {
 				display:none;
