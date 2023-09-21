@@ -26,22 +26,6 @@ class WikisController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Wiki id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $wiki = $this->Wikis->get($id, [
-            'contain' => ['Users', 'TagWikis'],
-        ]);
-
-        $this->set(compact('wiki'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
@@ -72,7 +56,7 @@ class WikisController extends AppController
     public function edit($id = null)
     {
         $wiki = $this->Wikis->get($id, [
-            'contain' => ['Users'],
+            'contain' => ['Authors', 'Contributors', 'Reviewers', 'Tags'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
@@ -83,8 +67,8 @@ class WikisController extends AppController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $users = $this->Wikis->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('wiki', 'users'));
+        $authors = $this->Wikis->Authors->find('all', ['limit' => 200]);
+        $this->set(compact('wiki', 'authors'));
     }
 
     /**

@@ -2,13 +2,19 @@ export let htmlDiv = document.getElementsByTagName('html'),
 sideNavTrigger = document.getElementById('desktopSideNavTrigger'),
 sideNavLinks = document.getElementsByClassName('side-nav-links'),
 stickyFooter = document.getElementsByClassName('sticky-footer'),
-sideNavDropDown= document.getElementsByClassName('side-nav-dropdown')
+sideNavDropDown = document.getElementsByClassName('side-nav-dropdown'),
+sideNavLinksLis = [];
+
+Array.from(sideNavLinks).forEach((element) => {
+    let childLiElements = Array.from(element.children).filter(child => child.tagName === 'LI');
+    sideNavLinksLis.push(...childLiElements);
+});
 
 export let hideSide = () => {
     htmlDiv[0].classList.remove('show-side-nav');
     document.removeEventListener('click', sideClickCheck);
 },
-sideClickCheck = (e) => {
+sideClickCheck = e => {
     if(e.target.closest('[data-hh-side-nav-trigger]') || e.target.closest('[data-hh-side-nav]')){
         return;
     } else {
@@ -18,6 +24,22 @@ sideClickCheck = (e) => {
 showSide = () => {
     htmlDiv[0].classList.add('show-side-nav');
     document.addEventListener('click', sideClickCheck);
+},
+toggleSideNavLis = sideNavLinksLis => {
+  sideNavLinksLis.forEach((li) => {
+    li.addEventListener("click", () => {
+      li.classList.toggle("show");
+    });
+
+    const nestedUl = li.querySelector("ul");
+
+    if (nestedUl) {
+      li.addEventListener("click", (e) => {
+        e.stopPropagation();
+        nestedUl.classList.toggle("show");
+      });
+    }
+  });
 }
 
 if(sideNavTrigger){
@@ -33,4 +55,6 @@ if(sideNavTrigger){
     if(stickyFooter.length > 0){
 	    sideNavLinks[0].classList.add('fac-present');
     };
+
+    toggleSideNavLis(sideNavLinksLis);
 }
