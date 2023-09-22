@@ -24,10 +24,10 @@ enum LocationListingType: string
     {
         return match($this)
         {
-            self::LISTING_TYPE_BASIC => 'text-danger',
-            self::LISTING_TYPE_ENHANCED => 'text-primary',
-            self::LISTING_TYPE_PREMIER => 'text-success',
-            self::LISTING_TYPE_NONE => 'text-white bg-dark',
+            self::LISTING_TYPE_BASIC => 'label-danger',
+            self::LISTING_TYPE_ENHANCED => 'bg-primary',
+            self::LISTING_TYPE_PREMIER => 'label-success',
+            self::LISTING_TYPE_NONE => 'label-default',
         };
     }
 }
