@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   apptRequestBtns.forEach(btn => {
     btn.addEventListener("click", function() {
-      const locationId = this.getAttribute("data-id");
+      const locationId = btn.dataset.id;
 
       if (locationId) {
         fetch("/locations/ajax_appt_request_modal/" + locationId)

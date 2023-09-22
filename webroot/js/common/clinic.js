@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		  moreReviewsButton.style.display = "block";
 
 		  window.scrollTo({
-		    top: document.querySelector(".panel-section.reviews").offsetTop - 114,
+		    top: document.querySelector(".panel-section.reviews").offsetTop + 1114,
 		    behavior: "smooth"
 		  });
 
@@ -307,68 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	  return elementBottom > viewportTop && elementTop < viewportBottom;
 	};
 	
-	const videoFrames = document.querySelectorAll('.video-frame');
-
-	if (videoFrames.length >= 1) {
-	  if (videoFrames.length > 2) {
-	    // Scroll function to detect if gallery div is in view
-	    window.addEventListener('scroll', function () {
-	      if (isInViewport(document.querySelector('.video-gallery'))) {
-	        for (let i = 0; i < videoFrames.length; i++) {
-	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
-	        }
-	        // Turn scroll function off once video sources are loaded
-	        window.removeEventListener('scroll', arguments.callee);
-	      }
-	    });
-
-	    const videoGallery = document.querySelector('.video-gallery');
-	    const videoGalleryButton = document.createElement('button');
-	    videoGalleryButton.id = 'videoGalleryButton';
-	    videoGalleryButton.className = 'btn btn-light mt20 show-videos';
-	    videoGalleryButton.style.margin = '20px auto';
-	    videoGalleryButton.style.display = 'block';
-	    videoGalleryButton.style.clear = 'both';
-	    videoGalleryButton.textContent = 'View more videos';
-
-	    const moreVideos = document.createElement('div');
-	    moreVideos.id = 'moreVideos';
-	    moreVideos.style.display = 'none';
-
-	    videoGallery.parentNode.insertBefore(videoGalleryButton, videoGallery.nextSibling);
-	    videoGallery.parentNode.insertBefore(moreVideos, videoGallery.nextSibling);
-
-	    videoGalleryButton.addEventListener('click', function () {
-	      if (this.classList.contains('show-videos')) {
-	        this.classList.toggle('show-videos');
-	        this.textContent = 'View fewer videos';
-	        moreVideos.style.display = 'block';
-	      } else {
-	        this.classList.toggle('show-videos');
-	        this.textContent = 'View more videos';
-	        moreVideos.style.display = 'none';
-	        window.scrollTo({
-	          top: videoGallery.offsetTop - 114,
-	          behavior: 'smooth'
-	        });
-	      }
-	    });
-
-	    for (let i = 2; i < videoFrames.length; i++) {
-	      moreVideos.appendChild(videoFrames[i]);
-	    }
-	  } else {
-	    window.addEventListener('scroll', function () {
-	      if (isInViewport(document.querySelector('#videoGallery'))) {
-	        for (let i = 0; i < videoFrames.length; i++) {
-	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
-	        }
-	        window.removeEventListener('scroll', arguments.callee);
-	      }
-	    });
-	  }
-	}
-	
 	//photo gallery functions
 	const photoGallery = document.querySelector('.photo-gallery');
 
@@ -461,14 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		      if (/Android|webOS|iPhone|iPad/i.test(navigator.userAgent)) {
 		        const stickyFooter = document.querySelector('.sticky-footer');
 		        stickyFooter.style.display = 'block';
-		      }
-
-		      if (document.querySelector('.video-gallery')) {
-		        const videoGalleryOffsetTop = document.querySelector('.video-gallery').offsetTop;
-		        window.scrollTo({
-		          top: videoGalleryOffsetTop,
-		          behavior: 'smooth'
-		        });
 		      }
 		    }
 		  }, 500);

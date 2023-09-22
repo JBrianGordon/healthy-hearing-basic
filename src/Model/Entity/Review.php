@@ -39,6 +39,35 @@ class Review extends Entity
     ];
 
     /**
+    * Enum - review status
+    */
+    const STATUS_PENDING = 0;
+    const STATUS_APPROVED = 1;
+    const STATUS_DENIED = 2;
+    const STATUS_RESPONDED = 3;
+    const STATUS_IGNORED = 4;
+    public static $statuses = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_APPROVED => 'Approved',
+        self::STATUS_DENIED => 'Denied',
+        self::STATUS_RESPONDED => 'Responded',
+        self::STATUS_IGNORED => 'Ignored',
+    ];
+    public $searchStatuses = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_APPROVED => 'Published',
+        self::STATUS_RESPONDED => 'Responded',
+        self::STATUS_IGNORED => 'Ignored',
+    ];
+    public $editStatuses = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_APPROVED => 'Published',
+        self::STATUS_DENIED => 'Published Negative',
+        self::STATUS_RESPONDED => 'Responded',
+        self::STATUS_IGNORED => 'Ignored',
+    ];
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

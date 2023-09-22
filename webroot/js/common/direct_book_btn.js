@@ -1,4 +1,6 @@
 /*** TODO: check this on city page, there's likely more that needs to be updated in that ticket ***/
+//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+
 export function directBookBtn() {
   // Global variable for direct book clinic id
   let directBookClinicId = 0;
@@ -30,12 +32,14 @@ export function directBookBtn() {
   const directBookButtons = document.querySelectorAll('.directBookBtn');
   directBookButtons.forEach(button => {
     button.addEventListener('click', function() {
-      directBookClinicId = this.getAttribute('data-button');
-      const modalId = `#directBookModal-${directBookClinicId}`;
+      const directBookClinicId = button.dataset.button;
+      const modalId = button.dataset.bsTarget;
+
+      // Remove comments from direct-book-body element
       const directBookBody = document.querySelector(`${modalId} .direct-book-body`);
-      directBookBody.innerHTML = directBookBody.innerHTML.replace('<!--','').replace('-->','');
-      const modal = document.querySelector(modalId);
-      modal.modal("show");
+      directBookBody.innerHTML = directBookBody.innerHTML.replace('<!--', '').replace('-->', '');
+      const modalElement = new bootstrap.Modal(document.querySelector(modalId));
+      modalElement.show();
       // Event listener for EarQ appointment confirmation
       window.addEventListener("message", onMessage, false);
     });

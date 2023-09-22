@@ -6,6 +6,8 @@ use App\Model\Entity\Location;
 
 $isCallAssistEnabled = Configure::read('isCallAssistEnabled');
 $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypassed : TableRegistry::get('Configurations')->isCallTrackingBypassed();
+
+$this->Html->script('dist/location_results.min', ['block' => true]);
 ?>
 <?php if (count($locations) != 0): ?>
 	<section class="panel panel-primary">
@@ -55,7 +57,7 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 										<?php endif; ?>
 											<div class="clearfix"></div>
 											<?php if (!empty($displayOpenClosed)): ?>
-												<div class="hours mb5"><span class="glyphicon glyphicon-time small"></span> <?= $displayOpenClosed ?></div>
+												<div class="hours mb5"><span class="bi bi-clock"></span> <?= $displayOpenClosed ?></div>
 											<?php endif; ?>
 											<?= $this->Clinic->addressSchemaHidden($location) ?>
 											<div class="address mb5"><span class="hh-icon-address"></span> <?= $this->Clinic->address($location) ?></div>
@@ -72,18 +74,19 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 												<a href="<?= $locationUrl . '#linkedLocationAnchor' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>" class="text-link">More locations available</a>
 											<?php endif; ?>
 											<div class="clinicPhone mb5<?= !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?= $locationId ?>">
-												<div class="telephone h2"><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
+												<div class="telephone h2 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
 												<!-- Appointment request -->
 												<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 													<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
-														<a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>">
+														<!-- *** TODO: appointment request modal not functioning properly, I think some backend work may be needed: ***-->
+														<a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>" data-bs-toggle="modal">
 															Request my appointment
 														</a>
 													<?php endif; ?>
 												<?php endif; ?>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 													<div>
-														<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' style="min-width:250px;" data-button="<?= $location->id ?>">Book now!</a>
+														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" style="min-width:250px;" data-bs-toggle="modal" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
 													</div>
 													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 												<?php endif; ?>
@@ -129,13 +132,13 @@ $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypass
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
 												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
+												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
+													<div>
+														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" data-bs-toggle="modal" data-button="<?= $location->id ?>" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
+													</div>
+													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
+												<?php endif; ?>
 											</div>
-											<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
-												<div>
-													<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5' data-button="<?= $location->id ?>">Book now!</a>
-												</div>
-												<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
-											<?php endif; ?>
 										</div>
 										<div class="col-md-6">
 											<div class="address mt5 hidden-sm hidden-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>

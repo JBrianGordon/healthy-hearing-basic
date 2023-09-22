@@ -179,10 +179,11 @@
 	}
 }
 
-.site-colophon {
+.row.site-colophon {
 	background: $body-bg;
 	position: relative;
 	max-width: 100%;
+	margin: 0 auto;
 }
 
 #footerContainer {

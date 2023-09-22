@@ -1,4 +1,4 @@
-import '../common/common';
+import './admin_common';
 import '../common/provider';
 import './nav_tabs';
 import './datepicker';
@@ -9,22 +9,10 @@ class locationsAdminEdit {
 
     document.body.addEventListener('change', (event) => {
       const target = event.target;
-      if (target.classList.contains('video-url')) {
-        editObj.addVideoRow(target);
-        return false;
-      }
     });
 
     document.body.addEventListener('click', (event) => {
       const target = event.target;
-      if (target.classList.contains('js-video-add')) {
-        editObj.addVideoRow(target);
-        return false;
-      }
-      if (target.classList.contains('js-video-delete')) {
-        editObj.removeVideoRow(target);
-        return false;
-      }
       if (target.classList.contains('js-link-delete')) {
         editObj.deleteLink(target);
         return false;
@@ -159,51 +147,6 @@ class locationsAdminEdit {
 	      div.style.display = 'block';
 	    }
 	  });
-	}
-
-	addVideoRow(obj) {
-	  const editObj = this;
-	  const row = obj.closest('tr');
-	  const newRow = document.createElement('tr');
-	  const newVideo = document.querySelector('.video-url');
-	  const newVideoValue = newVideo.value;
-	  const newVideoKey = parseInt(document.querySelector('.videoKey').value, 10);
-	  document.querySelector('.videoKey').value = newVideoKey + 1;
-
-	  // Check for errors in the inputs.
-	  let errors = false;
-	  if (newVideoValue.length === 0) {
-	    errors = true;
-	  }
-	  const pattern = /^https?:\/\/([da-z.-]+).([a-z.]{2,6})([/w.-=?]*)*\/?/;
-	  if (!pattern.test(newVideoValue)) {
-	    errors = true;
-	  }
-	  if (errors) {
-	    // Apply the error style to the input
-	    newVideo.style.background = 'rgba(200,100,100,.5)';
-	    document.querySelector('#video-add-error').style.display = 'block';
-	    return false;
-	  } else {
-	    // Remove the error style from the input.
-	    newVideo.style.background = '';
-	    document.querySelector('#video-add-error').style.display = 'none';
-	  }
-
-	  // Add the new row to the videos table
-	  newRow.innerHTML = `<td><div><input name="data[LocationVideo][${newVideoKey}][video_url]" class="form-control" maxlength="255" type="text" value="${newVideoValue}" id="LocationVideo${newVideoKey}VideoUrl"></div></td>`;
-	  newRow.innerHTML += `<td align="center"><button class="btn btn-md btn-danger js-video-delete" data-key="${newVideoKey}">delete</button></td>`;
-	  row.before(newRow);
-
-	  // Clear out the input
-	  newVideo.value = '';
-	}
-
-	removeVideoRow(obj) {
-	  const row = obj.closest('tr');
-	  const key = obj.dataset.key;
-	  document.querySelector(`#LocationVideo${key}VideoUrl`).value = '';
-	  row.style.display = 'none';
 	}
 
 	removePhotoRow(obj, type) {

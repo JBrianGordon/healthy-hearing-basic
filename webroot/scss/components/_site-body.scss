@@ -129,11 +129,6 @@
 		}
 	}
 	
-	.date {  
-		display: block;
-		color: #212529;
-	}
-	
 	.form-check {
 		padding-left: 0;
 		
@@ -402,4 +397,8 @@
 
 html.show-side-nav {
   overflow: hidden;
+
+  [data-hh-side-nav] {
+  	display: block;
+  }
 }
