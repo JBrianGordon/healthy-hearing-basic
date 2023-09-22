@@ -119,3 +119,26 @@ form {
 .submit {
 	display: inline-block;
 }
+
+#q {
+    width: 500px;
+}
+#query-results {
+  border: 1px dotted #ccc;
+  padding: 3px;
+  width: 500px;
+}
+
+#query-results ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#query-results ul li {
+  padding: 5px 0;
+}
+
+#query-results ul li:hover {
+  background: #eee;
+}
