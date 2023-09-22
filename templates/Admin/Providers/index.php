@@ -51,6 +51,8 @@ foreach ($fields as $field => $type) {
         'value' => $value
     ];
 }
+
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 
 <div class="container-fluid">
