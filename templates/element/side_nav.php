@@ -8,15 +8,15 @@ use Cake\Core\Configure;
 			<ul class="side-nav-links">
 				<li><span><strong class="invisible">Menu</strong></span></li>
 				<?php //TODO: review this logic. It matches existing code, but doesn't quite seem right. ?>
-				<?php if ($adminAccessAllowed && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')): ?>
-					<li><a href="/clinic/locations/edit"><span class="glyphicon glyphicon-globe"></span> My Profile</a></li>
-					<li><a href="/clinic/ca_call_groups/report"><span class="glyphicon glyphicon-list"></span> Reporting</a></li>
-					<li><a href="/clinic/reviews"><span class="glyphicon glyphicon-star"></span> Reviews</a></li>
-					<li><a href="/clinic/library"><span class="glyphicon glyphicon-book"></span> Library</a></li>
-					<li><a href="/clinic/pages/faq"><span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
-					<li><a href="/clinic/pages/about-ida"><span class="glyphicon glyphicon-certificate"></span> Inspired by Ida</a></li>
-					<li><a href="/clinic/users/account"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
-					<li><a href="/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+				<?php if ($adminAccessAllowed/* && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')*/): ?>
+					<li><a href="/clinic/locations/edit" class="bi bi-globe2"> My Profile</a></li>
+					<li><a href="/clinic/ca_call_groups/report" class="bi bi-list-task"> Reporting</a></li>
+					<li><a href="/clinic/reviews" class="bi bi-star-fill"> Reviews</a></li>
+					<li><a href="/clinic/library" class="bi bi-book-fill"> Library</a></li>
+					<li><a href="/clinic/pages/faq" class="bi bi-question-circle-fill"> Help</a></li>
+					<li><a href="/clinic/pages/about-ida" class="bi bi-award-fill"> Inspired by Ida</a></li>
+					<li><a href="/clinic/users/account" class="bi bi-person-fill"> My Account</a></li>
+					<li><a href="/logout" class="bi bi-power"> Logout</a></li>
 				<?php else: ?>
 					<li><a href="/hearing-aids" tabindex="-1">Find a clinic</a></li>
 					<li>
