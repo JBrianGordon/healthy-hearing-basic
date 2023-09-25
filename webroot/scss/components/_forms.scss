@@ -124,14 +124,15 @@ form {
     width: 500px;
 }
 #query-results {
-  border: 1px dotted #ccc;
-  padding: 3px;
+  border: 1px solid #ddd;
+  border-top:0;
   width: 500px;
+  position: relative;
+  bottom: 11px;
 }
 
 #query-results ul {
   list-style-type: none;
-  padding: 0;
   margin: 0;
 }
 

@@ -57,18 +57,18 @@ $this->Html->script('dist/admin_providers.min', ['block' => true]);
                                             echo $this->Form->control('id_yhn_provider');
                                             echo '<div class="mb-3 form-group text"><label class="form-label col-sm-3" for="location-association-list">Associated Locations</label><div id="location-association-list" class="col-xs-12 p0">';
                                             foreach ($provider->locations as $key => $location) {
-                                                echo '<div class="associated-location data-location-key=' .$key .' col-sm-9 p0">';
+                                                echo '<div class="associated-location col-sm-9 p0" data-location-key=' .$key .'">';
                                                 echo $this->Form->control("locations.{$key}.id");
-                                                echo $this->Form->text($location->title, ['value' => $location->title, 'readonly' => true, 'class' => 'd-inline-block']);
+                                                echo $this->Form->text($location->title, ['value' => $location->title, 'readonly' => true, 'class' => 'd-inline-block mb10']);
                                                 //echo $this->Form->label("locations.{$key}.id", $location->title);
-                                                echo $this->Form->button('Delete',['data-location-key' => $key, 'class' => 'delete-location-association btn btn-danger ml20', 'type' => 'button']);
+                                                echo $this->Form->button('Delete',['data-location-key' => $key, 'class' => 'delete-location-association btn btn-danger ml20 mb10', 'type' => 'button']);
                                                 echo '</div>';
                                             }
                                             echo '</div></div>';
                                             echo $this->Form->control('locations-query', ['id' => 'locations-query', 'label' => 'Add an associated clinic']);
                                         ?>
+                                        <div id="query-results" class="col-sm-offset-3"></div>
                                     </fieldset><br>
-                                    <div id="query-results"></div>
                                     <?= '<div class="form-actions tar clearfix">'
                                         . $this->Form->button('Save Provider', ['class' => 'btn btn-primary btn-lg'])
                                         . '</div>' ?>

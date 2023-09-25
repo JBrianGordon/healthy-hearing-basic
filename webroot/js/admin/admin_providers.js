@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => response.text())
         .then((data) => {
 
-            jsonArray = JSON.parse(data);
+            const jsonArray = JSON.parse(data);
 
             let list = '';
             jsonArray.forEach(item => {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create a new associated location div element
         const newAssociatedLocation = document.createElement('div');
-        newAssociatedLocation.classList.add('associated-location');
+        newAssociatedLocation.classList.add('associated-location', 'col-sm-9', 'p0');
         newAssociatedLocation.setAttribute('data-location-key', newKey);
 
         // Create an input element for the hidden 'location.#.id' field
@@ -62,21 +62,25 @@ document.addEventListener('DOMContentLoaded', () => {
         idInput.id = `locations-${newKey}-id`;
         idInput.value = itemId;
 
-        // Create a label element with location 'title'/name
-        const label = document.createElement('label');
-        label.textContent = `${itemTitle}`;
-        label.htmlFor = `locations-${newKey}-id`;
+        // Create a text element with location 'title'/name
+        const name = document.createElement('input');
+        name.textContent = `${itemTitle}`;
+        name.type = 'text';
+        name.readOnly = 'readonly';
+        name.name = itemTitle;
+        name.value = itemTitle;
+        name.classList.add('d-inline-block', 'form-control', 'mb10');
 
         // Create a delete button
         const deleteButton = document.createElement('button');
-        deleteButton.classList.add('delete-location-association', 'btn', 'btn-secondary');
+        deleteButton.classList.add('delete-location-association', 'btn', 'btn-danger', 'ml20', 'mb10');
         deleteButton.type = 'button';
         deleteButton.textContent = 'Delete';
         deleteButton.setAttribute('data-location-key', newKey);
 
         // Append the elements to the new associated location div
         newAssociatedLocation.appendChild(idInput);
-        newAssociatedLocation.appendChild(label);
+        newAssociatedLocation.appendChild(name);
         newAssociatedLocation.appendChild(deleteButton);
 
         // Append the new associated location div to the location-association-list
