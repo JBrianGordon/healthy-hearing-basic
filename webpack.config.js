@@ -27,6 +27,12 @@ module.exports = {
 	mode: 'production',
 	entry: entries,
 	devtool: 'source-map',
+  cache: {
+    type: 'filesystem',
+    cacheDirectory: path.resolve('webpack_cache'),
+    //Update version whenever configuration is changed to invalidate and replace previous cache
+    version: '1.1',
+  },
   module: {
     rules: [
       {

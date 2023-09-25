@@ -1,5 +1,6 @@
 # CakePHP project specific files #
 ##########################
+webpack_cache
 /config/app_local.php
 /config/.env
 /logs/*
