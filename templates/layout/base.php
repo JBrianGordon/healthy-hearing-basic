@@ -24,7 +24,6 @@
     <?= $this->fetch('content') ?>
     <?= $this->fetch('bs-modals') ?>
     <?= $this->element('footer') ?>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap" rel="stylesheet">
     <?= $this->Html->css('responsive', ['rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"']); ?>
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
