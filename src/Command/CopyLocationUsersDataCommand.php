@@ -39,7 +39,7 @@ class CopyLocationUsersDataCommand extends Command
     {
         $io->out('Copying location_users data into users table...');
 
-        $locationUsersTable = $this->fetchTable('LocationUsers');
+        $locationUsersTable = $this->fetchTable('location_users');
         $usersTable = $this->fetchTable('Users');
         $loginIpsTable = $this->fetchTable('LoginIps');
 

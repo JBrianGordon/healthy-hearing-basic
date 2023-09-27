@@ -12,7 +12,7 @@ export let hideNav = () => {
 	document.removeEventListener('click',autoClose);
 },
 
-autoClose = (e) => {
+autoClose = e => {
 	if(e.keyCode === 27){
 		hideNav();
 	}
@@ -24,7 +24,7 @@ autoClose = (e) => {
 	}
 },
 
-showNav = (thisTrigger) => {
+showNav = thisTrigger => {
 	let thisMegaNav;
 	for(let megaNav of megaNavs){
 		megaNav.setAttribute('style', 'height:0;max-height:0');
@@ -46,10 +46,24 @@ showNav = (thisTrigger) => {
 	
 	document.addEventListener('click', autoClose);
 	document.addEventListener('keyup', autoClose);
+},
+
+toggleDropdown = e =>{
+	const dropdown = e.currentTarget;
+    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+    if (dropdownMenu) {
+        dropdownMenu.classList.toggle('show');
+    }
 }
 
+const dropdowns = document.querySelectorAll('.dropdown');
+
+dropdowns.forEach(dropdown => {
+    dropdown.addEventListener('click', toggleDropdown);
+});
+
 for(let navTrigger of navTriggers) {
-	navTrigger.addEventListener('click', (e) => {
+	navTrigger.addEventListener('click', e => {
 		e.preventDefault();
 		navTrigger.classList.contains('active') ? hideNav() : showNav(navTrigger);
 	})

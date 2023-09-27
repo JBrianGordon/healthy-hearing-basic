@@ -79,10 +79,6 @@ $locationsItems['Clinic portal'] = [
     'url' => '/login',
     'icon' => 'bi bi-box-arrow-in-right',
 ];
-$locationsItems['Clinic users'] = [
-    'url' => '/admin/location-users',
-    'icon' => 'bi bi-person-fill',
-];
 $locationsItems['Cities'] = [
     'url' => '/admin/cities',
 ];

@@ -51,6 +51,8 @@ foreach ($fields as $field => $type) {
         'value' => $value
     ];
 }
+
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 
 <div class="container-fluid">
@@ -117,11 +119,8 @@ foreach ($fields as $field => $type) {
                                                                     'action' => 'edit',
                                                                     $location->id,
                                                                 ],
-                                                                [
-                                                                    'class' => 'fw-bold ' . LocationListingType::from($location->listing_type)->getColorClass()
-                                                                ],
                                                             );
-                                                            echo '<br>';
+                                                            echo ' - <span class="label ' . LocationListingType::from($location->listing_type)->getColorClass() . '">' . $location->listing_type . '</span><br>';
                                                         }
                                                         ?>
                                                     </td>
