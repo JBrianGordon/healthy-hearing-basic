@@ -22,34 +22,3 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 		}, 300)
 	});
 }
-
-//Generate breadcrumb schema
-const crumbsElements = document.querySelectorAll('.breadcrumb-item');
-const itemList = [];
-
-crumbsElements.forEach((crumbElement, position) => {
-  const aElement = crumbElement.querySelector('a');
-  if (aElement) {
-    const url = aElement.getAttribute('href');
-    const name = aElement.textContent;
-
-    itemList.push({
-      "@type": "ListItem",
-      "position": (position + 1).toString(),
-      "name": name,
-      "item": url
-    });
-  }
-});
-
-const breadcrumbList = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": itemList
-};
-
-const ldJsonScript = document.createElement('script');
-ldJsonScript.type = 'application/ld+json';
-ldJsonScript.textContent = JSON.stringify(breadcrumbList);
-
-document.head.appendChild(ldJsonScript);
