@@ -19,7 +19,7 @@ if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
 }
 
 //Preferred clinics panel
-$preferredDisplay = $isMobileDevice ? ' style="order:2"' : ' style="order:5"';
+$preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 
 //Corp page display
 if($controller == 'Corps'){
@@ -74,12 +74,13 @@ if($controller == 'Corps'){
 				</div>
 			</div>
 		</section>
-	<?php endif; ?>
+	<?php else: ?>
 		<section class="panel" style="order:6">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive block">
 			</a>
 		</section>
+	<?php endif; ?>
 	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 	<?php if (!empty($articles) && empty($wiki)): ?>
 		<section class="panel panel-light blog-previews" style="order:<?= $reportDisplay ?>">
@@ -127,5 +128,5 @@ if($controller == 'Corps'){
 			</table>
 		</section>
 	<?php endif; ?>
-	<?= (Configure::read('showAds') && !empty($wiki) && !$isMobileDevice) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 </div>
