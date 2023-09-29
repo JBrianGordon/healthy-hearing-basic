@@ -23,6 +23,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse">
 					<?= $this->Breadcrumbs->render() ?>
+					<?= $this->element('breadcrumb_schema') ?>
 					<div id="ellipses">...</div>
 				</header>
 				<div id="top" class="col-lg-9 page-content fap-cities float-start">

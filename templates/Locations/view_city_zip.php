@@ -25,6 +25,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 		<div class="row noprint">
 			<header class="col-md-12 inverse">
 				<?= $this->Breadcrumbs->render() ?>
+				<?= $this->element('breadcrumb_schema') ?>
 			</header>
 			<div class="col-md-12 page-content">
 				<section class="panel">

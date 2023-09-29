@@ -17,6 +17,7 @@ $this->Breadcrumbs->add([
 	    	<div class="row noprint">
 				<header class="col-md-12 inverse">
 					<?= $this->Breadcrumbs->render() ?>
+					<?= $this->element('breadcrumb_schema') ?>
 					<div id="ellipses">...</div>
 				</header>
 			</div>

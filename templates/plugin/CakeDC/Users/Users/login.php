@@ -25,6 +25,7 @@ $this->Breadcrumbs->add([
             <div class="row">
                 <header class="col-lg-12 inverse breadcrumb-header">
                     <?= $this->Breadcrumbs->render(); ?>
+                    <?= $this->element('breadcrumb_schema') ?>
                     <div id="ellipses">...</div>
                 </header>
                 <div class="col-sm-12 panel-parent">

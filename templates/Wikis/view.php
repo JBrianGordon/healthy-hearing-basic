@@ -20,6 +20,7 @@ if (!empty($parts[0])) {
 if (!empty($parts[1])) {
 	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[1])), '');
 }
+
 $isPreview = isset($isPreview) ? $isPreview : false;
 
 $wikiSchema = '<script type="application/ld+json">{';
@@ -125,6 +126,7 @@ echo $wikiSchema;
 				<header class="col-sm-12 inverse">
 					<div class="col-sm-12 col-xs-9">
 						<?= $this->Breadcrumbs->render() ?>
+						<?= $this->element('breadcrumb_schema') ?>
 						<div id="ellipses">...</div>
 					</div>
 					<div class="row header-content col-sm-8">

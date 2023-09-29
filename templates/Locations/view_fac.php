@@ -14,6 +14,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['blo
 		<div class="row noprint">
 			<header class="col-lg-12 inverse">
 				<?= $this->Breadcrumbs->render() ?>
+				<?= $this->element('breadcrumb_schema') ?>
 			</header>
 			<div class="col-lg-12 page-content float-start">
 				<section class="panel">
