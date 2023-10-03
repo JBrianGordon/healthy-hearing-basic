@@ -75,7 +75,9 @@ class PagesController extends AppController
     {
         $contactUsForm = new ContactUsForm();
         $page = $this->Pages->findByTitle('contactUs')->first();
+        $this->loadModel('Content');
         $this->set(compact('contactUsForm', 'page'));
+        $this->set('articles', $this->Content->findLatest(4));
 
         if ($this->request->is('post')) {
             if (!$this->Recaptcha->verify()) {

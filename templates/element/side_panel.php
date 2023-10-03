@@ -22,7 +22,7 @@ if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
 $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 
 //Corp page display
-if($controller == 'Corps'){
+if($controller == 'Corps' || $controller == 'Pages'){
 	$facDisplay = "8";
 	$reportDisplay = "9";
 } else {
@@ -81,7 +81,7 @@ if($controller == 'Corps'){
 			</a>
 		</section>
 	<?php endif; ?>
-	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?= (Configure::read('showAds') && $controller != 'Wikis' && $controller != 'Pages') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 	<?php if (!empty($articles) && empty($wiki)): ?>
 		<section class="panel panel-light blog-previews" style="order:<?= $reportDisplay ?>">
 			<header class="panel-heading text-center">
