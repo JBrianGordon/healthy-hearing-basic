@@ -167,6 +167,24 @@ class ClinicHelper extends Helper
         return $retval;
     }
 
+    public function reviewText($location, $options = []) {
+        if (!is_object($location)) {
+            $location = $this->Locations->get($location);
+        }
+        $count = $location->reviews_approved;
+        $rating = $location->average_rating;
+        if (!$count) {
+            return null;
+        }
+        if ($count == 1) {
+            $retval = "Read $count verified patient review for {$location->title}! Their review score was {$location->average_rating} ({$this->generateHalfStars($rating)}) from 1 review.";
+        } else {
+            $retval = "Read $count verified patient reviews for {$location->title}! Their average review score is {$location->average_rating} ({$this->generateHalfStars($rating)}) from $count reviews.";
+        }
+
+        return $retval;
+    }
+
     public function reviewSchema($location, $options = []) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);

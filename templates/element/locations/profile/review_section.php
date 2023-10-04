@@ -19,7 +19,7 @@
 	    <div class="panel-body clinic-info">
 	      <div class="panel-section reviews">
 	        <p>
-	          <?php /*** TODO: uncomment when reviewText built in clinic helper*** :echo $this->Clinic->reviewText($location);*/ ?>
+	          <?php echo $this->Clinic->reviewText($location); ?>
 	        </p>
 	        <p<?php if($location->state == 'ON'){ echo ' style="height:20px"'; } ?>>
 	          <button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
