@@ -54,8 +54,10 @@ use Cake\Routing\Router;
 						                <tr>
 						                    <th class="tar">Clinic</th>
 						                    <td>
-                                                <?= $caCallGroup->has('location') ? $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) : '' ?><br>
-                                                <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br><?= $caCallGroup->location->city ?> <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br><?= $caCallGroup->location->phone ?><br><?= $caCallGroup->location->landmarks ?>
+                                                <? if ($caCallGroup->has('location')): ?>
+                                                    <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
+                                                    <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br><?= $caCallGroup->location->city ?> <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br><?= $caCallGroup->location->phone ?><br><?= $caCallGroup->location->landmarks ?>
+                                                <?php endif; ?>
 						                    </td>
 						                </tr>
 						                <tr>
