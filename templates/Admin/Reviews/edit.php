@@ -4,6 +4,9 @@
  * @var \App\Model\Entity\Review $review
  * @var string[]|\Cake\Collection\CollectionInterface $locations
  */
+use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewRating;
+use App\Enums\Model\Review\ReviewResponseStatus;
 
 $this->Html->script('dist/review_index.min', ['block' => true]);
 ?>
@@ -57,7 +60,8 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                             <?= $this->Form->create($review) ?>
                                             <fieldset>
                                                 <?php
-                                                    //*** TODO: add location search: ***/
+                                                    //*** TODO: add location search functionality: ***/
+                                                    echo $this->Form->control('location_search');
                                                     echo $this->Form->control('location_id', ['label' => 'Location Id', 'required' => true, 'type' => 'text']);
                                                     echo $this->Form->control('body');
                                                     echo $this->Form->control('character_count', ['required' => false, 'disabled' => true]);
@@ -71,15 +75,13 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                 </div>
                                                 <?php
                                                     echo $this->Form->control('origin');
-                                                    //*** TODO: add in status text values: ***/
-                                                    echo $this->Form->control('status');
+                                                    echo $this->Form->control('status', ['options' => ReviewStatus::getEditStatusLabelArray()]);
                                                 ?>
                                                 <em class="col-sm-9 col-sm-offset-3">Please note that statuses that are saved as "Published Negative" will be automatically changed to "Published" after the negative review email has been sent to the clinic.<br><br></em>
                                                 <?php
-                                                    //*** TODO: add in rating text values: ***/
-                                                    echo $this->Form->control('rating');
+                                                    echo $this->Form->control('rating', ['options' => ReviewRating::getRatingLabelArray()]);
                                                     echo $this->Form->control('response');
-                                                    echo $this->Form->control('response_status', ['required' => false]);
+                                                    echo $this->Form->control('response_status', ['required' => false, 'options' => ReviewResponseStatus::getResponseStatusLabelArray()]);
                                                     echo $this->Form->control('denied_date', ['empty' => true]);
                                                 ?>
                                             </fieldset>
