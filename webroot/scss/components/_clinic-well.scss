@@ -77,8 +77,12 @@
 			color: #555657;
 		}
 
-		[class*="hh-icon-"] {
-			color: #ffcc00;
+		.author {
+			text-wrap: balance;
+			
+			[class*="hh-icon-"] {
+				color: #ffcc00;
+			}
 		}
 		
 		#sortSpan {
