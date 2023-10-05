@@ -39,6 +39,7 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                 <div class="row">
                                     <div class="column-responsive column-80">
                                         <div class="reviews form content">
+                                            <h2 class="mt0">Edit Review</h2>
                                             <table class="table table-striped table-bordered table-condensed">
                                                 <tbody>
                                                     <tr>
