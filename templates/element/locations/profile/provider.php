@@ -59,7 +59,7 @@ $this->set('hideProvider', $hideProvider);
 											<br class="br-mobile">
 											<span class="provider-qualifications"><?= $provider->credentials ?></span>
 											<?php if (Configure::read('showProviderCredentialButtons')): ?>
-												<a data-toggle='popover' data-trigger='hover click' data-content='' data-html='true' data-placement='bottom' class='cred-popover-<?= $providerKey; ?>'>
+												<a data-toggle='popover' data-trigger='hover click' data-bs-content='' data-html='true' data-bs-placement='bottom' class='cred-popover-<?= $providerKey; ?>'>
 													<span class='glyphicon glyphicon-question-sign'></span>
 												</a>
 											<?php endif; ?>

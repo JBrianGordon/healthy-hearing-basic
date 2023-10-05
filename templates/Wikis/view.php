@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki $wiki
  */
- 
-$this->Html->script('dist/wiki.min', ['block' => true]);
 
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -107,6 +105,8 @@ $wikiSchema .= '"audience": {"@type": "MedicalAudience", "audienceType": ["patie
 $wikiSchema .= '}</script>';
 
 echo $wikiSchema;
+
+$this->Html->script('dist/wiki.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body content-body secondary p0">
 	<div class="row pt0 pb0">
