@@ -1,9 +1,10 @@
 <?php
+use App\Enums\Model\Review\ReviewResponseStatus;
 if (!isset($review) && isset($review->body)) {
 	$review = $review;
 }
 // Only show the response after the response has been approved
-$show_response = !empty($review->response) && ($review->response_status == Review::RESPONSE_STATUS_PUBLISHED);
+$show_response = !empty($review->response) && ($review->response_status == ReviewResponseStatus::RESPONSE_STATUS_PUBLISHED);
 /*** TODO: build nameById ***/
 //$clinic_name = isset($clinic_name) ? $clinic_name : $this->Clinic->nameById($review->location_id);
 $truncate = isset($truncate) ? $truncate : false;
