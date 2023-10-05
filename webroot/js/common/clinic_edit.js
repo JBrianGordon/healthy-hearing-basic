@@ -362,13 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	  observer.observe(node, config);
 	});
 
-	//*** TODO: Make sure popover still works with this rewrite ***/
-  const popoverElements = document.querySelectorAll('[data-toggle="popover"]');
-  
-  popoverElements.forEach(function(element) {
-    new bootstrap.Popover(element);
-  });
-
 	locationAutocomplete();
 });
 

@@ -2,7 +2,6 @@ import './common';
 import '../../../node_modules/jquery-ui/ui/widgets/datepicker';
 import '../admin/nav_tabs';
 
-$('[data-toggle=\"popover\"]').popover();
 $('.datepicker').datepicker();
 
 // Click the default tab
