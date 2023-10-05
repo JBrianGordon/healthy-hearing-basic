@@ -115,6 +115,11 @@ $zipLabel = Configure::read('zipLabel');
             ],
           );
         ?>
+        <div class="col-md-9 offset-md-3">
+            <?php
+                echo $this->Recaptcha->display();
+            ?>
+        </div>
       </div>
       <div class="modal-footer">
         <div id="review-error" class="text-white pt-4 px-4 my-2"></div>
@@ -196,14 +201,13 @@ $zipLabel = Configure::read('zipLabel');
                 echo $this->Recaptcha->display();
             ?>
         </div>
-
       </div>
       <div class="modal-footer">
         <div id="newsletter-error" class="text-white py-4 px-4 my-4"></div>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No Thanks</button>
         <?php
           echo $this->Form->button(
-            'Submit review', [
+            'Sign up', [
               'type' => 'submit',
               'class' => [
                 'btn',
