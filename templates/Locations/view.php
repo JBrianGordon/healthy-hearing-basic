@@ -227,7 +227,7 @@ $this->Breadcrumbs->add([
 																    echo $this->Form->control('CaCallGroup.'.$topicKey, [
 																        'type' => 'checkbox',
 																        'label' => [
-																            'class' => 'control-label pt0 pl5',
+																            'class' => 'control-label pt0',
 																            'style' => 'text-align:left;',
 																            'text' => $label,
 																            'escape' => false,
