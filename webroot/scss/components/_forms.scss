@@ -23,6 +23,10 @@ form {
     	margin-bottom: 0;
     	padding-top: 7px;
     	font-weight: bold;
+
+    	&.form-check-label {
+    		font-weight: normal;
+    	}
 		}
 	}
 }

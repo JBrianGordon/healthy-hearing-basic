@@ -22,6 +22,7 @@ if (!empty($seoMetaTags)) {
 //$this->Content->setPrint(true);
 
 $this->Breadcrumbs->add([
+		['title' => 'Home', 'url' => '/'],
     ['title' => 'Report', 'url' => ['prefix'=>false, 'plugin'=>false, 'controller' => 'content', 'action' => 'report_index']],
     ['title' => $content->title, 'url' => '']
 ]);

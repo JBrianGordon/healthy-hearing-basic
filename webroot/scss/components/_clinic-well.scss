@@ -72,13 +72,21 @@
 	.reviews {
 		color: #555657;
 		margin-bottom: 5px;
+
+		i {
+			color: #ffcc00;
+		}
 		
 		blockquote{
 			color: #555657;
 		}
 
-		[class*="hh-icon-"] {
-			color: #ffcc00;
+		.author {
+			text-wrap: balance;
+			
+			[class*="hh-icon-"] {
+				color: #ffcc00;
+			}
 		}
 		
 		#sortSpan {

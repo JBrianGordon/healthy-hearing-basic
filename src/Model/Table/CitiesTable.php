@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 
@@ -169,5 +170,23 @@ class CitiesTable extends Table
         }
 
         return $retval;
+    }
+
+    /**
+    * Find a single city by the city name, could be lower or uppercase
+    * @param string city
+    * @return cities.
+    */
+    public function findByCity($city = null, $state = '%') {
+        $state = TableRegistry::getTableLocator()->get('Locations')->parseStateSlug($state);
+        $city = str_replace("_"," ", $city);
+        $city = str_replace("-"," ", $city);
+        return $this->find('all', [
+            'conditions' => [
+                'Cities.city LIKE' => $city.'%',
+                'Cities.state LIKE' => $state
+            ],
+            'contain' => []
+        ])->first();
     }
 }

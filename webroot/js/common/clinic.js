@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  }
 	}
 
-	const emptyLinks = document.querySelectorAll(".provider-qualifications a[data-content='']");
+	const emptyLinks = document.querySelectorAll(".provider-qualifications a[data-bs-content='']");
 	emptyLinks.forEach(function(link) {
 	  link.remove();
 	});
@@ -404,8 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		  }, 500);
 		});
 	}
-	
-	$('[data-toggle="popover"]').popover();
 });
 
 window.addEventListener('load', function () {

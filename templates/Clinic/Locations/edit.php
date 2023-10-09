@@ -226,7 +226,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </div>
                                         <?php
                                         echo $this->Form->control('Location.landmarks', [
-                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" data-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
+                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
                                                 'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,
@@ -278,13 +278,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">About us</h2>
-                                        <small>Please limit your description to an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
+                                        <small>Please limit your description to an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
                                         <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false]); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
                                         <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">Services</h2>
-                                        <small>This should be an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
+                                        <small>This should be an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
                                         <?php
                                         echo $this->Form->control('Location.services', [
                                             'label' => false,

@@ -263,7 +263,7 @@ class LocationsController extends AppController
                 return $q->where(['Providers.thumb_url !=' => '']); // Get providers with a picture
             },
         ];
-        $fields = array_merge(['Location.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
+        $fields = array_merge(['Locations.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
         $locations = $this->Locations->findAllByGeoLoc(compact('region','city','zip'), 40, [], $contain, $fields);
 
         // We are not currently using filters. Keep this code in case we decide to add them back.
@@ -362,7 +362,7 @@ class LocationsController extends AppController
                 $location = $this->Locations->find('all', [
                     'contain' => [],
                     'fields' => ['id', 'city', 'state', 'zip', 'title'],
-                    'conditions' => ['Location.id' => $locationId]
+                    'conditions' => ['Locations.id' => $locationId]
                 ])->first();
                 if (!empty($location)) {
                     $this->response->disableCache();
