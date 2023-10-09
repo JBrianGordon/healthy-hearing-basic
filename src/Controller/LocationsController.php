@@ -500,18 +500,6 @@ class LocationsController extends AppController
     {
         $this->viewBuilder()->setLayout('ajax');
 
-        if (!$this->Recaptcha->verify()) {
-            $response = [
-                'success' => false,
-                'errors' => ['reCAPTCHA test failed ("I\'m not a robot"). Please try again!'],
-            ];
-
-            $this->set(compact('response'));
-            $this->viewBuilder()->setOption('serialize', 'response');
-
-            return;
-        }
-
         $review = $this->Locations->Reviews->newEmptyEntity();
 
         $jsonRequestData = $this->request->getData('reviews');
@@ -525,6 +513,18 @@ class LocationsController extends AppController
             $response = [
                     'success' => false,
                     'errors' => Hash::flatten($reviewErrors),
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        }
+
+        if (!$this->Recaptcha->verify()) {
+            $response = [
+                'success' => false,
+                'errors' => ['reCAPTCHA test failed ("I\'m not a robot"). Please wait for the reCAPTCHA to reset!'],
             ];
 
             $this->set(compact('response'));

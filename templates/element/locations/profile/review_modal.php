@@ -197,9 +197,7 @@ $zipLabel = Configure::read('zipLabel');
             );
         ?>
         <div class="col-md-9 offset-md-3">
-            <?php
-                echo $this->Recaptcha->display();
-            ?>
+            <?= $this->Recaptcha->display(); ?>
         </div>
       </div>
       <div class="modal-footer">
@@ -217,7 +215,7 @@ $zipLabel = Configure::read('zipLabel');
           );
         ?>
       </div>
-        <?= $this->Form->end() ?>
+      <?= $this->Form->end() ?>
     </div>
   </div>
 </div>
@@ -226,10 +224,25 @@ $zipLabel = Configure::read('zipLabel');
     const reviewForm = document.querySelector('#submitReviewForm');
     const newsletterSignupForm = document.querySelector('#newsletterSignupForm');
 
+    let isReviewFormBeingSubmitted = false;
+
+    const reviewSubmitModal = document.querySelector('#reviewSubmitModal');
+    reviewSubmitModal.addEventListener('hide.bs.modal', event => {
+      if (isReviewFormBeingSubmitted) {
+        // The form is being submitted, allow the modal to close
+        isReviewFormBeingSubmitted = false; // Reset the flag
+        return true;
+      }
+
+      if (!confirm("This review has not been saved. Are you sure you want to exit?")) return false;
+    });
+
     reviewForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const addReviewUrl = event.target.action;
         const reviewFormData = new URLSearchParams(new FormData(reviewForm)).toString();
+
+        isReviewFormBeingSubmitted = true;
 
         try {
             const response = await fetch(addReviewUrl, {
@@ -274,6 +287,9 @@ $zipLabel = Configure::read('zipLabel');
                 const reviewSubmitModal = document.querySelector('#reviewSubmitModal');
                 const bootstrapReviewSubmitModal = bootstrap.Modal.getInstance(reviewSubmitModal);
                 bootstrapReviewSubmitModal.hide();
+
+                // This is the first (index 0) reCAPTCHA on page
+                grecaptcha.reset(0);
 
                 let thankYouModal = new bootstrap.Modal(document.getElementById('reviewThankYouModal'));
                 thankYouModal.show();
@@ -331,6 +347,9 @@ $zipLabel = Configure::read('zipLabel');
                 const thankYouModalElement = document.getElementById('reviewThankYouModal')
                 const bootstrapReviewThankYouModal = bootstrap.Modal.getInstance(thankYouModalElement)
                 bootstrapReviewThankYouModal.hide();
+
+                // This is the second (index 1) reCAPTCHA on page
+                grecaptcha.reset(1);
             }
         } catch {
             alert("We're sorry, but an error occured while signing you up for our newsletter. Thank you and sorry for the inconvenience.");
