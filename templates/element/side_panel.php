@@ -22,7 +22,7 @@ if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
 $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 
 //Corp page display
-if($controller == 'Corps'){
+if($controller == 'Corps' && !$isMobileDevice){
 	$facDisplay = "8";
 	$reportDisplay = "9";
 } else {
