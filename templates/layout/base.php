@@ -13,7 +13,7 @@
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="boostrap_u_i/font/bootstrap-icons.woff" as="font" type="font/woff" crossorigin>
+    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons'],['rel' => 'preload', 'as' => 'font', 'type' => 'font/woff']) ?>
 
     <?= $this->fetch('meta') ?>
     <!-- Above the fold CSS -->
