@@ -80,7 +80,15 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                 ?>
                                                 <em class="col-sm-9 col-sm-offset-3">Please note that statuses that are saved as "Published Negative" will be automatically changed to "Published" after the negative review email has been sent to the clinic.<br><br></em>
                                                 <?php
-                                                    echo $this->Form->control('rating', ['options' => ReviewRating::getRatingLabelArray()]);
+                                                    echo $this->Form->control(
+                                                        'rating', [
+                                                            'type' => 'select',
+                                                            'options' => array_combine(
+                                                                ReviewRating::getRatingValueArray(),
+                                                                ReviewRating::getRatingLabelArray(),
+                                                            ),
+                                                        ]
+                                                    );
                                                     echo $this->Form->control('response');
                                                     echo $this->Form->control('response_status', ['required' => false, 'options' => ReviewResponseStatus::getResponseStatusLabelArray()]);
                                                     echo $this->Form->control('denied_date', ['empty' => true]);
