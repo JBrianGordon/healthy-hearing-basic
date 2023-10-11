@@ -88,7 +88,7 @@ class LocationsController extends AppController
     {
         $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
         $location = $this->Locations->get($id, [
-            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers', 'LocationNotes', 'LocationUsers', 'LocationEmails', 'Reviews', 'Users.LoginIps'],
+            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers', 'LocationNotes', 'LocationEmails', 'Reviews', 'Users.LoginIps'],
         ]);
         $lastOticonImport = $this->Locations->ImportStatus->find('all', [
             'contain' => [],
