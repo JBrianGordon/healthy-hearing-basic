@@ -12,7 +12,7 @@ $this->loadHelper('Search.Search', [
 ]);
 $queryParams = $this->request->getQueryParams();
 // Only include these fields in advanced search
-$includeFields = ['id', 'username', 'first_name', 'last_name', 'email', 'company', 'active', 'role', 'created', 'modified', 'is_admin', 'is_it_admin', 'is_agent', 'is_call_supervisor', 'is_author', 'is_csa', 'is_writer', 'is_superuser'];
+$includeFields = ['id', 'username', 'first_name', 'last_name', 'email', 'active', 'role', 'created', 'modified', 'is_admin', 'is_it_admin', 'is_agent', 'is_call_supervisor', 'is_author', 'is_csa', 'is_writer', 'is_superuser'];
 // Advanced search details
 $advancedSearchFields = [];
 foreach ($fields as $field => $type) {
@@ -79,7 +79,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                    <th><?= $this->Paginator->sort('id') ?></th>
 								                    <th><?= $this->Paginator->sort('first_name') ?> / <?= $this->Paginator->sort('last_name') ?> / 
 								                        <?= $this->Paginator->sort('username') ?> / <?= $this->Paginator->sort('email') ?></th>
-								                    <th><?= $this->Paginator->sort('company') ?></th>
 								                    <th><?= $this->Paginator->sort('active') ?></th>
 								                    <th><?= $this->Paginator->sort('role') ?></th>
 								                    <th><?= $this->Paginator->sort('created') ?> / <?= $this->Paginator->sort('modified') ?></th>
@@ -93,7 +92,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                        <td><?php echo '<strong>'.$user->first_name.' '.$user->last_name.'</strong><br>'.
 								                            '<span class="badge bg-default">'.$user->username.'</span><br>'.
 								                            $user->email; ?></td>
-								                        <td><?= h($user->company) ?></td>
 								                        <td><?= $this->Html->badge(
 								                                $user->active ? '<i class="bi bi-check-lg"></i> Active' : '<i class="bi bi-x-lg"></i> Inactive',
 								                                [
@@ -101,8 +99,23 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                                ]
 								                            ); ?>
 								                        </td>
-								                        <td><?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?></td>
-								                        <td><?php echo date('M jS Y, H:i', strtotime($user->created)).'<br>'.date('M jS Y, H:i', strtotime($user->modified)); ?></td>
+								                        <td>
+															<?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?>
+															<?php if ($user->locations !== []): ?>
+																<br>
+																<?=
+																	$this->Html->link(
+																		$user->locations[0]->id,
+																		[
+																			'controller' => 'Locations',
+																			'action' => 'edit',
+																			$user->locations[0]->id
+																		]
+																	)
+																?>
+															<?php endif; ?>
+														</td>
+														<td><?php echo date('M jS Y, H:i', strtotime($user->created)).'<br>'.date('M jS Y, H:i', strtotime($user->modified)); ?></td>
 								                        <td class="actions">
 							                                <?= $this->Html->link(__(' Edit'),
 							                                    ['action' => 'edit', $user->id],

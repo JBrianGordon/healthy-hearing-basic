@@ -44,7 +44,8 @@ class UsersController extends AppController
         $usersQuery = $this->Users
             ->find('search', [
                 'search' => $requestParams,
-            ]);
+            ])
+            ->contain('Locations');
         $this->set('users', $this->paginate($usersQuery));
         $this->set('fields', $this->Users->getSchema()->typeMap());
     }
