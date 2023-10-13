@@ -4,9 +4,10 @@
  * @var \App\Model\Entity\Review $review
  * @var string[]|\Cake\Collection\CollectionInterface $locations
  */
-use App\Enums\Model\Review\ReviewStatus;
+use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewRating;
 use App\Enums\Model\Review\ReviewResponseStatus;
+use App\Enums\Model\Review\ReviewStatus;
 
 $this->Html->script('dist/review_index.min', ['block' => true]);
 ?>
@@ -75,7 +76,7 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                     <?= $this->Form->control('is_spam') ?>
                                                 </div>
                                                 <?php
-                                                    echo $this->Form->control('origin');
+                                                    echo $this->Form->control('origin', ['options' => ReviewOrigin::getOriginLabelArray()]);
                                                     echo $this->Form->control('status', ['options' => ReviewStatus::getEditStatusLabelArray()]);
                                                 ?>
                                                 <em class="col-sm-9 col-sm-offset-3">Please note that statuses that are saved as "Published Negative" will be automatically changed to "Published" after the negative review email has been sent to the clinic.<br><br></em>
