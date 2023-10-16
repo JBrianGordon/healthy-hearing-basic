@@ -444,7 +444,8 @@ class ReviewsTable extends Table
         $reviewIp = $this->get($reviewId)->ip;
         if (!empty($reviewIp)) {
             // Login IP matches
-            $loginMatches = $this->getTableLocator()->get('LoginIps')->find()
+            $loginMatches = $this->getTableLocator()->get('LoginIps')->find('all')
+                ->contain(['Users.Locations' => ['fields' => ['id']]])
                 ->where([
                     'ip' => $reviewIp
                 ])
