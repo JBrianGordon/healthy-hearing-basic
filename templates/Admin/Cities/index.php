@@ -84,9 +84,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                                'controller' => 'locations',
 								                                'action' => 'index',
 								                                'city' => $city->city,
-								                                'region' => $city->state,
-								                                // TODO:
-								                                //'region' =>  $this->Clinic->stateSlug($city->state)
+								                                'region' =>  $this->Clinic->stateSlug($city->state)
 								                            ])
 								                        ?>
 								                    </td>
