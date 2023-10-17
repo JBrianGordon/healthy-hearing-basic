@@ -83,9 +83,8 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 								<div class="panel-heading">Content Actions</div>
 								<div class="panel-body p10">
 									<div class="btn-group btn-group-sm pt-2 mb-3">
-										<?= $this->Html->link("+ Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+										<?= $this->Html->link("+ Add", ['action' => 'edit'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 										<?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
-										<?= $this->Html->link("<i class='bi bi-arrow-repeat'></i> Sync photos", ['action' => 'rsync'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 									</div>
 								</div>
 							</div>

@@ -4,8 +4,18 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content $content
  */
+use App\Model\Entity\Content;
  
 $this->Html->script('dist/content_edit.min', ['block' => true]);
+
+$author_default = false;
+$isFrozen = !empty($content->is_frozen);
+$isDraft = !empty($content->draft_parent_id);
+if (empty($content->id)) {
+	if (in_array($user->id, $authors)) {
+		$author_default = $user->id;
+	}
+}
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -21,13 +31,19 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 						<div class="panel-body p10">
 							<div class="btn-group">
 								<?= $this->Html->link( 'Browse', ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
-								<!--*** TODO: Add button not functioning correctly ***-->
-								<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
-								<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']
-					            ) ?>
-					            <!--*** TODO: Preview button not functioning correctly ***-->
-								<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-								<?= $this->Html->link(' Sync Photos', ['action' => 'rsync'], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
+								<?php if (!empty($content->id)): ?>
+									<?= $this->Html->link(' Add', ['action' => 'edit'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+									<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
+						            <!--*** TODO: Preview button not functioning correctly ***-->
+									<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
+									<?php if (!$isDraft): ?>
+										<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-open', 'target'=>'_blank']) ?>
+										<?php if ($isFrozen): ?>
+											<!-- This content is locked -->
+											<?= $this->Html->link(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-copy']) ?>
+										<?php endif; ?>
+									<?php endif; ?>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -36,31 +52,53 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 					<section class="panel">
 						<div class="panel-body">
 							<div class="panel-section expanded">
+								<h2><?= empty($content->id) ? "Add Report" : "Edit Report" ?></h2>
+								<?php if($isDraft): ?>
+									<div class="alert alert-warning" role="alert">
+										This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->draft_parent_id], ['target' => '_blank']) ?>.
+									</div>
+								<?php endif; ?>
 								<div class="row">
 								    <div class="column-responsive column-80">
 								        <div class="content form">
 								            <?= $this->Form->create($content) ?>
 								            <fieldset>
 								                <?php
-								                    echo $this->Form->hidden('is_frozen');
-								                    echo $this->Form->hidden('id_draft_parent');
-								                    echo $this->Form->control('title');
-								                    echo $this->Form->control('subtitle');
-								                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
-								                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true]);
-								                    echo $this->Form->control('type');
-								                    /*** TODO: primary author needs to be a dropdown with all possible authors as options: ***/
-								                    echo $this->Form->control('primary_author');
-								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-								                    echo $this->Form->control('is_active');
-								                    echo '</div>';
-								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-								                    echo $this->Form->control('is_library_item');
-								                    echo '</div>';
-								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-								                    echo $this->Form->control('is_gone', ['label' => '410 This Content']);
-								                    echo '<span class="help-block"><strong>Note:</strong> If checked, this content will serve a 410 GONE instead of rendering the content.</span>';
-								                    echo '</div>';
+							                    echo $this->Form->hidden('is_frozen');
+							                    echo $this->Form->hidden('id_draft_parent');
+							                    echo $this->Form->control('title');
+							                    echo $this->Form->control('subtitle');
+							                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
+							                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true]);
+							                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
+							                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+												if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {
+													echo $this->B3F->input('current_url', array('value' => Router::url($this->request->data['Content']['hh_url'], true), 'disabled' => false));
+												}
+												?>
+												<?php if (empty($content->is_active)): ?>
+													<div class="form-group">
+														<label class="col col-md-3 control-label">Redirects To:</label>
+														<div class="col col-md-9" style="padding:8px 12px;">
+															<?php if (!empty($seoRedirect)): ?>
+																<?php echo Router::url($seoRedirect->redirect, true); ?>
+															<?php else: ?>
+																<?php echo $this->Html->link('Create Redirect', ['controller'=>'seo', 'admin' => true, 'action' => 'seo_redirects', 'edit']); ?>
+															<?php endif; ?>
+														</div>
+													</div>
+												<?php endif; ?>
+												<?php
+							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
+							                    echo $this->Form->control('is_active');
+							                    echo '</div>';
+							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
+							                    echo $this->Form->control('is_library_item');
+							                    echo '</div>';
+							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
+							                    echo $this->Form->control('is_gone', ['label' => '410 This Content']);
+							                    echo '<span class="help-block"><strong>Note:</strong> If checked, this content will serve a 410 GONE instead of rendering the content.</span>';
+							                    echo '</div>';
 								                ?>
 								                <ul class="nav nav-tabs mb-3 clearfix" role="tablist">
 								                    <li class="nav-item" role="presentation">
@@ -113,6 +151,25 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 								                            echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
 								                            echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
 							                        	?>
+														<hr>
+														<h3>Additional Authors</h3>
+														<?php echo $this->Form->control('Contributor', [
+															'label' => false,
+															'options' => $authors,
+															'multiple' => 'checkbox',
+															'class' => 'pull-left col-md-4',
+															'wrapInput' => 'col-md-12'
+														]); ?>
+														<hr>
+														<h3>Help Page Tags</h3>
+														<?php echo $this->Form->control('Wikis.Tags', [
+															'label' => false,
+															'options' => $tags,
+															'multiple' => 'checkbox',
+															'class' => 'pull-left col-md-4',
+															'wrapInput' => 'col-md-12',
+															'escape' => false
+														]); ?>
 								                    </div>
 								                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
 								                        <?php
