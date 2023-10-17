@@ -82,7 +82,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                            [
 								                                'prefix' => false,
 								                                'controller' => 'locations',
-								                                'action' => 'index',
+								                                'action' => 'viewCityZip',
 								                                'city' => $city->city,
 								                                'region' =>  $this->Clinic->stateSlug($city->state)
 								                            ])
