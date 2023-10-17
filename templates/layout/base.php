@@ -62,7 +62,10 @@
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
     <?= $this->Html->css(['BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
-    <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
+    <div id="footerContainer">
+        <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
+        <?= $this->element('sticky_footer') ?>
+    </div>
 </body>
 <?= $this->fetch('script') ?>
 </html>
