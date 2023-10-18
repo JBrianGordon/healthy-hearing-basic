@@ -6,6 +6,7 @@ namespace App\View\Helper;
 use Cake\View\Helper;
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
+use App\Enums\Model\Review\ReviewOrigin;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -63,7 +64,7 @@ class ClinicHelper extends Helper
     // TO-DO: Remove this function from reviewVerification() below
     public function reviewOrigin($key = null) {
         if ($key !== null) {
-            return Review::$origins[$key];
+            return ReviewOrigin::from($key)->getOriginLabel();
         }
     }
 

@@ -1387,6 +1387,36 @@ class LocationsTable extends Table
     }
 
     /**
+    * Find a Location ID by the Location User username
+    * @param string username
+    * @return int LocationID
+    */
+    public function findByUsername($username) {
+
+        if (empty($username)) {
+            return null;
+        }
+
+        // Does username match a location_id?
+        $count = $this->findById($username)->count();
+        if (!empty($count)) {
+            return $username;
+        }
+
+        // Find location_id match for user
+        $locationsUser = $this->LocationsUsers->find('all', [
+            'conditions' => [
+                'user_id' => $username,
+            ],
+            'contain' => []
+        ])->first();
+        if (!empty($locationsUser)) {
+            return $locationsUser->location_id;
+        }
+        return null;
+    }
+
+    /**
     * Find all linked locations for the given locationId
     * @param int locationId
     */

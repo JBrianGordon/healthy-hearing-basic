@@ -457,4 +457,24 @@ class UsersTable extends CakeDcUsersTable
 
         return $agentsQuery->toArray();
     }
+
+    /**
+     * Find a list of users that are authors or writers
+     */
+    public function authorList() {
+        $authors = $this->find('all', [
+            'conditions' => [
+                'OR' => [
+                    'is_writer' => true,
+                    'is_author' => true
+                ]
+            ],
+            'order' => ['first_name ASC']
+        ])->all();
+        $authorList = [];
+        foreach ($authors as $author) {
+            $authorList[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
+        }
+        return $authorList;
+    }
 }

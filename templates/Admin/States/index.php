@@ -49,9 +49,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                            'prefix' => false,
 								                            'controller' => 'locations',
 								                            'action' => 'viewState',
-								                            'region' => $state->name
-								                            // TODO:
-								                            //'region' =>  $this->Clinic->stateSlug($state->name)
+								                            'region' =>  $this->Clinic->stateSlug($state->name)
 								                        ]) ?>
 								                    </td>
 								                    <td class="p5">
@@ -69,9 +67,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                                    'prefix' => false,
 								                                    'controller' => 'locations',
 								                                    'action' => 'viewState',
-								                                    'region' => $state->name,
-								                                    // TODO:
-								                                    //'region' =>  $this->Clinic->stateSlug($state->name)
+								                                    'region' =>  $this->Clinic->stateSlug($state->name)
 								                                ],
 								                                ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
 								                            <?= $this->Html->link(__(' Edit'),

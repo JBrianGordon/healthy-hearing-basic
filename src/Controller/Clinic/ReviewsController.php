@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Controller\Clinic;
+use App\Model\Entity\Review;
+use Cake\Routing\Router;
 
 /**
  * Reviews Controller
@@ -18,26 +20,50 @@ class ReviewsController extends BaseClinicController
     ];
 
     /**
-     * Index method
-     *
-     * @param $int|null $locationId Location ID.
-     * @return \Cake\Http\Response|null|void Renders view
+     * Show reviews for clinic
      */
-    public function index($locationId = null)
+    public function index($username = null)
     {
-        $locationId = $this->Authentication
-            ->getIdentity()
-            ->getOriginalData()
-            ->locations[0]['id'];
+        //Force recovery email to be filled out.
+        if (!$this->hasRecoveryEmail()) {
+            $this->Flash->error('You must first fill out your email to continue. ↓');
+            $this->redirect(['controller' => 'users', 'action' => 'account']);
+        }
+        //Only allow you to set the oticon_id if we're admin, otherwise we always pull from our username
+        if (!$this->isAdmin) {
+            $username = $this->user->username;
+        } else {
+            // Only set our username if it wasn't passed in.  This only works for admins.
+            if (empty($username)) {
+                $username = !empty($this->request->getData('username')) ? $this->request->getData('username') : null;
+            }
+        }
 
-        $reviews = $this->paginate(
-            $this->Reviews->find('all')
-                ->where([
-                    'location_id' => $locationId,
-                ])
-        );
+        $this->Locations = $this->fetchTable('Locations');
+        $locationId = $this->Locations->findByUsername($username);
 
-        $this->set(compact('reviews'));
+        $reviews = null;
+        $locationTitle = null;
+        $locationProfile = null;
+        if (!empty($locationId)) {
+            $reviews = $this->paginate('Reviews', [
+                'conditions' => [
+                    'Reviews.location_id' => $locationId,
+                    'Reviews.status IN' => [
+                        Review::STATUS_APPROVED,
+                        Review::STATUS_DENIED
+                    ],
+                ],
+            ]);
+            $location = $this->Locations->get($locationId);
+            $locationTitle = $location->title;
+            $locationProfile = Router::url($location->hh_url, true);
+        }
+
+        $this->set('reviews', $reviews);
+        $this->set('locationTitle', $locationTitle);
+        $this->set('locationProfile', $locationProfile);
+        $this->set('locationId', $locationId);
     }
 
     /**
