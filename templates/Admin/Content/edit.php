@@ -5,6 +5,7 @@
  * @var \App\Model\Entity\Content $content
  */
 use App\Model\Entity\Content;
+use Cake\Routing\Router;
  
 $this->Html->script('dist/content_edit.min', ['block' => true]);
 
@@ -73,7 +74,7 @@ if (empty($content->id)) {
 							                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 							                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 												if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {
-													echo $this->B3F->input('current_url', array('value' => Router::url($this->request->data['Content']['hh_url'], true), 'disabled' => false));
+													echo $this->Form->control('current_url', ['value' => Router::url($content->hh_url, true), 'disabled' => false]);
 												}
 												?>
 												<?php if (empty($content->is_active)): ?>

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use App\Model\Entity\Content;
+use Cake\Routing\Router;
 
 /**
  * Content Controller
@@ -149,10 +150,10 @@ class ContentController extends AppController
         $this->set(compact('content'));
         if (!empty($content->hh_url)) {
             $seoUrlSlug =  Router::url($this->Content->findForRedirectById($id));
-            $seoRedirect = $this->fetchTable('SeoRedirect')->find('all', [
-                'contain' => ['SeoUri'],
+            $seoRedirect = $this->fetchTable('SeoRedirects')->find('all', [
+                'contain' => ['SeoUris'],
                 'conditions' => [
-                    'SeoUri.uri' => $seoUrlSlug
+                    'SeoUris.uri' => $seoUrlSlug
                 ]
             ])->first();
             $this->set('seoRedirect', $seoRedirect);
