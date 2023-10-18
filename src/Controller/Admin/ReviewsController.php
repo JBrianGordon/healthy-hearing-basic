@@ -269,7 +269,7 @@ class ReviewsController extends AppController
         } catch (PersistenceFailedException $e) {
             $this->log($e->getMessage(), 'error');
             $this->Flash->error(
-                'Unable to delete selected reviews. Please contact a developer for assistance in troubleshooting.'
+                'Unable to approve selected reviews. Please contact a developer for assistance in troubleshooting.'
             );
 
             return $this->redirect(['action' => 'index']);
