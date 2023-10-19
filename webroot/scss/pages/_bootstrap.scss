@@ -1,3 +1,10 @@
+@font-face {
+  font-display: swap;
+  font-family: "bootstrap-icons";
+  src: url("./fonts/bootstrap-icons.woff2?2820a3852bdb9a5832199cc61cec4e65") format("woff2"),
+url("./fonts/bootstrap-icons.woff?2820a3852bdb9a5832199cc61cec4e65") format("woff");
+}
+
 .bs-component.hh-icons {
   text-align: center;
 
