@@ -76,7 +76,7 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                     <div class="col-md-9 col-md-offset-3">
                                                         <?php
                                                         if ($ipMatches['ipWarningsFound'] == true) {
-                                                            echo '<p><span class="label label-danger"><strong><span class="glyphicon glyphicon-ok"></span> IP warnings found</strong></span></p>';
+                                                            echo '<p><span class="badge bg-danger" id="ipWarning<?= $review->id; ?>"><strong><span class="bi bi-exclamation-triangle" style="font-size: 1.3rem;"></span> IP warnings</strong></span></p>';
                                                             echo '<ul>';
                                                             foreach ($ipMatches['loginMatches'] as $loginMatch) {
                                                                 $locationId = $loginMatch->user->locations[0]->id;
@@ -92,7 +92,7 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                             }
                                                             echo '</ul>';
                                                         } else {
-                                                            echo '<span class="label label-success"><strong><span class="glyphicon glyphicon-ok"></span> No IP warnings</strong></span>';
+                                                            echo '<span class="badge bg-success" id="ipSuccess<?= $review->id; ?>"><strong><span class="bi bi-check-lg" style="font-size: 1.3rem;"></span> No IP warnings</strong></span>';
                                                         }
                                                         ?>
                                                     </div>

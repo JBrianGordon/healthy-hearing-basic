@@ -117,12 +117,6 @@ class ReviewsTable extends Table
             'joinType' => 'LEFT',
         ]);
 
-        $this->hasOne('Zips', [
-            'foreignKey' => 'zip',
-            'bindingKey' => 'zip',
-            'propertyName' => 'reviewer_zip',
-        ]);
-
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
@@ -440,7 +434,7 @@ class ReviewsTable extends Table
     }
 
     public function findIpMatches($reviewId) {
-        $data['ipWarningsFound'] = [];
+        $data['ipWarningsFound'] = false;
         $reviewIp = $this->get($reviewId)->ip;
         if (!empty($reviewIp)) {
             // Login IP matches
@@ -450,7 +444,7 @@ class ReviewsTable extends Table
                     'ip' => $reviewIp
                 ])
                 ->order(['login_date' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['loginMatches'] = $loginMatches;
             // Review IP matches
             $reviewMatches = $this->find()
@@ -459,7 +453,7 @@ class ReviewsTable extends Table
                     'ip' => $reviewIp
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['reviewMatches'] = $reviewMatches;
             // LocationNote IP matches
             $noteMatches = $this->getTableLocator()->get('LocationNotes')->find()
@@ -467,9 +461,9 @@ class ReviewsTable extends Table
                     'body LIKE' => '%'.$reviewIp.'%'
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['noteMatches'] = $noteMatches;
-            if (!empty($loginMatches) || !empty($reviewMatches) || !empty($noteMatches)) {
+            if ($loginMatches !== [] || $reviewMatches !== [] || $noteMatches !== []) {
                 $data['ipWarningsFound'] = true;
             }
         }

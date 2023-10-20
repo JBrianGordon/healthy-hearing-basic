@@ -156,8 +156,8 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?= $this->element('locations/admin_review_body', ['review' => $review]) ?>
                                                                 <?php if (ReviewOrigin::from($review->origin) === ReviewOrigin::ORIGIN_ONLINE) : ?>
                                                                     <button type="button" class='btn btn-xs btn-default ipCheckBtn' data-id="<?= $review->id; ?>">Check for IP address warnings</button>
-                                                                    <span class="label label-success" style="display:none;" id="ipSuccess<?= $review->id; ?>"><strong><span class="glyphicon glyphicon-ok"></span> No IP warnings</strong></span>
-                                                                    <span class="label label-danger" style="display:none;" id="ipWarning<?= $review->id; ?>"><strong><span class="glyphicon glyphicon-warning-sign"></span> IP warning</strong></span>
+                                                                    <span class="badge bg-success" style="display:none;" id="ipSuccess<?= $review->id; ?>"><strong><span class="bi bi-check-lg" style="font-size: 1.3rem;"></span> No IP warnings</strong></span>
+                                                                    <span class="badge bg-danger" style="display:none;" id="ipWarning<?= $review->id; ?>"><strong><span class="bi bi-exclamation-triangle" style="font-size: 1.3rem;"></span> IP warnings</strong></span>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td>
