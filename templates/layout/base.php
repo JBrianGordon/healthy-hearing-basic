@@ -13,8 +13,6 @@
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="/font/bootstrap-icons.woff" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="/font/bootstrap-icons.woff2" as="font" type="font/woff" crossorigin>
 
     <?= $this->fetch('meta') ?>
     <!-- Above the fold CSS -->
@@ -61,7 +59,7 @@
     <?= $this->element('footer') ?>
     <?= $this->Html->css('responsive', ['rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"']); ?>
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
-    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
+    <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
     <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
 </body>
