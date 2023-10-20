@@ -72,6 +72,31 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                                     echo $this->Form->control('zip', ['label' => 'ZIP code']);
                                                     echo $this->Form->control('ip', ['disabled' => true]);
                                                 ?>
+                                                <div class="row">
+                                                    <div class="col-md-9 col-md-offset-3">
+                                                        <?php
+                                                        if ($ipMatches['ipWarningsFound'] == true) {
+                                                            echo '<p><span class="badge bg-danger" id="ipWarning<?= $review->id; ?>"><strong><span class="bi bi-exclamation-triangle" style="font-size: 1.3rem;"></span> IP warnings</strong></span></p>';
+                                                            echo '<ul>';
+                                                            foreach ($ipMatches['loginMatches'] as $loginMatch) {
+                                                                $locationId = $loginMatch->user->locations[0]->id;
+                                                                $date = date('Y-m-d', strtotime($loginMatch['login_date']));
+                                                                echo '<li>IP match found in clinic login dated '.$date.' for <a href="/admin/locations/edit/'.$locationId.'#User" target="_blank">location '.$locationId.'</a></li>';
+                                                            }
+                                                            foreach ($ipMatches['reviewMatches'] as $reviewMatch) {
+                                                                echo '<li>IP match found in <a href="/admin/reviews/edit/'.$reviewMatch['id'].'" target="_blank">review '.$reviewMatch['id'].'</a></li>';
+                                                            }
+                                                            foreach ($ipMatches['noteMatches'] as $noteMatch) {
+                                                                $date = date('Y-m-d', strtotime($noteMatch['created']));
+                                                                echo '<li>IP match found in note dated '.$date.' for <a href="/admin/locations/edit/'.$noteMatch['location_id'].'#Notes" target="_blank">location '.$noteMatch['location_id'].'</a></li>';
+                                                            }
+                                                            echo '</ul>';
+                                                        } else {
+                                                            echo '<span class="badge bg-success" id="ipSuccess<?= $review->id; ?>"><strong><span class="bi bi-check-lg" style="font-size: 1.3rem;"></span> No IP warnings</strong></span>';
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
                                                 <div class="col-sm-9 col-sm-offset-3 p0">
                                                     <?= $this->Form->control('is_spam') ?>
                                                 </div>

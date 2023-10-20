@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Log\LogTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\View\JsonView;
 
 /**
  * Reviews Controller
@@ -20,7 +21,7 @@ class ReviewsController extends AppController
     public $paginate = [
         'limit' => 50,
         'order' => ['created' => 'desc'],
-        'contain' => ['Zips', 'Locations'],
+        'contain' => ['Locations'],
     ];
 
     /**
@@ -35,6 +36,11 @@ class ReviewsController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+    }
+
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
     }
 
     /**
@@ -278,5 +284,20 @@ class ReviewsController extends AppController
         $this->Flash->success('Selected review(s) approved.');
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+    * Checks the IP address of a specific review for matches within other reviews, notes and logins.
+    */
+    public function checkIp($reviewId) {
+
+        $this->viewBuilder()->setLayout('ajax');
+
+        $data = $this->Reviews->findIpMatches($reviewId);
+
+        $this->set(compact('data'));
+        $this->viewBuilder()->setOption('serialize', 'data');
+
+        return;
     }
 }
