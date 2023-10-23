@@ -1,4 +1,4 @@
-<script src="https://cdn.tiny.cloud/1/8nnd708segowtbsh6yd6smkowrihsnb6cmviiyh4qpy7m9fu/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/wu3a6uyrxdnngas65ywopa04fomzngbm8e16wmw21ffr4vua/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -108,7 +108,7 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 <script>
 	tinymce.init({
 	  selector: '#body',
-	  plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
 	  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | insertfile link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
 	  tinycomments_mode: 'embedded',
@@ -116,7 +116,6 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	  mergetags_list: [
 	    { value: 'First.Name', title: 'First Name' },
 	    { value: 'Email', title: 'Email' },
-	  ],
-	  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+	  ]
 	});
 </script>
