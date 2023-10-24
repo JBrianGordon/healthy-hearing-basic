@@ -109,6 +109,12 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	tinymce.init({
 	  selector: '#body',
 	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  external_plugins: {
+		  "moxiemanager": "/moxiemanager/plugin.min.js"
+	  },
+	  moxiemanager_image_settings : { 
+		  view : 'thumbs'
+	  },
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
 	  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | insertfile link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
 	  tinycomments_mode: 'embedded',
@@ -116,6 +122,30 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	  mergetags_list: [
 	    { value: 'First.Name', title: 'First Name' },
 	    { value: 'Email', title: 'Email' },
-	  ]
+	  ],
+	  setup: function (editor) {
+
+	    function wrapImageInFigure(image) {
+	    	let imgParent = image.parentNode;
+	    	if(!imgParent.classList.contains("image")){
+		      const figure = document.createElement('figure');
+		      const figCap = document.createElement('figcaption');
+		      figure.setAttribute("class","image img-responsive pull-right");
+		      figCap.setAttribute("contenteditable", true);
+		      figCap.innerHTML = "Edit caption";
+		      figure.appendChild(image.cloneNode(true));
+		      figure.appendChild(figCap);
+		      image.parentNode.replaceChild(figure, image);
+	    	}
+	    }
+
+	    editor.on('NodeChange', function (e) {
+	      const node = e.element;
+
+	      if (node && node.tagName === 'IMG') {
+	        wrapImageInFigure(node);
+	      }
+	    });
+	  }
 	});
 </script>
