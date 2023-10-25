@@ -116,7 +116,8 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 		  view : 'thumbs'
 	  },
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
-	  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | insertfile link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+	  toolbar: 'code blocks | bold italic link bullist numlist checklist subscript superscript underline | insertfile blockquote table media align searchreplace| removeformat charmap forecolor fontfamily fontsize hr tinycomments',
+	  toolbar_mode: 'wrap',
 	  tinycomments_mode: 'embedded',
 	  tinycomments_author: 'Author name',
 	  mergetags_list: [
@@ -126,7 +127,7 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	  setup: function (editor) {
 
 	    function wrapImageInFigure(image) {
-	    	let imgParent = image.parentNode;
+	    	const imgParent = image.parentNode;
 	    	if(!imgParent.classList.contains("image")){
 		      const figure = document.createElement('figure');
 		      const figCap = document.createElement('figcaption');
