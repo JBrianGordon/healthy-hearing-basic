@@ -1,4 +1,4 @@
-<script src="https://cdn.tiny.cloud/1/8nnd708segowtbsh6yd6smkowrihsnb6cmviiyh4qpy7m9fu/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/wu3a6uyrxdnngas65ywopa04fomzngbm8e16wmw21ffr4vua/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -108,15 +108,45 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 <script>
 	tinymce.init({
 	  selector: '#body',
-	  plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  external_plugins: {
+		  "moxiemanager": "/moxiemanager/plugin.min.js"
+	  },
+	  moxiemanager_image_settings : { 
+		  view : 'thumbs'
+	  },
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
-	  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | insertfile link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+	  toolbar: 'code blocks | bold italic link bullist numlist checklist subscript superscript underline | insertfile blockquote table media align searchreplace| removeformat charmap forecolor fontfamily fontsize hr tinycomments',
+	  toolbar_mode: 'wrap',
 	  tinycomments_mode: 'embedded',
 	  tinycomments_author: 'Author name',
 	  mergetags_list: [
 	    { value: 'First.Name', title: 'First Name' },
 	    { value: 'Email', title: 'Email' },
 	  ],
-	  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+	  setup: function (editor) {
+
+	    function wrapImageInFigure(image) {
+	    	const imgParent = image.parentNode;
+	    	if(!imgParent.classList.contains("image")){
+		      const figure = document.createElement('figure');
+		      const figCap = document.createElement('figcaption');
+		      figure.setAttribute("class","image img-responsive pull-right");
+		      figCap.setAttribute("contenteditable", true);
+		      figCap.innerHTML = "Edit caption";
+		      figure.appendChild(image.cloneNode(true));
+		      figure.appendChild(figCap);
+		      image.parentNode.replaceChild(figure, image);
+	    	}
+	    }
+
+	    editor.on('NodeChange', function (e) {
+	      const node = e.element;
+
+	      if (node && node.tagName === 'IMG') {
+	        wrapImageInFigure(node);
+	      }
+	    });
+	  }
 	});
 </script>
