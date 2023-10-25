@@ -128,11 +128,13 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
 	    function wrapImageInFigure(image) {
 	    	const imgParent = image.parentNode;
+	    	const imageWidth = image.getAttribute("width");
 	    	if(!imgParent.classList.contains("image")){
 		      const figure = document.createElement('figure');
 		      const figCap = document.createElement('figcaption');
 		      figure.setAttribute("class","image img-responsive pull-right");
 		      figCap.setAttribute("contenteditable", true);
+		      figCap.setAttribute("style", `max-width:${imageWidth}px`);
 		      figCap.innerHTML = "Edit caption";
 		      figure.appendChild(image.cloneNode(true));
 		      figure.appendChild(figCap);
