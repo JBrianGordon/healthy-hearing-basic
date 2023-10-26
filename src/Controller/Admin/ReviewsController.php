@@ -259,29 +259,58 @@ class ReviewsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * Multiple review approval method
-     *
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     */
-    public function approveAll()
+    public function massAction()
     {
         $this->request->allowMethod(['post']);
 
         $ids = $this->request->getData('ids');
 
-        try {
-            $this->Reviews->approveAll($ids);
-        } catch (PersistenceFailedException $e) {
-            $this->log($e->getMessage(), 'error');
+        $massAction = $this->request->getData('massAction');
+
+        if ($ids === [] || $ids === null) {
+            $desiredAction = ($massAction === 'approveAllSelected') ? 'approved' : 'deleted';
             $this->Flash->error(
-                'Unable to approve selected reviews. Please contact a developer for assistance in troubleshooting.'
+                "No reviews were selected, so none were {$desiredAction}."
             );
 
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->Flash->success('Selected review(s) approved.');
+        if ($massAction === 'approveAllSelected') {
+            try {
+                $this->Reviews->approveAllSelected($ids);
+            } catch (PersistenceFailedException $e) {
+                $this->log($e->getMessage(), 'error');
+                $badEntity = $e->getEntity();
+                $this->Flash->error(
+                    'Unable to approve selected reviews. Please contact a developer for assistance in troubleshooting. The failing Review ID is ' . $badEntity
+                );
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->success('Selected review(s) approved.');
+
+            return $this->redirect(['action' => 'index']);
+        } elseif ($massAction === 'deleteAllSelected') {
+            try {
+                $this->Reviews->deleteAllSelected($ids);
+            } catch (PersistenceFailedException $e) {
+                $this->log($e->getMessage(), 'error');
+                $badEntity = $e->getEntity();
+                $this->Flash->error(
+                    'Unable to delete selected reviews. Please contact a developer for assistance in troubleshooting. The failing Review ID is ' . $badEntity
+                );
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->success('Selected review(s) deleted.');
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Flash->error('Mass action failed.');
 
         return $this->redirect(['action' => 'index']);
     }

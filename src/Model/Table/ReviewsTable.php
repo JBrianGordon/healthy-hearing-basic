@@ -36,7 +36,6 @@ use Search\Model\Filter\Base;
  * @method \App\Model\Entity\Review saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -351,10 +350,6 @@ class ReviewsTable extends Table
                 'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
             };
         };
-
-        // averageRating()
-        // updateReviewCount()
-        // updateReviewStatus()
     }
 
     /**
@@ -391,32 +386,32 @@ class ReviewsTable extends Table
      * @param array $ids Array of Review ids to be approved
      * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
      */
-    public function approveAll(array $ids)
+    public function approveAllSelected(array $ids)
     {
         $reviews = $this->find()
             ->where(['id IN' => $ids])
-            ->toList();
+            ->all();
 
-        // Create patch data array of Review ids and APPROVED statuses
-        $patchData = array_fill(0, count($ids), ['status' => ReviewStatus::APPROVED->value]);
-        foreach ($patchData as $key => &$entityData) {
-            $entityData = array_merge(
-                [
-                    'id' => $reviews[$key]->id,
-                ],
-                $entityData
-            );
+        foreach ($reviews as $review) {
+            $review->status = ReviewStatus::APPROVED->value;
         }
 
-        $patchedEntities = $this->patchEntities(
-            $reviews,
-            $patchData,
-            [
-                'fields' => ['status'],
-            ]
-        );
+        return $this->saveManyOrFail($reviews);
+    }
 
-        return $this->saveManyOrFail($patchedEntities);
+    /**
+     * Delete-all function for Reviews
+     *
+     * @param array $ids Array of Review ids to be deleted
+     * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
+     */
+    public function deleteAllSelected(array $ids)
+    {
+        $reviews = $this->find()
+            ->where(['id IN' => $ids])
+            ->all();
+
+        return $this->deleteManyOrFail($reviews);
     }
 
     /**

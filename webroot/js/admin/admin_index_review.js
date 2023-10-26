@@ -44,18 +44,4 @@ document.addEventListener('DOMContentLoaded', () => {
 			checkbox.checked = checkAllCheckbox.checked;
 		});
 	});
-
-	// Mass Delete Button
-	const massDeleteButton = document.querySelector('#mass_delete');
-	massDeleteButton.addEventListener('click', () => {
-		document.querySelector('#mass_delete_bool').value = '1';
-		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
-	});
-
-	// Mass Approve Button
-	const massApproveButton = document.querySelector('#mass_approve');
-	massApproveButton.addEventListener('click', () => {
-		document.querySelector('#mass_delete_bool').value = '0';
-		document.querySelector('#ReviewForm').dispatchEvent(new Event('submit'));
-	});
 });

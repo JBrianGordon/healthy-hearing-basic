@@ -1347,9 +1347,6 @@ class LocationsTable extends Table
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
                     ],
-                    'Zips' => [
-                        'fields' => ['city','state']
-                    ],
                 ]
             ]
         ])->first();
