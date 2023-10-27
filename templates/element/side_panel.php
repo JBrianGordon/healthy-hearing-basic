@@ -20,15 +20,6 @@ if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
 
 //Preferred clinics panel
 $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
-
-//Corp page display
-if($controller == 'Corps' && !$isMobileDevice){
-	$facDisplay = "8";
-	$reportDisplay = "9";
-} else {
-	$facDisplay = "9";
-	$reportDisplay = "8";
-}
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
@@ -83,7 +74,7 @@ if($controller == 'Corps' && !$isMobileDevice){
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 	<?php if (!empty($articles) && empty($wiki)): ?>
-		<section class="panel panel-light blog-previews" style="order:<?= $reportDisplay ?>">
+		<section class="panel panel-light blog-previews" style="order:8">
 			<header class="panel-heading text-center">
 				<h4>The Healthy Hearing Report</h4>
 			</header>
@@ -102,7 +93,7 @@ if($controller == 'Corps' && !$isMobileDevice){
 			<?php endforeach; ?>
 		</section>
 	<?php endif; ?>
-	<section class="panel panel-secondary" style="order:<?= $facDisplay ?>">
+	<section class="panel panel-secondary" style="order:9">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
 		</header>
