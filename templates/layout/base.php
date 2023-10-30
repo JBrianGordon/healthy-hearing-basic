@@ -3,10 +3,10 @@
  * @var \App\View\AppView $this
  */
 
-$countryCode = $_SESSION['geoLocData']['country'];
+use Cake\Core\Configure;
 ?>
 <!DOCTYPE html>
-<html lang="en-<?= $countryCode ?>">
+<html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
