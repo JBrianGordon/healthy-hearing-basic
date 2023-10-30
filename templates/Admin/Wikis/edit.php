@@ -108,13 +108,15 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 <script>
 	tinymce.init({
 	  selector: '#body',
-	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
-	  external_plugins: {
-		  "moxiemanager": "/moxiemanager/plugin.min.js"
-	  },
-	  moxiemanager_image_settings : { 
-		  view : 'thumbs'
-	  },
+	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media quickbars searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  // external_plugins: {
+	// 	  "moxiemanager": "/moxiemanager/plugin.min.js"
+	  // },
+	  // moxiemanager_image_settings : { 
+	// 	  view : 'thumbs'
+	  // },
+	  quickbars_image_toolbar: 'alignleft aligncenter alignright',
+	  quickbars_insert_toolbar: false,
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
 	  toolbar: 'code blocks | bold italic link bullist numlist checklist subscript superscript underline | insertfile blockquote table media align searchreplace| removeformat charmap forecolor fontfamily fontsize hr tinycomments',
 	  toolbar_mode: 'wrap',
@@ -126,26 +128,49 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	  ],
 	  setup: function (editor) {
 
-	    function wrapImageInFigure(image) {
-	    	const imgParent = image.parentNode;
-	    	const imageWidth = image.getAttribute("width");
-	    	if(!imgParent.classList.contains("image")){
-		      const figure = document.createElement('figure');
-		      const figCap = document.createElement('figcaption');
-		      figure.setAttribute("class","image img-responsive pull-right");
-		      figCap.setAttribute("contenteditable", true);
-		      figCap.setAttribute("style", `max-width:${imageWidth}px`);
-		      figCap.innerHTML = "Edit caption";
-		      figure.appendChild(image.cloneNode(true));
-		      figure.appendChild(figCap);
-		      image.parentNode.replaceChild(figure, image);
-	    	}
+	    function wrapImageInFigure(node) {
+	    	if(node.tagName == "IMG"){
+		    	const imgParent = node.parentNode;
+		    	const imageWidth = node.width;
+		    	//Wrap image in a figure and set classes and element widths if image is new
+		    	if(!imgParent.classList.contains("image")){
+			      const figure = document.createElement('figure');
+			      const figCap = document.createElement('figcaption');
+			      figure.setAttribute("class","image img-responsive pull-right");
+			      figCap.setAttribute("contenteditable", true);
+			      figCap.setAttribute("style", `max-width:${imageWidth}px`);
+			      figCap.innerHTML = "Edit caption";
+			      figure.appendChild(node.cloneNode(true));
+			      figure.appendChild(figCap);
+			      node.parentNode.replaceChild(figure, node);
+		    	} 
+		    	//Update caption max width and image alignment if image changed
+		    	else if(node.hasAttribute("style")){
+		    		const imageFloat = node.getAttribute("style");
+		    		const figCap = node.nextSibling;
+		    		figCap.setAttribute("style", `max-width:${imageWidth}px`);
+		    		imgParent.setAttribute("style", imageFloat);
+		    	}
+		    } else {
+		    	const image = node.querySelector("img");
+		    	const figCap = node.querySelector("figcaption");
+		    	const imageWidth = image.width;
+		    	let imageFloat = "float:none";
+
+		    	if(node.classList.contains("align-left")){
+		    		imageFloat = "float:left";
+		    	} else if (node.classList.contains("align-right")){
+		    		imageFloat = "float:right";
+		    	}
+	    		node.setAttribute("style", imageFloat);
+	    		figCap.setAttribute("style", `max-width:${imageWidth}px`);
+		    }
 	    }
 
 	    editor.on('NodeChange', function (e) {
 	      const node = e.element;
 
-	      if (node && node.tagName === 'IMG') {
+	      if (node && (node.tagName === 'IMG' || node.tagName === 'FIGURE')) {
 	        wrapImageInFigure(node);
 	      }
 	    });
