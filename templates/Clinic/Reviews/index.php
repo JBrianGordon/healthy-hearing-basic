@@ -5,7 +5,7 @@ use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewStatus;
 
 $siteUrl = Configure::read('siteUrl');
-$shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
+$shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
 ?>
 <div class="container-fluid site-body">
     <div class="row">
@@ -23,7 +23,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>
                                             <h3 class="text-center">FOR CHOOSING</h3>
-                                            <h4 class="text-center clinic-name"><?= $locationTitle ?></h4>
+                                            <h4 class="text-center clinic-name"><?= $location->title ?></h4>
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
@@ -34,7 +34,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>
                                             <h3 class="text-center">FOR CHOOSING</h3>
-                                            <h4 class="text-center clinic-name"><?= $locationTitle ?></h4>
+                                            <h4 class="text-center clinic-name"><?= $location->title ?></h4>
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
@@ -47,7 +47,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>
                                             <h3 class="text-center">FOR CHOOSING</h3>
-                                            <h4 class="text-center clinic-name"><?= $locationTitle ?></h4>
+                                            <h4 class="text-center clinic-name"><?= $location->title ?></h4>
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
@@ -58,7 +58,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>
                                             <h3 class="text-center">FOR CHOOSING</h3>
-                                            <h4 class="text-center clinic-name"><?= $locationTitle ?></h4>
+                                            <h4 class="text-center clinic-name"><?= $location->title ?></h4>
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
@@ -68,7 +68,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                 </div>
                                 <div class="noprint">
                                     <h1 class="noprint">Reviews</h1>
-                                    <?php if ($isAdmin && !isset($locationId)): ?>
+                                    <?php if ($isAdmin && !isset($location->id)): ?>
                                         <?= $this->Form->create($reviews) ?>
                                             <div class="row noprint">
                                                 <div class="col col-lg-6">
@@ -80,10 +80,10 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                             </div>
                                         </form>
                                     <?php endif; ?>
-                                    <?php if (isset($locationId)): ?>
+                                    <?php if (isset($location->id)): ?>
                                         <?php
                                             $options = [
-                                                'url' => [$locationId],
+                                                'url' => [$location->id],
                                             ];
                                             $this->Paginator->options($options);
                                         ?>
@@ -91,7 +91,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                         <table class="table table-striped table-bordered white-background table-condensed noprint">
                                         <?php if(Configure::read('country') == 'US') : ?>
                                             <p class="mb0">Link to your Healthy Hearing profile on your clinic website to get more reviews!</p>
-                                            <button id="copyLink" class="btn btn-light mb20" value="<?php echo $locationProfile; ?>">Copy link</button>
+                                            <button id="copyLink" class="btn btn-light mb20" value="<?= Router::url($location->hh_url, true) ?>">Copy link</button>
                                         <?php endif; ?>
                                             <tr>
                                                 <th style="min-width:115px"><?php echo $this->Paginator->sort('created', 'Date') ?></th>
@@ -125,13 +125,13 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $locationId;
                                                         <?php
                                                         if (!empty($review->response)) {
                                                             echo $this->Html->link('Edit response',
-                                                                ['action' => 'respond', $review->id, $locationId], ['class' => 'btn btn-primary']);
+                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-primary']);
                                                         } else if ($review->status == ReviewStatus::DENIED) {
                                                             echo $this->Html->link('Response needed',
-                                                                ['action' => 'respond', $review->id, $locationId], ['class' => 'btn btn-secondary']);
+                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-secondary']);
                                                         } else {
                                                             echo $this->Html->link('Write a response',
-                                                                ['action' => 'respond', $review->id, $locationId], ['class' => 'btn btn-primary']);
+                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-primary']);
                                                         }
                                                         ?>
                                                     </td>

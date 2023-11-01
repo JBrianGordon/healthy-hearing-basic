@@ -184,7 +184,19 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <div id="quickButtons">
                                                 <a href="#providers" class="btn btn-light">Edit staff</a>
                                                 <a href="#hoursOfOperation" class="btn btn-light">Edit hours</a>
-                                                <a href="/clinic/reviews" class="btn btn-light">Reviews</a>
+                                                <?php
+                                                    echo $this->Html->link(
+                                                        'Reviews',
+                                                        [
+                                                            'prefix' => 'Clinic',
+                                                            'controller' => 'Reviews',
+                                                            'action' => 'index',
+                                                            $location['id']
+                                                        ],
+                                                        ['class' => 'btn btn-light']
+                                                    );
+                                                ?>
+
                                                 <a href="/clinic/ca_call_groups/report" class="btn btn-light">Call reports</a>
                                                 <a href="/clinic/pages/faq" class="btn btn-light">FAQ</a>
                                                 <?= $this->Html->link('View my profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-light']) ?>
