@@ -82,9 +82,9 @@ if (empty($content->id)) {
 														<label class="col col-md-3 control-label">Redirects To:</label>
 														<div class="col col-md-9" style="padding:8px 12px;">
 															<?php if (!empty($seoRedirect)): ?>
-																<?php echo Router::url($seoRedirect->redirect, true); ?>
+																<?= Router::url($seoRedirect->redirect, true) ?>
 															<?php else: ?>
-																<?php echo $this->Html->link('Create Redirect', ['controller'=>'seo', 'admin' => true, 'action' => 'seo_redirects', 'edit']); ?>
+																<?= $this->Html->link('Create Redirect', ['controller'=>'seo', 'admin' => true, 'action' => 'seo_redirects', 'edit']) ?>
 															<?php endif; ?>
 														</div>
 													</div>
@@ -141,9 +141,7 @@ if (empty($content->id)) {
 								                        ?>
 								                        <div class="row">
     														<div class="col-sm-9 col-sm-offset-3">
-									                        <?php
-									                            echo $this->Form->control('facebook_image_width_override', ['type' => 'checkbox', 'label' => 'Bypass image selection, width and alt text errors']);
-									                        ?>
+									                        <?= $this->Form->control('facebook_image_width_override', ['type' => 'checkbox', 'label' => 'Bypass image selection, width and alt text errors'])?>
 										                    </div>
 										                </div>
 										                <?php
@@ -154,29 +152,20 @@ if (empty($content->id)) {
 							                        	?>
 														<hr>
 														<h3>Additional Authors</h3>
-														<?php echo $this->Form->control('Contributor', [
-															'label' => false,
-															'options' => $authors,
-															'multiple' => 'checkbox',
-															'class' => 'pull-left col-md-4',
-															'wrapInput' => 'col-md-12'
-														]); ?>
+														<?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
 														<hr>
 														<h3>Help Page Tags</h3>
-														<?php echo $this->Form->control('Wikis.Tags', [
-															'label' => false,
-															'options' => $tags,
-															'multiple' => 'checkbox',
-															'class' => 'pull-left col-md-4',
-															'wrapInput' => 'col-md-12',
-															'escape' => false
-														]); ?>
+														<?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
 								                    </div>
 								                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
-								                        <?php
-								                            echo $this->Form->control('last_modified', ['empty' => true]);
-								                            echo $this->Form->control('created');
-								                        ?>
+								                    	<div class="row">
+								                    		<strong class="col-sm-3 tar">Date last saved</strong>
+									                        <p class="col-sm-9"><?= date('F j, Y', strtotime($content->last_modified)) ?></p>
+									                    </div>
+									                    <div class="row">
+									                    	<strong class="col-sm-3 tar">Date created</strong>
+									                    	<p class="col-sm-9"><?= date('F j, Y', strtotime($content->created)) ?></p>
+									                    </div>
 								                    </div>
 								                </div>
 								
