@@ -78,24 +78,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const moreReviewsContainer = document.getElementById("more-reviews");
 	if(moreReviewsContainer){
-		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
+		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll(".well"));
 
 		hiddenReviews.forEach(review => {
 		  review.classList.add("hidden-review");
 		});
 
+		const moreReviewsButton = document.getElementById("more-reviews-button");
+		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
 		let hiddenRevNum = hiddenReviewElements.length;
+		let hiddenIndex = 0;
 
-		const moreReviewsButton = document.getElementById("more-reviews-button");
 		moreReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		  fewerReviewsButton.style.display = "block";
 
 		  for (let i = 0; i < 5; i++) {
-		    hiddenReviewElements[0].classList.remove("hidden-review");
+		    hiddenReviewElements[hiddenIndex].classList.remove("hidden-review");
 		    hiddenRevNum--;
+		    hiddenIndex++;
 
 		    if (hiddenRevNum === 0) {
 		      moreReviewsButton.style.display = "none";
@@ -109,15 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		  return false;
 		});
 
-		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		fewerReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const moreReviewsContainer = document.getElementById("more-reviews");
 		  moreReviewsContainer.style.display = "none";
+		  hiddenIndex = 0;
 
 		  this.style.display = "none";
 
-		  const moreReviewsButton = document.getElementById("more-reviews-button");
 		  moreReviewsButton.style.display = "block";
 
 		  window.scrollTo({

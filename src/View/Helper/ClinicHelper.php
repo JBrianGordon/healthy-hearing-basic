@@ -588,8 +588,8 @@ class ClinicHelper extends Helper
                 }
 
             }
-            if ($location->is_evening_weekend_hours) {
-                $retval .= "<tr><td colspan=\"2\">Evening and/or weekend hours available by appointment. Please call to schedule.</td></tr>";
+            if ($hours->is_evening_weekend_hours) {
+                $retval .= "<tr style='border-bottom-color:transparent'><td colspan=\"2\">Evening and/or weekend hours available by appointment. Please call to schedule.</td></tr>";
             }
         }
         if (!empty($retval)) {

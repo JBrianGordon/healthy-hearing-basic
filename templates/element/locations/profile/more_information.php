@@ -21,7 +21,7 @@
 				<?php if ($about): ?>
 						<div class="about-container">
 						<?php if ($slogan): ?>
-							<div class="slogan"><?php /*** TODO: uncomment when getSlogan built in clinic helper***: echo $this->Clinic->getSlogan($location);*/ ?></div>
+							<div class="slogan"><?= $location->slogan ?></div>
 						<?php endif; ?>
 						<?php echo $about; ?>
 						</div>
