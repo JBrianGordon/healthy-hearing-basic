@@ -159,7 +159,7 @@ class LocationsController extends AppController
         $requestParams = $this->request->getQueryParams();
         $options = [
             'search' => $requestParams,
-            'contain' => ['LocationUsers', 'LocationEmails', 'Providers'],
+            'contain' => ['Users', 'LocationEmails', 'Providers'],
         ];
         // TODO: So far, this seems to work okay even for larger exports.
         //     : But in Cake2 we sent large exports to the queue. Do we need to do the same?
