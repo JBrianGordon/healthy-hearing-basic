@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Controller\Clinic;
+
+use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
 use Cake\Routing\Router;
 
@@ -22,48 +24,31 @@ class ReviewsController extends BaseClinicController
     /**
      * Show reviews for clinic
      */
-    public function index($username = null)
+    public function index($locationId = null)
     {
-        //Force recovery email to be filled out.
-        if (!$this->hasRecoveryEmail()) {
-            $this->Flash->error('You must first fill out your email to continue. ↓');
-            $this->redirect(['controller' => 'users', 'action' => 'account']);
-        }
-        //Only allow you to set the oticon_id if we're admin, otherwise we always pull from our username
-        if (!$this->isAdmin) {
-            $username = $this->user->username;
-        } else {
-            // Only set our username if it wasn't passed in.  This only works for admins.
-            if (empty($username)) {
-                $username = !empty($this->request->getData('username')) ? $this->request->getData('username') : null;
-            }
-        }
 
-        $this->Locations = $this->fetchTable('Locations');
-        $locationId = $this->Locations->findByUsername($username);
+        // TO-DO: SHOULD WE DO THIS EMAIL REQUIRING SOMEWHERE ELSE?
+        // //Force recovery email to be filled out.
+        // if (!$this->hasRecoveryEmail()) {
+        //     $this->Flash->error('You must first fill out your email to continue. ↓');
+        //     $this->redirect(['controller' => 'users', 'action' => 'account']);
+        // }
 
-        $reviews = null;
-        $locationTitle = null;
-        $locationProfile = null;
-        if (!empty($locationId)) {
-            $reviews = $this->paginate('Reviews', [
-                'conditions' => [
-                    'Reviews.location_id' => $locationId,
-                    'Reviews.status IN' => [
-                        Review::STATUS_APPROVED,
-                        Review::STATUS_DENIED
-                    ],
+        $reviews = $this->paginate('Reviews', [
+            'contain' => ['Locations'],
+            'conditions' => [
+                'Reviews.location_id' => $locationId,
+                'Reviews.status IN' => [
+                    Review::STATUS_APPROVED,
+                    Review::STATUS_DENIED
                 ],
-            ]);
-            $location = $this->Locations->get($locationId);
-            $locationTitle = $location->title;
-            $locationProfile = Router::url($location->hh_url, true);
-        }
+            ],
+        ]);
+
+        $location = $this->Reviews->Locations->get($locationId);
 
         $this->set('reviews', $reviews);
-        $this->set('locationTitle', $locationTitle);
-        $this->set('locationProfile', $locationProfile);
-        $this->set('locationId', $locationId);
+        $this->set('location', $location);
     }
 
     /**
@@ -78,8 +63,16 @@ class ReviewsController extends BaseClinicController
         $review = $this->Reviews->get($id, [
             'contain' => [],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $review = $this->Reviews->patchEntity($review, $this->request->getData());
+
+            // Set response_status to RESPONSE_STATUS_RESPONDED if current status is RESPONSE_STATUS_NONE
+            $isCurrentResponseNone = $review->getOriginal('response_status') === ReviewResponseStatus::RESPONSE_STATUS_NONE->value;
+            if ($review->isDirty('response') && $isCurrentResponseNone) {
+                $review->response_status = ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value;
+            }
+
             if ($this->Reviews->save($review)) {
                 $this->Flash->success(__('The review has been saved.'));
 
