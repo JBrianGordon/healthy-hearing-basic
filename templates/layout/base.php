@@ -12,6 +12,7 @@ use Cake\Core\Configure;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Healthy Hearing</title>
     <?= $this->Html->meta('icon') ?>
+    <?= $this->element('google_tag_manager') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
@@ -63,7 +64,7 @@ use Cake\Core\Configure;
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
     <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
-    <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
+    <?= $this->element('cookie_footer') ?>
 </body>
 <?= $this->fetch('script') ?>
 </html>
