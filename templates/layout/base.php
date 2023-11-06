@@ -12,7 +12,7 @@ use Cake\Core\Configure;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Healthy Hearing</title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->element('google_tag_manager') ?>
+    <?= $this->element('google_tag_manager_head') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
@@ -54,6 +54,7 @@ use Cake\Core\Configure;
     ?>
 </head>
 <body>
+    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
