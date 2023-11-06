@@ -53,7 +53,6 @@ if (empty($content->id)) {
 					<section class="panel">
 						<div class="panel-body">
 							<div class="panel-section expanded">
-								<h2><?= empty($content->id) ? "Add Report" : "Edit Report" ?></h2>
 								<?php if($isDraft): ?>
 									<div class="alert alert-warning" role="alert">
 										This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->draft_parent_id], ['target' => '_blank']) ?>.
@@ -70,7 +69,7 @@ if (empty($content->id)) {
 							                    echo $this->Form->control('title');
 							                    echo $this->Form->control('subtitle');
 							                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
-							                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true]);
+							                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true, 'type' => 'date', 'dateFormat' => 'MDY',]);
 							                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 							                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 												if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {
