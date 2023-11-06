@@ -9,19 +9,20 @@ use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
-$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Html->script('dist/clinic.min.js', ['block' => true]);
 ?>
 <?php
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
 $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
-$firstProvider = empty($location->location_providers[0]) ? null : $location->location_providers[0];
-$hideProvider = empty($firstProvider->provider->title) && empty($firstProvider->provider->credentials) && empty($firstProvider->provider->thumb_url) && empty($firstProvider->provider->description);
+$firstProvider = empty($location->providers[0]) ? null : $location->providers[0];
+$hideProvider = empty($firstProvider->title) && empty($firstProvider->credentials) && empty($firstProvider->thumb_url) && empty($firstProvider->description);
 $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 $this->Breadcrumbs->add([
+	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
     ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
     ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'viewCityZip', 'region' => $region, 'city' => $city]],
@@ -84,7 +85,7 @@ $this->Breadcrumbs->add([
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
 												<div class="telephone h2 bi bi-telephone-fill">
@@ -593,27 +594,7 @@ $this->Breadcrumbs->add([
 									</div>
 								</div>
 							<?php endif; ?>
-				
-							<!-- Affiliations -->
-							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $isMobileDevice): ?>
-								<div id="affiliates" class="panel panel-light text-center">
-									<header class="panel-heading text-center">
-										<h2>Affiliations</h2>
-									</header>
-									<div class="panel-body">
-										<div class="panel-section condensed">
-											<div class="col-sm-4">
-												<img loading="lazy" class="earq-affiliate-img" src="/img/earq-hearstrong.jpg" alt="Clinic affiliations" width="300" height="42">
-											</div>
-											<p class="earq-blurb col-sm-8 tal">We are a proud partner of HearStrong, an organization that spreads hearing loss awareness and provides hearing aids to those in need.</p>
-											<div class="col-sm-4">
-												<img loading="lazy" class="earq-affiliate-img" src="/img/nflpa-cq.png" alt="Clinic affiliations" width="300" height="84">
-											</div>
-											<p class="earq-blurb col-sm-8 tal">We are preferred providers of the NFL Players Association’s Professional Athletes Foundation. Our goal is to bring better hearing to former professional athletes and fit them with the hearing technology they need.</p>
-										</div>
-									</div>
-								</div>
-							<?php endif; ?>
+
 							<?php if ($isMobileDevice) {
 								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
@@ -689,8 +670,7 @@ $this->Breadcrumbs->add([
 							if(!$hideProvider) {
 								
 								$businessSchema .= ', "employee": [';
-								foreach ($location->location_providers as $key => $loocationProvider) {
-									$provider = $loocationProvider->provider;
+								foreach ($location->providers as $key => $provider) {
 									$businessSchema .=  '{"@type": "Person",';
 									
 									if(!empty($provider->thumb_url)) {
@@ -708,7 +688,7 @@ $this->Breadcrumbs->add([
 									
 									$businessSchema .= '"name": "' . htmlentities(strip_tags($provider->first_name . ' ' . $provider->last_name)) . '"';
 									
-									if ($key + 1 >= count($location->location_providers)){
+									if ($key + 1 >= count($location->providers)){
 										$comma =  '';
 									} else {
 										$comma = ',';

@@ -160,6 +160,22 @@
 	.form-group{
 		display: flex;
 
+		&.multicheckbox{
+			flex-wrap: wrap;
+
+			.form-check {
+  			flex: 0 0 33.33%;
+  			box-sizing: border-box;
+
+  			.form-check-label{
+  				width: auto;
+  				float: none;
+  				padding-left: 30px;
+  				text-align: left;
+  			}
+			}
+		}
+
 		@media(max-width: $screen-sm-max){
 			flex-direction: column;
 

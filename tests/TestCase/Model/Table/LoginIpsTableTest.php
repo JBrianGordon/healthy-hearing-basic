@@ -26,7 +26,7 @@ class LoginIpsTableTest extends TestCase
     protected $fixtures = [
         'app.LoginIps',
         'app.Users',
-        'app.LocationUsers',
+        'app.LocationsUsers',
     ];
 
     /**

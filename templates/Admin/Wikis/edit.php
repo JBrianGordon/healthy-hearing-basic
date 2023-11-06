@@ -108,16 +108,19 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 <script>
 	tinymce.init({
 	  selector: '#body',
-	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
-	  external_plugins: {
-		  "moxiemanager": "/moxiemanager/plugin.min.js"
-	  },
-	  moxiemanager_image_settings : { 
-		  view : 'thumbs'
-	  },
+	  plugins: 'tinycomments mentions anchor autolink charmap codesample emoticons image link lists media quickbars searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker tinydrive autocorrect a11ychecker typography inlinecss',
+	  // external_plugins: {
+	// 	  "moxiemanager": "/moxiemanager/plugin.min.js"
+	  // },
+	  // moxiemanager_image_settings : { 
+	// 	  view : 'thumbs'
+	  // },
+	  quickbars_image_toolbar: 'alignleft aligncenter alignright',
+	  quickbars_insert_toolbar: false,
 	  tinydrive_token_provider: `${window.location.origin}/endpoints/tinymce_endpoint`,
 	  toolbar: 'code blocks | bold italic link bullist numlist checklist subscript superscript underline | insertfile blockquote table media align searchreplace| removeformat charmap forecolor fontfamily fontsize hr tinycomments',
 	  toolbar_mode: 'wrap',
+	  image_caption: true,
 	  tinycomments_mode: 'embedded',
 	  tinycomments_author: 'Author name',
 	  mergetags_list: [
@@ -126,27 +129,21 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 	  ],
 	  setup: function (editor) {
 
-	    function wrapImageInFigure(image) {
-	    	const imgParent = image.parentNode;
-	    	const imageWidth = image.getAttribute("width");
-	    	if(!imgParent.classList.contains("image")){
-		      const figure = document.createElement('figure');
-		      const figCap = document.createElement('figcaption');
-		      figure.setAttribute("class","image img-responsive pull-right");
-		      figCap.setAttribute("contenteditable", true);
-		      figCap.setAttribute("style", `max-width:${imageWidth}px`);
-		      figCap.innerHTML = "Edit caption";
-		      figure.appendChild(image.cloneNode(true));
-		      figure.appendChild(figCap);
-		      image.parentNode.replaceChild(figure, image);
+	    function figCapWidth(node) {
+	    	if(node.getAttribute("style") != null){
+	    		node.removeAttribute("style");
 	    	}
+	    	const image = node.querySelector("img");
+	    	const figCap = node.querySelector("figcaption");
+	    	const imageWidth = image.width;
+    		figCap.setAttribute("style", `max-width:${imageWidth}px`);
 	    }
 
 	    editor.on('NodeChange', function (e) {
 	      const node = e.element;
 
-	      if (node && node.tagName === 'IMG') {
-	        wrapImageInFigure(node);
+	      if (node && node.tagName === 'FIGURE') {
+	        figCapWidth(node);
 	      }
 	    });
 	  }

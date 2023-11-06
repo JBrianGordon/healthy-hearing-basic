@@ -1786,16 +1786,16 @@ class LocationsTable extends Table
                     ];
                 }
             }
-            // Get email from LocationUser recovery email
-            foreach ($location->location_users as $locationUser) {
-                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
-                    $uniqueEmails[] = $locationUser->email;
+            // Get email from User recovery email
+            foreach ($location->users as $user) {
+                if (!empty($user->email) && !in_array($user->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $user->email;
                     $data[] = [
                         'hhid' => $location->id,
                         'clinic_title' => $location->title,
-                        'first_name' => $locationUser->first_name,
-                        'last_name' => $locationUser->last_name,
-                        'email' => $locationUser->email,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
                     ];
                 }
             }

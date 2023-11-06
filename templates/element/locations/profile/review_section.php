@@ -14,14 +14,14 @@
 	    <div id="earqReviews"></div>
 	    <header class="panel-heading text-center">
 	      <h3>Reviews</h3>
-	      <small><?php echo $siteName; ?> posts all positive and negative reviews that meet publishing <a href="/terms-of-use#reviews" class="text-link">criteria</a>.</small>
+	      <small><?= $siteName ?> posts all positive and negative reviews that meet publishing <a href="/terms-of-use#reviews" class="text-link">criteria</a>.</small>
 	    </header>
 	    <div class="panel-body clinic-info">
 	      <div class="panel-section reviews">
 	        <p>
-	          <?php echo $this->Clinic->reviewText($location); ?>
+	          <?= $this->Clinic->reviewText($location) ?>
 	        </p>
-	        <p<?php if($location->state == 'ON'){ echo ' style="height:20px"'; } ?>>
+	        <p<?= $location->state == 'ON'? ' style="height:20px"' : null ?>>
 	          <button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
 	          <?php if (isset($location->reviews) && count($location->reviews)): ?>
 	          	<span id="sortSpan">Sort by: <select id="sortSelect">
@@ -31,10 +31,13 @@
 	          <?php endif; ?>
 	        </p>
 	        <?php if (isset($location->reviews) && count($location->reviews)): ?>
-	          <?php $reviews = $this->Clinic->sliceReviews($location->reviews); ?>
+	          <?php 
+	          	$newToOldReviews = array_reverse($location->reviews);
+	          	$reviews = $this->Clinic->sliceReviews($newToOldReviews); 
+	          ?>
 	          <?php foreach ($reviews[0] as $review): ?>
 	            <div class="well">
-	              <?php echo $this->element('locations/review_body', ['review' => $review]); ?>
+	              <?= $this->element('locations/review_body', ['review' => $review]) ?>
 	            </div>
 	          <?php endforeach; ?>
 	          <?php if (!empty($reviews[1])): ?>
