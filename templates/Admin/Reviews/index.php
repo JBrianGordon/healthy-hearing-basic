@@ -134,7 +134,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?= ReviewOrigin::from($review->origin)->getOriginLabel(); ?>
                                                                 <br>
                                                                 <br>
-                                                                <?= ReviewResponseStatus::from($review->origin)->getResponseStatusLabel(); ?>
+                                                                <?= ReviewResponseStatus::from($review->response_status)->getResponseStatusLabel(); ?>
                                                             </td>
                                                             <td>
                                                                 <span class="badge bg-info"><?= $review->character_count; ?></span><br>

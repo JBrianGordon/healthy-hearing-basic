@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Controller\Clinic;
+
+use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Model\Entity\Review;
 use Cake\Routing\Router;
 
@@ -61,8 +63,16 @@ class ReviewsController extends BaseClinicController
         $review = $this->Reviews->get($id, [
             'contain' => [],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $review = $this->Reviews->patchEntity($review, $this->request->getData());
+
+            // Set response_status to RESPONSE_STATUS_RESPONDED if current status is RESPONSE_STATUS_NONE
+            $isCurrentResponseNone = $review->getOriginal('response_status') === ReviewResponseStatus::RESPONSE_STATUS_NONE->value;
+            if ($review->isDirty('response') && $isCurrentResponseNone) {
+                $review->response_status = ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value;
+            }
+
             if ($this->Reviews->save($review)) {
                 $this->Flash->success(__('The review has been saved.'));
 

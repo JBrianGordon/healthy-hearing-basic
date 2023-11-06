@@ -37,7 +37,7 @@
 	          ?>
 	          <?php foreach ($reviews[0] as $review): ?>
 	            <div class="well">
-	              <?= $this->element('locations/review_body', ['review' => $review]) ?>
+	              <?= $this->element('locations/review_body', ['review' => $review, 'clinicName' => $location->title]) ?>
 	            </div>
 	          <?php endforeach; ?>
 	          <?php if (!empty($reviews[1])): ?>
