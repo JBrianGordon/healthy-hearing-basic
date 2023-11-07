@@ -15,6 +15,8 @@ $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'login', 'url' => ''],
 ]);
+
+$this->Html->script('dist/common.min.js', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">

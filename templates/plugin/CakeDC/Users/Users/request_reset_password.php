@@ -4,6 +4,8 @@
  */
 
 use Cake\Core\Configure;
+
+$this->Html->script('dist/common.min.js', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">
