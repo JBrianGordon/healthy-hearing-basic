@@ -460,29 +460,31 @@ class locationsAdminEdit {
 
 	initSpecialAnnouncements() {
 	  const specialAnnouncements = document.querySelector('#specialAnnouncements');
-	  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
-	  const adId = specialAnnouncements.dataset.adid;
-	  const couponId = specialAnnouncements.dataset.couponid;
+	  if(specialAnnouncements !== null){
+		  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
+		  const adId = specialAnnouncements.dataset.adid;
+		  const couponId = specialAnnouncements.dataset.couponid;
 
-	  const couponLibrary = document.querySelector('#couponLibrary');
-	  const couponSelected = document.querySelector('#couponSelected');
-	  const uploadCoupon = document.querySelector('#uploadCoupon');
+		  const couponLibrary = document.querySelector('#couponLibrary');
+		  const couponSelected = document.querySelector('#couponSelected');
+		  const uploadCoupon = document.querySelector('#uploadCoupon');
 
-	  if (isCqPremier && !adId) {
-	    if (couponId) {
-	      couponLibrary.style.display = 'none';
-	      couponSelected.style.display = 'block';
-	      uploadCoupon.style.display = 'none';
-	    } else {
-	      couponLibrary.style.display = 'block';
-	      couponSelected.style.display = 'none';
-	      uploadCoupon.style.display = 'none';
-	    }
-	  } else {
-	    couponLibrary.style.display = 'none';
-	    couponSelected.style.display = 'none';
-	    uploadCoupon.style.display = 'block';
-	  }
+		  if (isCqPremier && !adId) {
+		    if (couponId) {
+		      couponLibrary.style.display = 'none';
+		      couponSelected.style.display = 'block';
+		      uploadCoupon.style.display = 'none';
+		    } else {
+		      couponLibrary.style.display = 'block';
+		      couponSelected.style.display = 'none';
+		      uploadCoupon.style.display = 'none';
+		    }
+		  } else {
+		    couponLibrary.style.display = 'none';
+		    couponSelected.style.display = 'none';
+		    uploadCoupon.style.display = 'block';
+		  }
+		}
 	}
 
 	scrollTo(selector, offset = 90) {
