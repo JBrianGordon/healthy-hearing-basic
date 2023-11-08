@@ -39,15 +39,26 @@ class UsersController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'User');
+            $this->set('currentModel', 'Users');
         }
+
         $usersQuery = $this->Users
             ->find('search', [
                 'search' => $requestParams,
-            ])
-            ->contain('Locations');
+                'contain' => ['Locations'],
+            ]);
+        // Search by location id
+        if (!empty($requestParams['Locations']['id'])) {
+            $locationId = $requestParams['Locations']['id'];
+            $usersQuery->matching('Locations', function($q) use ($locationId) {
+                return $q->where(['Locations.id' => $locationId]);
+            });
+        }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'Users'])->toArray();
         $this->set('users', $this->paginate($usersQuery));
         $this->set('fields', $this->Users->getSchema()->typeMap());
+        $this->set('crmSearches', $crmSearches);
     }
 
     /**

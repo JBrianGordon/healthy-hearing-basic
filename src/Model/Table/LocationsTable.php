@@ -119,16 +119,17 @@ class LocationsTable extends Table
                 'Providers.id' => 'ASC',
             ]
         ]);
-        $this->hasMany('LocationUsers', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->hasOne('LocationVidscrips', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
-        $this->belongsToMany('Users');
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Allow us to search for multiple values using '[or]'
         $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];

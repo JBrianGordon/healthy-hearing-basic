@@ -229,8 +229,7 @@ $seoToolsMenu = [
 * Admin - Utilities
 ********************************/
 $utilitiesItems = [];
-$hhUsers = Configure::read('siteNameAbbr').' Users';
-$utilitiesItems[$hhUsers] = [
+$utilitiesItems['Users'] = [
     'url' => '/admin/users',
     'icon' => 'bi bi-person-fill',
 ];

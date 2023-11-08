@@ -117,7 +117,11 @@ class UsersTable extends CakeDcUsersTable
             'targetForeignKey' => 'wiki_id',
             'joinTable' => 'users_wikis',
         ]);
-        $this->belongsToMany('Locations');
+        $this->belongsToMany('Locations', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'location_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Setup search filter using search manager
         $this->searchManager()

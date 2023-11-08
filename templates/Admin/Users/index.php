@@ -5,16 +5,14 @@
  */
 use Cake\Core\Configure;
 use App\Model\Entity\User;
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
+
 $queryParams = $this->request->getQueryParams();
 // Only include these fields in advanced search
-$includeFields = ['id', 'username', 'first_name', 'last_name', 'email', 'active', 'role', 'created', 'modified', 'is_admin', 'is_it_admin', 'is_agent', 'is_call_supervisor', 'is_author', 'is_csa', 'is_writer', 'is_superuser'];
+$includeFields = ['id', 'username', 'first_name', 'last_name', 'email', 'recovery_email', 'active', 'role', 'created', 'modified', 'last_login', 'is_admin', 'is_it_admin', 'is_agent', 'is_call_supervisor', 'is_author', 'is_reviewer', 'is_csa', 'is_writer', 'is_superuser', 'Locations.id'];
 // Advanced search details
 $advancedSearchFields = [];
+// Add additional fields
+$fields['Locations.id'] = 'biginteger';
 foreach ($fields as $field => $type) {
     if (in_array($field, $includeFields)) {
         $label = '';
@@ -30,6 +28,9 @@ foreach ($fields as $field => $type) {
                 $type = 'select';
                 $options = User::$roles;
                 $empty = '(All roles)';
+                break;
+            case 'Locations.id':
+                $label = 'Location ID';
                 break;
         }
         $advancedSearchFields[] = [
@@ -60,6 +61,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 							<div class="btn-group">
 								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
 								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+								<?= $this->Html->link('Clinic Users', ['action' => 'index', '?' => ['role'=>'clinic']], ['class' => 'btn btn-default']) ?>
+								<?= $this->Html->link('Admin Users', ['action' => 'index', '?' => ['role'=>'admin']], ['class' => 'btn btn-default']) ?>
+								<?= $this->Html->link('Other Users', ['action' => 'index', '?' => ['role'=>'user']], ['class' => 'btn btn-default']) ?>
 							</div>
 						</div>
 					</div>
@@ -69,19 +73,30 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body">
 							<div class="panel-section expanded">
 								<div class="users index content">
-								    <h3><?= __(Configure::read('siteNameAbbr').' Users') ?></h3>
+								    <h3>Users</h3>
 								    <?= $this->element('pagination') ?>
 								    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
+								    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 								    <div class="table-responsive">
 								        <table class="table table-striped table-bordered table-sm mb20">
 								            <thead>
 								                <tr>
 								                    <th><?= $this->Paginator->sort('id') ?></th>
-								                    <th><?= $this->Paginator->sort('first_name') ?> / <?= $this->Paginator->sort('last_name') ?> / 
-								                        <?= $this->Paginator->sort('username') ?> / <?= $this->Paginator->sort('email') ?></th>
+								                    <th>
+														<?= $this->Paginator->sort('username') ?><br>
+														<?= $this->Paginator->sort('first_name') ?> / <?= $this->Paginator->sort('last_name') ?><br>
+														<?= $this->Paginator->sort('email') ?>
+								                    </th>
+								                    <th>
+														<?= $this->Paginator->sort('role') ?><br>
+														Clinic
+								                    </th>
 								                    <th><?= $this->Paginator->sort('active') ?></th>
-								                    <th><?= $this->Paginator->sort('role') ?></th>
-								                    <th><?= $this->Paginator->sort('created') ?> / <?= $this->Paginator->sort('modified') ?></th>
+								                    <th>
+														<?= $this->Paginator->sort('created') ?><br>
+														<?= $this->Paginator->sort('modified') ?><br>
+														<?= $this->Paginator->sort('last_login') ?>
+								                    </th>
 								                    <th class="actions"><?= __('Actions') ?></th>
 								                </tr>
 								            </thead>
@@ -89,33 +104,34 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                <?php foreach ($users as $user): ?>
 								                    <tr>
 								                        <td><?= h($user->id) ?></td>
-								                        <td><?php echo '<strong>'.$user->first_name.' '.$user->last_name.'</strong><br>'.
-								                            '<span class="badge bg-default">'.$user->username.'</span><br>'.
-								                            $user->email; ?></td>
-								                        <td><?= $this->Html->badge(
-								                                $user->active ? '<i class="bi bi-check-lg"></i> Active' : '<i class="bi bi-x-lg"></i> Inactive',
-								                                [
-								                                    'class' => $user->active ? 'success' : 'danger',
-								                                ]
-								                            ); ?>
+								                        <td>
+															<span class="badge bg-default"><?= $user->username ?></span><br>
+															<strong><?= $user->first_name.' '.$user->last_name ?></strong><br>
+															<?= $user->email ?>
 								                        </td>
 								                        <td>
-															<?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?>
-															<?php if ($user->locations !== []): ?>
-																<br>
+															<?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?><br>
+															<?php if (!empty($user->locations)): ?>
 																<?=
 																	$this->Html->link(
-																		$user->locations[0]->id,
-																		[
-																			'controller' => 'Locations',
-																			'action' => 'edit',
-																			$user->locations[0]->id
-																		]
+																		$user->locations[0]->title,
+																		['controller' => 'Locations', 'action' => 'edit', $user->locations[0]->id]
 																	)
-																?>
+																?><br>
+																<?= $user->locations[0]->city.', '.$user->locations[0]->state ?>
 															<?php endif; ?>
 														</td>
-														<td><?php echo date('M jS Y, H:i', strtotime($user->created)).'<br>'.date('M jS Y, H:i', strtotime($user->modified)); ?></td>
+														<td>
+															<?= $this->Html->badge(
+																$user->active ? '<i class="bi bi-check-lg"></i> Active' : '<i class="bi bi-x-lg"></i> Inactive',
+																['class' => $user->active ? 'success' : 'danger']
+															); ?>
+														</td>
+														<td nowrap>
+															<?= date('Y-m-d', strtotime($user->created)) ?><br>
+															<?= date('Y-m-d', strtotime($user->modified)) ?><br>
+															<?= date('Y-m-d', strtotime($user->last_login)) ?>
+														</td>
 								                        <td class="actions">
 							                                <?= $this->Html->link(__(' Edit'),
 							                                    ['action' => 'edit', $user->id],
