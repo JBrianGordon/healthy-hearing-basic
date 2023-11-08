@@ -128,9 +128,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 															); ?>
 														</td>
 														<td nowrap>
-															<?= date('Y-m-d', strtotime($user->created)) ?><br>
-															<?= date('Y-m-d', strtotime($user->modified)) ?><br>
-															<?= date('Y-m-d', strtotime($user->last_login)) ?>
+															<?= empty($user->created) ? '' : date('Y-m-d', strtotime($user->created)) ?><br>
+															<?= empty($user->modified) ? '' : date('Y-m-d', strtotime($user->modified)) ?><br>
+															<?= empty($user->last_login) ? '' : date('Y-m-d', strtotime($user->last_login)) ?>
 														</td>
 								                        <td class="actions">
 							                                <?= $this->Html->link(__(' Edit'),
