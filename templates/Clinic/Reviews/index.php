@@ -109,7 +109,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
                                                         <?= $review->zip;?>
                                                     </td>
                                                     <td class="center">
-                                                        <?php echo $this->element('locations/review_body', ['review' => $review, 'hideName' => true]); ?>
+                                                        <?php echo $this->element('locations/review_body', ['review' => $review, 'hideName' => true, 'clinicName' => $location->title]); ?>
                                                     </td>
                                                     <td class="center"><?php echo ReviewOrigin::from($review->origin)->getOriginLabel(); ?></td>
                                                     <td class="center">
