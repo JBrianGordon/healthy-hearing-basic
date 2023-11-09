@@ -100,7 +100,7 @@ class LocationsController extends AppController
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
-        $show_ad = false;
+        $show_ad = true;
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 

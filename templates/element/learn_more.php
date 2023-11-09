@@ -1,5 +1,8 @@
-<?php use Cake\Core\Configure; ?>
-<section class="panel panel-light blog-previews">
+<?php 
+	use Cake\Core\Configure;
+	$learnMoreOrder = isset($stateNice) ? '12' : '8';
+?>
+<section class="panel panel-light blog-previews" style="order:<?= $learnMoreOrder ?>">
 	<header class="panel-heading text-center">
 		<h4 class="pl10 pr10">Learn more about hearing health</h4>
 	</header>
