@@ -25,7 +25,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations')): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages')): ?>
 		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
@@ -98,4 +98,27 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if (Configure::read('showReports') && ($controller != 'quiz_results')): ?>
+		<section class="panel panel-light blog-previews" style="order:12">
+		<header class="panel-heading text-center">
+		  <h2>The Healthy Hearing Report</h2>
+		</header>
+		<div class="panel-body">
+		  <!--?php *** TODO: uncomment when recent articles logic built: $articles = ClassRegistry::init('Content')->findLatest(4);) ?-->
+		  <!--?php foreach ($articles as $content): ?-->
+		    <div class="panel-section condensed blog-preview">
+		      <div class="row">
+		        <div class="col-sm-3">
+		          <!--?= $this->Content->dateHome($content, ['large' => false]); ?-->
+		        </div>
+		        <div class="col-sm-9">
+		          <div class="subtitle"><!--?= $this->Content->getType(); ?--></div>
+		          <!--?= $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?-->
+		        </div>
+		      </div>
+		    </div>
+		  <!--?php endforeach; ?-->
+		</div>
+		</section>
+	<?php endif; ?>
 </div>
