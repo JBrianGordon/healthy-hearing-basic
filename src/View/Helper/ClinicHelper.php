@@ -155,13 +155,13 @@ class ClinicHelper extends Helper
         if (isset($review->origin)) {
             switch ($this->reviewOrigin($review->origin)) {
                 case 'Online':
-                    $retval = '<br>Review submitted online';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review submitted online';
                     break;
                 case 'Mail':
-                    $retval = '<br>Review received via mail';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review received via mail';
                     break;
                 case 'Phone':
-                    $retval = '<br>Review verified by phone';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review verified by phone';
                     break;
             }
         }
