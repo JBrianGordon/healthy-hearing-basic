@@ -94,7 +94,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Corps', 'Content', 'Wikis'],
+            'contain' => ['Corps', 'Content', 'Wikis', 'LoginIps', 'Locations'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
