@@ -1,4 +1,5 @@
 <?php
+use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewResponseStatus;
 
 if (!isset($review) && isset($review->body)) {
@@ -27,8 +28,7 @@ $name = empty($name) ? null : $name;
 
 			echo '<br />';
 			echo date('m/d/Y', strtotime($review->created)) . '&nbsp;&nbsp;&nbsp;';
-			//*** TODO: uncomment once updates to reviewVerification are made ***/
-			//echo $this->Clinic->reviewVerification($review);
+			echo ReviewOrigin::from($review->origin)->getOriginVerification();
 
 			?>
 		</div>

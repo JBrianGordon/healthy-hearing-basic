@@ -109,7 +109,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
                                                         <?= $review->zip;?>
                                                     </td>
                                                     <td class="center">
-                                                        <?php echo $this->element('locations/review_body', ['review' => $review, 'hideName' => true]); ?>
+                                                        <?php echo $this->element('locations/review_body', ['review' => $review, 'hideName' => true, 'clinicName' => $location->title]); ?>
                                                     </td>
                                                     <td class="center"><?php echo ReviewOrigin::from($review->origin)->getOriginLabel(); ?></td>
                                                     <td class="center">
@@ -125,13 +125,13 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
                                                         <?php
                                                         if (!empty($review->response)) {
                                                             echo $this->Html->link('Edit response',
-                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-primary']);
+                                                                ['action' => 'respond', $review->id], ['class' => 'btn btn-primary']);
                                                         } else if ($review->status == ReviewStatus::DENIED) {
                                                             echo $this->Html->link('Response needed',
-                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-secondary']);
+                                                                ['action' => 'respond', $review->id], ['class' => 'btn btn-secondary']);
                                                         } else {
                                                             echo $this->Html->link('Write a response',
-                                                                ['action' => 'respond', $review->id, $location->id], ['class' => 'btn btn-primary']);
+                                                                ['action' => 'respond', $review->id], ['class' => 'btn btn-primary']);
                                                         }
                                                         ?>
                                                     </td>
