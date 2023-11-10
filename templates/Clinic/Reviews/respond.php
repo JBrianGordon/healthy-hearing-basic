@@ -4,10 +4,8 @@
  * @var \App\Model\Entity\Review $review
  */
 
-
 $this->Html->script('dist/common.min.js', ['block' => true]);
 use BootstrapUI\View\Helper\FormHelper;
-
 ?>
 
 <div class="container-fluid site-body">
