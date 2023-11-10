@@ -47,8 +47,7 @@ class ReviewsController extends BaseClinicController
 
         $location = $this->Reviews->Locations->get($locationId);
 
-        $this->set('reviews', $reviews);
-        $this->set('location', $location);
+        $this->set(compact('reviews', 'location'));
     }
 
     /**
@@ -65,7 +64,7 @@ class ReviewsController extends BaseClinicController
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $review = $this->Reviews->patchEntity($review, $this->request->getData());
+            $review->set('response', $this->request->getData('response'));
 
             // Set response_status to RESPONSE_STATUS_RESPONDED if current status is RESPONSE_STATUS_NONE
             $isCurrentResponseNone = $review->getOriginal('response_status') === ReviewResponseStatus::RESPONSE_STATUS_NONE->value;
@@ -84,6 +83,8 @@ class ReviewsController extends BaseClinicController
             $this->Flash->error(__('The review could not be saved. Please, try again.'));
         }
 
-        $this->set(compact('review'));
+        $location = $this->Reviews->Locations->get($review->location_id);
+
+        $this->set(compact('review', 'location'));
     }
 }
