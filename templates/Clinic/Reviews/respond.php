@@ -40,10 +40,15 @@ use BootstrapUI\View\Helper\FormHelper;
                                         ])
                                     ?>
                                 </fieldset>
-                                <?= $this->Form->button(__('Save Response')) ?>
-                                <?= $this->Form->end() ?>
 
                                 <p class="text-end">You are responsible for ensuring that your clinic's review response does not violate any applicable privacy laws or our <a href="/terms-of-use" target="_blank">Terms of Use</a>.</p>
+
+                                <?=
+                                    $this->Form->button('Save Response', [
+                                        'class' => 'btn btn-primary'
+                                    ])
+                                ?>
+                                <?= $this->Form->end() ?>
                             </div>
                         </div>
                     </section>
