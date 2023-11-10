@@ -23,8 +23,8 @@ use BootstrapUI\View\Helper\FormHelper;
                                 <?php
                                     echo $this->Form->create($review, [
                                         'align' => [
-                                            FormHelper::GRID_COLUMN_ONE => 3, // first column (span over 4 columns)
-                                            FormHelper::GRID_COLUMN_TWO => 9, // second column (span over 8 columns)
+                                            FormHelper::GRID_COLUMN_ONE => 3,
+                                            FormHelper::GRID_COLUMN_TWO => 9,
                                         ],
                                     ]);
                                 ?>
