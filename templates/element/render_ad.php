@@ -22,7 +22,7 @@ if (!empty($ad->id) && $show_ad) {
 	// make passthrough - desc & src
 	$dest = '/ads/click/'.$id;
 	// Order
-	if((!empty($wiki) || !empty($content) || !empty($corp) || !empty($stateNice) || !empty($corps)) && !$isMobileDevice){
+	if((!empty($wiki) || !empty($content) || !empty($corp) || !empty($stateNice) || !empty($corps)  || !empty($page)) && !$isMobileDevice){
 		$adOrder = '7';
 	} else if ((!empty($wiki) || !empty($content) || !empty($corp) || !empty($stateNice) || !empty($corps)) && $isMobileDevice){
 		$adOrder = '1';
