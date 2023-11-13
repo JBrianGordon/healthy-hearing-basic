@@ -24,7 +24,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 						<div class="panel-body p10">
 							<div class="btn-group">
 								<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-								<?= $this->Html->link(' Add', ['action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+								<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 								<?= $this->Form->postLink('Delete',
 						            ['action' => 'delete', $user->id],
 						            ['confirm' => 'Are you sure you want to delete # {0}?', $user->id, 'class' => 'btn btn-danger bi bi-trash']
