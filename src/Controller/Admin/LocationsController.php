@@ -86,9 +86,19 @@ class LocationsController extends AppController
      */
     public function edit($id = null)
     {
+        $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
         $location = $this->Locations->get($id, [
-            'contain' => [],
+            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers', 'LocationNotes', 'LocationEmails', 'Reviews', 'Users.LoginIps'],
         ]);
+        $lastOticonImport = $this->Locations->ImportStatus->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $id,
+                'oticon_tier >' => 0
+            ],
+            'order' => ['ImportStatus.created DESC']
+        ])->first();
+        $lastOticonImportDate = empty($lastOticonImport->created) ? 'N/A' : dateTimeCentralToEastern($lastOticonImport->created);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
             if ($this->Locations->save($location)) {
@@ -98,7 +108,9 @@ class LocationsController extends AppController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $this->set(compact('location'));
+        $this->set(compact('location', 'lastOticonImportDate'));
+        $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
+        $this->set('days', $this->Locations->LocationHours->days);
     }
 
     /**
@@ -147,7 +159,7 @@ class LocationsController extends AppController
         $requestParams = $this->request->getQueryParams();
         $options = [
             'search' => $requestParams,
-            'contain' => ['LocationUsers', 'LocationEmails', 'Providers'],
+            'contain' => ['Users', 'LocationEmails', 'Providers'],
         ];
         // TODO: So far, this seems to work okay even for larger exports.
         //     : But in Cake2 we sent large exports to the queue. Do we need to do the same?

@@ -16,6 +16,19 @@ form {
 			position: absolute;
 	    }
 	}
+
+	&.form-horizontal {
+		.control-label {
+			text-align: right;
+    	margin-bottom: 0;
+    	padding-top: 7px;
+    	font-weight: bold;
+
+    	&.form-check-label {
+    		font-weight: normal;
+    	}
+		}
+	}
 }
 
 .form-control {
@@ -105,4 +118,32 @@ form {
 .max-chars{
 	color: #e51c23;
 	font-weight: bold;
+}
+
+.submit {
+	display: inline-block;
+}
+
+#q {
+    width: 500px;
+}
+#query-results {
+  border: 1px solid #ddd;
+  border-top:0;
+  width: 500px;
+  position: relative;
+  bottom: 11px;
+}
+
+#query-results ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#query-results ul li {
+  padding: 5px 0;
+}
+
+#query-results ul li:hover {
+  background: #eee;
 }

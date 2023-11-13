@@ -86,9 +86,11 @@ class User extends CakeDcUser
     */
     const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
+    const ROLE_CLINIC = 'clinic';
     static $roles = [
         self::ROLE_USER => 'User',
         self::ROLE_ADMIN => 'Admin',
+        self::ROLE_CLINIC => 'Clinic',
     ];
 
     /**

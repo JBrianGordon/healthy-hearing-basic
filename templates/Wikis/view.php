@@ -3,15 +3,13 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki $wiki
  */
- 
-$this->Html->script('dist/wiki.min', ['block' => true]);
 
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use Cake\Routing\Router;
 
 $parts = explode("/", $wiki->slug);
-$this->Breadcrumbs->add('Help', '/help');
+$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => 'Help', 'url' => '/help']]);
 if (!empty($parts[0])) {
 	$url = '/help/'.$parts[0];
 	$url = ($url == $_SERVER['REQUEST_URI']) ? '' : $url;
@@ -20,6 +18,7 @@ if (!empty($parts[0])) {
 if (!empty($parts[1])) {
 	$this->Breadcrumbs->add(ucfirst(str_replace('-', ' ', $parts[1])), '');
 }
+
 $isPreview = isset($isPreview) ? $isPreview : false;
 
 $wikiSchema = '<script type="application/ld+json">{';
@@ -107,6 +106,8 @@ $wikiSchema .= '"audience": {"@type": "MedicalAudience", "audienceType": ["patie
 $wikiSchema .= '}</script>';
 
 echo $wikiSchema;
+
+$this->Html->script('dist/wiki.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body content-body secondary p0">
 	<div class="row pt0 pb0">
@@ -122,43 +123,40 @@ echo $wikiSchema;
 					<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
 					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
-				<header class="col-md-12 inverse">
+				<header class="col-sm-12 inverse">
 					<div class="col-sm-12 col-xs-9">
 						<?= $this->Breadcrumbs->render() ?>
+						<?= $this->element('breadcrumb_schema') ?>
 						<div id="ellipses">...</div>
 					</div>
-					<div class="row header-content">
-						<div class="col-md-8 p0">
-							<div>
-								<?php if ($isAdmin): ?>
-									<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right']) ?>
-								<?php endif; ?>
-								<h1><?= $wiki->title_h1 ?></h1>
-								<p class="text-caption">
-									<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>
-									<?= $this->Editorial->getReviewersByline($wiki->reviewers) ?>
-									<br>Last updated on:
-									<span><?= date('F jS, Y', strtotime($wiki->last_modified)) ?></span>
-								</p>
-								<p class="lead">
-									<?= $wiki->short ?>
-								</p>
-								</div>
-							</div>
+					<div class="row header-content col-sm-8">
+						<?php if ($isAdmin): ?>
+							<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right', 'style' => 'width:66px']) ?>
+						<?php endif; ?>
+						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
+						<p class="text-caption p0">
+							<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>
+							<?= $this->Editorial->getReviewersByline($wiki->reviewers) ?>
+							<br>Last updated on:
+							<span><?= date('F jS, Y', strtotime($wiki->last_modified)) ?></span>
+						</p>
+						<p class="lead p0">
+							<?= $wiki->short ?>
+						</p>
 						</div>
 					</div>
 				</header>
 				<div class="row">
-					<div class="col-md-9 col-lg-9 float-start">
-						<div class="panel panel-section expanded">
-							<div id="wiki-body" class="col-lg-12 pr0 pl0">
+					<div class="col-sm-9 float-start mb70">
+						<div class="panel panel-section expanded mb0">
+							<div id="wiki-body">
 								<?= $wiki->body ?>
 								<div class="about-author">
 									<?= $this->Editorial->getAuthorsBio($wiki->author, $wiki->contributors) ?>
 								</div>
 							</div>
-							<?= $this->element('content/share') ?>
 						</div>
+						<?= $this->element('content/share') ?>
 					</div>
 					<?= $this->element('side_panel') ?>
 				</div>

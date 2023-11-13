@@ -5,6 +5,8 @@
  */
  
 use \App\Model\Entity\CaCallGroup;
+use \App\Model\Entity\CaCall;
+use Cake\Routing\Router;
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -47,11 +49,16 @@ use \App\Model\Entity\CaCallGroup;
 							            </tr>
 						                <tr>
 						                    <th class="tar">Status</th>
-						                    <td><?= h($caCallGroup->status) ?></td>
+						                    <td><?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
 						                </tr>
 						                <tr>
 						                    <th class="tar">Clinic</th>
-						                    <td><?= $caCallGroup->has('location') ? $this->Html->link($caCallGroup->location->title, ['controller' => 'Locations', 'action' => 'view', $caCallGroup->location->id]) : '' ?><br><?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br><?= $caCallGroup->location->city ?> <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br><?= $caCallGroup->location->phone ?><br><?= $caCallGroup->location->landmarks ?></td>
+						                    <td>
+                                                <? if ($caCallGroup->has('location')): ?>
+                                                    <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
+                                                    <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br><?= $caCallGroup->location->city ?> <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br><?= $caCallGroup->location->phone ?><br><?= $caCallGroup->location->landmarks ?>
+                                                <?php endif; ?>
+						                    </td>
 						                </tr>
 						                <tr>
 							                <th class="tar">Calls</th>
@@ -68,11 +75,14 @@ use \App\Model\Entity\CaCallGroup;
 											            <?php foreach ($caCallGroup->ca_calls as $caCalls) : ?>
 											                <tr>
 																<td><?= $caCalls->id ?></td>
-																<td><?= $caCalls->start_time ?></td>
-																<td><?= $caCalls->duration ?></td>
-																<!-- ***TODO***: chnage user_id for agent name -->
-																<td><?= $caCalls->user_id ?></td>
-																<td><?= $caCalls->call_type ?> call</td>
+																<td>
+																	<?php $startTimeEastern = $caCalls->start_time->setTimezone('America/New_York'); ?>
+																	<?php echo $startTimeEastern->format('m/d/Y'); ?><br>
+																	<?php echo $startTimeEastern->format('g:i a T'); ?>
+																</td>
+																<td><?= gmdate('H:i:s', $caCalls->duration) ?></td>
+																<td><?= $this->App->getUserName($caCalls->user_id) ?></td>
+																<td><?= CaCall::$callTypes[$caCalls->call_type] ?></td>
 											                </tr>
 											            <?php endforeach; ?>
 									                </tbody>
@@ -87,10 +97,9 @@ use \App\Model\Entity\CaCallGroup;
 															<tbody>
 																<?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
 																	<tr>
-																		<!-- ***TODO***: chnage user_id for agent name -->
-																		<td class="note_who"><?= $caCallGroupNotes->user_id ?></td>
-																		<td class="status"><?= $caCallGroupNotes->status ?></td>
-																		<td class="when"><?= $caCallGroupNotes->modified ?></td>
+																		<td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
+																		<td class="status"><?= CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
+																		<td class="when"><?= dateTimeCentralToEastern($caCallGroupNotes->created) ?></td>
 																		<td class="delete">
 																			<?= $this->Form->postLink(__('Delete'), ['controller' => 'ca_call_group_notes', 'action' => 'delete', $caCallGroupNotes->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger btn-xs']) ?>	
 																		</td>

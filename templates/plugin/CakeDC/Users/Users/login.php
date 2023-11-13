@@ -15,6 +15,8 @@ $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'login', 'url' => ''],
 ]);
+
+$this->Html->script('dist/common.min.js', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">
@@ -25,18 +27,21 @@ $this->Breadcrumbs->add([
             <div class="row">
                 <header class="col-lg-12 inverse breadcrumb-header">
                     <?= $this->Breadcrumbs->render(); ?>
+                    <?= $this->element('breadcrumb_schema') ?>
                     <div id="ellipses">...</div>
                 </header>
                 <div class="col-sm-12 panel-parent">
                     <section class="panel">
                         <div class="panel-body">
                             <div class="panel-section expanded">
-                                <h1 style="display:inline-block">Admin Login</h1>
+                                <h1 style="display:inline-block">Login</h1>
                                 <div class="users form">
                                     <?= $this->Flash->render('auth') ?>
                                     <?= $this->Form->create() ?>
                                     <fieldset>
-                                        <?= $this->Form->control('username', ['label' => 'Email or Username', 'required' => true]) ?>
+                                        <?php $usernamePlaceholder = (Configure::read('country') == 'CA') ? "This is the four digit number sent to you by Hearing Directory." : "This is the 10 digit number starting with 8119 sent to you by Healthy Hearing.";
+                                        ?>
+                                        <?= $this->Form->control('username', ['label' => 'Email or Username', 'required' => true, 'placeholder' => $usernamePlaceholder]) ?>
                                         <?= $this->Form->control('password') ?>
                                         <?php
                                         if (Configure::read('Users.reCaptcha.login')) {

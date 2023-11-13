@@ -129,11 +129,6 @@
 		}
 	}
 	
-	.date {  
-		display: block;
-		color: #212529;
-	}
-	
 	.form-check {
 		padding-left: 0;
 		
@@ -165,6 +160,22 @@
 	.form-group{
 		display: flex;
 
+		&.multicheckbox{
+			flex-wrap: wrap;
+
+			.form-check {
+  			flex: 0 0 33.33%;
+  			box-sizing: border-box;
+
+  			.form-check-label{
+  				width: auto;
+  				float: none;
+  				padding-left: 30px;
+  				text-align: left;
+  			}
+			}
+		}
+
 		@media(max-width: $screen-sm-max){
 			flex-direction: column;
 
@@ -178,10 +189,6 @@
 .clearfix {
 	display: block;
 	clear: both
-}
-
-.pull-right {
-	float: right;
 }
   
 	.read-more-row {
@@ -378,11 +385,23 @@
 			}
 		}
 	}
-	#wiki-body .aside aside {
-		@media only screen and (min-width: $screen-sm-min) {
-			display:none;
+
+	.header-content {
+		@media(min-width: $screen-sm-min){
+			padding: 0 70px;
 		}
 	}
+
+	#wiki-body {
+		padding: 15px;
+
+		.aside aside {
+			@media only screen and (min-width: $screen-sm-min) {
+				display:none;
+			}
+		}
+	}
+
   }
 
   &.secondary-fixed-nav {
@@ -406,4 +425,8 @@
 
 html.show-side-nav {
   overflow: hidden;
+
+  [data-hh-side-nav] {
+  	display: block;
+  }
 }

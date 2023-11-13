@@ -14,5 +14,13 @@ class EndpointsController extends Controller
         // Render the template without layout
         return $this->render('/Endpoints/ckeditor_endpoint');
     }
+    public function tinymceEndpoint()
+    {
+        // Disable the auto layout
+        $this->viewBuilder()->disableAutoLayout();
+
+        // Render the template without layout
+        return $this->render('/Endpoints/tinymce_endpoint');
+    }
 }
 ?>

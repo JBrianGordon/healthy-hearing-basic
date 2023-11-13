@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Hash;
 
 /**
  * Tags Model
@@ -103,5 +104,19 @@ class TagsTable extends Table
             ->notEmptyString('ribbon_header');
 
         return $validator;
+    }
+
+    /**
+    * Get a list of all tags for display
+    */
+    public function findTagList(){
+        $tags = $this->find('all', [
+            'order' => ['display_header' => 'ASC']
+        ])->all();
+        $tagList = [];
+        foreach ($tags as $tag) {
+            $tagList[$tag->id] = '<strong>'.$tag->display_header.'</strong><br><small>('.$tag->name.')</small>';
+        }
+        return $tagList;
     }
 }

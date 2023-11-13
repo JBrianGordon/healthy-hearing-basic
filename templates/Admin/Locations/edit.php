@@ -5,10 +5,20 @@
  */
  
 use App\Model\Entity\Location;
+use App\Model\Entity\Review;
 use Cake\Core\Configure;
 
 $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
+$id = $location->id;
+$isCqPremier = $location->is_cq_premier;
+$adId = $location->location_ad->id ?? null;
+$couponId = $location->coupon_id;
+$showSpecialAnnouncement = (
+	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
+	($location->feature_special_announcement)
+);
+$isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 ?>
 <div class="container-fluid site-body fap-cities default">
 	<div class="row">
@@ -115,19 +125,43 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 										</table>
 										<?= $this->Form->control('priority', ['label' => ['class' => 'col col-md-3 control-label'], 'class' => 'col col-md-9 mb10']); ?>
 						                <div class="tabbable">
-											<ul class="nav nav-tabs location-tabs clearfix">
-												<li class="active"><a href="#Location" data-toggle="tab" aria-expanded="true">Location</a></li>
-												<li><a href="#Details" data-toggle="tab">Details</a></li>
-												<li><a href="#Provider" data-toggle="tab">Provider</a></li>
-												<li><a href="#Hours" data-toggle="tab">Hours</a></li>
-												<li><a href="#Payment" data-toggle="tab">Payment</a></li>
-												<li><a href="#Notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
-												<li><a href="#CallAssist" data-toggle="tab">Call Assist</a></li>
-												<li><a href="#User" data-toggle="tab">User</a></li>
-												<li><a href="#Reviews" data-toggle="tab">Reviews</a></li>
-												<li><a href="#Imports" data-toggle="tab">Imports</a></li>
-												<li><a href="#Filters" data-toggle="tab">Filters</a></li>
-												<li><a href="#Admin" data-toggle="tab">Admin</a></li>
+											<ul class="nav nav-tabs location-tabs clearfix" role="tablist">
+												<li class="nav-item">
+													<button class="nav-link active" data-bs-target="#Location" data-bs-toggle="tab" aria-controls="Location" aria-expanded="true" type="button" role="tab">Location</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Details" data-bs-toggle="tab" aria-controls="Details" aria-expanded="false" type="button" role="tab">Details</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Provider" data-bs-toggle="tab" aria-controls="Provider" aria-expanded="false" type="button" role="tab">Provider</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Hours" data-bs-toggle="tab" aria-controls="Hours" aria-expanded="false" type="button" role="tab">Hours</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Payment" data-bs-toggle="tab" aria-controls="Payment" aria-expanded="false" type="button" role="tab">Payment</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Notes" data-bs-toggle="tab" aria-controls="Notes"  aria-expanded="false" type="button" role="tab">Notes</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#CallAssist" data-bs-toggle="tab" aria-controls="CallAssist" aria-expanded="false" type="button" role="tab">Call Assist</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#User" data-bs-toggle="tab" aria-controls="User" aria-expanded="false" type="button" role="tab">User</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Reviews" data-bs-toggle="tab" aria-controls="Reviews" aria-expanded="false" type="button" role="tab">Reviews</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Imports" data-bs-toggle="tab" aria-controls="Imports" aria-expanded="false" type="button" role="tab">Imports</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Filters" data-bs-toggle="tab" aria-controls="Filters" aria-expanded="false" type="button" role="tab">Filters</button>
+												</li>
+												<li class="nav-item">
+													<button class="nav-link" data-bs-target="#Admin" data-bs-toggle="tab" aria-controls="Admin" aria-expanded="false" type="button" role="tab">Admin</button>
+												</li>
 											</ul>
 											<div class="tab-content mt10">
 												<!-- Location Tab -->
@@ -192,8 +226,46 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																</div>
 															</div>
 														</div>
-											            <hr class="mt25">
-											            <!-- ***TODO: Add linked locations ***-->
+														<!-- Linked Locations -->
+														<hr class="mt25">
+														<div class="row">
+															<div class="col-md-12">
+																<label class="col col-md-2 control-label">Linked Locations</label><div class="clearfix"></div>
+																<table class="table-striped table-bordered col-md-offset-2 col-md-10">
+																	<?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
+																		<tr id="tr-link-<?php echo $key; ?>">
+																			<td>
+																				<div id="div-link-<?php echo $key; ?>">
+																					<?php echo $this->Clinic->linkedLocationInfo($linkedLocationId); ?>
+																					<span class="help-block text-danger" style="display:none;" id="link-error-<?php echo $key; ?>"></span>
+																				</div>
+																			</td>
+																			<td style="width:100px;" align="center">
+																				<button type="button" class="btn btn-md btn-danger js-link-delete" data-key="<?php echo $key; ?>" data-id="<?php echo $id; ?>" data-link="<?php echo $linkedLocationId; ?>">Delete</button>
+																			</td>
+																		</tr>
+																	<?php endforeach; ?>
+																	<?php $key = count($uniqueLocationLinks); ?>
+																	<tr id="tr-link-<?php echo $key; ?>">
+																		<td>
+																			<div id="div-link-<?php echo $key; ?>">
+																				<?php echo $this->Form->hidden('linked_location_id'); ?>
+																				<input class="form-control linked-location" data-key="<?php echo $key; ?>" data-id="<?php echo $id; ?>" />
+																				<span class="help-block text-danger" style="display:none;" id="link-error-<?php echo $key; ?>"></span>
+																			</div>
+																		</td>
+																		<td style="width:100px;" align="center">
+																			<div id="div-add-delete-<?php echo $key; ?>">
+																			</div>
+																		</td>
+																	</tr>
+																</table>
+																<span class="help-block col-md-offset-2 col-md-10">
+																	<?php if (Configure::read('isTieringEnabled')): ?>These are displayed on Enhanced/Premier profiles only. <?php endif; ?>
+																	Search by typing in clinic name, <?php echo $zipShort; ?>, or <?php echo Configure::read('siteNameAbbr'); ?> ID. Select the correct clinic from the drop-down list.
+																</span>
+															</div>
+														</div>
 													</div>
 												</div>
 												<!-- Details tab -->
@@ -260,88 +332,80 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																</div>
 																<div class="clearfix"></div>
 																<hr>
-																<!-- Videos -->
-																<div>
-																	<label class="col col-md-3 control-label">Videos</label><div class="clearfix"></div>
-																	<table class="table-striped table-bordered col-md-offset-3 col-md-9">
-																		<tbody>
-																			<!-- *** TODO: This code will need to be updated once locationvideo added *** -->
-																			<?php //foreach ($this->request->data['LocationVideo'] as $key => $video): ?>
-																				<tr>
-																					<td>
-																						<span class="hidden"><?php //=$LocationVideo.$key.id ?></span>
-																						<div>
-																							<?php /*$this->Form->control("LocationVideo.$key.video_url", [
-																								'label' => false,
-																								'div' => false,
-																								'wrapInput' => false
-																							]);*/ ?>
-																						</div>
-																					</td>
-																					<td style="width:100px;" align="center">
-																						<button type="button" class="btn btn-md btn-danger js-video-delete" data-key="<?php //echo $key; ?>">Delete</button>
-																					</td>
-																				</tr>
-																			<?php //endforeach; ?>
-																			<tr class="footer">
-																				<td>
-																					<input class="form-control video-url" />
-																					<span class="help-block text-danger" style="display:none;" id="video-add-error">Video URL is invalid. Must start with http: or https:</span>
-																				</td>
-																				<td style="width:100px;" align="center">
-																					<button type="button" class="btn btn-md btn-success js-video-add">add</button>
-																					<input type="hidden" class="videoKey" value="<?php //echo count($locationVideo); ?>" />
-																				</td>
-																			</tr>
-																		</tbody>
-																	</table>
-																	<span class="help-block col-md-9 col-md-offset-3">Please copy and paste the URL from the YouTube, Vimeo, Dailymotion or Wistia video you'd like to add. Alternatively, you can go to the video and click "share", then copy and paste the link generated. After adding the link, please click ADD.</span>
-																</div>
-																<div class="clearfix"></div>
-																<hr>
 																<!-- Photo Album -->
 																<div>
 																	<label class="col col-md-3 control-label">Photos</label><div class="clearfix"></div>
 																	<table class="table-striped table-bordered col-md-offset-3 col-md-9">
 																		<tbody>
-																		<!-- *** TODO: This code will need to be updated once locationphoto added *** -->
-																		<?php //foreach ($locationPhoto as $key => $photo): ?>
-																			<?php //if (!empty($photo->photo_url)): ?>
-																				<tr>
-																					<td>
-																						<span class="hidden"><?php //=$locationPhoto.$key.id; ?></span>
-																						<div class='row mt5 mb10'>
-																							<div class='col-md-offset-3 col-md-9'>
-																								<img src="/cloudfiles/clinics/<?php //echo $photo->photo_url; ?>">
+																			<!-- *** TODO: This code will need to be updated once locationphoto added *** -->
+																			<?php foreach ($location->location_photos as $key => $photo): ?>
+																				<?php if (!empty($photo->photo_url)): ?>
+																					<tr>
+																						<td>
+																							<span class="hidden"><?= $photo->id; ?></span>
+																							<div class='row mt5 mb10'>
+																								<div class='col-md-offset-3 col-md-9'>
+																									<img src="/cloudfiles/clinics/<?php echo $photo->photo_url; ?>">
+																								</div>
 																							</div>
+																							<?php
+																							echo $this->Form->control("LocationPhoto.$key.photo_url", [
+																								'value' => $photo->photo_url,
+																								'label' => 'File name',
+																								'readonly' => 'readonly',
+																							]);
+																							echo $this->Form->control("LocationPhoto.$key.alt", [
+																								'value' => $photo->alt,
+																								'label' => 'Description',
+																								'required' => true,
+																							]);
+																							?>
+																						</td>
+																						<td style="width:100px;" class="tac">
+																							<button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key; ?>">Delete</button>
+																						</td>
+																					</tr>
+																				<?php endif; ?>
+																			<?php endforeach; ?>
+																			<tr>
+																				<td>
+																					<?php $key = count($location->location_photos); ?>
+																					<div class='row mt5 mb10'>
+																						<div class='col-md-offset-3 col-md-9'>
+																							<img id="photo-thumb-<?php echo $key; ?>">
 																						</div>
+																					</div>
+																					<?php
+																					echo $this->Form->input("LocationPhoto." . $key . ".file", [
+																						'type' => 'file',
+																						'label' => 'File name',
+																						'class' => 'form-control photo-url'
+																					]);
+																					?>
+																					<div id="photo-description-<?php echo $key; ?>" style="display:none;">
 																						<?php
-																						/*echo $this->Form->control("LocationPhoto.$key.photo_url", [
-																							'label' => 'File name',
-																							'readonly' => 'readonly',
-																						]);
-																						echo $this->Form->control("LocationPhoto.$key.alt", [
+																						echo $this->Form->input("LocationPhoto.$key.alt", [
 																							'label' => 'Description',
-																							'required' => true,
-																						]);*/
+																							'disabled' => true,
+																							'required' =>true,
+																						]);
 																						?>
-																					</td>
-																					<td style="width:100px;" class="tac">
-																						<button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?php //=$key; ?>">Delete</button>
-																					</td>
-																				</tr>
-																			<?php //endif; ?>
-																		<?php //endforeach; ?>
+																					</div>
+																					<span class="help-block text-danger" style="display:none;" id="photo-add-error-<?php echo $key; ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
+																				</td>
+																				<td style="width:100px;" align="center">
+																					<button class="btn btn-md btn-danger js-photo-delete" data-key="<?php echo $key; ?>" id="btn-photo-delete-<?php echo $key; ?>" style="display:none;">Delete</button>
+																				</td>
+																			</tr>
 																		</tbody>
 																	</table>
 																	<span class="help-block col-md-9 col-md-offset-3">Photos must be JPG format and less than 2MB. To add a photo, click on "Choose File". To remove a photo, click on "Delete".</span>
 																</div>
 																<div class="clearfix"></div>
 																<hr>
-																<!-- *** TODO: header variables, e.g. showSpecialAnnouncements need to be set *** -->
-																<?php //if ($showSpecialAnnouncement): ?>
+																<?php if ($showSpecialAnnouncement): ?>
 																	<!-- Special announcements / Flex space / Coupons -->
-																	<div id="specialAnnouncements" data-iscqpremier="<?php //echo $isCqPremier; ?>" data-adid="<?php //echo $adId; ?>" data-couponid="<?php //echo $couponId; ?>">
+																	<div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= $adId; ?>" data-couponid="<?= $couponId; ?>">
 																		<label class="col col-md-3 control-label">Special announcement</label>
 																		<div class="clearfix"></div>
 																		<div id="couponLibrary" style="display:none;">
@@ -393,22 +457,22 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																		<div id="couponSelected" style="display:none;">
 																			<span class="hidden"><?php echo $location->id_coupon; ?></span>
 																			<div class='col-md-offset-4 col-md-3'>
-																				<?php //echo $this->Clinic->previewCoupon($couponId, false, true); ?>
+																				<?php echo $this->Clinic->previewCoupon($couponId, false, true); ?>
 																			</div>
 																			<div class='col-md-5'></div>
 																		</div>
 																		<div id="uploadCoupon" style="display:none;">
-																			<?php //if ($adId): ?>
-																				<?php /*echo $this->Form->control('LocationAd.id',
+																			<?php if ($adId): ?>
+																				<?php echo $this->Form->control('LocationAd.id',
 																					[
 																						'type' => 'hidden',
 																						'value' => $adId
-																					]);*/
+																					]);
 																				?>
-																			<?php //endif; ?>
-																			<?php //if ($isCqPremier): ?>
+																			<?php endif; ?>
+																			<?php if ($isCqPremier): ?>
 																				<div class="col-md-offset-3 mb20"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
-																			<?php //endif; ?>
+																			<?php endif; ?>
 																			<?php //if (!empty($locationAd->photo_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
 																				<div class='row mb20' id='location-ad-preview'>
 																					<div class='col-md-offset-3 col-md-3'>
@@ -472,18 +536,17 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																	</div>
 																	<div class="clearfix"></div>
 																	<hr>
-																<?php //endif; ?>
+																<?php endif; ?>
 															</div>
 														</div>
 													<?php endif; ?>
-													<?php //if ($isCqPremier): ?>
+													<?php if ($isCqPremier): ?>
 														<!-- Vidscrips -->
-														<!-- *** TODO: locationVidscrips needs to be added -->
 														<div id="vidscrips">
 															<?php echo $this->Form->control('LocationVidscrips.id',
 																[
 																	'type' => 'hidden',
-																	//'value' => $locationVidscrips->id
+																	'value' => $location->location_vidscrip->id
 																]);
 															?>
 															<label class="col col-md-3 control-label mb20">Vidscrips</label>
@@ -502,19 +565,18 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																]);	
 															?>
 														</div>
-													<?php //endif; ?>
+													<?php endif; ?>
 												</div>
 												
 												<!-- Provider Tab -->
 												<div class="tab-pane" id="Provider">
-													<!-- *** TODO: call this when Provider is added to page, including locations/provider *** -->		
 													<?php
-														//$count = count($this->request->data['Provider']);
+														$count = count($location->providers);
 													?>
-													<?php //foreach ($this->request->data['Provider'] AS $key => $provider): ?>
-														<?php //echo $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => false, 'locationId' => $id]); ?>
-													<?php //endforeach; ?>
-													<?php //echo $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => false]); ?>
+													<?php foreach ($location->providers as $key => $provider): ?>
+														<?php echo $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => false, 'locationId' => $id, 'isBasicClinic' => $isBasicClinic]); ?>
+													<?php endforeach; ?>
+													<?php echo $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => false, 'isBasicClinic' => $isBasicClinic]); ?>
 												</div>
 												
 												<!-- Hours Tab -->
@@ -527,7 +589,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																'rows' => 3,
 																'maxlength' => 400,
 																'required' => false,
-																'help_block' => 'Use this field to leave an update for patients about any changes this clinic is implementing regarding COVID-19.',
+																'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
 																'div' => 'form-group mb0']); ?>
 														</div>
 													</div>
@@ -540,105 +602,94 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 															<th width="12%">By Appt</th>
 														</tr>
 														<!-- *** TODO: update once locationHour is pulled in ***-->
-														<span class="hidden"><?php //echo $locationHour->id; ?></span>
-														<?php //foreach ($days as $day): ?>
+														<span class="hidden"><?= $location->location_hour->id; ?></span>
+														<?php foreach ($days as $day): ?>
 															<tr>
-																<td><?php //echo date("l", strtotime($day)); ?></td>
-																<td class="form-inline">
-																	<?php /*echo $this->Form->control("LocationHour.".$day."_open", [
-																		'label' => false,
-																		'type' => 'time',
-																		'empty' => true,
-																		//*** TODO: convert24hours needs to be built ***
-																		//'selected' => $this->Clinic->convert24hours($this->request->data['LocationHour'][$day.'_open']),
-																		'div' => false,
-																		'class' => false
-																	]); */?>
+																<td><?php echo date("l", strtotime($day)); ?></td>
+                                                                <td class="form-inline">
+                                                                    <?= $this->Form->control("LocationHour.".$day."_open", [
+                                                                        'label' => false,
+                                                                        'type' => 'time',
+                                                                        'empty' => true,
+                                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'})
+                                                                    ]) ?>
 																</td>
 																<td>
-																	<?php /*echo $this->Form->control("LocationHour.".$day."_close", [
-																		'label' => false,
-																		'type' => 'time',
-																		'empty' => true,
-																		//'selected' => $this->Clinic->convert24hours($this->request->data['LocationHour'][$day.'_close']),
-																		'div' => false,
-																		'class' => false
-																	]);*/ ?>
+                                                                    <?= $this->Form->control("LocationHour.".$day."_close", [
+                                                                        'label' => false,
+                                                                        'type' => 'time',
+                                                                        'empty' => true,
+                                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'})
+                                                                    ]) ?>
 																</td>
 																<td>
-																	<?php /*echo $this->Form->control("LocationHour.".$day."_is_closed", [
-																		'label' => false,
-																		'type' => 'checkbox',
-																		'div' => false,
-																		'class' => 'is-closed-checkbox',
-																		//'data-day' => ucfirst($day)
-																	]);*/ ?>
+                                                                    <?= $this->Form->control("LocationHour.".$day."_is_closed", [
+                                                                        'label' => false,
+                                                                        'type' => 'checkbox',
+                                                                        'class' => 'is-closed-checkbox',
+                                                                        'data-day' => ucfirst($day),
+                                                                        'checked' => $location->location_hour->{$day.'_is_closed'}
+                                                                    ]) ?>
 																</td>
 																<td>
-																	<?php /*echo $this->Form->control("LocationHour.".$day."_is_byappt", [
-																		'label' => false,
-																		'type' => 'checkbox',
-																		'div' => false,
-																		'class' => false,
-																	]);*/ ?>
+                                                                    <?= $this->Form->control("LocationHour.".$day."_is_byappt", [
+                                                                        'label' => false,
+                                                                        'type' => 'checkbox',
+                                                                        'checked' => $location->location_hour->{$day.'_is_byappt'}
+                                                                    ]) ?>
 																</td>
 															</tr>
-														<?php //endforeach; ?>
+														<?php endforeach; ?>
 														<tr>
-															<td colspan="5" class="center">
-															<?php /*echo $this->Form->control('LocationHour.is_evening_weekend_hours', [
-																'div' => false,
-																'label' => [
-																	'class' => 'col col-md-12 control-label tal mr5',
-																	'text' => 'Evening and/or weekend hours available by appointment. Please call to schedule.',
-																],
-																'type' => 'checkbox',
-																'class' => false,
-																'wrapInput' => 'col col-md-12'
-															]);*/ ?></td>
+                                                            <td colspan="5">
+                                                                <?= $this->Form->control('LocationHour.is_evening_weekend_hours', [
+                                                                    'type' => 'checkbox',
+                                                                    'label' => [
+                                                                        'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
+                                                                        'escape' => false,
+                                                                        'class' => 'col col-md-12 control-label tal p0',
+                                                                    ],
+                                                                    'checked' => $location->location_hour->is_evening_weekend_hours
+                                                                ]) ?>
+                                                            </td>
 														</tr>
 														<tr>
-															<td colspan="5" class="center">
-																<?php /*echo $this->Form->control('LocationHour.is_closed_lunch', [
-																	'type' => 'checkbox',
-																	'div' => false,
-																	'class' => false,
-																	'wrapInput' => 'col col-md-12 mb10',
-																	'label' => [
-																		'class' => 'col col-md-12 control-label tal',
-																		'text' => 'Closed for lunch',
-																	],
-																]);*/ ?>
-																<div id="closedLunch" class="col col-md-12" style="display:none;">
-																	<div class="form-group required">
-																		<label class="col col-md-2 tal">Lunch break</label>
-																		<div class="col col-md-10">
-																			<?php /*echo $this->Form->control('LocationHour.lunch_start', [
-																				'type' => 'time',
-																				'label' => false,
-																				'class' => false,
-																				'div' => false,
-																				'wrapInput' => false,
-																				'empty' => true,
-																				'interval' => 15,
-																				//'value' => $this->Clinic->convert24hours($this->request->data['LocationHour']['lunch_start']),
-																			]);*/ ?>
-																			<span class="mr5 ml5">-</span>
-																			<?php /*echo $this->Form->control('LocationHour.lunch_end', [
-																				'type' => 'time',
-																				'label' => false,
-																				'class' => false,
-																				'div' => false,
-																				'wrapInput' => false,
-																				'empty' => true,
-																				'interval' => 15,
-																				'timeFormat' => 12,
-																				//'value' => $this->Clinic->convert24hours($this->request->data['LocationHour']['lunch_end']),
-																			]);*/ ?>
-																		</div>
-																	</div>
-																</div>
-															</td>
+                                                            <td colspan="5">
+                                                                <?= $this->Form->control('LocationHour.is_closed_lunch', [
+                                                                    'type' => 'checkbox',
+                                                                    'label' => [
+                                                                        'text' => '<strong class="ml5">Closed for lunch</strong>',
+                                                                        'escape' => false,
+                                                                        'class' => 'col col-md-12 control-label tal p0',
+                                                                    ],
+                                                                    'checked' => $location->location_hour->is_closed_lunch
+                                                                ]) ?>
+                                                                <!--*** TODO: add lunch break logic: -->
+                                                                <div id="closedLunch" class="col col-md-12 hidden">
+                                                                    <div class="form-group required">
+                                                                        <label class="col col-md-2 tal">Lunch break</label>
+                                                                        <div class="col col-md-10">
+                                                                            <?= $this->Form->control('LocationHour.lunch_start', [
+                                                                                'type' => 'time',
+                                                                                'label' => false,
+                                                                                'empty' => true,
+                                                                                'autocomplete' => 'off',
+                                                                                'interval' => 15,
+                                                                                'value' => $this->Clinic->convert24hours($location->location_hour->lunch_start),
+                                                                            ]) ?>
+                                                                            <span class="mr5 ml5">-</span>
+                                                                            <?= $this->Form->control('LocationHour.lunch_end', [
+                                                                                'type' => 'time',
+                                                                                'label' => false,
+                                                                                'empty' => true,
+                                                                                'autocomplete' => 'off',
+                                                                                'interval' => 15,
+                                                                                'value' => $this->Clinic->convert24hours($location->location_hour->lunch_end),
+                                                                            ]) ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
 														</tr>
 													</table>
 												</div>
@@ -649,8 +700,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<div class="controls">
 															<p><strong>Acceptable Methods of Payment</strong></p>
 															<!-- *** TODO: set up payment methods *** -->
-															<?php //$payment_json = isset($this->request->data['Payment']) ? $this->request->data['Payment'] : $this->request->data['Location']['payment']; ?>
-															<?php //echo $this->Clinic->paymentForm($payment_json); ?>
+															<?php echo $this->Clinic->paymentForm($location->payment); ?>
 														</div>
 													</div>
 												</div>
@@ -658,9 +708,9 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 												<!-- Notes Tab -->
 												<div class="tab-pane" id="Notes">
 													<!-- *** TODO: set up notes *** -->
-													<?php //$noteCount = count($this->request->data['LocationNote']); ?>
+													<?php $noteCount = count($location->location_notes); ?>
 													<div class="notes">
-														<?php //echo $this->Form->input("LocationNote.$noteCount.body", array('required' => false)); ?>
+														<?php echo $this->Form->input("LocationNote.$noteCount.body", array('required' => false)); ?>
 														<?php 
 															//*** TODO: update when CKEditor is ready ***
 															/*echo $this->Ckeditor->replace("LocationNote{$noteCount}Body", [
@@ -676,9 +726,9 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														</div>
 														<br />
 														<?php
-															/*foreach ($this->request->data['LocationNote'] as $note) {
-																echo $this->element('locations/note', ['note' => $note]);
-															}*/
+															foreach ($location->location_notes as $note) {
+																//echo $this->element('locations/note', ['note' => $note]);
+															}
 														?>
 													</div>
 												</div>
@@ -726,8 +776,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 															<div class="control-group mb20">
 																<div class="controls">
 																	<div class="btn-group">
-																		<!-- *** TODO: Html helper needs to be built out *** -->
-																		<?php /*echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update or Create CS Number',
+																		<?php echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update or Create CS Number',
 																			['action' => 'call_source', $id, '#' => 'CallAssist'],
 																			['escape' => false, 'class' => 'btn btn-xs btn-default']); ?>
 																		<?php echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> End and create new CS Number',
@@ -740,7 +789,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																		<?php echo $this->Html->link('<span class="glyphicon glyphicon-trash"></span> End CS Number',
 																			['action' => 'end', $id, '#' => 'CallAssist'],
 																			['class' => 'btn btn-xs btn-danger', 'escape' => false],
-																			'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?');*/ ?>
+																			'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?'); ?>
 																	</div>
 																</div>
 															</div>
@@ -751,34 +800,33 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																	<th>Clinic Number</th>
 																	<th>Is Active</th>
 																</tr>
-																<!-- *** TODO: CallSource needs to be added to page *** -->
-																<?php //foreach ($this->request->data['CallSource'] as $callSource): ?>
+																<?php foreach ($location->call_sources as $callSource): ?>
 																	<tr>
 																		<td>
-																			<?php //echo formatPhoneNumber($callSource['phone_number']); ?>
+																			<?php echo formatPhoneNumber($callSource->phone_number); ?>
 																		</td>
 																		<td>
-																			<?php //echo formatPhoneNumber($callSource['target_number']); ?>
+																			<?php echo formatPhoneNumber($callSource->target_number); ?>
 																		</td>
 																		<td>
-																			<?php //echo formatPhoneNumber($callSource['clinic_number']); ?>
+																			<?php echo formatPhoneNumber($callSource->clinic_number); ?>
 																		</td>
 																		<td>
-																			<?php //echo $callSource['is_active']; ?>
+																			<?php echo $callSource->is_active; ?>
 																		</td>
 																	</tr>
-																<?php //endforeach; ?>
+																<?php endforeach; ?>
 															</table>
 														</div>
 													<!-- User Tab -->
 													<div class="tab-pane" id="User">
+                                                        <?php $user = $location->users[0]; ?>
 														<div class="form-group mb20">
 															<div class="controls col-md-offset-3 col-md-9">
 																<div class="btn-group">
-																	<!-- *** TODO: Html helper needs to be built out *** -->
-																	<?php /*echo $this->Html->link('<span class="glyphicon glyphicon-envelope"></span> Send Default Email', ['controller' => 'location_users', 'action' => 'default_email', $this->request->data['LocationUser']['id'], $this->request->data['Location']['id']], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
-																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-lock"></span> Send Password Reset Email', ['controller' => 'location_users', 'action' => 'change_password', $this->request->data['LocationUser']['id'], $this->request->data['Location']['id']], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
-																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Generate New Password', ['controller' => 'location_users', 'action' => 'generate_new_password', $this->request->data['LocationUser']['id'], $this->request->data['Location']['id']], ['class' => 'btn btn-xs btn-default', 'escape' => false]);*/ ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-envelope"></span> Send Default Email', ['controller' => 'Users', 'action' => 'default_email', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-lock"></span> Send Password Reset Email', ['controller' => 'Users', 'action' => 'change_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Generate New Password', ['controller' => 'Users', 'action' => 'generate_new_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
 																</div>
 															</div>
 														</div>
@@ -786,33 +834,32 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<table class="table table-striped table-bordered table-condensed">
 															<tr>
 																<th class="col-md-3 tar">ID</th>
-																<!-- *** TODO: uncomment this and much of the code below when LocationUser added *** -->
-																<td class="col-md-9"><?php //echo $this->request->data['LocationUser']['id']; ?></td>
+																<td class="col-md-9"><?= $user->id ?></td>
 															</tr>
 															<tr>
 																<th class="col-md-3 tar">Created</th>
-																<td class="col-md-9"><?php echo dateTimeCentralToEastern($location->created); ?></td>
+																<td class="col-md-9"><?php echo dateTimeCentralToEastern($user->created); ?></td>
 															</tr>
 															<tr>
 																<th class="col-md-3 tar">Modified</th>
-																<td class="col-md-9"><?php echo dateTimeCentralToEastern($location->modified); ?></td>
+																<td class="col-md-9"><?php echo dateTimeCentralToEastern($user->modified); ?></td>
 															</tr>
 														</table>
-														<?php /*echo $this->Form->control('LocationUser.id') ?>
-														<?php echo $this->Form->control('LocationUser.username'); ?>
-														<?php echo $this->Form->control('LocationUser.first_name', ['required' => false]); ?>
-														<?php echo $this->Form->control('LocationUser.last_name', ['required' => false]); ?>
-														<?php echo $this->Form->control('LocationUser.email', ['required' => false]);*/ ?>
+														<?php echo $this->Form->control('User.id', ['value'=>$user->id]) ?>
+														<?php echo $this->Form->control('User.username', ['value'=>$user->username]); ?>
+														<?php echo $this->Form->control('User.first_name', ['required' => false, 'value'=>$user->first_name]); ?>
+														<?php echo $this->Form->control('User.last_name', ['required' => false, 'value'=>$user->last_name]); ?>
+														<?php echo $this->Form->control('User.email', ['required' => false, 'value'=>$user->email]); ?>
 														<div class="form-group">
 															<label class="col col-md-3 control-label">Last Login</label>
 															<div class="col col-md-9">
 																<div class="form-control" disabled="true">
 																	<?php
-																	/*if ($this->request->data['LocationUser']['lastlogin']) {
-																		echo date('F d Y, g:i a', strtotime($this->request->data['LocationUser']['lastlogin']));
+																	if ($user->lastlogin) {
+																		echo date('F d Y, g:i a', strtotime($user->lastlogin));
 																	} else {
 																		echo 'Never Logged In';
-																	}*/
+																	}
 																	?>
 																</div>
 															</div>
@@ -821,46 +868,40 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<div class="form-group">
 															<div class="controls">
 																<label class="col col-md-3 control-label">Email Notifications</label><div class="clearfix"></div>
-																<?php
-																$i=0; /*keep $i outside scope*/
-																//*** TODO: add LocationEmail ***
-																//$count = count($this->request->data['LocationEmail']);
-																?>
-																<?php //for(; $i < $count; $i++): ?>
-																	<?php //if ($this->B3F->value("LocationEmail.$i.email")): /* Only show if we have something to show*/ ?>
-																		<hr />
-																		<?php //if($i != $count): ?>
-																			<div class="form-group">
-																				<div class="col col-md-offset-3 col-md-9">
-																					<?php /*echo $this->Html->link(
-																						'Delete This Email',
-																						array('prefix' => 'Admin', 'controller' => 'location_users', 'action' => 'deluser',
-																						$this->request->data['LocationEmail'][$i]['id']), array(), 'Are you sure?'
-																					);*/ ?>
-																				</div>
-																			</div>
-																		<?php //endif; ?>
-																		<?php //echo $this->Form->control("LocationEmail.$i.id", array('default' => isset($this->request->data['LocationEmail'][$i]['id']) ? $this->request->data['LocationEmail'][$i]['id'] : '')); ?>
-																		<?php //foreach(array('email','first_name','last_name') as $field): ?>
-																			<?php //echo $this->Form->control("LocationEmail.$i.$field", array('default' => isset($this->request->data['LocationEmail'][$i][$field]) ? $this->request->data['LocationEmail'][$i][$field] : '')); ?>
-																		<?php //endforeach; ?>
+																<?php foreach($location->location_emails as $key => $email): ?>
+																	<?php if (!empty($email->email)): /* Only show if we have something to show*/ ?>
 																		<hr>
-																	<?php //endif; ?>
-																<?php //endfor; ?>
+																		<div class="form-group">
+																			<div class="col col-md-offset-3 col-md-9">
+																				<?php echo $this->Html->link(
+																					'Delete This Email',
+																					['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'deluser',
+																					$email->id], [], 'Are you sure?'
+																				); ?>
+																			</div>
+																		</div>
+																		<?php echo $this->Form->control("LocationEmail.$key.id", ['default' => isset($email->id) ? $email->id : '']); ?>
+																		<?php foreach(['email','first_name','last_name'] as $field): ?>
+																			<?php echo $this->Form->control("LocationEmail.$key.$field", ['default' => isset($email->$field) ? $email->$field : '']); ?>
+																		<?php endforeach; ?>
+																		<hr>
+																	<?php endif; ?>
+																<?php endforeach; ?>
 									
 																<div class="form-group">
 																	<div class="col col-md-offset-3 col-md-9">
-																		<?php //echo $this->Html->link('Add Another Email', '#', array('onclick' => '$("#additional-notification").slideDown(); return false;')); ?>
+																		<?php echo $this->Html->link('Add Another Email', '#', array('onclick' => '$("#additional-notification").slideDown(); return false;')); ?>
 																	</div>
 																</div>
-									
-																<?php //$notificationStyle = isset($this->validationErrors['LocationEmail'][$i]) ? '' : 'display:none;'; ?>
-																<div id="additional-notification" style=<?php //echo $notificationStyle; ?>>
-																	<?php //echo $this->Form->control("LocationEmail.$i.id", ['default' => isset($this->request->data['LocationEmail'][$i]['id']) ? $this->request->data['LocationEmail'][$i]['id'] : '']); ?>
-																	<?php //foreach(['email','first_name','last_name'] as $field): ?>
-																		<?php //echo $this->Form->control("LocationEmail.$i.$field", ['required' => false]); ?>
-																	<?php //endforeach; ?>
-																	<hr />
+
+                                                                <?php $key = count($location->location_emails); ?>
+																<?php $notificationStyle = '';//!empty($this->validationErrors['LocationEmail'][$key]) ? '' : 'display:none;'; ?>
+																<div id="additional-notification" style=<?= $notificationStyle ?>>
+																	<?php echo $this->Form->control("LocationEmail.$key.id"); ?>
+																	<?php foreach(['email','first_name','last_name'] as $field): ?>
+																		<?php echo $this->Form->control("LocationEmail.$key.$field", ['required' => false]); ?>
+																	<?php endforeach; ?>
+																	<hr>
 																</div>
 															</div>
 														</div>
@@ -874,12 +915,12 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																			<th>Login</th>
 																			<th>IP Address</th>
 																		</tr>
-																		<?php //foreach ($locationUserLogins as $locationUserLogin): ?>
+																		<?php foreach ($user->login_ips as $loginIp): ?>
 																			<tr>
-																				<td><?php //echo $locationUserLogin['login_date']; ?></td>
-																				<td><?php //echo $locationUserLogin['ip']; ?></td>
+																				<td><?php echo $loginIp->login_date; ?></td>
+																				<td><?php echo $loginIp->ip; ?></td>
 																			</tr>
-																		<?php //endforeach; ?>
+																		<?php endforeach; ?>
 																	</table>
 																</div>
 															</div>
@@ -895,27 +936,23 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<div id="reviews" class="pb10">
 															<div class="control-group">
 																<div class="controls">
-																<!-- *** TODO: Pull in Review *** -->
-																<?php //foreach($this->request->data['Review'] as $review): ?>
-																	<!-- *** TODO: Add locations/review_body *** -->
-																	<?php //echo $this->element('locations/review_body', array('review' => $review)); ?>
+																<?php foreach($location->reviews as $review): ?>
+																	<?php echo $this->element('locations/review_body', ['review' => $review]); ?>
 																	<div class="ml20 mt10">
-																		<span class='label label-default'><?php //echo $this->Clinic->reviewStatus($review['status']) ?></span>
-																		<?php /*echo $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",
-																			['controller' => 'reviews', 'action' => 'edit', $review['id']],
-																			['escape' => false, 'class' => 'btn btn-xs btn-default ml10']);*/ ?>
+																		<span class='label label-default'><?php echo Review::$statuses[$review->status]; ?></span>
+																		<?php echo $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",
+																			['controller' => 'reviews', 'action' => 'edit', $review->id],
+																			['escape' => false, 'class' => 'btn btn-xs btn-default ml10']); ?>
 																	</div>
 																	<hr>
-																<?php //endforeach; ?>
+																<?php endforeach; ?>
 																</div>
 															</div>
 														</div>
 														<div class="control-group">
 															<div class="controls">
-																<?php //if ($id): ?>
-																	<?php //echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Load All Reviews For This Clinic', array($id, '#' => 'Reviews', 'loadall' => 1), array('class' => 'btn btn-xs btn-info', 'escape' => false)); ?>
-																<?php //endif; ?>
-																<?php //echo $this->Html->link('<span class="glyphicon glyphicon-plus"></span> Add A Review For This Clinic', array('controller' => 'reviews', 'action' => 'edit', 0, $this->request->data['Location']['id']), array('class' => 'btn btn-xs btn-primary', 'escape' => false)); ?>
+																<?php echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Load All Reviews For This Clinic', [$id, '#' => 'Reviews', 'loadall' => 1], ['class' => 'btn btn-xs btn-info', 'escape' => false]); ?>
+																<?php echo $this->Html->link('<span class="glyphicon glyphicon-plus"></span> Add A Review For This Clinic', ['controller' => 'reviews', 'action' => 'edit', 0, $id], ['class' => 'btn btn-xs btn-primary', 'escape' => false]); ?>
 															</div>
 														</div>
 													</div>
@@ -924,27 +961,33 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 													<!-- *** TODO: add import specific variables, e.g. $lastOticonImportDate *** -->
 													<div class="tab-pane" id="Imports">
 														<h4>Imports</h4>
-														<div class="tabbable">
-															<ul class="nav nav-tabs import-tabs">
+                                                        <div class="tabbable">
+                                                            <ul class="nav nav-tabs import-tabs clearfix" role="tablist">
 																<?php if (Configure::read('isOticonImportEnabled')): ?>
-																	<li class="active"><a href="#Oticon" data-toggle="tab">Oticon</a></li>
+                                                                    <li class="nav-item">
+                                                                        <button class="nav-link active" data-bs-target="#Oticon" data-bs-toggle="tab" aria-controls="Oticon" aria-expanded="true" type="button" role="tab">Oticon</button>
+                                                                    </li>
 																<?php endif; ?>
 																<?php if (Configure::read('isYhnImportEnabled')): ?>
-																	<li><a href="#YHN" data-toggle="tab">YHN</a></li>
+                                                                    <li class="nav-item">
+                                                                        <button class="nav-link" data-bs-target="#YHN" data-bs-toggle="tab" aria-controls="YHN" aria-expanded="true" type="button" role="tab">YHN</button>
+                                                                    </li>
 																<?php endif; ?>
 																<?php if (Configure::read('isCqpImportEnabled')): ?>
-																	<li><a href="#CQP" data-toggle="tab">CQP</a></li>
+                                                                    <li class="nav-item">
+                                                                        <button class="nav-link" data-bs-target="#CQP" data-bs-toggle="tab" aria-controls="CQP" aria-expanded="true" type="button" role="tab">CQP</button>
+                                                                    </li>
 																<?php endif; ?>
 															</ul>
 															<div class="tab-content mt10">
 																<!-- Oticon Tab -->
 																<div class="tab-pane active" id="Oticon">
-																	<span><strong>Most recent Oticon import:</strong> <?php //echo $lastOticonImportDate; ?></span><br><br>
+																	<span><strong>Most recent Oticon import:</strong> <?php echo $lastOticonImportDate; ?></span><br><br>
 																	<?php if (!empty($location->oticon_tier)): ?>
 																		<!-- Show change status only if this in an active Oticon clinic -->
 																		<div class="form-group col-md-12">
 																			<div class="btn-group">
-																				<?php //echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Field Statuses Without Accepting Oticon Changes', array('controller' => 'locations', 'action' => 'check_oticon', $this->request->data['Location']['id']), array('class' => 'btn btn-xs btn-default', 'escape' => false)); ?>
+																				<?php echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Field Statuses Without Accepting Oticon Changes', ['controller' => 'locations', 'action' => 'check_oticon', $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
 																			</div>
 																		</div>
 																		<div class="clearfix"></div>
@@ -956,10 +999,10 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																				<th>Oticon value</th>
 																				<th></th>
 																			</tr>
-																			<?php //foreach (['email', 'phone', 'title', 'address'] as $field): ?>
-																				<?php //$ucField = ucfirst($field); ?>
+																			<?php foreach (['email', 'phone', 'title', 'address'] as $field): ?>
+																				<?php $ucField = ucfirst($field); ?>
 																				<tr>
-																					<td><?php //echo $ucField; ?></td>
+																					<td><?php echo $ucField; ?></td>
 																					<td><?php //echo $this->Clinic->{"readable".$ucField."Status"}($this->request->data); ?></td>
 																					<td>
 																						<?php /*
@@ -1013,7 +1056,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 																						]);*/ ?>
 																					</td>
 																				</tr>
-																			<?php //endforeach; ?>
+																			<?php endforeach; ?>
 																		</table>
 																		<hr>
 																	<?php endif; ?>
@@ -1215,7 +1258,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<div class="control-group mb20">
 															<div class="controls">
 																<div class="btn-group">
-																	<?php //echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Filters', array('action' => 'update_filters', $id, '#' => 'Filters'), array('escape' => false, 'class' => 'btn btn-xs btn-default')); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Filters', array('action' => 'update_filters', $id, '#' => 'Filters'), array('escape' => false, 'class' => 'btn btn-xs btn-default')); ?>
 																</div>
 															</div>
 														</div>
@@ -1282,12 +1325,11 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 														<table class="table table-striped table-bordered table-condensed">
 															<tr>
 																<th class="col-md-3 tar">Date Created</th>
-																<!-- *** TODO: build dateTimeCentralToEastern *** -->
-																<td class="col-md-9"><?php //echo dateTimeCentralToEastern($location->created); ?></td>
+																<td class="col-md-9"><?php echo dateTimeCentralToEastern($location->created); ?></td>
 															</tr>
 															<tr>
 																<th class="col-md-3 tar">Last Modified</th>
-																<td class="col-md-9"><?php //echo dateTimeCentralToEastern($location->modified); ?></td>
+																<td class="col-md-9"><?php echo dateTimeCentralToEastern($location->modified); ?></td>
 															</tr>
 														</table>
 														<?= $this->Form->control('redirect'); ?>

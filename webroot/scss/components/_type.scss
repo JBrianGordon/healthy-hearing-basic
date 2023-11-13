@@ -63,10 +63,16 @@ hr {
 	background-color: #eee;
 	border: 0;
 	border-top: 1px solid #777;
+  width: 100%;
 }
 
 th {
 	vertical-align: top;
+}
+
+small {
+  font-size: 87%;
+  line-height: 1.6;
 }
 
 @media only screen and (max-width: $screen-sm-max) {
@@ -114,6 +120,39 @@ a.print-link {
 
 .hidden {
   display: none;
+}
+
+.flex {
+  display: flex;
+
+  .checkbox-left {
+    order: -1;
+  }
+}
+
+.form-group {
+  clear: both;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pagination {
+  font-size: 16px;
+}
+
+table {
+
+  &.basic-info {
+    th, td {
+      padding: 12px 24px;
+    }
+  }
+
+  &.table-bordered {
+    border: 1px solid #ddd
+  }
 }
 
 .text-primary {

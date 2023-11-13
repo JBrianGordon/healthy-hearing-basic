@@ -32,9 +32,7 @@ use DateTimeZone;
  * @property \App\Model\Table\LocationLinksTable&\Cake\ORM\Association\HasMany $LocationLinks
  * @property \App\Model\Table\LocationNotesTable&\Cake\ORM\Association\HasMany $LocationNotes
  * @property \App\Model\Table\LocationPhotosTable&\Cake\ORM\Association\HasMany $LocationPhotos
- * @property \App\Model\Table\LocationProvidersTable&\Cake\ORM\Association\HasMany $LocationProviders
  * @property \App\Model\Table\LocationUsersTable&\Cake\ORM\Association\HasMany $LocationUsers
- * @property \App\Model\Table\LocationVideosTable&\Cake\ORM\Association\HasMany $LocationVideos
  * @property \App\Model\Table\LocationVidscripsTable&\Cake\ORM\Association\HasMany $LocationVidscrips
  * @property \App\Model\Table\ReviewsTable&\Cake\ORM\Association\HasMany $Reviews
  *
@@ -74,6 +72,11 @@ class LocationsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        // The 'lng' field is named 'lon' in our Locations table
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
+        $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
+
+        // Associations
         $this->hasMany('CaCallGroups', [
             'foreignKey' => 'location_id',
         ]);
@@ -107,18 +110,14 @@ class LocationsTable extends Table
         $this->hasMany('LocationPhotos', [
             'foreignKey' => 'location_id',
         ]);
-        $this->hasMany('LocationProviders', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->belongsToMany('Providers', [
-            'through' => 'LocationProviders',
-            'sort' => ['Providers.priority' => 'ASC']
-        ]);
-        $this->hasMany('LocationUsers', [
             'foreignKey' => 'location_id',
-        ]);
-        $this->hasMany('LocationVideos', [
-            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'provider_id',
+            'joinTable' => 'locations_providers',
+            'sort' => [
+                'Providers.priority' => 'ASC',
+                'Providers.id' => 'ASC',
+            ]
         ]);
         $this->hasOne('LocationVidscrips', [
             'foreignKey' => 'location_id',
@@ -126,7 +125,11 @@ class LocationsTable extends Table
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
-        $this->belongsToMany('Users');
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Allow us to search for multiple values using '[or]'
         $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];
@@ -215,7 +218,6 @@ class LocationsTable extends Table
             ->boolean('badge_chinese')
             ->boolean('using_logo')
             ->boolean('using_photos')
-            ->boolean('using_videos')
             ->boolean('using_badges')
             ->boolean('using_flex_space')
             ->boolean('using_linked_locations')
@@ -373,24 +375,6 @@ class LocationsTable extends Table
                     }
                 }
             ])
-            ->add('using_videos', 'Search.Callback', [
-                'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $locationList = $this->LocationVideos->find('list', ['valueField' => 'location_id'])->toArray();
-                    $uniqueList = array_unique($locationList);
-                    if ($args['using_videos']) {
-                        $query->andWhere([
-                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
-                            'Locations.id IN' => $uniqueList]);
-                    } else {
-                        $query->andWhere([
-                            'OR' => [
-                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
-                                'Locations.id NOT IN' => $uniqueList,
-                            ]
-                        ]);
-                    }
-                }
-            ])
             ->add('using_badges', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     if ($args['using_badges']) {
@@ -466,6 +450,15 @@ class LocationsTable extends Table
                         ]);
                     }
                 }
+            ])
+            ->add('providerLocation', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['title'],
             ]);
 
         // Accepted forms of payments options at a clinic
@@ -1350,16 +1343,10 @@ class LocationsTable extends Table
             'contain' => [
                 'CallSources',
                 'LocationHours',
-                'LocationProviders.Providers' => [
-                    // TODO fix provider order
-                    //'order' => 'Providers.priority ASC, Providers.id ASC'
-                ],
+                'Providers',
                 'Reviews' => [
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
-                    ],
-                    'Zips' => [
-                        'fields' => ['city','state']
                     ],
                 ]
             ]
@@ -1374,12 +1361,6 @@ class LocationsTable extends Table
             }
             // Premier features ('Premier' listings only)
             if ($location->listing_type == Location::LISTING_TYPE_PREMIER) {
-                // Get videos
-                $location->location_videos = $this->LocationVideos->find('all', [
-                    'contain' => [],
-                    'conditions' => ['location_id' => $locationId]
-                ])->all();
-
                 // Get photos
                 $location->location_photos = $this->LocationPhotos->find('all', [
                     'contain' => [],
@@ -1401,6 +1382,36 @@ class LocationsTable extends Table
             }
         }
         return $location;
+    }
+
+    /**
+    * Find a Location ID by the Location User username
+    * @param string username
+    * @return int LocationID
+    */
+    public function findByUsername($username) {
+
+        if (empty($username)) {
+            return null;
+        }
+
+        // Does username match a location_id?
+        $count = $this->findById($username)->count();
+        if (!empty($count)) {
+            return $username;
+        }
+
+        // Find location_id match for user
+        $locationsUser = $this->LocationsUsers->find('all', [
+            'conditions' => [
+                'user_id' => $username,
+            ],
+            'contain' => []
+        ])->first();
+        if (!empty($locationsUser)) {
+            return $locationsUser->location_id;
+        }
+        return null;
     }
 
     /**
@@ -1558,29 +1569,24 @@ class LocationsTable extends Table
             'region' => null,
             'city' => null
         ], $options);
-        // Reverted to old syntax (pre-??) for #16574 fix
+        // Note: the null-coalescing operator doesn't work on hhapp4. All servers must be PHP 7.0+.
         // $limit = $limit ?? 40;
         $limit = $limit ? $limit : 40;
+        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
+        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
         $conditions = array_merge([
             'Locations.is_active' => true,
             'Locations.is_show' => true
         ], $conditions);
 
-        /*
-        TODO: IMPLEMENT RANGEABLE BEHAVIOR
-
-
-        // Reverted to old syntax (pre-??) for #16574 fix
-        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
-        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
         if (!empty($options['lat']) && !empty($options['lon'])) {
-            $conditions['Locations.lat'] = $options['lat'];
-            $conditions['Locations.lon'] = $options['lon'];
+            $lat = $options['lat'];
+            $lng = $options['lon'];
         } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
             $zip = TableRegistry::get('Zips')->get($options['zip']);
             if (!empty($zip['lat']) && !empty($zip['lon'])) {
-                $conditions['Locations.lat'] = $zip['lat'];
-                $conditions['Locations.lon'] = $zip['lon'];
+                $lat = $zip['lat'];
+                $lng = $zip['lon'];
             } else {
                 // This zip code does not exist in our zip table
                 return [];
@@ -1592,10 +1598,10 @@ class LocationsTable extends Table
                 return [];
             }
             $options['region'] = $this->parseStateSlug($options['region']);
-            $city = ClassRegistry::init('City')->findByCity($options['city'], $options['region']);
-            if (!empty($city) && !empty($city['City']['lat'] && !empty($city['City']['lon']))) {
-                $conditions['Locations.lat'] = $city['City']['lat'];
-                $conditions['Locations.lon'] = $city['City']['lon'];
+            $city = TableRegistry::get('Cities')->findByCity($options['city'], $options['region']);
+            if (!empty($city) && !empty($city->lat && !empty($city->lon))) {
+                $lat = $city->lat;
+                $lng = $city->lon;
             } else {
                 // we can't find lat/lon for this city
                 return [];
@@ -1605,29 +1611,9 @@ class LocationsTable extends Table
             return [];
         }
 
-        $clinicFindSettings = [
-            'conditions' => $conditions,
-            'fields' => $fields,
-            'range' => $maxRange,
-            'range_out_till_count_is' => false, //disable range-out
-            'order_by_distance' => true,
-            'contain' => $contain,
-            'limit' => $limit
-        ];
-        return $this->find('range', $clinicFindSettings);
-        */
-
-        //TODO TEMPORARY - Just return the first $limit locations in my state
-        // Remove this when rangeable is working
-        //--------------------------------------------------------------
-        $state = $this->parseStateSlug($options['region']);
-        $conditions['Locations.state'] = $state;
-        $locations = $this->find('all', [
-            'contain' => $contain,
-            'conditions' => $conditions,
-            'limit' => $limit
-        ])->all()->toArray();
-        //--------------------------------------------------------------
+        $options = ['lat'=>$lat, 'lng'=>$lng, 'distance'=>$maxRange, 'conditions'=>$conditions, 'fields'=>$fields, 'contain'=>$contain];
+        $query = $this->find('distance', $options)->orderAsc('distance')->limit($limit);
+        $locations = $query->all()->toArray();
         return $locations;
     }
 
@@ -1731,34 +1717,6 @@ class LocationsTable extends Table
     }
 
     /**
-    * Return the first provider with a photo
-    * @param location id
-    * @return mixed false if failed to find location, array of result
-    */
-    public function firstProviderWithPhoto($locationId) {
-        // Find all providers for this locaton
-        $locationProviders = $this->LocationProviders->find('all', [
-            'contain' => ['Providers'],
-            'conditions' => [
-                'LocationProviders.location_id' => $locationId,
-            ]
-        ])->all();
-        $provider = false;
-        $providerPriority = 99;
-        foreach ($locationProviders as $locationProvider) {
-            if ($locationProvider->provider->thumb_url != '') {
-                // This provider has a photo
-                if ($locationProvider->provider->priority < $providerPriority) {
-                    // Find the provider with the lowest priority number
-                    $provider = $locationProvider->provider;
-                    $providerPriority = $locationProvider->provider->priority;
-                }
-            }
-        }
-        return $provider;
-    }
-
-    /**
     * Find unique linked locations for the given locationId
     * @param int locationId
     */
@@ -1829,16 +1787,16 @@ class LocationsTable extends Table
                     ];
                 }
             }
-            // Get email from LocationUser recovery email
-            foreach ($location->location_users as $locationUser) {
-                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
-                    $uniqueEmails[] = $locationUser->email;
+            // Get email from User recovery email
+            foreach ($location->users as $user) {
+                if (!empty($user->email) && !in_array($user->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $user->email;
                     $data[] = [
                         'hhid' => $location->id,
                         'clinic_title' => $location->title,
-                        'first_name' => $locationUser->first_name,
-                        'last_name' => $locationUser->last_name,
-                        'email' => $locationUser->email,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
                     ];
                 }
             }

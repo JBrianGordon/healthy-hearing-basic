@@ -5,7 +5,7 @@ $this->Breadcrumbs->add([
 	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => ''],
 ]);
-$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer']);
+$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['block' => true, 'defer' => 'defer']);
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">
@@ -14,6 +14,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
 		<div class="row noprint">
 			<header class="col-lg-12 inverse">
 				<?= $this->Breadcrumbs->render() ?>
+				<?= $this->element('breadcrumb_schema') ?>
 			</header>
 			<div class="col-lg-12 page-content float-start">
 				<section class="panel">

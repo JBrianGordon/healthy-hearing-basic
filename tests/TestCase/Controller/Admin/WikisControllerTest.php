@@ -73,17 +73,6 @@ class WikisControllerTest extends TestCase
     }
 
     /**
-     * Test view method
-     *
-     * @return void
-     * @uses \App\Controller\Admin\WikisController::view()
-     */
-    public function testView(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test add method
      *
      * @return void

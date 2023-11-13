@@ -11,6 +11,11 @@
 		border-bottom-left-radius: 3rem !important;
 		border-top-left-radius: 3rem !important;
 	}
+
+  &.btn-block {
+    width: 100%;
+    display: block;
+  }
 }
 
 .btn-secondary {
@@ -191,8 +196,13 @@
     max-width: 220px;
 }
 
+#more-reviews-button {
+  margin: 0 auto;
+}
+
 #fewer-reviews-button {
 	display: none;
+  margin: 0 auto;
 }
 
 span#exportClose {

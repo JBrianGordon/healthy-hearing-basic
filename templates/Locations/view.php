@@ -9,19 +9,20 @@ use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
-$this->Html->script('dist/clinic.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Html->script('dist/clinic.min.js', ['block' => true]);
 ?>
 <?php
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);
 $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($location->id);
-$firstProvider = empty($location->location_providers[0]) ? null : $location->location_providers[0];
-$hideProvider = empty($firstProvider->provider->title) && empty($firstProvider->provider->credentials) && empty($firstProvider->provider->thumb_url) && empty($firstProvider->provider->description);
+$firstProvider = empty($location->providers[0]) ? null : $location->providers[0];
+$hideProvider = empty($firstProvider->title) && empty($firstProvider->credentials) && empty($firstProvider->thumb_url) && empty($firstProvider->description);
 $showSpecialAnnouncement = (
 	($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
 	($location->feature_special_announcement)
 );
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 $this->Breadcrumbs->add([
+	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
     ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
     ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'viewCityZip', 'region' => $region, 'city' => $city]],
@@ -37,6 +38,7 @@ $this->Breadcrumbs->add([
 			<div class="row" id="result_content">
 				<header class="col-lg-12 inverse breadcrumb-header">
 					<?= $this->Breadcrumbs->render(); ?>
+					<?= $this->element('breadcrumb_schema') ?>
 					<div id="ellipses">...</div>
 				</header>
 				<div class="col-lg-12 page-content">
@@ -83,7 +85,7 @@ $this->Breadcrumbs->add([
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>id="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
 												<div class="telephone h2 bi bi-telephone-fill">
@@ -226,7 +228,7 @@ $this->Breadcrumbs->add([
 																    echo $this->Form->control('CaCallGroup.'.$topicKey, [
 																        'type' => 'checkbox',
 																        'label' => [
-																            'class' => 'control-label pt0 pl5',
+																            'class' => 'control-label pt0',
 																            'style' => 'text-align:left;',
 																            'text' => $label,
 																            'escape' => false,
@@ -256,7 +258,7 @@ $this->Breadcrumbs->add([
 													 data-callback='submitApptRequest'
 													 data-size="invisible">
 												</div>
-												<small class="help-block p20 tac clearfix">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</small>
+												<small class="help-block p10 tac clearfix">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</small>
 											</div>
 										<?= $this->Form->end(); ?>
 									</div>
@@ -281,48 +283,11 @@ $this->Breadcrumbs->add([
 						</section>
 					<?php endif; ?>
 					<div class="row" style="clear: both">
-						<?php $covid19Statement = trim($location->optional_message); ?>
-						<?php if (!empty($covid19Statement)): ?>
-							<div id="covidStatement" class="col-md-12">
-								<h2>A message from <?= $location->title ?> about COVID-19:</h2>
-								<p><?= $covid19Statement ?></p>
-							</div>
-						<?php endif; ?>
-						<div class="col-md-8">
+						<div class="col-sm-8">
 							<!-- About / Services -->
 							<?php
-							$hours = $this->Clinic->hours($location);
-							if ($isMobileDevice) {
-								echo "<span id='mapBuffer'></span>";
-								echo '<section id="mobileMap" class="panel panel-primary">';
-								echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
-								echo '<div class="panel-body"><div class="panel-section condensed">';
-								echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
-								if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
-									echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
-								};
-								echo '</div></div></section>';
-								echo '<div id="hours" class="panel panel-light">
-									<div id="earqHours"></div>
-									<header class="panel-heading text-center">
-										<h2>Hours of operation</h2>
-									</header>
-									<div class="panel-body">
-										<div class="panel-section condensed">' .$hours.
-										'</div>
-									</div>
-								</div>';
-								echo $this->element('locations/profile/more_information');
-								echo $this->element('locations/profile/video_gallery');
-								echo $this->element('locations/profile/photo_gallery');
-								if ($isEnhancedOrPremier) {
-									echo $this->element('locations/profile/services');
-								}
-								echo $this->element('locations/profile/review_section');
-								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
-							} else {
-								echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
-								if (Configure::read('country') != 'CA') {
+								$hours = $this->Clinic->hours($location);
+								if ($isMobileDevice) {
 									echo "<span id='mapBuffer'></span>";
 									echo '<section id="mobileMap" class="panel panel-primary">';
 									echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
@@ -332,15 +297,45 @@ $this->Breadcrumbs->add([
 										echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
 									};
 									echo '</div></div></section>';
+									echo '<div id="hours" class="panel panel-light">
+										<div id="earqHours"></div>
+										<header class="panel-heading text-center">
+											<h2>Hours of operation</h2>
+										</header>
+										<div class="panel-body">
+											<div class="panel-section condensed">' .$hours.
+											'</div>
+										</div>
+									</div>';
+									echo $this->element('locations/profile/optional_message');
+									echo $this->element('locations/profile/more_information');
+									echo $this->element('locations/profile/photo_gallery');
+									if ($isEnhancedOrPremier) {
+										echo $this->element('locations/profile/services');
+									}
+									echo $this->element('locations/profile/review_section');
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+								} else {
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+									if (Configure::read('country') != 'CA') {
+										echo "<span id='mapBuffer'></span>";
+										echo '<section id="mobileMap" class="panel panel-primary">';
+										echo '<header class="panel-heading text-center"><h2>Location</h2></header>';
+										echo '<div class="panel-body"><div class="panel-section condensed">';
+										echo $this->element('locations/map', ['hideProvider' => $hideProvider]);
+										if (!$location->is_mobile && ($location->listing_type === 'Premier')) {
+											echo '<a href="#" class="btn btn-lg btn-primary directions-link" rel="noopener" target="_blank">Driving Directions</a>';
+										};
+										echo '</div></div></section>';
+									}
+									echo $this->element('locations/profile/review_section');
+									echo $this->element('locations/profile/optional_message');
+									echo $this->element('locations/profile/more_information');
+									echo $this->element('locations/profile/photo_gallery');
+									if ($isEnhancedOrPremier) {
+										echo $this->element('locations/profile/services');
+									}
 								}
-								echo $this->element('locations/profile/review_section');
-								echo $this->element('locations/profile/more_information');
-								echo $this->element('locations/profile/video_gallery');
-								echo $this->element('locations/profile/photo_gallery');
-								if ($isEnhancedOrPremier) {
-									echo $this->element('locations/profile/services');
-								}
-							}
 							?>
 							
 							<!-- Clinic Badges -->
@@ -415,14 +410,14 @@ $this->Breadcrumbs->add([
 									</header>
 									<div class="panel-body">
 										<div class="panel-section condensed">
-											<div class="col-md-4">
+											<div class="col-sm-4">
 												<img loading="lazy" class="earq-affiliate-img" src="/img/nflpa-cq.png" alt="Clinic affiliations" width="300" height="84">
 											</div>
-											<p class="earq-blurb col-md-8 tal">We are preferred providers of the NFL Players Association’s Professional Athletes Foundation. Our goal is to bring better hearing to former professional athletes and fit them with the hearing technology they need.</p>
-											<div class="col-md-4">
+											<p class="earq-blurb col-sm-8 tal">We are preferred providers of the NFL Players Association’s Professional Athletes Foundation. Our goal is to bring better hearing to former professional athletes and fit them with the hearing technology they need.</p>
+											<div class="col-sm-4">
 												<img loading="lazy" class="earq-affiliate-img" src="/img/earq-hearstrong.jpg" alt="Clinic affiliations" width="300" height="42">
 											</div>
-											<p class="earq-blurb col-md-8 tal">We are a proud partner of HearStrong, an organization that spreads hearing loss awareness and provides hearing aids to those in need.</p>
+											<p class="earq-blurb col-sm-8 tal">We are a proud partner of HearStrong, an organization that spreads hearing loss awareness and provides hearing aids to those in need.</p>
 										</div>
 									</div>
 								</div>
@@ -433,7 +428,7 @@ $this->Breadcrumbs->add([
 							?>
 						</div>
 				
-						<div class="col-md-4">
+						<div class="col-sm-4">
 							
 							<!-- Clinic Links -->
 							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>
@@ -599,31 +594,7 @@ $this->Breadcrumbs->add([
 									</div>
 								</div>
 							<?php endif; ?>
-				
-							<!-- Affiliations -->
-							<?php if ($location->is_iris_plus && $location->listing_type == 'Premier' && $isMobileDevice): ?>
-								<div id="affiliates" class="panel panel-light text-center">
-									<header class="panel-heading text-center">
-										<h2>Affiliations</h2>
-									</header>
-									<div class="panel-body">
-										<div class="panel-section condensed">
-											<div class="col-md-4">
-												<img loading="lazy" class="earq-affiliate-img" src="/img/earq-warranty-logo.jpg" alt="Clinic affiliations" width="62" height="101">
-											</div>
-											<p class="earq-blurb col-md-8 tal">We are proud to be your exclusive EarQ provider. Only EarQ providers can offer leading hearing aid technology complete with the EarQ 4-Year Warranty that covers any EarQ device for four full years.</p>
-											<div class="col-md-4">
-												<img loading="lazy" class="earq-affiliate-img" src="/img/earq-hearstrong.jpg" alt="Clinic affiliations" width="300" height="42">
-											</div>
-											<p class="earq-blurb col-md-8 tal">We are a proud partner of HearStrong, an organization that spreads hearing loss awareness and provides hearing aids to those in need.</p>
-											<div class="col-md-4">
-												<img loading="lazy" class="earq-affiliate-img" src="/img/nflpa-cq.png" alt="Clinic affiliations" width="300" height="84">
-											</div>
-											<p class="earq-blurb col-md-8 tal">We are preferred providers of the NFL Players Association’s Professional Athletes Foundation. Our goal is to bring better hearing to former professional athletes and fit them with the hearing technology they need.</p>
-										</div>
-									</div>
-								</div>
-							<?php endif; ?>
+
 							<?php if ($isMobileDevice) {
 								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
@@ -632,8 +603,8 @@ $this->Breadcrumbs->add([
 							<!-- Ida Explanation -->
 							<?php
 							$idaProvider = false;
-							foreach ($location->location_providers as $locationProvider) {
-								if ($locationProvider->provider->is_ida_verified) {
+							foreach ($location->providers as $locationProvider) {
+								if ($locationProvider->is_ida_verified) {
 									$idaProvider = true;
 									break;
 								}
@@ -699,8 +670,7 @@ $this->Breadcrumbs->add([
 							if(!$hideProvider) {
 								
 								$businessSchema .= ', "employee": [';
-								foreach ($location->location_providers as $key => $loocationProvider) {
-									$provider = $loocationProvider->provider;
+								foreach ($location->providers as $key => $provider) {
 									$businessSchema .=  '{"@type": "Person",';
 									
 									if(!empty($provider->thumb_url)) {
@@ -718,7 +688,7 @@ $this->Breadcrumbs->add([
 									
 									$businessSchema .= '"name": "' . htmlentities(strip_tags($provider->first_name . ' ' . $provider->last_name)) . '"';
 									
-									if ($key + 1 >= count($location->location_providers)){
+									if ($key + 1 >= count($location->providers)){
 										$comma =  '';
 									} else {
 										$comma = ',';

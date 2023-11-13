@@ -36,7 +36,6 @@ use Search\Model\Filter\Base;
  * @method \App\Model\Entity\Review saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -52,6 +51,8 @@ class ReviewsTable extends Table
         4 => '4 (Above average)',
         5 => '5 (Excellent)',
     );
+
+    public $reviewLimit = 10;
 
     /**
      * Initialize method
@@ -113,12 +114,6 @@ class ReviewsTable extends Table
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
-        ]);
-
-        $this->hasOne('Zips', [
-            'foreignKey' => 'zip',
-            'bindingKey' => 'zip',
-            'propertyName' => 'reviewer_zip',
         ]);
 
         // Setup search filter using search manager
@@ -217,6 +212,11 @@ class ReviewsTable extends Table
             ->requirePresence('first_name')
             ->notEmptyString('first_name');
 
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 255)
+            ->requirePresence('last_name')
+            ->notEmptyString('last_name');
 
         // Country-specific postal code validation
         $country = ucfirst(strtolower(Configure::read('country')));
@@ -350,10 +350,6 @@ class ReviewsTable extends Table
                 'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
             };
         };
-
-        // averageRating()
-        // updateReviewCount()
-        // updateReviewStatus()
     }
 
     /**
@@ -390,32 +386,32 @@ class ReviewsTable extends Table
      * @param array $ids Array of Review ids to be approved
      * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
      */
-    public function approveAll(array $ids)
+    public function approveAllSelected(array $ids)
     {
         $reviews = $this->find()
             ->where(['id IN' => $ids])
-            ->toList();
+            ->all();
 
-        // Create patch data array of Review ids and APPROVED statuses
-        $patchData = array_fill(0, count($ids), ['status' => ReviewStatus::APPROVED->value]);
-        foreach ($patchData as $key => &$entityData) {
-            $entityData = array_merge(
-                [
-                    'id' => $reviews[$key]->id,
-                ],
-                $entityData
-            );
+        foreach ($reviews as $review) {
+            $review->status = ReviewStatus::APPROVED->value;
         }
 
-        $patchedEntities = $this->patchEntities(
-            $reviews,
-            $patchData,
-            [
-                'fields' => ['status'],
-            ]
-        );
+        return $this->saveManyOrFail($reviews);
+    }
 
-        return $this->saveManyOrFail($patchedEntities);
+    /**
+     * Delete-all function for Reviews
+     *
+     * @param array $ids Array of Review ids to be deleted
+     * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
+     */
+    public function deleteAllSelected(array $ids)
+    {
+        $reviews = $this->find()
+            ->where(['id IN' => $ids])
+            ->all();
+
+        return $this->deleteManyOrFail($reviews);
     }
 
     /**
@@ -433,16 +429,17 @@ class ReviewsTable extends Table
     }
 
     public function findIpMatches($reviewId) {
-        $data['ipWarningsFound'] = [];
+        $data['ipWarningsFound'] = false;
         $reviewIp = $this->get($reviewId)->ip;
         if (!empty($reviewIp)) {
             // Login IP matches
-            $loginMatches = $this->getTableLocator()->get('LoginIps')->find()
+            $loginMatches = $this->getTableLocator()->get('LoginIps')->find('all')
+                ->contain(['Users.Locations' => ['fields' => ['id']]])
                 ->where([
                     'ip' => $reviewIp
                 ])
                 ->order(['login_date' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['loginMatches'] = $loginMatches;
             // Review IP matches
             $reviewMatches = $this->find()
@@ -451,7 +448,7 @@ class ReviewsTable extends Table
                     'ip' => $reviewIp
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['reviewMatches'] = $reviewMatches;
             // LocationNote IP matches
             $noteMatches = $this->getTableLocator()->get('LocationNotes')->find()
@@ -459,9 +456,9 @@ class ReviewsTable extends Table
                     'body LIKE' => '%'.$reviewIp.'%'
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['noteMatches'] = $noteMatches;
-            if (!empty($loginMatches) || !empty($reviewMatches) || !empty($noteMatches)) {
+            if ($loginMatches !== [] || $reviewMatches !== [] || $noteMatches !== []) {
                 $data['ipWarningsFound'] = true;
             }
         }

@@ -8,7 +8,6 @@ use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
-// TODO: Add JS for "Check for IP address warnings"
 use Cake\Core\Configure;
 
 $this->loadHelper('Search.Search', [
@@ -103,7 +102,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
                                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                                     <div class="table-responsive">
-                                        <?= $this->Form->create(null, ['url' => ['action' => 'approveAll'], 'class' => 'mb10']); ?>
+                                        <?= $this->Form->create(null, ['url' => ['action' => 'massAction'], 'class' => 'mb10']); ?>
                                             <table class="table table-striped table-bordered table-sm mb20">
                                                 <thead>
                                                     <tr>
@@ -135,7 +134,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?= ReviewOrigin::from($review->origin)->getOriginLabel(); ?>
                                                                 <br>
                                                                 <br>
-                                                                <?= ReviewResponseStatus::from($review->origin)->getResponseStatusLabel(); ?>
+                                                                <?= ReviewResponseStatus::from($review->response_status)->getResponseStatusLabel(); ?>
                                                             </td>
                                                             <td>
                                                                 <span class="badge bg-info"><?= $review->character_count; ?></span><br>
@@ -156,8 +155,8 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?= $this->element('locations/admin_review_body', ['review' => $review]) ?>
                                                                 <?php if (ReviewOrigin::from($review->origin) === ReviewOrigin::ORIGIN_ONLINE) : ?>
                                                                     <button type="button" class='btn btn-xs btn-default ipCheckBtn' data-id="<?= $review->id; ?>">Check for IP address warnings</button>
-                                                                    <span class="label label-success" style="display:none;" id="ipSuccess<?= $review->id; ?>"><strong><span class="glyphicon glyphicon-ok"></span> No IP warnings</strong></span>
-                                                                    <span class="label label-danger" style="display:none;" id="ipWarning<?= $review->id; ?>"><strong><span class="glyphicon glyphicon-warning-sign"></span> IP warning</strong></span>
+                                                                    <span class="badge bg-success" style="display:none;" id="ipSuccess<?= $review->id; ?>"><strong><span class="bi bi-check-lg" style="font-size: 1.3rem;"></span> No IP warnings</strong></span>
+                                                                    <span class="badge bg-danger" style="display:none;" id="ipWarning<?= $review->id; ?>"><strong><span class="bi bi-exclamation-triangle" style="font-size: 1.3rem;"></span> IP warnings</strong></span>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td>
@@ -191,9 +190,8 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                     <?php endforeach; ?>
                                                 </tbody>
                                             </table>
-                                            <?= $this->Form->hidden('data[mass_delete]', ['value' => '0', 'id' => 'mass_delete_bool']) ?>
-                                            <?= $this->Form->button('Delete Selected', ['id' => 'mass_delete', 'class' => 'btn btn-danger']) ?>
-                                            <?= $this->Form->button('Publish Positive Selected', ['id' => 'mass_approve', 'class' => 'btn btn-primary']) ?>
+                                            <?= $this->Form->button('Delete Selected', ['id' => 'mass_delete', 'class' => 'btn btn-danger', 'type' => 'submit', 'name' => 'massAction', 'value' => 'deleteAllSelected', 'confirm' => 'Are you sure you want to delete the selected reviews?']) ?>
+                                            <?= $this->Form->button('Publish Positive Selected', ['id' => 'mass_approve', 'class' => 'btn btn-primary', 'type' => 'submit', 'name' => 'massAction', 'value' => 'approveAllSelected', 'confirm' => 'Are you sure you want to approve the selected positive reviews?']) ?>
                                         <?= $this->Form->end() ?>
                                         <?= $this->fetch('postLink') ?>
                                     </div>

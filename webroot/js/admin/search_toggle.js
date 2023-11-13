@@ -133,10 +133,10 @@ if(exportSubmit !== null){
       .then(response => response.json())
       .then(data => {
         if (data.success == true) {
-          console.debug('success');q
+          console.debug('success');
           console.debug(data);
         } else {
-          console.log('failed');q
+          console.log('failed');
         }
       })
       .catch(error => {
@@ -146,11 +146,15 @@ if(exportSubmit !== null){
 }
 
 // Reorganize search options and change booleans into a toggle
-if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches")) {
-
+if (document.querySelector("form").action.includes("/admin/locations") ||
+		document.querySelector("form").action.includes("/admin/crm-searches") ||
+		document.querySelector("form").action.includes("/search") ||
+		exportModal !== null) {
   // Update labels for specific elements
   const updateLabels = () => {
-    document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
+    if (document.querySelector("label[for='id-cqp-practice']")) {
+			document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
+    }
   };
 
   updateLabels();
@@ -188,9 +192,9 @@ if (document.querySelector("form").action.includes("/admin/locations") || docume
 
 	sliders.forEach((slider) => {
 	  slider.addEventListener("mouseup", function () {
-	    const slideClass = this.classList.value;
+	    const slideClass = slider.classList.value;
 
-	    const input = this.closest("label").querySelector("input");
+	    const input = slider.closest("label").querySelector("input");
 
 	    if (slideClass === "switch-positive") {
 	      input.classList.remove("switch-negative");
@@ -241,21 +245,19 @@ if ($('.datepicker').attr('minDate')) {
 }
 
 // Toggle values for switches
-export const exportSwitchesFunctions = () => {
+if(exportModal !== null) {
 	const exportSwitches = document.querySelectorAll("#exportModal .form-control");
 	exportSwitches.forEach(switchElement => {
 	  switchElement.addEventListener("click", () => {
-	    if (this.value === "0") {
-	      this.value = "1";
+	    if (switchElement.value === "0") {
+	      switchElement.value = "1";
 	    } else {
-	      this.value = "0";
+	      switchElement.value = "0";
 	    }
 	  });
 	});
-}
 
 // Toggle classes and values for all switches, based on #allFieldsInput active class
-export const allFieldsFunctions = () => {
 	const allFieldsInput = document.getElementById("allFieldsInput");
 	allFieldsInput.addEventListener("click", function() {
 	  setTimeout(function() {
@@ -275,9 +277,7 @@ export const allFieldsFunctions = () => {
 	    }
 	  }, 200);
 	});
-}
 
-export const exportSubmissionsFunctions = () => {
 	const exportSubmit = document.querySelector("#exportModal #exportSubmit");
 	const exportModalFormControls = document.querySelectorAll("#exportModal .form-control");
 
@@ -305,6 +305,7 @@ export const exportSubmissionsFunctions = () => {
 	$("#exportClose").on("click",function() {
 		$("#exportModal").hide().removeClass("in");
 	});
+
 }
 
 export const datepickerFunctions = () => {

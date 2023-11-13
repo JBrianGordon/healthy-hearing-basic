@@ -25,7 +25,17 @@
   &.large .day {
     font-size: 48px;
   }
+
+  label{
+    color: #212529;
+  }
 }
 .inline-date {
     display: inline-block;
+}
+
+#advanced_search {
+  .inline-date {
+    width: 46%;
+  }
 }

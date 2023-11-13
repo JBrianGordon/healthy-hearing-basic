@@ -1,711 +1,44 @@
 import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
-/*** TODO: check this code when clinic edit view is added: ***/
 
-document.addEventListener('DOMContentLoaded', function() {
-  // If there are any errors on the page, scroll down
-  const errorDivs = document.querySelectorAll('div.has-error');
-  if (errorDivs.length) {
-    const firstErrorDiv = errorDivs[0];
-    window.scrollTo({
-      top: firstErrorDiv.offsetTop - 90,
-      behavior: 'smooth'
-    });
-  }
 
-  // Initialize the "Special Announcements" section.
-  // Coupon Library is currently only available to CQ Premier clinics
-  initSpecialAnnouncements();
-		
-  // Clinic profile completion. Currently we are only checking the first provider
-  const providerArray = [
-    document.querySelector("#Provider0FirstName"),
-    document.querySelector("#Provider0LastName"),
-    document.querySelector("#Provider0Description"),
-    document.querySelector("#Provider0ThumbUrl")
-  ];
-  const incompleteArray = [];
-  let completionPercentage = 100;
-
-  if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
-    completionPercentage -= 25;
-    incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
-    document.querySelector("h2:contains('About us')").classList.add("red");
-  }
-  if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
-    completionPercentage -= 25;
-    incompleteArray.push("<li><a href='#services'>- Services</a></li>");
-    document.querySelector("h2:contains('Services')").classList.add("red");
-  }
-  providerArray.forEach(function(input) {
-    if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
-      input.closest(".form-group").classList.add("has-error");
-      input.closest(".form-group").previousElementSibling.classList.add("red");
-    }
+// If there are any errors on the page, scroll down
+const errorDivs = document.querySelectorAll('div.has-error');
+if (errorDivs.length) {
+  const firstErrorDiv = errorDivs[0];
+  window.scrollTo({
+    top: firstErrorDiv.offsetTop - 90,
+    behavior: 'smooth'
   });
-	
-	document.querySelector("#hhtvButton").addEventListener("click", function() {
-	  window.scrollTo({
-	    top: document.querySelector("#hhTv").offsetTop,
-	    behavior: 'smooth'
-	  });
-	});
-
-	// Remove error class if at least one photo field has a value
-	if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.querySelector("#Provider0File").value !== "") {
-	  document.querySelector("#Provider0ThumbUrl").closest(".form-group").classList.remove("has-error");
-	  document.querySelector("#Provider0File").closest(".form-group").classList.remove("has-error");
-	  document.querySelector("#Provider0ThumbUrl").closest(".form-group").previousElementSibling.classList.remove("red");
-	  document.querySelector("#Provider0File").closest(".form-group").previousElementSibling.classList.remove("red");
-	}
-
-	// Provider first name
-	if (document.querySelector("#Provider0FirstName").value === "") {
-	  completionPercentage -= 5;
-	  incompleteArray.push("<li><a href='#provider0First'>- Provider first name</a></li>");
-	}
-
-	// Provider last name
-	if (document.querySelector("#Provider0LastName").value === "") {
-	  completionPercentage -= 5;
-	  incompleteArray.push("<li><a href='#provider0Last'>- Provider last name</a></li>");
-	}
-
-	// Provider description
-	if (document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "") {
-	  completionPercentage -= 5;
-	  incompleteArray.push("<li><a href='#provider0Desc'>- Provider description</a></li>");
-	}
-
-	// Provider photo
-	if ((document.querySelector("#Provider0ThumbUrl").value === "" && document.querySelector("#Provider0File").value === "") || document.querySelector("#Provider0ThumbUrl") === undefined) {
-	  completionPercentage -= 10;
-	  incompleteArray.push("<li><a href='#provider0Photo'>- Provider photo</a></li>");
-	}
-
-	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-	let isHoursIncomplete = false;
-
-	days.forEach((day) => {
-	  if (!isHoursIncomplete) {
-	    const isOpenHourEmpty = document.querySelector(`#LocationHour${day}OpenHour`).value === "";
-	    const isOpenMinEmpty = document.querySelector(`#LocationHour${day}OpenMin`).value === "";
-	    const isOpenMeridianEmpty = document.querySelector(`#LocationHour${day}OpenMeridian`).value === "";
-	    const isCloseHourEmpty = document.querySelector(`#LocationHour${day}CloseHour`).value === "";
-	    const isCloseMinEmpty = document.querySelector(`#LocationHour${day}CloseMin`).value === "";
-	    const isCloseMeridianEmpty = document.querySelector(`#LocationHour${day}CloseMeridian`).value === "";
-	    const isClosedChecked = !document.querySelector(`#LocationHour${day}IsClosed`).checked;
-	    const isByAppointmentChecked = !document.querySelector(`#LocationHour${day}IsByappt`).checked;
-
-	    if (isOpenHourEmpty && isOpenMinEmpty && isOpenMeridianEmpty && isCloseHourEmpty && isCloseMinEmpty && isCloseMeridianEmpty && isClosedChecked && isByAppointmentChecked) {
-	      completionPercentage -= 10;
-	      incompleteArray.push(`<li><a href='#hoursOfOperation'>- Hours of operation</a></li>`);
-	      document.querySelector("h2:contains('Hours of operation')").classList.add("red");
-	      isHoursIncomplete = true;
-	    }
-	  }
-	});
-
-	// Payment section check
-	const paymentOptions = ["#Payment2", "#Payment4", "#Payment8", "#Payment16", "#Payment64", "#Payment128", "#Payment256", "#Payment512", "#Payment1024", "#Payment2048"];
-
-	const isPaymentIncomplete = paymentOptions.every(option => !document.querySelector(option).checked);
-
-	if (isPaymentIncomplete) {
-	  completionPercentage -= 10;
-	  incompleteArray.push("<li><a href='#payment'>- Accepted methods of payment</a></li>");
-	  document.querySelector("h2:contains('Accepted methods of payment')").classList.add("red");
-	}
-
-	// Website url check
-	if (document.querySelector("#LocationUrl").value === "") {
-	  completionPercentage -= 5;
-	  incompleteArray.push("<li><a href='#urlAnchor'>- Website URL</a></li>");
-	  document.querySelector("#LocationUrl").parentElement.classList.add("has-error");
-	  document.querySelector("#LocationUrl").previousElementSibling.classList.add("red");
-	}
-
-	// Vidscrip validation
-	const vidscripsVidscripInput = document.querySelector("#LocationVidscripsVidscrip");
-	const vidscripsEmailInput = document.querySelector("#LocationVidscripsEmail");
-
-	const handleVidscripBlur = () => {
-	  if (vidscripsVidscripInput.value === "" && vidscripsEmailInput.value === "") {
-	    vidscripsVidscripInput.required = false;
-	    vidscripsEmailInput.required = false;
-	  } else {
-	    vidscripsVidscripInput.required = true;
-	    vidscripsEmailInput.required = true;
-	  }
-	};
-
-	vidscripsVidscripInput.addEventListener("blur", handleVidscripBlur);
-	vidscripsEmailInput.addEventListener("blur", handleVidscripBlur);
-
-	// Only display the completion modal once per session. Display again if the percentage changes.
-	const sessionCompletionPercentage = sessionStorage.getItem("sessionCompletionPercentage");
-	if (sessionCompletionPercentage !== String(completionPercentage)) {
-	  if (completionPercentage < 100) {
-	    document.getElementById("completionPercentage").textContent = completionPercentage;
-	    document.getElementById("completionList").innerHTML = incompleteArray.join('');
-	    document.getElementById("incompleteModal").style.display = "block";
-	    document.getElementById("incompleteModal").classList.add("in");
-	  } else if (completionPercentage === 100) {
-	    document.getElementById("completeModal").style.display = "block";
-	    document.getElementById("completeModal").classList.add("in");
-	  }
-	  sessionStorage.setItem("sessionCompletionPercentage", completionPercentage);
-	}
-
-	// Trigger change events
-	document.getElementById("LocationHourIsClosedLunch").dispatchEvent(new Event("change"));
-	document.getElementById("LocationIsMobile").dispatchEvent(new Event("change"));
-	
-	const elements = document.querySelectorAll("span.cke_path_item");
-
-	elements.forEach((element) => {
-	  const node = document.getElementById(element.getAttribute("id"));
-	  const message = element.closest(".form-group").nextElementSibling.querySelector(".text-danger");
-	  const callback = function (mutationsList) {
-	    if (node.classList.contains("cke_wordcountLimitReached")) {
-	      message.style.display = "block";
-	    } else {
-	      message.style.display = "none";
-	    }
-	  };
-	  const config = { characterData: true, childList: true, subtree: true };
-	  const observer = new MutationObserver(callback);
-
-	  observer.observe(node, config);
-	});
-
-	//*** TODO: Make sure popover still works with this rewrite ***/
-  const popoverElements = document.querySelectorAll('[data-toggle="popover"]');
-  
-  popoverElements.forEach(function(element) {
-    new bootstrap.Popover(element);
-  });
-
-	locationAutocomplete();
-});
-
-const submitButton = document.querySelectorAll('input[type=submit]');
-
-submitButton.forEach((button) => {
-  button.addEventListener('click', () => {
-    const providers = document.querySelectorAll('.provider');
-    
-    providers.forEach((provider) => {
-      const providerId = provider.getAttribute('provider');
-      const firstName = document.querySelector('#Provider' + providerId + 'FirstName');
-      const lastName = document.querySelector('#Provider' + providerId + 'LastName');
-      const description = document.querySelector('#Provider' + providerId + 'Description');
-      
-      if (firstName.value.length > 0 || lastName.value.length > 0 || description.value.length > 0) {
-        firstName.setAttribute('required', 'required');
-        lastName.setAttribute('required', 'required');
-      } else {
-        firstName.removeAttribute('required');
-        lastName.removeAttribute('required');
-      }
-    });
-  });
-});
-
-const closedCheckboxes = document.querySelectorAll('.is-closed-checkbox');
-
-closedCheckboxes.forEach(function(checkbox) {
-  checkbox.addEventListener('click', function() {
-    const day = this.dataset.day;
-    const isOpen = !this.checked;
-    
-    const openHour = document.querySelector(`#LocationHour${day}OpenHour`);
-    const openMin = document.querySelector(`#LocationHour${day}OpenMin`);
-    const openMeridian = document.querySelector(`#LocationHour${day}OpenMeridian`);
-    const closeHour = document.querySelector(`#LocationHour${day}CloseHour`);
-    const closeMin = document.querySelector(`#LocationHour${day}CloseMin`);
-    const closeMeridian = document.querySelector(`#LocationHour${day}CloseMeridian`);
-    
-    if (isOpen) {
-      openHour.value = null;
-      openMin.value = null;
-      openMeridian.value = null;
-      closeHour.value = null;
-      closeMin.value = null;
-      closeMeridian.value = null;
-    } else {
-      openHour.value = '08';
-      openMin.value = '00';
-      openMeridian.value = 'am';
-      closeHour.value = '05';
-      closeMin.value = '00';
-      closeMeridian.value = 'pm';
-    }
-  });
-});
-
-function hhGetFileSize(fileid) {
-  try {
-    let fileSize = 0;
-    
-    if (navigator.userAgent.match(/msie/i)) { // For IE
-      // Before making an object of ActiveXObject,
-      // please make sure ActiveX is enabled in your IE browser
-      const objFSO = new ActiveXObject("Scripting.FileSystemObject");
-      const filePath = document.getElementById(fileid).value;
-      const objFile = objFSO.getFile(filePath);
-      fileSize = objFile.size; // Size in bytes
-    } else if (document.getElementById(fileid).files.length > 0) { // For FF, Safari, Opera, and others
-      fileSize = document.getElementById(fileid).files[0].size; // Size in bytes
-    }
-    
-    if (fileSize !== 0) {
-      fileSize = fileSize / (1024 * 1024); // Convert size to MB
-    }
-    
-    // alert("Uploaded File Size is " + fileSize + " MB");
-    return fileSize;
-  } catch (e) {
-    alert("Error: " + e);
-  }
 }
 
-const fileid = "your-file-input-id";
-const fileSize = hhGetFileSize(fileid);
-alert("Uploaded File Size is " + fileSize + " MB");
+const initSpecialAnnouncements = () => {
+  const specialAnnouncements = document.querySelector("#specialAnnouncements");
+  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
+  const adId = specialAnnouncements.dataset.adid;
+  const couponId = specialAnnouncements.dataset.couponid;
 
-function hhCanSubmit(completeCheck) {
-  let totalUpload = 0;
-  let uploadLimit = 0;
+  const couponLibrary = document.querySelector("#couponLibrary");
+  const couponSelected = document.querySelector("#couponSelected");
+  const uploadCoupon = document.querySelector("#uploadCoupon");
 
-  if (typeof UPLOAD_LIMIT !== 'undefined') {
-    uploadLimit = UPLOAD_LIMIT;
-  } else {
-    alert('Error: UPLOAD_LIMIT is not set');
-    return false;
-  }
-
-  const inputFiles = document.querySelectorAll('.input_file');
-  inputFiles.forEach((inputFile) => {
-    totalUpload += hhGetFileSize(inputFile.id);
-  });
-
-  if (totalUpload > uploadLimit) {
-    totalUpload = Math.round(totalUpload * 100) / 100;
-    alert(`Note - Combined files queued for upload (${totalUpload} MB) are more than the limit allowed (${uploadLimit} MB). We cannot upload your picture(s). Please try again with smaller picture file(s). If you need assistance, please email contactHH@healthyhearing.com.`);
-    return false;
-  }
-
-  return true;
-}
-
-const completeCheck = true;
-const canSubmit = hhCanSubmit(completeCheck);
-alert(`Can Submit: ${canSubmit}`);
-
-// Allow form submission if user clicks modal continue
-document.querySelector("#saveAndContinue").addEventListener("click", () => {
-	document.querySelector("#LocationClinicEditForm").setAttribute("onsubmit", "return $.hhCanSubmit('Continue');");
-	document.querySelector("#LocationClinicEditForm").submit();
-});
-
-// Notice on input.
-document.querySelectorAll(".input_file").forEach((element) => {
-	element.addEventListener("change", () => {
-		$.hhCanSubmit();
-	});
-});
-
-document.body.addEventListener("change", (e) => {
-	if (event.target.classList.contains("video-url")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-
-	const { target } = e;
-
-	if (target.matches('input[type="file"]')) {
-		if (target.id === 'LocationAdFile') {
-			$.onChangeLocationAdFile(target);
-		} else {
-			$.onChangeFileInput(target);
-		}
-	}
-
-	if (target.matches('#LocationIsMobile')) {
-		$.onChangeIsMobile(target.checked);
-	}
-
-	if (target.matches('#LocationHourIsClosedLunch')) {
-		$.onChangeIsClosedLunch(target.checked);
-		e.preventDefault();
-	}
-});
-
-document.body.addEventListener("click", (e) => {
-	if (e.target.classList.contains("js-video-add")) {
-		$.addVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-video-delete')) {
-		$.removeVideoRow(e.target);
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-photo-delete')) {
-		$.removePhotoRow(e.target, 'photo');
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-logo-delete')) {
-		$.removePhotoRow(e.target, 'logo');
-		e.preventDefault();
-		return false;
-	}
-	if (e.target.classList.contains('js-ad-delete')) {
-		$.removePhotoRow(e.target, 'ad');
-		e.preventDefault();
-		return false;
-	}
-
-	const { target } = e;
-
-	if (target.matches('.js-link-delete')) {
-		$.deleteLink(target);
-		e.preventDefault();
-	} else if (target.matches('.js-coupon-select')) {
-		$.addCoupon(target);
-		e.preventDefault();
-	} else if (target.matches('.js-choose-own-coupon')) {
-		$.chooseOwnCoupon();
-		e.preventDefault();
-	} else if (target.matches('.js-show-coupon-library')) {
-		$.showCouponLibrary();
-		e.preventDefault();
-	}
-});
-
-const deletePhotoButtons = document.querySelectorAll('.provider-photo-delete');
-
-deletePhotoButtons.forEach(button => {
-	button.addEventListener('click', () => {
-		const target = button.getAttribute('data-target');
-		const img = button.nextElementSibling.querySelector('img');
-		document.getElementById(target).value = '';
-		img.setAttribute('src', '');
-	});
-});
-
-const addVideoRow = (obj) => {
-  const editObj = this;
-  const row = obj.closest('tr');
-  const newRow = document.createElement('tr');
-  const newVideo = document.querySelector('.video-url');
-  const newVideoValue = document.querySelector('.video-url').value;
-  const newVideoKey = parseInt(document.querySelector('.videoKey').value, 10);
-  document.querySelector('.videoKey').value = parseInt(document.querySelector('.videoKey').value, 10) + 1;
-
-  // Check for errors in the inputs.
-  let errors = false;
-  if (newVideoValue.length === 0) {
-    errors = true;
-  }
-  const pattern = new RegExp("^https?://([da-z.-]+).([a-z.]{2,6})([/w.-=?]*)*/?");
-  if (!pattern.test(newVideoValue)) {
-    errors = true;
-  }
-  if (errors === true) {
-    // Apply the error style to the input
-    newVideo.style.background = 'rgba(200,100,100,.5)';
-    document.getElementById('video-add-error').style.display = 'block';
-    return false;
-  } else {
-    // Remove the error style from the input.
-    newVideo.style.background = '';
-    document.getElementById('video-add-error').style.display = 'none';
-  }
-
-  // Add the new row to the videos table
-  newRow.innerHTML = `
-    <td><div><input name="data[LocationVideo][${newVideoKey}][video_url]" class="form-control" maxlength="255" type="text" value="${newVideoValue}" id="LocationVideo${newVideoKey}VideoUrl"></div></td>
-    <td align="center"><button class="btn btn-md btn-danger js-video-delete" data-key="${newVideoKey}">delete</button></td>
-  `;
-  row.before(newRow);
-
-  // Clear out the input
-  newVideo.value = '';
-};
-
-const removeVideoRow = (obj) => {
-  const row = obj.closest('tr');
-  const key = obj.dataset.key;
-  document.getElementById(`LocationVideo${key}VideoUrl`).value = '';
-  row.style.display = 'none';
-};
-
-const removePhotoRow = (obj, type) => {
-  const row = obj.closest('tr');
-  const key = obj.dataset.key;
-  if (type === 'photo') {
-    document.getElementById(`LocationPhoto${key}PhotoUrl`).value = '';
-    if (document.getElementById(`LocationPhoto${key}File`) !== undefined) {
-      document.getElementById(`LocationPhoto${key}File`).value = '';
-    }
-    row.style.display = 'none';
-  }
-  if (type === 'logo') {
-    document.getElementById('LocationLogoUrl').value = '';
-    document.getElementById('photo-thumb-logo').setAttribute('src', '');
-    if (document.getElementById('LocationLogo0File') !== undefined) {
-      document.getElementById('LocationLogo0File').value = '';
-    }
-  }
-  if (type === 'ad') {
-    document.getElementById('location-ad-preview').style.display = 'none';
-    document.getElementById('LocationAdFile').value = '';
-    document.getElementById('LocationAdTitle').value = '';
-    document.getElementById('LocationAdDescription').value = '';
-    document.getElementById('LocationAdPhotoUrl').value = '';
-    document.getElementById('LocationCouponId').value = null;
-    document.getElementById('specialAnnouncements').dataset.adid = null;
-    document.getElementById('specialAnnouncements').dataset.couponid = null;
-    initSpecialAnnouncements();
-  }
-};
-
-const validatePhotoAlt = (key) => {
-  const pattern = new RegExp("^.*[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}.*$");
-  const altInput = document.getElementById(`LocationPhoto${key}Alt`);
-  if (pattern.test(altInput.value)) {
-    document.querySelector("input[type='submit']").setAttribute("disabled", "disabled");
-    document.querySelector(`.help-block-desc-${key}`).style.display = 'block';
-    altInput.parentNode.classList.add("has-error");
-  } else {
-    document.querySelector("input[type='submit']").removeAttribute("disabled");
-    document.querySelector(`.help-block-desc-${key}`).style.display = 'none';
-    altInput.parentNode.classList.remove("has-error");
-  }
-};
-
-const addCoupon = (obj) => {
-  const couponId = obj.getAttribute("data-coupon-id");
-  document.getElementById("LocationAdFile").value = "";
-  document.getElementById("LocationAdTitle").value = "";
-  document.getElementById("LocationAdDescription").value = "";
-  document.getElementById("LocationAdPhotoUrl").value = "";
-  document.getElementById("specialAnnouncements").dataset.adid = null;
-  document.getElementById("LocationCouponId").value = couponId;
-  document.getElementById("specialAnnouncements").dataset.couponid = couponId;
-  document.querySelector("#couponSelected .coupon-image").setAttribute("src", `/img/coupons/coupon-${couponId}.jpg`);
-  document.getElementById("couponLibrary").style.display = 'none';
-  document.getElementById("couponSelected").style.display = 'block';
-  document.getElementById("uploadCoupon").style.display = 'none';
-  scrollToElement("#specialAnnouncements");
-};
-
-const chooseOwnCoupon = () => {
-  document.getElementById("couponLibrary").style.display = 'none';
-  document.getElementById("couponSelected").style.display = 'none';
-  document.getElementById("uploadCoupon").style.display = 'block';
-  scrollToElement("#specialAnnouncements");
-};
-
-const showCouponLibrary = () => {
-  document.getElementById("couponLibrary").style.display = 'block';
-  document.getElementById("couponSelected").style.display = 'none';
-  document.getElementById("uploadCoupon").style.display = 'none';
-  scrollToElement("#specialAnnouncements");
-};
-
-const onChangeFileInput = (obj) => {
-  const id = obj.id;
-  const row = document.getElementById(id).closest('tr');
-  const keyMatch = id.match(/LocationPhoto|LocationLogo|LocationAd|Provider(\d+)(.+)/);
-  const key = parseInt(keyMatch.input.match(/\d+/)[0]);
-  const newKey = Number(key) + 1;
-  const filename = obj.files[0].name;
-  const filesize = obj.files[0].size;
-  const maxSize = id.match(/LocationLogo/) ? 500000 : 2000000;
-
-  // Check for errors in the inputs
-  let errors = false;
-
-  if (filename.length === 0) {
-    // File is empty
-    errors = true;
-    document.querySelector('.upload-text-' + key).innerHTML = 'Click the button to choose a photo from your computer.';
-  } else {
-    document.querySelector('.upload-text-' + key).innerHTML = filename;
-  }
-
-  const match = filename.match(/\.(.+)/);
-  let ext = '';
-  if (match && (typeof match[1] !== undefined)) {
-    ext = match[1].toLowerCase();
-  }
-
-  if (!['jpg', 'jpeg'].includes(ext)) {
-    // File is not a jpg
-    errors = true;
-  }
-
-  if (filesize > maxSize) {
-    // File is larger than 500KB for logos, 2MB for photo gallery
-    errors = true;
-  }
-
-  if (errors) {
-    // Apply the error style to the input
-    obj.style.background = 'rgba(200,100,100,.5)';
-
-    if (keyMatch.input === 'LocationLogo0Url') {
-      document.getElementById('photo-add-error-logo').style.display = 'block';
-    } else if (keyMatch[0].match(/Provider/)) {
-      document.getElementById('provider-photo-add-error-' + key).style.display = 'block';
+  if (isCqPremier && !adId) {
+    if (couponId) {
+      couponLibrary.style.display = "none";
+      couponSelected.style.display = "block";
+      uploadCoupon.style.display = "none";
     } else {
-      document.getElementById('photo-add-error-' + key).style.display = 'block';
+      couponLibrary.style.display = "block";
+      couponSelected.style.display = "none";
+      uploadCoupon.style.display = "none";
     }
-
-    document.querySelector("#LocationClinicEditForm input[type='submit']").setAttribute('disabled', 'disabled');
-    return false;
   } else {
-  // Remove the error style from the input
-  obj.style.background = '';
-  document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
-  const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
-	helpBlocks.forEach((block) => {
-	  block.style.display = 'none';
-	});
-  document.getElementById("photo-add-error-" + key).style.display = 'none';
-  document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-  document.getElementById("photo-description-" + key).style.display = 'block';
-
-  if (keyMatch[0] === 'LocationPhoto') {
-    document.getElementById("photo-add-error-" + key).style.display = 'none';
-    document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-    document.getElementById("photo-description-" + key).style.display = 'block';
-    document.querySelector("input#LocationPhoto" + key + "Alt").removeAttribute('disabled');
-
-    // Add a new row to the photos table
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `<td>
-      <div class="row mt5 mb10">
-        <div class="col-md-offset-3 col-md-9">
-          <img id="photo-thumb-${newKey}">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>
-        <div class="col col-md-9">
-          <input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File">
-        </div>
-      </div>
-      <div id="photo-description-${newKey}" style="display:none;">
-        <div class="form-group required">
-          <label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>
-          <div class="col col-md-9">
-            <input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt">
-          </div>
-        </div>
-      </div>
-      <span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>
-    </td>`;
-    newRow.innerHTML += `<td align="center">
-      <button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>
-    </td>`;
-    row.parentNode.insertBefore(newRow, row.nextSibling);
-  }
-
-  // Load the thumbnail image
-  const files = obj.files;
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    if (keyMatch.input === 'LocationLogo0Url') {
-      document.querySelector('img#photo-thumb-logo').src = e.target.result;
-    } else {
-      document.querySelector('img#photo-thumb-' + key).src = e.target.result;
-    }
-  };
-  reader.readAsDataURL(files[0]);
-};
-
-const onChangeLocationAdFile = (obj) => {
-  const id = obj.id;
-  const row = document.getElementById(id).closest('tr');
-  const filename = obj.files[0].name;
-  const filesize = obj.files[0].size;
-  
-  // Check for errors in the inputs
-  let errors = false;
-  if (filename.length === 0) {
-    // File is empty
-    errors = true;
-  } else {
-    document.getElementById('LocationAdPhotoUrl').value = filename;
-  }
-  
-  const match = filename.match(/\.(.+)/);
-  let ext = '';
-  if (match && typeof match[1] !== 'undefined') {
-    ext = match[1].toLowerCase();
-  }
-  
-  if (!['jpg', 'jpeg'].includes(ext)) {
-    // File is not a jpg
-    errors = true;
-  }
-  
-  if (filesize > 500000) {
-    // File is larger than 2MB
-    errors = true;
-  }
-  
-  if (errors) {
-    // Apply the error style to the input
-    document.getElementById('LocationAdPhotoUrl').style.background = 'rgba(200,100,100,.5)';
-    document.getElementById('location-ad-error').style.display = 'block';
-    document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
-      el.setAttribute('disabled', 'disabled');
-    });
-    return false;
-  } else {
-    document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
-      el.removeAttribute('disabled');
-    });
-    // Remove the error style from the input
-    document.getElementById('LocationAdPhotoUrl').style.background = '';
-    document.getElementById('location-ad-error').style.display = 'none';
+    couponLibrary.style.display = "none";
+    couponSelected.style.display = "none";
+    uploadCoupon.style.display = "block";
   }
 };
-
-// Close completion check modal
-document.querySelector("#incompleteModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#incompleteModal").classList.remove("in");
-  document.querySelector("#incompleteModal").style.display = "none";
-});
-
-document.querySelector("#completeModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#completeModal").classList.remove("in");
-  document.querySelector("#completeModal").style.display = "none";
-});
-
-// Close new user modal
-document.querySelector("#newUserModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#newUserModal").classList.remove("show", "in");
-  document.querySelector("#newUserModal").style.display = "none";
-  document.querySelector("#faqTab").animate({ "bottom": 0 }, 500);
-});
-
-// Special announcement border selection
-document.querySelectorAll(".border-radio").forEach((radio) => {
-  radio.addEventListener("click", () => {
-    document.querySelector(".selected-border").classList.remove("selected-border");
-    radio.classList.add("selected-border");
-  });
-});
 
 const addLink = async (locationId, key) => {
   const newLink = document.querySelector('.linked-location');
@@ -807,33 +140,6 @@ const locationAutocomplete = () => {
   };
 };
 
-const initSpecialAnnouncements = () => {
-  const specialAnnouncements = document.querySelector("#specialAnnouncements");
-  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
-  const adId = specialAnnouncements.dataset.adid;
-  const couponId = specialAnnouncements.dataset.couponid;
-
-  const couponLibrary = document.querySelector("#couponLibrary");
-  const couponSelected = document.querySelector("#couponSelected");
-  const uploadCoupon = document.querySelector("#uploadCoupon");
-
-  if (isCqPremier && !adId) {
-    if (couponId) {
-      couponLibrary.style.display = "none";
-      couponSelected.style.display = "block";
-      uploadCoupon.style.display = "none";
-    } else {
-      couponLibrary.style.display = "block";
-      couponSelected.style.display = "none";
-      uploadCoupon.style.display = "none";
-    }
-  } else {
-    couponLibrary.style.display = "none";
-    couponSelected.style.display = "none";
-    uploadCoupon.style.display = "block";
-  }
-};
-
 const scrollTo = (selector, offset = 90) => {
   const element = document.querySelector(selector);
   if (element) {
@@ -886,4 +192,631 @@ const onChangeIsMobile = (isMobile) => {
     locationRadius.required = false;
   }
 };
+
+// Initialize the "Special Announcements" section.
+// Coupon Library is currently only available to CQ Premier clinics
+initSpecialAnnouncements();
+	
+// Clinic profile completion. Currently we are only checking the first provider
+const providerArray = [
+  document.querySelector("#Provider0FirstName"),
+  document.querySelector("#Provider0LastName"),
+  document.querySelector("#Provider0Description"),
+  document.querySelector("#Provider0ThumbUrl")
+];
+const incompleteArray = [];
+let completionPercentage = 100;
+
+/*** TODO: rewrite this when CKEditor 5 is added:
+if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
+  completionPercentage -= 25;
+  incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
+  document.querySelector("h2:contains('About us')").classList.add("red");
 }
+if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
+  completionPercentage -= 25;
+  incompleteArray.push("<li><a href='#services'>- Services</a></li>");
+  document.querySelector("h2:contains('Services')").classList.add("red");
+}
+providerArray.forEach(function(input) {
+  if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
+    input.closest(".form-group").classList.add("has-error");
+    input.closest(".form-group").previousElementSibling.classList.add("red");
+  }
+});
+*/
+
+document.querySelector("#hhtvButton").addEventListener("click", function() {
+  window.scrollTo({
+    top: document.querySelector("#hhTv").offsetTop,
+    behavior: 'smooth'
+  });
+});
+
+// Remove error class if at least one photo field has a value
+/*** TODO: uncomment when providerImage function is fixed in template/element/locations/provider.php:
+if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.querySelector("#Provider0File").value !== "") {
+  document.querySelector("#Provider0ThumbUrl").closest(".form-group").classList.remove("has-error");
+  document.querySelector("#Provider0File").closest(".form-group").classList.remove("has-error");
+  document.querySelector("#Provider0ThumbUrl").closest(".form-group").previousElementSibling.classList.remove("red");
+  document.querySelector("#Provider0File").closest(".form-group").previousElementSibling.classList.remove("red");
+}*/
+
+// Provider first name
+if (document.querySelector("#provider-0-first-name").value === "") {
+  completionPercentage -= 5;
+  incompleteArray.push("<li><a href='#provider0First'>- Provider first name</a></li>");
+}
+
+// Provider last name
+if (document.querySelector("#providers-0-last-name").value === "") {
+  completionPercentage -= 5;
+  incompleteArray.push("<li><a href='#provider0Last'>- Provider last name</a></li>");
+}
+
+// Provider description
+/*** TODO: uncomment when CKEditor added:
+if (document.querySelector("#provider-0-description iframe").contentDocument.body.textContent.trim() === "") {
+  completionPercentage -= 5;
+  incompleteArray.push("<li><a href='#provider0Desc'>- Provider description</a></li>");
+}*/
+
+// Provider photo
+/*** TODO: uncomment when ~line 85 is uncommented above
+if ((document.querySelector("#Provider0ThumbUrl").value === "" && document.querySelector("#Provider0File").value === "") || document.querySelector("#Provider0ThumbUrl") === undefined) {
+  completionPercentage -= 10;
+  incompleteArray.push("<li><a href='#provider0Photo'>- Provider photo</a></li>");
+}*/
+
+const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+let isHoursIncomplete = false;
+
+days.forEach((day) => {
+  if (!isHoursIncomplete) {
+    const isOpenHourEmpty = document.querySelector(`#locationhour-${day}-open`).value === "";
+    const isCloseHourEmpty = document.querySelector(`#locationhour-${day}-close`).value === "";
+    const isClosedChecked = !document.querySelector(`#locationhour-${day}-is-closed`).checked;
+    const isByAppointmentChecked = !document.querySelector(`#locationhour-${day}-is-byappt`).checked;
+
+    if (isOpenHourEmpty && isCloseHourEmpty && isClosedChecked && isByAppointmentChecked) {
+      completionPercentage -= 10;
+      incompleteArray.push(`<li><a href='#hoursOfOperation'>- Hours of operation</a></li>`);
+      document.querySelector("h2:contains('Hours of operation')").classList.add("red");
+      isHoursIncomplete = true;
+    }
+  }
+});
+
+// Payment section check
+const paymentOptions = ["#Payment2", "#Payment4", "#Payment8", "#Payment16", "#Payment64", "#Payment128", "#Payment256", "#Payment512", "#Payment1024", "#Payment2048"];
+
+const isPaymentIncomplete = paymentOptions.every(option => !document.querySelector(option).checked);
+
+if (isPaymentIncomplete) {
+  completionPercentage -= 10;
+  incompleteArray.push("<li><a href='#payment'>- Accepted methods of payment</a></li>");
+  document.querySelector("h2:contains('Accepted methods of payment')").classList.add("red");
+}
+
+// Website url check
+if (document.querySelector("#location-url").value === "") {
+  completionPercentage -= 5;
+  incompleteArray.push("<li><a href='#urlAnchor'>- Website URL</a></li>");
+  document.querySelector("#location-url").parentElement.classList.add("has-error");
+  document.querySelector("#location-url").previousElementSibling.classList.add("red");
+}
+
+// Vidscrip validation
+const vidscripsVidscripInput = document.querySelector("#locationvidscrips-vidscrip");
+const vidscripsEmailInput = document.querySelector("#locationvidscrips-email");
+
+const handleVidscripBlur = () => {
+  if (vidscripsVidscripInput.value === "" && vidscripsEmailInput.value === "") {
+    vidscripsVidscripInput.required = false;
+    vidscripsEmailInput.required = false;
+  } else {
+    vidscripsVidscripInput.required = true;
+    vidscripsEmailInput.required = true;
+  }
+};
+
+if(vidscripsVidscripInput !== null){
+	vidscripsVidscripInput.addEventListener("blur", handleVidscripBlur);
+	vidscripsEmailInput.addEventListener("blur", handleVidscripBlur);
+}
+
+// Only display the completion modal once per session. Display again if the percentage changes.
+/*** TODO: uncomment when isClinic check added:
+const sessionCompletionPercentage = sessionStorage.getItem("sessionCompletionPercentage");
+if (sessionCompletionPercentage !== String(completionPercentage)) {
+  if (completionPercentage < 100) {
+    document.getElementById("completionPercentage").textContent = completionPercentage;
+    document.getElementById("completionList").innerHTML = incompleteArray.join('');
+    document.getElementById("incompleteModal").style.display = "block";
+    document.getElementById("incompleteModal").classList.add("in");
+  } else if (completionPercentage === 100) {
+    document.getElementById("completeModal").style.display = "block";
+    document.getElementById("completeModal").classList.add("in");
+  }
+  sessionStorage.setItem("sessionCompletionPercentage", completionPercentage);
+}*/
+
+// Trigger change events
+document.getElementById("locationhour-is-closed-lunch").dispatchEvent(new Event("change"));
+document.getElementById("is-mobile").dispatchEvent(new Event("change"));
+
+const elements = document.querySelectorAll("span.cke_path_item");
+
+elements.forEach((element) => {
+  const node = document.getElementById(element.getAttribute("id"));
+  const message = element.closest(".form-group").nextElementSibling.querySelector(".text-danger");
+  const callback = function (mutationsList) {
+    if (node.classList.contains("cke_wordcountLimitReached")) {
+      message.style.display = "block";
+    } else {
+      message.style.display = "none";
+    }
+  };
+  const config = { characterData: true, childList: true, subtree: true };
+  const observer = new MutationObserver(callback);
+
+  observer.observe(node, config);
+});
+
+locationAutocomplete();
+
+
+const submitButton = document.querySelectorAll('input[type=submit]');
+
+submitButton.forEach((button) => {
+button.addEventListener('click', () => {
+  const providers = document.querySelectorAll('.provider');
+  
+  providers.forEach((provider) => {
+    const providerId = provider.getAttribute('provider');
+    const firstName = document.querySelector('#Provider' + providerId + 'FirstName');
+    const lastName = document.querySelector('#Provider' + providerId + 'LastName');
+    const description = document.querySelector('#Provider' + providerId + 'Description');
+    
+    if (firstName.value.length > 0 || lastName.value.length > 0 || description.value.length > 0) {
+      firstName.setAttribute('required', 'required');
+      lastName.setAttribute('required', 'required');
+    } else {
+      firstName.removeAttribute('required');
+      lastName.removeAttribute('required');
+    }
+  });
+});
+});
+
+const closedCheckboxes = document.querySelectorAll('.is-closed-checkbox');
+
+closedCheckboxes.forEach(function(checkbox) {
+checkbox.addEventListener('click', function() {
+  const day = this.dataset.day;
+  const isOpen = !this.checked;
+  
+  const openHour = document.querySelector(`#LocationHour${day}OpenHour`);
+  const openMin = document.querySelector(`#LocationHour${day}OpenMin`);
+  const openMeridian = document.querySelector(`#LocationHour${day}OpenMeridian`);
+  const closeHour = document.querySelector(`#LocationHour${day}CloseHour`);
+  const closeMin = document.querySelector(`#LocationHour${day}CloseMin`);
+  const closeMeridian = document.querySelector(`#LocationHour${day}CloseMeridian`);
+  
+  if (isOpen) {
+    openHour.value = null;
+    openMin.value = null;
+    openMeridian.value = null;
+    closeHour.value = null;
+    closeMin.value = null;
+    closeMeridian.value = null;
+  } else {
+    openHour.value = '08';
+    openMin.value = '00';
+    openMeridian.value = 'am';
+    closeHour.value = '05';
+    closeMin.value = '00';
+    closeMeridian.value = 'pm';
+  }
+});
+});
+
+function hhGetFileSize(fileid) {
+try {
+  let fileSize = 0;
+  
+  if (navigator.userAgent.match(/msie/i)) { // For IE
+    // Before making an object of ActiveXObject,
+    // please make sure ActiveX is enabled in your IE browser
+    const objFSO = new ActiveXObject("Scripting.FileSystemObject");
+    const filePath = document.getElementById(fileid).value;
+    const objFile = objFSO.getFile(filePath);
+    fileSize = objFile.size; // Size in bytes
+  } else if (document.getElementById(fileid).files.length > 0) { // For FF, Safari, Opera, and others
+    fileSize = document.getElementById(fileid).files[0].size; // Size in bytes
+  }
+  
+  if (fileSize !== 0) {
+    fileSize = fileSize / (1024 * 1024); // Convert size to MB
+  }
+  
+  // alert("Uploaded File Size is " + fileSize + " MB");
+  return fileSize;
+} catch (e) {
+  alert("Error: " + e);
+}
+}
+
+function hhCanSubmit(completeCheck) {
+let totalUpload = 0;
+let uploadLimit = 0;
+
+if (typeof UPLOAD_LIMIT !== 'undefined') {
+  uploadLimit = UPLOAD_LIMIT;
+} else {
+  alert('Error: UPLOAD_LIMIT is not set');
+  return false;
+}
+
+const inputFiles = document.querySelectorAll('.input_file');
+inputFiles.forEach((inputFile) => {
+  totalUpload += hhGetFileSize(inputFile.id);
+});
+
+if (totalUpload > uploadLimit) {
+  totalUpload = Math.round(totalUpload * 100) / 100;
+  alert(`Note - Combined files queued for upload (${totalUpload} MB) are more than the limit allowed (${uploadLimit} MB). We cannot upload your picture(s). Please try again with smaller picture file(s). If you need assistance, please email contactHH@healthyhearing.com.`);
+  return false;
+}
+
+return true;
+}
+
+function onChangeLocationAdFile(obj){
+const id = obj.id;
+const row = document.getElementById(id).closest('tr');
+const filename = obj.files[0].name;
+const filesize = obj.files[0].size;
+
+// Check for errors in the inputs
+let errors = false;
+if (filename.length === 0) {
+  // File is empty
+  errors = true;
+} else {
+  document.getElementById('locationad-photo-url').value = filename;
+}
+
+const match = filename.match(/\.(.+)/);
+let ext = '';
+if (match && typeof match[1] !== 'undefined') {
+  ext = match[1].toLowerCase();
+}
+
+if (!['jpg', 'jpeg'].includes(ext)) {
+  // File is not a jpg
+  errors = true;
+}
+
+if (filesize > 500000) {
+  // File is larger than 2MB
+  errors = true;
+}
+
+if (errors) {
+  // Apply the error style to the input
+  document.getElementById('locationad-photo-url').style.background = 'rgba(200,100,100,.5)';
+  document.getElementById('location-ad-error').style.display = 'block';
+  document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
+    el.setAttribute('disabled', 'disabled');
+  });
+  return false;
+} else {
+  document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
+    el.removeAttribute('disabled');
+  });
+  // Remove the error style from the input
+  document.getElementById('LocationAdPhotoUrl').style.background = '';
+  document.getElementById('location-ad-error').style.display = 'none';
+}
+};
+
+/*** TODO: possibly deletable block: ***/
+// Allow form submission if user clicks modal continue
+// document.querySelector("#saveAndContinue").addEventListener("click", () => {
+// 	document.querySelector("#LocationClinicEditForm").setAttribute("onsubmit", "return $.hhCanSubmit('Continue');");
+// 	document.querySelector("#LocationClinicEditForm").submit();
+// });
+
+// Notice on input.
+document.querySelectorAll(".input_file").forEach((element) => {
+element.addEventListener("change", () => {
+	hhCanSubmit();
+});
+});
+
+document.body.addEventListener("change", (e) => {
+const { target } = e;
+
+if (target.matches('input[type="file"]')) {
+	if (target.id === 'LocationAdFile') {
+		onChangeLocationAdFile(target);
+	} else {
+		onChangeFileInput(target);
+	}
+}
+
+if (target.matches('#LocationIsMobile')) {
+	onChangeIsMobile(target.checked);
+}
+
+if (target.matches('#LocationHourIsClosedLunch')) {
+	onChangeIsClosedLunch(target.checked);
+	e.preventDefault();
+}
+});
+
+document.body.addEventListener("click", (e) => {
+if (e.target.classList.contains('js-photo-delete')) {
+	removePhotoRow(e.target, 'photo');
+	e.preventDefault();
+	return false;
+}
+if (e.target.classList.contains('js-logo-delete')) {
+	removePhotoRow(e.target, 'logo');
+	e.preventDefault();
+	return false;
+}
+if (e.target.classList.contains('js-ad-delete')) {
+	removePhotoRow(e.target, 'ad');
+	e.preventDefault();
+	return false;
+}
+
+const { target } = e;
+
+if (target.matches('.js-link-delete')) {
+	deleteLink(target);
+	e.preventDefault();
+} else if (target.matches('.js-coupon-select')) {
+	addCoupon(target);
+	e.preventDefault();
+} else if (target.matches('.js-choose-own-coupon')) {
+	chooseOwnCoupon();
+	e.preventDefault();
+} else if (target.matches('.js-show-coupon-library')) {
+	showCouponLibrary();
+	e.preventDefault();
+}
+});
+
+const deletePhotoButtons = document.querySelectorAll('.provider-photo-delete');
+
+deletePhotoButtons.forEach(button => {
+button.addEventListener('click', () => {
+	const target = button.getAttribute('data-target');
+	const img = button.nextElementSibling.querySelector('img');
+	document.getElementById(target).value = '';
+	img.setAttribute('src', '');
+});
+});
+
+const removePhotoRow = (obj, type) => {
+const row = obj.closest('tr');
+const key = obj.dataset.key;
+if (type === 'photo') {
+  document.getElementById(`locationphoto-${key}-photo-url`).value = '';
+  if (document.getElementById(`locationphoto-${key}-file`) !== null) {
+    document.getElementById(`locationphoto-${key}-file`).value = '';
+  }
+  row.style.display = 'none';
+}
+if (type === 'logo') {
+  document.getElementById('LocationLogoUrl').value = '';
+  document.getElementById('photo-thumb-logo').setAttribute('src', '');
+  if (document.getElementById('LocationLogo0File') !== null) {
+    document.getElementById('LocationLogo0File').value = '';
+  }
+}
+if (type === 'ad') {
+  document.getElementById('location-ad-preview').style.display = 'none';
+  document.getElementById('locationad-photo-url').value = '';
+  document.getElementById('locationad-title').value = '';
+  document.getElementById('locationad-description').value = '';
+  document.getElementById('locationad-photo-url').value = '';
+  document.getElementById('location-coupon-id').value = null;
+  document.getElementById('specialAnnouncements').dataset.adid = null;
+  document.getElementById('specialAnnouncements').dataset.couponid = null;
+  initSpecialAnnouncements();
+}
+};
+
+const validatePhotoAlt = (key) => {
+const pattern = new RegExp("^.*[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}.*$");
+const altInput = document.getElementById(`LocationPhoto${key}Alt`);
+if (pattern.test(altInput.value)) {
+  document.querySelector("input[type='submit']").setAttribute("disabled", "disabled");
+  document.querySelector(`.help-block-desc-${key}`).style.display = 'block';
+  altInput.parentNode.classList.add("has-error");
+} else {
+  document.querySelector("input[type='submit']").removeAttribute("disabled");
+  document.querySelector(`.help-block-desc-${key}`).style.display = 'none';
+  altInput.parentNode.classList.remove("has-error");
+}
+};
+
+const addCoupon = (obj) => {
+const couponId = obj.getAttribute("data-coupon-id");
+document.getElementById("LocationAdFile").value = "";
+document.getElementById("LocationAdTitle").value = "";
+document.getElementById("LocationAdDescription").value = "";
+document.getElementById("LocationAdPhotoUrl").value = "";
+document.getElementById("specialAnnouncements").dataset.adid = null;
+document.getElementById("LocationCouponId").value = couponId;
+document.getElementById("specialAnnouncements").dataset.couponid = couponId;
+document.querySelector("#couponSelected .coupon-image").setAttribute("src", `/img/coupons/coupon-${couponId}.jpg`);
+document.getElementById("couponLibrary").style.display = 'none';
+document.getElementById("couponSelected").style.display = 'block';
+document.getElementById("uploadCoupon").style.display = 'none';
+scrollToElement("#specialAnnouncements");
+};
+
+const chooseOwnCoupon = () => {
+document.getElementById("couponLibrary").style.display = 'none';
+document.getElementById("couponSelected").style.display = 'none';
+document.getElementById("uploadCoupon").style.display = 'block';
+scrollToElement("#specialAnnouncements");
+};
+
+const showCouponLibrary = () => {
+document.getElementById("couponLibrary").style.display = 'block';
+document.getElementById("couponSelected").style.display = 'none';
+document.getElementById("uploadCoupon").style.display = 'none';
+scrollToElement("#specialAnnouncements");
+};
+
+const onChangeFileInput = (obj) => {
+const id = obj.id;
+const row = document.getElementById(id).closest('tr');
+const keyMatch = id.match(/locationphoto|LocationLogo|locationad|provider-(\d+)(.+)/);
+const key = parseInt(keyMatch.input.match(/\d+/)[0]);
+const newKey = Number(key) + 1;
+const filename = obj.files[0].name;
+const filesize = obj.files[0].size;
+const maxSize = id.match(/LocationLogo/) ? 500000 : 2000000;
+
+// Check for errors in the inputs
+let errors = false;
+
+/*** TODO: Delete this block if unused: 
+// if (filename.length === 0) {
+//   // File is empty
+//   errors = true;
+//   document.querySelector(`.upload-text-${key}`).innerHTML = 'Click the button to choose a photo from your computer.';
+// } else {
+//   document.querySelector(`.upload-text-${key}`).innerHTML = filename;
+// }***/
+
+const match = filename.match(/\.(.+)/);
+let ext = '';
+if (match && (typeof match[1] !== undefined)) {
+  ext = match[1].toLowerCase();
+}
+
+if (!['jpg', 'jpeg'].includes(ext)) {
+  // File is not a jpg
+  errors = true;
+}
+
+if (filesize > maxSize) {
+  // File is larger than 500KB for logos, 2MB for photo gallery
+  errors = true;
+}
+
+if (errors) {
+  // Apply the error style to the input
+  obj.style.background = 'rgba(200,100,100,.5)';
+
+  if (keyMatch.input === 'LocationLogo0Url') {
+    //*** TODO: add error messaging (currently nothing on prod): document.getElementById('photo-add-error-logo').style.display = 'block';
+  } else if (keyMatch[0].match(/Provider/)) {
+    document.getElementById('provider-photo-add-error-' + key).style.display = 'block';
+  } else {
+    document.getElementById('photo-add-error-' + key).style.display = 'block';
+  }
+
+  document.querySelector("#LocationClinicEditForm input[type='submit']").setAttribute('disabled', 'disabled');
+  return false;
+} else {
+// Remove the error style from the input
+obj.style.background = '';
+document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
+const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
+helpBlocks.forEach((block) => {
+  block.style.display = 'none';
+});
+document.getElementById("photo-add-error-" + key).style.display = 'none';
+document.getElementById("btn-photo-delete-" + key).style.display = 'block';
+document.getElementById("photo-description-" + key).style.display = 'block';
+
+if (keyMatch[0] === 'LocationPhoto') {
+  document.getElementById("photo-add-error-" + key).style.display = 'none';
+  document.getElementById("btn-photo-delete-" + key).style.display = 'block';
+  document.getElementById("photo-description-" + key).style.display = 'block';
+  document.querySelector("input#LocationPhoto" + key + "Alt").removeAttribute('disabled');
+
+  // Add a new row to the photos table
+  const newRow = document.createElement('tr');
+  newRow.innerHTML = `<td>
+    <div class="row mt5 mb10">
+      <div class="col-md-offset-3 col-md-9">
+        <img id="photo-thumb-${newKey}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>
+      <div class="col col-md-9">
+        <input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File">
+      </div>
+    </div>
+    <div id="photo-description-${newKey}" style="display:none;">
+      <div class="form-group required">
+        <label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>
+        <div class="col col-md-9">
+          <input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt">
+        </div>
+      </div>
+    </div>
+    <span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>
+  </td>`;
+  newRow.innerHTML += `<td align="center">
+    <button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>
+  </td>`;
+  row.parentNode.insertBefore(newRow, row.nextSibling);
+}
+
+// Load the thumbnail image
+const files = obj.files;
+const reader = new FileReader();
+reader.onload = function (e) {
+  if (keyMatch.input === 'LocationLogo0Url') {
+    document.querySelector('img#photo-thumb-logo').src = e.target.result;
+  } else {
+    document.querySelector('img#photo-thumb-' + key).src = e.target.result;
+  }
+};
+reader.readAsDataURL(files[0]);
+};
+
+// Close completion check modal
+if(document.querySelector("#incompleteModal") !== null) {
+document.querySelector("#incompleteModal .close-modal").addEventListener("click", () => {
+  document.querySelector("#incompleteModal").classList.remove("in");
+  document.querySelector("#incompleteModal").style.display = "none";
+});
+}
+
+if(document.querySelector("#completeModal") !== null) {
+document.querySelector("#completeModal .close-modal").addEventListener("click", () => {
+  document.querySelector("#completeModal").classList.remove("in");
+  document.querySelector("#completeModal").style.display = "none";
+});
+}
+
+// Close new user modal
+if(document.querySelector("#newUserModal") !== null) {
+document.querySelector("#newUserModal .close-modal").addEventListener("click", () => {
+  document.querySelector("#newUserModal").classList.remove("show", "in");
+  document.querySelector("#newUserModal").style.display = "none";
+  document.querySelector("#faqTab").animate({ "bottom": 0 }, 500);
+});
+}
+}
+
+// Special announcement border selection
+document.querySelectorAll(".border-radio").forEach((radio) => {
+radio.addEventListener("click", () => {
+  document.querySelector(".selected-border").classList.remove("selected-border");
+  radio.classList.add("selected-border");
+});
+});

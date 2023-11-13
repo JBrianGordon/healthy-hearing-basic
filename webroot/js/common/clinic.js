@@ -78,23 +78,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const moreReviewsContainer = document.getElementById("more-reviews");
 	if(moreReviewsContainer){
-		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
+		let hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll(".well"));
 
 		hiddenReviews.forEach(review => {
 		  review.classList.add("hidden-review");
 		});
 
-		const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
-		let hiddenRevNum = hiddenReviewElements.length;
-
 		const moreReviewsButton = document.getElementById("more-reviews-button");
+		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		let hiddenReviewElements, hiddenRevNum;
+
 		moreReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		  fewerReviewsButton.style.display = "block";
+			hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
+			hiddenRevNum = hiddenReviewElements.length;
 
 		  for (let i = 0; i < 5; i++) {
 		    hiddenReviewElements[0].classList.remove("hidden-review");
+		    hiddenReviewElements = Array.from(hiddenReviewElements).slice(1);
 		    hiddenRevNum--;
 
 		    if (hiddenRevNum === 0) {
@@ -103,25 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		    }
 		  }
 
-		  const moreReviewsContainer = document.getElementById("more-reviews");
 		  moreReviewsContainer.style.display = "block";
 
 		  return false;
 		});
 
-		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		fewerReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const moreReviewsContainer = document.getElementById("more-reviews");
 		  moreReviewsContainer.style.display = "none";
 
 		  this.style.display = "none";
 
-		  const moreReviewsButton = document.getElementById("more-reviews-button");
 		  moreReviewsButton.style.display = "block";
 
 		  window.scrollTo({
-		    top: document.querySelector(".panel-section.reviews").offsetTop - 114,
+		    top: document.querySelector(".panel-section.reviews").offsetTop + 1114,
 		    behavior: "smooth"
 		  });
 
@@ -293,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  }
 	}
 
-	const emptyLinks = document.querySelectorAll(".provider-qualifications a[data-content='']");
+	const emptyLinks = document.querySelectorAll(".provider-qualifications a[data-bs-content='']");
 	emptyLinks.forEach(function(link) {
 	  link.remove();
 	});
@@ -306,68 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	  return elementBottom > viewportTop && elementTop < viewportBottom;
 	};
-	
-	const videoFrames = document.querySelectorAll('.video-frame');
-
-	if (videoFrames.length >= 1) {
-	  if (videoFrames.length > 2) {
-	    // Scroll function to detect if gallery div is in view
-	    window.addEventListener('scroll', function () {
-	      if (isInViewport(document.querySelector('.video-gallery'))) {
-	        for (let i = 0; i < videoFrames.length; i++) {
-	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
-	        }
-	        // Turn scroll function off once video sources are loaded
-	        window.removeEventListener('scroll', arguments.callee);
-	      }
-	    });
-
-	    const videoGallery = document.querySelector('.video-gallery');
-	    const videoGalleryButton = document.createElement('button');
-	    videoGalleryButton.id = 'videoGalleryButton';
-	    videoGalleryButton.className = 'btn btn-light mt20 show-videos';
-	    videoGalleryButton.style.margin = '20px auto';
-	    videoGalleryButton.style.display = 'block';
-	    videoGalleryButton.style.clear = 'both';
-	    videoGalleryButton.textContent = 'View more videos';
-
-	    const moreVideos = document.createElement('div');
-	    moreVideos.id = 'moreVideos';
-	    moreVideos.style.display = 'none';
-
-	    videoGallery.parentNode.insertBefore(videoGalleryButton, videoGallery.nextSibling);
-	    videoGallery.parentNode.insertBefore(moreVideos, videoGallery.nextSibling);
-
-	    videoGalleryButton.addEventListener('click', function () {
-	      if (this.classList.contains('show-videos')) {
-	        this.classList.toggle('show-videos');
-	        this.textContent = 'View fewer videos';
-	        moreVideos.style.display = 'block';
-	      } else {
-	        this.classList.toggle('show-videos');
-	        this.textContent = 'View more videos';
-	        moreVideos.style.display = 'none';
-	        window.scrollTo({
-	          top: videoGallery.offsetTop - 114,
-	          behavior: 'smooth'
-	        });
-	      }
-	    });
-
-	    for (let i = 2; i < videoFrames.length; i++) {
-	      moreVideos.appendChild(videoFrames[i]);
-	    }
-	  } else {
-	    window.addEventListener('scroll', function () {
-	      if (isInViewport(document.querySelector('#videoGallery'))) {
-	        for (let i = 0; i < videoFrames.length; i++) {
-	          videoFrames[i].src = videoFrames[i].getAttribute('data-src');
-	        }
-	        window.removeEventListener('scroll', arguments.callee);
-	      }
-	    });
-	  }
-	}
 	
 	//photo gallery functions
 	const photoGallery = document.querySelector('.photo-gallery');
@@ -462,20 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		        const stickyFooter = document.querySelector('.sticky-footer');
 		        stickyFooter.style.display = 'block';
 		      }
-
-		      if (document.querySelector('.video-gallery')) {
-		        const videoGalleryOffsetTop = document.querySelector('.video-gallery').offsetTop;
-		        window.scrollTo({
-		          top: videoGalleryOffsetTop,
-		          behavior: 'smooth'
-		        });
-		      }
 		    }
 		  }, 500);
 		});
 	}
-	
-	$('[data-toggle="popover"]').popover();
 });
 
 window.addEventListener('load', function () {

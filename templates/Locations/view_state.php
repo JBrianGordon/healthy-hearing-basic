@@ -14,7 +14,7 @@ $this->Breadcrumbs->add([
     ['title' => $stateNice, 'url' => ''],
 ]);
 
-$this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"));
+$this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -23,6 +23,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"));
 			<div class="row" id="result_content">
 				<header class="col-md-12 inverse">
 					<?= $this->Breadcrumbs->render() ?>
+					<?= $this->element('breadcrumb_schema') ?>
 					<div id="ellipses">...</div>
 				</header>
 				<div id="top" class="col-lg-9 page-content fap-cities float-start">
@@ -125,7 +126,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"));
 																<?= $this->Html->link("{$city->city}, {$city->state}",
 																	[
 																		'controller' => 'locations',
-																		'action' => 'index',
+																		'action' => 'viewCityZip',
 																		'region' => $this->Clinic->stateSlug($city->state),
 																		'city' => slugifyCity($city->city)
 																	],

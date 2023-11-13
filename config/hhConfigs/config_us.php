@@ -73,6 +73,8 @@ return [
     'isTieringEnabled' => true,
     'isYhnAutoMatched' => false,
     'importTag' => 'YHN',
+    // Google tag manager
+    'gtmId' => 'GTM-P2V6GQ',
 	// Google Maps API
 	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
 	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',
