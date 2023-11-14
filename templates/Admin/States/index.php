@@ -62,6 +62,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                    </td>
 								                    <td class="actions p5">
 								                        <div class="btn-group-vertical btn-group-sm">
+								                            <?= $this->Html->link(__(' Edit'),
+								                                ['action' => 'edit', $state->id],
+								                                ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
 								                            <?= $this->Html->link(__(' View'),
 								                                [
 								                                    'prefix' => false,
@@ -69,9 +72,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                                    'action' => 'viewState',
 								                                    'region' =>  $this->Clinic->stateSlug($state->name)
 								                                ],
-								                                ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
-								                            <?= $this->Html->link(__(' Edit'),
-								                                ['action' => 'edit', $state->id],
 								                                ['class' => 'btn btn-default btn-xs bi bi-eye-fill']) ?>
 								                            <?= $this->Form->postLink(__(' Delete'),
 								                                ['action' => 'delete', $state->id],
