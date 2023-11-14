@@ -107,7 +107,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
                                                         ?>
                                                     </div>
                                                     <div class="tab-pane fade" aria-expanded="false" id="Admin" role="tabpanel">
-                                                        <div class="row">
+                                                        <div class="row m0">
                                                             <?= $this->Form->control('role', ['type' => 'select', 'options' => User::$roles]) ?>
                                                         </div>
                                                         <div class="row m0">
