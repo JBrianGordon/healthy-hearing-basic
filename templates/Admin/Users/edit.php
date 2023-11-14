@@ -49,7 +49,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 													<tr>
 														<th class="col-md-3 tar">ID</th>
 														<td class="col-md-9">
-															<?php echo $user->id; ?>
+															<?= $user->id ?>
 														</td>
 													</tr>
 													<?php if (!empty($user->locations)): ?>
@@ -64,13 +64,13 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 													<tr>
 														<th class="col-md-3 tar">Created</th>
 														<td class="col-md-9">
-															<?php echo $user->created; ?>
+															<?= $user->created ?>
 														</td>
 													</tr>
 													<tr>
 														<th class="col-md-3 tar">Modified</th>
 														<td class="col-md-9">
-															<?php echo $user->modified; ?>
+															<?= $user->modified ?>
 														</td>
 													</tr>
 												</table>
@@ -182,8 +182,8 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 
 																<?php foreach ($user->login_ips as $locationUserLogin): ?>
 																	<tr>
-																		<td><?php echo $locationUserLogin['login_date']; ?></td>
-																		<td><?php echo $locationUserLogin['ip']; ?></td>
+																		<td><?= $locationUserLogin['login_date'] ?></td>
+																		<td><?= $locationUserLogin['ip'] ?></td>
 																	</tr>
 																<?php endforeach; ?>
 															</table>
