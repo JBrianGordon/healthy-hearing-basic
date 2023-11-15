@@ -44,7 +44,7 @@ $logo = Configure::read('logo');
                                 'class' => 'nav-link d-inline-block',
                             ]
                     ) ?>
-                    <ul class="dropdown-menu dropdown-menu-end pt20" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <!-- TODO: MAKE SURE LINKS BELOW WORK; CREATE ROUTES -->
                         <!-- TODO: USE ROUTING ARRAYS WHERE APPROPRIATE -->
                         <li>

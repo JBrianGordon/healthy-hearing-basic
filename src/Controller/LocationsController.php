@@ -100,7 +100,7 @@ class LocationsController extends AppController
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
-        $show_ad = false;
+        $show_ad = true;
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 
@@ -263,7 +263,7 @@ class LocationsController extends AppController
                 return $q->where(['Providers.thumb_url !=' => '']); // Get providers with a picture
             },
         ];
-        $fields = array_merge(['Location.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
+        $fields = array_merge(['Locations.id', 'is_call_assist', 'is_iris_plus', 'direct_book_type', 'direct_book_iframe', 'listing_type', 'logo_url', 'lat', 'lon', 'reviews_approved', 'average_rating', 'last_review_date', 'title', 'address', 'address_2', 'city', 'state', 'zip', 'phone', 'is_mobile', 'mobile_text', 'filter_has_photo'], Location::$badgeFields);
         $locations = $this->Locations->findAllByGeoLoc(compact('region','city','zip'), 40, [], $contain, $fields);
 
         // We are not currently using filters. Keep this code in case we decide to add them back.
@@ -362,12 +362,12 @@ class LocationsController extends AppController
                 $location = $this->Locations->find('all', [
                     'contain' => [],
                     'fields' => ['id', 'city', 'state', 'zip', 'title'],
-                    'conditions' => ['Location.id' => $locationId]
+                    'conditions' => ['Locations.id' => $locationId]
                 ])->first();
                 if (!empty($location)) {
                     $this->response->disableCache();
                     // Found an inactive clinic, redirect to the zip page
-                    $this->badFlash('<div class="p10"><strong><span class="glyphicon glyphicon-search pr10" aria-hidden="true"></span> '.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.</div>');
+                    $this->Flash->error('<div class="p10"><strong><span class="glyphicon glyphicon-search pr10" aria-hidden="true"></span> '.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.</div>');
                     return $this->redirect([
                         'controller' => 'locations',
                         'action' => 'viewCityZip',
@@ -513,6 +513,18 @@ class LocationsController extends AppController
             $response = [
                     'success' => false,
                     'errors' => Hash::flatten($reviewErrors),
+            ];
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+
+            return;
+        }
+
+        if (!$this->Recaptcha->verify()) {
+            $response = [
+                'success' => false,
+                'errors' => ['reCAPTCHA test failed ("I\'m not a robot"). Please wait for the reCAPTCHA to reset!'],
             ];
 
             $this->set(compact('response'));

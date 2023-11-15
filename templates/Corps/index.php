@@ -56,3 +56,13 @@ $this->Breadcrumbs->add([
 	    </div>
 	</div>
 </div>
+<script>
+  // May want to consider making this an export module if image height/width needed on other pages.
+  window.onload = function() {
+    const images = document.querySelectorAll('.img-responsive.align-center');
+
+    images.forEach(image => {
+      image.setAttribute('height', `${image.height}px`);
+    });
+  };
+</script>

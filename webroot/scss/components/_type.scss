@@ -71,9 +71,8 @@ th {
 }
 
 small {
-  font-size: 0.65em;
-  line-height: 1;
-  color: #777;
+  font-size: 87%;
+  line-height: 1.6;
 }
 
 @media only screen and (max-width: $screen-sm-max) {
@@ -137,6 +136,10 @@ a.print-link {
 
 .pull-right {
   float: right;
+}
+
+.pagination {
+  font-size: 16px;
 }
 
 table {

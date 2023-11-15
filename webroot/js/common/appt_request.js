@@ -75,7 +75,7 @@ window.addSubmitListener = () => {
 
 //Highlight Appt req form on link click
 if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-	const formLink = document.querySelector("#requestFormHighlight");
+	const formLink = document.querySelector(".requestFormHighlight");
 	const apptReqForm = document.querySelector("#apptRequestPanel");
 	const expandContract = () => {
 		  	apptReqForm.classList.toggle("contracted");

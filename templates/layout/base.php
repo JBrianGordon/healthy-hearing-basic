@@ -2,14 +2,17 @@
 /**
  * @var \App\View\AppView $this
  */
+
+use Cake\Core\Configure;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Healthy Hearing</title>
     <?= $this->Html->meta('icon') ?>
+    <?= $this->element('google_tag_manager_head') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
@@ -51,6 +54,7 @@
     ?>
 </head>
 <body>
+    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
@@ -59,9 +63,9 @@
     <?= $this->element('footer') ?>
     <?= $this->Html->css('responsive', ['rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"']); ?>
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
-    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
+    <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
-    <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
+    <?= $this->element('cookie_footer') ?>
 </body>
 <?= $this->fetch('script') ?>
 </html>

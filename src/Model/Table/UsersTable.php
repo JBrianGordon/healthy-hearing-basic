@@ -117,7 +117,11 @@ class UsersTable extends CakeDcUsersTable
             'targetForeignKey' => 'wiki_id',
             'joinTable' => 'users_wikis',
         ]);
-        $this->belongsToMany('Locations');
+        $this->belongsToMany('Locations', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'location_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -456,5 +460,25 @@ class UsersTable extends CakeDcUsersTable
         ]);
 
         return $agentsQuery->toArray();
+    }
+
+    /**
+     * Find a list of users that are authors or writers
+     */
+    public function authorList() {
+        $authors = $this->find('all', [
+            'conditions' => [
+                'OR' => [
+                    'is_writer' => true,
+                    'is_author' => true
+                ]
+            ],
+            'order' => ['first_name ASC']
+        ])->all();
+        $authorList = [];
+        foreach ($authors as $author) {
+            $authorList[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
+        }
+        return $authorList;
     }
 }

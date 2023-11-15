@@ -11,31 +11,24 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 //Set panel order depending on page, using flex
 //Hearing test panel
 if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
-	$hearingTestDisplay = ' style="order:1"';
+	$hearingTestDisplay = (isset($stateNice) && $isMobileDevice) ? ' style="order:2"' : ' style="order:1"';
 } else if(Configure::read('showHearingTest') && in_array($controller, ['Content', 'Wikis', 'Corps'])) {
 	$hearingTestDisplay = ' class="panel" style="order:4"';
+} else if(empty($wiki)) {
+	$hearingTestDisplay = ' style="order:6"';
 } else {
 	$hearingTestDisplay = ' class="hidden"';
 }
 
 //Preferred clinics panel
 $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
-
-//Corp page display
-if($controller == 'Corps'){
-	$facDisplay = "8";
-	$reportDisplay = "9";
-} else {
-	$facDisplay = "9";
-	$reportDisplay = "8";
-}
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations')): ?>
-		<section<?= $hearingTestDisplay ?>>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages')): ?>
+		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
-			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive">
+			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
 			</a>
 		</section>
 	<?php endif; ?>
@@ -74,35 +67,12 @@ if($controller == 'Corps'){
 				</div>
 			</div>
 		</section>
-	<?php else: ?>
-		<section class="panel" style="order:6">
-			<a href="/help/online-hearing-test">
-			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive block">
-			</a>
-		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if (!empty($articles) && empty($wiki)): ?>
-		<section class="panel panel-light blog-previews" style="order:<?= $reportDisplay ?>">
-			<header class="panel-heading text-center">
-				<h4>The Healthy Hearing Report</h4>
-			</header>
-			<?php foreach ($articles as $content): ?>
-				<div class="panel-section condensed blog-preview">
-					<div class="row">
-						<div class="col-lg-3">
-							<?= $this->Editorial->dateHome($content, ['large' => false]) ?>
-						</div>
-						<div class="col-lg-9">
-							<div class="subtitle"><?= $this->Editorial->getType($content) ?></div>
-							<?= $this->Editorial->titleLink($content, false, ['class' => 'text-link']) ?>
-						</div>
-					</div>
-				</div>
-			<?php endforeach; ?>
-		</section>
+	<?php if ((!empty($articles) && empty($wiki)) || isset($stateNice)): ?>
+		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
-	<section class="panel panel-secondary" style="order:<?= $facDisplay ?>">
+	<section class="panel panel-secondary" style="order:9">
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
 		</header>
@@ -111,7 +81,6 @@ if($controller == 'Corps'){
 			<?= $this->element('fac_config_text', ["locationsPage" => false]) ?>
 		</div>
 	</section>
-	<?= isset($stateNice) ? $this->element('learn_more') : null; ?>
 	<?php if (!empty($contents)): ?>
 		<section class="panel panel-light related-reports" style="order:10">
 			<header class="panel-heading text-center">
@@ -129,4 +98,27 @@ if($controller == 'Corps'){
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if (Configure::read('showReports') && ($controller != 'quiz_results')): ?>
+		<section class="panel panel-light blog-previews" style="order:12">
+		<header class="panel-heading text-center">
+		  <h2>The Healthy Hearing Report</h2>
+		</header>
+		<div class="panel-body">
+		  <!--?php *** TODO: uncomment when recent articles logic built: $articles = ClassRegistry::init('Content')->findLatest(4);) ?-->
+		  <!--?php foreach ($articles as $content): ?-->
+		    <div class="panel-section condensed blog-preview">
+		      <div class="row">
+		        <div class="col-sm-3">
+		          <!--?= $this->Content->dateHome($content, ['large' => false]); ?-->
+		        </div>
+		        <div class="col-sm-9">
+		          <div class="subtitle"><!--?= $this->Content->getType(); ?--></div>
+		          <!--?= $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?-->
+		        </div>
+		      </div>
+		    </div>
+		  <!--?php endforeach; ?-->
+		</div>
+		</section>
+	<?php endif; ?>
 </div>

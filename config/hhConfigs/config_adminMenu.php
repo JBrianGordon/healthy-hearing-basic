@@ -35,7 +35,7 @@ if (Configure::read('showAds')) {
 }
 if (Configure::read('showReports')) {
     $editorialItems['Add article'] = [
-        'url' => '/admin/content/edit/type:article',
+        'url' => '/admin/content/edit',
         'icon' => 'bi bi-plus-lg',
     ];
 }
@@ -229,8 +229,7 @@ $seoToolsMenu = [
 * Admin - Utilities
 ********************************/
 $utilitiesItems = [];
-$hhUsers = Configure::read('siteNameAbbr').' Users';
-$utilitiesItems[$hhUsers] = [
+$utilitiesItems['Users'] = [
     'url' => '/admin/users',
     'icon' => 'bi bi-person-fill',
 ];
@@ -246,11 +245,14 @@ $utilitiesItems['Clear session'] = [
 $utilitiesItems['Queues'] = [
     'url' => '/admin/queue/queue-tasks',
 ];
+/*
+TODO: Hopefully Rsync will not be needed in Cake4
 if (Configure::read('isLoadBalanced')) {
     $utilitiesItems['Rsync'] = [
         'url' => '/admin/utils/rsync',
     ];
 }
+*/
 $utilitiesItems['Settings'] = [
     'url' => '/admin/configurations',
 ];

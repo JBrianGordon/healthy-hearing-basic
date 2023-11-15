@@ -97,7 +97,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                     ?>
                                     <h1>Welcome to your <?= Configure::read('siteName') ?> profile!</h1>
                                     <h2><strong><?= $location->title ?></strong></h2>
-                                    <?= $this->Form->create($location, ['class' => 'form-horizontal']); ?>
+                                    <?= $this->Form->create($location, ['class' => 'form-horizontal', 'id' => 'LocationClinicEditForm']); ?>
                                     <?php if ($isAdmin && !isset($locationId)): ?>
                                         <div class="row">
                                             <div class="col col-lg-6 noprint">
@@ -184,7 +184,19 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <div id="quickButtons">
                                                 <a href="#providers" class="btn btn-light">Edit staff</a>
                                                 <a href="#hoursOfOperation" class="btn btn-light">Edit hours</a>
-                                                <a href="/clinic/reviews" class="btn btn-light">Reviews</a>
+                                                <?php
+                                                    echo $this->Html->link(
+                                                        'Reviews',
+                                                        [
+                                                            'prefix' => 'Clinic',
+                                                            'controller' => 'Reviews',
+                                                            'action' => 'index',
+                                                            $location['id']
+                                                        ],
+                                                        ['class' => 'btn btn-light']
+                                                    );
+                                                ?>
+
                                                 <a href="/clinic/ca_call_groups/report" class="btn btn-light">Call reports</a>
                                                 <a href="/clinic/pages/faq" class="btn btn-light">FAQ</a>
                                                 <?= $this->Html->link('View my profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-light']) ?>
@@ -205,8 +217,10 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         echo $this->Form->control('Location.slogan', ['value' => $location->slogan, 'class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         ?>
                                         <div class="form-group">
-                                            <label class="col col-md-3 control-label">Mobile-only clinic?</label>
-                                            <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false], 'value' => $location->is_mobile, 'class' => 'ml0 mt10'])?>
+                                            <label class="col col-sm-3 p0 control-label">Mobile-only clinic?</label>
+                                            <div class="col-sm-9" style="margin-left: -24px;">
+                                                <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false], 'value' => $location->is_mobile, 'class' => 'ml0 mt10'])?>
+                                            </div>
                                         </div>
                                         <div id="radius" class="hidden">
                                             <?= $this->Form->control('radius', [
@@ -226,7 +240,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </div>
                                         <?php
                                         echo $this->Form->control('Location.landmarks', [
-                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" data-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
+                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
                                                 'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,
@@ -278,13 +292,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">About us</h2>
-                                        <small>Please limit your description to an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
+                                        <small>Please limit your description to an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
                                         <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false]); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
                                         <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0">Services</h2>
-                                        <small>This should be an <a data-toggle="popover" data-trigger="hover" data-container="body" data-placement="right" title="Original content" data-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
+                                        <small>This should be an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
                                         <?php
                                         echo $this->Form->control('Location.services', [
                                             'label' => false,
@@ -409,15 +423,16 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         'rows' => 3,
                                                         'maxlength' => 400,
                                                         'required' => false,
-                                                        'class' => 'col-md-12',
+                                                        'class' => 'col-sm-9',
                                                         'value' => $location->optional_message
                                                     ]) ?>
-                                                    <span class="help-block">Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.</span>
+                                                    <span class="help-block col-sm-9">Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.</span>
                                                 </div>
                                             </div>
                                         <?php endif; ?>
 
                                         <!-- Linked Locations -->
+                                        <!--- *** TODO: add and delete location functionality needed: ***-->
                                         <div class="clearfix"></div>
                                         <?php if(Configure::read('isTieringEnabled')): ?>
                                             <div class="panel panel-default mt20">
@@ -552,13 +567,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 </div>
                                                             </div>
                                                             <div id="couponSelected" class="hidden">
-                                                                <?= $this->Form->hidden("Location.coupon_id") ?>
+                                                                <?= $this->Form->hidden("Location.coupon_id", ['id' => 'location-coupon-id']) ?>
                                                                 <div class='col-md-offset-4 col-md-3'>
                                                                     <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                                 </div>
                                                                 <div class='col-md-5'></div>
                                                             </div>
-                                                            <div id="uploadCoupon" class="hidden">
+                                                            <div id="uploadCoupon">
                                                                 <?php if (!empty($adId)): ?>
                                                                     <?= $this->Form->control('LocationAd.id',
                                                                         [
@@ -591,45 +606,48 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                     </div>
                                                                 <?php endif; ?>
                                                                 <?= $this->Form->control("LocationAd.photo_url", [
-                                                                        'label' => 'File name',
+                                                                        'label' => ['text' => 'File name', 'class' => 'col-sm-3 tar'],
                                                                         'readonly' => 'readonly',
-                                                                        'wrapInput' => 'col-md-7',
                                                                         'help-block' => 'help',
-                                                                        'after' => '<label class="btn btn-sm btn-default mt5">
-                                                                            <span>Upload image</span>
-                                                                            <input type="file" name="data[LocationAd][file]" class="form-control hidden" id="LocationAdFile">
-                                                                            </label>',
-                                                                        'help_block' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
-                                                                            <span class="text-danger hidden" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>',
-                                                                        'value' => $locationAd->photo_url
+                                                                        'class' => 'col-sm-7',
+                                                                        'value' => ($locationAd->photo_url ?? null)
                                                                     ])
                                                                 ?>
-                                                                <?php
-                                                                    echo $this->Form->control("LocationAd.title", [
-                                                                        'label' => 'Title',
+                                                                <label class="btn btn-sm btn-default ml10">
+                                                                    <span>Upload image</span>
+                                                                    <input type="file" name="data[LocationAd][file]" class="form-control hidden" id="LocationAdFile">
+                                                                </label>
+                                                                <span class="help-block col-sm-offset-3 col-sm-9 mb20">Images must be JPG format, less than 500kb, and under 700 pixels in width.<br><span class="text-danger hidden" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span></span>
+                                                                <?= $this->Form->control("LocationAd.title", [
+                                                                        'label' => ['text' => 'Title', 'class' => 'col-sm-3 tar'],
                                                                         'maxlength' => 50,
                                                                         'required' => false,
-                                                                        'help_block' => 'This text will appear in the header of this space. 50 characters max.',
-                                                                        'value' => $locationAd->title
-                                                                    ]);
-                                                                    echo $this->Form->control("LocationAd.description", [
-                                                                        'type' => 'textarea',
-                                                                        'rows' => 2,
-                                                                        'label' => 'Message',
-                                                                        'maxlength' => 500,
-                                                                        'required' => false,
-                                                                        'help_block' => 'This text will appear below the image in this space. 500 characters max.',
-                                                                        'value' => $locationAd->description
+                                                                        'class' => 'col-sm-9',
+                                                                        'value' => ($locationAd->title ?? null)
                                                                     ]);
                                                                 ?>
+                                                                <span class="help-block col-sm-offset-3 col-sm-9 mb20">This text will appear in the header of this space. 50 characters max.</span>
+                                                                <?= $this->Form->control("LocationAd.description", [
+                                                                        'type' => 'textarea',
+                                                                        'rows' => 2,
+                                                                        'label' => ['text' => 'Message', 'class' => 'col-sm-3 tar'],
+                                                                        'maxlength' => 500,
+                                                                        'required' => false,
+                                                                        'class' => 'col-sm-9',
+                                                                        'value' => ($locationAd->description ?? null)
+                                                                    ]);
+                                                                ?>
+                                                                <span class="help-block col-sm-offset-3 col-sm-9 mb20">This text will appear below the image in this space. 500 characters max.</span>
                                                                 <div class="form-group">
                                                                     <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
                                                                     <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
                                                                     <div class="col col-md-9">
-                                                                        <div class="col-md-3 border-radio<?= $locationAd->border == 'blank' ? ' selected-border' : '' ?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?= $locationAd->border == 'blank' ? ' checked' : '' ?>> No Border</label></div>
-                                                                        <div class="col-md-3 border-radio<?= $locationAd->border == 'border-dashed' ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= $locationAd->border == 'border-dashed' ? ' checked' : '' ?>> Dashed</label></div>
-                                                                        <div class="col-md-3 border-radio<?= $locationAd->border == 'border-dotted' ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= $locationAd->border == 'border-dotted' ? ' checked' : '' ?>> Dotted</label></div>
-                                                                        <div class="col-md-3 border-radio<?= $locationAd->border == 'border-inset' ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= $locationAd->border == 'border-inset' ? ' checked' : '' ?>> Inset</label></div>
+                                                                        <div class="col-md-3 border-radio<?php
+                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php
+                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>> No Border</label></div>
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' checked' : '' ?>> Dashed</label></div>
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-dotted') ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= (isset($locationAd->border) && $locationAd->border == 'border-dotted') ? ' checked' : '' ?>> Dotted</label></div>
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-inset') ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= (isset($locationAd->border) && $locationAd->border == 'border-inset') ? ' checked' : '' ?>> Inset</label></div>
                                                                         <span class="help-block">Select a border for the image.</span>
                                                                     </div>
                                                                 </div>
@@ -777,7 +795,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                             <span class="help-block col-md-11 ml20">Need help with photo sizes or formats? Please email them to <a href="mailto:<?= Configure::read('customer-support-email') ?>"><?= Configure::read('customer-support-email') ?></a> and we'll be happy to assist you.</span>
                                                         </div>
                                                         <div class="clearfix"></div>
-                                                    <?php if (($location->listing_type == Location::LISTING_TYPE_PREMIER && $location->is_cq_premier == true) || $this->Clinic->get('feature_content_library')): ?>
+                                                    <?php if (($location->listing_type == Location::LISTING_TYPE_PREMIER && $location->is_cq_premier == true) || $location->feature_content_library): ?>
                                                         <hr>
                                                         <div>
                                                             <h2 class="mt20 mb20">Social Media Sharing Library</h2>

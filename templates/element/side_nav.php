@@ -68,7 +68,7 @@ use Cake\Core\Configure;
 					<?php if (Configure::read('showNewsletter')): ?>
 						<li><a href="/newsletter" tabindex="-1">Sign up for our newsletter</a></li>
 					<?php endif; ?>
-					<?php if (($this->layout == 'upgrade') && !$adminAccessAllowed): ?>
+					<?php if (isset($clinicPage) && !$adminAccessAllowed): ?>
 						<li><a href="/login">Login</a></li>
 					<?php endif; ?>
 					<?php if ($adminAccessAllowed): ?>

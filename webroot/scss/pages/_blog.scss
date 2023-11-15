@@ -159,6 +159,10 @@ $blog-border-color: lighten($brand-light, 30%);
 
 .caption, figure.image {
   padding: 20px 0px 20px 30px;
+
+  figcaption {
+    font-style: italic;
+  }
   
   @media only screen and (max-width: $screen-xs-max) and (orientation: portrait){
 	  float: none!important;

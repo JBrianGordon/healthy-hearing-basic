@@ -72,6 +72,10 @@ class LocationsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        // The 'lng' field is named 'lon' in our Locations table
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
+        $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
+
         // Associations
         $this->hasMany('CaCallGroups', [
             'foreignKey' => 'location_id',
@@ -115,16 +119,17 @@ class LocationsTable extends Table
                 'Providers.id' => 'ASC',
             ]
         ]);
-        $this->hasMany('LocationUsers', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->hasOne('LocationVidscrips', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
-        $this->belongsToMany('Users');
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Allow us to search for multiple values using '[or]'
         $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];
@@ -1343,9 +1348,6 @@ class LocationsTable extends Table
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
                     ],
-                    'Zips' => [
-                        'fields' => ['city','state']
-                    ],
                 ]
             ]
         ])->first();
@@ -1380,6 +1382,36 @@ class LocationsTable extends Table
             }
         }
         return $location;
+    }
+
+    /**
+    * Find a Location ID by the Location User username
+    * @param string username
+    * @return int LocationID
+    */
+    public function findByUsername($username) {
+
+        if (empty($username)) {
+            return null;
+        }
+
+        // Does username match a location_id?
+        $count = $this->findById($username)->count();
+        if (!empty($count)) {
+            return $username;
+        }
+
+        // Find location_id match for user
+        $locationsUser = $this->LocationsUsers->find('all', [
+            'conditions' => [
+                'user_id' => $username,
+            ],
+            'contain' => []
+        ])->first();
+        if (!empty($locationsUser)) {
+            return $locationsUser->location_id;
+        }
+        return null;
     }
 
     /**
@@ -1537,29 +1569,24 @@ class LocationsTable extends Table
             'region' => null,
             'city' => null
         ], $options);
-        // Reverted to old syntax (pre-??) for #16574 fix
+        // Note: the null-coalescing operator doesn't work on hhapp4. All servers must be PHP 7.0+.
         // $limit = $limit ?? 40;
         $limit = $limit ? $limit : 40;
+        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
+        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
         $conditions = array_merge([
             'Locations.is_active' => true,
             'Locations.is_show' => true
         ], $conditions);
 
-        /*
-        TODO: IMPLEMENT RANGEABLE BEHAVIOR
-
-
-        // Reverted to old syntax (pre-??) for #16574 fix
-        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
-        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
         if (!empty($options['lat']) && !empty($options['lon'])) {
-            $conditions['Locations.lat'] = $options['lat'];
-            $conditions['Locations.lon'] = $options['lon'];
+            $lat = $options['lat'];
+            $lng = $options['lon'];
         } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
             $zip = TableRegistry::get('Zips')->get($options['zip']);
             if (!empty($zip['lat']) && !empty($zip['lon'])) {
-                $conditions['Locations.lat'] = $zip['lat'];
-                $conditions['Locations.lon'] = $zip['lon'];
+                $lat = $zip['lat'];
+                $lng = $zip['lon'];
             } else {
                 // This zip code does not exist in our zip table
                 return [];
@@ -1571,10 +1598,10 @@ class LocationsTable extends Table
                 return [];
             }
             $options['region'] = $this->parseStateSlug($options['region']);
-            $city = ClassRegistry::init('City')->findByCity($options['city'], $options['region']);
-            if (!empty($city) && !empty($city['City']['lat'] && !empty($city['City']['lon']))) {
-                $conditions['Locations.lat'] = $city['City']['lat'];
-                $conditions['Locations.lon'] = $city['City']['lon'];
+            $city = TableRegistry::get('Cities')->findByCity($options['city'], $options['region']);
+            if (!empty($city) && !empty($city->lat && !empty($city->lon))) {
+                $lat = $city->lat;
+                $lng = $city->lon;
             } else {
                 // we can't find lat/lon for this city
                 return [];
@@ -1584,29 +1611,9 @@ class LocationsTable extends Table
             return [];
         }
 
-        $clinicFindSettings = [
-            'conditions' => $conditions,
-            'fields' => $fields,
-            'range' => $maxRange,
-            'range_out_till_count_is' => false, //disable range-out
-            'order_by_distance' => true,
-            'contain' => $contain,
-            'limit' => $limit
-        ];
-        return $this->find('range', $clinicFindSettings);
-        */
-
-        //TODO TEMPORARY - Just return the first $limit locations in my state
-        // Remove this when rangeable is working
-        //--------------------------------------------------------------
-        $state = $this->parseStateSlug($options['region']);
-        $conditions['Locations.state'] = $state;
-        $locations = $this->find('all', [
-            'contain' => $contain,
-            'conditions' => $conditions,
-            'limit' => $limit
-        ])->all()->toArray();
-        //--------------------------------------------------------------
+        $options = ['lat'=>$lat, 'lng'=>$lng, 'distance'=>$maxRange, 'conditions'=>$conditions, 'fields'=>$fields, 'contain'=>$contain];
+        $query = $this->find('distance', $options)->orderAsc('distance')->limit($limit);
+        $locations = $query->all()->toArray();
         return $locations;
     }
 
@@ -1780,16 +1787,16 @@ class LocationsTable extends Table
                     ];
                 }
             }
-            // Get email from LocationUser recovery email
-            foreach ($location->location_users as $locationUser) {
-                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
-                    $uniqueEmails[] = $locationUser->email;
+            // Get email from User recovery email
+            foreach ($location->users as $user) {
+                if (!empty($user->email) && !in_array($user->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $user->email;
                     $data[] = [
                         'hhid' => $location->id,
                         'clinic_title' => $location->title,
-                        'first_name' => $locationUser->first_name,
-                        'last_name' => $locationUser->last_name,
-                        'email' => $locationUser->email,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
                     ];
                 }
             }
