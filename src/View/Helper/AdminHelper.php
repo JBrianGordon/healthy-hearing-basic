@@ -101,7 +101,7 @@ class AdminHelper extends Helper
                     'type' => 'checkbox',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label, 'class' => 'float-end'],
+                    'label' => ['text' => $label, 'class' => 'float-end', 'escape' => false],
                     'multiple' => null,
                 ]);
                 break;
