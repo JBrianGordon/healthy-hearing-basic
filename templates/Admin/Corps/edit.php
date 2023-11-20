@@ -4,6 +4,13 @@
  * @var \App\Model\Entity\Corp $corp
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+
+$author_default = false;
+if (empty($content->id)) {
+	if (in_array($user->id, $authors)) {
+		$author_default = $user->id;
+	}
+}
  
 $this->Html->script('dist/corp_edit.min', ['block' => true]);
 ?>
@@ -45,17 +52,17 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 								            <fieldset>
 								                <?php
 									                echo $this->Form->control('title');
-									                //*** TODO: Add primary authors ***
+									                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 									                echo $this->Form->control('priority', ['label' => 'Order']);
-									                echo $this->Form->control('last_modified', ['empty' => true]);
+									                echo $this->Form->control('last_modified', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 									                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
-									                echo $this->Form->control('is_active');
+									                echo $this->Form->control('is_active', ['label' => 'Active']);
 									                echo '</div>';
 								                ?>
-												<div class="tabbable clearfix">
-													<ul class="nav nav-tabs">
-														<li class="active"><a href="#Corp" data-toggle="tab" aria-expanded="true">Company</a></li>
-														<li class=""><a href="#Admin" data-toggle="tab" aria-expanded="false">Admin</a></li>
+												<div class="tabbable">
+													<ul class="nav nav-tabs clearfix">
+														<li class="nav-item"><a href="#Corp" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">Company</a></li>
+														<li class="nav-item"><a href="#Admin" data-bs-toggle="tab" aria-expanded="false" class="nav-link">Admin</a></li>
 													</ul>
 													<div class="tab-content">
 														<br>
@@ -74,10 +81,12 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 																echo $this->Form->control('facebook_title');
 																echo $this->Form->control('facebook_description');
 																echo $this->Form->control('facebook_image');
-																echo $this->Form->control('date_approved', ['empty' => true]);
-																//*** TODO: Add Contributors list ***
+																echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 															?>
-														</div>
+															<hr>
+															<h3>Contributors</h3>
+															<?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+															</div>
 													</div>
 												</div>
 								            </fieldset>
