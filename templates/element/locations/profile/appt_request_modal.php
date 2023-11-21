@@ -1,4 +1,7 @@
 <?php
+use App\Model\Entity\CaCallGroup;
+use Cake\Core\Configure;
+
 $topicOptions = [
 	CaCallGroup::TOPIC_WANTS_APPT => 'Hearing test or hearing aid consultation</span><span class="topic-label vwo-test-new-label pl5" style="display:none;">Difficulty hearing in certain situations',
 	CaCallGroup::TOPIC_AID_LOST_OLD => 'Hearing aid lost or broken</span><span class="topic-label vwo-test-new-label pl5" style="display:none;">My hearing aid is lost or broken',
@@ -11,15 +14,10 @@ $topicOptions = [
 	<span id="apptRequestModalAnchor"></span>
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<?= $this->Form->create('CaCall', [
-				'url' => ['controller' => 'ca_calls', 'action' => 'appt_request'],
-				'inputDefaults' => [
-					'div' => 'form-group',
-					'label' => [
-						'class' => 'col col-md-3 control-label'
-					],
-					'wrapInput' => 'col col-md-9',
-					'class' => 'form-control'
+			<?= $this->Form->create(null, [
+				'url' => [
+					'controller' => 'CaCalls',
+					'action' => 'ajaxApptRequest'
 				],
 				'class' => 'form-horizontal apptRequestForm',
 			]) ?>
@@ -71,15 +69,16 @@ $topicOptions = [
 								<div class="checkbox">
 									<?php
 									foreach ($topicOptions as $topicKey => $label) {
-										echo $this->Form->input('CaCallGroup.'.$topicKey, [
+										echo $this->Form->control('CaCallGroup.'.$topicKey, [
+											'type' => 'checkbox',
 											'label' => [
 												'class' => 'control-label pt0',
 												'style' => 'text-align:left;',
 												'text' => '<span class="topic-label vwo-test-old-label pl5">' . $label . '</span>',
 											],
+											'escape' => false,
 											'wrapInput' => false,
 											'div' => false,
-											'class' => false,
 										]);
 									}
 									?>
