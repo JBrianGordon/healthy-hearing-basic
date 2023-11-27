@@ -156,6 +156,7 @@ class User extends CakeDcUser
         'secret_verified' => true,
         'tos_date' => true,
         'is_superuser' => true,
+        'workspace_id' => true,
         'role' => true,
         'additional_data' => true,
         'social_accounts' => true,
