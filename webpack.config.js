@@ -93,21 +93,22 @@ module.exports = {
 };
 
 //Create ATF CSS
+//*** TODO: change these urls back to the production site once Cake 4 is live: ***/
 const cssArrays = [
-	['home','https://www.healthyhearing.com'],
-	['help','https://www.healthyhearing.com/help'],
-	['help-page','https://www.healthyhearing.com/help/hearing-aids/aarp'],
-	['report','https://www.healthyhearing.com/report'],
-	['report-page','https://www.healthyhearing.com/report/52879-Why-do-my-ears-feel-clogged'],
-	['hearing-aids','https://www.healthyhearing.com/hearing-aids'],
-	['state-page','https://www.healthyhearing.com/hearing-aids/NY-New-York'],
-	['city-page','https://www.healthyhearing.com/hearing-aids/NY-New-York/New-York'],
-	['clinic-page','https://www.healthyhearing.com/hearing-aids/27604-hearinglife-madison-avenue'],
-	['enhanced-page','https://www.healthyhearing.com/hearing-aids/26872-hearinglife-olympia'],
-	['about','https://www.healthyhearing.com/about'],
-	['online-hearing-test','https://www.healthyhearing.com/help/online-hearing-test'],
-	['manufacturers','https://www.healthyhearing.com/hearing-aid-manufacturers'],
-	['manufacturer','https://www.healthyhearing.com/oticon-hearing-aids']
+	['home','http://hhcake.com'],
+	['help','http://hhcake.com/help'],
+	['help-page','http://hhcake.com/help/hearing-aids/aarp'],
+	['report','http://hhcake.com/report'],
+	['report-page','http://hhcake.com/report/52879-Why-do-my-ears-feel-clogged'],
+	['hearing-aids','http://hhcake.com/hearing-aids'],
+	['state-page','http://hhcake.com/hearing-aids/NY-New-York'],
+	['city-page','http://hhcake.com/hearing-aids/NY-New-York/New-York'],
+	['clinic-page','http://hhcake.com/hearing-aids/27604-hearinglife-madison-avenue'],
+	['enhanced-page','http://hhcake.com/hearing-aids/26872-hearinglife-olympia'],
+	['about','http://hhcake.com/about'],
+	['online-hearing-test','http://hhcake.com/help/online-hearing-test'],
+	['manufacturers','http://hhcake.com/hearing-aid-manufacturers'],
+	['manufacturer','http://hhcake.com/oticon-hearing-aids']
 ]
 
 function genAtfCss () {

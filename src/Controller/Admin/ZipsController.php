@@ -38,7 +38,7 @@ class ZipsController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'Zip');
+            $this->set('currentModel', 'Zips');
         }
         $zipsQuery = $this->Zips
             ->find('search', [

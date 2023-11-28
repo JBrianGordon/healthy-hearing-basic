@@ -103,6 +103,10 @@ class Application extends BaseApplication
             if (($controller=='Utils') && ($action=='inlineajax')) {
                 return true;
             }
+
+            if ($controller === 'Endpoints') {
+                return true;
+            }
             return false;
         });
         $middlewareQueue

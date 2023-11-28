@@ -30,6 +30,8 @@ return [
         'facebook' => 'https://www.facebook.com/HearingDirectoryCANADA',
         'twitter' => 'https://twitter.com/HearingaidsCAN',
     ],
+    // Google tag manager
+    'gtmId' => 'GTM-TC3K3WL',
     // From email address
     'email' => ['contacthd@hearingdirectory.ca' => 'Hearing Directory'],
     'customer-support-email' => 'contacthd@hearingdirectory.ca',

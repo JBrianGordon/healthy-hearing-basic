@@ -22,6 +22,7 @@ if (!empty($seoMetaTags)) {
 //$this->Content->setPrint(true);
 
 $this->Breadcrumbs->add([
+		['title' => 'Home', 'url' => '/'],
     ['title' => 'Report', 'url' => ['prefix'=>false, 'plugin'=>false, 'controller' => 'content', 'action' => 'report_index']],
     ['title' => $content->title, 'url' => '']
 ]);
@@ -29,12 +30,9 @@ $isPreview = isset($isPreview) ? $isPreview : false;
 
 $contentSchema = '<script type="application/ld+json">{
 	"@context": "https://schema.org",
-	"@type": "NewsArticle",
-	"mainEntityOfPage": {
-		"@type": "WebPage",';
-		$contentSchema .= '"@id": "https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"
-	},
-	"headline": "' . htmlentities(strip_tags($title)) . '",
+	"@type": "NewsArticle",';
+	$contentSchema .= '"mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
+	$contentSchema .= '"headline": "' . htmlentities(strip_tags($title)) . '",
 	"alternativeHeadline": "' . $altTitle . '",';
 	if (!empty($content->facebook_image)) {
 		$contentSchema .= '"image": {

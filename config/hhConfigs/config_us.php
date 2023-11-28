@@ -73,13 +73,12 @@ return [
     'isTieringEnabled' => true,
     'isYhnAutoMatched' => false,
     'importTag' => 'YHN',
+    // Google tag manager
+    'gtmId' => 'GTM-P2V6GQ',
 	// Google Maps API
 	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
 	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',
 	'googleMapsWebServicesApiKey' => 'AIzaSyDwFnCP8X_TM8j4rlRZohfW2-D9bG_-Ryg',
-    //Recaptcha
-    'recaptchaPublicKey' => '6Lerlm4UAAAAACfk818_O4_oZVGu7oNLpH8oOkjN',
-    'recaptchaPrivateKey' => '6Lerlm4UAAAAALIm24GCUC89umBRR9M4LiyVVB34',
     // Misc
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',

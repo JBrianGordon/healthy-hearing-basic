@@ -69,7 +69,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							</li>
 						<?php elseif($clinicPageUser): ?>
 							<li class="dropdown clinic-link">
-								<a href="#" id="myAccountDropdown" class="dropdown-toggle bi bi-person-fill" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> My Account <span class="caret"></span></a>
+								<a href="#" id="myAccountDropdown" class="dropdown-toggle bi bi-person-fill" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> My Account <span class="caret"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="myAccountDropdown">
 									<li><?= $this->Html->link(' My Profile', '/clinic/locations/edit', ['escape' => false, 'class' => 'bi bi-globe2']); ?></li>
 									<li><?= $this->Html->link(' Reporting', '/clinic/ca_call_groups/report', ['escape' => false, 'class' => 'bi bi-list-task']); ?></li>

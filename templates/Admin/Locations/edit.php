@@ -820,16 +820,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 														</div>
 													<!-- User Tab -->
 													<div class="tab-pane" id="User">
-                                                        <!-- TODO: The LocationUsers table is being modified as part of #16103.
-                                                            I think it will just be a join table to link Locations with Users.
-                                                            This section can be completed after those changes. -->
-                                                        <?php $user = $location->location_users[0]; ?>
+                                                        <?php $user = $location->users[0]; ?>
 														<div class="form-group mb20">
 															<div class="controls col-md-offset-3 col-md-9">
 																<div class="btn-group">
-																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-envelope"></span> Send Default Email', ['controller' => 'location_users', 'action' => 'default_email', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
-																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-lock"></span> Send Password Reset Email', ['controller' => 'location_users', 'action' => 'change_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
-																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Generate New Password', ['controller' => 'location_users', 'action' => 'generate_new_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-envelope"></span> Send Default Email', ['controller' => 'Users', 'action' => 'default_email', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-lock"></span> Send Password Reset Email', ['controller' => 'Users', 'action' => 'change_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
+																	<?php echo $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Generate New Password', ['controller' => 'Users', 'action' => 'generate_new_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
 																</div>
 															</div>
 														</div>
@@ -848,11 +845,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																<td class="col-md-9"><?php echo dateTimeCentralToEastern($user->modified); ?></td>
 															</tr>
 														</table>
-														<?php echo $this->Form->control('LocationUser.id', ['value'=>$user->id]) ?>
-														<?php echo $this->Form->control('LocationUser.username', ['value'=>$user->username]); ?>
-														<?php echo $this->Form->control('LocationUser.first_name', ['required' => false, 'value'=>$user->first_name]); ?>
-														<?php echo $this->Form->control('LocationUsers.last_name', ['required' => false, 'value'=>$user->last_name]); ?>
-														<?php echo $this->Form->control('LocationUser.email', ['required' => false, 'value'=>$user->email]); ?>
+														<?php echo $this->Form->control('User.id', ['value'=>$user->id]) ?>
+														<?php echo $this->Form->control('User.username', ['value'=>$user->username]); ?>
+														<?php echo $this->Form->control('User.first_name', ['required' => false, 'value'=>$user->first_name]); ?>
+														<?php echo $this->Form->control('User.last_name', ['required' => false, 'value'=>$user->last_name]); ?>
+														<?php echo $this->Form->control('User.email', ['required' => false, 'value'=>$user->email]); ?>
 														<div class="form-group">
 															<label class="col col-md-3 control-label">Last Login</label>
 															<div class="col col-md-9">
@@ -878,7 +875,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																			<div class="col col-md-offset-3 col-md-9">
 																				<?php echo $this->Html->link(
 																					'Delete This Email',
-																					['prefix' => 'Admin', 'controller' => 'location_users', 'action' => 'deluser',
+																					['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'deluser',
 																					$email->id], [], 'Are you sure?'
 																				); ?>
 																			</div>
@@ -909,8 +906,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 															</div>
 														</div>
 														<hr>
-                                                        <!-- TODO: The LocationUserLogins table is being renamed to LoginIps as part of #16103.
-                                                            This section can be completed after those changes. -->
 														<div class="form-group">
 															<label class="col col-md-3 control-label">Login History</label>
 															<div class="col col-md-9">
@@ -920,12 +915,12 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																			<th>Login</th>
 																			<th>IP Address</th>
 																		</tr>
-																		<?php //foreach ($locationUserLogins as $locationUserLogin): ?>
+																		<?php foreach ($user->login_ips as $loginIp): ?>
 																			<tr>
-																				<td><?php //echo $locationUserLogin['login_date']; ?></td>
-																				<td><?php //echo $locationUserLogin['ip']; ?></td>
+																				<td><?php echo $loginIp->login_date; ?></td>
+																				<td><?php echo $loginIp->ip; ?></td>
 																			</tr>
-																		<?php //endforeach; ?>
+																		<?php endforeach; ?>
 																	</table>
 																</div>
 															</div>

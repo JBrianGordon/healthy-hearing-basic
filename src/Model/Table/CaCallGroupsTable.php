@@ -8,6 +8,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\CaCallGroup;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 
 /**
  * CaCallGroups Model
@@ -386,8 +389,7 @@ class CaCallGroupsTable extends Table
 
         $validator
             ->integer('id_locked_by_user')
-            ->requirePresence('id_locked_by_user', 'create')
-            ->notEmptyString('id_locked_by_user');
+            ->allowEmptyString('id_locked_by_user');
 
         $validator
             ->numeric('outbound_priority')
@@ -443,8 +445,7 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('id_xml_file')
             ->maxLength('id_xml_file', 30)
-            ->requirePresence('id_xml_file', 'create')
-            ->notEmptyFile('id_xml_file');
+            ->allowEmptyString('id_xml_file');
 
         return $validator;
     }
@@ -461,5 +462,18 @@ class CaCallGroupsTable extends Table
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isNew()) {
+            if (empty($entity->id_locked_by_user)) {
+                $entity->id_locked_by_user = 0;
+            }
+            if (empty($entity->id_xml_file)) {
+                $entity->id_xml_file = '';
+            }
+        }
+        return true;
     }
 }

@@ -30,6 +30,10 @@
   }
 }
 
+ol.breadcrumb {
+  padding: 0;
+}
+
 .inverse .breadcrumb {
   > li a {
     border-bottom: dotted 1px darken($white, 8%);

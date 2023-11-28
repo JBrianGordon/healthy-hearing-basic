@@ -64,7 +64,7 @@ class EditorialHelper extends Helper
     {
         $reviewerBylines = [];
         foreach ($reviewers as $reviewer) {
-            $reviewerByline = '<a class="text-link" data-toggle="popover" data-trigger="hover" data-content="'.$reviewer->short_bio.'">'.$reviewer->full_name.'</a>';
+            $reviewerByline = '<span class="text-link" data-toggle="popover" data-bs-trigger="hover" data-bs-content="'.$reviewer->short_bio.'">'.$reviewer->full_name.'</span>';
             $fields = ['degrees', 'credentials', 'title_dept_company', 'company'];
             $additionalReviewerInfo = '';
             foreach ($fields as $field) {

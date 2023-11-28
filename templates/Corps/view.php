@@ -8,8 +8,9 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 $this->Breadcrumbs->add([
-    ['title' => 'Help', 'url' => ['controller' => 'wikis', 'action' => 'index']],
-    ['title' => 'Manufacturers', 'url' => ['controller' => 'corps', 'action' => 'index']],
+	['title' => 'Home', 'url' => '/'],
+    ['title' => 'Help', 'url' => '/help'],
+    ['title' => 'Manufacturers', 'url' => '/hearing-aid-manufacturers'],
     ['title' => $corp->title, 'url' => ''],
 ]);
  

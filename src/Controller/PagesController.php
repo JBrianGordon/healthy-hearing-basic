@@ -143,6 +143,9 @@ class PagesController extends AppController
      */
     public function newsletterSuccess()
     {
+        $page = true;
+        $this->set(compact('page'));
+        
         if (!Configure::read('showNewsletter')) {
             throw new NotFoundException();
         }
