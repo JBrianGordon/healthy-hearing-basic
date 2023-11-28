@@ -86,7 +86,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 									                                'action' => 'viewCityZip',
 									                                'zip' => $zip->zip,
 									                                'city' => $zip->city,
-									                                'region' =>  $this->Clinic->stateSlug($zip->state)
+									                                'region' =>  $zip->state
 									                            ])
 									                        ?>
 									                    </span>

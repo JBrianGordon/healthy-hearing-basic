@@ -179,4 +179,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 			</div>
 		</div>
 	</section>
+	<div id="ajaxModals">
+	</div>
 <?php endif; ?>

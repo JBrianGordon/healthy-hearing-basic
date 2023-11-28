@@ -93,6 +93,9 @@ class User extends CakeDcUser
         self::ROLE_CLINIC => 'Clinic',
     ];
 
+    /* User ID for Automated User */
+    const USER_ID_AUTOMATED_USER = 999999999;
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

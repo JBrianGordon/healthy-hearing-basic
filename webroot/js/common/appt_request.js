@@ -7,7 +7,7 @@ window.submitApptRequest = () => {
     const formData = new FormData(form);
     const serializedData = new URLSearchParams(formData).toString();
 
-    fetch("/ca_calls/appt_request", {
+    fetch("/ca_calls/ajax_appt_request", {
       method: "POST",
       body: serializedData,
       headers: {
@@ -94,17 +94,17 @@ if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 document.addEventListener("DOMContentLoaded", function() {
   const apptRequestBtns = document.querySelectorAll(".apptRequestBtn");
   const apptRequestPanel = document.getElementById("apptRequestPanel");
-  const apptRequestThankYouModal = document.getElementById("apptRequestThankYouModal");
-  const apptRequestModal = document.getElementById("apptRequestModal");
+  var apptRequestThankYouModal = document.getElementById("apptRequestThankYouModal");
+  var apptRequestModal = document.getElementById("apptRequestModal");
 
   function addSubmitListener() {
     // Add submit listener code here
   }
 
-  function scrollToApptRequestModal() {
-    if (apptRequestModal) {
+  function scrollToApptRequestPanel() {
+    if (apptRequestPanel) {
       window.scrollTo({
-        top: apptRequestModal.offsetTop - 70,
+        top: apptRequestPanel.offsetTop - 70,
         behavior: "smooth"
       });
     }
@@ -113,16 +113,17 @@ document.addEventListener("DOMContentLoaded", function() {
   apptRequestBtns.forEach(btn => {
     btn.addEventListener("click", function() {
       const locationId = btn.dataset.id;
-
       if (locationId) {
         fetch("/locations/ajax_appt_request_modal/" + locationId)
           .then(response => response.text())
           .then(data => {
             document.getElementById("ajaxModals").innerHTML = data;
+            apptRequestModal = document.getElementById("apptRequestModal");
+            apptRequestThankYouModal = document.getElementById("apptRequestThankYouModal");
             if (apptRequestModal) {
               const closeModalButton = apptRequestModal.querySelector(".close");
               closeModalButton.addEventListener("click", function() {
-                apptRequestPanel.classList.remove("fixed");
+                $("#apptRequestModal").modal('hide');
               });
               addSubmitListener();
               $("#apptRequestModal").modal("show");
@@ -130,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
           })
           .catch(error => console.error(error));
       } else if (apptRequestPanel) {
-        scrollToApptRequestModal();
+        scrollToApptRequestPanel();
       } else if (apptRequestThankYouModal.style.display !== "none") {
         apptRequestPanel.classList.add("fixed");
         const closeModalButton = document.querySelector(".fixed .close");

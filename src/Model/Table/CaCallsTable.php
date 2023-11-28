@@ -7,6 +7,9 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 
 /**
  * CaCalls Model
@@ -101,8 +104,7 @@ class CaCallsTable extends Table
 
         $validator
             ->integer('duration')
-            ->requirePresence('duration', 'create')
-            ->notEmptyString('duration');
+            ->allowEmptyString('duration');
 
         $validator
             ->scalar('call_type')
@@ -116,8 +118,7 @@ class CaCallsTable extends Table
 
         $validator
             ->integer('recording_duration')
-            ->requirePresence('recording_duration', 'create')
-            ->notEmptyString('recording_duration');
+            ->allowEmptyString('recording_duration');
 
         return $validator;
     }
@@ -135,5 +136,18 @@ class CaCallsTable extends Table
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isNew()) {
+            if (empty($entity->duration)) {
+                $entity->duration = 0;
+            }
+            if (empty($entity->recording_duration)) {
+                $entity->recording_duration = 0;
+            }
+        }
+        return true;
     }
 }

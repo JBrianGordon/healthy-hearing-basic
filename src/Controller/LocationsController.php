@@ -602,4 +602,15 @@ class LocationsController extends AppController
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         return (stripos($referer, ".healthyhearing.") == false);
     }
+
+    /**
+    * Loads an appointment request modal via ajax for a specified locationId.
+    */
+    public function ajaxApptRequestModal($locationId) {
+        $this->viewBuilder()->setLayout('ajax');
+        //$this->meta['robots'] = "NOINDEX, FOLLOW";
+        $location = $this->Locations->findByIdForView($locationId);
+        $this->set(compact('location'));
+        $this->viewBuilder()->setOption('serialize', 'location');
+    }
 }
