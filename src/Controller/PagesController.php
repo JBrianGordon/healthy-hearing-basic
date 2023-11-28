@@ -181,4 +181,15 @@ class PagesController extends AppController
         $this->set('enhancedFeatures', $enhancedFeatures);
         $this->set('premierFeatures', $premierFeatures);
     }
+
+    /**
+     * About us page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function about() {
+        $page = $this->Pages->findByTitle('about')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
 }

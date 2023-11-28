@@ -166,6 +166,7 @@ return [
                 'newsletter',
                 'newsletterSuccess',
                 'clinicInfo',
+                'about',
             ],
             'bypassAuth' => true,
         ],
