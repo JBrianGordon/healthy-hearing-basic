@@ -97,6 +97,23 @@ class PagesController extends AppController
         }
     }
 
+
+    /**
+     * RSS feeds page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function feeds() {
+        $page = $this->Pages->findByTitle('feeds')->first();
+
+        $this->Content = $this->fetchTable('Content');
+        $articles = $this->Content->findLatest(4);
+        $this->set('articles', $articles);
+
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
     /**
      * Newsletter method
      *

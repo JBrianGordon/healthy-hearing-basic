@@ -69,7 +69,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if ((!empty($articles) && empty($wiki)) || isset($stateNice)): ?>
+	<?php if ((!empty($articles) && empty($wiki) && empty($page)) || isset($stateNice)): ?>
 		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
 	<section class="panel panel-secondary" style="order:9">
