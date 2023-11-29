@@ -52,7 +52,7 @@
 						<a href="<?= Configure::read('sameAsSocialLinks.facebook') ?>" class="text-light" target="_blank" rel="noopener"><span class="hh-icon-circle-facebook"></span><?= Configure::read('siteNameAbbr') ?> Facebook page</a>
 					<?php endif; ?>
 					<?php if(Configure::read('sameAsSocialLinks.twitter')): ?>
-						<a href="<?= Configure::read('sameAsSocialLinks.twitter') ?>" class="text-light" target="_blank" rel="noopener"><?= Configure::read('siteNameAbbr') ?> Twitter page<span class="hh-icon-circle-twitter"></span></a>
+						<a href="<?= Configure::read('sameAsSocialLinks.twitter') ?>" class="text-light" target="_blank" rel="noopener"><?= Configure::read('siteNameAbbr') ?> Twitter page<span class="hh-icon-circle-x"></span></a>
 					<?php endif; ?>
 					<?php if(Configure::read('sameAsSocialLinks.youtube')): ?>
 						<a href="<?= Configure::read('sameAsSocialLinks.youtube') ?>" class="text-light" target="_blank" rel="noopener"><span class="hh-icon-circle-youtube"></span><?= Configure::read('siteNameAbbr') ?> YouTube page</a>

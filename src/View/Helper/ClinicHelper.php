@@ -841,7 +841,7 @@ class ClinicHelper extends Helper
                 ) . '</span>';
             case 'twitter':
                 $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
-                return '<span class="twitter"><span class="hh-icon-twitter clinic-share"></span> ' . $this->Html->link(
+                return '<span class="twitter"><span class="hh-icon-x clinic-share"></span> ' . $this->Html->link(
                     'Twitter',
                     'https://twitter.com/' . $text,
                     ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']

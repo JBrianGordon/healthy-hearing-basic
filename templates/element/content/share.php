@@ -35,7 +35,7 @@ $image = Router::url($image, true);
 			'escape' => false,
 			'onclick' => false
 		],
-		'label' => '<span class="hh-icon-twitter"></span> Tweet'
+		'label' => '<span class="hh-icon-x"></span> Tweet'
 	]);
 	?>
 	<?php
