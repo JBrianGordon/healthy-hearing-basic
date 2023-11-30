@@ -12,7 +12,7 @@
         'sub' => 'finance@healthyhearing.com',
         'auth' => [
             'ckbox' => [
-                'role' => 'writer',
+                'role' => $userRole,
             ]
         ]
     ];

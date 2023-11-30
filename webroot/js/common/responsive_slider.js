@@ -1,4 +1,4 @@
-import '../../../node_modules/jquery-ui/ui/effects/effect-slide';
+import 'jquery-ui/ui/effects/effect-slide';
 import '../jquery/jquery.cookie';
 
 /*** TODO: check when slider built into views ***/
