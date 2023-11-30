@@ -75,7 +75,7 @@ use Cake\Core\Configure;
 		}
 		echo '<span id="provider' . $key . 'Desc" class="clinic-anchor"></span>';
 		echo '<div class="col-sm-9 col-md-offset-3"><small>Tell us about you! What makes you different from other hearing professionals? Why should customers choose your clinic over others?</small></div>';
-		echo $this->Form->control("Provider." . $key . ".description", ['label' => ['class' => 'col-sm-3 tar control-label'], 'class' => 'col-sm-9 mb20', 'required' => false, 'value' => $provider->description ?? '', 'cols' => '30', 'rows' => '6']);
+		echo $this->Form->control("Provider." . $key . ".description", ['label' => ['class' => 'col-sm-3 tar control-label'], 'class' => 'col-sm-9 mb20 editor', 'required' => false, 'value' => $provider->description ?? '', 'cols' => '30', 'rows' => '6']);
 		//*** TODO: update when CKEditor is ready ***
 		//echo $this->Ckeditor->replace("Provider" . $key . "Description", ['var_name' => "Provider" . $key . "Description", 'height'=>'200', 'var_name' => "Provider" . $key . "Description"]);
 		echo '<span id="upsellMessage' . $key .'" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';

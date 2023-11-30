@@ -1,6 +1,7 @@
-import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
+import 'jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
+import './ck-clinic-package';
 
 
 // If there are any errors on the page, scroll down
@@ -211,12 +212,12 @@ let completionPercentage = 100;
 if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
   completionPercentage -= 25;
   incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
-  document.querySelector("h2:contains('About us')").classList.add("red");
+  document.querySelector("#aboutLabel").classList.add("red");
 }
 if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
   completionPercentage -= 25;
   incompleteArray.push("<li><a href='#services'>- Services</a></li>");
-  document.querySelector("h2:contains('Services')").classList.add("red");
+  document.querySelector("#servicesLabel").classList.add("red");
 }
 providerArray.forEach(function(input) {
   if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
@@ -226,12 +227,12 @@ providerArray.forEach(function(input) {
 });
 */
 
-document.querySelector("#hhtvButton").addEventListener("click", function() {
-  window.scrollTo({
-    top: document.querySelector("#hhTv").offsetTop,
-    behavior: 'smooth'
-  });
-});
+// document.querySelector("#hhtvButton").addEventListener("click", function() {
+//   window.scrollTo({
+//     top: document.querySelector("#hhTv").offsetTop,
+//     behavior: 'smooth'
+//   });
+// });
 
 // Remove error class if at least one photo field has a value
 /*** TODO: uncomment when providerImage function is fixed in template/element/locations/provider.php:
@@ -281,7 +282,7 @@ days.forEach((day) => {
     if (isOpenHourEmpty && isCloseHourEmpty && isClosedChecked && isByAppointmentChecked) {
       completionPercentage -= 10;
       incompleteArray.push(`<li><a href='#hoursOfOperation'>- Hours of operation</a></li>`);
-      document.querySelector("h2:contains('Hours of operation')").classList.add("red");
+      document.querySelector("#hoursLabel").classList.add("red");
       isHoursIncomplete = true;
     }
   }
@@ -295,7 +296,7 @@ const isPaymentIncomplete = paymentOptions.every(option => !document.querySelect
 if (isPaymentIncomplete) {
   completionPercentage -= 10;
   incompleteArray.push("<li><a href='#payment'>- Accepted methods of payment</a></li>");
-  document.querySelector("h2:contains('Accepted methods of payment')").classList.add("red");
+  document.querySelector("#paymentLabel").classList.add("red");
 }
 
 // Website url check

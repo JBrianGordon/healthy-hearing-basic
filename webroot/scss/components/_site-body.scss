@@ -159,6 +159,7 @@
 
 	.form-group{
 		display: flex;
+		flex-grow: 1;
 
 		&.multicheckbox{
 			flex-wrap: wrap;

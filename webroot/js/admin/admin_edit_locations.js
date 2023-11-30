@@ -2,6 +2,7 @@ import './admin_common';
 import '../common/provider';
 import './nav_tabs';
 import './datepicker';
+import './ckpackage';
 
 class locationsAdminEdit {
   constructor() {
@@ -93,11 +94,11 @@ class locationsAdminEdit {
         }
       }
     });
-
+    /*** TODO: uncomment when direct book type added: ***
     document.getElementById('direct-book-type').addEventListener('change', function () {
       editObj.onChangeDirectBookType(this.value);
     });
-    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
+    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));***/
     /*** TODO: add frozen-expiration field to view: ***
     document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, 'is-listing-type-frozen', <frozen expiration field here>);

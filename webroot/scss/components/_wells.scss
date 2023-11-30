@@ -11,6 +11,13 @@
 	&.manufacturer {
 		float: left;
 	}
+
+	&.provider {
+		.ck-editor__main {
+			width: 75%;
+			margin-left: 25%;
+		}
+	}
 	
 	.about-team {
 		float: left;

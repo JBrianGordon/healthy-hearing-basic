@@ -55,6 +55,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/', 'Pages::home');
 
         // Misc pages with simple, content-only templates
+        $builder->connect('/about', ['controller' => 'Pages', 'action' => 'about', 'about']);
         $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'view', 'aboutIda']);
         $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'view', 'clinicFaq']);
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
