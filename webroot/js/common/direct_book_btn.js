@@ -1,5 +1,5 @@
 /*** TODO: check this on city page, there's likely more that needs to be updated in that ticket ***/
-//import '../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap/modal';
+//import 'bootstrap-sass/assets/javascripts/bootstrap/modal';
 
 export function directBookBtn() {
   // Global variable for direct book clinic id

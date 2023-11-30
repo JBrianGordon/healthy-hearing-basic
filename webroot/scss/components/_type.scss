@@ -132,6 +132,9 @@ a.print-link {
 
 .form-group {
   clear: both;
+  .ck-content {
+    min-height: 200px;
+  }
 }
 
 .pull-right {

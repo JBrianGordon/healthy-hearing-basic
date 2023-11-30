@@ -1,5 +1,5 @@
 import './common';
-import '../../../node_modules/jquery-ui/ui/widgets/datepicker';
+import 'jquery-ui/ui/widgets/datepicker';
 import '../admin/nav_tabs';
 
 $('.datepicker').datepicker();

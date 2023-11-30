@@ -1,4 +1,4 @@
-import '../../../node_modules/jquery-ui/ui/widgets/autocomplete';
+import 'jquery-ui/ui/widgets/autocomplete';
 
 $(window).ready(function() {
 	$('input.autocomplete').autocomplete({
