@@ -126,6 +126,10 @@ return [
         'zip' => 'postal_code',
         'hh_url' => 'hd_url',
     ],
+    'Sitemap.tables' => [
+        'Main',
+        'Corps',
+    ],
     'states' => [
         'AB' => 'Alberta',
         'BC' => 'British Columbia',
