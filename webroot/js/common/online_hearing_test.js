@@ -222,11 +222,14 @@ class OnlineHearingTest {
 
 		} else { // Quiz questions
 			retval = true;
-			switch (document.querySelector('input[name=quizAnswers' + page + ']:checked').value) {
-				case 'sometimes': this.results.answers[answerIndex] = 1; break;
-				case 'yes': this.results.answers[answerIndex] = 2; break;
-				case 'no': this.results.answers[answerIndex] = 0; break;
-				default: retval = false;
+			if(document.querySelector(`input[name=quizAnswers${page}]:checked`) !== null){
+				switch (document.querySelector(`input[name=quizAnswers${page}]:checked`).value) {
+					case 'sometimes': this.results.answers[answerIndex] = 1; break;
+					case 'yes': this.results.answers[answerIndex] = 2; break;
+					case 'no': this.results.answers[answerIndex] = 0; break;
+				}
+			} else {
+				retval = false;
 			}
 
 			if (page === 9) { // Last quiz question
