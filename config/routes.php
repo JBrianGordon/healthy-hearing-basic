@@ -73,6 +73,9 @@ return static function (RouteBuilder $routes) {
             ->setPass(['slug'])
             ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
 
+        // Online hearing test
+        $builder->connect('/help/online-hearing-test', ['controller' => 'quizResults', 'action' => 'online_hearing_test']);
+
         /*
          * Connect catchall routes for all controllers.
          *
