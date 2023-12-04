@@ -124,6 +124,7 @@ class OnlineHearingTest {
 					element.style.transitionDuration = "0ms";
 					element.style.display = "none";
 				});
+				document.querySelector(testpage).style.display = "block";
 				document.querySelector(testpage).style.transitionDuration = `${fade_duration}ms`;
 				document.querySelector(testpage).style.opacity = 1;
 			}, fade_duration + 50);
@@ -221,11 +222,14 @@ class OnlineHearingTest {
 
 		} else { // Quiz questions
 			retval = true;
-			switch (document.querySelector('input[name=quizAnswers' + page + ']:checked').value) {
-				case 'sometimes': this.results.answers[answerIndex] = 1; break;
-				case 'yes': this.results.answers[answerIndex] = 2; break;
-				case 'no': this.results.answers[answerIndex] = 0; break;
-				default: retval = false;
+			if(document.querySelector(`input[name=quizAnswers${page}]:checked`) !== null){
+				switch (document.querySelector(`input[name=quizAnswers${page}]:checked`).value) {
+					case 'sometimes': this.results.answers[answerIndex] = 1; break;
+					case 'yes': this.results.answers[answerIndex] = 2; break;
+					case 'no': this.results.answers[answerIndex] = 0; break;
+				}
+			} else {
+				retval = false;
 			}
 
 			if (page === 9) { // Last quiz question
@@ -250,7 +254,11 @@ class OnlineHearingTest {
 	}
 
 	completed() {
-		return this.results.answers.length === this.numberOfQuestions && this.contactInfoFilled();
+		if(this.results !== null){
+			return this.results.answers.length === this.numberOfQuestions && this.contactInfoFilled();
+		} else {
+			return false;
+		}
 	}
 
 	contactInfoFilled() {
@@ -362,15 +370,10 @@ class OnlineHearingTest {
 	}
 }
 
-let answers;
-// 'online_answers' defined in online_hearing_test.ctp
-if (typeof online_answers !== 'undefined') {
-  answers = online_answers; // previous test results
-} else {
-  answers = null;
-}
+// 'online_answers' defined in online_hearing_test.ctp, true indicates previous test results
+let answers = online_answers ?? null;
 
-const HT = new OnlineHearingTest(answers, false, true);
+window.HT = new OnlineHearingTest(answers, false, true);
 
 function onSubmit(e) {
   e.preventDefault();
