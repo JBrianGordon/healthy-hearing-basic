@@ -8,6 +8,9 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 	$display = 'differentCountry';
 }
 
+//Set order on hearing test page
+$facOrder = $controller == 'QuizResults' ? ' style="order:1"' : ' style="order:9"';
+
 //Set panel order depending on page, using flex
 //Hearing test panel
 if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
@@ -42,17 +45,17 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 					<?php foreach($locations as $location): ?>
 						<div class="panel-section condensed">
 							<p class="text-small mb0">
-								<?php echo $this->Clinic->addressLink($location); ?>
+								<?= $this->Clinic->addressLink($location) ?>
 							</p>
 						</div>
 					<?php endforeach; ?>
 					<div class="tac">
 						<?php $nearMeLink = $this->Clinic->nearMeLink(); ?>
-						<a href="<?php echo $nearMeLink; ?>" class="btn btn-primary btn-xs m10 pl10 pr10">See more clinics</a>
+						<a href="<?= $nearMeLink ?>" class="btn btn-primary btn-xs m10 pl10 pr10">See more clinics</a>
 					</div>
 				<?php elseif ($display === 'differentCountry'): ?>
 					<div class="panel-section condensed">
-						<?php echo $this->element('locations/near_me/different_country'); ?>
+						<?= $this->element('locations/near_me/different_country') ?>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -72,7 +75,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php if ((!empty($articles) && empty($wiki) && empty($page)) || isset($stateNice)): ?>
 		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
-	<section class="panel panel-secondary" style="order:9">
+	<section class="panel panel-secondary"<?= $facOrder ?>>
 		<header class="panel-heading text-center">
 			<h4>Find a clinic</h4>
 		</header>
@@ -98,7 +101,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if (Configure::read('showReports') && ($controller != 'quiz_results')): ?>
+	<?php if (Configure::read('showReports') && ($controller != 'QuizResults')): ?>
 		<section class="panel panel-light blog-previews" style="order:12">
 		<header class="panel-heading text-center">
 		  <h2>The Healthy Hearing Report</h2>

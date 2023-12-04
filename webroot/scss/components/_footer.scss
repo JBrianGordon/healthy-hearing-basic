@@ -3,6 +3,7 @@
 	padding: 40px inherit;
 	position: relative;
 	max-width: 100%;
+	z-index: 1;
 
 	&.row {
 		@media (max-width: $screen-xs-max){

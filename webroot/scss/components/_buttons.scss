@@ -1,3 +1,20 @@
+button {
+  &.close {
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+  }
+}
+
 .btn {
 	padding: 6px 17px;
 	font-size: 85%;
