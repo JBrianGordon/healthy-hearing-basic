@@ -212,4 +212,15 @@ class PagesController extends AppController
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }
+
+    /**
+     * Terms of use page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function termsOfUse() {
+        $page = $this->Pages->findByTitle('termsOfUse')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
 }
