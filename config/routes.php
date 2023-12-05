@@ -60,7 +60,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'view', 'clinicFaq']);
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'view', 'privacyPolicy']);
-        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'view', 'termsOfUse']);
+        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');
