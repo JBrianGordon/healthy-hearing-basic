@@ -50,26 +50,32 @@ Editor.builtinPlugins = [
     //WProofreader
 ];
 
-Editor.create(document.querySelector(".editor"), {
-    toolbar: {
-        items: [
-            'bold',
-            'italic',
-            'bulletedList',
-            'numberedList',
-            'underline',
-            '|',
-            'alignment',
-            'findAndReplace',
-            //'wproofreader'
-        ],
-        shouldNotGroupWhenFull: true
-    },
-    language: 'en',
-    placeholder: 'Welcome to CKEditor 5 + CKBox!',
-    CloudServices: {
-        tokenUrl: ckTokenUrl
-    }
-	}).catch( error => {
-	    console.error( error );
+// Get all elements with the "editor" class
+const editorElements = document.querySelectorAll(".editor");
+
+// Iterate over each element and create the editor
+editorElements.forEach((element) => {
+
+    Editor.create(element, {
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'bulletedList',
+                'numberedList',
+                'underline',
+                '|',
+                'alignment',
+                'findAndReplace',
+                //'wproofreader'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        language: 'en',
+        CloudServices: {
+            tokenUrl: ckTokenUrl
+        }
+    	}).catch( error => {
+    	    console.error( error );
+    });
 });

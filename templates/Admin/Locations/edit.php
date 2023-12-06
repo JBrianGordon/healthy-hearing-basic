@@ -283,9 +283,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 									                    echo $this->Form->control('facebook');
 									                    echo $this->Form->control('twitter');
 									                    echo $this->Form->control('youtube');
-									                    /*** TODO: replace with CKEditor ***/
-									                    echo $this->Form->control('services', ['required' => true]);
-									                    echo $this->Form->control('about_us', ['required' => true]);
+									                    echo $this->Form->control('services', ['required' => true, 'class' => 'editor']);
+									                    echo $this->Form->control('about_us', ['required' => true, 'class' => 'editor']);
 													?>
 													<div class="panel panel-default pb20">
 														<div class="panel-heading">Enhanced features</div>

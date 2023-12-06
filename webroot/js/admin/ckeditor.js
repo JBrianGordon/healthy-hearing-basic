@@ -128,82 +128,88 @@ Editor.builtinPlugins = [
     //WProofreader
 ];
 
-Editor.create(document.querySelector(".editor"), {
-    toolbar: {
-        items: [
-            'sourceEditing',
-            '|',
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            'subscript',
-            'superscript',
-            'underline',
-            '|',
-            'ckbox',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'alignment',
-            'findAndReplace',
-            '-',
-            'removeFormat',
-            'specialCharacters',
-            '|',
-            'fontColor',
-            'fontSize',
-            'fontFamily',
-            '|',
-            'horizontalLine',
-            'highlight',
-            'style',
-            'restrictedEditingException'//,
-            //'wproofreader'
-        ],
-        shouldNotGroupWhenFull: true
-    },
-    language: 'en',
-    image: {
-        toolbar: [
-            'imageTextAlternative',
-            'toggleImageCaption',
-            'imageStyle:inline',
-            'imageStyle:block',
-            'imageStyle:side',
-            'linkImage'
-        ]
-    },
-    table: {
-        contentToolbar: [
-            'tableColumn',
-            'tableRow',
-            'mergeTableCells',
-            'tableCellProperties',
-            'tableProperties'
-        ]
-    },
-    heading: {
-        options: [
-            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-            { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-            { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-            { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-        ]
-    },
-    placeholder: 'Welcome to CKEditor 5 + CKBox!',
-    CloudServices: {
-        tokenUrl: ckTokenUrl
-    },
-    ckbox: {
-        tokenUrl: ckTokenUrl
-    }
-	}).catch( error => {
+// Get all elements with the "editor" class
+const editorElements = document.querySelectorAll(".editor");
+
+// Iterate over each element and create the editor
+editorElements.forEach((element) => {
+
+    Editor.create(element, {
+        toolbar: {
+            items: [
+                'sourceEditing',
+                '|',
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'subscript',
+                'superscript',
+                'underline',
+                '|',
+                'ckbox',
+                'blockQuote',
+                'insertTable',
+                'mediaEmbed',
+                'alignment',
+                'findAndReplace',
+                '-',
+                'removeFormat',
+                'specialCharacters',
+                '|',
+                'fontColor',
+                'fontSize',
+                'fontFamily',
+                '|',
+                'horizontalLine',
+                'highlight',
+                'style',
+                'restrictedEditingException'//,
+                //'wproofreader'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        language: 'en',
+        image: {
+            toolbar: [
+                'imageTextAlternative',
+                'toggleImageCaption',
+                'imageStyle:inline',
+                'imageStyle:block',
+                'imageStyle:side',
+                'linkImage'
+            ]
+        },
+        table: {
+            contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableCellProperties',
+                'tableProperties'
+            ]
+        },
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+            ]
+        },
+        CloudServices: {
+            tokenUrl: ckTokenUrl
+        },
+        ckbox: {
+            tokenUrl: ckTokenUrl
+        }
+    	}).catch( error => {
 	    console.error( error );
+    });
 });

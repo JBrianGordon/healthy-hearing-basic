@@ -61,7 +61,7 @@ if (empty($content->id)) {
 								<div class="row">
 								    <div class="column-responsive column-80">
 								        <div class="content form">
-								            <?= $this->Form->create($content) ?>
+								            <?= $this->Form->create($content, ['id' => 'contentForm']) ?>
 								            <fieldset>
 								                <?php
 							                    echo $this->Form->hidden('is_frozen');

@@ -9,6 +9,19 @@ form {
 	&#FapMegaSearch {
 		margin-bottom: 30px;
 	}
+
+	&#LocationClinicEditForm, &#contentForm{
+		.provider {
+			.ck-editor__main {
+				width: 75%;
+				margin-left: 25%;
+			}
+		}
+		.ck.ck-editor {
+			width: 100%;
+		}
+	}
+
 	label {
 	    &[for="FooterContactEmail"] {
 			font-size: 0;
