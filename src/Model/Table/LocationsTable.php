@@ -1814,4 +1814,39 @@ class LocationsTable extends Table
         }
         return $data;
     }
+
+    /**
+    * Get the timezone conditions based on tzFilter
+    * @param array tzFilter
+    */
+    public function getTimezoneConditions($tzFilter) {
+        $timezone = [];
+        $isDST = date('I');
+        if (!empty($tzFilter['Eastern'])) {
+            $timezone[] = 'America/New_York';
+            $timezone[] = 'America/Indiana/Indianapolis';
+        }
+        if (!empty($tzFilter['Central'])) {
+            $timezone[] = 'America/Chicago';
+        }
+        if (!empty($tzFilter['Mountain'])) {
+            $timezone[] = 'America/Denver';
+            if (!$isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Pacific'])) {
+            $timezone[] = 'America/Los_Angeles';
+            if ($isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Alaska'])) {
+            $timezone[] = 'America/Anchorage';
+        }
+        if (!empty($tzFilter['Hawaii'])) {
+            $timezone[] = 'Pacific/Honolulu';
+        }
+        return $timezone;
+    }
 }

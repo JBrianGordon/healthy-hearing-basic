@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\CaCallGroup;
 
 /**
  * CaCallGroups Controller
@@ -131,5 +132,70 @@ class CaCallGroupsController extends AppController
         $this->autoRender = false;
         $this->Export->exportCsv('export_call_groups.csv');
         die();
+    }
+
+    /**
+     * Outbound calls page
+     */
+    public function outbound()
+    {
+        $requestParams = $this->request->getData();
+        // Hide outbound calls that are scheduled for more than 1 month ago
+        $oneMonthAgo = getDateTime('-1 month', 'GMT', 'Y-m-d H:i:s');
+        $now = getDateTime('now', 'GMT', 'Y-m-d H:i:s');
+        $defaultStatus = [
+            CaCallGroup::STATUS_VM_NEEDS_CALLBACK,
+            CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED,
+            CaCallGroup::STATUS_FOLLOWUP_SET_APPT,
+            CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM,
+            CaCallGroup::STATUS_TENTATIVE_APPT,
+            CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER,
+        ];
+        $conditions = [
+            'ca_call_count >' => 0,
+            'status IN' => $defaultStatus,
+            'AND' => [
+                'scheduled_call_date >=' => $oneMonthAgo,
+                'scheduled_call_date <=' => $now,
+            ],
+            'is_spam' => false,
+        ];
+        if (!empty($requestParams['status'])) {
+            $status = $requestParams['status'];
+            if (str_contains($status, '!')) {
+                $status = array_diff($defaultStatus, [str_replace('!', '', $status)]);
+                $conditions['status IN'] = $status;
+            } elseif (str_contains($requestParams['status'], '[or]')) {
+                $conditions['status IN'] = explode('[or]', $requestParams['status']);
+            } else {
+                $conditions['status IN'] = [$status];
+            }
+        }
+        if (!empty($requestParams['score'])) {
+            $conditions['score'] = $requestParams['score'];
+        }
+        if (!empty($requestParams['is_appt_request_form'])) {
+            $conditions['is_appt_request_form'] = true;
+        }
+        if (!empty($requestParams['tzFilter'])) {
+            $timezoneConditions = $this->CaCallGroups->Locations->getTimezoneConditions($requestParams['tzFilter']);
+            if (!empty($timezoneConditions)) {
+                $conditions['Locations.timezone IN'] = $timezoneConditions;
+            }
+        }
+        $caCallGroupsQuery = $this->CaCallGroups->find('all', [
+            'conditions' => $conditions,
+            'contain' => ['Locations', 'CaCalls'],
+        ]);
+        $this->paginate['order'] = [];
+        $this->paginate['order'][] = "FIELD(status, '".
+            CaCallGroup::STATUS_VM_NEEDS_CALLBACK."', '".
+            CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED."', '".
+            CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER."', '".
+            CaCallGroup::STATUS_FOLLOWUP_SET_APPT."', '".
+            CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM."', '".
+            CaCallGroup::STATUS_TENTATIVE_APPT."')";
+        $this->paginate['order'][] = "scheduled_call_date ASC";
+        $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
     }
 }

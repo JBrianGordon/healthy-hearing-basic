@@ -19,8 +19,6 @@ const exportBtnClick = () => {
 document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
 
 document.addEventListener("DOMContentLoaded", function() {
-  console.debug('ready');
-  
   // Delete Button
   document.body.addEventListener("click", function(event) {
     if (event.target.matches("#deleteBtn")) {
