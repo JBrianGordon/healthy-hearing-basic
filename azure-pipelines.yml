@@ -70,6 +70,7 @@ stages:
               downloadType: 'single'
               artifactName: 'drop1'
               downloadPath: '$(System.ArtifactsDirectory)'
+              cleanDestinationFolder: true
           - task: ExtractFiles@1
             inputs: 
               archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
