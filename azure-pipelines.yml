@@ -64,16 +64,20 @@ stages:
       runOnce:
        deploy:
          steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop1'
-              downloadPath: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: true
+          # - task: DownloadBuildArtifacts@0
+          #   inputs:
+          #     buildType: 'current'
+          #     downloadType: 'single'
+          #     artifactName: 'drop1'
+          #     downloadPath: '$(System.ArtifactsDirectory)'
+          #     cleanDestinationFolder: true
+          # - task: ExtractFiles@1
+          #   inputs:
+          #     archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+          #     destinationFolder: '/home/hhadmin/hh'
           - task: ExtractFiles@1
             inputs: 
-              archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+              archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/**/*.zip'
               destinationFolder: '/home/hhadmin/hh'
           - script: |
               sudo rm -r /var/www/hh/ &&
