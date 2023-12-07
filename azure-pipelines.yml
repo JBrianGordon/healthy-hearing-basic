@@ -57,7 +57,7 @@ stages:
        deploy:
          steps:
           - script: |
-            echo "Contents of the $(Build.SourcesDirectory)"
+            echo "Contents of the $(Build.SourcesDirectory):"
             ls -la $(Build.SourcesDirectory)
           - script: |
               sudo rm -r /var/www/hh/ &&
