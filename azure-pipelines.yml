@@ -57,7 +57,9 @@ stages:
        deploy:
          steps:
           - script: |
-              sudo ls $(Build.SourcesDirectory)
+            echo "Contents of the $(Build.SourcesDirectory)"
+            ls -la $(Build.SourcesDirectory)
+          - script: |
               sudo rm -r /var/www/hh/ &&
               sudo cp -r $(Build.SourcesDirectory)/ /var/www/hh/ &&
               sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
