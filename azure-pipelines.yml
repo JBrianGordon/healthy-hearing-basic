@@ -60,6 +60,8 @@ stages:
           - script: |
               echo "Contents of the $(Build.SourcesDirectory):"
               ls -la $(Build.SourcesDirectory)
+              echo "PWD: "
+              pwd
           - script: |
               sudo rm -r /var/www/hh/ &&
               sudo cp -r $(Build.SourcesDirectory)/ /var/www/hh/ &&
