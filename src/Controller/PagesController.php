@@ -214,6 +214,17 @@ class PagesController extends AppController
     }
 
     /**
+     * Privacy policy page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function privacyPolicy() {
+        $page = $this->Pages->findByTitle('privacyPolicy')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
+    /**
      * Terms of use page
      *
      * @return \Cake\Http\Response|null|void Renders view
