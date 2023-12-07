@@ -48,7 +48,7 @@ stages:
       displayName: 'npm run compile-sass'
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: '$(Build.SourcesDirectory)/'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: 'hhApp'
         publishLocation: 'Container'
   - deployment: VMDeploy
