@@ -57,6 +57,7 @@ stages:
       runOnce:
        deploy:
          steps:
+          - checkout: self
           - script: |
               echo "Contents of the $(Build.SourcesDirectory):"
               ls -la $(Build.SourcesDirectory)
