@@ -53,22 +53,22 @@ stages:
       inputs:
         pathToPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: drop1
-  # - deployment: VMDeploy
-  #   displayName: Web deploy
-  #   dependsOn: Build
-  #   environment:
-  #     name: HH Dev
-  #     resourceType: VirtualMachine
-  #     tags: dev
-  #   strategy:
-  #     runOnce:
-  #      deploy:
-  #        steps:
-  #         - task: DownloadBuildArtifacts@0
-  #           inputs:
-  #             buildType: 'current'
-  #             downloadType: 'single'
-  #             artifactName: 'drop1'
+  - deployment: VMDeploy
+    displayName: Web deploy
+    dependsOn: Build
+    environment:
+      name: HH Dev
+      resourceType: VirtualMachine
+      tags: dev
+    strategy:
+      runOnce:
+       deploy:
+         steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop1'
   #             downloadPath: '$(System.ArtifactsDirectory)'
   #             cleanDestinationFolder: true
   #         - task: ExtractFiles@1
