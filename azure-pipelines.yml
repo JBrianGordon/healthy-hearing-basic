@@ -48,31 +48,25 @@ stages:
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(build.sourcesDirectory)'
-        includeRootFolder: false
-  - deployment: VMDeploy
-    displayName: Web deploy
-    dependsOn: Build
-    environment:
-      name: HH Dev
-      resourceType: VirtualMachine
-      tags: dev
-    strategy:
-      runOnce:
-       deploy:
-         steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop1'
-              downloadPath: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: true
-          - task: ExtractFiles@1
-            inputs:
-              archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
-              destinationFolder: '/home/hhadmin/hh'
-          - script: |
-              sudo rm -r /var/www/hh/ &&
-              sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
-              sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
-              sudo chown -R hhweb:hhweb /var/www/hh
+        # includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+  # - deployment: VMDeploy
+  #   displayName: Web deploy
+  #   dependsOn: Build
+  #   environment:
+  #     name: HH Dev
+  #     resourceType: VirtualMachine
+  #     tags: dev
+  #   strategy:
+  #     runOnce:
+  #      deploy:
+  #        steps:
+  #         - task: ExtractFiles@1
+  #           inputs:
+  #             archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+  #             destinationFolder: '/home/hhadmin/hh'
+  #         - script: |
+  #             sudo rm -r /var/www/hh/ &&
+  #             sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
+  #             sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
+  #             sudo chown -R hhweb:hhweb /var/www/hh
