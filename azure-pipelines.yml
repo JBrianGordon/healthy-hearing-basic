@@ -49,10 +49,6 @@ stages:
       inputs:
         rootFolderOrFile: '$(build.sourcesDirectory)'
         includeRootFolder: false
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: drop1
   - deployment: VMDeploy
     displayName: Web deploy
     dependsOn: Build
