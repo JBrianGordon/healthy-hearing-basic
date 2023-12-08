@@ -63,17 +63,17 @@ stages:
     strategy:
       runOnce:
        deploy:
-         # steps:
+         steps:
           # - task: DownloadBuildArtifacts@0
           #   inputs:
           #     buildType: 'current'
           #     downloadType: 'single'
           #     artifactName: 'drop1'
           #     downloadPath: '$(System.ArtifactsDirectory)'
-  #         - task: ExtractFiles@1
-  #           inputs:
-  #             archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
-  #             destinationFolder: '/home/hhadmin/hh'
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+              destinationFolder: '/home/hhadmin/hh'
   #         - script: |
   #             sudo rm -r /var/www/hh/ &&
   #             sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
