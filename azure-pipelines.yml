@@ -64,12 +64,12 @@ stages:
       runOnce:
        deploy:
          steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop1'
-              downloadPath: '$(System.ArtifactsDirectory)'
+          # - task: DownloadBuildArtifacts@0
+          #   inputs:
+          #     buildType: 'current'
+          #     downloadType: 'single'
+          #     artifactName: 'drop1'
+          #     downloadPath: '$(System.ArtifactsDirectory)'
   #         - task: ExtractFiles@1
   #           inputs:
   #             archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
