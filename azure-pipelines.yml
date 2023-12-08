@@ -48,8 +48,11 @@ stages:
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(build.sourcesDirectory)'
-        # includeRootFolder: false
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        includeRootFolder: false
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: drop1
   # - deployment: VMDeploy
   #   displayName: Web deploy
   #   dependsOn: Build
@@ -61,6 +64,13 @@ stages:
   #     runOnce:
   #      deploy:
   #        steps:
+  #         - task: DownloadBuildArtifacts@0
+  #           inputs:
+  #             buildType: 'current'
+  #             downloadType: 'single'
+  #             artifactName: 'drop1'
+  #             downloadPath: '$(System.ArtifactsDirectory)'
+  #             cleanDestinationFolder: true
   #         - task: ExtractFiles@1
   #           inputs:
   #             archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
