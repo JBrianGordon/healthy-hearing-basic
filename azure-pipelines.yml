@@ -69,9 +69,7 @@ stages:
               buildType: 'current'
               downloadType: 'single'
               artifactName: 'drop1'
-              downloadPath: '$(Build.ArtifactStagingDirectory)'
-              # downloadPath: '$(System.ArtifactsDirectory)'
-  #             cleanDestinationFolder: true
+              downloadPath: '$(System.ArtifactsDirectory)'
   #         - task: ExtractFiles@1
   #           inputs:
   #             archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
