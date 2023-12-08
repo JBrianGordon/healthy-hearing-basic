@@ -75,8 +75,8 @@ stages:
             inputs:
               archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
               destinationFolder: '/home/hhadmin/hh'
-  #         - script: |
-  #             sudo rm -r /var/www/hh/ &&
-  #             sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
-  #             sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
-  #             sudo chown -R hhweb:hhweb /var/www/hh
+          - script: |
+              sudo rm -r /var/www/hh/ &&
+              sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
+              sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
+              sudo chown -R hhweb:hhweb /var/www/hh
