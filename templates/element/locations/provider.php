@@ -86,19 +86,19 @@ use Cake\Core\Configure;
 					'disabled' => 'disabled'
 				]);
 			}
-			echo $this->Form->control('Provider.' . $key . '.is_ida_verified', [
-					'div' => false,
-					'label' => [
-						'class' => 'col control-label switch boolean-switch ida-verified',
-						'text' => 'Ida verified provider',
-					],
-					'type' => 'checkbox',
-					'class' => '',
-					'wrapInput' => 'col-md-12'
-			]);
 		endif;
 	?>
 
+	<div class="col-md-12 mb20 form-group">
+		<div class="checkbox form-check form-switch">
+				<?= $this->Form->control('Provider.' . $key . '.is_ida_verified', [
+					'type' => 'checkbox',
+					'label' => ['class' => 'pl110 pr30 fw-bold form-check-label'],
+					'class' => 'form-check-input'
+					])
+				?>
+		</div>
+	</div>
 	<div class="form-group clearfix">
 		<div class="col-sm-4 col-sm-offset-2">
 			<?= $this->Form->control("Provider." . $key . ".order", ['label' => ['text' => 'Order', 'class' => 'col-sm-3 control-label'], 'value' => $key + 1, 'required' => true, 'id'=>"order-" . $key, 'readonly'=>true, 'class' => 'provider-order col-sm-9'])	?>
