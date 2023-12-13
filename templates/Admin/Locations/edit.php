@@ -701,7 +701,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 													<!-- *** TODO: set up notes *** -->
 													<?php $noteCount = count($location->location_notes); ?>
 													<div class="notes">
-														<?php echo $this->Form->input("LocationNote.$noteCount.body", array('required' => false)); ?>
+														<label>Body</label>
+														<?= $this->Form->input("LocationNote.$noteCount.body", ['required' => false, 'class' => 'editor']); ?>
 														<?php 
 															//*** TODO: update when CKEditor is ready ***
 															/*echo $this->Ckeditor->replace("LocationNote{$noteCount}Body", [
@@ -710,11 +711,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																'var_name' => "NoteBody",
 															]); */
 														?>
-														<div class="row">
-															<div class="col-lg-12">
-																<input type="submit" value="Save Location" class="btn btn-primary btn-lg pull-right">
-															</div>
-														</div>
 														<br />
 														<?php
 															foreach ($location->location_notes as $note) {

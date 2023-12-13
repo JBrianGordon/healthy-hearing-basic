@@ -1,4 +1,5 @@
 import './admin_common';
+import './ckpackage';
 
 const titleUnlock = document.querySelector('#titleUnlock');
 const pageTitle = document.querySelector('#PageTitle');
