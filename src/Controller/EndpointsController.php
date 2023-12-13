@@ -13,19 +13,11 @@ class EndpointsController extends Controller
 
         //Set role
         $this->user = $this->request->getSession()->read('Auth');
-        $userRole = ($this->user->role === 'admin') ? 'superadmin' : 'user';
+        $userRole = ($this->user->role === 'admin') ? 'admin' : 'user';
         $this->set('userRole', $userRole);
 
         // Render the template without layout
         return $this->render('/Endpoints/ckeditor_endpoint');
-    }
-    public function tinymceEndpoint()
-    {
-        // Disable the auto layout
-        $this->viewBuilder()->disableAutoLayout();
-
-        // Render the template without layout
-        return $this->render('/Endpoints/tinymce_endpoint');
     }
 }
 ?>
