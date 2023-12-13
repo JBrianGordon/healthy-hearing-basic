@@ -124,7 +124,7 @@ if (empty($content->id)) {
 								                    <!-- Content Tab -->
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
-								                            echo $this->Form->control('body', ['label' => ['text' => '', 'class' => 'hidden'], 'class' => 'editor', 'required' => false]);
+								                            echo $this->Form->control('body', ['label' => false, 'class' => 'editor', 'required' => false]);
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');
 								                        ?>
@@ -144,6 +144,7 @@ if (empty($content->id)) {
 										                    </div>
 										                </div>
 										                <?php
+										                	//*** TODO: change this to upload to CKBox: ***/
 								                            echo $this->Form->control('facebook_image', ['label' => 'Schema/Facebook Image<br><a class="btn btn-xs btn-info ck-box">Select New Image</a>', 'escape' => false]);
 								                            echo $this->Form->control('facebook_image_width', ['label' => 'Image Width']);
 								                            echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);

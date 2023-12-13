@@ -168,7 +168,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                                                 <?php if (Configure::read('isTieringEnabled')) : ?>
                                                                     <?= $this->Clinic->badgeListingType($review->location->listing_type) ?>
                                                                 <?php endif; ?>
-                                                                <?= $this->Clinic->badgeReview(null, $review->location->reviews_approved) ?>
+                                                                <?= $this->Clinic->badgeReview($review->location->reviews_approved) ?>
                                                             </td>
                                                             <td style="min-width:110px">
                                                                 <!-- Review created date is saved in server timezone (central). Display as Eastern time. -->

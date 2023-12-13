@@ -34,7 +34,7 @@ function myLog(msg) {
 
 //List of data pushes pushed in this request
 dataLayer.dataPushes = [];
-dataLayer.hhDebugging = <?= Configure::read('debug') ?>;
+dataLayer.hhDebugging = <?= var_export(Configure::read('debug'), true) ?>;
 
 //Abstract push of data to push, creates log for us.
 dataLayer.hhPush = function(dataToPush) {

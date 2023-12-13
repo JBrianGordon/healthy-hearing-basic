@@ -44,7 +44,15 @@ stages:
       displayName: 'npm run build'
     - script: |
         npm run compile-sass
-      displayName: 'npm run compile-sass'     
+      displayName: 'npm run compile-sass'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(build.sourcesDirectory)'
+        includeRootFolder: false
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: drop1
   - deployment: VMDeploy
     displayName: Web deploy
     dependsOn: Build
@@ -56,9 +64,27 @@ stages:
       runOnce:
        deploy:
          steps:
+          - download: none
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop1'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+              destinationFolder: '/home/hhadmin/hh'
           - script: |
-              sudo ls $(Build.SourcesDirectory)
               sudo rm -r /var/www/hh/ &&
-              sudo cp -r $(Build.SourcesDirectory)/ /var/www/hh/ &&
+              sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
               sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
-              sudo chown -R hhweb:hhweb /var/www/hh
+              sudo chown -R hhweb:hhweb /var/www/hh &&
+              sudo rm -r /var/www/dev/ &&
+              sudo cp -r /home/hhadmin/hh/ /var/www/dev/ &&
+              sudo cp /home/hhweb/dev/app_local.php /var/www/dev/config/ &&
+              sudo chown -R hhweb:hhweb /var/www/dev &&
+              sudo rm -r /var/www/ca-dev/ &&
+              sudo cp -r /home/hhadmin/hh/ /var/www/ca-dev/ &&
+              sudo cp /home/hhweb/ca-dev/app_local.php /var/www/ca-dev/config/ &&
+              sudo chown -R hhweb:hhweb /var/www/ca-dev

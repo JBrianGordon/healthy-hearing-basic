@@ -156,7 +156,7 @@ editorElements.forEach((element) => {
                 'mediaEmbed',
                 'alignment',
                 'findAndReplace',
-                '-',
+                '|',
                 'removeFormat',
                 'specialCharacters',
                 '|',

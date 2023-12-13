@@ -84,6 +84,13 @@
 	.container {
 		padding-left: 15px;
 		padding-right: 15px;
+
+		.notes {
+			.ck-editor {
+				float: right;
+				margin-bottom: 20px;
+			}
+		}
 	}
 	  
 	label {
