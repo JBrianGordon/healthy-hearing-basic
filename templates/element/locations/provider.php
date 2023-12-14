@@ -62,7 +62,7 @@ use Cake\Core\Configure;
 		$calculatedTitle = $this->Clinic->getProviderTitle($credentials);
 		echo '<div class="form-group">';
 			echo $this->Form->control("Provider." . $key . ".title", ['class' => 'col col-sm-9', 
-			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'], 'placeholder' => $calculatedTitle, 'value' => $provider->title ?? ''
+			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'], 'required' => false, 'placeholder' => $calculatedTitle, 'value' => $provider->title ?? ''
 		]);
 		echo '</div>';
 	?>

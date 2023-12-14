@@ -42,6 +42,9 @@ form {
     	}
 		}
 	}
+	.is-invalid ~ .invalid-feedback {
+		display: none;
+	}
 }
 
 .form-control, .form-control[type=text], .form-control[type=tel], .form-control[type=email]{

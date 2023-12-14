@@ -189,7 +189,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 															echo '<div class="col-md-8 col-md-offset-4 pl0 mb25">';
 															echo $this->Form->control('is_mobile', ['label' => ' Mobile-only clinic?']);
 															echo '</div>';
-															echo $this->Form->control('mobile_text', ['label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Mobile clinic description'], 'class' => 'col col-md-8-override mb10 fg-2']);
+															echo $this->Form->control('mobile_text', ['label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Mobile clinic description'], 'required' => false, 'class' => 'col col-md-8-override mb10 fg-2']);
 															echo '<span id="addressHelp" class="help-block col-md-12 tar">This will be displayed instead of street address</span>';
 														?>
 													</div>
@@ -579,12 +579,10 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 														<div class="col-md-12">
 															<?= $this->Form->control('optional_message', [
 																'label' => ['class' => 'col col-md-2 control-label'],
-																'wrapInput' => 'col col-md-10',
 																'rows' => 3,
 																'maxlength' => 400,
 																'required' => false,
-																'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.',
-																'div' => 'form-group mb0']) ?>
+																'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.']) ?>
 														</div>
 													</div>
 													<table class="table table-striped table-bordered">
@@ -753,7 +751,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 																	'label' => 'Direct book URL',
 																	'type' => 'text',
 																	'rows' => 4,
-																	'required' => false
+																	'required' => false,
 																]);	?>
 																<?= $this->Form->control('direct_book_iframe', [
 																	'label' => 'Direct book iFrame',
