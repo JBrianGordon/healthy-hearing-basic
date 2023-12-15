@@ -90,7 +90,7 @@ class CaCallGroupsController extends AppController
     public function edit($id = null)
     {
         $caCallGroup = $this->CaCallGroups->get($id, [
-            'contain' => [],
+            'contain' => ['Locations', 'CaCalls', 'CaCallGroupNotes'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $caCallGroup = $this->CaCallGroups->patchEntity($caCallGroup, $this->request->getData());
@@ -101,8 +101,7 @@ class CaCallGroupsController extends AppController
             }
             $this->Flash->error(__('The ca call group could not be saved. Please, try again.'));
         }
-        $locations = $this->CaCallGroups->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('caCallGroup', 'locations'));
+        $this->set(compact('caCallGroup'));
     }
 
     /**

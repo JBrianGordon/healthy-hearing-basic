@@ -89,7 +89,7 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
 								                    <th><?php echo 'Initial call ('.getEasternTimezone().')'; ?></th>
 								                    <th><?php echo $this->Paginator->sort('scheduled_call_date','Next call time ('.getEasternTimezone().')'); ?></th>
 								                    <th>Clinic</th>
-								                    <th>Caller Name/<br>Patient Name</th>
+								                    <th nowrap>Caller Name/<br>Patient Name</th>
 								                    <th>Actions</th>
 								                </tr>
 								            </thead>

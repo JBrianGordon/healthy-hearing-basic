@@ -1,263 +1,273 @@
-import '../common/common';
-import '../jquery/jplayer/jquery.jplayer.min';
-import '../common/play_media';
-import {questionsOnLoad} from './ca_call_questions';
+//import '../common/common';
+//import '../jquery/jplayer/jquery.jplayer.min';
+//import '../common/play_media';
+//import {questionsOnLoad} from './ca_call_questions';
 
-const locationTitle = '';
-const pageLoadComplete = false;
-const DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
+//const locationTitle = '';
+//const pageLoadComplete = false;
+//const DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
 
 const onPageLoad = () => {
-	document.querySelector('body').addEventListener('change', e => {
-	  const targetId = e.target.id;
-	  const targetClass = e.target.classList;
-	  const targetValue = e.target.value;
-	  const targetChecked = e.target.checked;
+  const locationTitle = '';
+  const pageLoadComplete = false;
+  const DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
+  
+  document.querySelector('body').addEventListener('change', e => {
+    const targetId = e.target.id;
+    const targetClass = e.target.classList;
+    const targetValue = e.target.value;
+    const targetChecked = e.target.checked;
 
-	  if (targetId === 'CaCallGroupTopicWarranty' || targetId === 'CaCallGroupTopicAidLost') {
-	    // Check the statuses of both of the related checkboxes.
-	    const warrantyChecked = document.querySelector('#CaCallGroupTopicWarranty').checked;
-	    const aidLostChecked = document.querySelector('#CaCallGroupTopicAidLost').checked;
+    if (targetId === 'CaCallGroupTopicWarranty' || targetId === 'CaCallGroupTopicAidLost') {
+      // Check the statuses of both of the related checkboxes.
+      const warrantyChecked = document.querySelector('#CaCallGroupTopicWarranty').checked;
+      const aidLostChecked = document.querySelector('#CaCallGroupTopicAidLost').checked;
 
-	    // If either of these are checked, show the 'How Old is your Hearing Aid' dialog.
-	    if (warrantyChecked || aidLostChecked) {
-	      document.querySelector('.aid_age_topic').classList.remove('hidden');
-	    } else {
-	      document.querySelector('.aid_age_topic').classList.add('hidden');
-	    }
+      // If either of these are checked, show the 'How Old is your Hearing Aid' dialog.
+      if (warrantyChecked || aidLostChecked) {
+        document.querySelector('.aid_age_topic').classList.remove('hidden');
+      } else {
+        document.querySelector('.aid_age_topic').classList.add('hidden');
+      }
 
-	    // Trigger the change event for the age dialog, to make sure the correct (hidden) checkboxes are checked.
-	    document.querySelector('#CaCallGroupHearingAidAge').dispatchEvent(new Event('change'));
-	  }
+      // Trigger the change event for the age dialog, to make sure the correct (hidden) checkboxes are checked.
+      document.querySelector('#CaCallGroupHearingAidAge').dispatchEvent(new Event('change'));
+    }
 
-	  if (targetId === 'CaCallGroupHearingAidAge') {
-	    const warrantyChecked = document.querySelector('#CaCallGroupTopicWarranty').checked;
-	    const aidLostChecked = document.querySelector('#CaCallGroupTopicAidLost').checked;
+    if (targetId === 'CaCallGroupHearingAidAge') {
+      const warrantyChecked = document.querySelector('#CaCallGroupTopicWarranty').checked;
+      const aidLostChecked = document.querySelector('#CaCallGroupTopicAidLost').checked;
 
-	    // Set the hidden checkboxes based on what topics are checked and the age of the hearing aid.
-	    document.querySelector('#CaCallGroupTopicAidLostOld').checked = (aidLostChecked && targetValue === 'old');
-	    document.querySelector('#CaCallGroupTopicAidLostNew').checked = (aidLostChecked && targetValue === 'new');
-	    document.querySelector('#CaCallGroupTopicWarrantyOld').checked = (warrantyChecked && targetValue === 'old');
-	    document.querySelector('#CaCallGroupTopicWarrantyNew').checked = (warrantyChecked && targetValue === 'new');
-	    document.querySelector('#CaCallGroupTopicWarrantyNew').dispatchEvent(new Event('change'));
-	  }
+      // Set the hidden checkboxes based on what topics are checked and the age of the hearing aid.
+      document.querySelector('#CaCallGroupTopicAidLostOld').checked = (aidLostChecked && targetValue === 'old');
+      document.querySelector('#CaCallGroupTopicAidLostNew').checked = (aidLostChecked && targetValue === 'new');
+      document.querySelector('#CaCallGroupTopicWarrantyOld').checked = (warrantyChecked && targetValue === 'old');
+      document.querySelector('#CaCallGroupTopicWarrantyNew').checked = (warrantyChecked && targetValue === 'new');
+      document.querySelector('#CaCallGroupTopicWarrantyNew').dispatchEvent(new Event('change'));
+    }
 
-	  if (targetId === 'CaCallIsWrongNumber') {
-	    const isWrongNumberChecked = document.querySelector('#CaCallIsWrongNumber').checked;
-	    const validNumberElements = document.querySelectorAll('.valid_number');
+    if (targetId === 'CaCallIsWrongNumber') {
+      const isWrongNumberChecked = document.querySelector('#CaCallIsWrongNumber').checked;
+      const validNumberElements = document.querySelectorAll('.valid_number');
 
-	    if (isWrongNumberChecked) {
-	      validNumberElements.forEach(element => {
-	        element.style.display = 'none';
-	      });
-	    } else {
-	      validNumberElements.forEach(element => {
-	        element.style.display = 'block';
-	      });
-	    }
+      if (isWrongNumberChecked) {
+        validNumberElements.forEach(element => {
+          element.style.display = 'none';
+        });
+      } else {
+        validNumberElements.forEach(element => {
+          element.style.display = 'block';
+        });
+      }
 
-	    updateVisibility();
-	  }
+      updateVisibility();
+    }
 
-	  if (targetId === 'cancelBtn') {
-	    const caCallGroupId = document.querySelector('#CaCallGroupId').value;
-	    const url = `/ca_calls/unlock_call_group/${caCallGroupId}`;
+    if (targetId === 'cancelBtn') {
+      const caCallGroupId = document.querySelector('#CaCallGroupId').value;
+      const url = `/ca_calls/unlock_call_group/${caCallGroupId}`;
 
-	    fetch(url)
-	      .then(response => response.json())
-	      .then(data => {
-	        if (data.unlock_status === true) {
-	          window.location = '/admin/ca_call_groups/outbound';
-	        }
-	      })
-	      .catch(error => {
-	        console.error('An error occurred:', error);
-	      });
-	  }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.unlock_status === true) {
+            window.location = '/admin/ca_call_groups/outbound';
+          }
+        })
+        .catch(error => {
+          console.error('An error occurred:', error);
+        });
+    }
 
-	  if (targetId === 'disconnectedBtn') {
-	    // The "disconnected" button was clicked
-	    // Make sure the Notes field is filled in
-	    const callGroupNoteValue = document.querySelector('[id^=CaCallGroupCaCallGroupNote]').value.trim();
+    if (targetId === 'disconnectedBtn') {
+      // The "disconnected" button was clicked
+      // Make sure the Notes field is filled in
+      const callGroupNoteValue = document.querySelector('[id^=CaCallGroupCaCallGroupNote]').value.trim();
 
-	    if (callGroupNoteValue) {
-	      const callType = document.querySelector('#CaCallCallType').value;
-	      const callTypeOutboundOptions = [CALL_TYPE_OUTBOUND_CLINIC, CALL_TYPE_OUTBOUND_CALLER];
-	      const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
-	      let callDate;
+      if (callGroupNoteValue) {
+        const callType = document.querySelector('#CaCallCallType').value;
+        const callTypeOutboundOptions = [CALL_TYPE_OUTBOUND_CLINIC, CALL_TYPE_OUTBOUND_CALLER];
+        const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
+        let callDate;
 
-	      if (callTypeOutboundOptions.includes(callType)) {
-	        // If an outbound call was disconnected, set the next call date 24 hours in the future.
-	        callDate = new Date();
-	        callDate.setDate(callDate.getDate() + 1);
+        if (callTypeOutboundOptions.includes(callType)) {
+          // If an outbound call was disconnected, set the next call date 24 hours in the future.
+          callDate = new Date();
+          callDate.setDate(callDate.getDate() + 1);
 
-	        // Dis-disable the scheduled call date fields
-	        const scheduledCallDateFields = document.querySelectorAll('[id^=CaCallGroupScheduledCallDate]');
-	        scheduledCallDateFields.forEach(field => {
-	          field.disabled = false;
-	        });
+          // Dis-disable the scheduled call date fields
+          const scheduledCallDateFields = document.querySelectorAll('[id^=CaCallGroupScheduledCallDate]');
+          scheduledCallDateFields.forEach(field => {
+            field.disabled = false;
+          });
 
-	        // Set the fields using our handy function
-	        setDateField('CaCallGroupScheduledCallDate', callDate);
-	      }
+          // Set the fields using our handy function
+          setDateField('CaCallGroupScheduledCallDate', callDate);
+        }
 
-	      if (callTypeInboundOptions.includes(callType)) {
-	        // If a new incoming call or VM follow-up call was disconnected, submit the form without validation.
-	        // This will just save the call in our database in case they call back.
-	        document.querySelector('#CaCallGroupStatus').value = STATUS_INCOMPLETE;
-	        document.querySelector('#CaCallGroupScore').value = SCORE_DISCONNECTED;
-	      }
+        if (callTypeInboundOptions.includes(callType)) {
+          // If a new incoming call or VM follow-up call was disconnected, submit the form without validation.
+          // This will just save the call in our database in case they call back.
+          document.querySelector('#CaCallGroupStatus').value = STATUS_INCOMPLETE;
+          document.querySelector('#CaCallGroupScore').value = SCORE_DISCONNECTED;
+        }
 
-	      document.querySelector('#CaCallForm').submit();
-	    } else {
-	      document.querySelector('#note-required').modal('show');
-	    }
-	  }
+        document.querySelector('#CaCallForm').submit();
+      } else {
+        document.querySelector('#note-required').modal('show');
+      }
+    }
 
-	  if (targetId === 'unlockBtn') {
-	    const caCallGroupId = document.querySelector('#CaCallGroupId').value;
-	    try {
-	      const response = fetch(`/ca_calls/unlock_call_group/${caCallGroupId}`, {
-	        method: 'post',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        dataType: 'json'
-	      });
-	      const data = response.json();
-	      if (data.unlock_status === true) {
-	        onChangeGroupSearch(caCallGroupId);
-	      }
-	    } catch (error) {
-	      console.error('An error occurred while unlocking the call group:', error);
-	    }
-	  }
+    if (targetId === 'unlockBtn') {
+      const caCallGroupId = document.querySelector('#CaCallGroupId').value;
+      try {
+        const response = fetch(`/ca_calls/unlock_call_group/${caCallGroupId}`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          dataType: 'json'
+        });
+        const data = response.json();
+        if (data.unlock_status === true) {
+          onChangeGroupSearch(caCallGroupId);
+        }
+      } catch (error) {
+        console.error('An error occurred while unlocking the call group:', error);
+      }
+    }
 
-	  //All other form logic using functions
-	  switch (targetId) {
-	  	case 'CaCallGroupTopicWantsAppt':
-	  	  onChangeTopicWantsAppt(targetChecked);
-	  	  break;
-	  	case 'CaCallGroupWantsHearingTest':
-	  	  onChangeProspect(null);
-	  	  break;
-	  	case 'CaCallGroupTopic':
-	  	  onChangeTopic();
-	  	  break;
-	    case 'CaCallGroupLocationId':
-	      onChangeLocationId(targetValue);
-	      break;
-	    case 'CaCallCallType':
-	      onChangeCallType(targetValue);
-	      break;
-	    case 'CaCallGroupIsPatient':
-	      onChangeIsPatient(event.target.checked);
-	      break;
-	    case 'CaCallGroupProspect':
-	      onChangeProspect(targetValue);
-	      break;
-	    case 'CaCallGroupScore':
-	      onChangeScore(targetValue);
-	      break;
-	    case 'CaCallGroupSearch':
-	      onChangeGroupSearch(targetValue);
-	      break;
-	    case 'CaCallGroupCallerFirstName':
-	      onChangeCallerFirstName(targetValue);
-	      break;
-	    case 'CaCallGroupCallerLastName':
-	      onChangeCallerLastName(targetValue);
-	      break;
-	    case 'CaCallGroupCallerPhone':
-	      onChangeCallerPhone(targetValue);
-	      break;
-	    case 'CaCallGroupPatientFirstName':
-	    case 'CaCallGroupPatientLastName':
-	      onChangePatientInfo();
-	      break;
-	    case 'CaCallGroupFrontDeskName':
-	      onChangeFrontDeskName(targetValue);
-	      break;
-	    case 'CaCallGroupApptDate':
-	    case 'CaCallGroupApptDate2':
-	    case 'CaCallGroupApptDate3':
-	      onChangeApptDate();
-	      break;
-	    case 'CaCallGroupConsumerConsent':
-	      onChangeConsumerConsent(targetValue);
-	      break;
-	    case 'CaCallGroupDidClinicAnswer':
-	    case 'CaCallGroupDidClinicAnswerUnknown':
-	      onChangeDidClinicAnswer(targetValue);
-	      break;
-	    case 'CaCallGroupDidTheyAnswerVm':
-	      onChangeDidTheyAnswerVm(targetValue);
-	      break;
-	    case 'CaCallGroupDidTheyAnswerFollowup':
-	    case 'CaCallGroupDidTheyAnswerFollowup2':
-	      onChangeDidTheyAnswerFollowup(targetValue);
-	      break;
-	    case 'CaCallGroupDidConsumerAnswer':
-	      onChangeDidConsumerAnswer(targetValue);
-	      break;
-	    case 'CaCallGroupDidConsumerAnswer2':
-	      onChangeDidConsumerAnswer2(targetValue);
-	      break;
-	    case 'CaCallGroupDidTheyWantHelp':
-	      onChangeDidTheyWantHelp(targetValue);
-	      break;
-	    case 'CaCallGroupDidClinicContactConsumer':
-	      onChangeDidClinicContactConsumer(targetValue);
-	      break;
-		case 'CaCallGroupRefusedName':
-	      onChangeRefusedName();
-	      break;
-		case 'CaCallGroupDidClinicRefuse':
-		  onChangeDidClinicRefuse();
-		  break;
-		case'spamBtn':
-		  document.querySelector('#CaCallGroupIsSpam').value = true;
-		  document.querySelector('#CaCallForm').submit();
-		  break;
-  		case 'deleteBtn':
-    	  // The "delete" button was clicked. Display the confirmation modal.
-    	  document.querySelector('#delete-modal').modal('show');
-		case 'submitBtn':
-		  // The "save" button was clicked
-		  // Verify that we have a valid clinic value
-		  validateLocationId();
-		  // Verify we have a valid prospect value
-		  validateProspect();
-		  // Calculate status
-		  calculateStatus();
-		  // If topics are hidden, remove the custom validation
-		  if (document.querySelector('#CaCallGroupTopicParts').hidden) {
-		    document.querySelector('#CaCallGroupTopicParts').setCustomValidity('');
-		  }
-		  break;
-	  	case 'CaCallVoicemailFrom':
-	      document.querySelector('#CaCallCallType').value = targetValue;
-	      const callTypeChangeEvent = new Event('change');
-	      document.querySelector('#CaCallCallType').dispatchEvent(callTypeChangeEvent);
-	      break;
-	    default:
-	      break;
-	  }
+    //All other form logic using functions
+    switch (targetId) {
+      case 'CaCallGroupTopicWantsAppt':
+        onChangeTopicWantsAppt(targetChecked);
+        break;
+      case 'CaCallGroupWantsHearingTest':
+        onChangeProspect(null);
+        break;
+      case 'CaCallGroupTopic':
+        onChangeTopic();
+        break;
+      case 'CaCallGroupLocationId':
+        onChangeLocationId(targetValue);
+        break;
+      case 'CaCallCallType':
+        onChangeCallType(targetValue);
+        break;
+      case 'is-patient':
+        onChangeIsPatient(targetChecked);
+        break;
+      case 'CaCallGroupProspect':
+        onChangeProspect(targetValue);
+        break;
+      case 'CaCallGroupScore':
+        onChangeScore(targetValue);
+        break;
+      case 'CaCallGroupSearch':
+        onChangeGroupSearch(targetValue);
+        break;
+      case 'CaCallGroupCallerFirstName':
+        onChangeCallerFirstName(targetValue);
+        break;
+      case 'CaCallGroupCallerLastName':
+        onChangeCallerLastName(targetValue);
+        break;
+      case 'CaCallGroupCallerPhone':
+        onChangeCallerPhone(targetValue);
+        break;
+      case 'CaCallGroupPatientFirstName':
+      case 'CaCallGroupPatientLastName':
+        onChangePatientInfo();
+        break;
+      case 'CaCallGroupFrontDeskName':
+        onChangeFrontDeskName(targetValue);
+        break;
+      case 'CaCallGroupApptDate':
+      case 'CaCallGroupApptDate2':
+      case 'CaCallGroupApptDate3':
+        onChangeApptDate();
+        break;
+      case 'CaCallGroupConsumerConsent':
+        onChangeConsumerConsent(targetValue);
+        break;
+      case 'CaCallGroupDidClinicAnswer':
+      case 'CaCallGroupDidClinicAnswerUnknown':
+        onChangeDidClinicAnswer(targetValue);
+        break;
+      case 'CaCallGroupDidTheyAnswerVm':
+        onChangeDidTheyAnswerVm(targetValue);
+        break;
+      case 'CaCallGroupDidTheyAnswerFollowup':
+      case 'CaCallGroupDidTheyAnswerFollowup2':
+        onChangeDidTheyAnswerFollowup(targetValue);
+        break;
+      case 'CaCallGroupDidConsumerAnswer':
+        onChangeDidConsumerAnswer(targetValue);
+        break;
+      case 'CaCallGroupDidConsumerAnswer2':
+        onChangeDidConsumerAnswer2(targetValue);
+        break;
+      case 'CaCallGroupDidTheyWantHelp':
+        onChangeDidTheyWantHelp(targetValue);
+        break;
+      case 'CaCallGroupDidClinicContactConsumer':
+        onChangeDidClinicContactConsumer(targetValue);
+        break;
+    case 'CaCallGroupRefusedName':
+        onChangeRefusedName();
+        break;
+    case 'CaCallGroupDidClinicRefuse':
+      onChangeDidClinicRefuse();
+      break;
+    case'spamBtn':
+      document.querySelector('#CaCallGroupIsSpam').value = true;
+      document.querySelector('#CaCallForm').submit();
+      break;
+      case 'deleteBtn':
+        // The "delete" button was clicked. Display the confirmation modal.
+        document.querySelector('#delete-modal').modal('show');
+    case 'submitBtn':
+      console.debug('submit button pressed');
+      // The "save" button was clicked
+      // Verify that we have a valid clinic value
+      validateLocationId();
+      // Verify we have a valid prospect value
+      validateProspect();
+      // Calculate status
+      calculateStatus();
+      // If topics are hidden, remove the custom validation
+      if (document.querySelector('#CaCallGroupTopicParts').hidden) {
+        document.querySelector('#CaCallGroupTopicParts').setCustomValidity('');
+      }
+      break;
+      case 'CaCallVoicemailFrom':
+        document.querySelector('#CaCallCallType').value = targetValue;
+        const callTypeChangeEvent = new Event('change');
+        document.querySelector('#CaCallCallType').dispatchEvent(callTypeChangeEvent);
+        break;
+      default:
+        break;
+    }
 
-	});
+  });
 
-	document.querySelector('body').addEventListener('keyup', e => {
-	  const targetId = e.target.id;
-	  const targetValue = e.target.value;
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    // Disable hidden fields before submitting
+    disableHiddenFields();
+  });
 
-	  if (targetId === 'CaCallGroupFrontDeskName') {
-	    onChangeFrontDeskName(targetValue);
-	  }
+  document.querySelector('body').addEventListener('keyup', e => {
+    const targetId = e.target.id;
+    const targetValue = e.target.value;
 
-	  if (targetId === 'CaCallGroupFrontDeskName') {
-	    onChangeFrontDeskName(targetValue);
-	  }
-	});
+    if (targetId === 'CaCallGroupFrontDeskName') {
+      onChangeFrontDeskName(targetValue);
+    }
+
+    if (targetId === 'CaCallGroupFrontDeskName') {
+      onChangeFrontDeskName(targetValue);
+    }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -283,27 +293,32 @@ document.addEventListener('DOMContentLoaded', () => {
  ****/
 
 function triggerChangeEvents(skipElements = []) {
-  const elements = ['#CaCallGroupLocationId','#CaCallCallType','#CaCallGroupCallerFirstName','#CaCallGroupCallerLastName','#CaCallGroupCallerPhone','#CaCallGroupIsPatient','#CaCallGroupPatientFirstName','#CaCallGroupPatientLastName','#CaCallGroupProspect','#CaCallGroupFrontDeskName','#CaCallGroupScore','#CaCallGroupTopicWarranty','#CaCallIsWrongNumber','#CaCallGroupRefusedName'];
-
+  // TODO: I don't think these IDs are correct anymore
+  const elements = ['#CaCallGroupLocationId','#CaCallCallType','#CaCallGroupCallerFirstName','#CaCallGroupCallerLastName','#CaCallGroupCallerPhone','#is-patient','#CaCallGroupPatientFirstName','#CaCallGroupPatientLastName','#CaCallGroupProspect','#CaCallGroupFrontDeskName','#CaCallGroupScore','#CaCallGroupTopicWarranty','#CaCallIsWrongNumber','#CaCallGroupRefusedName'];
   elements.forEach(element => {
     if (skipElements.indexOf(element) === -1) {
-      element.dispatchEvent(new Event("change"));
+      var selector = document.querySelector(element);
+      if (selector !== null) {
+        selector.dispatchEvent(new Event("change"));
+      }
     }
   });
 }
 
 //Leaving this alone, since autocomplete is dependent on jQuery
 function locationAutocomplete() {
-	$("#CaCallLocationSearch, #location_search").autocomplete({
-		source: "/caautocomplete",
-		minLength: "2",
-		select: function(event, ui){
-			if (ui.item.id) {
-				$("#CaCallGroupLocationId").val(ui.item.id).trigger("change");
-			}
-		}
-	});
-
+  const locationSearch = document.querySelector("#CaCallLocationSearch, #location_search");
+  if (locationSearch) {
+    locationSearch.autocomplete({
+      source: "/caautocomplete",
+      minLength: "2",
+      select: function(event, ui){
+        if (ui.item.id) {
+          $("#CaCallGroupLocationId").val(ui.item.id).trigger("change");
+        }
+      }
+    });
+  }
 }
 
 function validateLocationId() {
@@ -392,113 +407,113 @@ const calculateStatus = () => {
       calculateByScore = true;
     }
   } else if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER) {
-	  if (document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "yes") {
-	    // Patient answered
-	    if (document.querySelector("#CaCallGroupScore").value === SCORE_APPT_SET) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
-	      document.querySelector("#CaCallGroupScore").disabled = false;
-	      document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
-	    }
-	  } else if (document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "vm") {
-	    // Left a voicemail
-	    document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
-	    document.querySelector("#CaCallGroupScore").disabled = false;
-	    document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
-	  } else {
-	    // Patient did not answer
-	    if (Number(document.querySelector("#CaCallGroupPatientFollowupCount").value) < MAX_PATIENT_FOLLOWUP_ATTEMPTS) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
-	      document.querySelector("#CaCallGroupScore").disabled = false;
-	      document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
-	    }
-	  }
-	} else if (callType === CALL_TYPE_OUTBOUND_CLINIC) {
-	  if (document.querySelector("#CaCallGroupDidTheyAnswerOutbound").value === "1" || IS_CLINIC_LOOKUP_PAGE) {
-	    if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
-	      // Clinic refused to answer our questions
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_DECLINED;
-	    } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
-	      // Appointment is coming up ..
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-	      document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
-	      onChangeApptDate();
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
-	    }
-	  } else {
-	    if (Number(document.querySelector("#CaCallGroupClinicOutboundCount").value) < MAX_CLINIC_OUTBOUND_ATTEMPTS) {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-	    } else {
-	      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS;
-	    }
-	  }
-	} else if (callType === CALL_TYPE_SURVEY_DIRECT) {
-		  if (document.querySelector("#CaCallGroupDmHasApptInfo").value === "1") {
-		    // DM had appt info
-		    if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
-		      // DM was missing some important info. Try calling clinic.
-		      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-		    } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
-		      // Appointment is coming up ..
-		      document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-		      document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
-		      onChangeApptDate();
-		    } else {
-		      document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
-		    }
-		  } else {
-		    // DM did not have appt info. Try calling clinic.
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-		  }
-		} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "vm") {
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-		} else if (isVoicemailType && (document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "no" || document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "")) {
-		  if (Number(document.querySelector("#CaCallGroupVmOutboundCount").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
-		  } else {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-		  }
-		} else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "noAttempt") {
-		  const vmCount = Number(document.querySelector("#CaCallGroupVmOutboundCount").value);
-		  document.querySelector("#CaCallGroupVmOutboundCount").value = vmCount - 1;
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
-		} else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
-		} else if (document.querySelector("#CaCallIsWrongNumber").checked) {
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
-		} else if (document.querySelector("#CaCallGroupRefusedNameAgainQuickPick").checked) {
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
-		} else if (document.querySelector("#CaCallGroupDidClinicAnswer").value === "cr") {
-		  document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
-		} else {
-		  // Inbound or Followup call
-		  calculateByScore = true;
-		}
+    if (document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "yes") {
+      // Patient answered
+      if (document.querySelector("#CaCallGroupScore").value === SCORE_APPT_SET) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
+        document.querySelector("#CaCallGroupScore").disabled = false;
+        document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
+      }
+    } else if (document.querySelector("#CaCallGroupDidTheyAnswerFollowup").value === "vm") {
+      // Left a voicemail
+      document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
+      document.querySelector("#CaCallGroupScore").disabled = false;
+      document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
+    } else {
+      // Patient did not answer
+      if (Number(document.querySelector("#CaCallGroupPatientFollowupCount").value) < MAX_PATIENT_FOLLOWUP_ATTEMPTS) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_NO_ANSWER;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_MO_NO_ANSWER;
+        document.querySelector("#CaCallGroupScore").disabled = false;
+        document.querySelector("#CaCallGroupScore").value = SCORE_MISSED_OPPORTUNITY;
+      }
+    }
+  } else if (callType === CALL_TYPE_OUTBOUND_CLINIC) {
+    if (document.querySelector("#CaCallGroupDidTheyAnswerOutbound").value === "1" || IS_CLINIC_LOOKUP_PAGE) {
+      if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
+        // Clinic refused to answer our questions
+        document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_DECLINED;
+      } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
+        // Appointment is coming up ..
+        document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+        document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
+        onChangeApptDate();
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
+      }
+    } else {
+      if (Number(document.querySelector("#CaCallGroupClinicOutboundCount").value) < MAX_CLINIC_OUTBOUND_ATTEMPTS) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS;
+      }
+    }
+  } else if (callType === CALL_TYPE_SURVEY_DIRECT) {
+      if (document.querySelector("#CaCallGroupDmHasApptInfo").value === "1") {
+        // DM had appt info
+        if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#CaCallGroupQuestionWhatFor").value === Q_WHAT_FOR_DECLINED || document.querySelector("#CaCallGroupQuestionPurchase").value === Q_PURCHASE_DECLINED || document.querySelector("#CaCallGroupQuestionBrand").value === Q_BRAND_DECLINED) {
+          // DM was missing some important info. Try calling clinic.
+          document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
+        } else if (document.querySelector("#CaCallGroupQuestionVisitClinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
+          // Appointment is coming up ..
+          document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+          document.querySelector("[id^=CaCallGroupScheduledCallDate]").disabled = false;
+          onChangeApptDate();
+        } else {
+          document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
+        }
+      } else {
+        // DM did not have appt info. Try calling clinic.
+        document.querySelector("#CaCallGroupStatus").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
+      }
+    } else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "vm") {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+    } else if (isVoicemailType && (document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "no" || document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "")) {
+      if (Number(document.querySelector("#CaCallGroupVmOutboundCount").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+      }
+    } else if (isVoicemailType && document.querySelector("#CaCallGroupDidTheyAnswerVm").value === "noAttempt") {
+      const vmCount = Number(document.querySelector("#CaCallGroupVmOutboundCount").value);
+      document.querySelector("#CaCallGroupVmOutboundCount").value = vmCount - 1;
+      document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
+    } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
+    } else if (document.querySelector("#CaCallIsWrongNumber").checked) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
+    } else if (document.querySelector("#CaCallGroupRefusedNameAgainQuickPick").checked) {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
+    } else if (document.querySelector("#CaCallGroupDidClinicAnswer").value === "cr") {
+      document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
+    } else {
+      // Inbound or Followup call
+      calculateByScore = true;
+    }
 
-		if (calculateByScore) {
-		  const score = document.querySelector("#CaCallGroupScore").value;
-		  const prospect = document.querySelector("#CaCallGroupProspect").value;
-		  if (prospect === PROSPECT_NO) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_NON_PROSPECT;
-		  } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_INCOMPLETE;
-		    document.querySelector("#CaCallGroupScore").value = SCORE_DISCONNECTED;
-		  } else if (score === SCORE_NOT_REACHED) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
-		  } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
-		  } else if (score === SCORE_TENTATIVE_APPT) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
-		  } else if (score === SCORE_MISSED_OPPORTUNITY) {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_MISSED_OPPORTUNITY;
-		  } else {
-		    document.querySelector("#CaCallGroupStatus").value = STATUS_NEW;
-		  }
-		}
+    if (calculateByScore) {
+      const score = document.querySelector("#CaCallGroupScore").value;
+      const prospect = document.querySelector("#CaCallGroupProspect").value;
+      if (prospect === PROSPECT_NO) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_NON_PROSPECT;
+      } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_INCOMPLETE;
+        document.querySelector("#CaCallGroupScore").value = SCORE_DISCONNECTED;
+      } else if (score === SCORE_NOT_REACHED) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_FOLLOWUP_SET_APPT;
+      } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_APPT_SET;
+      } else if (score === SCORE_TENTATIVE_APPT) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_TENTATIVE_APPT;
+      } else if (score === SCORE_MISSED_OPPORTUNITY) {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_MISSED_OPPORTUNITY;
+      } else {
+        document.querySelector("#CaCallGroupStatus").value = STATUS_NEW;
+      }
+    }
 }
 
 
@@ -518,337 +533,337 @@ function onChangeLocationId(locationId) {
 }
 
 function handleLocationChange(data) {
-	const updateElementHTML = (selector, content) => {
-	  const element = document.querySelector(selector);
-	  if (element) {
-	    element.innerHTML = content || '';
-	  }
-	};
+  const updateElementHTML = (selector, content) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      element.innerHTML = content || '';
+    }
+  };
 
-	updateElementHTML(".locationLink", data ? data['link'] : '');
-	updateElementHTML(".locationTitle", data ? data['title'] : '');
-	const locationTitle = data ? data['title'] : '';
-	updateElementHTML(".locationAddress", data ? data['address'] : '');
-	updateElementHTML(".locationPhone", data ? data['phone'] : '');
-	updateElementHTML(".locationCovid", data && data['covid'] ? `COVID-19 statement: ${data['covid']}` : '');
-	updateElementHTML(".locationLandmarks", data && data['landmarks'] ? `Landmarks: ${data['landmarks']}` : '');
-	updateElementHTML(".andYhn", data && data['isYhn'] === 1 ? 'and Your Hearing Network' : '');
-	const locationSearchInput = document.querySelector("#CaCallLocationSearch");
-	if (!locationSearchInput.value && data) {
-	  locationSearchInput.value = data['searchTitle'];
-	}
+  updateElementHTML(".locationLink", data ? data['link'] : '');
+  updateElementHTML(".locationTitle", data ? data['title'] : '');
+  const locationTitle = data ? data['title'] : '';
+  updateElementHTML(".locationAddress", data ? data['address'] : '');
+  updateElementHTML(".locationPhone", data ? data['phone'] : '');
+  updateElementHTML(".locationCovid", data && data['covid'] ? `COVID-19 statement: ${data['covid']}` : '');
+  updateElementHTML(".locationLandmarks", data && data['landmarks'] ? `Landmarks: ${data['landmarks']}` : '');
+  updateElementHTML(".andYhn", data && data['isYhn'] === 1 ? 'and Your Hearing Network' : '');
+  const locationSearchInput = document.querySelector("#CaCallLocationSearch");
+  if (!locationSearchInput.value && data) {
+    locationSearchInput.value = data['searchTitle'];
+  }
 
-	if (data) {
-	  const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
-	  const directBookUrlLink = document.querySelector("#directBookUrl");
-	  
-	  directBookTypeInput.value = data['directBookType'];
-	  directBookUrlLink.textContent = data['directBookUrl'];
-	  directBookUrlLink.href = data['directBookUrl'];
-	} else {
-	  const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
-	  directBookTypeInput.value = DIRECT_BOOK_NONE;
-	}
-	const locationCityStateStreetElement = document.querySelector(".locationCityStateStreet");
-	locationCityStateStreetElement.innerHTML = data ? data['cityStateStreet'] : '';
+  if (data) {
+    const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
+    const directBookUrlLink = document.querySelector("#directBookUrl");
+    
+    directBookTypeInput.value = data['directBookType'];
+    directBookUrlLink.textContent = data['directBookUrl'];
+    directBookUrlLink.href = data['directBookUrl'];
+  } else {
+    const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
+    directBookTypeInput.value = DIRECT_BOOK_NONE;
+  }
+  const locationCityStateStreetElement = document.querySelector(".locationCityStateStreet");
+  locationCityStateStreetElement.innerHTML = data ? data['cityStateStreet'] : '';
 
-	let hours = data ? data['hours'] : '';
-	if (hours !== '') {
-	  hours = '<u>Clinic hours</u><br>' + hours;
-	}
-	const locationHoursElement = document.querySelector(".locationHours");
-	locationHoursElement.innerHTML = hours;
+  let hours = data ? data['hours'] : '';
+  if (hours !== '') {
+    hours = '<u>Clinic hours</u><br>' + hours;
+  }
+  const locationHoursElement = document.querySelector(".locationHours");
+  locationHoursElement.innerHTML = hours;
 
-	let hoursToday = data ? data['hoursToday'] : '';
-	if (hoursToday !== '') {
-	  if (hoursToday === 'closed') {
-	    hoursToday = 'They are closed today.';
-	  } else {
-	    hoursToday = 'Their hours today are <strong>' + hoursToday + '</strong>.';
-	  }
-	}
-	const locationHoursTodayElement = document.querySelector(".locationHoursToday");
-	locationHoursTodayElement.innerHTML = hoursToday;
+  let hoursToday = data ? data['hoursToday'] : '';
+  if (hoursToday !== '') {
+    if (hoursToday === 'closed') {
+      hoursToday = 'They are closed today.';
+    } else {
+      hoursToday = 'Their hours today are <strong>' + hoursToday + '</strong>.';
+    }
+  }
+  const locationHoursTodayElement = document.querySelector(".locationHoursToday");
+  locationHoursTodayElement.innerHTML = hoursToday;
 
-	const locationCurrentTimeElement = document.querySelector('.locationCurrentTime');
-	locationCurrentTimeElement.innerHTML = data ? data['currentTime'] : '';
+  const locationCurrentTimeElement = document.querySelector('.locationCurrentTime');
+  locationCurrentTimeElement.innerHTML = data ? data['currentTime'] : '';
 
-	const locationTimezone = data ? data['timezone'] : '';
-	const labelElement = document.querySelector("label[for='CaCallGroupApptDateMonth']");
-	labelElement.innerHTML = `Appointment date/time (${locationTimezone})<br><small class='text-muted'>This is the clinic's timezone</small>`;
+  const locationTimezone = data ? data['timezone'] : '';
+  const labelElement = document.querySelector("label[for='CaCallGroupApptDateMonth']");
+  labelElement.innerHTML = `Appointment date/time (${locationTimezone})<br><small class='text-muted'>This is the clinic's timezone</small>`;
 
-	const locationId = data ? data['id'] : '';
+  const locationId = data ? data['id'] : '';
 
-	if (IS_CLINIC_LOOKUP_PAGE) {
-		if (locationId) {
-			fetch(`/ca_calls/get_previous_calls/${locationId}/1`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				const count = Object.keys(data).length;
-				if (count === 0) {
-					// No followup calls found
-					document.querySelector("#CaCallGroupId").value = '';
-					document.querySelector(".found-no-calls").style.display = 'block';
-					document.querySelector(".found-multiple-calls").style.display = 'none';
-					document.querySelector(".group-found").style.display = 'none';
-					updateVisibility();
-				} else if (count == 1) {
-					// One previous call found. Automatically select it.
-					document.querySelector(".found-no-calls").style.display = 'none';
-					document.querySelector(".found-multiple-calls").style.display = 'none';
-					updateVisibility();
-					const dataKeys = Object.keys(data);
-					const groupId = dataKeys[0];
-					onChangeGroupSearch(groupId);
-				} else {
-					// Found multiple followup calls. User must select one.
-					document.querySelector(".found-no-calls").style.display = 'none';
-					document.querySelector(".found-multiple-calls").style.display = 'block';
-					document.querySelector(".group-found").style.display = 'none';
-					updateVisibility();
-					document.querySelector("#CaCallGroupId").value = '';
-					const callCountElement = document.querySelector("span.callCount");
-					callCountElement.textContent = count;
-					const groupSearchElement = document.querySelector('.group_search');
-					groupSearchElement.innerHTML = '';
-					groupSearchElement.appendChild(new Option('', ''));
-					for (const key in data) {
-						groupSearchElement.appendChild(new Option(data[key], key));
-					}
-				}
-			})
-			.catch(error => {
-				// Handle the error
-			});
-		} else {
-			// No location selected
-			document.querySelector(".found-no-calls").style.display = 'none';
-			document.querySelector(".found-multiple-calls").style.display = 'none';
-			updateVisibility();
-		}
-	} else {
-		fetch(`/ca_calls/get_previous_calls/${locationId}`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			// Found multiple pending calls
-			const groupSearchElement = document.querySelector('.group_search');
-			groupSearchElement.innerHTML = '';
-			groupSearchElement.appendChild(new Option('', ''));
-			for (const key in data) {
-				groupSearchElement.appendChild(new Option(data[key], key));
-			}
-		})
-		.catch(error => {
-			// Handle the error
-		});
-	}
+  if (IS_CLINIC_LOOKUP_PAGE) {
+    if (locationId) {
+      fetch(`/ca_calls/get_previous_calls/${locationId}/1`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        const count = Object.keys(data).length;
+        if (count === 0) {
+          // No followup calls found
+          document.querySelector("#CaCallGroupId").value = '';
+          document.querySelector(".found-no-calls").style.display = 'block';
+          document.querySelector(".found-multiple-calls").style.display = 'none';
+          document.querySelector(".group-found").style.display = 'none';
+          //updateVisibility();
+        } else if (count == 1) {
+          // One previous call found. Automatically select it.
+          document.querySelector(".found-no-calls").style.display = 'none';
+          document.querySelector(".found-multiple-calls").style.display = 'none';
+          //updateVisibility();
+          const dataKeys = Object.keys(data);
+          const groupId = dataKeys[0];
+          onChangeGroupSearch(groupId);
+        } else {
+          // Found multiple followup calls. User must select one.
+          document.querySelector(".found-no-calls").style.display = 'none';
+          document.querySelector(".found-multiple-calls").style.display = 'block';
+          document.querySelector(".group-found").style.display = 'none';
+          //updateVisibility();
+          document.querySelector("#CaCallGroupId").value = '';
+          const callCountElement = document.querySelector("span.callCount");
+          callCountElement.textContent = count;
+          const groupSearchElement = document.querySelector('.group_search');
+          groupSearchElement.innerHTML = '';
+          groupSearchElement.appendChild(new Option('', ''));
+          for (const key in data) {
+            groupSearchElement.appendChild(new Option(data[key], key));
+          }
+        }
+      })
+      .catch(error => {
+        // Handle the error
+      });
+    } else {
+      // No location selected
+      document.querySelector(".found-no-calls").style.display = 'none';
+      document.querySelector(".found-multiple-calls").style.display = 'none';
+      //updateVisibility();
+    }
+  } else {
+    fetch(`/ca_calls/get_previous_calls/${locationId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Found multiple pending calls
+      const groupSearchElement = document.querySelector('.group_search');
+      groupSearchElement.innerHTML = '';
+      groupSearchElement.appendChild(new Option('', ''));
+      for (const key in data) {
+        groupSearchElement.appendChild(new Option(data[key], key));
+      }
+    })
+    .catch(error => {
+      // Handle the error
+    });
+  }
 }
 
 function onChangeCallType(callType) {
-	const callTypeElement = document.querySelector("span.callType");
-	callTypeElement.innerHTML = callTypes[callType];
+  const callTypeElement = document.querySelector("span.callType");
+  callTypeElement.innerHTML = callTypes[callType];
 
-	if (callType === CALL_TYPE_VM_CALLBACK_CONSUMER) {
-		loadReturnVoicemailForm('consumer');
-		updateVisibility();
-		IS_CLINIC_LOOKUP_PAGE = false;
-	} else if (callType === CALL_TYPE_VM_CALLBACK_CLINIC) {
-		loadReturnVoicemailForm('clinic');
-		updateVisibility();
-		IS_CLINIC_LOOKUP_PAGE = true;
-	} else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
-		loadReturnVoicemailForm('invalid');
-		updateVisibility();
-		IS_CLINIC_LOOKUP_PAGE = false;
-	}
+  if (callType === CALL_TYPE_VM_CALLBACK_CONSUMER) {
+    loadReturnVoicemailForm('consumer');
+    //updateVisibility();
+    IS_CLINIC_LOOKUP_PAGE = false;
+  } else if (callType === CALL_TYPE_VM_CALLBACK_CLINIC) {
+    loadReturnVoicemailForm('clinic');
+    //updateVisibility();
+    IS_CLINIC_LOOKUP_PAGE = true;
+  } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
+    loadReturnVoicemailForm('invalid');
+    //updateVisibility();
+    IS_CLINIC_LOOKUP_PAGE = false;
+  }
 }
 
 function loadReturnVoicemailForm(type) {
-	const returnVmFromInvalid = document.querySelector('#return_vm_from_invalid');
-	const caCallGroupId = document.querySelector('#CaCallGroupId').value;
-	let ajaxUrl = null;
-	if (type === 'clinic') {
-		ajaxUrl = '/admin/ca_calls/ajax_clinic_form/' + caCallGroupId;
-	} else if (type === 'consumer') {
-		ajaxUrl = '/admin/ca_calls/ajax_consumer_form/' + caCallGroupId;
-	}
+  const returnVmFromInvalid = document.querySelector('#return_vm_from_invalid');
+  const caCallGroupId = document.querySelector('#CaCallGroupId').value;
+  let ajaxUrl = null;
+  if (type === 'clinic') {
+    ajaxUrl = '/admin/ca_calls/ajax_clinic_form/' + caCallGroupId;
+  } else if (type === 'consumer') {
+    ajaxUrl = '/admin/ca_calls/ajax_consumer_form/' + caCallGroupId;
+  }
 
-	if (ajaxUrl) {
-		fetch(ajaxUrl)
-			.then(response => response.text())
-			.then(data => {
-				console.log('AJAX form loaded successfully: ' + type);
-				const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
-				returnVmAjaxForm.innerHTML = data;
-				returnVmAjaxForm.style.display = 'block';
-				returnVmFromInvalid.style.display = 'none';
-				locationAutocomplete();
-				triggerChangeEvents(['#CaCallCallType']);
-				document.querySelector('#CaCallGroupDidTheyAnswerVm').dispatchEvent(new Event('change'));
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	} else {
-		const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
-		returnVmAjaxForm.innerHTML = '';
-		returnVmAjaxForm.style.display = 'none';
-		returnVmFromInvalid.style.display = 'block';
-	}
+  if (ajaxUrl) {
+    fetch(ajaxUrl)
+      .then(response => response.text())
+      .then(data => {
+        console.log('AJAX form loaded successfully: ' + type);
+        const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
+        returnVmAjaxForm.innerHTML = data;
+        returnVmAjaxForm.style.display = 'block';
+        returnVmFromInvalid.style.display = 'none';
+        locationAutocomplete();
+        triggerChangeEvents(['#CaCallCallType']);
+        document.querySelector('#CaCallGroupDidTheyAnswerVm').dispatchEvent(new Event('change'));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  } else {
+    const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
+    returnVmAjaxForm.innerHTML = '';
+    returnVmAjaxForm.style.display = 'none';
+    returnVmFromInvalid.style.display = 'block';
+  }
 }
 
 function onChangeIsPatient(isPatient) {
-	const patientDataElements = document.querySelectorAll('.patient-data');
-	if (isPatient) {
-		patientDataElements.forEach(element => {
-			element.style.display = 'none';
-		});
-	} else {
-		patientDataElements.forEach(element => {
-			element.style.display = 'block';
-		});
-	}
-	updateVisibility();
-	onChangePatientInfo();
+  const patientDataElements = document.querySelectorAll('.patient-data');
+  if (isPatient) {
+    patientDataElements.forEach(element => {
+      element.style.display = 'none';
+    });
+  } else {
+    patientDataElements.forEach(element => {
+      element.style.display = 'block';
+    });
+  }
+  //updateVisibility();
+  onChangePatientInfo();
 }
 
 function onChangeProspect(selectedProspect) {
-	const isOverride = 0;
-	let calculatedProspect = PROSPECT_NO;
+  const isOverride = 0;
+  let calculatedProspect = PROSPECT_NO;
 
-	if (document.querySelector('#CaCallGroupTopicDeclined').checked) {
-	  calculatedProspect = PROSPECT_UNKNOWN;
-	}
+  if (document.querySelector('#CaCallGroupTopicDeclined').checked) {
+    calculatedProspect = PROSPECT_UNKNOWN;
+  }
 
-	Object.keys(prospectTopics).forEach(key => {
-	  if (document.querySelector(`#${prospectTopics[key]}`).checked) {
-	    calculatedProspect = PROSPECT_YES;
-	  }
-	});
+  Object.keys(prospectTopics).forEach(key => {
+    if (document.querySelector(`#${prospectTopics[key]}`).checked) {
+      calculatedProspect = PROSPECT_YES;
+    }
+  });
 
-	if (document.querySelector("#CaCallCallType").value === CALL_TYPE_INBOUND_QUICK_PICK) {
-	  calculatedProspect = selectedProspect;
-	  if (calculatedProspect !== PROSPECT_YES && document.querySelector("#CaCallGroupStatus").value !== STATUS_INCOMPLETE) {
-	    isOverride = 1;
-	  }
-	} else if (selectedProspect !== null) {
-	  if (selectedProspect !== calculatedProspect) {
-	    calculatedProspect = selectedProspect;
-	    isOverride = 1;
-	  }
-	}
+  if (document.querySelector("#CaCallCallType").value === CALL_TYPE_INBOUND_QUICK_PICK) {
+    calculatedProspect = selectedProspect;
+    if (calculatedProspect !== PROSPECT_YES && document.querySelector("#CaCallGroupStatus").value !== STATUS_INCOMPLETE) {
+      isOverride = 1;
+    }
+  } else if (selectedProspect !== null) {
+    if (selectedProspect !== calculatedProspect) {
+      calculatedProspect = selectedProspect;
+      isOverride = 1;
+    }
+  }
 
-	// Do not overwrite prospect and override flag if we are still loading the page
-	if (pageLoadComplete === false) {
-	  calculatedProspect = document.querySelector('#CaCallGroupProspect').value;
-	  isOverride = document.querySelector('#CaCallGroupIsProspectOverride').value;
-	}
-	document.querySelector('#CaCallGroupProspect').value = calculatedProspect;
-	document.querySelector('#CaCallGroupIsProspectOverride').value = isOverride;
+  // Do not overwrite prospect and override flag if we are still loading the page
+  if (pageLoadComplete === false) {
+    calculatedProspect = document.querySelector('#CaCallGroupProspect').value;
+    isOverride = document.querySelector('#CaCallGroupIsProspectOverride').value;
+  }
+  document.querySelector('#CaCallGroupProspect').value = calculatedProspect;
+  document.querySelector('#CaCallGroupIsProspectOverride').value = isOverride;
 
-	if (calculatedProspect === PROSPECT_YES) {
-	  document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'block');
-	  const wantsAppt = document.querySelector('#CaCallGroupTopicWantsAppt').checked;
-	  const directBookType = document.querySelector("#CaCallGroupDirectBookType").value;
-	  const isDirectBookEarqOrBp = (directBookType === DIRECT_BOOK_BLUEPRINT) || (directBookType === DIRECT_BOOK_EARQ);
-	  const wantsHearingTest = document.querySelector('#CaCallGroupWantsHearingTest').value === '1';
-	  if (wantsAppt && (directBookType === DIRECT_BOOK_DM) && wantsHearingTest) {
-	    document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'block');
-	    document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
-	    document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
-	  } else if (wantsAppt && isDirectBookEarqOrBp) {
-	    document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
-	    document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'block');
-	    document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
-	  } else {
-	    document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'block');
-	    document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
-	    document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
-	  }
-	  updateVisibility();
-	} else if (calculatedProspect === PROSPECT_NO) {
-	  document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'block');
-	  updateVisibility();
-	  document.querySelector('#CaCallGroupScore').value = '';
-	  document.querySelector('#CaCallGroupScore').dispatchEvent(new Event('change'));
-	} else if (calculatedProspect === PROSPECT_UNKNOWN) {
-	  document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'block');
-	  updateVisibility();
-	} else {
-	  // disconnected - no need to show any further script
-	  document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-	  document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
-	  updateVisibility();
-	}
+  if (calculatedProspect === PROSPECT_YES) {
+    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'block');
+    const wantsAppt = document.querySelector('#CaCallGroupTopicWantsAppt').checked;
+    const directBookType = document.querySelector("#CaCallGroupDirectBookType").value;
+    const isDirectBookEarqOrBp = (directBookType === DIRECT_BOOK_BLUEPRINT) || (directBookType === DIRECT_BOOK_EARQ);
+    const wantsHearingTest = document.querySelector('#CaCallGroupWantsHearingTest').value === '1';
+    if (wantsAppt && (directBookType === DIRECT_BOOK_DM) && wantsHearingTest) {
+      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'block');
+      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
+      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
+    } else if (wantsAppt && isDirectBookEarqOrBp) {
+      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
+      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'block');
+      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
+    } else {
+      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'block');
+      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
+      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
+    }
+    //updateVisibility();
+  } else if (calculatedProspect === PROSPECT_NO) {
+    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'block');
+    //updateVisibility();
+    document.querySelector('#CaCallGroupScore').value = '';
+    document.querySelector('#CaCallGroupScore').dispatchEvent(new Event('change'));
+  } else if (calculatedProspect === PROSPECT_UNKNOWN) {
+    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'block');
+    //updateVisibility();
+  } else {
+    // disconnected - no need to show any further script
+    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
+    //updateVisibility();
+  }
 }
 
 function onChangeScore(score) {
-	if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
-		// Appointment set
-		document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'block');
-		document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
-		updateVisibility();
-		document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Survey call date/time ("+easternTimezone+")";
-		// Do not modify the call date if we are loading the page and call date is already set
-		if (pageLoadComplete || !isCallDateSet) {
-			onChangeApptDate();
-		}
-	} else if (score === SCORE_TENTATIVE_APPT) {
-		// Left a voicemail with clinic - followup in 48 hours to verify if appointment has been set
-		document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-		document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
-		// Do not modify the call date if we are loading the page and call date is already set
-		if (pageLoadComplete || !isCallDateSet) {
-			// Next call time should be 48 hours from now
-			const nextCallDate = new Date();
-			nextCallDate.setDate(nextCallDate.getDate() + 2);
-			setDateField('CaCallGroupScheduledCallDate', nextCallDate);
-			document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
-		}
-		if (IS_CALL_GROUP_EDIT_PAGE) {
-			document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
-		}
-		updateVisibility();
-	} else if (score === SCORE_NOT_REACHED) {
-		// Clinic not reached - needs followup to set appt
-		document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-		document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
-		// Do not modify the call date if we are loading the page and call date is already set
-		if (pageLoadComplete || !isCallDateSet) {
-			// Next call time should be 15 minutes from now
-			const callDate = new Date();
-			callDate.setMinutes(callDate.getMinutes() + 15);
-			setDateField('CaCallGroupScheduledCallDate', callDate);
-			document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
-		}
-		if (IS_CALL_GROUP_EDIT_PAGE) {
-			document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
-		}
-		updateVisibility();
-	} else {
-		// Non-prospect/missed opportunity
-		document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-		document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'none');
-		// Disable any fields that are required and hidden, or the form will fail to validate.
-		updateVisibility();
-	}
+  if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
+    // Appointment set
+    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'block');
+    document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    //updateVisibility();
+    document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Survey call date/time ("+easternTimezone+")";
+    // Do not modify the call date if we are loading the page and call date is already set
+    if (pageLoadComplete || !isCallDateSet) {
+      onChangeApptDate();
+    }
+  } else if (score === SCORE_TENTATIVE_APPT) {
+    // Left a voicemail with clinic - followup in 48 hours to verify if appointment has been set
+    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
+    document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
+    // Do not modify the call date if we are loading the page and call date is already set
+    if (pageLoadComplete || !isCallDateSet) {
+      // Next call time should be 48 hours from now
+      const nextCallDate = new Date();
+      nextCallDate.setDate(nextCallDate.getDate() + 2);
+      setDateField('CaCallGroupScheduledCallDate', nextCallDate);
+      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    }
+    if (IS_CALL_GROUP_EDIT_PAGE) {
+      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    }
+    //updateVisibility();
+  } else if (score === SCORE_NOT_REACHED) {
+    // Clinic not reached - needs followup to set appt
+    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
+    document.querySelector("label[for='CaCallGroupScheduledCallDateMonth']").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
+    // Do not modify the call date if we are loading the page and call date is already set
+    if (pageLoadComplete || !isCallDateSet) {
+      // Next call time should be 15 minutes from now
+      const callDate = new Date();
+      callDate.setMinutes(callDate.getMinutes() + 15);
+      setDateField('CaCallGroupScheduledCallDate', callDate);
+      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    }
+    if (IS_CALL_GROUP_EDIT_PAGE) {
+      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    }
+    //updateVisibility();
+  } else {
+    // Non-prospect/missed opportunity
+    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
+    document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'none');
+    // Disable any fields that are required and hidden, or the form will fail to validate.
+    //updateVisibility();
+  }
 }
 
 async function onChangeGroupSearch(group_id) {
@@ -863,7 +878,7 @@ async function onChangeGroupSearch(group_id) {
       if (data["lock_error"] === true) {
         document.querySelector(".lock-error").style.display = "block";
         document.querySelector(".group-found").style.display = "none";
-        updateVisibility();
+        //updateVisibility();
         document.querySelector("span.lockTime").textContent = data["lock_time"];
         document.querySelector("span.lockedBy").textContent = data["locked_by"];
         document.querySelector("#CaCallGroupId").value = group_id;
@@ -1030,7 +1045,7 @@ function doWeHaveLocationAndFrontDesk() {
     });
   }
   
-  updateVisibility();
+  //updateVisibility();
 }
 
 function doWeHaveLocationInitially() {
@@ -1056,7 +1071,7 @@ function doWeHaveLocationInitially() {
     });
   }
 
-  updateVisibility();
+  //updateVisibility();
 }
 
 function showGroupFound() {
@@ -1095,17 +1110,17 @@ function showGroupFound() {
     }
 
     groupFoundButtonsElement.style.display = "block";
-    updateVisibility();
+    //updateVisibility();
   } else {
     groupFoundElement.innerHTML = "";
     groupFoundElement.style.display = "none";
     groupFoundButtonsElement.style.display = "none";
-    updateVisibility();
+    //updateVisibility();
   }
 }
 
 function showOutcome() {
-  const status = document.querySelector('#CaCallGroupStatus').value;
+  const status = document.querySelector('#status').value;
   const outcomeElement = document.querySelector('#outcome');
 
   if (status) {
@@ -1118,7 +1133,7 @@ function showOutcome() {
     outcomeElement.style.display = 'none';
   }
 
-  updateVisibility();
+  //updateVisibility();
 }
 
 function onChangeApptDate() {
@@ -1151,7 +1166,7 @@ function onChangeCallerPhone(callerPhone) {
 }
 
 function onChangePatientInfo() {
-  const isPatient = document.querySelector('#CaCallGroupIsPatient').checked;
+  const isPatient = document.querySelector('#is-patient').checked;
   if (isPatient) {
     document.querySelectorAll('span.not-self').forEach(element => {
       element.style.display = 'none';
@@ -1159,17 +1174,25 @@ function onChangePatientInfo() {
     document.querySelectorAll('span.self').forEach(element => {
       element.style.display = 'block';
     });
-    document.querySelector('span.isNotPatient').style.display = 'none';
-    const callerFirstName = document.querySelector('#CaCallGroupCallerFirstName').value;
-    const callerLastName = document.querySelector('#CaCallGroupCallerLastName').value;
+    document.querySelectorAll('span.isNotPatient').forEach(element => {
+      element.style.display = 'none';
+    });
     const patientNameElement = document.querySelector('span.patientName');
-    patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
+    if (patientNameElement) {
+      const callerFirstName = document.querySelector('#caller-first-name').value;
+      const callerLastName = document.querySelector('#caller-last-name').value;
+      patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
+    }
   } else {
-    const patientFirstName = document.querySelector('#CaCallGroupPatientFirstName').value;
-    const patientLastName = document.querySelector('#CaCallGroupPatientLastName').value;
-    document.querySelector('span.isNotPatient').style.display = 'block';
+    document.querySelectorAll('span.isNotPatient').forEach(element => {
+      element.style.display = 'block';
+    });
     const patientNameElement = document.querySelector('span.patientName');
-    patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
+    if (patientNameElement) {
+      const patientFirstName = document.querySelector('#patient-first-name').value;
+      const patientLastName = document.querySelector('#patient-last-name').value;
+      patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
+    }
     document.querySelectorAll('span.self').forEach(element => {
       element.style.display = 'none';
     });
@@ -1230,18 +1253,30 @@ function setDateField(prefix, date) {
   document.querySelector(`#${prefix}Meridian`).value = meridian;
 }
 
-export function updateVisibility(className = 'form_fields') {
+function disableHiddenFields() {
+  Array.from(document.querySelectorAll(`fieldset div[style*="display:none"] input, fieldset div[style*="display:none"] select`)).forEach(input => {
+    input.setAttribute("disabled","disabled");
+  });
+}
+
+function updateVisibility(className = 'form_fields') {
+  // TODO: I DON'T THINK WE NEED THIS ANYMORE
+  /*
   // This will disable all hidden fields and enable all visible fields within the specified class
-  Array.from(document.querySelectorAll(`.${className} :hidden input`)).forEach(input => {
+  Array.from(document.querySelectorAll(`.${className} input[type="hidden"]`)).forEach(input => {
+    //TODO: I DON'T KNOW IF THIS CODE IS CORRECT
     input.disabled = true;
   });
-  Array.from(document.querySelectorAll(`.${className} :visible input`)).forEach(input => {
+  // TODO:
+  Array.from(document.querySelectorAll(`.${className} input:not([type="hidden"])`)).forEach(input => {
     input.disabled = false;
   });
   // We don't want to disable the hidden checkbox fields. These are important.
-  Array.from(document.querySelectorAll('div.checkbox :input')).forEach(input => {
+  Array.from(document.querySelectorAll('div.checkbox input')).forEach(input => {
+    //todo:
     input.disabled = false;
   });
+  */
 }
 
 function onChangeTopic() {
