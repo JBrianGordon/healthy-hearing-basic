@@ -1,4 +1,4 @@
-<script src="https://cdn.ckbox.io/CKBox/1.6.0/ckbox.js"></script>
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 use Cake\Core\Configure;
 use Cake\Routing\Router;

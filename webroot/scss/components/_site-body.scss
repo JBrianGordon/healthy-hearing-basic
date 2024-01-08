@@ -134,6 +134,13 @@
 		&.col-md-10-override {
 			width: 83.33333%;
 		}
+
+		&#services, &#about-us{
+			display: block;
+			width: 0;
+			padding: 0;
+			border: 0;
+		}
 	}
 	
 	.form-check {
@@ -168,10 +175,11 @@
 		display: flex;
 		flex-grow: 1;
 
-		&.form-check{
-			flex-direction: row-reverse;
-			place-content: flex-end;
-		}
+		//commented out for checkboxes on content edit page
+		// &.form-check{
+		// 	flex-direction: row-reverse;
+		// 	place-content: flex-end;
+		// }
 
 		&.multicheckbox{
 			flex-wrap: wrap;

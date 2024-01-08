@@ -38,10 +38,10 @@ if (empty($content->id)) {
 						            <!--*** TODO: Preview button not functioning correctly ***-->
 									<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
 									<?php if (!$isDraft): ?>
-										<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-open', 'target'=>'_blank']) ?>
+										<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
 										<?php if ($isFrozen): ?>
 											<!-- This content is locked -->
-											<?= $this->Html->link(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-copy']) ?>
+											<?= $this->Html->link(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 										<?php endif; ?>
 									<?php endif; ?>
 								<?php endif; ?>

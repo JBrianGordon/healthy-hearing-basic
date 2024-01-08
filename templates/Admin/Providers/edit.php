@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -40,7 +41,7 @@ $this->Html->script('dist/admin_providers.min', ['block' => true]);
                                             echo $this->Form->control('title');
                                             echo $this->Form->control('email');
                                             //*** TODO: Replace description with CKEditor instance ***
-                                            echo $this->Form->control('description');
+                                            echo $this->Form->control('description', ['class' => 'editor']);
                                             echo $this->Form->control('micro_url');
                                             echo $this->Form->control('square_url');
                                             echo $this->Form->control('thumb_url');
