@@ -134,6 +134,13 @@
 		&.col-md-10-override {
 			width: 83.33333%;
 		}
+
+		&#services, &#about-us{
+			display: block;
+			width: 0;
+			padding: 0;
+			border: 0;
+		}
 	}
 	
 	.form-check {
