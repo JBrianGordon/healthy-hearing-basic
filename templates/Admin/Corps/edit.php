@@ -69,7 +69,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 														<br>
 														<div class="tab-pane active" id="Corp">
 															<?php
-																echo $this->Form->control('description', ['label' => false, 'class' => 'editor']);
+																echo $this->Form->control('description', ['class' => 'editor']);
 																echo $this->Form->control('short');
 															?>
 														</div>
