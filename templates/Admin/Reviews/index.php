@@ -85,7 +85,16 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                 <?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
                                 <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
                                 <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'export'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-                                <?= $this->Html->link("<i class='bi bi-check-lg'></i> To Publish", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+                                <?=
+                                    $this->Html->link(
+                                        "<i class='bi bi-check-lg'></i> To Publish", [
+                                            'action' => 'index',
+                                            '?' => ['status' => ReviewStatus::PENDING->value],
+                                        ], [
+                                            'class' => 'btn btn-default',
+                                            'escape' => false
+                                        ])
+                                ?>
                                 <?= $this->Html->link("<i class='bi bi-search'></i> Find Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
                                 <?= $this->Html->link("<i class='bi bi-x-lg'></i> Clear Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
                             </div>
