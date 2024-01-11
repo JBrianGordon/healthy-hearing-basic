@@ -172,6 +172,31 @@ editorElements.forEach((element) => {
             ],
             shouldNotGroupWhenFull: true
         },
+        htmlSupport: {
+            allow: [
+                {
+                    name: 'div',
+                    attributes: true,
+                    classes: true
+                },
+                {
+                    name: 'script',
+                    attributes: {
+                        type: 'application/ld+json'
+                    }
+                },
+                {
+                    name: 'img',
+                    attributes: true,
+                    classes: true
+                },
+                {
+                    name: 'figure',
+                    attributes: true,
+                    classes: true
+                }
+            ]
+        },
         language: 'en',
         image: {
             toolbar: [
