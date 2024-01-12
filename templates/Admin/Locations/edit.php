@@ -269,13 +269,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 												<!-- Details tab -->
 												<div class="tab-pane" id="Details">
 													<div class="col-md-12 ida-wrapper mb20">
-														<div class="checkbox form-check form-switch">
-																<?= $this->Form->control('is_ida_verified', [
-																	'type' => 'checkbox',
-																	'label' => ['class' => 'pl125 pr30 fw-bold form-check-label'],
-																	'class' => 'form-check-input'
-																	])
-																?>
+														<div class="checkbox form-check form-switch w-100">
+																<?= $this->Form->label('is_ida_verified', 'Is IDA Verified', ['class' => 'fw-bold form-check-label w-25 float-left pl15 pr15 mr10', 'for' => 'isIdaVerified']) ?>
+																<?= $this->Form->checkbox('is_ida_verified', ['class' => 'form-check-input', 'id' => 'isIdaVerified']) ?>
 														</div>
 													</div>
 													<?php

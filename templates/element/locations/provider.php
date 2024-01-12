@@ -89,12 +89,12 @@ use Cake\Core\Configure;
 		endif;
 	?>
 
-	<div class="col-md-12 mb20 form-group">
-		<div class="checkbox form-check form-switch">
-				<?= $this->Form->control('Provider.' . $key . '.is_ida_verified', [
+	<div class="col-md-12 mb20 form-group pl0">
+		<div class="checkbox form-check form-switch pl0 w-100">
+				<?= $this->Form->label('Provider.' . $key . '.is_ida_verified', 'Is IDA verified', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
+				<?= $this->Form->checkbox('Provider.' . $key . '.is_ida_verified', [
 					'type' => 'checkbox',
-					'label' => ['class' => 'pl110 pr30 fw-bold form-check-label'],
-					'class' => 'form-check-input'
+					'class' => 'form-check-input ml0'
 					])
 				?>
 		</div>
