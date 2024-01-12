@@ -130,7 +130,7 @@ class ReviewsTable extends Table
             ->value('rating', [
                 'multiValue' => true
             ])
-            ->value('status')
+            ->finder('status', ['finder' => 'pendingOrResponded'])
             ->value('origin')
             ->like('response', [
                 'before' => true,
@@ -463,5 +463,19 @@ class ReviewsTable extends Table
             }
         }
         return $data;
+    }
+
+    public function findPendingOrResponded(Query $query, array $options)
+    {
+        return $query->where(function (QueryExpression $exp, Query $q) use ($options) {
+            if ($options['status'] == ReviewStatus::PENDING->value) {
+                return $exp->or([
+                    'status' => ReviewStatus::PENDING->value,
+                    'response_status' => ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value
+                ]);
+            } else {
+                return $exp->eq('status', $options['status']);
+            }
+        });
     }
 }
