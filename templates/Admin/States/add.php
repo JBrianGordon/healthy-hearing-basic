@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\State $state
  */
  
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/admin_state_add.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -36,8 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								            <fieldset>
 								                <?php
 								                    echo $this->Form->control('name', ['required' => true]);
-								                    /*** TODO: replace body with CKEditor when possible ***/
-								                    echo $this->Form->control('body', ['required' => false]);
+								                    echo $this->Form->control('body', ['required' => false, 'class' => 'editor']);
 								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_active', ['label' => ' Active']);
 								                    echo '</div>';
