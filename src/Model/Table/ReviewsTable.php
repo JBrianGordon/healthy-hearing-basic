@@ -344,11 +344,24 @@ class ReviewsTable extends Table
         $sendReviewEmail = $entity->get('sendReviewEmail');
         if ($sendReviewEmail !== false) {
             $mailer = $this->getMailer('Review');
-            match ($sendReviewEmail) {
-                'emailPositiveReviewReceived' => $mailer->send('emailPositiveReviewReceived', [$entity]),
-                'emailNegativeReviewReceived' => $mailer->send('emailNegativeReviewReceived', [$entity]),
-                'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
-            };
+            $locationNotes = $this->fetchTable('LocationNotes');
+
+            switch ($sendReviewEmail) {
+                case 'emailPositiveReviewReceived':
+                    $mailer->send('emailPositiveReviewReceived', [$entity]);
+                    $noteBody = 'Positive review received';
+                    break;
+                case 'emailNegativeReviewReceived':
+                    $mailer->send('emailNegativeReviewReceived', [$entity]);
+                    $noteBody = 'Negative review received';
+                    break;
+                case 'emailReviewResponsePosted':
+                    $mailer->send('emailReviewResponsePosted', [$entity]);
+                    $noteBody = 'Review response posted';
+                    break;
+            }
+
+            $locationNotes->add($entity->location_id, $noteBody);
         };
     }
 
