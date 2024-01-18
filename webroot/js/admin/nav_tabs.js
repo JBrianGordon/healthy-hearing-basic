@@ -1,4 +1,3 @@
-/*** TODO: Make sure inactive tab content is hidden in views ***/
 document.addEventListener('DOMContentLoaded', function() {
 
   // On submit, make any validation errors on tabs visible

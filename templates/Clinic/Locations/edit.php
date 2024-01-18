@@ -642,12 +642,41 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                     <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
                                                                     <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
                                                                     <div class="col col-md-9">
-                                                                        <div class="col-md-3 border-radio<?php
-                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php
-                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>> No Border</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' checked' : '' ?>> Dashed</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-dotted') ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= (isset($locationAd->border) && $locationAd->border == 'border-dotted') ? ' checked' : '' ?>> Dotted</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-inset') ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= (isset($locationAd->border) && $locationAd->border == 'border-inset') ? ' checked' : '' ?>> Inset</label></div>
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && ($locationAd->border == 'blank' || $locationAd->border == '' || $locationAd->border === null)) ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdBlank" class="col control-label">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php
+                                                                                echo ($locationAd->border ?? '') == 'blank' ? ' checked' : '';
+                                                                                ?>>
+                                                                                No Border
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdDashed" class="col control-label border-dashed">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-dashed' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Dashed
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dotted') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdDotted" class="col control-label border-dotted">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-dotted' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Dotted
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-inset') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdInset" class="col control-label border-inset">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-inset' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Inset
+                                                                            </label>
+                                                                        </div>
                                                                         <span class="help-block">Select a border for the image.</span>
                                                                     </div>
                                                                 </div>

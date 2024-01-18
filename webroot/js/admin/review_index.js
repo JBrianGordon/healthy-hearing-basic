@@ -1,9 +1,8 @@
 import '../common/common';
 import './nav_tabs';
 
-const reviewLocationSearch = document.querySelector('#ReviewLocationSearch');
-const reviewLocationId = document.querySelector('#ReviewLocationId');
-const clearClinic = document.querySelector('#ClearClinic');
+const reviewLocationSearch = document.querySelector('#location-search');
+const reviewLocationId = document.querySelector('#location-id');
 
 reviewLocationSearch.addEventListener('input', async () => {
   const query = reviewLocationSearch.value;
@@ -33,8 +32,3 @@ function initializeAutocomplete(data) {
     }
   });
 }
-
-clearClinic.addEventListener('click', function (event) {
-  reviewLocationId.value = '';
-  event.preventDefault();
-});
