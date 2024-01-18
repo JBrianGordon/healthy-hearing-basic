@@ -20,7 +20,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						<div class="panel-body p10">
 							<div class="btn-group">
 								<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-								<?= $this->Html->link(__(' Add'), ['action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+								<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 							</div>
 						</div>
 					</div>
