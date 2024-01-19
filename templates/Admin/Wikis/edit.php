@@ -7,6 +7,15 @@
  */
  
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
+
+$author_default = false;
+$isFrozen = !empty($content->is_frozen);
+$isDraft = !empty($content->draft_parent_id);
+if (empty($content->id)) {
+    if (in_array($user->id, $authors)) {
+        $author_default = $user->id;
+    }
+}
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -40,7 +49,7 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 						                <?php
 						                    echo $this->Form->control('name');
 						                    echo $this->Form->control('slug');
-						                    echo $this->Form->control('user_id', ['label' => 'Primary Author']);
+						                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 						                    echo $this->Form->control('last_modified', ['empty' => true]);
 						                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 						                    echo $this->Form->control('is_active', ['label' => ' Active', 'required' => true]);
@@ -74,8 +83,12 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 								                    echo $this->Form->control('facebook_image_width', ['label' => 'Image Width (min 800px)', 'required' => false]);
 								                    echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
 								                    echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
-								                    echo $this->Form->control('users._ids', ['options' => $users]);
 								                ?>
+                                                <hr>
+                                                <h3>Additional Authors</h3>
+                                                <?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+                                                <h3>Reviewers</h3>
+                                                <!--*** TODO: add reviewers ***-->
 											</div>
 											<div class="tab-pane" id="display">
 												<?php
@@ -85,9 +98,8 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 												?>
 											</div>
 											<div class="tab-pane" id="tags">
-												<?php
-													
-												?>
+                                                <h3>Tags</h3>
+                                                <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
 											</div>
 										</div>
 						            </fieldset>
