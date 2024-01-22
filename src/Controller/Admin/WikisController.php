@@ -70,6 +70,7 @@ class WikisController extends AppController
         }
         $authors = $this->Wikis->Authors->authorList();
         $this->set(compact('wiki', 'authors'));
+        $this->set('tags', $this->Wikis->Tags->findTagList());
     }
 
     /**
