@@ -120,7 +120,7 @@ if (empty($content->id)) {
 								                            aria-controls="admin" aria-selected="false">Admin</button>
 								                    </li>
 								                </ul>
-								                <div class="tab-content" id="myTabContent">
+								                <div class="tab-content">
 								                    <!-- Content Tab -->
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
