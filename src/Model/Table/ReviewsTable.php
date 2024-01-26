@@ -70,6 +70,12 @@ class ReviewsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        $this->addBehavior('Muffin/Footprint.Footprint', [
+            'events' => [
+                'Model.afterSave',
+            ],
+        ]);
+
         $this->addBehavior('CounterCache', [
             'Locations' => [
                 // Total # of approved reviews for a Location (e.g. 17)
@@ -342,6 +348,7 @@ class ReviewsTable extends Table
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $sendReviewEmail = $entity->get('sendReviewEmail');
+
         if ($sendReviewEmail !== false) {
             $mailer = $this->getMailer('Review');
             $locationNotes = $this->fetchTable('LocationNotes');
@@ -361,7 +368,7 @@ class ReviewsTable extends Table
                     break;
             }
 
-            $locationNotes->add($entity->location_id, $noteBody);
+            $locationNotes->add($entity->location_id, $noteBody, $options['_footprint']);
         };
     }
 

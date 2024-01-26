@@ -98,12 +98,21 @@ class LocationNotesTable extends Table
     }
 
 
-    public function add($locationId, $noteBody, $userId = User::USER_ID_AUTOMATED_USER)
+    public function add($locationId, $noteBody, ?User $user = null)
     {
+        $userId = User::USER_ID_AUTOMATED_USER;
+        if ($user) {
+            if ($user->role == 'clinic') {
+                $userId = 0;
+            } elseif ($user->role == 'admin') {
+                $userId = $user->id;
+            }
+        }
+
         $noteData = [
             'location_id' => $locationId,
             'body' => $noteBody,
-            'userId' => $userId,
+            'user_id' => $userId,
         ];
         $entity = $this->newEntity($noteData);
         $this->save($entity);

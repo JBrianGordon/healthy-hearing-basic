@@ -84,7 +84,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                             <div class="btn-group">
                                 <?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
                                 <?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
-                                <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'export'], ['class' => 'btn btn-default', 'escape' => false]) ?>
+                                <?= $this->Html->link("<i class='bi bi-download'></i> Export", ['action' => 'export', '?' => $_searchParams], ['class' => 'btn btn-default', 'escape' => false]) ?>
                                 <?=
                                     $this->Html->link(
                                         "<i class='bi bi-check-lg'></i> To Publish", [

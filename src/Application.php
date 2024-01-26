@@ -30,6 +30,9 @@ use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Middlewares\TrailingSlash;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Event\EventInterface;
+use Muffin\Footprint\Middleware\FootprintMiddleware;
 
 /**
  * Application setup class.
@@ -57,6 +60,7 @@ class Application extends BaseApplication
                 (new TableLocator())->allowFallbackClass(false)
             );
         }
+        $this->addPlugin('Muffin/Footprint');
 
         $this->addPlugin(\CakeDC\Users\Plugin::class, ['routes' => true, 'bootstrap' => true]);
         Configure::write('Users.config', ['users']);
@@ -80,6 +84,13 @@ class Application extends BaseApplication
 
         // Listener for CakeDC/users plugin Events
         $this->getEventManager()->on(new \App\Event\UsersListener());
+
+        $this->getEventManager()->on(
+            'Server.buildMiddleware',
+            function (EventInterface $event, MiddlewareQueue $middleware) {
+                $middleware->insertAfter(AuthenticationMiddleware::class, FootprintMiddleware::class);
+            }
+        );
     }
 
     /**

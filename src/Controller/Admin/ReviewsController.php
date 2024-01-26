@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use Cake\Log\LogTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\View\JsonView;
+use Cake\Utility\Inflector;
 
 /**
  * Reviews Controller
@@ -328,5 +329,60 @@ class ReviewsController extends AppController
         $this->viewBuilder()->setOption('serialize', 'data');
 
         return;
+    }
+
+    /**
+     * Export
+     */
+    public function export()
+    {
+        $reviews = $this->Reviews
+            ->find('search', [
+                'search' => $this->request->getQueryParams(),
+            ])
+            ->contain(['Locations']);
+
+        $extract = [
+            'id',
+            'location_id',
+            'body',
+            'first_name',
+            'last_name',
+            'zip',
+            'rating',
+            'is_spam',
+            'status',
+            'origin',
+            'response',
+            'created',
+            'denied_date',
+            'ip',
+            'character_count',
+            'location.listing_type',
+            'location.oticon_id',
+            'location.title',
+            'location.is_yhn',
+            'location.is_retail',
+            'location.email',
+            'location.hh_url'
+        ];
+
+        $header = array_map(
+            function($item) {
+                return str_replace('location.', '', $item);
+            },
+            $extract
+        );
+        $header = array_map([new Inflector(), 'humanize'], $header);
+
+        $this->set(compact('reviews'));
+        $this->viewBuilder()
+            ->setClassName('CsvView.Csv')
+            ->setOptions([
+                'serialize' => 'reviews',
+                'header' => $header,
+                'extract' => $extract,
+            ]);
+
     }
 }
