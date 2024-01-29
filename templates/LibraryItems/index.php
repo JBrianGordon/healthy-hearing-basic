@@ -23,7 +23,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 										<?= $pageContent ?>
 									</div>
 									<div class="col-sm-4">
-										<a href="#libraryExampleModal" data-toggle="modal">
+										<a href="#libraryExampleModal" data-bs-toggle="modal">
 											<img style="width: 314px; height: 329px;" src="/img/library-facebook-example.png" alt="Library item example usage">
 											<em>Click image to enlarge</em>
 										</a>
@@ -32,7 +32,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 								<div id="items-container">
 									<?php foreach($libraryItems as $index => $libraryItem): ?>
 										<?php
-											$modalId = "{$index}-libraryItemModal";
+											$modalId = "libraryItemModal{$index}";
 											$modalIdTarget = "#{$modalId}";
 											$modalIdTitle = "{$modalId}Title";
 										?>
@@ -71,7 +71,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 															'label' => '<span class="hh-icon-facebook"></span> SHARE NOW'
 														])
 													?>
-													<a href="#" data-toggle="modal" data-target="<?= $modalIdTarget ?>">More options</a>
+													<a href="#" data-bs-toggle="modal" data-bs-target="<?= $modalIdTarget ?>">More options</a>
 												</div>
 											</div>
 											<!-- Modal -->
@@ -88,7 +88,11 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 														</div>
 														<div class="modal-body row">
 															<div class="col-md-8 item-modal-body">
-																<?= $libraryItem['body'] ?>
+																<?php
+																	$htmlContent = $libraryItem['body'];
+																	$modifiedHtml = str_replace('<img ', '<img loading="lazy" ', $htmlContent);
+																	echo $modifiedHtml;
+																?>
 															</div>
 															<div class="col-md-4">
 																<strong>Suggested social media message</strong>
@@ -126,7 +130,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 															</div>
 														</div>
 														<div class="modal-footer">
-															<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+															<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
 														</div>
 													</div>
 												</div>
