@@ -20,6 +20,20 @@
 	margin-bottom: 2em;
 	margin-left: 1em;
 }
+
+.modal-lg {
+	width: auto;
+	max-width: none;
+
+	@media(min-width: 768px){
+		width: 600px;
+	}
+
+	@media(min-width: 992px){
+		width: 900px;
+	}
+}
+
 .test-overlay {
 	.test-page {
 		margin: 10% 10% 0px;

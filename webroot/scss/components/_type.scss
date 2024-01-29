@@ -118,6 +118,12 @@ a.print-link {
   }
 }
 
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
 .hidden {
   display: none;
 }
@@ -132,6 +138,10 @@ a.print-link {
 
 .form-group {
   clear: both;
+  margin-bottom: 15px;
+  .ck-content {
+    min-height: 200px;
+  }
 }
 
 .pull-right {

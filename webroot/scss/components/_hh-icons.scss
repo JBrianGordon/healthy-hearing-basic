@@ -80,7 +80,7 @@
   }
 }
 
-.hh-icon-facebook.clinic-share, .hh-icon-twitter.clinic-share, .hh-icon-youtube.clinic-share {
+.hh-icon-facebook.clinic-share, .hh-icon-x.clinic-share, .hh-icon-youtube.clinic-share {
   color: $share-icon-gray;
   margin: 5px 2px 5px 5px;
 }
@@ -89,8 +89,12 @@
   content: "\e606";
 }
 
-.hh-icon-twitter:before {
-  content: "\e607";
+.hh-icon-x {
+  background-image: url("../img/x-logo-white.png");
+  background-size: contain;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
 }
 
 .hh-icon-google:before {
@@ -118,8 +122,18 @@
   content: "\e60a";
 }
 
-.hh-icon-circle-twitter:before {
-  content: "\e60b";
+.hh-icon-circle-x {
+  display: inline-block;
+  background: url("../img/x-logo-white.png");
+  width: 40px;
+  height: 40px;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-color: #78afc9;
+  background-position: 11px;
+  border-radius: 21px;
+  position: relative;
+  top: 3px;
 }
 
 .hh-icon-circle-youtube:before {

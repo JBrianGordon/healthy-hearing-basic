@@ -2,6 +2,7 @@ import './admin_common';
 import '../common/provider';
 import './nav_tabs';
 import './datepicker';
+import './ckpackage';
 
 class locationsAdminEdit {
   constructor() {
@@ -93,11 +94,11 @@ class locationsAdminEdit {
         }
       }
     });
-
+    /*** TODO: uncomment when direct book type added: ***
     document.getElementById('direct-book-type').addEventListener('change', function () {
       editObj.onChangeDirectBookType(this.value);
     });
-    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
+    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));***/
     /*** TODO: add frozen-expiration field to view: ***
     document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, 'is-listing-type-frozen', <frozen expiration field here>);
@@ -120,8 +121,10 @@ class locationsAdminEdit {
     document.getElementById('hour-is-closed-lunch').dispatchEvent(new Event('change'));*/
 
     document.getElementById('is-mobile').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#is-mobile', '#radius');
-      editObj.onChangeFeature(this.checked, '#is-mobile', '#mobile-text');
+      editObj.onChangeFeature(this.checked, 'label[for="radius"]', '#radius');
+      editObj.onChangeFeature(this.checked, 'label[for="mobile-text"]', '#mobile-text');
+      document.getElementById('addressHelp').classList.toggle("hidden");
+      document.getElementById('radiusHelp').classList.toggle("hidden");
     });
     document.getElementById('is-mobile').dispatchEvent(new Event('change'));
     //*** TODO: uncomment once linked locations added to page: ***/
@@ -416,16 +419,18 @@ class locationsAdminEdit {
 	  }
 	}
 
-	onChangeFeature(isFeature, elementId, requiredElementId) {
-	  const element = document.querySelector(elementId);
+	onChangeFeature(isFeature, label, requiredElementId) {
+		const elementLabel = document.querySelector(label);
 	  const requiredElement = document.querySelector(requiredElementId);
 
 	  if (isFeature) {
-	    element.style.display = 'block';
+	  	elementLabel.style.display = 'block';
+	    requiredElement.style.display = 'block';
 	    requiredElement.required = true;
 	  } else {
 	    requiredElement.required = false;
-	    element.style.display = 'none';
+	    requiredElement.style.display = 'none';
+	    elementLabel.style.display = 'none';
 	  }
 	}
 
@@ -628,7 +633,6 @@ new locationsAdminEdit();
 
 const providerCheckboxes = document.querySelectorAll(".provider .checkbox label input");
 
-//ida checkbox toggle switch
 const insertAfter = (targetElement, htmlString) => {
   targetElement.insertAdjacentHTML("afterend", htmlString);
 };

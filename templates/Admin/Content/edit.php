@@ -1,4 +1,4 @@
-<script src="https://cdn.ckbox.io/CKBox/1.6.0/ckbox.js"></script>
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -38,10 +38,10 @@ if (empty($content->id)) {
 						            <!--*** TODO: Preview button not functioning correctly ***-->
 									<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
 									<?php if (!$isDraft): ?>
-										<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-open', 'target'=>'_blank']) ?>
+										<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
 										<?php if ($isFrozen): ?>
 											<!-- This content is locked -->
-											<?= $this->Html->link(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-copy']) ?>
+											<?= $this->Html->link(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 										<?php endif; ?>
 									<?php endif; ?>
 								<?php endif; ?>
@@ -61,7 +61,7 @@ if (empty($content->id)) {
 								<div class="row">
 								    <div class="column-responsive column-80">
 								        <div class="content form">
-								            <?= $this->Form->create($content) ?>
+								            <?= $this->Form->create($content, ['id' => 'contentForm']) ?>
 								            <fieldset>
 								                <?php
 							                    echo $this->Form->hidden('is_frozen');
@@ -120,11 +120,11 @@ if (empty($content->id)) {
 								                            aria-controls="admin" aria-selected="false">Admin</button>
 								                    </li>
 								                </ul>
-								                <div class="tab-content" id="myTabContent">
+								                <div class="tab-content">
 								                    <!-- Content Tab -->
 								                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
 								                       <?php
-								                            echo $this->Form->control('body', ['label' => ['text' => '', 'class' => 'hidden'], 'class' => 'editor', 'required' => false]);
+								                            echo $this->Form->control('body', ['label' => false, 'class' => 'editor', 'required' => false]);
 								                            echo $this->Form->control('short');
 								                            echo $this->Form->control('library_share_text');
 								                        ?>
@@ -144,6 +144,7 @@ if (empty($content->id)) {
 										                    </div>
 										                </div>
 										                <?php
+										                	//*** TODO: change this to upload to CKBox: ***/
 								                            echo $this->Form->control('facebook_image', ['label' => 'Schema/Facebook Image<br><a class="btn btn-xs btn-info ck-box">Select New Image</a>', 'escape' => false]);
 								                            echo $this->Form->control('facebook_image_width', ['label' => 'Image Width']);
 								                            echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);

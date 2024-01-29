@@ -1,10 +1,11 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\State $state
  */
  
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/admin_edit_state.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -42,7 +43,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 								                <?php
 								                    echo $this->Form->control('name');
 								                    /*** TODO: replace body with CKEditor when possible ***/
-								                    echo $this->Form->control('body');
+								                    echo $this->Form->control('body', ['class' => 'editor']);
 								                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 								                    echo $this->Form->control('is_active');
 								                    echo '</div>';

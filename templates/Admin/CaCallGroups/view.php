@@ -39,7 +39,7 @@ use Cake\Routing\Router;
 							<div class="panel-section expanded">					
 								<h2>View Call Group</h2>
 								<?= $this->Form->control('data[CaCallGroup][id]', ['type' => 'hidden', 'value' => $caCallGroup->id, 'id' => 'CaCallGroupId']) ?>
-								<?= $this->Form->control('data[CaCallGroup][location_id]', ['type' => 'hidden', 'value' => $caCallGroup->id, 'id' => 'CaCallGroupId']) ?>
+								<?= $this->Form->control('data[CaCallGroup][location_id]', ['type' => 'hidden', 'value' => $caCallGroup->id, 'id' => 'CaCallGroupLocationId']) ?>
 								<?= $this->Form->control('data[CaCallGroup][is_prospect_override]', ['type' => 'hidden', 'value' => $caCallGroup->is_prospect_override, 'id' => 'CaCallGroupIsProspectOverride']) ?>
 								<div class="table-responsive">
 						            <table class="table table-striped table-bordered table-condensed">
@@ -88,6 +88,7 @@ use Cake\Routing\Router;
 									                </tbody>
 								                </table>
 							                </td>
+							            </tr>
 						                <tr>
 							                <th class="tar">Notes</th>
 											<td>

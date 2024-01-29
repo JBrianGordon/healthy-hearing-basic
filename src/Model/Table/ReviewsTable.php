@@ -70,6 +70,12 @@ class ReviewsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        $this->addBehavior('Muffin/Footprint.Footprint', [
+            'events' => [
+                'Model.afterSave',
+            ],
+        ]);
+
         $this->addBehavior('CounterCache', [
             'Locations' => [
                 // Total # of approved reviews for a Location (e.g. 17)
@@ -130,7 +136,7 @@ class ReviewsTable extends Table
             ->value('rating', [
                 'multiValue' => true
             ])
-            ->value('status')
+            ->finder('status', ['finder' => 'pendingOrResponded'])
             ->value('origin')
             ->like('response', [
                 'before' => true,
@@ -342,13 +348,27 @@ class ReviewsTable extends Table
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $sendReviewEmail = $entity->get('sendReviewEmail');
+
         if ($sendReviewEmail !== false) {
             $mailer = $this->getMailer('Review');
-            match ($sendReviewEmail) {
-                'emailPositiveReviewReceived' => $mailer->send('emailPositiveReviewReceived', [$entity]),
-                'emailNegativeReviewReceived' => $mailer->send('emailNegativeReviewReceived', [$entity]),
-                'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
-            };
+            $locationNotes = $this->fetchTable('LocationNotes');
+
+            switch ($sendReviewEmail) {
+                case 'emailPositiveReviewReceived':
+                    $mailer->send('emailPositiveReviewReceived', [$entity]);
+                    $noteBody = 'Positive review received';
+                    break;
+                case 'emailNegativeReviewReceived':
+                    $mailer->send('emailNegativeReviewReceived', [$entity]);
+                    $noteBody = 'Negative review received';
+                    break;
+                case 'emailReviewResponsePosted':
+                    $mailer->send('emailReviewResponsePosted', [$entity]);
+                    $noteBody = 'Review response posted';
+                    break;
+            }
+
+            $locationNotes->add($entity->location_id, $noteBody, $options['_footprint']);
         };
     }
 
@@ -463,5 +483,19 @@ class ReviewsTable extends Table
             }
         }
         return $data;
+    }
+
+    public function findPendingOrResponded(Query $query, array $options)
+    {
+        return $query->where(function (QueryExpression $exp, Query $q) use ($options) {
+            if ($options['status'] == ReviewStatus::PENDING->value) {
+                return $exp->or([
+                    'status' => ReviewStatus::PENDING->value,
+                    'response_status' => ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value
+                ]);
+            } else {
+                return $exp->eq('status', $options['status']);
+            }
+        });
     }
 }

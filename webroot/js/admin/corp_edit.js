@@ -1,5 +1,6 @@
 import './admin_common';
 import './nav_tabs';
+import './ckpackage';
 
 /*** TODO: update this code when view is built: ***
 $(document).ready(function() {

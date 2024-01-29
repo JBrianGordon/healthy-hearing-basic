@@ -123,7 +123,10 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 								                <tr>
 								                    <th class="p5"><?= $this->Paginator->sort('id', 'Group ID') ?></th>
 								                    <th class="p5"><?= $this->Paginator->sort('location_id', 'Clinic') ?></th>
-								                    <th class="p5"><?= $this->Paginator->sort('caller_last_name', 'Caller name') ?>/<br><?= $this->Paginator->sort('patient_last_name', 'Patient name') ?></th>
+								                    <th class="p5" style="min-width:150px;">
+								                    	<?= $this->Paginator->sort('caller_last_name', 'Caller name') ?>/<br>
+								                    	<?= $this->Paginator->sort('patient_last_name', 'Patient name') ?>
+								                    </th>
 								                    <th class="p5"><?= $this->Paginator->sort('created', 'Initial call time') ?></th>
 								                    <th class="p5"><?= $this->Paginator->sort('score') ?></th>
 								                    <th class="p5"><?= $this->Paginator->sort('prospect') ?>/<br><?= $this->Paginator->sort('status') ?></th>

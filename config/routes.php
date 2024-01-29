@@ -55,11 +55,13 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/', 'Pages::home');
 
         // Misc pages with simple, content-only templates
+        $builder->connect('/about', ['controller' => 'Pages', 'action' => 'about', 'about']);
         $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'view', 'aboutIda']);
         $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'view', 'clinicFaq']);
-        $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'view', 'feeds']);
-        $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'view', 'privacyPolicy']);
-        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'view', 'termsOfUse']);
+        $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
+        $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
+        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
+        $builder->connect('/clinic/library', ['controller' => 'LibraryItems', 'action' => 'index', 'index']);
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');
@@ -71,6 +73,9 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/{slug}', 'Corps::view')
             ->setPass(['slug'])
             ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
+
+        // Online hearing test
+        $builder->connect('/help/online-hearing-test', ['controller' => 'quizResults', 'action' => 'online_hearing_test']);
 
         /*
          * Connect catchall routes for all controllers.

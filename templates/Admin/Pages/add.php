@@ -36,7 +36,7 @@ $this->Html->script('dist/admin_edit_pages.min', ['block' => true]);
 							                echo '<span id="titleUnlock" class="btn btn-default btn-sm col-md-2 mt10">Unlock title field</span>';
 						                    echo $this->Form->control('title', ['label' => ['class' => 'col col-md-3 control-label'], 'style' => 'width:50%', 'disabled' => true, 'id' => 'PageTitle']);
 						                    echo '<small class="col-md-9 col-md-offset-3 red mb10">Warning: Changing the page title will affect whether or not the page displays correctly. Contact a developer if you would like a page title updated before saving any changes.</small>';
-						                    echo $this->Form->control('content');
+						                    echo $this->Form->control('content', ['class' => 'editor']);
 						                ?>
 						            </fieldset>
 						            <div class="form-actions tar">

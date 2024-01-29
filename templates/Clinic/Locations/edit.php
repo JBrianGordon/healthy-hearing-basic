@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -289,26 +290,25 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <?php endforeach; ?>
                                         <?= $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => true, 'isBasicClinic' => $isBasicClinic]) ?>
                                         <hr>
-                                        <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="aboutUs" class="clinic-anchor"></span>
-                                        <h2 class="mt20 mb0">About us</h2>
+                                        <h2 class="mt20 mb0" id="aboutLabel">About us</h2>
                                         <small>Please limit your description to an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
-                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false]); 
+                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false, 'class' => 'editor']); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
-                                        <!--*** TODO: add a limited CKEditor instance here: --->
                                         <span id="services" class="clinic-anchor"></span>
-                                        <h2 class="mt20 mb0">Services</h2>
+                                        <h2 class="mt20 mb0" id="servicesLabel">Services</h2>
                                         <small>This should be an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
                                         <?php
                                         echo $this->Form->control('Location.services', [
                                             'label' => false,
-                                            'value' => $location->services
+                                            'value' => $location->services,
+                                            'class' => 'editor'
                                         ]); 
                                         echo '<span id="upsellMessageServices" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
                                         ?>
 
                                         <span id="hoursOfOperation" class="clinic-anchor"></span>   
-                                        <h2 class="mt20 mb10">Hours of operation</h2>
+                                        <h2 class="mt20 mb10" id="hoursLabel">Hours of operation</h2>
                                         <table class="table table-bordered table-striped white-background">
                                             <tr>
                                                 <th>Day of week</th>
@@ -409,7 +409,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </table>
 
                                         <span id="payment" class="clinic-anchor"></span>
-                                        <h2 class="mt20 mb20">Accepted methods of payment</h2>
+                                        <h2 class="mt20 mb20" id="paymentLabel">Accepted methods of payment</h2>
                                         <div class="ml20 row">
                                             <?= $this->Clinic->paymentForm($location->payment) ?>
                                         </div>
@@ -642,12 +642,41 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                     <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
                                                                     <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
                                                                     <div class="col col-md-9">
-                                                                        <div class="col-md-3 border-radio<?php
-                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php
-                                                                            if ($locationAd->border !== null && $locationAd->border == 'blank' || $locationAd->border == '') {echo ' selected-border';}?>> No Border</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' selected-border' : '' ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' checked' : '' ?>> Dashed</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-dotted') ? ' selected-border' : '' ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= (isset($locationAd->border) && $locationAd->border == 'border-dotted') ? ' checked' : '' ?>> Dotted</label></div>
-                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == ' border-inset') ? ' selected-border' : '' ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= (isset($locationAd->border) && $locationAd->border == 'border-inset') ? ' checked' : '' ?>> Inset</label></div>
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && ($locationAd->border == 'blank' || $locationAd->border == '' || $locationAd->border === null)) ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdBlank" class="col control-label">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php
+                                                                                echo ($locationAd->border ?? '') == 'blank' ? ' checked' : '';
+                                                                                ?>>
+                                                                                No Border
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dashed') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdDashed" class="col control-label border-dashed">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-dashed' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Dashed
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-dotted') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdDotted" class="col control-label border-dotted">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-dotted' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Dotted
+                                                                            </label>
+                                                                        </div>
+
+                                                                        <div class="col-md-3 border-radio<?= (isset($locationAd->border) && $locationAd->border == 'border-inset') ? ' selected-border' : '' ?>">
+                                                                            <label for="LocationAdInset" class="col control-label border-inset">
+                                                                                <input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php
+                                                                                echo ($locationAd->border ?? '') == 'border-inset' ? ' checked' : '';
+                                                                                ?>>
+                                                                                Inset
+                                                                            </label>
+                                                                        </div>
                                                                         <span class="help-block">Select a border for the image.</span>
                                                                     </div>
                                                                 </div>

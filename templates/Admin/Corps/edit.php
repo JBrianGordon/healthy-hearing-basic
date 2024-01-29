@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -48,7 +49,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 												<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
 											</div>
 											<div class="clearfix"></div>
-								            <?= $this->Form->create($corp) ?>
+								            <?= $this->Form->create($corp, ['id' => 'corpForm']) ?>
 								            <fieldset>
 								                <?php
 									                echo $this->Form->control('title');
@@ -68,7 +69,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 														<br>
 														<div class="tab-pane active" id="Corp">
 															<?php
-																echo $this->Form->control('description');
+																echo $this->Form->control('description', ['class' => 'editor']);
 																echo $this->Form->control('short');
 															?>
 														</div>

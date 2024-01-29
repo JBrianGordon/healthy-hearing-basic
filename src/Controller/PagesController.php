@@ -75,7 +75,9 @@ class PagesController extends AppController
     {
         $contactUsForm = new ContactUsForm();
         $page = $this->Pages->findByTitle('contactUs')->first();
+        $this->loadModel('Content');
         $this->set(compact('contactUsForm', 'page'));
+        $this->set('articles', $this->Content->findLatest(4));
 
         if ($this->request->is('post')) {
             if (!$this->Recaptcha->verify()) {
@@ -95,6 +97,23 @@ class PagesController extends AppController
                 return;
             }
         }
+    }
+
+
+    /**
+     * RSS feeds page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function feeds() {
+        $page = $this->Pages->findByTitle('feeds')->first();
+
+        $this->Content = $this->fetchTable('Content');
+        $articles = $this->Content->findLatest(4);
+        $this->set('articles', $articles);
+
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
     }
 
     /**
@@ -181,5 +200,38 @@ class PagesController extends AppController
         $this->set('basicFeatures', $basicFeatures);
         $this->set('enhancedFeatures', $enhancedFeatures);
         $this->set('premierFeatures', $premierFeatures);
+    }
+
+    /**
+     * About us page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function about() {
+        $page = $this->Pages->findByTitle('about')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
+    /**
+     * Privacy policy page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function privacyPolicy() {
+        $page = $this->Pages->findByTitle('privacyPolicy')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
+    /**
+     * Terms of use page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function termsOfUse() {
+        $page = $this->Pages->findByTitle('termsOfUse')->first();
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
     }
 }

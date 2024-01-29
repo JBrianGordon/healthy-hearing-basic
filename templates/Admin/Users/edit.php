@@ -1,3 +1,4 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -137,7 +138,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 														<hr>
 														<?php
 															/*** TODO: replace bio with CKEditor instance when ready: ***/
-															echo $this->Form->control('bio');
+															echo $this->Form->control('bio', ['class' => 'editor']);
 															echo $this->Form->control('short_bio');
 														?>
 													</div>

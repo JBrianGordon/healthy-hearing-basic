@@ -84,6 +84,13 @@
 	.container {
 		padding-left: 15px;
 		padding-right: 15px;
+
+		.notes {
+			.ck-editor {
+				float: right;
+				margin-bottom: 20px;
+			}
+		}
 	}
 	  
 	label {
@@ -127,6 +134,13 @@
 		&.col-md-10-override {
 			width: 83.33333%;
 		}
+
+		&#services, &#about-us{
+			display: block;
+			width: 0;
+			padding: 0;
+			border: 0;
+		}
 	}
 	
 	.form-check {
@@ -135,7 +149,7 @@
 		.form-check-input {
 			float: none;
 			position: relative;
-			left: 25px;
+			left: 30px;
 			top: 8px;
 		}
 		
@@ -159,6 +173,13 @@
 
 	.form-group{
 		display: flex;
+		flex-grow: 1;
+
+		//commented out for checkboxes on content edit page
+		// &.form-check{
+		// 	flex-direction: row-reverse;
+		// 	place-content: flex-end;
+		// }
 
 		&.multicheckbox{
 			flex-wrap: wrap;

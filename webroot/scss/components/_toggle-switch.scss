@@ -127,36 +127,3 @@ label.switch {
 	}
 	
 }
-
-.boolean-switch {
-	color: #fff;
-	margin-left: 5px;
-	
-	&[for="location-is-ida-verified"] {
-		color: inherit;
-		font-weight: bold;
-		width: 100%;
-		text-align: left;
-		padding-left: 90px;
-	}
-	
-	.slider {
-		width: 60px;
-		
-		&:before {
-			left:5px;
-		}
-	}
-	
-	input {
-		&:checked + .slider {
-		  background-color: #78afc9;
-		  
-		  &:before {
-			  -webkit-transform: translateX(26px);
-			  -ms-transform: translateX(26px);
-			  transform: translateX(26px);  
-		  }
-		}
-	}
-}

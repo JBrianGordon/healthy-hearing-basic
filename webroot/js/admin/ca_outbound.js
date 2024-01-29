@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	// Call Type filter buttons
 	document.querySelector("body").addEventListener("click", function(e) {
 		const target = e.target;
-
 		if (target.id === "vmCallbackBtn") {
 			$("#CaCallGroupStatus").val(STATUS_VM_NEEDS_CALLBACK + "[or]" + STATUS_VM_CALLBACK_ATTEMPTED);
 			$("#CaCallGroupScore").val("");
@@ -37,11 +36,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	document.querySelector("body").addEventListener("change", function(event) {
+	document.querySelector("body").addEventListener("change", function(e) {
 		const target = e.target;
-
 		if (target.classList.contains("timezoneFilter")) {
-			$("#CaCallGroupAdminOutboundForm").submit();
+			$("#OutboundCallsForm").submit();
 		}
 	});
 });
