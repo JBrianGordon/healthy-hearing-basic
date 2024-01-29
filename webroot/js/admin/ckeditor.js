@@ -194,6 +194,11 @@ editorElements.forEach((element) => {
                     name: 'figure',
                     attributes: true,
                     classes: true
+                },
+                {
+                    name: 'input',
+                    attributes: true,
+                    classes: true
                 }
             ]
         },
