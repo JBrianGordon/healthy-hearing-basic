@@ -95,7 +95,9 @@ class LocationsController extends AppController
                 'LocationPhotos',
                 'LocationVidscrips',
                 'Providers',
-                'LocationNotes',
+                'LocationNotes' => [
+                    'sort' => ['LocationNotes.created' => 'DESC']
+                ],
                 'LocationEmails',
                 'Reviews' => [
                     'sort' => ['Reviews.created' => 'DESC'],

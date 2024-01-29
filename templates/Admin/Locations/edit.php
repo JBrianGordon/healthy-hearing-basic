@@ -698,20 +698,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 													<!-- *** TODO: set up notes *** -->
 													<?php $noteCount = count($location->location_notes); ?>
 													<div class="notes">
-														<label>Body</label>
-														<?= $this->Form->input("LocationNote.$noteCount.body", ['required' => false, 'class' => 'editor']); ?>
-														<?php 
-															//*** TODO: update when CKEditor is ready ***
-															/*echo $this->Ckeditor->replace("LocationNote{$noteCount}Body", [
-																'toolbar' => 'Basic', 
-																'height' => '200px', 
-																'var_name' => "NoteBody",
-															]); */
-														?>
-														<br />
 														<?php
 															foreach ($location->location_notes as $note) {
-																//echo $this->element('locations/note', ['note' => $note]);
+																echo $this->element('locations/note', ['note' => $note]);
 															}
 														?>
 													</div>
