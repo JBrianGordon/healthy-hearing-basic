@@ -1,10 +1,12 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
 <?php
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Corp $corp
- * @var \Cake\Collection\CollectionInterface|string[] $users
  */
 $this->Html->script('dist/corp_edit.min', ['block' => true]);
+
+$author_default = false;
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">
@@ -39,38 +41,38 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 									            <div class="clearfix"></div>
 								                <?php
 									                echo $this->Form->control('title');
-									                //*** TODO: Add primary authors ***
+                                            		echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 									                echo $this->Form->control('priority', ['label' => 'Order']);
 									                echo $this->Form->control('last_modified', ['empty' => true]);
-									                echo $this->Form->control('is_active');
+									                echo $this->Form->control('is_active', ['class' => 'col-sm-offset-3', 'style' => 'left:0', 'label' => ['class' => 'pl0']]);
 								                ?>
-												<div class="tabbable">
-													<ul class="nav nav-tabs">
-														<li class="active"><a href="#Corp" data-toggle="tab" aria-expanded="true">Company</a></li>
-														<li class=""><a href="#Admin" data-toggle="tab" aria-expanded="false">Admin</a></li>
-													</ul>
-													<div class="tab-content">
-														<br>
-														<div class="tab-pane active" id="Corp">
-															<?php
-																echo $this->Form->control('description');
-																echo $this->Form->control('short');
-															?>
-														</div>
-														<div class="tab-pane" id="Admin">
-															<?php
-																echo $this->Form->control('title_long');
-																echo $this->Form->control('slug');
-																echo $this->Form->control('thumb_url');
-																//*** TODO: add upload file functionality ***
-																echo $this->Form->control('facebook_title');
-																echo $this->Form->control('facebook_description');
-																echo $this->Form->control('facebook_image');
-																echo $this->Form->control('date_approved', ['empty' => true]);
-																//*** TODO: Add Contributors list ***
-															?>
-														</div>
+												<ul class="nav nav-tabs clearfix">
+													<li class="nav-item"><a href="#Corp" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">Company</a></li>
+													<li class="nav-item"><a href="#Admin" data-bs-toggle="tab" aria-expanded="false" class="nav-link">Admin</a></li>
+												</ul>
+												<div class="tab-content">
+													<br>
+													<div class="tab-pane active" id="Corp">
+														<?php
+															echo $this->Form->control('description', ['class' => 'editor']);
+															echo $this->Form->control('short');
+														?>
 													</div>
+													<div class="tab-pane" id="Admin">
+														<?php
+															echo $this->Form->control('title_long');
+															echo $this->Form->control('slug');
+															echo $this->Form->control('thumb_url');
+															//*** TODO: add upload file functionality ***
+															echo $this->Form->control('facebook_title');
+															echo $this->Form->control('facebook_description');
+															echo $this->Form->control('facebook_image');
+															echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
+														?>
+														<hr>
+														<h3>Contributors</h3>
+														<?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+														</div>
 												</div>
 								            </fieldset>
 								            <div class="form-actions tar">

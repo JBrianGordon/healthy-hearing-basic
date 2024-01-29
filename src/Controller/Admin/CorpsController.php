@@ -65,8 +65,8 @@ class CorpsController extends AppController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
-        $users = $this->Corps->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('corp', 'users'));
+        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set(compact('corp'));
     }
 
     /**
