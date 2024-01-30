@@ -104,6 +104,10 @@
 			width: 100%;
 			text-align: left;
 		}
+
+		&.col-md-1-override {
+			width: 8.33333%;
+		}
 		
 		&.col-md-2-override {
 			width: 16.66666%;
