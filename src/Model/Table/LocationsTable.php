@@ -1849,4 +1849,72 @@ class LocationsTable extends Table
         }
         return $timezone;
     }
+
+    /**
+    * Get the datetime for display in the clinic's timezone
+    */
+    public function getClinicDateTime($locationId, $datetime, $format='m/d/Y g:i a T') {
+        $timezone = $this->getClinicTimezone($locationId);
+        $date = new DateTime($datetime, new DateTimeZone($timezone));
+        return $date->format($format);
+    }
+
+    /**
+    * Gets a string of clinic hours for display
+    * @param integer $locationId
+    * @return string hours
+    */
+    public function getHours($locationId) {
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        // Get the string to display
+        $result = '';
+        if (!empty($locationHour)) {
+            $dayMap = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            foreach ($dayMap as $day) {
+                $time = '';
+                if ($locationHour->{$day.'_is_closed'} == true) {
+                    $time = 'Closed';
+                } else if ($locationHour->{$day.'_is_byappt'} == true) {
+                    $time = 'Open by appointment.';
+                }
+                if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                    $time = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+                }
+                if (!empty($time)) {
+                    $result .= ucfirst($day).': '.$time.'<br>';
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+    * Gets a string of today's clinic hours for display
+    * @param integer $locationId
+    * @return string today's hours
+    */
+    public function getHoursToday($locationId) {
+        $day = strtolower(date('D'));
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        $hoursToday = '';
+        if (!empty($locationHour)) {
+            if ($locationHour->{$day.'_is_closed'} == true) {
+                $hoursToday = 'closed';
+            }
+            if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                $hoursToday = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+            }
+        }
+        return $hoursToday;
+    }
 }

@@ -54,7 +54,7 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                         </tr>
                                         <tr>
                                             <th class="tar">Status</th>
-                                            <td><?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
+                                            <td><?= isset($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
                                         </tr>
                                         <tr>
                                             <th class="tar">Clinic</th>
@@ -66,14 +66,17 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                                             <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br>
                                                             <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br>
                                                             <?= $caCallGroup->location->phone ?><br>
-                                                            <strong><?= $caCallGroup->location->landmarks ?></strong>
+                                                            <?php if (!empty($caCallGroup->location->optional_message)): ?>
+                                                                <span class="locationMessage">Landmarks: <?= $caCallGroup->location->optional_message ?></span>
+                                                            <?php endif; ?>
+                                                            <?php if (!empty($caCallGroup->location->landmarks)): ?>
+                                                                <strong>Landmarks: <?= $caCallGroup->location->landmarks ?></strong>
+                                                            <?php endif; ?>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <span class="locationHours small"></span>
                                                         </div>
                                                     </div>
-                                                    <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
-                                                    <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br><?= $caCallGroup->location->city ?> <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br><?= $caCallGroup->location->phone ?><br><?= $caCallGroup->location->landmarks ?>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

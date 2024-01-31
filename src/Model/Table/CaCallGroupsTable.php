@@ -431,8 +431,7 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('traffic_medium')
             ->maxLength('traffic_medium', 50)
-            ->requirePresence('traffic_medium', 'create')
-            ->notEmptyString('traffic_medium');
+            ->allowEmptyString('traffic_medium');
 
         $validator
             ->boolean('is_appt_request_form')
@@ -473,7 +472,70 @@ class CaCallGroupsTable extends Table
             if (empty($entity->id_xml_file)) {
                 $entity->id_xml_file = '';
             }
+            if (empty($entity->traffic_medium)) {
+                $entity->traffic_medium = '';
+            }
         }
         return true;
+    }
+
+    /**
+    * Get the 10 most recent calls for the specified location id. Or the 10 most recent calls (all locations) if no id specified.
+    * @param location id - leave empty to find calls for all locations
+    * @param followupOnly - true to only find 'followup to set appt' calls
+    * @return array of previous calls
+    */
+    function getPreviousCalls($locationId = null, $followupOnly = false) {
+        $previousCalls = [];
+        $conditions = [];
+        if (!empty($locationId)) {
+            // Find calls for this clinic only
+            $conditions['location_id'] = $locationId;
+        }
+        $now = getDateTime('now', 'GMT', 'Y-m-d H:i:s');
+        if ($followupOnly) {
+            // Find followup calls only
+            $conditions['OR'] = [
+                [
+                    'status IN' => [CaCallGroup::STATUS_FOLLOWUP_SET_APPT, CaCallGroup::STATUS_TENTATIVE_APPT, /*CaCallGroup::STATUS_OUTBOUND_CLINIC_ATTEMPTED*/]
+                ],
+                /* HIDE SURVEY CALLS #15351
+                [
+                    // Survey calls
+                    'status' => [CaCallGroup::STATUS_APPT_SET],
+                    'appt_date <=' => $now,
+                ],*/
+            ];
+        } else {
+            // Find all calls that are not 'complete'
+            $conditions['OR'] = [
+                [
+                    'final_score_date <' => '2000-01-01'
+                ],
+                [
+                    'status IN' => [CaCallGroup::STATUS_INCOMPLETE],
+                ],
+            ];
+        }
+        // Find 10 most recent calls
+        $callGroups = $this->find('all', [
+            'contain' => [],
+            'conditions' => $conditions,
+            'order' => 'created DESC',
+            'limit' => 10,
+        ])->all();
+        foreach ($callGroups as $callGroup) {
+            $callDescription = $callGroup->created->format("n/d/y g:i A");
+            if (!empty($callGroup->caller_first_name) || !empty($callGroup->caller_last_name)) {
+                $callDescription .= " - ".$callGroup->caller_first_name." ".$callGroup->caller_last_name;
+            }
+            if (!empty($callGroup->patient_first_name) || !empty($callGroup->patient_last_name)) {
+                $callDescription .= " calling for ".$callGroup->patient_first_name." ".$callGroup->patient_last_name;
+            }
+            $status = empty($callGroup->status) ? "Incomplete" : CaCallGroup::$statuses[$callGroup->status];
+            $callDescription .= " (".$status.")";
+            $previousCalls[$callGroup->id] = $callDescription;
+        }
+        return $previousCalls;
     }
 }

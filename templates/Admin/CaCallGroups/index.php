@@ -167,7 +167,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 									                        <?php if (!empty($caCallGroup->prospect)): ?>
 									                            <span class="label label-default"><?= $caCallGroup->prospect ?></span><br>
 									                        <?php endif; ?>
-									                        <?= CaCallGroup::$statuses[$caCallGroup->status] ?></td>
+									                        <?= isset($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
 								                        <td class="p5">
 								                            <?php if ($caCallGroup->is_review_needed): ?>
 								                                <span class="badge bg-danger">Review Needed</span>

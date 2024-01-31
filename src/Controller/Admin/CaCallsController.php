@@ -6,6 +6,9 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
+use Cake\View\JsonView;
+use App\Model\Entity\CallSource;
+use App\Model\Entity\CaCall;
 
 /**
  * CaCalls Controller
@@ -35,6 +38,11 @@ class CaCallsController extends AppController
         $this->paginate = [
             'order' => ['CaCalls.id' => 'DESC']
         ];
+    }
+
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
     }
 
     /**
@@ -81,45 +89,73 @@ class CaCallsController extends AppController
      */
     public function inbound()
     {
-        $caCall = $this->CaCalls->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $caCall = $this->CaCalls->patchEntity($caCall, $this->request->getData());
-            if ($this->CaCalls->save($caCall)) {
-                $this->Flash->success(__('The ca call has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The ca call could not be saved. Please, try again.'));
+        // New inbound call via CallSource XML integration
+        $locationId = $this->request->getQuery('id');
+        if ($locationId == CallSource::LOCATION_ID_FROM_CLINIC) {
+            // Return call from clinic
+            return $this->redirect([
+                'action' => 'clinic_lookup'
+            ]);
+        } elseif ($locationId == CallSource::LOCATION_ID_QUICK_PICK) {
+            // Quick Pick
+            return $this->redirect([
+                'action' => 'quick_pick'
+            ]);
+        } elseif ($this->CaCalls->CaCallGroups->Locations->get($locationId)) {
+            // This is a new inbound call for a valid location id
+            return $this->redirect([
+                'action' => 'edit',
+                '?' => $this->request->getQueryParams()
+            ]);
         }
-        $caCallGroups = $this->CaCalls->CaCallGroups->find('list', ['limit' => 200])->all();
-        $users = $this->CaCalls->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('caCall', 'caCallGroups', 'users'));
+        // else, this is probably an internal call for the agent's direct extension
     }
 
     /**
      * New Inbound Call
      *
-     * @param string|null $id Ca Call id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit()
     {
-        $caCall = $this->CaCalls->get($id, [
-            'contain' => [],
+        $locationId = $this->request->getQuery('id');
+        $callerPhone = $this->request->getQuery('caller_phone');
+        $xmlFileId = $this->request->getQuery('xml_file_id');
+        $caCall = $this->CaCalls->newEntity([
+            'ca_call_group' => [
+                'location_id' => $locationId,
+                'caller_phone' => $callerPhone,
+                'id_xml_file' => $xmlFileId
+            ]
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $caCall = $this->CaCalls->patchEntity($caCall, $this->request->getData());
-            if ($this->CaCalls->save($caCall)) {
-                $this->Flash->success(__('The ca call has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        $requestData = $this->request->getData();
+        if ($this->request->is('post')) {
+//todo
+pr('post data =');
+pr($requestData);
+die('die post');
+            if (empty($requestData->id)) {
+                // Saving a new call
+                $requestData->duration = strtotime(getCurrentEasternTime()) - strtotime($requestData->start_time);
             }
-            $this->Flash->error(__('The ca call could not be saved. Please, try again.'));
+            $caCall = $this->CaCalls->patchEntity($caCall, $requestData, ['associated'=>['CaCallGroups']]);
+            $validate = ($requestData->ca_call_group->status == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            if ($this->CaCalls->save($caCall)) {
+                $this->Flash->success('The call has been saved.');
+                return $this->redirect('/admin-panel');
+            }
+            $this->Flash->error('The call could not be saved. Please, try again.');
         }
-        $caCallGroups = $this->CaCalls->CaCallGroups->find('list', ['limit' => 200])->all();
-        $users = $this->CaCalls->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('caCall', 'caCallGroups', 'users'));
+        $requestData['start_time'] = getCurrentEasternTime();
+        $requestData['call_type'] = CaCall::CALL_TYPE_INBOUND;
+        $requestData['user_id'] = $this->user->id;
+        $caCall = $this->CaCalls->patchEntity($caCall, $requestData, ['associated'=>['CaCallGroups']]);
+
+        // New inbound call
+        $previousCalls = $this->CaCalls->CaCallGroups->getPreviousCalls($locationId, false);
+        $this->set('previousCalls', $previousCalls);
+        $this->set('caCall', $caCall);
     }
 
     /**
@@ -154,5 +190,29 @@ class CaCallsController extends AppController
         $this->Export->setOverwriteLabels(['Users.username' => 'Agent']);
         $this->Export->exportCsv('export_calls.csv');
         die();
+    }
+
+    /**
+    * Finds info about the specified location and loads it via ajax.
+    */
+    public function getLocationData($locationId = null) {
+        $this->viewBuilder()->setLayout('ajax');
+        $this->meta['robots'] = "NOINDEX, FOLLOW";
+        $data = $this->CaCalls->getLocationData($locationId);
+        $this->set('data', $data);
+        $this->viewBuilder()->setOption('serialize', 'data');
+        return;
+    }
+
+    /**
+    * Finds previous calls for the specified location and loads it via ajax.
+    */
+    public function getPreviousCalls($locationId = null, $followupOnly = false) {
+        $this->viewBuilder()->setLayout('ajax');
+        $this->meta['robots'] = "NOINDEX, FOLLOW";
+        $data = $this->CaCalls->CaCallGroups->getPreviousCalls($locationId, $followupOnly);
+        $this->set('data', $data);
+        $this->viewBuilder()->setOption('serialize', 'data');
+        return;
     }
 }

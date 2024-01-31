@@ -2,6 +2,8 @@
 /*
 These buttons are displayed in the action bar for all Call Assist admin pages.
 */
+$requestParams = $this->request->getAttribute('params');
+$action = $requestParams['action'];
 $spamCount = isset($spamCount) ? $spamCount : 0;
 // TODO: some features only for call supervisor or admin. Is there a better way to check this?
 $user = $this->Identity->get();
@@ -21,5 +23,7 @@ $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
 <?php if ($isCallSupervisor): ?>
 	<?= $this->Html->link("Calls", ['controller' => 'ca_calls', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?= $this->Html->link("Call groups", ['controller' => 'ca_call_groups', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-	<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+	<?php if ($action == 'index'): ?>
+		<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+	<?php endif; ?>
 <?php endif; ?>
