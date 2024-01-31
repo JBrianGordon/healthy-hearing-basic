@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\LocationsTable $Locations
  * @method \App\Model\Entity\Location[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class LocationsController extends AppController
+class LocationsController extends BaseAdminController
 {
     /**
      * Initialize

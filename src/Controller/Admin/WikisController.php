@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\WikisTable $Wikis
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class WikisController extends AppController
+class WikisController extends BaseAdminController
 {
     /**
      * Index method
