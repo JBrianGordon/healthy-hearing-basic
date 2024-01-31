@@ -37,16 +37,22 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 						                <?php
 							                echo '<div class="mb-3 form-group text"><label class="form-label" for="id">ID</label><div class="form-control border-0 pl0">' . $crmSearch->id . '</div></div><div class="clearfix"></div>';
 						                    echo $this->Form->control('model');
-						                    echo $this->Form->control('priority');
+						                    echo $this->Form->control('priority', ['label' => 'Order']);
 						                    echo $this->Form->control('title');
 						                    echo $this->Form->control('search');
-						                    echo $this->Form->control('is_public');
-						                    echo $this->Form->control('user_id', ['options' => $users]);
-						                    echo $this->Form->control('created');
+						                ?>
+						                <div class="col-md-offset-3 pl0">
+						                    <?= $this->Form->control('is_public') ?>
+						                </div>
+						                <?php
+											echo $this->Form->control('user_id', ['options' => $users]);
+					                        echo $this->Form->control('created', ['disabled' => true]);
 						                ?>
 						            </fieldset>
-						            <?= $this->Form->button(__('Submit')) ?>
-						            <?= $this->Form->end() ?>
+                                    <div class="form-actions tar clearfix">
+                                        <?= $this->Form->button('Save CRM search', ['class' => 'btn btn-primary btn-lg']) ?>
+                                     </div>
+                                    <?= $this->Form->end() ?>
 						        </div>
 							</div>
 						</div>
