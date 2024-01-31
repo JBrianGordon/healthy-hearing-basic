@@ -90,13 +90,13 @@ if (empty($content->id)) {
 												<?php endif; ?>
 												<?php
 							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-							                    echo $this->Form->control('is_active');
+							                    echo $this->Form->control('is_active', ['type' => 'checkbox']);
 							                    echo '</div>';
 							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-							                    echo $this->Form->control('is_library_item');
+							                    echo $this->Form->control('is_library_item', ['type' => 'checkbox']);
 							                    echo '</div>';
 							                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-							                    echo $this->Form->control('is_gone', ['label' => '410 This Content']);
+							                    echo $this->Form->control('is_gone', ['label' => '410 This Content', 'type' => 'checkbox']);
 							                    echo '<span class="help-block"><strong>Note:</strong> If checked, this content will serve a 410 GONE instead of rendering the content.</span>';
 							                    echo '</div>';
 								                ?>
@@ -113,12 +113,14 @@ if (empty($content->id)) {
 								                            type="button" role="tab"
 								                            aria-controls="details" aria-selected="false">Details</button>
 								                    </li>
-								                    <li class="nav-item" role="presentation">
-								                        <button class="nav-link" id="admin-tab"
-								                            data-bs-toggle="tab" data-bs-target="#admin"
-								                            type="button" role="tab"
-								                            aria-controls="admin" aria-selected="false">Admin</button>
-								                    </li>
+								                    <?php if(isset($content->created)) : ?>
+									                    <li class="nav-item" role="presentation">
+									                        <button class="nav-link" id="admin-tab"
+									                            data-bs-toggle="tab" data-bs-target="#admin"
+									                            type="button" role="tab"
+									                            aria-controls="admin" aria-selected="false">Admin</button>
+									                    </li>
+									                <?php endif ?>
 								                </ul>
 								                <div class="tab-content">
 								                    <!-- Content Tab -->
@@ -157,16 +159,18 @@ if (empty($content->id)) {
 														<h3>Help Page Tags</h3>
 														<?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
 								                    </div>
-								                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
-								                    	<div class="row">
-								                    		<strong class="col-sm-3 tar">Date last saved</strong>
-									                        <p class="col-sm-9"><?= date('F j, Y', strtotime($content->last_modified)) ?></p>
+								                    <?php if(isset($content->created)) : ?>
+									                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
+									                    	<div class="row">
+									                    		<strong class="col-sm-3 tar">Date last saved</strong>
+										                        <p class="col-sm-9"><?= date('F j, Y', strtotime($content->last_modified)) ?></p>
+										                    </div>
+										                    <div class="row">
+										                    	<strong class="col-sm-3 tar">Date created</strong>
+										                    	<p class="col-sm-9"><?= date('F j, Y', strtotime($content->created)) ?></p>
+										                    </div>
 									                    </div>
-									                    <div class="row">
-									                    	<strong class="col-sm-3 tar">Date created</strong>
-									                    	<p class="col-sm-9"><?= date('F j, Y', strtotime($content->created)) ?></p>
-									                    </div>
-								                    </div>
+									                <?php endif; ?>
 								                </div>
 								
 								            </fieldset>
