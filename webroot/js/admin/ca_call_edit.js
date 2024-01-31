@@ -3,15 +3,11 @@
 //import '../common/play_media';
 //import {questionsOnLoad} from './ca_call_questions';
 
-//const locationTitle = '';
-//const pageLoadComplete = false;
-//const DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
+var locationTitle = '';
+var pageLoadComplete = false;
+var DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
 
 const onPageLoad = () => {
-  const locationTitle = '';
-  const pageLoadComplete = false;
-  const DIRECT_BOOK_NONE = DIRECT_BOOK_NONE ? DIRECT_BOOK_NONE : '';
-  
   document.querySelector('body').addEventListener('change', e => {
     const targetId = e.target.id;
     const targetClass = e.target.classList;
@@ -46,8 +42,8 @@ const onPageLoad = () => {
       document.querySelector('#CaCallGroupTopicWarrantyNew').dispatchEvent(new Event('change'));
     }
 
-    if (targetId === 'CaCallIsWrongNumber') {
-      const isWrongNumberChecked = document.querySelector('#CaCallIsWrongNumber').checked;
+    if (targetId === 'is-wrong-number') {
+      const isWrongNumberChecked = document.querySelector('#is-wrong-number').checked;
       const validNumberElements = document.querySelectorAll('.valid_number');
 
       if (isWrongNumberChecked) {
@@ -65,13 +61,13 @@ const onPageLoad = () => {
 
     if (targetId === 'cancelBtn') {
       const caCallGroupId = document.querySelector('#CaCallGroupId').value;
-      const url = `/ca_calls/unlock_call_group/${caCallGroupId}`;
+      const url = `/ca-calls/unlock_call_group/${caCallGroupId}`;
 
       fetch(url)
         .then(response => response.json())
         .then(data => {
           if (data.unlock_status === true) {
-            window.location = '/admin/ca_call_groups/outbound';
+            window.location = '/admin/ca-call-groups/outbound';
           }
         })
         .catch(error => {
@@ -121,7 +117,7 @@ const onPageLoad = () => {
     if (targetId === 'unlockBtn') {
       const caCallGroupId = document.querySelector('#CaCallGroupId').value;
       try {
-        const response = fetch(`/ca_calls/unlock_call_group/${caCallGroupId}`, {
+        const response = fetch(`/ca-calls/unlock_call_group/${caCallGroupId}`, {
           method: 'post',
           headers: {
             'Content-Type': 'application/json'
@@ -148,12 +144,14 @@ const onPageLoad = () => {
       case 'CaCallGroupTopic':
         onChangeTopic();
         break;
-      case 'CaCallGroupLocationId':
+      case 'location-id':
+      case 'ca-call-group-location-id':
         onChangeLocationId(targetValue);
         break;
       case 'CaCallCallType':
         onChangeCallType(targetValue);
         break;
+      case 'ca-call-group-is-patient':
       case 'is-patient':
         onChangeIsPatient(targetChecked);
         break;
@@ -179,7 +177,7 @@ const onPageLoad = () => {
       case 'CaCallGroupPatientLastName':
         onChangePatientInfo();
         break;
-      case 'CaCallGroupFrontDeskName':
+      case 'ca-call-group-front-desk-name':
         onChangeFrontDeskName(targetValue);
         break;
       case 'CaCallGroupApptDate':
@@ -213,21 +211,20 @@ const onPageLoad = () => {
       case 'CaCallGroupDidClinicContactConsumer':
         onChangeDidClinicContactConsumer(targetValue);
         break;
-    case 'CaCallGroupRefusedName':
+      case 'ca-call-group-refused-name':
         onChangeRefusedName();
         break;
-    case 'CaCallGroupDidClinicRefuse':
-      onChangeDidClinicRefuse();
-      break;
-    case'spamBtn':
-      document.querySelector('#CaCallGroupIsSpam').value = true;
-      document.querySelector('#CaCallForm').submit();
-      break;
+      case 'CaCallGroupDidClinicRefuse':
+        onChangeDidClinicRefuse();
+        break;
+      case'spamBtn':
+        document.querySelector('#CaCallGroupIsSpam').value = true;
+        document.querySelector('#CaCallForm').submit();
+        break;
       case 'deleteBtn':
         // The "delete" button was clicked. Display the confirmation modal.
         document.querySelector('#delete-modal').modal('show');
     case 'submitBtn':
-      console.debug('submit button pressed');
       // The "save" button was clicked
       // Verify that we have a valid clinic value
       validateLocationId();
@@ -260,11 +257,11 @@ const onPageLoad = () => {
     const targetId = e.target.id;
     const targetValue = e.target.value;
 
-    if (targetId === 'CaCallGroupFrontDeskName') {
+    if (targetId === 'ca-call-group-front-desk-name') {
       onChangeFrontDeskName(targetValue);
     }
 
-    if (targetId === 'CaCallGroupFrontDeskName') {
+    if (targetId === 'ca-call-group-front-desk-name') {
       onChangeFrontDeskName(targetValue);
     }
   });
@@ -293,13 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
  ****/
 
 function triggerChangeEvents(skipElements = []) {
-  // TODO: I don't think these IDs are correct anymore
-  const elements = ['#CaCallGroupLocationId','#CaCallCallType','#CaCallGroupCallerFirstName','#CaCallGroupCallerLastName','#CaCallGroupCallerPhone','#is-patient','#CaCallGroupPatientFirstName','#CaCallGroupPatientLastName','#CaCallGroupProspect','#CaCallGroupFrontDeskName','#CaCallGroupScore','#CaCallGroupTopicWarranty','#CaCallIsWrongNumber','#CaCallGroupRefusedName'];
+  const elements = ['#ca-call-group-location-id','#call-type','#ca-call-group-caller-first-name','#ca-call-group-caller-last-name','#ca-call-group-caller-phone','#ca-call-group-is-patient','#is-patient','#ca-call-group-patient-first-name','#ca-call-group-patient-last-name','#ca-call-group-prospect','#ca-call-group-front-desk-name','#ca-call-group-score','#ca-call-group-topic-warranty','#is-wrong-number','#ca-call-group-refused-name'];
   elements.forEach(element => {
     if (skipElements.indexOf(element) === -1) {
       var selector = document.querySelector(element);
       if (selector !== null) {
-        selector.dispatchEvent(new Event("change"));
+        selector.dispatchEvent(new Event('change', {bubbles: true}));
       }
     }
   });
@@ -307,17 +303,20 @@ function triggerChangeEvents(skipElements = []) {
 
 //Leaving this alone, since autocomplete is dependent on jQuery
 function locationAutocomplete() {
-  const locationSearch = document.querySelector("#CaCallLocationSearch, #location_search");
+  const locationSearch = document.querySelector("#location-search, #location_search");
   if (locationSearch) {
+    //TODO: Autocomplete (ticket #17080)
+    /*
     locationSearch.autocomplete({
       source: "/caautocomplete",
       minLength: "2",
       select: function(event, ui){
         if (ui.item.id) {
-          $("#CaCallGroupLocationId").val(ui.item.id).trigger("change");
+          $("#ca-call-group-location-id").val(ui.item.id).trigger("change");
         }
       }
     });
+    */
   }
 }
 
@@ -326,7 +325,7 @@ function validateLocationId() {
   if (document.querySelectorAll(locationSearchInput).length === 0) {
     return true;
   }
-  const locationId = document.querySelector("#CaCallGroupLocationId").value.trim();
+  const locationId = document.querySelector("#ca-call-group-location-id").value.trim();
   if (locationId && (parseInt(locationId) > 0)) {
     document.querySelector(locationSearchInput).setCustomValidity('');
   } else {
@@ -483,7 +482,7 @@ const calculateStatus = () => {
       document.querySelector("#CaCallGroupStatus").value = STATUS_VM_CALLBACK_ATTEMPTED;
     } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
       document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
-    } else if (document.querySelector("#CaCallIsWrongNumber").checked) {
+    } else if (document.querySelector("#is-wrong-number").checked) {
       document.querySelector("#CaCallGroupStatus").value = STATUS_WRONG_NUMBER;
     } else if (document.querySelector("#CaCallGroupRefusedNameAgainQuickPick").checked) {
       document.querySelector("#CaCallGroupStatus").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
@@ -520,13 +519,26 @@ const calculateStatus = () => {
 function onChangeLocationId(locationId) {
   doWeHaveLocationAndFrontDesk();
   if (locationId && locationId > 0) {
-    fetch(`/ca_calls/get_location_data/${locationId}`)
+    const url = `/admin/ca-calls/get-location-data/${locationId}`;
+    try {
+      fetch(url, {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+        },
+      })
       .then(response => response.json())
-      .then(data => handleLocationChange(data))
-      .catch(error => {
-        // Handle any errors
-        console.error('Error:', error);
+      .then(data => {
+        if (data.title !== undefined) {
+          handleLocationChange(data);
+        } else {
+          console.log('getLocationData failed');
+          console.debug(data);
+        }
       });
+    } catch (error) {
+      console.error(error);
+    }
   } else {
     handleLocationChange(null);
   }
@@ -542,26 +554,27 @@ function handleLocationChange(data) {
 
   updateElementHTML(".locationLink", data ? data['link'] : '');
   updateElementHTML(".locationTitle", data ? data['title'] : '');
-  const locationTitle = data ? data['title'] : '';
+  locationTitle = data ? data['title'] : '';
   updateElementHTML(".locationAddress", data ? data['address'] : '');
   updateElementHTML(".locationPhone", data ? data['phone'] : '');
   updateElementHTML(".locationCovid", data && data['covid'] ? `COVID-19 statement: ${data['covid']}` : '');
   updateElementHTML(".locationLandmarks", data && data['landmarks'] ? `Landmarks: ${data['landmarks']}` : '');
   updateElementHTML(".andYhn", data && data['isYhn'] === 1 ? 'and Your Hearing Network' : '');
-  const locationSearchInput = document.querySelector("#CaCallLocationSearch");
-  if (!locationSearchInput.value && data) {
-    locationSearchInput.value = data['searchTitle'];
-  }
+  
+  //todo: search
+  //const locationSearchInput = document.querySelector("#CaCallLocationSearch");
+  //if (!locationSearchInput.value && data) {
+  //  locationSearchInput.value = data['searchTitle'];
+  //}
 
   if (data) {
-    const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
+    const directBookTypeInput = document.querySelector("#ca-call-group-direct-book-type");
     const directBookUrlLink = document.querySelector("#directBookUrl");
-    
     directBookTypeInput.value = data['directBookType'];
     directBookUrlLink.textContent = data['directBookUrl'];
     directBookUrlLink.href = data['directBookUrl'];
   } else {
-    const directBookTypeInput = document.querySelector("#CaCallGroupDirectBookType");
+    const directBookTypeInput = document.querySelector("#ca-call-group-direct-book-type");
     directBookTypeInput.value = DIRECT_BOOK_NONE;
   }
   const locationCityStateStreetElement = document.querySelector(".locationCityStateStreet");
@@ -590,13 +603,14 @@ function handleLocationChange(data) {
 
   const locationTimezone = data ? data['timezone'] : '';
   const labelElement = document.querySelector("label[for='CaCallGroupApptDateMonth']");
-  labelElement.innerHTML = `Appointment date/time (${locationTimezone})<br><small class='text-muted'>This is the clinic's timezone</small>`;
+  //todo:
+  //labelElement.innerHTML = `Appointment date/time (${locationTimezone})<br><small class='text-muted'>This is the clinic's timezone</small>`;
 
   const locationId = data ? data['id'] : '';
 
   if (IS_CLINIC_LOOKUP_PAGE) {
     if (locationId) {
-      fetch(`/ca_calls/get_previous_calls/${locationId}/1`, {
+      fetch(`/ca-calls/get_previous_calls/${locationId}/1`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -647,25 +661,33 @@ function handleLocationChange(data) {
       //updateVisibility();
     }
   } else {
-    fetch(`/ca_calls/get_previous_calls/${locationId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Found multiple pending calls
-      const groupSearchElement = document.querySelector('.group_search');
-      groupSearchElement.innerHTML = '';
-      groupSearchElement.appendChild(new Option('', ''));
-      for (const key in data) {
-        groupSearchElement.appendChild(new Option(data[key], key));
-      }
-    })
-    .catch(error => {
-      // Handle the error
-    });
+    const url = `/admin/ca-calls/get-previous-calls/${locationId}`;
+    try {
+      fetch(url, {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        var size = Object.keys(data).length;
+        if (size > 0) {
+          // Found multiple pending calls
+          const groupSearchElement = document.querySelector('.group_search');
+          groupSearchElement.innerHTML = '';
+          groupSearchElement.appendChild(new Option('', ''));
+          for (const key in data) {
+            groupSearchElement.appendChild(new Option(data[key], key));
+          }
+        } else {
+          console.log('getPreviousCalls failed');
+          console.debug(data);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
@@ -693,9 +715,9 @@ function loadReturnVoicemailForm(type) {
   const caCallGroupId = document.querySelector('#CaCallGroupId').value;
   let ajaxUrl = null;
   if (type === 'clinic') {
-    ajaxUrl = '/admin/ca_calls/ajax_clinic_form/' + caCallGroupId;
+    ajaxUrl = '/admin/ca-calls/ajax_clinic_form/' + caCallGroupId;
   } else if (type === 'consumer') {
-    ajaxUrl = '/admin/ca_calls/ajax_consumer_form/' + caCallGroupId;
+    ajaxUrl = '/admin/ca-calls/ajax_consumer_form/' + caCallGroupId;
   }
 
   if (ajaxUrl) {
@@ -870,7 +892,7 @@ async function onChangeGroupSearch(group_id) {
   document.querySelector(".lock-error").style.display = "none";
   if (group_id) {
     try {
-      const response = await fetch(`/ca_calls/get_call_group_data/${group_id}`, {
+      const response = await fetch(`/ca-calls/get_call_group_data/${group_id}`, {
         method: "POST",
         dataType: "json"
       });
@@ -888,6 +910,34 @@ async function onChangeGroupSearch(group_id) {
     } catch (error) {
       console.error("Error:", error);
     }
+    //todo
+    /*
+    try {
+      fetch(`/ca-calls/get_call_group_data/${group_id}`, {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        var size = Object.keys(data).length;
+        if (size > 0) {
+          // Found multiple pending calls
+          const groupSearchElement = document.querySelector('.group_search');
+          groupSearchElement.innerHTML = '';
+          groupSearchElement.appendChild(new Option('', ''));
+          for (const key in data) {
+            groupSearchElement.appendChild(new Option(data[key], key));
+          }
+        } else {
+          console.log('getPreviousCalls failed');
+          console.debug(data);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }*/
   } else {
     handleCallGroupChange(null);
   }
@@ -934,13 +984,13 @@ function handleCallGroupChange(data) {
     document.querySelector("#CaCallGroupProspect").value = data["CaCallGroup"]["prospect"];
     if (!IS_CLINIC_LOOKUP_PAGE) {
       // Don't overwrite the front desk name on the clinic lookup page
-      document.querySelector("#CaCallGroupFrontDeskName").value = data["CaCallGroup"]["front_desk_name"];
+      document.querySelector("#ca-call-group-front-desk-name").value = data["CaCallGroup"]["front_desk_name"];
     }
     document.querySelector("#CaCallGroupScore").value = data["CaCallGroup"]["score"];
     document.querySelector("#CaCallGroupIsReviewNeeded").checked = data["CaCallGroup"]["is_review_needed"];
-    if (document.querySelector("#CaCallGroupLocationId").value != data["CaCallGroup"]["location_id"]) {
+    if (document.querySelector("#ca-call-group-location-id").value != data["CaCallGroup"]["location_id"]) {
       // Only trigger a location change if different
-      document.querySelector("#CaCallGroupLocationId").value = data["CaCallGroup"]["location_id"];
+      document.querySelector("#ca-call-group-location-id").value = data["CaCallGroup"]["location_id"];
     }
     setDateField("CaCallGroupApptDate", data["CaCallGroup"]["appt_date"]);
     setDateField("CaCallGroupScheduledCallDate", data["CaCallGroup"]["scheduled_call_date"]);
@@ -963,7 +1013,7 @@ function clearAllFields() {
     "#CaCallGroupCallerPhone",
     "#CaCallGroupPatientFirstName",
     "#CaCallGroupPatientLastName",
-    "#CaCallGroupFrontDeskName",
+    "#ca-call-group-front-desk-name",
   ];
 
   elementsToClear.forEach((selector) => {
@@ -1013,8 +1063,8 @@ function clearAllFields() {
   document.querySelector("#CaCallGroupScore").value = "";
   document.querySelector("#CaCallGroupScore").dispatchEvent(new Event("change"));
 
-  const locationSearchInput = document.querySelector("#CaCallGroupLocationSearch");
-  const locationIdInput = document.querySelector("#CaCallGroupLocationId");
+  const locationSearchInput = document.querySelector("#location-search");
+  const locationIdInput = document.querySelector("#ca-call-group-location-id");
 
   if (locationSearchInput && locationSearchInput.value !== "") {
     // Changing the group id should not clear the location search
@@ -1031,8 +1081,8 @@ function clearAllFields() {
 }
 
 function doWeHaveLocationAndFrontDesk() {
-  const locationId = document.querySelector("#CaCallGroupLocationId").value;
-  const frontDeskName = document.querySelector("#CaCallGroupFrontDeskName").value;
+  const locationId = document.querySelector("#ca-call-group-location-id").value;
+  const frontDeskName = document.querySelector("#ca-call-group-front-desk-name").value;
   const locationAndFrontDeskElements = document.querySelectorAll(".have-location-and-front-desk");
   
   if (locationId && frontDeskName) {
@@ -1049,7 +1099,7 @@ function doWeHaveLocationAndFrontDesk() {
 }
 
 function doWeHaveLocationInitially() {
-  const locationId = document.querySelector("#CaCallGroupLocationId").value;
+  const locationId = document.querySelector("#ca-call-group-location-id").value;
   const initHaveLocationElements = document.querySelectorAll(".init_have_location");
   const initNoLocationElements = document.querySelectorAll(".init_no_location");
 
@@ -1075,8 +1125,8 @@ function doWeHaveLocationInitially() {
 }
 
 function showGroupFound() {
-  const groupId = document.querySelector("#CaCallGroupId").value;
-  const frontDeskName = document.querySelector("#CaCallGroupFrontDeskName").value;
+  const groupId = document.querySelector("#ca-call-group-id").value;
+  const frontDeskName = document.querySelector("#ca-call-group-front-desk-name").value;
   const groupFoundElement = document.querySelector(".group-found");
   const groupFoundButtonsElement = document.querySelector(".group-found-buttons");
 
@@ -1086,7 +1136,7 @@ function showGroupFound() {
 
     if (groupNotLoaded && !isGroupLocked) {
       groupFoundElement.dataset.groupId = groupId;
-      fetch(`/admin/ca_calls/ajax_outbound_followup_form/${groupId}`)
+      fetch(`/admin/ca-calls/ajax_outbound_followup_form/${groupId}`)
         .then((response) => response.text())
         .then((data) => {
           const status = document.querySelector("#CaCallGroupStatus").value;
@@ -1104,7 +1154,7 @@ function showGroupFound() {
           groupFoundElement.style.display = "block";
           onPageLoad();
           questionsOnLoad();
-          triggerChangeEvents(["#CaCallGroupLocationId", "#CaCallCallType"]);
+          triggerChangeEvents(["#ca-call-group-location-id", "#CaCallCallType"]);
           document.querySelector("span.locationTitle").innerHTML = locationTitle;
         });
     }
@@ -1112,15 +1162,19 @@ function showGroupFound() {
     groupFoundButtonsElement.style.display = "block";
     //updateVisibility();
   } else {
-    groupFoundElement.innerHTML = "";
-    groupFoundElement.style.display = "none";
-    groupFoundButtonsElement.style.display = "none";
+    if (groupFoundElement) {
+      groupFoundElement.innerHTML = "";
+      groupFoundElement.style.display = "none";
+    }
+    if (groupFoundButtonsElement) {
+      groupFoundButtonsElement.style.display = "none";
+    }
     //updateVisibility();
   }
 }
 
 function showOutcome() {
-  const status = document.querySelector('#status').value;
+  const status = document.querySelector('#status') ? document.querySelector('#status').value : document.querySelector('#ca-call-group-status').value;
   const outcomeElement = document.querySelector('#outcome');
 
   if (status) {
@@ -1166,7 +1220,7 @@ function onChangeCallerPhone(callerPhone) {
 }
 
 function onChangePatientInfo() {
-  const isPatient = document.querySelector('#is-patient').checked;
+  const isPatient = document.querySelector('#ca-call-group-is-patient, #is-patient').checked;
   if (isPatient) {
     document.querySelectorAll('span.not-self').forEach(element => {
       element.style.display = 'none';
@@ -1179,8 +1233,8 @@ function onChangePatientInfo() {
     });
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
-      const callerFirstName = document.querySelector('#caller-first-name').value;
-      const callerLastName = document.querySelector('#caller-last-name').value;
+      const callerFirstName = document.querySelector('#ca-call-group-caller-first-name, #caller-first-name').value;
+      const callerLastName = document.querySelector('#ca-call-group-caller-last-name, #caller-last-name').value;
       patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
     }
   } else {
@@ -1189,8 +1243,8 @@ function onChangePatientInfo() {
     });
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
-      const patientFirstName = document.querySelector('#patient-first-name').value;
-      const patientLastName = document.querySelector('#patient-last-name').value;
+      const patientFirstName = document.querySelector('#ca-call-group-patient-first-name, #patient-first-name').value;
+      const patientLastName = document.querySelector('#ca-call-group-patient-last-name, #patient-last-name').value;
       patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
     }
     document.querySelectorAll('span.self').forEach(element => {
@@ -1392,7 +1446,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     updateVisibility();
     const groupProspect = document.getElementById('CaCallGroupProspect').value;
     if (groupProspect === PROSPECT_YES) {
-      if (document.getElementById('CaCallGroupRefusedName').checked) {
+      if (document.getElementById('ca-call-group-refused-name').checked) {
         document.getElementById('CaCallGroupScore').value = SCORE_MISSED_OPPORTUNITY;
       } else {
         document.getElementById('CaCallGroupScore').value = SCORE_NOT_REACHED;
@@ -1669,7 +1723,7 @@ function onChangeRefusedName() {
   const refusedNameYes = $('.refusedNameYes');
   const topicDeclined = $('#CaCallGroupTopicDeclined');
 
-  if ($('#CaCallGroupRefusedName').prop('checked')) {
+  if ($('#ca-call-group-refused-name').prop('checked')) {
     refusedNameNo.hide();
     refusedNameYes.show();
     if (pageLoadComplete) {

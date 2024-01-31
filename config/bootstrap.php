@@ -330,8 +330,12 @@ function arrayFilterRecursive($array) {
 * Returns a datetime formatted to display in the specified timezone
 */
 function getDateTime($datetime, $timezone='America/New_York', $format='m/d/Y g:i a T') {
-    $date = new DateTime($datetime, new DateTimeZone($timezone));
-    return $date->format($format);
+    if (is_string($datetime)) {
+        $date = new DateTime($datetime, new DateTimeZone($timezone));
+        return $date->format($format);
+    } else { // frozenTime passed in
+        return $datetime->setTimezone($timezone)->format($format);
+    }
 }
 
 /**
