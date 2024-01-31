@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\PagesTable $Pages
  * @method \App\Model\Entity\Page[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class PagesController extends AppController
+class PagesController extends BaseAdminController
 {
     /**
      * Index method

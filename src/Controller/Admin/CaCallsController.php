@@ -16,7 +16,7 @@ use App\Model\Entity\CaCall;
  * @property \App\Model\Table\CaCallsTable $CaCalls
  * @method \App\Model\Entity\CaCall[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CaCallsController extends AppController
+class CaCallsController extends BaseAdminController
 {
     /**
      * Initialize

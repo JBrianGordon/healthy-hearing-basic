@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\StatesTable $States
  * @method \App\Model\Entity\State[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class StatesController extends AppController
+class StatesController extends BaseAdminController
 {
 	
 	public $paginate = [

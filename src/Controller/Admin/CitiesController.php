@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CitiesTable $Cities
  * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CitiesController extends AppController
+class CitiesController extends BaseAdminController
 {
     /**
      * Initialize

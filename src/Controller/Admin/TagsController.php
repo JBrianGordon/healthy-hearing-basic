@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\TagsTable $Tags
  * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class TagsController extends AppController
+class TagsController extends BaseAdminController
 {
     /**
      * Index method

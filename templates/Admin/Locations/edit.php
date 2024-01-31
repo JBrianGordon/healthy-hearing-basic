@@ -1,4 +1,4 @@
-<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
+<?= $this->element('ckbox_script'); ?>
 <?php
 /**
  * @var \App\View\AppView $this

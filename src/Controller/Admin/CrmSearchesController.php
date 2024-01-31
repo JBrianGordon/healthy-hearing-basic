@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CrmSearchesTable $CrmSearches
  * @method \App\Model\Entity\CrmSearch[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CrmSearchesController extends AppController
+class CrmSearchesController extends BaseAdminController
 {
     /**
      * Initialize

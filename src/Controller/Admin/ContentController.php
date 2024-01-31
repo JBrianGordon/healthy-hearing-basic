@@ -13,7 +13,7 @@ use Cake\Routing\Router;
  * @property \App\Model\Table\ContentTable $Content
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ContentController extends AppController
+class ContentController extends BaseAdminController
 {
     public $paginate = [
         'order' => [

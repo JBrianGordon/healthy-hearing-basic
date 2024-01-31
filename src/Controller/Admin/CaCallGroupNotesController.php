@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CaCallGroupsTable $CaCallGroups
  * @method \App\Model\Entity\CaCallGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CaCallGroupNotesController extends AppController
+class CaCallGroupNotesController extends BaseAdminController
 {
     /**
      * Delete method

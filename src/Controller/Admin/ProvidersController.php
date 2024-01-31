@@ -12,7 +12,7 @@ use Cake\View\JsonView;
  * @property \App\Model\Table\ProvidersTable $Providers
  * @method \App\Model\Entity\Provider[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ProvidersController extends AppController
+class ProvidersController extends BaseAdminController
 {
     /**
      * Initialize

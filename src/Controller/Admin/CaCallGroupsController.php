@@ -12,7 +12,7 @@ use App\Model\Entity\CaCallGroup;
  * @property \App\Model\Table\CaCallGroupsTable $CaCallGroups
  * @method \App\Model\Entity\CaCallGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CaCallGroupsController extends AppController
+class CaCallGroupsController extends BaseAdminController
 {
     /**
      * Initialize

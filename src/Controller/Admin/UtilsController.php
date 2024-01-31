@@ -11,7 +11,7 @@ use Cake\ORM\TableRegistry;
  *
  * @method \App\Model\Entity\Util[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UtilsController extends AppController
+class UtilsController extends BaseAdminController
 {
     /**
      * Panel method
