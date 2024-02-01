@@ -13,7 +13,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-				<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+				<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'edit'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 				<?= $this->Html->link("<i class='bi bi-trash'></i> Delete", ['action' => 'delete', $crmSearch->id], ['class' => 'btn btn-danger', 'escape' => false], ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id)]) ?>
 				<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 			</div>

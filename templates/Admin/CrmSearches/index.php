@@ -45,7 +45,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(" Browse", ['action' => '#'], ['class' => 'btn btn-default bi bi-search', 'escape' => false]) ?>
-				<?= $this->Html->link(" Add", ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
+				<?= $this->Html->link(" Add", ['action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
 				<?= $this->Html->link(" CRM", ['action' => 'locations'], ['class' => 'btn btn-default bi bi-person-fill', 'escape' => false]) ?>
 			</div>
 		</div>
