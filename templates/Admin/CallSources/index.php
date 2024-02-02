@@ -40,7 +40,6 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 				<?= $this->Form->button(' Export', ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
 			</div>
 		</div>
