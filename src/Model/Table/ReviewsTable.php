@@ -317,7 +317,7 @@ class ReviewsTable extends Table
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        //If we're passing in the body, update character_count.
+        // If we're passing in the body, update character_count.
         if ($entity->isDirty('body')) {
             $entity->set('character_count', strlen($entity->get('body')));
         }
