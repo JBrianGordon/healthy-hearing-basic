@@ -180,6 +180,11 @@ editorElements.forEach((element) => {
                     classes: true
                 },
                 {
+                    name: 'span',
+                    attributes: true,
+                    classes: true
+                },
+                {
                     name: 'script',
                     attributes: {
                         type: 'application/ld+json'
