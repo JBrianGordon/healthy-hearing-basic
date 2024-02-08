@@ -114,22 +114,23 @@
 		<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 	<!-- End TrustBox script -->
 <?php endif; ?>
-
-<script type="application/ld+json">
-{
-	"@context" : "https://schema.org",
-	"@type" : "Organization",
-	"name" : "<?= Configure::read('siteName') ?>",
-	"url" : "https://www.<?= Configure::read('siteUrl') ?>",
-	"logo": "https://www.<?= Configure::read('siteUrl') . Configure::read('logo') ?>"
-	<?php if (Configure::read('country') == 'US'): ?>
-	,
-	"sameAs" : [
-		"https://www.facebook.com/healthyhearing",
-		"https://twitter.com/HearingAids",
-		"https://www.youtube.com/user/HealthyHearing",
-		"https://www.linkedin.com/company/9426778"
-	]
-	<?php endif; ?>
-}
-</script>
+<?php if (!empty($show_organization_schema)): ?>
+	<script type="application/ld+json">
+	{
+		"@context" : "https://schema.org",
+		"@type" : "Organization",
+		"name" : "<?= Configure::read('siteName') ?>",
+		"url" : "https://www.<?= Configure::read('siteUrl') ?>",
+		"logo": "https://www.<?= Configure::read('siteUrl') . Configure::read('logo') ?>"
+		<?php if (Configure::read('country') == 'US'): ?>
+		,
+		"sameAs" : [
+			"https://www.facebook.com/healthyhearing",
+			"https://twitter.com/HearingAids",
+			"https://www.youtube.com/user/HealthyHearing",
+			"https://www.linkedin.com/company/9426778"
+		]
+		<?php endif; ?>
+	}
+	</script>
+<?php endif; ?>

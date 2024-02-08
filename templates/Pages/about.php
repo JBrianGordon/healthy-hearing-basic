@@ -6,7 +6,7 @@
 
 	use Cake\Core\Configure;
 
-	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Learn about '.Configure::read('siteName')), 'url' => '/contact-us']]);
+	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('About '.Configure::read('siteName')), 'url' => '/contact-us']]);
 	
 	$this->Html->script('dist/common.min', ['block' => true]);
 ?>

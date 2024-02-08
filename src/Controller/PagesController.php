@@ -50,6 +50,7 @@ class PagesController extends AppController
     public function home()
     {
         $content = $this->Pages->findByTitle('home')->first()->content;
+        $this->set('show_organization_schema', true);
         $this->set('content', $content);
     }
 
