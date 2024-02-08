@@ -10,7 +10,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ZipsController extends AppController
+class ZipsController extends BaseAdminController
 {
     /**
      * Initialize

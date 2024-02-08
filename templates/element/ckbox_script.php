@@ -1,0 +1,1 @@
+<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>

@@ -224,6 +224,18 @@ class ReviewsTable extends Table
             ->requirePresence('last_name')
             ->notEmptyString('last_name');
 
+        $validator
+            ->add('last_name', 'moreThanOne', [
+                'rule' => function ($value, $context) {
+                    $input = strval($value);
+                    if (strlen($input) < 2 || (strlen($input) < 3 && !ctype_alpha($input))) {
+                        return false;
+                    }
+                    return true;
+                },
+                'message' => Configure::read('siteName').' requires you to submit your full last name for our review verification process. Although we show only the first name and last initial of the submitter, we cannot publish reviews submitted without a complete and accurate last name.'
+            ]);
+
         // Country-specific postal code validation
         $country = ucfirst(strtolower(Configure::read('country')));
         $countryValidator = 'Cake\\Localized\\Validation\\' . $country . 'Validation';
@@ -305,6 +317,11 @@ class ReviewsTable extends Table
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        // If we're passing in the body, update character_count.
+        if ($entity->isDirty('body')) {
+            $entity->set('character_count', strlen($entity->get('body')));
+        }
+
         $entity->set('sendReviewEmail', false);
 
         // Check if 'status' OR 'response_status' has changed

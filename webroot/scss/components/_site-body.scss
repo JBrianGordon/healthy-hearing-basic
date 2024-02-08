@@ -77,132 +77,131 @@
 	
   }
   
-&.fap-cities {
-	//If this is breaking styling, find another solution
-	//padding: 0;
-	
-	.container {
-		padding-left: 15px;
-		padding-right: 15px;
+.container {
+	padding-left: 15px;
+	padding-right: 15px;
 
-		.notes {
-			.ck-editor {
-				float: right;
-				margin-bottom: 20px;
-			}
+	.notes {
+		.ck-editor {
+			float: right;
+			margin-bottom: 20px;
 		}
 	}
-	  
-	label {
-		width: 25%;
-		float: left;
-		text-align: right;
-		padding: 7px 15px 0;
-		font-weight: bold;
+}
+  
+label {
+	width: 25%;
+	float: left;
+	text-align: right;
+	padding: 7px 15px 0;
+	font-weight: bold;
 
-		@media(max-width: $screen-sm-max){
-			width: 100%;
-			text-align: left;
-		}
-		
-		&.col-md-2-override {
-			width: 16.66666%;
-		}
-		
-		&.col-md-4-override {
-			width: 33.33333%;
-		}
+	@media(max-width: $screen-sm-max){
+		width: 100%;
+		text-align: left;
+	}
+
+	&.col-md-1-override {
+		width: 8.33333%;
 	}
 	
-	.form-control, .form-select {
-		width: 75%;
-		font-size: 16px;
-		flex-flow: row-reverse;
-
-		@media(max-width: $screen-sm-max){
-			width: 100%;
-		}
-		
-		&.inline-date {
-			width: 46%;
-		}
-		
-		&.col-md-8-override {
-			width: 66.66666%;
-		}
-		
-		&.col-md-10-override {
-			width: 83.33333%;
-		}
-
-		&#services, &#about-us{
-			display: block;
-			width: 0;
-			padding: 0;
-			border: 0;
-		}
+	&.col-md-2-override {
+		width: 16.66666%;
 	}
 	
-	.form-check {
-		padding-left: 0;
+	&.col-md-4-override {
+		width: 33.33333%;
+	}
+}
+
+.form-control, .form-select {
+	width: 75%;
+	font-size: 16px;
+	flex-flow: row-reverse;
+
+	@media(max-width: $screen-sm-max){
+		width: 100%;
+	}
+	
+	&.inline-date {
+		width: 46%;
+	}
+	
+	&.col-md-8-override {
+		width: 66.66666%;
+	}
+	
+	&.col-md-10-override {
+		width: 83.33333%;
+	}
+
+	&#services, &#about-us{
+		display: block;
+		width: 0;
+		padding: 0;
+		border: 0;
+	}
+}
+
+.form-check {
+	padding-left: 0;
+	
+	.form-check-input {
+		float: none;
+		position: relative;
+		left: 30px;
+		top: 8px;
+	}
+	
+	&.checkbox {
+		label {
+			min-height: 25px;
+			padding-left: 20px;
+			margin-bottom: 0;
+			font-weight: normal;
+			cursor: pointer;
+			width: auto;
+		}
 		
-		.form-check-input {
-			float: none;
+		input[type=checkbox] {
 			position: relative;
-			left: 30px;
-			top: 8px;
+			margin-right: 10px;
+			float: left;
 		}
-		
-		&.checkbox {
-			label {
-				min-height: 25px;
-				padding-left: 20px;
-				margin-bottom: 0;
-				font-weight: normal;
-				cursor: pointer;
+	}
+}
+
+.form-group{
+	display: flex;
+	flex-grow: 1;
+
+	//commented out for checkboxes on content edit page
+	// &.form-check{
+	// 	flex-direction: row-reverse;
+	// 	place-content: flex-end;
+	// }
+
+	&.multicheckbox{
+		flex-wrap: wrap;
+
+		.form-check {
+			flex: 0 0 33.33%;
+			box-sizing: border-box;
+
+			.form-check-label{
 				width: auto;
-			}
-			
-			input[type=checkbox] {
-				position: relative;
-				margin-right: 10px;
-				float: left;
+				float: none;
+				padding-left: 30px;
+				text-align: left;
 			}
 		}
 	}
 
-	.form-group{
-		display: flex;
-		flex-grow: 1;
+	@media(max-width: $screen-sm-max){
+		flex-direction: column;
 
-		//commented out for checkboxes on content edit page
-		// &.form-check{
-		// 	flex-direction: row-reverse;
-		// 	place-content: flex-end;
-		// }
-
-		&.multicheckbox{
-			flex-wrap: wrap;
-
-			.form-check {
-  			flex: 0 0 33.33%;
-  			box-sizing: border-box;
-
-  			.form-check-label{
-  				width: auto;
-  				float: none;
-  				padding-left: 30px;
-  				text-align: left;
-  			}
-			}
-		}
-
-		@media(max-width: $screen-sm-max){
-			flex-direction: column;
-
-			&.checkbox {
-				flex-direction: initial;
-			}
+		&.checkbox {
+			flex-direction: initial;
 		}
 	}
 }

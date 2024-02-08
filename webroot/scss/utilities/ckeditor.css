@@ -2,6 +2,7 @@
 /*CKEditor CSS customizations below*/
 .ck.ck-editor__main{
 	max-height: 500px;
+	font-weight: normal;
 }
 .ck-source-editing-area{
 	max-height: 500px;

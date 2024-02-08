@@ -6,6 +6,8 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
@@ -206,5 +208,43 @@ class CaCallsTable extends Table
                 return false;
         }
         return $callType;
+    }
+
+    /**
+    * Finds info about the specified location and puts it into an array for display.
+    */
+    public function getLocationData($locationId = null) {
+        $data = [];
+        $this->Locations = TableRegistry::get('Locations');
+        $location = $this->Locations->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'id' => $locationId,
+            ],
+        ])->first();
+        if (!empty($location)) {
+            $address = $location->address.'<br>'.
+                $location->city.', '.$location->state.' '.$location->zip;
+            $cityStateStreet = $location->city.', '.$location->state.', '.$location->address;
+            $link = "<a href='".Router::url($location->hh_url)."' target='_blank'>".$location->title."</a>";
+            $searchTitle = $location->title.' | '.$location->city.', '.$location->state.' '.$location->zip;
+            $data['id'] = $location->id;
+            $data['title'] = $location->title;
+            $data['phone']  = formatPhoneNumber($location->phone);
+            $data['address'] = $address;
+            $data['link'] = $link;
+            $data['landmarks'] = $location->landmarks;
+            $data['timezone'] = $this->Locations->getClinicTimezone($locationId);
+            $data['currentTime'] = $this->Locations->getClinicDateTime($locationId, 'now', 'h:i A');
+            $data['searchTitle'] = $searchTitle;
+            $data['isYhn'] = $location->is_yhn;
+            $data['directBookType'] = $location->direct_book_type;
+            $data['directBookUrl'] = $location->direct_book_url;
+            $data['cityStateStreet'] = $cityStateStreet;
+            $data['hours'] = $this->Locations->getHours($locationId);
+            $data['hoursToday'] = $this->Locations->getHoursToday($locationId);
+            $data['message'] = trim($location->optional_message);
+        }
+        return $data;
     }
 }

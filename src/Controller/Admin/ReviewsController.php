@@ -17,7 +17,7 @@ use Cake\ORM\Locator\LocatorAwareTrait;
  * @property \App\Model\Table\ReviewsTable $Reviews
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ReviewsController extends AppController
+class ReviewsController extends BaseAdminController
 {
     use LogTrait;
     use LocatorAwareTrait;

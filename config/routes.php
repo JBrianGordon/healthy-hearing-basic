@@ -61,6 +61,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
         $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
+        $builder->connect('/clinic/library', ['controller' => 'LibraryItems', 'action' => 'index', 'index']);
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');

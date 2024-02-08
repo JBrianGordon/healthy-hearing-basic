@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CorpsTable $Corps
  * @method \App\Model\Entity\Corp[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CorpsController extends AppController
+class CorpsController extends BaseAdminController
 {
 	
 	public $paginate = [

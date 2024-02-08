@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\ImportsTable $Imports
  * @method \App\Model\Entity\Import[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ImportsController extends AppController
+class ImportsController extends BaseAdminController
 {
     /**
      * Initialize

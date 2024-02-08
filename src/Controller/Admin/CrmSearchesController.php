@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CrmSearchesTable $CrmSearches
  * @method \App\Model\Entity\CrmSearch[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CrmSearchesController extends AppController
+class CrmSearchesController extends BaseAdminController
 {
     /**
      * Initialize
@@ -55,27 +55,6 @@ class CrmSearchesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $crmSearch = $this->CrmSearches->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $crmSearch = $this->CrmSearches->patchEntity($crmSearch, $this->request->getData());
-            if ($this->CrmSearches->save($crmSearch)) {
-                $this->Flash->success(__('The crm search has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
-        }
-        $users = $this->CrmSearches->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('crmSearch', 'users'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Crm Search id.
@@ -84,10 +63,14 @@ class CrmSearchesController extends AppController
      */
     public function edit($id = null)
     {
-        $crmSearch = $this->CrmSearches->get($id, [
-            'contain' => [],
-        ]);
-
+        if($id !== null) {
+            $crmSearch = $this->CrmSearches->get($id, [
+                'contain' => [],
+            ]);
+        } else {
+            $this->Flash->warning('To create a saved search, run a search.');
+            return $this->redirect(['admin' => true, 'controller' => 'locations', 'action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $crmSearch = $this->CrmSearches->patchEntity($crmSearch, $this->request->getData());
             if ($this->CrmSearches->save($crmSearch)) {
