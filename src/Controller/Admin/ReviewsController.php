@@ -8,6 +8,8 @@ use Cake\Log\LogTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\View\JsonView;
 use Cake\Utility\Inflector;
+use Cake\View\ViewBuilder;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Reviews Controller
@@ -18,6 +20,7 @@ use Cake\Utility\Inflector;
 class ReviewsController extends AppController
 {
     use LogTrait;
+    use LocatorAwareTrait;
 
     public $paginate = [
         'limit' => 50,
@@ -336,12 +339,6 @@ class ReviewsController extends AppController
      */
     public function export()
     {
-        $reviews = $this->Reviews
-            ->find('search', [
-                'search' => $this->request->getQueryParams(),
-            ])
-            ->contain(['Locations']);
-
         $extract = [
             'id',
             'location_id',
@@ -375,14 +372,41 @@ class ReviewsController extends AppController
         );
         $header = array_map([new Inflector(), 'humanize'], $header);
 
-        $this->set(compact('reviews'));
-        $this->viewBuilder()
-            ->setClassName('CsvView.Csv')
-            ->setOptions([
-                'serialize' => 'reviews',
-                'header' => $header,
-                'extract' => $extract,
-            ]);
+        $reviews = $this->Reviews
+            ->find('search', [
+                'search' => $this->request->getQueryParams(),
+            ])
+            ->contain(['Locations']);
 
+        if ($reviews->count() < 2000) { // Immediately download small exports
+
+            $this->setResponse($this->getResponse()->withDownload('reviewsExport.csv'));
+            $this->set(compact('reviews'));
+            $this->viewBuilder()
+                ->setClassName('CsvView.Csv')
+                ->setOptions([
+                    'serialize' => 'reviews',
+                    'header' => $header,
+                    'extract' => $extract,
+                ]);
+
+        } else { // Email large exports
+            $data = [
+                'vars' => [
+                    'table' => 'Reviews',
+                    'queryParams' => $this->request->getQueryParams(),
+                    'containedTables' => ['Locations'],
+                    'extract' => $extract,
+                    'header' => $header,
+                    'csvExportFile' => '/tmp/reviewsExport.csv',
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+
+            $this->Flash->success(__('Large file export. Results will be emailed.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }
