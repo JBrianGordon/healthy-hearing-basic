@@ -133,6 +133,7 @@ return static function (RouteBuilder $routes) {
     // Admin-prefixed routes
     $routes->prefix('Admin', function (RouteBuilder $adminBuilder) {
         $adminBuilder->connect('/', 'Utils::panel');
+        $adminBuilder->connect('/seo/seo-canonicals', ['controller' => 'SeoCanonicals', 'action' => 'index', 'index']);
 
         // All routes here will be prefixed with `/admin`, and
         // have the `'prefix' => 'Admin'` route element added that

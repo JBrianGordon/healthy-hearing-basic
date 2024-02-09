@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
+
+use App\Controller\AppController;
 
 /**
  * SeoCanonicals Controller
@@ -9,7 +11,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoCanonicalsTable $SeoCanonicals
  * @method \App\Model\Entity\SeoCanonical[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoCanonicalsController extends AppController
+class SeoCanonicalsController extends BaseAdminController
 {
     /**
      * Index method
