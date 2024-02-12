@@ -29,22 +29,6 @@ class SeoCanonicalsController extends BaseAdminController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Seo Canonical id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoCanonical = $this->SeoCanonicals->get($id, [
-            'contain' => ['SeoUris'],
-        ]);
-
-        $this->set(compact('seoCanonical'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
