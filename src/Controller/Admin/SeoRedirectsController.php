@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoRedirects Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoRedirectsTable $SeoRedirects
  * @method \App\Model\Entity\SeoRedirect[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoRedirectsController extends AppController
+class SeoRedirectsController extends BaseAdminController
 {
     /**
      * Index method
@@ -24,22 +24,6 @@ class SeoRedirectsController extends AppController
         $seoRedirects = $this->paginate($this->SeoRedirects);
 
         $this->set(compact('seoRedirects'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Seo Redirect id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoRedirect = $this->SeoRedirects->get($id, [
-            'contain' => ['SeoUris'],
-        ]);
-
-        $this->set(compact('seoRedirect'));
     }
 
     /**
