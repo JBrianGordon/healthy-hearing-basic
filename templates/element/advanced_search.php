@@ -51,7 +51,7 @@ $this->loadHelper('Search.Search', [
     <?php if (!empty($this->request->getQueryParams())) : ?>
         <div class="col col-md-auto p-0">
             Showing search results.
-            <?= $this->Html->link('Clear Search', ['?'=>'']) ?>
+            <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
         </div>
     <?php endif; ?>
     <div class="col col-md-auto mb20">
