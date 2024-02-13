@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoBlacklists Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoBlacklistsTable $SeoBlacklists
  * @method \App\Model\Entity\SeoBlacklist[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoBlacklistsController extends AppController
+class SeoBlacklistsController extends BaseAdminController
 {
     /**
      * Index method
@@ -21,22 +21,6 @@ class SeoBlacklistsController extends AppController
         $seoBlacklists = $this->paginate($this->SeoBlacklists);
 
         $this->set(compact('seoBlacklists'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Seo Blacklist id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoBlacklist = $this->SeoBlacklists->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('seoBlacklist'));
     }
 
     /**
