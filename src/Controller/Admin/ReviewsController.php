@@ -40,6 +40,9 @@ class ReviewsController extends BaseAdminController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
     }
 
     public function viewClasses(): array

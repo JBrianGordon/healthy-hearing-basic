@@ -201,19 +201,19 @@ $callTrackingMenu = [
 ********************************/
 $seoItems = [];
 $seoItems['Canonicals'] = [
-    'url' => '/admin/seo/seo-canonicals',
+    'url' => '/admin/seo-canonicals',
 ];
 $seoItems['Meta tags'] = [
-    'url' => '/admin/seo/seo-meta-tags',
+    'url' => '/admin/seo-meta-tags',
 ];
 $seoItems['Redirects'] = [
-    'url' => '/admin/seo/seo-redirects',
+    'url' => '/admin/seo-redirects',
 ];
 $seoItems['Status codes'] = [
-    'url' => '/admin/seo/seo-status-codes',
+    'url' => '/admin/seo-status-codes',
 ];
 $seoItems['Titles'] = [
-    'url' => '/admin/seo/seo-titles',
+    'url' => '/admin/seo-titles',
 ];
 if (Configure::read('showImageSitemap')) {
     $seoItems['Image sitemap'] = [

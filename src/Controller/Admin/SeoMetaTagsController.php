@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoMetaTags Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoMetaTagsTable $SeoMetaTags
  * @method \App\Model\Entity\SeoMetaTag[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoMetaTagsController extends AppController
+class SeoMetaTagsController extends BaseAdminController
 {
     /**
      * Index method
@@ -24,22 +24,6 @@ class SeoMetaTagsController extends AppController
         $seoMetaTags = $this->paginate($this->SeoMetaTags);
 
         $this->set(compact('seoMetaTags'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Seo Meta Tag id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoMetaTag = $this->SeoMetaTags->get($id, [
-            'contain' => ['SeoUris'],
-        ]);
-
-        $this->set(compact('seoMetaTag'));
     }
 
     /**
