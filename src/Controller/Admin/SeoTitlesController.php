@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoTitles Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoTitlesTable $SeoTitles
  * @method \App\Model\Entity\SeoTitle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoTitlesController extends AppController
+class SeoTitlesController extends BaseAdminController
 {
     /**
      * Index method
@@ -24,22 +24,6 @@ class SeoTitlesController extends AppController
         $seoTitles = $this->paginate($this->SeoTitles);
 
         $this->set(compact('seoTitles'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Seo Title id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoTitle = $this->SeoTitles->get($id, [
-            'contain' => ['SeoUris'],
-        ]);
-
-        $this->set(compact('seoTitle'));
     }
 
     /**
