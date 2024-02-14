@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoStatusCodes Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoStatusCodesTable $SeoStatusCodes
  * @method \App\Model\Entity\SeoStatusCode[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoStatusCodesController extends AppController
+class SeoStatusCodesController extends BaseAdminController
 {
     /**
      * Index method
@@ -24,22 +24,6 @@ class SeoStatusCodesController extends AppController
         $seoStatusCodes = $this->paginate($this->SeoStatusCodes);
 
         $this->set(compact('seoStatusCodes'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Seo Status Code id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $seoStatusCode = $this->SeoStatusCodes->get($id, [
-            'contain' => ['SeoUris'],
-        ]);
-
-        $this->set(compact('seoStatusCode'));
     }
 
     /**
