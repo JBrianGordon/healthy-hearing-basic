@@ -34,7 +34,7 @@ class ExportCsvTask extends Task {
                 'extract' => $data['vars']['extract'],
             ]);
 
-        $view = $builder->build($exportData->toArray());
+        $view = $builder->setVars($exportData->toArray())->build();
         $view->set(compact('exportData'));
 
         // Save the file
