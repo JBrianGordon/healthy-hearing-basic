@@ -64,7 +64,19 @@ return [
 		'plugins' => [],
 
 		// ignores task classes
-		'ignoredTasks' => [],
+		// 'ignoredTasks' => [],
+		'ignoredTasks' => [
+		    'Queue\Queue\Task\CostsExampleTask',
+		    'Queue\Queue\Task\EmailTask',
+		    'Queue\Queue\Task\ExampleTask',
+		    'Queue\Queue\Task\ExceptionExampleTask',
+		    'Queue\Queue\Task\ExecuteTask',
+		    'Queue\Queue\Task\MonitorExampleTask',
+		    'Queue\Queue\Task\ProgressExampleTask',
+		    'Queue\Queue\Task\RetryExampleTask',
+		    'Queue\Queue\Task\SuperExampleTask',
+		    'Queue\Queue\Task\UniqueExampleTask',
+		],
 
 		// Control serializer strategy
 		'serializerClass' => null, // FQCN
