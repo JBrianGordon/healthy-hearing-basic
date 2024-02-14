@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 /**
  * SeoUris Controller
@@ -9,7 +9,7 @@ namespace App\Controller;
  * @property \App\Model\Table\SeoUrisTable $SeoUris
  * @method \App\Model\Entity\SeoUri[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SeoUrisController extends AppController
+class SeoUrisController extends BaseAdminController
 {
     /**
      * Index method
