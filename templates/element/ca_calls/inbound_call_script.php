@@ -1,18 +1,6 @@
 <?php
 use \App\Model\Entity\CaCallGroup;
 
-/*
-This portion of the inbound call script is reused in multiple places
-*/
-$inputDefaults = array(
-	'id' => true,
-	'div' => 'form-group',
-	'label' => array(
-		'class' => 'col col-md-3 control-label'
-	),
-	'wrapInput' => 'col col-md-9',
-	'class' => 'form-control'
-);
 $noteCount = isset($noteCount) ? $noteCount : 0;
 $showScript = isset($showScript) ? $showScript : true;
 $copyPage = isset($copyPage) ? $copyPage : false;
@@ -36,7 +24,7 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.caller_last_name', $inputDefaults); ?>
+	<?php echo $this->Form->control('ca_call_group.caller_last_name'); ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -47,10 +35,8 @@ if ($copyPage) {
 		</div>
 	<?php endif; ?>
 	<?php echo $this->Form->control('ca_call_group.caller_phone', [
-		'div' => 'form-group required',
-//todo
-//		'required' => true,
-	] + $inputDefaults); ?>
+		'required' => true,
+	]); ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -68,8 +54,8 @@ if ($copyPage) {
 	]);
 	?>
 	<div class="patient-data" style="display:none;">
-		<?php echo $this->Form->control('ca_call_group.patient_first_name', $inputDefaults); ?>
-		<?php echo $this->Form->control('ca_call_group.patient_last_name', $inputDefaults); ?>
+		<?php echo $this->Form->control('ca_call_group.patient_first_name'); ?>
+		<?php echo $this->Form->control('ca_call_group.patient_last_name'); ?>
 	</div>
 </div>
 <div class="refusedNameYes" style="display:none;">
@@ -82,12 +68,12 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.caller_phone', $inputDefaults); ?>
+	<?php echo $this->Form->control('ca_call_group.caller_phone'); ?>
 </div>
 <?php if (!empty($previousCalls)): ?>
 	<div id="group-search">
 		<?php
-		echo $this->Form->control('group_search', array(
+		echo $this->Form->control('group_search', [
 			'class' => 'form-control group_search',
 			'label' => [
 				'class' => 'col col-md-3 control-label',
@@ -96,7 +82,7 @@ if ($copyPage) {
 			'type' => 'select',
 			'options' => $previousCalls,
 			'empty' => true,
-		) + $inputDefaults);
+		]);
 		?>
 	</div>
 <?php endif; ?>
@@ -124,6 +110,7 @@ if ($copyPage) {
 				<?php
 				foreach (CaCallGroup::$col2Topics as $topicKey => $label) {
 					echo $this->Form->control('ca_call_group.'.$topicKey, [
+						'type' => 'checkbox',
 						'label' => [
 							'style' => 'text-align:left;',
 							'text' => '<span class="topic-label">'.$label.'</span>',
@@ -164,7 +151,7 @@ if ($copyPage) {
 			1 => 'Yes',
 		],
 		'default' => 0
-	] + $inputDefaults);
+	]);
 	?>
 </div>
 
@@ -184,7 +171,7 @@ if ($copyPage) {
 	if (!empty($caCall->ca_call_group->topic_aid_lost_old) || !empty($caCall->ca_call_group->topic_warranty_old)) {
 		$hearingAidAge = 'old';
 	}
-	echo $this->Form->control('ca_call_group.hearingAidAge', array(
+	echo $this->Form->control('ca_call_group.hearing_aid_age', array(
 		'label' => [
 			'class' => 'col col-md-3 control-label',
 			'text' => 'Hearing aid age?'
@@ -195,7 +182,7 @@ if ($copyPage) {
 			'old' => 'Hearing aid is 3 years or older',
 		],
 		'default' => $hearingAidAge
-	) + $inputDefaults);
+	));
 	?>
 </div>
 
@@ -209,7 +196,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 	'type' => 'select',
 	'options' => CaCallGroup::$prospectOptions,
 	'default' => CaCallGroup::PROSPECT_NO,
-) + $inputDefaults);
+));
 ?>
 
 <!-- Prospects -->
@@ -235,19 +222,14 @@ echo $this->Form->control('ca_call_group.prospect', array(
 			</div>
 		<?php endif; ?>
 		<?php echo $this->Form->control('ca_call_group.consumer_consent', [
-			'label' => [
-				'class' => 'col col-md-3 control-label',
-				'text' => 'Did they consent?'
-			],
-//todo
-//			'required' => true,
-			'div' => 'form-group required',
+			'label' => 'Did they consent?',
+			'required' => true,
 			'empty' => true,
 			'options' => [
 				'yes' => 'Yes',
 				'no' => 'No'
 			],
-		] + $inputDefaults); ?>
+		]); ?>
 		<div class="consumerConsentYes" style="display:none;">
 			<?php if ($showScript): ?>
 				<div class="row">
@@ -271,20 +253,15 @@ echo $this->Form->control('ca_call_group.prospect', array(
 			<?php endif; ?>
 		</div>
 		<?php echo $this->Form->control('ca_call_group.did_clinic_answer', [
-			'label' => [
-				'class' => 'col col-md-3 control-label',
-				'text' => 'Did clinic answer?'
-			],
-//todo
-//			'required' => true,
-			'div' => 'form-group required',
+			'label' => 'Did clinic answer?',
+			'required' => true,
 			'empty' => true,
 			'options' => [
 				'yes' => 'Yes',
 				'no' => 'No',
 				'vm' => 'No, but leave voicemail'
 			],
-		] + $inputDefaults); ?>
+		]); ?>
 		<!-- Clinic answered -->
 		<div class="didClinicAnswerYes" style="display:none;">
 			<?php if ($showScript): ?>
@@ -296,7 +273,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 					</div>
 				</div>
 			<?php endif; ?>
-			<?php echo $this->Form->control('ca_call_group.front_desk_name', array('autocomplete' => 'off') + $inputDefaults); ?>
+			<?php echo $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off']); ?>
 			<div class="refusedNameNo">
 				<?php if ($showScript): ?>
 					<div class="row">
@@ -427,7 +404,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 		'type' => 'select',
 		'options' => CaCallGroup::$scores,
 		'empty' => true,
-	) + $inputDefaults);
+	));
 	?>
 </div>
 
@@ -444,19 +421,14 @@ echo $this->Form->control('ca_call_group.prospect', array(
 		</div>
 	<?php endif; ?>
 	<?php echo $this->Form->control('ca_call_group.did_clinic_answer_unknown', [
-		'label' => [
-			'class' => 'col col-md-3 control-label',
-			'text' => 'Did clinic answer?'
-		],
-//todo
-//		'required' => true,
-		'div' => 'form-group required',
+		'label' => 'Did clinic answer?',
+		'required' => true,
 		'empty' => true,
 		'options' => [
 			'yes' => 'Yes',
 			'no' => 'No'
 		],
-	] + $inputDefaults); ?>
+	]); ?>
 	<!-- Clinic answered -->
 	<div class="didClinicAnswerYes" style="display:none;">
 		<?php if ($showScript): ?>
@@ -468,7 +440,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				</div>
 			</div>
 		<?php endif; ?>
-		<?php echo $this->Form->control('ca_call_group.front_desk_name', array('autocomplete' => 'off') + $inputDefaults); ?>
+		<?php echo $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off']); ?>
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -514,20 +486,15 @@ echo $this->Form->control('ca_call_group.prospect', array(
 		</div>
 	<?php endif; ?>
 	<?php echo $this->Form->control('ca_call_group.did_clinic_answer', [
-		'label' => [
-			'class' => 'col col-md-3 control-label',
-			'text' => 'Did clinic answer?'
-		],
-//todo
-//		'required' => true,
-		'div' => 'form-group required',
+		'label' => 'Did clinic answer?',
+		'required' => true,
 		'empty' => true,
 		'options' => [
 			'yes' => 'Yes',
 			'no' => 'No',
 			'vm' => 'No, but leave voicemail'
 		],
-	] + $inputDefaults); ?>
+	]); ?>
 	<!-- Clinic answered -->
 	<div class="didClinicAnswerYes" style="display:none;">
 		<div class="row">
@@ -590,16 +557,17 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				1 => 'Yes',
 			],
 			'default' => 0
-		] + $inputDefaults);
+		]);
 		?>
 	</div>
 	<?php
 	echo $this->Form->control('ca_call_group.appt_date', [
-		'class' => 'form-control datepicker inline-date',
-		'interval' => 15,
-		'minYear' => '2016',
-		'maxYear' => date("Y", strtotime('+1 year')),
-	] + $inputDefaults);
+		'type' => 'datetime-local',
+		'min' => '2016-01-01T00:00',
+		'max' => date("Y-m-d\TH:i", strtotime('+1 year')),
+		'step' => 60, //minutes
+		'label' => ['id' => 'appt-date-label'],
+	]);
 	?>
 </div>
 
@@ -607,11 +575,12 @@ echo $this->Form->control('ca_call_group.prospect', array(
 <div class="scheduled_call_date" style="display:none;">
 	<?php
 	echo $this->Form->control('ca_call_group.scheduled_call_date', [
-		'class' => 'form-control datepicker inline-date',
-		'interval' => 15,
-		'minYear' => '2016',
-		'maxYear' => date("Y", strtotime('+2 years')),
-	] + $inputDefaults);
+		'type' => 'datetime-local',
+		'min' => '2016-01-01T00:00',
+		'max' => date("Y-m-d\TH:i", strtotime('+1 year')),
+		'step' => 60, //minutes
+		'label' => ['id' => 'scheduled-call-date-label'],
+	]);
 	?>
 </div>
 
@@ -623,7 +592,7 @@ echo $this->Form->control("ca_call_group.ca_call_group_note.$noteCount.body", [
 		'text' => 'Add a note'],
 	'rows' => 3,
 	'required' => false,
-] + $inputDefaults);
+]);
 echo $this->Form->control('ca_call_group.is_review_needed', [
 	'label' => 'Needs supervisor review'
 ]);

@@ -9,6 +9,8 @@ use Cake\Utility\Inflector;
 use Cake\View\JsonView;
 use App\Model\Entity\CallSource;
 use App\Model\Entity\CaCall;
+use App\Model\Entity\CaCallGroup;
+use Cake\Utility\Hash;
 
 /**
  * CaCalls Controller
@@ -131,21 +133,23 @@ class CaCallsController extends BaseAdminController
         ]);
         $requestData = $this->request->getData();
         if ($this->request->is('post')) {
-//todo
-pr('post data =');
-pr($requestData);
-die('die post');
-            if (empty($requestData->id)) {
+            if (empty($requestData['id'])) {
                 // Saving a new call
-                $requestData->duration = strtotime(getCurrentEasternTime()) - strtotime($requestData->start_time);
+                $requestData['duration'] = strtotime(getCurrentEasternTime()) - strtotime($requestData['start_time']);
             }
             $caCall = $this->CaCalls->patchEntity($caCall, $requestData, ['associated'=>['CaCallGroups']]);
-            $validate = ($requestData->ca_call_group->status == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            $validate = ($requestData['ca_call_group']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            if ($validate && $caCall->hasErrors()) {
+                $errors = json_encode(Hash::flatten($caCall->getErrors()));
+                $this->Flash->error('Failed to save call.<br>'.$errors, ['escape'=>false]);
+                return;
+            }
             if ($this->CaCalls->save($caCall)) {
                 $this->Flash->success('The call has been saved.');
-                return $this->redirect('/admin-panel');
+                return $this->redirect('/admin');
             }
-            $this->Flash->error('The call could not be saved. Please, try again.');
+            $errors = json_encode(Hash::flatten($caCall->getErrors()));
+            $this->Flash->error("The call could not be saved. Please, try again.<br>".$errors, ['escape'=>false]);
         }
         $requestData['start_time'] = getCurrentEasternTime();
         $requestData['call_type'] = CaCall::CALL_TYPE_INBOUND;
@@ -211,6 +215,38 @@ die('die post');
         $this->viewBuilder()->setLayout('ajax');
         $this->meta['robots'] = "NOINDEX, FOLLOW";
         $data = $this->CaCalls->CaCallGroups->getPreviousCalls($locationId, $followupOnly);
+        $this->set('data', $data);
+        $this->viewBuilder()->setOption('serialize', 'data');
+        return;
+    }
+
+    /**
+    * Finds the specified call group and loads it via ajax.
+    */
+    public function getCallGroupData($callGroupId = null) {
+        $this->viewBuilder()->setLayout('ajax');
+        $this->meta['robots'] = "NOINDEX, FOLLOW";
+        $lockStatus = $this->CaCalls->CaCallGroups->lock($callGroupId, $this->user->id);
+        if ($lockStatus) {
+            $data = $this->CaCalls->CaCallGroups->get($callGroupId);
+        } else {
+            // TODO: TEST LOCKED CALL GROUP
+            // Failed to lock the call group
+            $this->CaCallGroup->id;
+            $lockTime = $this->CaCallGroup->field('lock_time');
+            if (date('m/d/Y', strtotime($lockTime)) == date('m/d/Y', strtotime('today'))) {
+                $lockTime = 'Today '.date('h:i a', strtotime($lockTime));
+            } else {
+                $lockTime = date('n/d g:i a', strtotime($lockTime));
+            }
+            $lockedByUserId = $this->CaCallGroup->field('locked_by_user_id');
+            $lockedBy = ClassRegistry::init('User')->getUserFullName($lockedByUserId);
+            $data = array(
+                'lock_error' => true,
+                'lock_time' => $lockTime,
+                'locked_by' => $lockedBy
+            );
+        }
         $this->set('data', $data);
         $this->viewBuilder()->setOption('serialize', 'data');
         return;

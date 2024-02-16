@@ -41,7 +41,7 @@ use Cake\Routing\Router;
 			            </tr>
 		                <tr>
 		                    <th class="tar">Status</th>
-		                    <td><?= isset($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
+		                    <td><?= !empty($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
 		                </tr>
 		                <tr>
 		                    <th class="tar">Clinic</th>

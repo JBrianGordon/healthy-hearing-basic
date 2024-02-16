@@ -72,7 +72,7 @@ use Cake\Core\Configure;
 						<li><a href="/login">Login</a></li>
 					<?php endif; ?>
 					<?php if ($adminAccessAllowed): ?>
-						<li><a href="/admin-panel"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>
+						<li><a href="/admin"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>
 					<?php endif; ?>
 				<?php endif; ?>
 			</ul>

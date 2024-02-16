@@ -182,12 +182,12 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('caller_first_name')
             ->maxLength('caller_first_name', 255)
-            ->allowEmptyString('caller_first_name');
+            ->notEmptyString('caller_first_name');
 
         $validator
             ->scalar('caller_last_name')
             ->maxLength('caller_last_name', 255)
-            ->allowEmptyString('caller_last_name');
+            ->notEmptyString('caller_last_name');
 
         $validator
             ->boolean('is_patient')
@@ -196,12 +196,12 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('patient_first_name')
             ->maxLength('patient_first_name', 255)
-            ->allowEmptyString('patient_first_name');
+            ->notEmptyString('patient_first_name');
 
         $validator
             ->scalar('patient_last_name')
             ->maxLength('patient_last_name', 255)
-            ->allowEmptyString('patient_last_name');
+            ->notEmptyString('patient_last_name');
 
         $validator
             ->boolean('refused_name')
@@ -537,5 +537,28 @@ class CaCallGroupsTable extends Table
             $previousCalls[$callGroup->id] = $callDescription;
         }
         return $previousCalls;
+    }
+
+    /**
+    * Lock the record to the current user
+    */
+    function lock($id = null, $userId = null) {
+        //TODO: handle call group locking
+        return true;
+        /*
+        if ($id) {
+            $this->id = $id;
+        }
+        if ($this->isLocked($id, $userId)) {
+            return false;
+        }
+        if ($this->saveField('is_locked', true)) {
+            if ($this->saveField('locked_by_user_id', $userId)) {
+                $retval = $this->saveField('lock_time', $this->str2datetime());
+                return $retval === false ? false : true;
+            }
+        }
+        return false;
+        */
     }
 }

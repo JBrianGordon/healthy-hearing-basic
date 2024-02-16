@@ -5,7 +5,7 @@ foreach (CaCallGroup::$col1Topics as $topicKey => $label) {
 
 	if ($topicKey == 'topic_aid_lost_old') {
 		$topicAidLost = !empty($caCall->ca_call_group->topic_aid_lost_old) || !empty($caCall->ca_call_group->topic_aid_lost_new);
-		echo $this->Form->control('ca_call_group.TopicAidLost', [
+		echo $this->Form->control('ca_call_group.topic_aid_lost', [
 			'type' => 'checkbox',
 			'label' => [
 				'style' => 'text-align:left;',
@@ -18,7 +18,7 @@ foreach (CaCallGroup::$col1Topics as $topicKey => $label) {
 
 	if ($topicKey == 'topic_warranty_old') {
 		$topicWarranty = !empty($caCall->ca_call_group->topic_warranty_old) || !empty($caCall->ca_call_group->topic_warranty_new);
-		echo $this->Form->control('ca_call_group.TopicWarranty', [
+		echo $this->Form->control('ca_call_group.topic_warranty', [
 			'type' => 'checkbox',
 			'label' => [
 				'style' => 'text-align:left;',
@@ -32,6 +32,7 @@ foreach (CaCallGroup::$col1Topics as $topicKey => $label) {
 	if (in_array($topicKey, $hiddenInputs)) {
 		echo '<div class="hidden checkbox '.$topicKey.'">';
 			echo $this->Form->control('ca_call_group.'.$topicKey, [
+				'type' => 'checkbox',
 				'label' => [
 					'style' => 'text-align:left;',
 					'text' => '<span class="topic-label">'.$label.'</span>',
@@ -41,6 +42,7 @@ foreach (CaCallGroup::$col1Topics as $topicKey => $label) {
 		echo '</div>';				
 	} else {
 		echo $this->Form->control('ca_call_group.'.$topicKey, [
+			'type' => 'checkbox',
 			'label' => [
 				'style' => 'text-align:left;',
 				'text' => '<span class="topic-label">'.$label.'</span>',

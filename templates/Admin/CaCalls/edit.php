@@ -13,6 +13,7 @@ $previousCalls = empty($previousCalls) ? array() : $previousCalls;
 $status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_NEW : $caCall->ca_call_group->status;
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
+$caCall = empty($caCall) ? array() : $caCall;
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
@@ -29,7 +30,7 @@ $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>New Inbound Call</h2>
-                <?= $this->Form->create($caCall) ?>
+                <?= $this->Form->create($caCall, ['id' => 'CaCallForm']) ?>
                     <?php $this->Form->setTemplates([
                         // Add an offset to checkbox containers
                         'checkboxContainer' => '<div{{containerAttrs}} class="offset-md-3 {{containerClass}}form-group form-check{{variant}} {{type}}{{required}}">{{content}}{{help}}</div>',
@@ -127,10 +128,9 @@ $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
                         ]); ?>
                         <div class="init_no_location" style="display:none;">
                             <div class="valid_number">
-                                <?php echo $this->Form->input('location_search', [
+                                <?php echo $this->Form->control('location_search', [
                                     'label' => 'Clinic search',
-                                    'div' => 'form-group',
-                                    'id' => 'location-search',
+                                    'required' => true,
                                 ]); ?>
                                 <div class="row">
                                     <div class="col-md-9 offset-md-3">

@@ -143,6 +143,21 @@ class CaCallsTable extends Table
         return $rules;
     }
 
+    /**
+     * @param \Cake\Event\EventInterface $event
+     * @param \ArrayObject<string, mixed> $data
+     * @param \ArrayObject<string, mixed> $options
+     * @return void
+     */
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options) {
+        $dateTimeFields = ['start_time'];
+        foreach ($dateTimeFields as $key) {
+        if (isset($data[$key]) && is_string($data[$key])) {
+            $data[$key] = date('Y-m-d H:i', strtotime($data[$key]));
+        }
+    }
+    }
+
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($entity->isNew()) {
@@ -235,6 +250,7 @@ class CaCallsTable extends Table
             $data['link'] = $link;
             $data['landmarks'] = $location->landmarks;
             $data['timezone'] = $this->Locations->getClinicTimezone($locationId);
+            $data['timezoneOffset'] = $this->Locations->getClinicTimezoneOffset($locationId);
             $data['currentTime'] = $this->Locations->getClinicDateTime($locationId, 'now', 'h:i A');
             $data['searchTitle'] = $searchTitle;
             $data['isYhn'] = $location->is_yhn;

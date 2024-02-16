@@ -226,14 +226,14 @@ class CaCallGroup extends Entity
     ];
     /* These are the prospect topic fields */
     static $prospectTopics = [
-        'CaCallGroupTopicWantsAppt',
-        'CaCallGroupTopicClinicHours',
-        'CaCallGroupTopicInsurance',
-        'CaCallGroupTopicClinicInquiry',
-        'CaCallGroupTopicAidLostOld',
-        'CaCallGroupTopicWarrantyOld',
-        'CaCallGroupTopicRescheduleAppt',
-        'CaCallGroupTopicTinnitus',
+        'ca-call-group-topic-wants-appt',
+        'ca-call-group-topic-clinic-hours',
+        'ca-call-group-topic-insurance',
+        'ca-call-group-topic-clinic-inquiry',
+        'ca-call-group-topic-aid-lost-old',
+        'ca-call-group-topic-warranty-old',
+        'ca-call-group-topic-reschedule-appt',
+        'ca-call-group-topic-tinnitus',
     ];
 
     /**

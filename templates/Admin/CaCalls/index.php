@@ -125,8 +125,8 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                            <?= date("g:i a ", strtotime($caCall->start_time)).getEasternTimezone(); ?><br>
 				                            <?= gmdate("H:i:s", $caCall->duration) ?>
 				                        </td>
-				                        <td class="p5"><?= isset($caCall->call_type) ? CaCall::$callTypes[$caCall->call_type] : '' ?></td>
-				                        <td class="p5"><?= isset($caCall->ca_call_group->status) ? CaCallGroup::$statuses[$caCall->ca_call_group->status] : '' ?></td>
+				                        <td class="p5"><?= !empty($caCall->call_type) ? CaCall::$callTypes[$caCall->call_type] : '' ?></td>
+				                        <td class="p5"><?= !empty($caCall->ca_call_group->status) ? CaCallGroup::$statuses[$caCall->ca_call_group->status] : '' ?></td>
 				                        <td class="p5">
 				                            <?php if ($caCall->ca_call_group->is_review_needed): ?>
 				                                <span class="badge bg-danger">Review Needed</span>
