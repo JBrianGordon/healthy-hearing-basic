@@ -188,4 +188,33 @@ class LocationsController extends BaseAdminController
         $this->viewBuilder()->setClassName('CsvView.Csv');
         $this->set(compact('emails', '_serialize', '_header', '_extract'));
     }
+
+    /**
+    * Runs a Tier Status Change report and sends the results via email
+    */
+    /*** TODO: update this action ***/
+    public function tierStatusReport() {
+        //$email = $this->Auth->user('email');
+        if (!empty($this->request->data)) {
+            // Large file. Dispatch shell.
+            App::uses('Queue','Queue.Lib');
+            $cmd = "util tier_status_changes";
+            if (!empty($this->request->data['Util']['email'])) {
+                $cmd .= ' -t '.$this->request->data['Util']['email'];
+            }
+            if (!empty($this->request->data['Util']['start_date'])) {
+                $cmd .= ' -s '.$this->request->data['Util']['start_date'];
+            }
+            if (!empty($this->request->data['Util']['end_date'])) {
+                $cmd .= ' -e '.$this->request->data['Util']['end_date'];
+            }
+            if (Queue::add($cmd, 'shell')) {
+                $this->goodFlash('The tier status change report will be emailed.');
+            } else {
+                $this->badFlash('Unable to add to queue: '.$cmd);
+            }
+            return $this->redirect(['action' => 'tier-status-report']);
+        }
+        //$this->set('email', $email);
+    }
 }
