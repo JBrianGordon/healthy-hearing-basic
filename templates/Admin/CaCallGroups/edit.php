@@ -51,7 +51,7 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                         <tr>
                             <th class="tar">Clinic</th>
                             <td>
-                                <? if ($caCallGroup->has('location')): ?>
+                                <?php if ($caCallGroup->has('location')): ?>
                                     <div class="row">
                                         <div class="col-md-9">
                                             <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
