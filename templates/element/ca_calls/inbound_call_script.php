@@ -9,12 +9,12 @@ if ($copyPage) {
 	$showScript = false;
 }
 ?>
-<?php echo $this->Form->control('ca_call_group.refused_name', [
+<?= $this->Form->control('ca_call_group.refused_name', [
 	'type' => 'checkbox',
 	'label' => 'Refused to give name?',
-]); ?>
+]) ?>
 <div class="refusedNameNo">
-	<?php echo $this->Form->control('ca_call_group.caller_first_name'); ?>
+	<?= $this->Form->control('ca_call_group.caller_first_name', ['label' => ['class' => 'ml10']]) ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -24,7 +24,7 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.caller_last_name'); ?>
+	<?= $this->Form->control('ca_call_group.caller_last_name', ['label' => ['class' => 'ml10']]) ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -34,9 +34,8 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.caller_phone', [
-		'required' => true,
-	]); ?>
+	<?= $this->Form->control('ca_call_group.caller_phone', [
+		'required' => true, 'label' => ['class' => 'ml10']]) ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -46,16 +45,14 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php
-	echo $this->Form->control('ca_call_group.is_patient', [
+	<?= $this->Form->control('ca_call_group.is_patient', [
 		'type' => 'checkbox',
-		'label' => 'Self',
+		'label' => ['class' => 'ml10', 'text' => ' Self'],
 		'default' => true,
-	]);
-	?>
+	])?>
 	<div class="patient-data" style="display:none;">
-		<?php echo $this->Form->control('ca_call_group.patient_first_name'); ?>
-		<?php echo $this->Form->control('ca_call_group.patient_last_name'); ?>
+		<?= $this->Form->control('ca_call_group.patient_first_name', ['label' => ['class' => 'ml10']]) ?>
+		<?= $this->Form->control('ca_call_group.patient_last_name', ['label' => ['class' => 'ml10']]) ?>
 	</div>
 </div>
 <div class="refusedNameYes" style="display:none;">
@@ -68,22 +65,20 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.caller_phone'); ?>
+	<?= $this->Form->control('ca_call_group.caller_phone', ['label' => ['class' => 'ml10']]) ?>
 </div>
 <?php if (!empty($previousCalls)): ?>
 	<div id="group-search">
-		<?php
-		echo $this->Form->control('group_search', [
+		<?= $this->Form->control('group_search', [
 			'class' => 'form-control group_search',
 			'label' => [
-				'class' => 'col col-md-3 control-label',
+				'class' => 'col col-md-3 control-label ml10',
 				'text' => 'Related to previous call?'
 			],
 			'type' => 'select',
 			'options' => $previousCalls,
 			'empty' => true,
-		]);
-		?>
+		])?>
 	</div>
 <?php endif; ?>
 <?php if ($showScript): ?>
@@ -104,7 +99,7 @@ if ($copyPage) {
 	<div class="col col-md-9">
 		<div class="row">
 			<div class="col col-md-6">
-				<?php echo $this->element('ca_calls/ca_call_topics'); ?>
+				<?= $this->element('ca_calls/ca_call_topics') ?>
 			</div>
 			<div class="checkbox col col-md-6">
 				<?php
@@ -139,10 +134,9 @@ if ($copyPage) {
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php
-	echo $this->Form->control('ca_call_group.wants_hearing_test', [
+	<?= $this->Form->control('ca_call_group.wants_hearing_test', [
 		'label' => [
-			'class' => 'col col-md-3 control-label',
+			'class' => 'col col-md-3 control-label ml10',
 			'text' => 'Hearing test?'
 		],
 		'type' => 'select',
@@ -151,8 +145,7 @@ if ($copyPage) {
 			1 => 'Yes',
 		],
 		'default' => 0
-	]);
-	?>
+	])?>
 </div>
 
 <!-- Hearing Aid Age -->
@@ -171,9 +164,9 @@ if ($copyPage) {
 	if (!empty($caCall->ca_call_group->topic_aid_lost_old) || !empty($caCall->ca_call_group->topic_warranty_old)) {
 		$hearingAidAge = 'old';
 	}
-	echo $this->Form->control('ca_call_group.hearing_aid_age', array(
+	echo $this->Form->control('ca_call_group.hearing_aid_age', [
 		'label' => [
-			'class' => 'col col-md-3 control-label',
+			'class' => 'col col-md-3 control-label ml10',
 			'text' => 'Hearing aid age?'
 		],
 		'type' => 'select',
@@ -182,22 +175,20 @@ if ($copyPage) {
 			'old' => 'Hearing aid is 3 years or older',
 		],
 		'default' => $hearingAidAge
-	));
+	]);
 	?>
 </div>
 
 <!-- Is this a prospect call? -->
-<?php
-echo $this->Form->control('ca_call_group.prospect', array(
+<?= $this->Form->control('ca_call_group.prospect', [
 	'label' => [
-		'class' => 'col col-md-3 control-label',
+		'class' => 'col col-md-3 control-label ml10',
 		'text' => 'Prospect?'
 	],
 	'type' => 'select',
 	'options' => CaCallGroup::$prospectOptions,
 	'default' => CaCallGroup::PROSPECT_NO,
-));
-?>
+])?>
 
 <!-- Prospects -->
 <div class="prospectTopic" style="display:none;">
@@ -221,15 +212,15 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				</div>
 			</div>
 		<?php endif; ?>
-		<?php echo $this->Form->control('ca_call_group.consumer_consent', [
-			'label' => 'Did they consent?',
+		<?= $this->Form->control('ca_call_group.consumer_consent', [
+			'label' => ['text' => 'Did they consent?', 'class' => 'ml10'],
 			'required' => true,
 			'empty' => true,
 			'options' => [
 				'yes' => 'Yes',
 				'no' => 'No'
 			],
-		]); ?>
+		]) ?>
 		<div class="consumerConsentYes" style="display:none;">
 			<?php if ($showScript): ?>
 				<div class="row">
@@ -252,8 +243,8 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				</div>
 			<?php endif; ?>
 		</div>
-		<?php echo $this->Form->control('ca_call_group.did_clinic_answer', [
-			'label' => 'Did clinic answer?',
+		<?= $this->Form->control('ca_call_group.did_clinic_answer', [
+			'label' => ['text' => 'Did clinic answer?', 'class' => 'ml10'],
 			'required' => true,
 			'empty' => true,
 			'options' => [
@@ -261,19 +252,19 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				'no' => 'No',
 				'vm' => 'No, but leave voicemail'
 			],
-		]); ?>
+		]) ?>
 		<!-- Clinic answered -->
 		<div class="didClinicAnswerYes" style="display:none;">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-9 offset-md-3">
 						<div class="well blue-well">
-							Hello, my name is <?php echo $user['first_name']; ?> and I'm with Healthy Hearing. This call is being recorded for quality assurance. I have a caller on the line who's interested in setting an appointment at your clinic and I will conference them in with us in a minute. Before I bring them in, can you please note in your system that this referral is from Healthy Hearing, as part of your paid membership. Who am I speaking with?
+							Hello, my name is <?= $user['first_name'] ?> and I'm with Healthy Hearing. This call is being recorded for quality assurance. I have a caller on the line who's interested in setting an appointment at your clinic and I will conference them in with us in a minute. Before I bring them in, can you please note in your system that this referral is from Healthy Hearing, as part of your paid membership. Who am I speaking with?
 						</div>
 					</div>
 				</div>
 			<?php endif; ?>
-			<?php echo $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off']); ?>
+			<?= $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off']) ?>
 			<div class="refusedNameNo">
 				<?php if ($showScript): ?>
 					<div class="row">
@@ -344,7 +335,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 					<div class="col-md-9 offset-md-3">
 						<div class="well blue-well">
 							<i class="text-muted">[Leave a voicemail]</i><br />
-							This is <?php echo $user['first_name']; ?>  with Healthy Hearing. We tried to reach you today, <?php echo date('F d'); ?> at <span class="locationCurrentTime"></span> because we had a consumer on the line trying to reach you to set an appointment for a hearing test.
+							This is <?= $user['first_name'] ?>  with Healthy Hearing. We tried to reach you today, <?= date('F d') ?> at <span class="locationCurrentTime"></span> because we had a consumer on the line trying to reach you to set an appointment for a hearing test.
 							<span class="self">
 							Their name is <strong><span class="callerFirstName"></span></strong> <strong><span class="callerLastName"></span></strong>. That spelling is <i class="text-muted">[spell caller first name, caller last name]</i>.
 							</span>
@@ -399,13 +390,11 @@ echo $this->Form->control('ca_call_group.prospect', array(
 		<?php endif; ?>
 	</div>
 	<hr>
-	<?php
-	echo $this->Form->control('ca_call_group.score', array(
+	<?= $this->Form->control('ca_call_group.score', [
 		'type' => 'select',
 		'options' => CaCallGroup::$scores,
 		'empty' => true,
-	));
-	?>
+	])?>
 </div>
 
 <!-- Prospect Unknown -->
@@ -420,27 +409,27 @@ echo $this->Form->control('ca_call_group.prospect', array(
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.did_clinic_answer_unknown', [
-		'label' => 'Did clinic answer?',
+	<?= $this->Form->control('ca_call_group.did_clinic_answer_unknown', [
+		'label' => ['text' => 'Did clinic answer?', 'class' => 'ml10'],
 		'required' => true,
 		'empty' => true,
 		'options' => [
 			'yes' => 'Yes',
 			'no' => 'No'
 		],
-	]); ?>
+	])?>
 	<!-- Clinic answered -->
 	<div class="didClinicAnswerYes" style="display:none;">
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
 					<div class="well blue-well">
-						Hello, my name is <?php echo $user['first_name']; ?> and I'm with Healthy Hearing. This call is being recorded for quality assurance. I have a caller on the line who's interested in speaking to your clinic and I will conference them in with us in a minute. Before I bring them in, can you please note in your system that this referral is from Healthy Hearing, as part of your paid membership. Who am I speaking with?
+						Hello, my name is <?= $user['first_name'] ?> and I'm with Healthy Hearing. This call is being recorded for quality assurance. I have a caller on the line who's interested in speaking to your clinic and I will conference them in with us in a minute. Before I bring them in, can you please note in your system that this referral is from Healthy Hearing, as part of your paid membership. Who am I speaking with?
 					</div>
 				</div>
 			</div>
 		<?php endif; ?>
-		<?php echo $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off']); ?>
+		<?= $this->Form->control('ca_call_group.front_desk_name', ['autocomplete' => 'off', 'label' => ['class' => 'ml10']]) ?>
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -485,8 +474,8 @@ echo $this->Form->control('ca_call_group.prospect', array(
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php echo $this->Form->control('ca_call_group.did_clinic_answer', [
-		'label' => 'Did clinic answer?',
+	<?= $this->Form->control('ca_call_group.did_clinic_answer', [
+		'label' => ['text' => 'Did clinic answer?', 'class' => 'ml10'],
 		'required' => true,
 		'empty' => true,
 		'options' => [
@@ -494,7 +483,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 			'no' => 'No',
 			'vm' => 'No, but leave voicemail'
 		],
-	]); ?>
+	]) ?>
 	<!-- Clinic answered -->
 	<div class="didClinicAnswerYes" style="display:none;">
 		<div class="row">
@@ -530,7 +519,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
 				<div class="well blue-well">
-					This is <?php echo $user['first_name']; ?> from Healthy Hearing. I had <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong> on the line. They were calling you for <strong><span class="callerTopics"></span></strong>. Please call them back directly at <strong><span class="callerPhone"></span></strong><br><br>
+					This is <?= $user['first_name'] ?> from Healthy Hearing. I had <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong> on the line. They were calling you for <strong><span class="callerTopics"></span></strong>. Please call them back directly at <strong><span class="callerPhone"></span></strong><br><br>
 					<i class="text-muted">[Return to caller]</i><br />
 					Thanks for holding. The clinic is unavailable at this time. I left them a voicemail message asking them to call you back directly.
 					<span class="locationHoursToday"></span>
@@ -545,10 +534,9 @@ echo $this->Form->control('ca_call_group.prospect', array(
 <!-- Appointment Date -->
 <div class="appt_date" style="display:none;">
 	<div class="directBook" style="display:none;">
-		<?php
-		echo $this->Form->control('ca_call_group.is_bringing_third_party', [
+		<?= $this->Form->control('ca_call_group.is_bringing_third_party', [
 			'label' => [
-				'class' => 'col col-md-3 control-label',
+				'class' => 'col col-md-3 control-label ml10',
 				'text' => 'Will patient bring a 3rd party?'
 			],
 			'type' => 'select',
@@ -557,43 +545,38 @@ echo $this->Form->control('ca_call_group.prospect', array(
 				1 => 'Yes',
 			],
 			'default' => 0
-		]);
-		?>
+		])?>
 	</div>
-	<?php
-	echo $this->Form->control('ca_call_group.appt_date', [
+	<?= $this->Form->control('ca_call_group.appt_date', [
 		'type' => 'datetime-local',
 		'min' => '2016-01-01T00:00',
 		'max' => date("Y-m-d\TH:i", strtotime('+1 year')),
 		'step' => 60, //minutes
-		'label' => ['id' => 'appt-date-label'],
-	]);
-	?>
+		'label' => ['id' => 'appt-date-label', 'class' => 'ml10'],
+	])?>
 </div>
 
 <!-- Scheduled Call Date -->
 <div class="scheduled_call_date" style="display:none;">
-	<?php
-	echo $this->Form->control('ca_call_group.scheduled_call_date', [
+	<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 		'type' => 'datetime-local',
 		'min' => '2016-01-01T00:00',
 		'max' => date("Y-m-d\TH:i", strtotime('+1 year')),
 		'step' => 60, //minutes
-		'label' => ['id' => 'scheduled-call-date-label'],
-	]);
-	?>
+		'label' => ['id' => 'scheduled-call-date-label', 'class' => 'ml10'],
+	])?>
 </div>
 
 <?php
 echo $this->element('ca_calls/outcome');
 echo $this->Form->control("ca_call_group.ca_call_group_note.$noteCount.body", [
 	'label' => [
-		'class' => 'col col-md-3 control-label',
+		'class' => 'col col-md-3 control-label ml10',
 		'text' => 'Add a note'],
 	'rows' => 3,
 	'required' => false,
 ]);
 echo $this->Form->control('ca_call_group.is_review_needed', [
-	'label' => 'Needs supervisor review'
+	'label' => ['text' => 'Needs supervisor review', 'class' => 'ml10']
 ]);
 ?>

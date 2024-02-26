@@ -56,32 +56,32 @@ $caCall = empty($caCall) ? array() : $caCall;
                         </tr>
                         <tr><th class="tar">Status</th>
                             <td>
-                                <span class="status"><?php echo CaCallGroup::$statuses[$status]; ?></span>
+                                <span class="status"><?= CaCallGroup::$statuses[$status] ?></span>
                             </td>
                         </tr>
                         <tr><th class="tar">CallType</th>
                             <td>
-                                <?php echo empty($callType) ? '' : CaCall::$callTypes[$callType]; ?>
+                                <?= empty($callType) ? '' : CaCall::$callTypes[$callType] ?>
                             </td>
                         </tr>
                         <?php if (isset($caCall->start_time)): ?>
                             <tr><th class="tar">Start Time</th>
                                 <td>
-                                    <?php echo dateTimeEastern($caCall->start_time); ?>
+                                    <?= dateTimeEastern($caCall->start_time) ?>
                                 </td>
                             </tr>
                         <?php endif; ?>
                         <?php if (!empty($caCall->duration)): ?>
                             <tr><th class="tar">Duration</th>
                                 <td>
-                                    <?php echo gmdate('H:i:s', $caCall->duration); ?>
+                                    <?= gmdate('H:i:s', $caCall->duration) ?>
                                 </td>
                             </tr>
                         <?php endif; ?>
                         <?php if (!empty($agentName)): ?>
                             <tr><th class="tar">Agent</th>
                                 <td>
-                                    <?php echo $agentName; ?>
+                                    <?= $agentName ?>
                                 </td>
                             </tr>
                         <?php endif; ?>
@@ -107,7 +107,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                             <div class="row">
                                 <div class="col-md-9 offset-md-3">
                                     <div class="well blue-well">
-                                        Thank you for calling Healthy Hearing. This is <?php echo $user['first_name']; ?> and I'm here to help you get connected with <strong><span class="locationTitle"></span></strong>. Before we get started, may I please have your first name?
+                                        Thank you for calling Healthy Hearing. <?php if ($user != null) : ?>This is <?= $user['first_name'] ?> and<?php endif; ?> I'm here to help you get connected with <strong><span class="locationTitle"></span></strong>. Before we get started, may I please have your first name?
                                     </div>
                                 </div>
                             </div>
@@ -116,22 +116,22 @@ $caCall = empty($caCall) ? array() : $caCall;
                             <div class="row">
                                 <div class="col-md-9 offset-md-3">
                                     <div class="well blue-well">
-                                        Hello, this is Healthy Hearing and my name is <?php echo $user['first_name']; ?>. This call is being recorded for quality assurance. Can you tell me the name of the clinic you're trying to reach so I can get you connected?
+                                        Hello, this is Healthy Hearing and my name is <?= $user['first_name'] ?>. This call is being recorded for quality assurance. Can you tell me the name of the clinic you're trying to reach so I can get you connected?
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <?php echo $this->Form->control('is_wrong_number', [
+                        <?= $this->Form->control('is_wrong_number', [
                             'type' => 'checkbox',
                             'label' => 'Wrong number?',
                             'default' => $isWrongNumber
-                        ]); ?>
+                        ]) ?>
                         <div class="init_no_location" style="display:none;">
                             <div class="valid_number">
-                                <?php echo $this->Form->control('location_search', [
+                                <?= $this->Form->control('location_search', [
                                     'label' => 'Clinic search',
                                     'required' => true,
-                                ]); ?>
+                                ]) ?>
                                 <div class="row">
                                     <div class="col-md-9 offset-md-3">
                                         <div class="well blue-well">
@@ -142,7 +142,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                             </div>
                         </div>
                         <div class="valid_number">
-                            <?php echo $this->element('ca_calls/inbound_call_script', ['showScript'=>true, 'noteCount'=>0]); ?>
+                            <?= $this->element('ca_calls/inbound_call_script', ['showScript'=>true, 'noteCount'=>0]) ?>
                         </div>
                     </div>
                     <div class="form-actions tar">
@@ -155,7 +155,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <?php echo 'Please fill in \'Notes\' field.'; ?>
+                                    <?= 'Please fill in \'Notes\' field.' ?>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Okay</button>
