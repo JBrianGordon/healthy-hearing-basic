@@ -284,35 +284,33 @@ const onPageLoad = () => {
       onChangeFrontDeskName(targetValue);
     }
   });
+
+  //Strip out default Cake validity inline code, and set up new validity check
+  let requiredElements = document.querySelectorAll('input[required], select[required]');
+  requiredElements.forEach( el => {
+      el.removeAttribute('oninvalid');
+      el.removeAttribute('oninput');
+
+      let errorMessageP = document.createElement('p');
+      errorMessageP.className = 'error-message col-md-offset-3 pl10';
+      el.parentNode.insertAdjacentElement('afterend', errorMessageP);
+
+      el.addEventListener('invalid', function () {
+          this.setCustomValidity('');
+          if (!this.value) {
+              this.setCustomValidity(this.dataset.validityMessage);
+              errorMessageP.textContent = this.dataset.validityMessage || 'Please fill out this field';
+              errorMessageP.style.color = 'red';
+          }
+      });
+
+      el.addEventListener('input', function () {
+          this.setCustomValidity('');
+          errorMessageP.textContent = '';
+          errorMessageP.style.color = '';
+      });
+  });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    let requiredElements = document.querySelectorAll('input[required], select[required]');
-
-    requiredElements.forEach( el => {
-        el.removeAttribute('oninvalid');
-        el.removeAttribute('oninput');
-
-        let errorMessageP = document.createElement('p');
-        errorMessageP.className = 'error-message col-md-offset-3 pl10';
-        el.parentNode.insertAdjacentElement('afterend', errorMessageP);
-
-        el.addEventListener('invalid', function () {
-            this.setCustomValidity('');
-            if (!this.value) {
-                this.setCustomValidity(this.dataset.validityMessage);
-                errorMessageP.textContent = this.dataset.validityMessage || 'Please fill out this field';
-                errorMessageP.style.color = 'red';
-            }
-        });
-
-        el.addEventListener('input', function () {
-            this.setCustomValidity('');
-            errorMessageP.textContent = '';
-            errorMessageP.style.color = '';
-        });
-    });
-});
 
 document.addEventListener('DOMContentLoaded', () => {
   onPageLoad();
