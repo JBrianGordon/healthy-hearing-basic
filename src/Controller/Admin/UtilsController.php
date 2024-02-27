@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
 
 /**
  * Utils Controller
@@ -36,5 +37,12 @@ class UtilsController extends BaseAdminController
             exit();
         }
         die('Do not access directly');
+    }
+
+    public function cache(){
+        ini_set('max_execution_time', 600);
+        $Folder = new Folder(CACHE);
+        $files = $Folder->find('[a-zA-Z0-9_\-]+');
+        $this->set('files', $files);
     }
 }
