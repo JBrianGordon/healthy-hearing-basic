@@ -268,6 +268,16 @@ summary {
 // MISC
 //====================================
 
+pre {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    font-size: 15px;
+    line-height: 1.6;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
 .ui-autocomplete {
 	@media screen and (min-width: $screen-sm-min){
 		z-index: 9999!important;

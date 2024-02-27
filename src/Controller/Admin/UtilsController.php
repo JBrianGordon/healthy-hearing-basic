@@ -45,4 +45,11 @@ class UtilsController extends BaseAdminController
         $files = $Folder->find('[a-zA-Z0-9_\-]+');
         $this->set('files', $files);
     }
+
+    public function cacheView($key = null){
+        $file = CACHE . $key;
+        $contents = file_get_contents($file);
+        $this->set('key', $key);
+        $this->set('cache_contents', $contents);
+    }
 }
