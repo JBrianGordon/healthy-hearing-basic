@@ -90,7 +90,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 															<div class="col-md-8 item-modal-body">
 																<?php
 																	$htmlContent = $libraryItem['body'];
-																	$modifiedHtml = str_replace('<img ', '<img loading="lazy" ', $htmlContent);
+																	$modifiedHtml = str_replace(' src', ' data-src', $htmlContent);
 																	echo $modifiedHtml;
 																?>
 															</div>

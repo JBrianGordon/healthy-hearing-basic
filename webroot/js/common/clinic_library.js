@@ -36,4 +36,18 @@ function liveLibraryItemUpdate() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const modalLinks = document.querySelectorAll('[data-bs-toggle]');
+
+  modalLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      const modalTarget = this.getAttribute('data-bs-target');
+      const modal = document.querySelector(modalTarget);
+      const modalImage = modal.querySelector('img');
+      const dataSrc = modalImage.getAttribute('data-src');
+      modalImage.setAttribute('src', dataSrc);
+    });
+  });
+});
+
 input.addEventListener("keyup", liveLibraryItemUpdate);
