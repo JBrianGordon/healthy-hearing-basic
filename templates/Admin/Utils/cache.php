@@ -10,8 +10,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-heading">Utils Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-				<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'cache'], ['class' => 'btn btn-default bi bi-search']) ?>
 			</div>
 		</div>
 	</div>
