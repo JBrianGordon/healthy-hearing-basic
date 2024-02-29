@@ -41,11 +41,6 @@ button {
 
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
-
-  &:hover {
-    background-color: #5499ba;
-    color: #fff;
-  }
 }
 
 .btn-neutral {
@@ -56,6 +51,11 @@ button {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+
+    &:active, &:first-child:active, &:hover, &:target, &:focus, &:focus-within {
+      background-color: #e6e6e6;
+      border-color: #adadad;
+    }
 }
 
 .btn-lg {
