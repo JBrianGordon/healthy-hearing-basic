@@ -37,9 +37,18 @@
 	src: url("/font/lato-v17-latin-regular.woff") format("woff");
 	font-display: swap;
 }
-
+a {
+	cursor: pointer;
+	color: $link-color;
+	text-decoration: none;
+}
 th a.asc:after { content: ' ⇣'; }
 th a.desc:after { content: ' ⇡'; }
+th small {
+	font-style: italic;
+	font-weight: normal;
+	color: #999;
+}
 .pull-center {
 	margin: auto;
 }

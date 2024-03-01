@@ -1,175 +1,80 @@
-.bg-oticon {
-    background-color:#c6168d;
+// Common styles for backgrounds
+@mixin bg-styles($bg-color) {
+    background-color: $bg-color;
     color: #ffffff;
     border: none;
-}
-.bg-hh {
-    background-color:#78afc9;
-    color: #ffffff;
-    border: none;
-}
-.bg-yhn {
-    background-color:#ff9800;
-    color: #ffffff;
-    border: none;
-}
-.bg-cqp {
-    background-color:#0089bb;
-    color: #ffffff;
-    border: none;
-}
-.bg-earq {
-    background-color:#ee3a3c;
-    color: #ffffff;
-    border: none;
-}
-.notes {
-	margin: 20px 0px;
-}
-.single_note {
-	padding: 5px;
-	border: 1px solid #DDD;
-}
-.single_note table {
-	width: 100%;
-}
-.single_note:nth-child(even) {
-	background: #F9F9F9;
-}
-/*.single_note:nth-child(odd) {
-	background: #1EBBF5;
-}*/
-.single_note .note_who {
-	width: 140px;
-}
-.single_note .when {
-	width: 210px;
-	text-align: right;
-}
-.single_note .delete {
-	width: 90px;
-	text-align: right;
-}
-.single_note .status {
-	text-align: center;
-	font-weight: bold;
 }
 
-.admin-panels .dropdown-menu {
-	min-width: 225px;
-}
-.admin-panels .panel-btn {
-	min-width: 225px;
+.bg-oticon { @include bg-styles(#c6168d); }
+.bg-hh { @include bg-styles(#78afc9); }
+.bg-yhn { @include bg-styles(#ff9800); }
+.bg-cqp { @include bg-styles(#0089bb); }
+.bg-earq { @include bg-styles(#ee3a3c); }
+
+// Common styles for labels
+@mixin label-styles($bg-color) {
+    background-color: $bg-color;
+    color: #ffffff;
+    border: none;
 }
 
-.orange-bg td {
-	background-color: #ffebc6;
+.label-oticon { @include label-styles(#c6168d); }
+.label-hh { @include label-styles(#78afc9); }
+.label-yhn { @include label-styles(#ff9800); }
+.label-cqp { @include label-styles(#0089bb); }
+.label-earq { @include label-styles(#ee3a3c); }
+
+// Common styles for table backgrounds
+@mixin table-bg-styles($bg-color) {
+    td { background-color: $bg-color; }
 }
-.purple-bg td {
-	background-color: #f3e5f5;
+
+.orange-bg { @include table-bg-styles(#ffebc6); }
+.purple-bg { @include table-bg-styles(#f3e5f5); }
+.ivory-bg { @include table-bg-styles(#fffff0); }
+.lavender-bg { @include table-bg-styles(#e6e6fa); }
+.red-bg { @include table-bg-styles(#d9534f); }
+.beige-bg { @include table-bg-styles(#fcf8e3); }
+.lt-blue-bg { @include table-bg-styles(#5bc0de); }
+.green-bg { @include table-bg-styles(#5cb85c); }
+
+// Common styles for text colors
+@mixin text-color-styles($color) {
+    color: $color;
 }
-.ivory-bg td {
-	background-color: #fffff0;
+
+.pink { @include text-color-styles(#ffb6c1); }
+.orange { @include text-color-styles(#ffb900); }
+.yellow { @include text-color-styles(#ffd700); }
+.purple { @include text-color-styles(#dda0dd); }
+.ivory { @include text-color-styles(#f0e68c); }
+.lavender { @include text-color-styles(#c8c8f7); }
+.blue { @include text-color-styles(#add8e6); }
+.green { @include text-color-styles(#B3DA65); }
+.red { @include text-color-styles(#ee3322); }
+
+// Common styles for alert messages
+@mixin alert-styles($bg-color) {
+    background-color: $bg-color;
+    font-size: larger;
 }
-.lavender-bg td {
-	background-color: #e6e6fa;
-}
-.red-bg td {
-	background-color: #d9534f;
-}
-.beige-bg td {
-	background-color: #fcf8e3;
-}
-.lt-blue-bg td {
-	background-color: #5bc0de;
-}
-.green-bg td {
-	background-color: #5cb85c;
-}
-.pink {
-	color: #ffb6c1;
-}
-.orange {
-	color: #ffb900;
-}
-.yellow {
-	color: #ffd700;
-}
-.purple {
-	color: #dda0dd;
-}
-.ivory {
-	color: #f0e68c;
-}
-.lavender {
-	color: #c8c8f7;
-}
-.blue {
-	color: #add8e6;
-}
-.green {
-	color: #B3DA65;
-}
-.red {
-	color: #ee3322;
-}
-.tab-has-error {
-	color: #e03020 !important;
-	font-weight: bold;
-}
-.btn-toolbar .btn {
-	margin-bottom: 4px;
-}
-.location-tabs>li>a {
-	padding: 10px;
-}
-.label-oticon {
-	background-color:#c6168d;
-	color: #ffffff;
-	border: none;
-}
-.label-hh {
-	background-color:#78afc9;
-	color: #ffffff;
-	border: none;
-}
-.label-yhn {
-	background-color:#ff9800;
-	color: #ffffff;
-	border: none;
-}
-.label-cqp {
-	background-color:#0089bb;
-	color: #ffffff;
-	border: none;
-}
-.label-earq {
-	background-color:#ee3a3c;
-	color: #ffffff;
-	border: none;
-}
-span.error {
-	color: red;
-}
-.userTypes .label {
-	line-height: 2;
-}
-.bl-dark {
-	border-left: 2px solid #888 !important;
-}
+
+#flash-message .alert-danger { @include alert-styles(#ad0000); }
+
+// Other shared styles
+span.error { color: red; }
+
 .metric-reported {
-	color: red;
-	font-weight: bold;
+    color: red;
+    font-weight: bold;
 }
-#flash-message .alert-danger {
-	background-color: #ad0000;
-	font-size: larger;
-}
+
 .admin-filter-well {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	padding: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
 }
+
 .locationCovid {
-	color: #ff8c00;
+    color: #ff8c00;
 }
