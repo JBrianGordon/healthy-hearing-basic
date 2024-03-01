@@ -282,6 +282,16 @@
 				}
 			}
 		}
+
+		blockquote {
+		  border-left-color: $blockquote-border-color;
+		  color: $blockquote;
+		}
+
+		.badge {
+		  font-weight: normal;
+		  padding-top: 0.4em;
+		}
 		
 		@media only screen and (min-width: $screen-sm-min) {
 			padding: 60px 70px;

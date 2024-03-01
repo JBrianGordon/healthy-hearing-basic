@@ -1,4 +1,4 @@
-button {
+.button {
   &.close {
     padding: 0;
     cursor: pointer;
@@ -16,18 +16,18 @@ button {
 }
 
 .btn {
-	padding: 6px 17px;
-	font-size: 85%;
-	border-radius: 3em;
-	box-shadow:rgba(0,0,0,0.15) 0px 1px 2px;
-	text-transform: uppercase;
-	font-weight: bold;
-	line-height: 1.4;
-	
-	&.rounded-start {
-		border-bottom-left-radius: 3rem !important;
-		border-top-left-radius: 3rem !important;
-	}
+  padding: 6px 17px;
+  font-size: 85%;
+  border-radius: 3em;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 1.4;
+  
+  &.rounded-start {
+    border-bottom-left-radius: 3rem !important;
+    border-top-left-radius: 3rem !important;
+  }
 
   &.btn-block {
     width: 100%;
@@ -48,70 +48,70 @@ button {
 }
 
 .btn-default {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
 
-    &:active, &:first-child:active, &:hover, &:target, &:focus, &:focus-within {
-      background-color: #e6e6e6;
-      border-color: #adadad;
-    }
+  &:active, &:first-child:active, &:hover, &:target, &:focus, &:focus-within {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+  }
 }
 
 .btn-lg {
-  // line-height: ensure even-numbered height of button next to large input
   @include button-size(10px, 22px, 1.4, $btn-border-radius-large);
 }
+
 .btn-sm {
-  // line-height: ensure proper height of button next to small input
   padding: 5px 12px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3em;
-  
+
   &.group-toggle {
-	  float: right;
+    float: right;
   }
 }
+
 .btn-xs {
   @include button-size(3px, 6px, 12px, $btn-border-radius);
 }
 
-.btn-print{
-	margin:10px 0;
-	text-transform: none;
-	
-	.hh-icon-printer{
-		font-size: 16px;
-	}
-	
-	&:focus{
-		outline: 0;
-	}
+.btn-print {
+  margin: 10px 0;
+  text-transform: none;
+
+  .hh-icon-printer {
+    font-size: 16px;
+  }
+
+  &:focus {
+    outline: 0;
+  }
 }
 
-.btn-lg, .btn-group-lg>.btn {
-    padding: 10px 22px;
-    font-size: 15px;
-    line-height: 1.4;
-    border-radius: 3em;
+.btn-lg, .btn-group-lg > .btn {
+  padding: 10px 22px;
+  font-size: 15px;
+  line-height: 1.4;
+  border-radius: 3em;
 }
 
-.btn-group.show{
-	display: inline-block!important;
-	
-	ul.dropdown-menu.show {
-	    transform: none!important;
-	    top:100%!important;
-	}
+.btn-group.show {
+  display: inline-block !important;
+
+  ul.dropdown-menu.show {
+    transform: none !important;
+    top: 100% !important;
+  }
 }
 
 .btn-group {
   flex-wrap: wrap;
-  
-	>.btn:not(:first-child), >.btn-group:not(:first-child) {
-		margin-left: 0;
-	}
+
+  > .btn:not(:first-child), > .btn-group:not(:first-child) {
+    margin-left: 0;
+  }
 }
 
 .btn-group-vertical {
@@ -124,131 +124,4 @@ button {
     border-bottom-left-radius: $border-radius-base;
     border-bottom-right-radius: $border-radius-base;
   }
-}
-
-.btn-set {
-  .btn {
-    display: block;
-    margin: 1em 0;
-    width: 100%;
-  }
-
-  @media only screen and (min-width: $screen-sm-min) {
-
-    .btn {
-      display: inline-block;
-      width: auto;
-    }
-  }
-
-  @media only screen and (min-width: $screen-lg-min) {
-    & > .btn + .btn {
-      margin-left: 1em;
-    }
-  }
-}
-
-.btn-share {
-  background: $brand-primary;
-  border-radius: 18px;
-  color: $body-bg;
-  height: 35px;
-  line-height: 30px;
-  padding: 3px 1.5em;
-  text-transform: none;
-
-  &:hover, &:focus, &:active {
-    color: $white;
-  }
-
-  [class*="hh-icon-"] {
-    font-size: 16px;
-  }
-
-  .badge {
-    background: $white;
-    border-radius: 18px;
-    color: tint($text-color, 45%);
-    height: 100%;
-    line-height: 16px;
-    margin-left: 0.75em;
-    min-width: 27px;
-  }
-}
-
-.btn-badge {
-  padding: 3px 3px 3px 1em;
-}
-
-.btn-facebook {
-  background: $color-facebook;
-}
-
-.btn-twitter {
-  background: $color-twitter;
-}
-
-.btn-linkedin {
-  background: $color-linkedin;
-}
-
-.btn-pinterest {
-  background: $color-pinterest;
-}
-
-.btn-google-plus {
-  background: $color-google-plus;
-}
-
-.btn-cookie {
-  @media(max-width: $screen-sm-max){
-    display: block;
-    margin: 0 auto;
-  }
-}
-
-.directions-link{
-    margin: 10px auto 0;
-    display: block;
-    max-width: 220px;
-}
-
-#more-reviews-button {
-  margin: 0 auto;
-}
-
-#fewer-reviews-button {
-	display: none;
-  margin: 0 auto;
-}
-
-span#exportClose {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#exportSubmit {
-	display: block;
-	clear: both;
-	margin: 0 auto;	
-}
-
-#floatingSave {
-    position: fixed;
-    right: 20px;
-    bottom: 0px;
-    padding: 10px 20px;
-    border-radius: 20px 20px 0 0;
-    border: 5px solid $btn-secondary-border;
-    background: #fff;
-    color: $text-color;
-    z-index: 2;
-}
-
-#titleUnlock {
-    position: absolute;
-    left: 75%;
 }
