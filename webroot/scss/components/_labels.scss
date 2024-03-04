@@ -1,14 +1,14 @@
 .label {
-	font-weight: normal;
-	display: inline;
-	padding: 0.2em 0.6em 0.3em;
-	font-size: 75%;
-	line-height: 1;
-	color: #fff;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: baseline;
-	border-radius: 0.25em;
+  font-weight: normal;
+  display: inline;
+  padding: 0.2em 0.6em 0.3em;
+  font-size: 75%;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
 }
 
 .label-default {
@@ -18,89 +18,91 @@
 }
 
 .label-success {
-	background-color: $label-success-bg;
+  background-color: $label-success-bg;
 }
 
 .label-danger {
-	background-color: $label-danger-bg;
+  background-color: $label-danger-bg;
 }
 
 label {
-	&[for="adBlock"] {
-		color: $brand-primary;
-		margin-right: calc(50% - 126px);
-		
-		@media(min-width: $screen-sm-min) and (max-width: $screen-md-max){
-			margin-right: calc(50% - 106px);
-		}
-	}
+  &[for="adBlock"] {
+    color: $brand-primary;
+    margin-right: calc(50% - 126px);
+
+    @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+      margin-right: calc(50% - 106px);
+    }
+  }
 }
 
 #advanced_search {
-	label {
-		width: 41.66667%;
-		text-align: right;
-		padding: 7px 15px 0;
-		font-weight: bold;
+  label {
+    width: 41.66667%;
+    text-align: right;
+    padding: 7px 15px 0;
+    font-weight: bold;
 
-		@media(max-width: $screen-md-max){
-			text-align: left;
-		}
-		
-		&.float-end {
-			width: 90%;
-			text-align: left;
-		}
-	}
-	
-	.form-control:not([type='date']), .form-select {
-		display: inline-block;
-		width: 58.33333%;
-		padding: 10px 12px;
-		font-size: 1.5rem;
+    @media (max-width: $screen-md-max) {
+      text-align: left;
+    }
 
-		@media(max-width: $screen-md-max){
-			width: 100%;
-		}
-	}
-	
-	.form-check {
-		padding-left: 0;
-		
-		.form-check-input {
-			float: none;
-			position: relative;
-			left: 25px;
-			top: 5px;
-		}
-	}
+    &.float-end {
+      width: 90%;
+      text-align: left;
+    }
+  }
+
+  .form-control:not([type='date']), .form-select {
+    display: inline-block;
+    width: 58.33333%;
+    padding: 10px 12px;
+    font-size: 1.5rem;
+
+    @media (max-width: $screen-md-max) {
+      width: 100%;
+    }
+  }
+
+  .form-check {
+    padding-left: 0;
+
+    .form-check-input {
+      float: none;
+      position: relative;
+      left: 25px;
+      top: 5px;
+    }
+  }
 }
 
 .table-striped {
-	.label:not(.bg-light) {
-		display: inline;
-		padding: 0.2em 0.6em 0.3em;
-		font-size: 75%;
-		line-height: 1;
-		color: #fff;
-		text-align: center;
-		white-space: nowrap;
-		vertical-align: baseline;
-		border-radius: 0.25em;
-		
-		&.label-default {
-		  background: transparentize(white, 1);
-		  border: solid 1px $gray;
-		  color: $gray;
-		}
-	}
-	
-	.bg-light {
-		color: #7b7e80;
-		border: 1px solid #7b7e80;
-	}
-	
-	.bi-book-fill {
-		color: $brand-secondary;
-	}
+  .label:not(.bg-light), .bg-light {
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+  }
+
+  .label:not(.bg-light) {
+    color: #fff;
+    text-align: center;
+    &.label-default {
+      background: transparentize(white, 1);
+      border: solid 1px $gray;
+      color: $gray;
+    }
+  }
+
+  .bg-light {
+    color: #7b7e80;
+    border: 1px solid #7b7e80;
+  }
+
+  .bi-book-fill {
+    color: $brand-secondary;
+  }
 }
