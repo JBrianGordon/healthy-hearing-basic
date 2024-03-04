@@ -244,6 +244,13 @@
   }
 }
 
+@media screen and (max-width: $screen-xs-max){
+	//Hide most google maps controls on mobile
+	.gm-style-iw.gm-style-iw-c, .gm-style-mtc, button.gm-control-active.gm-fullscreen-control, .gm-svpc, .gm-style .gm-style-iw-t::after{
+		display: none;
+	}
+}
+
 .directions-link {
 	margin: 10px auto 0;
     display: block;
