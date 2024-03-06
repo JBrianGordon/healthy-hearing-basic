@@ -1,13 +1,12 @@
 html {
-	font-size: 10px;
+  font-size: 10px;
 }
+
 body {
-	font-size: 16px;
-	line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.6;
   overflow-x: hidden;
   background-color: $body-bg;
-}
-body, html {
   @include font($font-family-primary, 'normal', "400");
   -webkit-font-smoothing: antialiased;
 }
@@ -16,63 +15,68 @@ h1, .h1,
 h2, .h2,
 h3, .h3,
 h4, .h4,
-h5, .h5
+h5, .h5,
 h6, .h6 {
   margin-top: 0;
   margin-bottom: $line-height-computed;
-}
-
-h1, .h1 {
-	font-size: 4.75rem;
-}
-
-h2, .h2 {
-  margin-top: 1em;
-  margin-bottom: 15px;
-  font-size: 3rem;
-}
-
-h3 {
-	line-height: 1.5;
-	font-size: 2.4rem;
-	
-	&.crm-group-header {
-		display:inline-block;
-	}
-}
-
-h4, .h4{
-	font-size: 2.2rem;
-	line-height: 1.5
-}
-
-h1, .h1,
-h2, .h2,
-h3, .h3,
-h4, .h4,
-h5, .h5 {
   @include font($font-family-secondary, 'normal', "500");
 }
 
-h6 {
-	line-height: 1.5
+h1, .h1 {
+  font-size: 47.5px;
+}
+
+h2, .h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 30px;
+}
+
+h3 {
+  line-height: 1.5;
+  font-size: 24px;
+
+  &.crm-group-header {
+    display: inline-block;
+  }
+}
+
+h4, .h4 {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+h6, .h6 {
+  line-height: 1.5;
 }
 
 hr {
-	margin: 25px 0;
-	background-color: #eee;
-	border: 0;
-	border-top: 1px solid #777;
+  margin: 25px 0;
+  background-color: #eee;
+  border: 0;
+  border-top: 1px solid #777;
   width: 100%;
 }
 
 th {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 small {
   font-size: 87%;
   line-height: 1.6;
+}
+
+blockquote {
+  @include font($font-family-secondary, 'italic', "500");
+  padding: 12.5px 25px;
+  margin: 0 0 25px;
+  font-size: 20px;
+  border-left: 5px solid #d9dfed;
+
+  p:last-child, ul:last-child, ol:last-child {
+    margin-bottom: 0;
+  }
 }
 
 @media only screen and (max-width: $screen-sm-max) {
@@ -89,9 +93,8 @@ small {
   }
 }
 
-
 p, .container p {
-  margin-bottom: 1em;
+  margin-bottom: 30px;
 }
 
 a.text-link {
@@ -119,9 +122,9 @@ a.print-link {
 }
 
 .center-block {
-    display: block;
-    margin-left: auto;
-    margin-right: auto
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hidden {
@@ -139,6 +142,7 @@ a.print-link {
 .form-group {
   clear: both;
   margin-bottom: 15px;
+
   .ck-content {
     min-height: 200px;
   }
@@ -161,13 +165,13 @@ table {
   }
 
   &.table-bordered {
-    border: 1px solid #ddd
+    border: 1px solid #ddd;
   }
 }
 
 .text-primary {
   color: $brand-primary;
-  
+
   &.name {
     line-height: 33px;
     font-size: 30px;
@@ -179,7 +183,7 @@ table {
 }
 
 .text-light {
-  color: $brand-light!important;
+  color: $brand-light !important;
 }
 
 .text-small {
@@ -187,36 +191,24 @@ table {
 }
 
 .lead {
-	line-height: 1.4;
-	font-size: 24px;
-	
-	@include font($font-family-secondary, normal, normal);
-		font-size: 112%;
-	
-	@media only screen and (min-width: $screen-sm-min) {
-		font-size: 128%;
-	}
+  line-height: 1.4;
+  font-size: 24px;
+
+  @include font($font-family-secondary, normal, normal);
+  font-size: 112%;
+
+  @media only screen and (min-width: $screen-sm-min) {
+    font-size: 128%;
+  }
 }
 
 .text-large {
   font-size: 115%;
 }
 
-.text-xs-center {
-  @media only screen and (max-width: $screen-xs-max) {
-    text-align: center;
-  }
-}
-
 .text-xs-left {
   @media only screen and (max-width: $screen-xs-max) {
     text-align: left;
-  }
-}
-
-.text-xs-right {
-  @media only screen and (max-width: $screen-xs-max) {
-    text-align: right;
   }
 }
 
@@ -240,30 +232,18 @@ table {
 }
 
 .text-caption {
-	@include font($font-family-serif, 'normal', 'normal');
-	font-size: 87.5%;
-  
-  	span[itemprop] {
-		display: none;
-	}
-	
-	.popover-content {
-		color: #2b2c2d;
-	}
+  @include font($font-family-serif, 'normal', 'normal');
+  font-size: 87.5%;
+
+  span[itemprop] {
+    display: none;
+  }
+
+  .popover-content {
+    color: #2b2c2d;
+  }
 }
 
 .dropdown-item {
-	font-size: 16px;
-}
-
-blockquote {
-	@include font($font-family-secondary, 'italic', "500");
-    padding: 12.5px 25px;
-    margin: 0 0 25px;
-    font-size: 20px;
-    border-left: 5px solid #d9dfed;
-    
-	p:last-child, ul:last-child, ol:last-child {
-	    margin-bottom: 0;
-	}
+  font-size: 16px;
 }

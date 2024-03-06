@@ -33,6 +33,10 @@ button.close {
     width: 100%;
     display: block;
   }
+
+  &.group-toggle {
+    float: right;
+  }
 }
 
 // Button variants
