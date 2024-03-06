@@ -13,7 +13,7 @@ if (isset($wiki)) {
 }
 $image = Router::url($image, true);
 ?>
-<footer class="panel-footer text-center btn-set share-footer noprint">
+<footer class="panel-footer text-center btn-set noprint">
 	<?php
 	echo $this->Share->facebook([
 		'linkOptions' => [
