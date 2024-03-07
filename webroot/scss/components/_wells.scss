@@ -65,6 +65,26 @@
   margin-bottom: 5px;
   padding: 25px;
 
+  .clinic-provider-name {
+    font-size: 22px;
+    margin-bottom: 10px;
+
+    .provider-credentials {
+      font-size: 20px;
+    }
+  }
+  .provider-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .clinic-provider-bio {
+    @media (max-width: $screen-sm-max) {
+      display: none;
+    }
+  }
+
   .profile-pic-container {
     min-height: 175px;
     max-width: 116px;
