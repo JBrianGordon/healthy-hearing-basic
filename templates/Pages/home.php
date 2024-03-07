@@ -41,7 +41,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     <?php endif; ?>
                 </div>
-            <div class="col-sm-5 col-lg-offset-1 over-backdrop right-desktop">
+            <div class="col-sm-5 col-lg-offset-1 over-backdrop pull-right">
                 <div class="panel panel-secondary">
                     <header class="panel-heading text-center">
                       Find a clinic
