@@ -154,7 +154,7 @@ table {
 }
 
 .text-primary {
-  color: $brand-primary;
+  color: $brand-primary!important;
 
   &.name {
     line-height: 33px;
@@ -388,6 +388,17 @@ summary {
   clear: both;
 }
 
+.bg-primary {
+  background-color: #304369!important;
+}
+
+.bg-info {
+    background: rgba(255, 255, 255, 0);
+    background-color: #fff!important;
+    border: solid 1px #7b7e80;
+    color: #7b7e80;
+}
+
 // Telephone number styles
 .telephone {
   // Orange phone numbers in results list, clinic well, slider, sidebar, footer, etc.
@@ -516,6 +527,11 @@ pre {
 
 .dropdown-item {
   font-size: 16px;
+
+  &:active {
+    background-color: transparent;
+    color: $text-color;
+  }
 }
 
 // Autocomplete styles

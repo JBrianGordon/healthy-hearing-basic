@@ -7,6 +7,9 @@ $bootstrap-sass-asset-helper: false !default;
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
+$primary:       #304369 !default; //dark blue
+$secondary:     #ef642f !default; //orange
+$info:     		#fff	!default; //white
 
 $gray-base:              #000 !default;
 $gray-darker:            lighten($gray-base, 13.5%) !default; // #222
@@ -15,7 +18,7 @@ $gray:                   lighten($gray-base, 33.5%) !default; // #555
 $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
-$brand-primary:         darken(#428bca, 6.5%) !default; // #337ab7
+$brand-primary:         #304369 !default; // #337ab7
 $brand-success:         #5cb85c !default;
 $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
@@ -857,6 +860,13 @@ $text-color: $gray-darker; // #28292b;
 $link-color: #1E5C8F;
 
 $share-icon-gray: #cacacb;
+
+$color-facebook: #4267B2;
+$color-twitter: #1DA1F2;
+$color-linkedin: #007bb6;
+$color-pinterest: #cf2527;
+$color-google-plus: #d34836;
+$blockquote: #ff6600;
 
 /*
  * Typography

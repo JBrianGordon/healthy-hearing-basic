@@ -48,6 +48,13 @@ form {
       display: none;
     }
   }
+
+  .form-check-input {
+    &:checked {
+      background-color: $brand-primary;
+      border-color: $brand-primary;
+    }
+  }
 }
 
 .form-control, .form-control[type=text], .form-control[type=tel], .form-control[type=email] {

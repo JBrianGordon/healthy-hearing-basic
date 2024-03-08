@@ -37,9 +37,19 @@ button.close {
   &.group-toggle {
     float: right;
   }
+
+  &.show {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+  }
 }
 
 // Button variants
+.btn-primary {
+  @include button-variant($btn-primary-border, $btn-primary-bg, $btn-primary-color);
+}
+
 .btn-secondary {
   @include button-variant($btn-secondary-border, $btn-secondary-bg, $btn-secondary-color);
 }

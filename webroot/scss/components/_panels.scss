@@ -9,8 +9,8 @@
   &.panel-primary {
     .panel-heading {
       color: #fff;
-      background-color: $brand-primary;
-      border-color: $brand-primary;
+      background-color: $brand-primary!important;
+      border-color: $brand-primary!important;
     }
   }
 
@@ -337,6 +337,7 @@
 		      background-color: #fff;
 		      border: 1px solid #ddd;
 		      margin-left: -1px;
+		      font-size: 16px;
 
 		      &:hover {
 		        color: #113350;

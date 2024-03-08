@@ -1,5 +1,3 @@
-@import "theme-colors.scss"; // Load before bootstrap
-@import "variables/colors";
 @import "mixins/font";
 @import "mixins/forms";
 @import "mixins/hh-icons";
@@ -37,8 +35,6 @@
 @import "pages/fap-cities";
 @import "pages/home";
 @import "pages/library";
-@import "pages/manufacturer";
-@import "pages/secondary";
 @import "pages/online-hearing-test";
 @import "admin/responsive-admin.scss";
 @import "admin/imports.scss";
