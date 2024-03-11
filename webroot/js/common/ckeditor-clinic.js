@@ -23,7 +23,7 @@ import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofread
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
 //Importing custom CSS
-import '../../scss/utilities/ckeditor.css';
+import '../../css/ckeditor/ckeditor.css';
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 

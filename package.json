@@ -2,7 +2,7 @@
   "name": "healthy-hearing-website",
   "scripts": {
     "build": "webpack",
-    "compile-sass": "node_modules/.bin/sass webroot/scss/responsive.scss webroot/css/responsive.css"
+    "sass": "sass --style=compressed webroot/scss:webroot/css"
   },
   "author": "Brian Gordon",
   "description": "Healthy Hearing assets served through Webpack",
