@@ -124,7 +124,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                    <th class="p5"><?= $this->Paginator->sort('prospect') ?>/<br><?= $this->Paginator->sort('status') ?></th>
 				                    <th class="p5">Flags: <?= $this->Paginator->sort('is_review_needed', 'RN') ?>/<?= $this->Paginator->sort('is_prospect_override', 'PO') ?>/<br>
 				                        <?= $this->Paginator->sort('is_spam', 'Spam') ?></th>
-				                    <th class="actions p5"><?= __('Actions') ?></th>
+				                    <th class="actions p5">Actions</th>
 				                </tr>
 				            </thead>
 				            <tbody>
@@ -144,8 +144,8 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                        </td>
 				                        <td class="p5">
 				                            <?php if (isset($caCallGroup->ca_calls[0])): ?>
-				                                <?php echo date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
-				                                <?php echo date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
+				                                <?= date("m/d/Y", strtotime($caCallGroup->ca_calls[0]['start_time'])); ?><br>
+				                                <?= date("g:i a ", strtotime($caCallGroup->ca_calls[0]['start_time'])).getEasternTimezone(); ?>
 				                            <?php else: ?>
 				                                <span class="badge bg-danger">No calls</span>
 				                            <?php endif; ?>
@@ -173,8 +173,8 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                        </td>
 				                        <td class="actions p5">
 				                            <div class="btn-group-vertical btn-group-sm">
-				                                <?= $this->Html->link(__(' View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default bi bi-eye-fill']) ?>
-				                                <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default bi bi-pencil-fill']) ?>
+				                                <?= $this->Html->link(__(' View'), ['action' => 'view', $caCallGroup->id], ['class' => 'btn btn-default btn-xs bi bi-eye-fill']) ?>
+				                                <?= $this->Html->link(__(' Edit'), ['action' => 'edit', $caCallGroup->id], ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
 				                            </div>
 				                        </td>
 				                    </tr>
