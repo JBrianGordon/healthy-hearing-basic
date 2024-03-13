@@ -6,7 +6,7 @@
 				<ul class="no-bullets">
 					<li><a href="/" class="text-link">Home</a></li>
 					<li><a href="/about" class="text-link">About us</a></li>
-					<li><a href="/contact-us" class="text-link">Contact <?php echo $siteName; ?></a></li>
+					<li><a href="/contact-us" class="text-link">Contact <?= $siteName ?></a></li>
 					<?php if (Configure::read('showFeeds')): ?>
 						<li><a href="/feeds" class="text-link">RSS feeds</a></li>
 					<?php endif; ?>
@@ -39,12 +39,10 @@
 			<div class="col-md-6">
 				<?php if (Configure::read('showNewsletter')): ?>
 					<p class="text-primary text-small">
-					<strong>Get the best of <?php echo $siteName; ?> delivered to your inbox!</strong>
+					<strong>Get the best of <?= $siteName; ?> delivered to your inbox!</strong>
 					</p>
 					<p>
-					<?php
-					echo $this->Html->link('Sign up for our newsletter', '/newsletter', ['class' => 'btn btn-primary btn-sm']);
-					?>
+					<?= $this->Html->link('Sign up for our newsletter', '/newsletter', ['class' => 'btn btn-primary btn-sm']) ?>
 					</p>
 				<?php endif; ?>
 				<div class="soc-icons">
@@ -104,8 +102,8 @@
 </footer>
 <footer class="row site-colophon noprint">
 	<div class="col-md-12 text-center text-small">
-		<strong>&copy; Copyright <?php echo date('Y'); ?>. All Rights Reserved.</strong> 
-		<?= Configure::read('siteUrl') ?>HealthyHearing.com does not provide medical advice, diagnosis or treatment.
+		<strong>&copy; Copyright <?= date('Y') ?>. All Rights Reserved.</strong> 
+		<?= Configure::read('siteUrl') ?> does not provide medical advice, diagnosis or treatment.
 	</div>
 </footer>
 
