@@ -319,13 +319,13 @@ $groupedFields = [
 				                        <div class="btn-group-vertical btn-group-sm">
 				                            <?= $this->Html->link("<i class='bi bi-wrench'></i> Manage",
 				                                ['action' => 'edit', $location->id],
-				                                ['class' => 'btn btn-default', 'escape' => false]) ?>
-				                            <?= $this->Html->link("View",
+				                                ['class' => 'btn btn-default btn-xs', 'escape' => false]) ?>
+				                            <?= $this->Html->link("<i class='bi bi-eye-fill'></i> View",
 				                                $location->hh_url,
-				                                ['class' => 'btn btn-default']) ?>
-				                            <?= $this->Html->link("Clinic Edit",
+				                                ['class' => 'btn btn-default btn-xs', 'escape' => false]) ?>
+				                            <?= $this->Html->link("<i class='bi bi-pencil-fill'></i> Clinic Edit",
 				                                ['action' => 'edit', 'prefix' => 'Clinic', $location->id],
-				                                ['class' => 'btn btn-default']) ?>
+				                                ['class' => 'btn btn-default btn-xs', 'escape' => false]) ?>
 				                        </div>
 				                    </td>
 				                </tr>
