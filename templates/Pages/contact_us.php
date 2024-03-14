@@ -38,10 +38,10 @@ $this->Html->script('dist/contact.min', ['block' => true]);
                                             echo $this->Form->control('email', ['placeholder' => 'Email', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0'], 'required' => false]);
                                             echo $this->Form->control('zip', ['class' => 'col-sm-9 mb15', 'label' => ['text' => Configure::read('zipLabel'), 'class' => 'col-sm-3 control-label pl0'], 'placeholder' => Configure::read('zipLabel')]);
                                             if (Configure::read('showNewsletter')) {
-                                                echo $this->Form->control('subscribe', ['checked' => true,'type' => 'checkbox', 'class' => 'col-sm-offset-3', 'label' => ['class' => 'control-label pt0 pl5','text' => 'Subscribe to our newsletter']
+                                                echo $this->Form->control('subscribe', ['checked' => true,'type' => 'checkbox', 'class' => 'col-sm-offset-2', 'label' => ['class' => 'control-label pt5 pl45','text' => 'Subscribe to our newsletter']
                                                 ]); 
                                             }
-                                            echo $this->Form->control('hearing_care_professional', ['type' => 'checkbox', 'id' => 'ContactHearingCareProfessional', 'class' => 'col-sm-offset-3', 'label' => ['class' => 'control-label pt0 pl5','text' => 'I am a hearing care professional']]); ?>
+                                            echo $this->Form->control('hearing_care_professional', ['type' => 'checkbox', 'id' => 'ContactHearingCareProfessional', 'class' => 'col-sm-offset-2', 'label' => ['class' => 'control-label pt5 pl45','text' => 'I am a hearing care professional']]); ?>
                                         <div id="ContactCompany" style="display:none;">
                                             <?= $this->Form->control('company', ['class' => 'col-sm-9', 'label' => 'Practice Name', 'placeholder' => 'Practice Name', 'class' => 'col-sm-3']); ?>
                                         </div>
