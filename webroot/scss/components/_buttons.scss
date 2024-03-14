@@ -69,6 +69,10 @@ button.close {
   @include button-variant($btn-neutral-color, $btn-neutral-bg, $btn-neutral-border);
 }
 
+.btn-info {
+  @include button-variant($btn-neutral-border, $btn-neutral-bg, $white);
+}
+
 .btn-default {
   color: #333;
   background-color: #fff;
@@ -98,6 +102,12 @@ button.close {
 
 .btn-group {
   flex-wrap: wrap;
+
+  &.btn-group-xs > .btn {
+    padding: 3px 6px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
   
   > .btn:not(:first-child), > .btn-group:not(:first-child) {
     margin-left: 0;
