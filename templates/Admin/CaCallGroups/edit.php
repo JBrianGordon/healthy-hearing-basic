@@ -30,107 +30,107 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Edit Call Group</h2>
-                <?= $this->Form->control('data[CaCallGroup][id]', ['type' => 'hidden', 'value' => $caCallGroup->id, 'id' => 'CaCallGroupId']) ?>
-                <?= $this->Form->control('data[CaCallGroup][location_id]', ['type' => 'hidden', 'value' => $caCallGroup->id, 'id' => 'CaCallGroupLocationId']) ?>
-                <?= $this->Form->control('data[CaCallGroup][is_prospect_override]', ['type' => 'hidden', 'value' => $caCallGroup->is_prospect_override, 'id' => 'CaCallGroupIsProspectOverride']) ?>
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <tbody>
-                        <tr>
-                            <th style="width:25%" class="tar">Group ID</th>
-                            <td><?= $caCallGroup->id ?></td>
-                        </tr>
-                        <tr>
-                            <th class="tar">XML File Id</th>
-                            <td><?= $caCallGroup->id_xml_file ?></td>
-                        </tr>
-                        <tr>
-                            <th class="tar">Status</th>
-                            <td><?= isset($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
-                        </tr>
-                        <tr>
-                            <th class="tar">Clinic</th>
-                            <td>
-                                <?php if ($caCallGroup->has('location')): ?>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
-                                            <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br>
-                                            <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br>
-                                            <?= $caCallGroup->location->phone ?><br>
-                                            <?php if (!empty($caCallGroup->location->optional_message)): ?>
-                                                <span class="locationMessage">Landmarks: <?= $caCallGroup->location->optional_message ?></span>
-                                            <?php endif; ?>
-                                            <?php if (!empty($caCallGroup->location->landmarks)): ?>
-                                                <strong>Landmarks: <?= $caCallGroup->location->landmarks ?></strong>
-                                            <?php endif; ?>
+                <?= $this->Form->create($caCallGroup, ['idPrefix'=>'ca-call-group']) ?>
+                    <?= $this->Form->hidden('id', ['id' => true]) ?>
+                    <?= $this->Form->hidden('location_id', ['id' => true]) ?>
+                    <?= $this->Form->hidden('is_prospect_override', ['id' => true]) ?>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <tbody>
+                            <tr>
+                                <th style="width:25%" class="tar">Group ID</th>
+                                <td><?= $caCallGroup->id ?></td>
+                            </tr>
+                            <tr>
+                                <th class="tar">XML File Id</th>
+                                <td><?= $caCallGroup->id_xml_file ?></td>
+                            </tr>
+                            <tr>
+                                <th class="tar">Status</th>
+                                <td><?= isset($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
+                            </tr>
+                            <tr>
+                                <th class="tar">Clinic</th>
+                                <td>
+                                    <?php if ($caCallGroup->has('location')): ?>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <?= $this->Html->link($caCallGroup->location->title, $caCallGroup->location->hh_url) ?><br>
+                                                <?= $caCallGroup->location->address ?> <?= $caCallGroup->location->address_2 ?><br>
+                                                <?= $caCallGroup->location->city ?>, <?= $caCallGroup->location->state ?> <?= $caCallGroup->location->zip ?><br>
+                                                <?= $caCallGroup->location->phone ?><br>
+                                                <?php if (!empty($caCallGroup->location->optional_message)): ?>
+                                                    <span class="locationMessage">Landmarks: <?= $caCallGroup->location->optional_message ?></span>
+                                                <?php endif; ?>
+                                                <?php if (!empty($caCallGroup->location->landmarks)): ?>
+                                                    <strong>Landmarks: <?= $caCallGroup->location->landmarks ?></strong>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="locationHours small"></span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <span class="locationHours small"></span>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="tar">Calls</th>
-                            <td>
-                                <table class="table table-bordered table-condensed">
-                                    <tbody>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Call time</th>
-                                            <th>Duration</th>
-                                            <th>Agent</th>
-                                            <th>Call type</th>
-                                        </tr>
-                                        <?php foreach ($caCallGroup->ca_calls as $caCalls) : ?>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="tar">Calls</th>
+                                <td>
+                                    <table class="table table-bordered table-condensed">
+                                        <tbody>
                                             <tr>
-                                                <td><?= $caCalls->id ?></td>
-                                                <td>
-                                                    <?php $startTimeEastern = $caCalls->start_time->setTimezone('America/New_York'); ?>
-                                                    <?php echo $startTimeEastern->format('m/d/Y'); ?><br>
-                                                    <?php echo $startTimeEastern->format('g:i a T'); ?>
-                                                </td>
-                                                <td><?= gmdate('H:i:s', $caCalls->duration) ?></td>
-                                                <td><?= $this->App->getUserName($caCalls->user_id) ?></td>
-                                                <td><?= CaCall::$callTypes[$caCalls->call_type] ?></td>
+                                                <th>ID</th>
+                                                <th>Call time</th>
+                                                <th>Duration</th>
+                                                <th>Agent</th>
+                                                <th>Call type</th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="tar">Notes</th>
-                            <td>
-                                <div class="notes">
-                                    <div class="single_note">
-                                        <table cellpadding="0" cellspacing="0">
-                                            <tbody>
-                                                <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
-                                                    <tr>
-                                                        <td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
-                                                        <td class="status"><?= CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
-                                                        <td class="when"><?= dateTimeCentralToEastern($caCallGroupNotes->created) ?></td>
-                                                        <td class="delete">
-                                                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'ca_call_group_notes', 'action' => 'delete', $caCallGroupNotes->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger btn-xs']) ?> 
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="3" class="body"><?= $caCallGroupNotes->body ?></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
+                                            <?php foreach ($caCallGroup->ca_calls as $caCalls) : ?>
+                                                <tr>
+                                                    <td><?= $caCalls->id ?></td>
+                                                    <td>
+                                                        <?php $startTimeEastern = $caCalls->start_time->setTimezone('America/New_York'); ?>
+                                                        <?php echo $startTimeEastern->format('m/d/Y'); ?><br>
+                                                        <?php echo $startTimeEastern->format('g:i a T'); ?>
+                                                    </td>
+                                                    <td><?= gmdate('H:i:s', $caCalls->duration) ?></td>
+                                                    <td><?= $this->App->getUserName($caCalls->user_id) ?></td>
+                                                    <td><?= CaCall::$callTypes[$caCalls->call_type] ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="tar">Notes</th>
+                                <td>
+                                    <div class="notes">
+                                        <div class="single_note">
+                                            <table cellpadding="0" cellspacing="0">
+                                                <tbody>
+                                                    <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
+                                                        <tr>
+                                                            <td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
+                                                            <td class="status"><?= empty($caCallGroupNotes->status) ? '' : CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
+                                                            <td class="when"><?= dateTimeCentralToEastern($caCallGroupNotes->created) ?></td>
+                                                            <td class="delete">
+                                                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'ca_call_group_notes', 'action' => 'delete', $caCallGroupNotes->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger btn-xs']) ?> 
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3" class="body"><?= $caCallGroupNotes->body ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </div>
-                <?= $this->Form->create($caCallGroup) ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
                     <fieldset>
                         <?php
                         echo $this->Form->control('refused_name', [
@@ -220,30 +220,27 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                 'options' => CaCallGroup::$statuses,
                                 'required' => true
                             ]);
-                        ?>
-                        <?php
-                            echo $this->Form->control('final_score_date', ['empty' => true]);
-                            echo $this->Form->control('is_bringing_third_party');
-                            echo $this->Form->control('is_review_needed');
-                            echo $this->Form->control('ca_call_count');
-                            echo $this->Form->control('clinic_followup_count');
-                            echo $this->Form->control('patient_followup_count');
-                            echo $this->Form->control('clinic_outbound_count');
-                            echo $this->Form->control('patient_outbound_count');
-                            echo $this->Form->control('vm_outbound_count');
-                            echo $this->Form->control('is_locked');
-                            echo $this->Form->control('lock_time', ['empty' => true]);
-                            echo $this->Form->control('id_locked_by_user');
-                            echo $this->Form->control('outbound_priority');
-                            echo $this->Form->control('did_they_want_help');
-                            echo $this->Form->control('traffic_source');
-                            echo $this->Form->control('traffic_medium');
-                            echo $this->Form->control('is_appt_request_form');
-                            echo $this->Form->control('is_spam');
+                            $noteCount = count($caCallGroup->ca_call_group_notes);
+                            echo $this->Form->control("ca_call_group_notes.$noteCount.body", [
+                                'label' => 'Add a note',
+                                'rows' => 3,
+                                'required' => false,
+                            ]);
+                            echo $this->Form->control('is_review_needed', array(
+                                'label' => 'Needs supervisor review',
+                            ));
                         ?>
                     </fieldset>
-                    <?= $this->Form->submit('Submit1', ['id' => 'submitBtn']) ?>
+                    <div class="tar">
+                        <?= $this->Form->submit('Save Call Group', ['id' => 'submitBtn']) ?>
+                    </div>
                 <?= $this->Form->end() ?>
+                <script type="text/javascript">
+                    // Global javascript variables
+                    var isCallDateSet = <?php echo json_encode(!empty($caCallGroup->scheduled_call_date)); ?>;
+                    window.IS_CALL_GROUP_EDIT_PAGE = true;
+                    window.IS_CLINIC_LOOKUP_PAGE = false;
+                </script>
             </div>
         </div>
     </section>

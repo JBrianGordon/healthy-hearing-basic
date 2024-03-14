@@ -32,6 +32,7 @@ class CaCallGroupsController extends BaseAdminController
         ]);
 
         $this->paginate = [
+            'limit' => 30,
             'order' => ['CaCallGroups.id' => 'DESC']
         ];
     }
