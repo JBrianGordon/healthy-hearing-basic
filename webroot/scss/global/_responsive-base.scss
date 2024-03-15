@@ -253,13 +253,16 @@ summary {
 
 // Printer-friendly styles
 @media print {
+  .backdrop-gradient {
+    background-image: none;
+  }
   .site-body, .container {
     width: 100vw;
 
     &.content-body,
     &.blog {
       width: 95vw;
-      padding-left: 4vw;
+      padding-left: 1vw;
       padding-right: 1vw;
     }
   }
