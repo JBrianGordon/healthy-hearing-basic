@@ -27,13 +27,14 @@ class ReviewMailer extends Mailer
      * Send an email to a clinic after a positive email is approved.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @param string $toEmail Recipient email address
      * @return $this
      */
-    public function emailPositiveReviewReceived($review)
+    public function emailPositiveReviewReceived($review, $toEmail)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($this->getLocationEmail($review->location_id))
+            ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Positive Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/positiveReviewReceived')
@@ -46,13 +47,14 @@ class ReviewMailer extends Mailer
      * Send an email to a clinic after a negative email is approved.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @param string $toEmail Recipient email address
      * @return $this
      */
-    public function emailNegativeReviewReceived($review)
+    public function emailNegativeReviewReceived($review, $toEmail)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($this->getLocationEmail($review->location_id))
+            ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Negative Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/negativeReviewReceived')
@@ -65,13 +67,14 @@ class ReviewMailer extends Mailer
      * Send an email to a clinic after a review response is published.
      *
      * @param \Cake\ORM\Entity $review Review entity
+     * @param string $toEmail Recipient email address
      * @return $this
      */
-    public function emailReviewResponsePosted($review)
+    public function emailReviewResponsePosted($review, $toEmail)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($this->getLocationEmail($review->location_id))
+            ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review Response Posted')
             ->viewBuilder()
                 ->setTemplate('Review/reviewResponsePosted')
@@ -81,18 +84,21 @@ class ReviewMailer extends Mailer
     }
 
     /**
-     * Return email address for clinic location
+     * Send an email to site's customer-support-email if clinic doesn't have email
      *
-     * @param int $locationId Location ID
-     * @return string Location email address
+     * @param \Cake\ORM\Entity $review Review entity
+     * @return $this
      */
-    protected function getLocationEmail($locationId)
+    public function noEmailSentToClinic($review)
     {
-        return $this
-            ->getTableLocator()
-            ->get('Locations')
-            ->findById($locationId)
-            ->first()
-            ->email;
+        $this
+            ->setEmailFormat('html')
+            ->setTo(Configure::read('customer-support-email'))
+            ->setSubject(Configure::read('siteNameAbbr') . ' -- Review email not sent')
+            ->viewBuilder()
+                ->setTemplate('Review/reviewNoEmail')
+                ->setVar('reviewData', $review);
+
+        return $this;
     }
 }
