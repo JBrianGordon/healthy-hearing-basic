@@ -76,8 +76,13 @@
   display: inline-block;
 }
 
-.hh-icon-pinterest:before {
-  content: "\e609";
+.hh-icon-pinterest {
+  background-image: url("../img/pinterest.svg");
+  background-size: contain;
+  width: 16px;
+  height: 16px;
+  margin-bottom: -2px;
+  display: inline-block;
 }
 
 .hh-icon-circle-facebook:before {

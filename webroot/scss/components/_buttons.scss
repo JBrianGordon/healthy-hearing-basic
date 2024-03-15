@@ -141,21 +141,24 @@ button.close {
 }
 
 // Share button styles
-.btn-share {
+.btn-share, .IN-widget {
   background: $brand-primary;
   border-radius: 18px;
   color: $body-bg;
   height: 35px;
-  line-height: 30px;
-  padding: 3px 1.5em;
+  line-height: 30px!important;
+  padding: 3px 1.5em!important;
   text-transform: none;
 
   &:hover, &:focus, &:active {
     color: $white;
+    background-color: $btn-primary-bg;
   }
 
   [class*="hh-icon-"] {
     font-size: 16px;
+    position: relative;
+    top: 1px;
   }
 
   .badge {
@@ -169,16 +172,47 @@ button.close {
   }
 }
 
+.btn-print {
+  &:hover, &:focus, &:active {
+    color: $white;
+    background-color: $btn-primary-bg;
+  }
+}
+
 // Badge button styles
 .btn-badge {
   padding: 3px 3px 3px 1em;
 }
 
 // Social media buttons
-.btn-facebook { background: $color-facebook; }
+.btn-facebook {
+  background: $color-facebook;
+
+  .fb-xfbml-parse-ignore {
+    color: $white;
+  }
+}
 .btn-twitter { background: $color-twitter; }
-.btn-linkedin { background: $color-linkedin; }
-.btn-pinterest { background: $color-pinterest; }
+.IN-widget { 
+  background: $color-linkedin;
+  margin: 13.6px 0 13.6px 13.6px!important;
+
+  &:hover {
+    background: #006097;
+
+    > span > button {
+      background-color: #006097!important;
+    }
+  }
+
+  button {
+    font-size: 14px!important;
+  }
+}
+.btn-pinterest { 
+  background: $color-pinterest; 
+  margin-left: 13.6px!important;
+}
 .btn-google-plus { background: $color-google-plus; }
 
 // Cookie button styles
