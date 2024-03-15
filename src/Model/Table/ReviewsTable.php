@@ -366,23 +366,48 @@ class ReviewsTable extends Table
     {
         $sendReviewEmail = $entity->get('sendReviewEmail');
 
+        // The following got uglier (1 switch statement turned into 2)
+        // after I included the no-clinic-email condition.
+        // I *think* this could be very clean with enums, but maybe not worth it :)
         if ($sendReviewEmail !== false) {
             $mailer = $this->getMailer('Review');
             $locationNotes = $this->fetchTable('LocationNotes');
 
+            // Set up note body
             switch ($sendReviewEmail) {
                 case 'emailPositiveReviewReceived':
-                    $mailer->send('emailPositiveReviewReceived', [$entity]);
                     $noteBody = 'Positive review received';
                     break;
                 case 'emailNegativeReviewReceived':
-                    $mailer->send('emailNegativeReviewReceived', [$entity]);
                     $noteBody = 'Negative review received';
                     break;
                 case 'emailReviewResponsePosted':
-                    $mailer->send('emailReviewResponsePosted', [$entity]);
                     $noteBody = 'Review response posted';
                     break;
+            }
+
+            $locationEmail = $this
+                ->getTableLocator()
+                ->get('Locations')
+                ->findById($entity->location_id)
+                ->first()
+                ->email;
+
+            // If there is no location email, alert site admins.
+            if ($locationEmail === '') {
+                 $mailer->send('noEmailSentToClinic', [$entity]);
+            } else {
+                switch ($sendReviewEmail) {
+                    case 'emailPositiveReviewReceived':
+                        $mailer->send('emailPositiveReviewReceived', [$entity, $locationEmail]);
+                        break;
+                    case 'emailNegativeReviewReceived':
+                        $mailer->send('emailNegativeReviewReceived', [$entity, $locationEmail]);
+                        break;
+                    case 'emailReviewResponsePosted':
+                        $mailer->send('emailReviewResponsePosted', [$entity, $locationEmail]);
+                        break;
+                }
             }
 
             $locationNotes->add($entity->location_id, $noteBody, $options['_footprint']);
