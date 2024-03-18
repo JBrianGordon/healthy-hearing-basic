@@ -21,7 +21,7 @@
         </div>
 	  </div>
       <div class="row page-content">
-		<div class="col-sm-9">
+		<div class="col-lg-9">
 			<article class="panel hearing-test">
 			<div class="panel-body">
 				<div class="panel-section expanded">

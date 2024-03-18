@@ -68,7 +68,7 @@ $image = Router::url($image, true);
 		]);
 	}
 	?>
-	<button class="btn btn-print btn-light noprint" onclick="window.print()"><span class="icon hh-icon-printer"></span> Print</button>
+	<button class="btn btn-print btn-light noprint ml15" onclick="window.print()"><span class="icon hh-icon-printer"></span> Print</button>
 	<!-- Pinterest button JS -->
 	<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js" data-pin-custom="true"></script>
 </footer>
