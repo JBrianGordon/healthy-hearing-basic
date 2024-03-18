@@ -123,7 +123,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
 					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
-				<header class="col-sm-12 inverse">
+				<header class="col-sm-12 inverse noprint">
 					<div class="col-sm-12 col-xs-9">
 						<?= $this->Breadcrumbs->render() ?>
 						<?= $this->element('breadcrumb_schema') ?>
@@ -147,7 +147,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 				</header>
 				<div class="row">
-					<div class="col-sm-9 float-start mb70">
+					<div class="col-lg-9 float-start mb70">
 						<div class="panel panel-section expanded mb0">
 							<div id="wiki-body">
 								<?= $wiki->body ?>
