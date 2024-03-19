@@ -158,8 +158,27 @@ table {
         padding: 5px;
         border: 1px solid #ddd;
 
-        :nth-child(even){
+        &:nth-child(even){
           background: #F9F9F9;
+        }
+
+        .note_who {
+          width: 140px;
+        }
+
+        .status {
+          text-align: center;
+          font-weight: bold;
+        }
+
+        .when {
+          width: 210px;
+          text-align: right;
+        }
+
+        .delete {
+          width: 90px;
+          text-align: right;
         }
       }
     }
