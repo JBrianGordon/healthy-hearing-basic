@@ -106,10 +106,10 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                 <th class="tar">Notes</th>
                                 <td>
                                     <div class="notes">
-                                        <div class="single_note">
-                                            <table cellpadding="0" cellspacing="0">
-                                                <tbody>
-                                                    <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
+                                        <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
+                                            <div class="single_note">
+                                                <table cellpadding="0" cellspacing="0">
+                                                    <tbody>             
                                                         <tr>
                                                             <td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
                                                             <td class="status"><?= empty($caCallGroupNotes->status) ? '' : CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
@@ -121,10 +121,10 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                                         <tr>
                                                             <td colspan="3" class="body"><?= $caCallGroupNotes->body ?></td>
                                                         </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </td>
                             </tr>

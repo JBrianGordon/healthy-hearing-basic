@@ -150,6 +150,19 @@ table {
 
   &.table-bordered {
     border: 1px solid #ddd;
+
+    .notes {
+      margin: 20px 0;
+
+      .single_note {
+        padding: 5px;
+        border: 1px solid #ddd;
+
+        :nth-child(even){
+          background: #F9F9F9;
+        }
+      }
+    }
   }
 }
 
