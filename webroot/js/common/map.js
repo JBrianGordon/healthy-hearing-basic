@@ -62,16 +62,3 @@ window.addEventListener('pageshow', (event) => {
     }, 700);
   }
 });
-
-const enlargeMapModal = document.getElementById('enlargeMap');
-
-if(enlargeMapModal){
-  enlargeMapModal.addEventListener('shown.bs.modal', () => {
-    enableInteractiveMap('big');
-  });
-
-  enlargeMapModal.addEventListener('hidden.bs.modal', () => {
-    const bigMap = document.getElementById('bigMap');
-    bigMap.setAttribute('data-enabled', '0');
-  });
-}

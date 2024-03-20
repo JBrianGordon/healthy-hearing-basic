@@ -67,7 +67,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                 <object data="<?php Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
                             <?php endif; ?>
                             <p class="text-center">
-                                <button class="btn btn-secondary hidden-sm" data-toggle="modal" data-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                <button class="btn btn-secondary hidden-sm" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
                             </p>
                         </div>
                         <?php if (!empty($clinicsNearMe)): ?>
@@ -104,16 +104,12 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4>Pick a <?php echo $stateLabel; ?></h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4>Pick a <?= Configure::read('stateLabel') ?></h4>
                     </div>
                     <div class="modal-body">
                         <center>
-                            <?php if (Configure::read('country') == 'US'): ?>
-                                <div data-hh-map></div>
-                            <?php else: ?>
-                                <object data="<?php echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
-                            <?php endif; ?>
+                            <div data-hh-map></div>
                         </center>
                     </div>
                 </div>
