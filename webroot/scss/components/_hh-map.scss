@@ -8,6 +8,15 @@
   svg {
     max-height: 100%;
     max-width: 100%;
+
+    g.Canada {
+      g {
+        &:hover {
+          fill: #78afc9;
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .map {
