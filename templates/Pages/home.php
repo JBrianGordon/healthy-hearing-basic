@@ -61,11 +61,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                             </p>
                         </div>
                         <div class="panel-section hidden-xs">
-                            <?php if (Configure::read('country') == 'US'): ?>
-                                <div data-hh-map></div>
-                            <?php else: ?>
-                                <object data="<?php Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
-                            <?php endif; ?>
+                            <div data-hh-map></div>
                             <p class="text-center">
                                 <button class="btn btn-secondary hidden-sm" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
                             </p>

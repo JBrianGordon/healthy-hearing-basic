@@ -49,13 +49,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['blo
 									<p class="h3">It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the lists below.</p>
 								</div>
 							</div>
-							<?php if (Configure::read('country') == 'US'): ?>
-								<div data-hh-map class="hidden-sm hidden-xs"></div>
-							<?php else: ?>
-								<center>
-									<object data="<?= Configure::read('map') ?>" type="image/svg+xml" id="interactiveMap" style="width: 600px;" class="hidden-sm hidden-xs"></object>
-								</center>
-							<?php endif; ?>
+							<div data-hh-map class="hidden-sm hidden-xs"></div>
 						</div>
 					</div>
 				</section>

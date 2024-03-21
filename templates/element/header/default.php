@@ -113,11 +113,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 					<?php endif; ?>
 				</div>
 				<div class="col-md-6 col-sm-6">
-					<?php if (Configure::read('country') == 'US'): ?>
-						<div data-hh-map></div>
-					<?php else: ?>
-						<object data="<?= Configure::read('map'); ?>" type="image/svg+xml" id="headerMap"></object>
-					<?php endif; ?>
+					<div data-hh-map></div>
 					<div class="tac mt20 col-md-10 col-md-offset-1">
 						<?= $this->element('locations/search', [
 							'label' => 'Enter city, '.$stateLabel.' or '.$zipShort,
