@@ -6,11 +6,10 @@ lang = html[0].getAttribute('lang'),
 mapDivs = document.querySelectorAll('[data-hh-map]'),
 stateButtons = document.getElementsByClassName('state'),
 provinceButtons = document.querySelectorAll('[province]'),
-usedTemplate = (lang === 'en-US' ? caTemplate : template);
+usedTemplate = (lang === 'en-CA' ? caTemplate : template);
 
 const zoomFunctions = zoomElements => {
 	for(let zoomObject of zoomElements){
-		console.log("step 5");
 		zoomObject.addEventListener('click', () => {
 			let map	= zoomObject.parentNode.parentNode.getElementsByClassName('map');
 			let unZoom = zoomObject.parentNode.parentNode.getElementsByClassName('map-unzoom');
