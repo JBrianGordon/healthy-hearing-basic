@@ -12,8 +12,7 @@ $this->Html->script('dist/admin_edit_state.min', ['block' => true]);
 	<div class="panel-heading">States Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Form->postLink(
 	                __(' Delete'),
 	                ['action' => 'delete', $state->id],

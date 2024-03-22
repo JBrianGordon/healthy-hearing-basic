@@ -33,26 +33,6 @@ class StatesController extends BaseAdminController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $state = $this->States->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $state = $this->States->patchEntity($state, $this->request->getData());
-            if ($this->States->save($state)) {
-                $this->Flash->success(__('The state has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The state could not be saved. Please, try again.'));
-        }
-        $this->set(compact('state'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id State id.
