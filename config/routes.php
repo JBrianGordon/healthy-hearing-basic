@@ -56,8 +56,8 @@ return static function (RouteBuilder $routes) {
 
         // Misc pages with simple, content-only templates
         $builder->connect('/about', ['controller' => 'Pages', 'action' => 'about', 'about']);
-        $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'view', 'aboutIda']);
-        $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'view', 'clinicFaq']);
+        $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'aboutIda', 'aboutIda']);
+        $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'clinicFaq', 'clinicFaq']);
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
         $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);

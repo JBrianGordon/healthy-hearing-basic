@@ -204,6 +204,30 @@ class PagesController extends AppController
     }
 
     /**
+     * Clinic FAQ page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function clinicFaq() {
+        $page = $this->Pages->findByTitle('clinicFaq')->first();
+        $this->viewBuilder()->setLayout('clinic_panel');
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
+    /**
+     * About IDA page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function aboutIda() {
+        $page = $this->Pages->findByTitle('aboutIda')->first();
+        $this->viewBuilder()->setLayout('clinic_panel');
+        $this->set(compact('page'));
+        $this->set('show_slider', false);
+    }
+
+    /**
      * About us page
      *
      * @return \Cake\Http\Response|null|void Renders view
