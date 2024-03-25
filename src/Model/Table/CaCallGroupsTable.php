@@ -87,15 +87,8 @@ class CaCallGroupsTable extends Table
             ->value('ca_call_count')
             ->value('clinic_followup_count')
             ->value('patient_followup_count')
-            ->value('clinic_outbound_count')
-            ->value('patient_outbound_count')
             ->value('vm_outbound_count')
             ->boolean('is_locked')
-            ->value('question_visit_clinic')
-            ->value('question_what_for')
-            ->value('question_purchase')
-            ->value('question_brand')
-            ->value('question_brand_other')
             ->boolean('did_they_want_help')
             ->value('traffic_source')
             ->value('traffic_medium')
@@ -368,14 +361,6 @@ class CaCallGroupsTable extends Table
             ->notEmptyString('patient_followup_count');
 
         $validator
-            ->integer('clinic_outbound_count')
-            ->notEmptyString('clinic_outbound_count');
-
-        $validator
-            ->integer('patient_outbound_count')
-            ->notEmptyString('patient_outbound_count');
-
-        $validator
             ->integer('vm_outbound_count')
             ->notEmptyString('vm_outbound_count');
 
@@ -394,31 +379,6 @@ class CaCallGroupsTable extends Table
         $validator
             ->numeric('outbound_priority')
             ->allowEmptyString('outbound_priority');
-
-        $validator
-            ->scalar('question_visit_clinic')
-            ->maxLength('question_visit_clinic', 255)
-            ->allowEmptyString('question_visit_clinic');
-
-        $validator
-            ->scalar('question_what_for')
-            ->maxLength('question_what_for', 255)
-            ->allowEmptyString('question_what_for');
-
-        $validator
-            ->scalar('question_purchase')
-            ->maxLength('question_purchase', 255)
-            ->allowEmptyString('question_purchase');
-
-        $validator
-            ->scalar('question_brand')
-            ->maxLength('question_brand', 255)
-            ->allowEmptyString('question_brand');
-
-        $validator
-            ->scalar('question_brand_other')
-            ->maxLength('question_brand_other', 255)
-            ->allowEmptyString('question_brand_other');
 
         $validator
             ->boolean('did_they_want_help')
@@ -497,14 +457,8 @@ class CaCallGroupsTable extends Table
             // Find followup calls only
             $conditions['OR'] = [
                 [
-                    'status IN' => [CaCallGroup::STATUS_FOLLOWUP_SET_APPT, CaCallGroup::STATUS_TENTATIVE_APPT, /*CaCallGroup::STATUS_OUTBOUND_CLINIC_ATTEMPTED*/]
+                    'status IN' => [CaCallGroup::STATUS_FOLLOWUP_SET_APPT, CaCallGroup::STATUS_TENTATIVE_APPT]
                 ],
-                /* HIDE SURVEY CALLS #15351
-                [
-                    // Survey calls
-                    'status' => [CaCallGroup::STATUS_APPT_SET],
-                    'appt_date <=' => $now,
-                ],*/
             ];
         } else {
             // Find all calls that are not 'complete'

@@ -183,28 +183,6 @@ use Cake\Routing\Router;
 		                    <th class="tar">Final Score Date/Time</th>
 		                    <td><?= h($caCallGroup->final_score_date) ?></td>
 		                </tr>
-		                <?php if($caCallGroup->question_visit_clinic) : ?>
-			                <tr>
-			                    <th class="tar">Question Visit Clinic</th>
-			                    <td><?= h($caCallGroup->question_visit_clinic) ?></td>
-			                </tr>
-			                <tr>
-			                    <th class="tar">Question What For</th>
-			                    <td><?= h($caCallGroup->question_what_for) ?></td>
-			                </tr>
-			                <tr>
-			                    <th class="tar">Question Purchase</th>
-			                    <td><?= h($caCallGroup->question_purchase) ?></td>
-			                </tr>
-			                <tr>
-			                    <th class="tar">Question Brand</th>
-			                    <td><?= h($caCallGroup->question_brand) ?></td>
-			                </tr>
-			                <tr>
-			                    <th class="tar">Question Brand Other</th>
-			                    <td><?= h($caCallGroup->question_brand_other) ?></td>
-			                </tr>
-		                <?php endif; ?>
 		                <tr>
 		                    <th class="tar">Needs supervisor review</th>
 		                    <td><?= $caCallGroup->is_review_needed ? __('Yes') : __('No'); ?></td>
@@ -236,14 +214,6 @@ use Cake\Routing\Router;
 		                <tr>
 		                    <th class="tar">Consumer followup count</th>
 		                    <td><?= $this->Number->format($caCallGroup->patient_followup_count) ?></td>
-		                </tr>
-		                <tr>
-		                    <th class="tar">Clinic survey count</th>
-		                    <td><?= $this->Number->format($caCallGroup->clinic_outbound_count) ?></td>
-		                </tr>
-		                <tr>
-		                    <th class="tar">Patient survey count</th>
-		                    <td><?= $this->Number->format($caCallGroup->patient_outbound_count) ?></td>
 		                </tr>
 		                <tr>
 		                    <th class="tar">Id Xml File</th>

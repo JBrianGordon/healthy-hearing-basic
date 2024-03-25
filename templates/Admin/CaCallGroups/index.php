@@ -39,26 +39,6 @@ foreach ($fields as $field => $type) {
                 $options = CaCallGroup::$prospectOptions;
                 $empty = '(select one)';
                 break;
-            case 'question_visit_clinic':
-                $type = 'select';
-                $options = CaCallGroup::$questionVisitClinicAnswers;
-                $empty = '(select one)';
-                break;
-            case 'question_brand':
-                $type = 'select';
-                $options = CaCallGroup::$questionBrandAnswers;
-                $empty = '(select one)';
-                break;
-            case 'question_purchase':
-                $type = 'select';
-                $options = CaCallGroup::$questionPurchaseAnswers;
-                $empty = '(select one)';
-                break;
-            case 'question_what_for':
-                $type = 'select';
-                $options = CaCallGroup::$questionWhatForAnswers;
-                $empty = '(select one)';
-                break;
         }
         $advancedSearchFields[] = [
             'field' => $field,

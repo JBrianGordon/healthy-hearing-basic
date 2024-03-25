@@ -1,7 +1,6 @@
 //import '../common/common';
 //import '../jquery/jplayer/jquery.jplayer.min';
 //import '../common/play_media';
-//import {questionsOnLoad} from './ca_call_questions';
 
 var locationTitle = '';
 var locationTimezoneOffset = '';
@@ -40,25 +39,8 @@ const onPageLoad = () => {
       if (true) {
       //if (callGroupNoteValue) {
         const callType = document.querySelector('#call-type').value;
-        const callTypeOutboundOptions = [CALL_TYPE_OUTBOUND_CLINIC, CALL_TYPE_OUTBOUND_CALLER];
         const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
         let callDate;
-
-        if (callTypeOutboundOptions.includes(callType)) {
-          // If an outbound call was disconnected, set the next call date 24 hours in the future.
-          callDate = new Date();
-          callDate.setDate(callDate.getDate() + 1);
-
-          // Dis-disable the scheduled call date fields
-          //todo: I think there is only 1 field now (not multiple)
-          const scheduledCallDateFields = document.querySelectorAll('[id^=ca-call-group-scheduled-call-date]');
-          scheduledCallDateFields.forEach(field => {
-            field.disabled = false;
-          });
-
-          // Set the fields using our handy function
-          setDateField('#ca-call-group-scheduled-call-date', callDate);
-        }
 
         if (callTypeInboundOptions.includes(callType)) {
           // If a new incoming call or VM follow-up call was disconnected, submit the form without validation.
@@ -312,7 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
   IS_CALL_GROUP_EDIT_PAGE = typeof IS_CALL_GROUP_EDIT_PAGE !== 'undefined' ? IS_CALL_GROUP_EDIT_PAGE : false;
 
   doWeHaveLocationInitially();
-  showOutcome();
   triggerChangeEvents();
   locationAutocomplete();
   pageLoadComplete = true;
@@ -470,89 +451,51 @@ const calculateStatus = () => {
         document.querySelector("#ca-call-group-score").value = SCORE_MISSED_OPPORTUNITY;
       }
     }
-  } else if (callType === CALL_TYPE_OUTBOUND_CLINIC) {
-    if (document.querySelector("#ca-call-group-did-they-answer-outbound").value === "1" || IS_CLINIC_LOOKUP_PAGE) {
-      if (document.querySelector("#ca-call-group-question-visit-clinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#ca-call-group-question-what-for").value === Q_WHAT_FOR_DECLINED || document.querySelector("#ca-call-group-question-purchase").value === Q_PURCHASE_DECLINED || document.querySelector("#ca-call-group-question-brand").value === Q_BRAND_DECLINED) {
-        // Clinic refused to answer our questions
-        document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_DECLINED;
-      } else if (document.querySelector("#ca-call-group-question-visit-clinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
-        // Appointment is coming up ..
-        document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
-        document.querySelector("#ca-call-group-scheduled-call-date").disabled = false;
-        onChangeApptDate();
-      } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
-      }
-    } else {
-      if (Number(document.querySelector("#ca-call-group-clinic-outbound-count").value) < MAX_CLINIC_OUTBOUND_ATTEMPTS) {
-        document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-      } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS;
-      }
-    }
-  } else if (callType === CALL_TYPE_SURVEY_DIRECT) {
-      if (document.querySelector("#ca-call-group-dm-has-appt-info").value === "1") {
-        // DM had appt info
-        if (document.querySelector("#ca-call-group-question-visit-clinic").value === Q_VISIT_CLINIC_DECLINED || document.querySelector("#ca-call-group-question-what-for").value === Q_WHAT_FOR_DECLINED || document.querySelector("#ca-call-group-question-purchase").value === Q_PURCHASE_DECLINED || document.querySelector("#ca-call-group-question-brand").value === Q_BRAND_DECLINED) {
-          // DM was missing some important info. Try calling clinic.
-          document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-        } else if (document.querySelector("#ca-call-group-question-visit-clinic").value === Q_VISIT_CLINIC_NO_RESCHEDULED) {
-          // Appointment is coming up ..
-          document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
-          document.querySelector("#ca-call-group-scheduled-call-date").disabled = false;
-          onChangeApptDate();
-        } else {
-          document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_COMPLETE;
-        }
-      } else {
-        // DM did not have appt info. Try calling clinic.
-        document.querySelector("#ca-call-group-status").value = STATUS_OUTBOUND_CLINIC_ATTEMPTED;
-      }
-    } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "vm") {
-      document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-    } else if (isVoicemailType && (document.querySelector("#ca-call-group-did-they-answer-vm").value === "no" || document.querySelector("#ca-call-group-did-they-answer-vm").value === "")) {
-      if (Number(document.querySelector("#ca-call-group-vm-outbound-count").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
-        document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
-      } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
-      }
-    } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "noAttempt") {
-      const vmCount = Number(document.querySelector("#ca-call-group-vm-outbound-count").value);
-      document.querySelector("#ca-call-group-vm-outbound-count").value = vmCount - 1;
+  } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "vm") {
+    document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+  } else if (isVoicemailType && (document.querySelector("#ca-call-group-did-they-answer-vm").value === "no" || document.querySelector("#ca-call-group-did-they-answer-vm").value === "")) {
+    if (Number(document.querySelector("#ca-call-group-vm-outbound-count").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
       document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
-    } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
-      document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
-    } else if (document.querySelector("#is-wrong-number").checked) {
-      document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
-    } else if (document.querySelector("#ca-call-group-refused-name-again-quick-pick") && document.querySelector("#ca-call-group-refused-name-again-quick-pick").checked) {
-      document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
-    } else if (document.querySelector("#ca-call-group-did-clinic-answer").value === "cr") {
-      document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
     } else {
-      // Inbound or Followup call
-      calculateByScore = true;
+      document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
     }
+  } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "noAttempt") {
+    const vmCount = Number(document.querySelector("#ca-call-group-vm-outbound-count").value);
+    document.querySelector("#ca-call-group-vm-outbound-count").value = vmCount - 1;
+    document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
+  } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
+    document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
+  } else if (document.querySelector("#is-wrong-number").checked) {
+    document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
+  } else if (document.querySelector("#ca-call-group-refused-name-again-quick-pick") && document.querySelector("#ca-call-group-refused-name-again-quick-pick").checked) {
+    document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
+  } else if (document.querySelector("#ca-call-group-did-clinic-answer").value === "cr") {
+    document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
+  } else {
+    // Inbound or Followup call
+    calculateByScore = true;
+  }
 
-    if (calculateByScore) {
-      const score = document.querySelector("#ca-call-group-score").value;
-      const prospect = document.querySelector("#ca-call-group-prospect").value;
-      if (prospect === PROSPECT_NO) {
-        document.querySelector("#ca-call-group-status").value = STATUS_NON_PROSPECT;
-      } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
-        document.querySelector("#ca-call-group-status").value = STATUS_INCOMPLETE;
-        document.querySelector("#ca-call-group-score").value = SCORE_DISCONNECTED;
-      } else if (score === SCORE_NOT_REACHED) {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_SET_APPT;
-      } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
-        document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
-      } else if (score === SCORE_TENTATIVE_APPT) {
-        document.querySelector("#ca-call-group-status").value = STATUS_TENTATIVE_APPT;
-      } else if (score === SCORE_MISSED_OPPORTUNITY) {
-        document.querySelector("#ca-call-group-status").value = STATUS_MISSED_OPPORTUNITY;
-      } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_NEW;
-      }
+  if (calculateByScore) {
+    const score = document.querySelector("#ca-call-group-score").value;
+    const prospect = document.querySelector("#ca-call-group-prospect").value;
+    if (prospect === PROSPECT_NO) {
+      document.querySelector("#ca-call-group-status").value = STATUS_NON_PROSPECT;
+    } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
+      document.querySelector("#ca-call-group-status").value = STATUS_INCOMPLETE;
+      document.querySelector("#ca-call-group-score").value = SCORE_DISCONNECTED;
+    } else if (score === SCORE_NOT_REACHED) {
+      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_SET_APPT;
+    } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
+      document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
+    } else if (score === SCORE_TENTATIVE_APPT) {
+      document.querySelector("#ca-call-group-status").value = STATUS_TENTATIVE_APPT;
+    } else if (score === SCORE_MISSED_OPPORTUNITY) {
+      document.querySelector("#ca-call-group-status").value = STATUS_MISSED_OPPORTUNITY;
+    } else {
+      document.querySelector("#ca-call-group-status").value = STATUS_NEW;
     }
+  }
 }
 
 
@@ -870,50 +813,49 @@ function onChangeProspect(selectedProspect) {
 function onChangeScore(score) {
   if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
     // Appointment set
-    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'block');
-    document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+    setElementDisplay('.appt_date', 'block');
+    setElementDisplay('.scheduled_call_date', 'none');
     updateVisibility();
-    setElementInnerHTML('#scheduled-call-date-label',  "Survey call date/time ("+easternTimezone+")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
       onChangeApptDate();
     }
   } else if (score === SCORE_TENTATIVE_APPT) {
     // Left a voicemail with clinic - followup in 48 hours to verify if appointment has been set
-    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-    document.querySelector("#scheduled-call-date-label").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
+    setElementDisplay('.appt_date', 'none');
+    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic ("+easternTimezone+")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
       // Next call time should be 48 hours from now
       const nextCallDate = new Date();
       nextCallDate.setDate(nextCallDate.getDate() + 2);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
-      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+      setElementDisplay('.scheduled_call_date', 'block');
     }
     if (IS_CALL_GROUP_EDIT_PAGE) {
-      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+      setElementDisplay('.scheduled_call_date', 'block');
     }
     updateVisibility();
   } else if (score === SCORE_NOT_REACHED) {
     // Clinic not reached - needs followup to set appt
-    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-    document.querySelector("#scheduled-call-date-label").innerHTML = "Next attempt to reach clinic ("+easternTimezone+")";
+    setElementDisplay('.appt_date', 'none');
+    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic ("+easternTimezone+")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
       // Next call time should be 15 minutes from now
       const callDate = new Date();
       callDate.setMinutes(callDate.getMinutes() + 15);
       setDateField('#ca-call-group-scheduled-call-date', callDate);
-      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+      setElementDisplay('.scheduled_call_date', 'block');
     }
     if (IS_CALL_GROUP_EDIT_PAGE) {
-      document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'block');
+      setElementDisplay('.scheduled_call_date', 'block');
     }
     updateVisibility();
   } else {
     // Non-prospect/missed opportunity
-    document.querySelectorAll('.appt_date').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.scheduled_call_date').forEach(element => element.style.display = 'none');
+    setElementDisplay('.appt_date', 'none');
+    setElementDisplay('.scheduled_call_date', 'none');
     // Disable any fields that are required and hidden, or the form will fail to validate.
     updateVisibility();
   }
@@ -1005,7 +947,6 @@ function handleCallGroupChange(data) {
     }
     setDateField("#ca-call-group-appt-date", data["appt_date"]);
     setDateField("#ca-call-group-scheduled-call-date", data["scheduled_call_date"]);
-    showOutcome(data["status"]);
   } else {
     clearAllFields();
   }
@@ -1093,8 +1034,6 @@ function clearAllFields() {
 
   setDateField("#ca-call-group-appt-date", null);
   setDateField("#ca-call-group-scheduled-call-date", null);
-
-  showOutcome();
 }
 
 function doWeHaveLocationAndFrontDesk() {
@@ -1158,9 +1097,7 @@ function showGroupFound() {
           const status = document.querySelector("#ca-call-group-status").value;
           const callTypeElement = document.querySelector("#call-type");
 
-          if (status === STATUS_OUTBOUND_CLINIC_ATTEMPTED || status === STATUS_APPT_SET) {
-            callTypeElement.value = CALL_TYPE_OUTBOUND_CLINIC;
-          } else if (status === STATUS_TENTATIVE_APPT) {
+          if (status === STATUS_TENTATIVE_APPT) {
             callTypeElement.value = CALL_TYPE_FOLLOWUP_TENTATIVE_APPT;
           } else {
             callTypeElement.value = CALL_TYPE_FOLLOWUP_APPT;
@@ -1169,7 +1106,6 @@ function showGroupFound() {
           groupFoundElement.innerHTML = data;
           groupFoundElement.style.display = "block";
           onPageLoad();
-          questionsOnLoad();
           triggerChangeEvents(["#ca-call-group-location-id", "#call-type"]);
           setElementInnerHTML('span.locationTitle', locationTitle);
         });
@@ -1185,23 +1121,6 @@ function showGroupFound() {
     setElementDisplay('.group-found-buttons', 'none');
     updateVisibility();
   }
-}
-
-function showOutcome() {
-  const status = document.querySelector('#status') ? document.querySelector('#status').value : document.querySelector('#ca-call-group-status').value;
-  const outcomeElement = document.querySelector('#outcome');
-
-  if (status) {
-    if (status === STATUS_OUTBOUND_CLINIC_COMPLETE || status === STATUS_OUTBOUND_CUST_SURVEY_COMPLETE) {
-      outcomeElement.style.display = 'block';
-    } else {
-      outcomeElement.style.display = 'none';
-    }
-  } else {
-    outcomeElement.style.display = 'none';
-  }
-
-  updateVisibility();
 }
 
 function onChangeApptDate() {
@@ -1567,9 +1486,7 @@ function onChangeDidTheyAnswerFollowup(answer) {
       // Try again in 15 minutes
       nextCallDate.setMinutes(nextCallDate.getMinutes() + 15);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
-      document.querySelector("#scheduled-call-date-label").html(
-        "Next attempt to reach consumer (" + easternTimezone + ")"
-      );
+      setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach consumer ("+easternTimezone+")");
     }
   }
   updateVisibility();
