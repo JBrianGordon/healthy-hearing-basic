@@ -58,9 +58,6 @@ $locationsItems = [];
 $locationsItems['CRM'] = [
     'url' => '/admin/locations/index',
 ];
-$locationsItems['CRM searches'] = [
-    'url' => '/admin/crm-searches',
-];
 $locationsItems['Providers'] = [
     'url' => '/admin/providers',
     'icon' => 'bi bi-people-fill',
@@ -244,6 +241,9 @@ $utilitiesItems['Clear session'] = [
 ];
 $utilitiesItems['Queues'] = [
     'url' => '/admin/queue/queue-tasks',
+];
+$utilitiesItems['CRM searches'] = [
+    'url' => '/admin/crm-searches',
 ];
 /*
 TODO: Hopefully Rsync will not be needed in Cake4

@@ -45,8 +45,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(" Browse", ['action' => '#'], ['class' => 'btn btn-default bi bi-search', 'escape' => false]) ?>
-				<?= $this->Html->link(" Add", ['action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
-				<?= $this->Html->link(" CRM", ['action' => 'locations'], ['class' => 'btn btn-default bi bi-person-fill', 'escape' => false]) ?>
 			</div>
 		</div>
 	</div>
@@ -81,14 +79,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                    <td><?= h($crmSearch->model) ?></td>
 					                    <td style="word-wrap: break-word; max-width: 350px;"><?= h($crmSearch->title) ?><br><small><?= h($crmSearch->search) ?></small></td>
 					                    <td>
-					                        <?=
-					                            $crmSearch->has('user') ?
-					                            $this->Html->link($crmSearch->user->username, [
-					                                'controller' => 'Users',
-					                                'action' => 'view',
-					                                $crmSearch->user->id,
-					                            ]) : ''
-					                        ?>     
+					                        <?= $crmSearch->has('user') ? $crmSearch->user->username : '' ?>     
 					                    </td>
 					                    <td nowrap><?= date('M jS Y, H:i', strtotime($crmSearch->created)) ?><br><?= date('M jS Y, H:i', strtotime($crmSearch->modified))  ?></td>
 					                    <td class="actions">
