@@ -203,21 +203,6 @@ class CaCallsTable extends Table
             case CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER:
                 $callType = CaCall::CALL_TYPE_FOLLOWUP_NO_ANSWER;
                 break;
-            case CaCallGroup::STATUS_APPT_SET:
-                if ($score == CaCallGroup::SCORE_APPT_SET_DIRECT) {
-                    $callType = CaCall::CALL_TYPE_SURVEY_DIRECT;
-                } else {
-                    $callType = CaCall::CALL_TYPE_OUTBOUND_CLINIC;
-                }
-                break;
-            case CaCallGroup::STATUS_OUTBOUND_CLINIC_ATTEMPTED:
-                $callType = CaCall::CALL_TYPE_OUTBOUND_CLINIC;
-                break;
-            case CaCallGroup::STATUS_OUTBOUND_CLINIC_DECLINED:
-            case CaCallGroup::STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS:
-            case CaCallGroup::STATUS_OUTBOUND_CUST_ATTEMPTED:
-                $callType = CaCall::CALL_TYPE_OUTBOUND_CALLER;
-                break;
             default:
                 // This is not a valid outbound call
                 return false;

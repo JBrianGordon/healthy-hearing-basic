@@ -56,18 +56,11 @@ use Cake\ORM\Entity;
  * @property int $ca_call_count
  * @property int $clinic_followup_count
  * @property int $patient_followup_count
- * @property int $clinic_outbound_count
- * @property int $patient_outbound_count
  * @property int $vm_outbound_count
  * @property bool $is_locked
  * @property \Cake\I18n\FrozenTime|null $lock_time
  * @property int $id_locked_by_user
  * @property float|null $outbound_priority
- * @property string|null $question_visit_clinic
- * @property string|null $question_what_for
- * @property string|null $question_purchase
- * @property string|null $question_brand
- * @property string|null $question_brand_other
  * @property bool $did_they_want_help
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -132,14 +125,6 @@ class CaCallGroup extends Entity
     const STATUS_MISSED_OPPORTUNITY = 'missed_opportunity';
     const STATUS_MO_NO_ANSWER = 'mo_clinic_no_answer';
     const STATUS_NON_PROSPECT = 'non_prospect';
-    const STATUS_OUTBOUND_CLINIC_ATTEMPTED = 'outbound_clinic_attempted';
-    const STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS = 'outbound_clinic_too_many_attempts';
-    const STATUS_OUTBOUND_CLINIC_DECLINED = 'outbound_clinic_declined';
-    const STATUS_OUTBOUND_CLINIC_COMPLETE = 'outbound_clinic_complete';
-    const STATUS_OUTBOUND_CUST_ATTEMPTED = 'outbound_cust_attempted';
-    const STATUS_OUTBOUND_CUST_DECLINED = 'outbound_cust_declined';
-    const STATUS_OUTBOUND_CUST_SURVEY_COMPLETE = 'outbound_cust_complete';
-    const STATUS_OUTBOUND_CUST_TOO_MANY_ATTEMPTS = 'outbound_cust_too_many_attempts';
     const STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS = 'quick_pick_refused_name';
     const STATUS_QUICK_PICK_CALLER_REFUSED_HELP = 'quick_pick_caller_refused_help';
     static $statuses = [
@@ -157,14 +142,6 @@ class CaCallGroup extends Entity
         self::STATUS_MISSED_OPPORTUNITY => 'Complete (missed opportunity)',
         self::STATUS_MO_NO_ANSWER => 'Complete (MO - Clinic no answer)',
         self::STATUS_NON_PROSPECT => 'Complete (non-prospect)',
-        self::STATUS_OUTBOUND_CLINIC_ATTEMPTED => 'Clinic survey attempted',
-        self::STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS => 'Clinic survey - too many attempts',
-        self::STATUS_OUTBOUND_CLINIC_DECLINED => 'Clinic survey declined',
-        self::STATUS_OUTBOUND_CLINIC_COMPLETE => 'Clinic survey complete',
-        self::STATUS_OUTBOUND_CUST_ATTEMPTED => 'Consumer survey attempted',
-        self::STATUS_OUTBOUND_CUST_DECLINED => 'Consumer survey declined',
-        self::STATUS_OUTBOUND_CUST_SURVEY_COMPLETE => 'Consumer survey complete',
-        self::STATUS_OUTBOUND_CUST_TOO_MANY_ATTEMPTS => 'Consumer survey - too many attempts',
         self::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS => 'Quick Pick - Refused Name/Address',
         self::STATUS_QUICK_PICK_CALLER_REFUSED_HELP => 'Quick Pick - Caller Refused Help'
     ];
@@ -237,81 +214,12 @@ class CaCallGroup extends Entity
     ];
 
     /**
-    * Enum - Question: Did patient make it to appt?
-    */
-    const Q_VISIT_CLINIC_YES = 'yes';
-    const Q_VISIT_CLINIC_NO_RESCHEDULED = 'no_rescheduled';
-    const Q_VISIT_CLINIC_NO_CANCELLED = 'no_cancelled';
-    const Q_VISIT_CLINIC_DECLINED = 'declined';
-    static $questionVisitClinicAnswers = array(
-        self::Q_VISIT_CLINIC_YES => 'Yes',
-        self::Q_VISIT_CLINIC_NO_RESCHEDULED => 'No, appt is coming up',
-        self::Q_VISIT_CLINIC_NO_CANCELLED => 'No, cancelled appt and did not reschedule',
-        self::Q_VISIT_CLINIC_DECLINED => 'Refused to answer question',
-    );
-    /**
-    * Enum - Question: What did patient have done at appt?
-    */
-    const Q_WHAT_FOR_HEARING_TEST = 'hearing_test';
-    const Q_WHAT_FOR_HEARING_AID_CONSULT = 'hearing_aid_consultation';
-    const Q_WHAT_FOR_HEARING_AID_REPAIR = 'hearing_aid_checkup_repair';
-    const Q_WHAT_FOR_OTHER_DR = 'other_doctors_appt';
-    const Q_WHAT_FOR_DECLINED = 'declined';
-    static $questionWhatForAnswers = array(
-        self::Q_WHAT_FOR_HEARING_TEST => 'Hearing Test',
-        self::Q_WHAT_FOR_HEARING_AID_CONSULT => 'Hearing Aid Consultation',
-        self::Q_WHAT_FOR_HEARING_AID_REPAIR => 'Hearing Aid Checkup/Repair',
-        self::Q_WHAT_FOR_OTHER_DR => 'Other Doctor\'s Appointment',
-        self::Q_WHAT_FOR_DECLINED => 'Refused to answer question',
-    );
-    /**
-    * Enum - Question: Did patient purchase a hearing aid?
-    */
-    const Q_PURCHASE_YES = 'Yes';
-    const Q_PURCHASE_NO = 'No';
-    const Q_PURCHASE_DECLINED = 'declined';
-    static $questionPurchaseAnswers = array(
-        self::Q_PURCHASE_YES => 'Yes',
-        self::Q_PURCHASE_NO => 'No',
-        self::Q_PURCHASE_DECLINED => 'Refused to answer question',
-    );
-    /**
-    * Enum - Question: What brand of hearing aid did they purchase?
-    */
-    const Q_BRAND_OTICON = 'Oticon';
-    const Q_BRAND_AGXO = 'AGXO';
-    const Q_BRAND_RESOUND = 'Resound';
-    const Q_BRAND_STARKEY = 'Starkey';
-    const Q_BRAND_PHONAK = 'Phonak';
-    const Q_BRAND_WIDEX = 'Widex';
-    const Q_BRAND_UNITRON = 'Unitron';
-    const Q_BRAND_SIEMENS = 'Siemens';
-    const Q_BRAND_UNKNOWN = 'unknown';
-    const Q_BRAND_OTHER = 'Other';
-    const Q_BRAND_DECLINED = 'declined';
-    static $questionBrandAnswers = array(
-        self::Q_BRAND_OTICON => 'Oticon',
-        self::Q_BRAND_AGXO => 'AGXO',
-        self::Q_BRAND_RESOUND => 'Resound',
-        self::Q_BRAND_STARKEY => 'Starkey',
-        self::Q_BRAND_PHONAK => 'Phonak',
-        self::Q_BRAND_WIDEX => 'Widex',
-        self::Q_BRAND_UNITRON => 'Unitron',
-        self::Q_BRAND_SIEMENS => 'Sivantos / Siemens / Signia',
-        self::Q_BRAND_UNKNOWN => 'Can\'t remember',
-        self::Q_BRAND_OTHER => 'Other brand',
-        self::Q_BRAND_DECLINED => 'Refused to answer question',
-    );
-    /**
     * Maximum outbound call attempts allowed
     */
     const MAX_VM_OUTBOUND_ATTEMPTS = 3;
     // Appointments
     const MAX_CLINIC_FOLLOWUP_ATTEMPTS = 6;
     const MAX_PATIENT_FOLLOWUP_ATTEMPTS = 3;
-    // Surveys
-    const MAX_CLINIC_OUTBOUND_ATTEMPTS = 4;
-    const MAX_PATIENT_OUTBOUND_ATTEMPTS = 4;
     
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -370,18 +278,11 @@ class CaCallGroup extends Entity
         'ca_call_count' => true,
         'clinic_followup_count' => true,
         'patient_followup_count' => true,
-        'clinic_outbound_count' => true,
-        'patient_outbound_count' => true,
         'vm_outbound_count' => true,
         'is_locked' => true,
         'lock_time' => true,
         'id_locked_by_user' => true,
         'outbound_priority' => true,
-        'question_visit_clinic' => true,
-        'question_what_for' => true,
-        'question_purchase' => true,
-        'question_brand' => true,
-        'question_brand_other' => true,
         'did_they_want_help' => true,
         'created' => true,
         'modified' => true,

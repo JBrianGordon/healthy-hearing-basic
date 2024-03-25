@@ -112,15 +112,6 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                         case CaCall::CALL_TYPE_FOLLOWUP_TENTATIVE_APPT:
                                             $class = 'ivory-bg';
                                             break;
-                                        case CaCall::CALL_TYPE_SURVEY_DIRECT:
-                                            $class = 'purple-bg';
-                                            break;
-                                        case CaCall::CALL_TYPE_OUTBOUND_CLINIC:
-                                            $class = 'lt-blue-bg';
-                                            break;
-                                        case CaCall::CALL_TYPE_OUTBOUND_CALLER:
-                                            $class = 'green-bg';
-                                            break;
                                     }
                                     ?>
 				                    <tr class='<?= $class ?>'>

@@ -291,22 +291,6 @@ $itUtilitiesMenu = [
     'items' => $itUtilitiesItems,
 ];
 
-/*******************************
-* IT - Call Concierge (Legacy)
-********************************/
-$itConciergeLegacyItems = [];
-$itConciergeLegacyItems['Survey Calls'] = [
-    'url' => '/admin/ca-call-groups/surveys',
-    'icon' => 'bi bi-bullhorn',
-];
-$itConciergeLegacyItems['Survey Metrics'] = [
-    'url' => '/admin/ca-call-groups/survey-metrics',
-    'icon' => 'bi bi-bar-chart-fill',
-];
-$itConciergeLegacyMenu = [
-    'items' => $itConciergeLegacyItems,
-];
-
 /********************************
 ********** Writer Menu **********
 *********************************/
@@ -427,9 +411,8 @@ return [
             'Utilities' => $utilitiesMenu,
         ],
         'IT Admin' => [
-            'permissions' => ['it_admin'],
+            'permissions' => ['admin', 'it_admin'], //todo: This panel should only show for it_admin. (More work needed on roles/user types)
             'IT - Utilities' => $itUtilitiesMenu,
-            'IT - Call Concierge' => $itConciergeLegacyMenu,
         ],
         'Writer' => [
             'permissions' => ['writer', 'it_admin', 'admin'],

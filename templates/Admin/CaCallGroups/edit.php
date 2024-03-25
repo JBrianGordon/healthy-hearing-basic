@@ -212,9 +212,6 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                             <?php echo $this->Form->control('scheduled_call_date', ['empty' => true]); ?>
                         </div>
                         <?php
-                        //   TODO: OUTCOME ELEMENT 
-                        echo $this->element('ca_calls/outcome'); ?>
-                        <?php
                             echo $this->Form->control('status', [
                                 'type' => 'select',
                                 'options' => CaCallGroup::$statuses,
