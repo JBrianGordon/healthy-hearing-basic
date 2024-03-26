@@ -42,7 +42,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					            <tbody>
 					                <?php foreach ($wikis as $wiki): ?>
 					                <tr>
-						                <td><?= $wiki->is_active ? '<span class="label label-success bi bi-check-lg"> Yes</span>' : '<span class="label label-danger bi bi-x-lg"> No</span>' ?></td>
+						                <td><?= $wiki->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?></td>
 					                    <td><?= h($wiki->name) ?></td>
 					                    <td><?= h($wiki->slug) ?></td>
 					                    <td><?= h($wiki->short) ?></td>

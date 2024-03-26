@@ -53,12 +53,12 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 		                    echo '</div>';
 		                    echo '<div class="form-group">';
 		                    echo '<div class="col col-md-9 col-md-offset-3 pl0 mb10">';
-		                    echo $location->is_yhn ? '<span class="label label-yhn bi bi-globe-americas mr5"> YHN ' . $location->yhn_tier . '</span>' : '';
-		                    echo $location->is_cqp ? '<span class="label label-cqp bi bi-briefcase-fill mr5">CQP ' . $location->cqp_tier . '</span>' : '';
-		                    echo $location->_ ? '<span class="label label-cqp mr5">CQ Premier</span>' : '';
-		                    echo $location->is_iris_plus ? '<span class="label label-earq mr5">Iris+</span>' : '';
-		                    echo $location->is_call_assist ? '<span class="label label-success bi bi-telephone-fill mr5"> Call Assist</span>' : '<span class="label label-danger bi bi-telephone-fill"> Not Call Assist</span>';
-		                    echo $location->is_retail ? '<span class="label label-primary mr5">Retail</span>' : '';
+		                    echo $location->is_yhn ? '<span class="badge bg-yhn bi bi-globe-americas mr5"> YHN ' . $location->yhn_tier . '</span>' : '';
+		                    echo $location->is_cqp ? '<span class="badge bg-cqp bi bi-briefcase-fill mr5">CQP ' . $location->cqp_tier . '</span>' : '';
+		                    echo $location->_ ? '<span class="badge bg-cqp mr5">CQ Premier</span>' : '';
+		                    echo $location->is_iris_plus ? '<span class="badge bg-earq mr5">Iris+</span>' : '';
+		                    echo $location->is_call_assist ? '<span class="badge bg-success bi bi-telephone-fill mr5"> Call Assist</span>' : '<span class="badge bg-danger bi bi-telephone-fill"> Not Call Assist</span>';
+		                    echo $location->is_retail ? '<span class="badge bg-primary mr5">Retail</span>' : '';
 		                    echo '</div>';
 		                    echo '</div>';
 		                    echo $this->Form->control('listing_type', [
@@ -901,7 +901,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 												<?php foreach($location->reviews as $review): ?>
 													<?= $this->element('locations/review_body', ['review' => $review]) ?>
 													<div class="ml20 mt10">
-														<span class='label label-default'><?= Review::$statuses[$review->status] ?></span>
+														<span class='badge bg-light'><?= Review::$statuses[$review->status] ?></span>
 														<?= $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",
 															['controller' => 'reviews', 'action' => 'edit', $review->id],
 															['escape' => false, 'class' => 'btn btn-xs btn-default ml10']) ?>

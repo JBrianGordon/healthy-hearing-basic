@@ -137,7 +137,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                        </td>
 				                        <td class="p5">
 					                        <?php if (!empty($caCallGroup->prospect)): ?>
-					                            <span class="label label-default"><?= $caCallGroup->prospect ?></span><br>
+					                            <span class="badge bg-light"><?= $caCallGroup->prospect ?></span><br>
 					                        <?php endif; ?>
 					                        <?= !empty($caCallGroup->status) ? CaCallGroup::$statuses[$caCallGroup->status] : '' ?></td>
 				                        <td class="p5">

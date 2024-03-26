@@ -18,12 +18,6 @@
     border: none;
 }
 
-.label-oticon { @include label-styles(#c6168d); }
-.label-hh { @include label-styles(#78afc9); }
-.label-yhn { @include label-styles(#ff9800); }
-.label-cqp { @include label-styles(#0089bb); }
-.label-earq { @include label-styles(#ee3a3c); }
-
 // Common styles for table backgrounds
 @mixin table-bg-styles($bg-color) {
     td { background-color: $bg-color; }

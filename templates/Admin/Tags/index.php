@@ -41,8 +41,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                <tr>
 				                    <td><?= $this->Number->format($tag->id) ?></td>
 				                    <td><?= h($tag->name) ?></td>
-				                    <td><?= $tag->is_category ? '<span class="label label-success bi bi-check-lg"> Yes</span>' : '<span class="label label-danger bi bi-x-lg"> No</span>' ?></td>
-				                    <td><?= $tag->is_sub_category ? '<span class="label label-success bi bi-check-lg"> Yes</span>' : '<span class="label label-danger bi bi-x-lg"> No</span>' ?></td>
+				                    <td><?= $tag->is_category ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?></td>
+				                    <td><?= $tag->is_sub_category ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?></td>
 				                    <td><?= $this->Text->truncate($tag->header) ?></td>
 				                    <td><?= date_format($tag->created, 'M jS o, G:i') ?><br><?= date_format($tag->modified, 'M jS o, G:i') ?></td>
 				                    <td class="actions">

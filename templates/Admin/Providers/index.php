@@ -111,7 +111,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                     $location->id,
                                                 ],
                                             );
-                                            echo ' - <span class="label ' . LocationListingType::from($location->listing_type)->getColorClass() . '">' . $location->listing_type . '</span><br>';
+                                            echo ' - '.$this->Clinic->badgeListingType($location->listing_type).'<br>';
                                         }
                                         ?>
                                     </td>

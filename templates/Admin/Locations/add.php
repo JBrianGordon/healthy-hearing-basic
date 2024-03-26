@@ -31,7 +31,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                         </div>
                         <div class="form-group row">
                             <div class="col col-md-10 col-md-offset-2 pl0">
-                                <span class="label label-hh"><?= Configure::read('siteNameAbbr') ?></span>
+                                <span class="badge bg-hh"><?= Configure::read('siteNameAbbr') ?></span>
                             </div>
                         </div>
                         <div class="col-md-6 row">

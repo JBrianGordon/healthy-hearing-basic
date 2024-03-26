@@ -70,7 +70,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                <?php foreach ($zips as $zip): ?>
 				                <tr>
 				                    <td class="p5">
-					                    <span class="label label-default">
+					                    <span class="badge bg-light">
 					                        <?= $this->Html->link($zip->zip,
 					                            [
 					                                'prefix' => false,
