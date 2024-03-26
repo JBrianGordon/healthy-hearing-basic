@@ -22,12 +22,16 @@ $showSpecialAnnouncement = (
 );
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 $this->Breadcrumbs->add([
-	['title' => 'Home', 'url' => '/'],
-    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
-    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
-    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'viewCityZip', 'region' => $region, 'city' => $city]],
-    ['title' => $location->title, 'url' => ''],
+	['title'=>'Home', 'url'=>'/'],
+    ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
+if ($region == 'DC-Dist--Of-Columbia') {
+	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
+} else {
+	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
+}
+$this->Breadcrumbs->add(cleanCityName($city), ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
+$this->Breadcrumbs->add($location->title, ['url' => '']);
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">
