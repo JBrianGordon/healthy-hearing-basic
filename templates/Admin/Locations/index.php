@@ -253,21 +253,21 @@ $groupedFields = [
 				                        <?php endif; ?>
 				                        <?php if (Configure::read('isYhnImportEnabled')): ?>
 				                            <?php if (!empty($location->is_cq_premier)): ?>
-				                                <span class='badge bg-info label-cqp'>CQ Premier</span><br>
+				                                <span class='badge bg-cqp'>CQ Premier</span><br>
 				                            <?php endif; ?>
 				                            <?php if (!empty($location->is_iris_plus)): ?>
-				                                <span class='badge bg-danger label-earq'>CQ Iris+</span><br>
+				                                <span class='badge bg-earq'>CQ Iris+</span><br>
 				                            <?php endif; ?>
 				                        <?php endif ?>
 				                    </td>
 				                    <td>
 				                        <?php if (!empty($location->is_yhn)): ?>
 				                            <?php if (Configure::read('isYhnImportEnabled')): ?>
-				                                <span class='badge bg-danger label-yhn'>YHN <?php echo $location->yhn_tier; ?></span><br>
+				                                <span class='badge bg-yhn'>YHN <?php echo $location->yhn_tier; ?></span><br>
 				                            <?php endif; ?>
 				                        <?php endif; ?>
 				                        <?php if ($location->is_oticon): ?>
-				                            <span class='badge bg-oticon label-oticon'>OTI
+				                            <span class='badge bg-oticon'>OTI
 				                            <?php if (Configure::read('isTieringEnabled')): ?>
 				                                <?php echo $location->oticon_tier; ?>
 				                            <?php endif; ?>
@@ -275,11 +275,11 @@ $groupedFields = [
 				                        <?php endif; ?>
 				                        <?php if (Configure::read('isCqpImportEnabled')): ?>
 				                            <?php if (!empty($location->is_cqp)): ?>
-				                                <span class='badge bg-info label-cqp'>CQP <?php echo $location->cqp_tier; ?></span><br>
+				                                <span class='badge bg-cqp'>CQP <?php echo $location->cqp_tier; ?></span><br>
 				                            <?php endif; ?>
 				                        <?php endif; ?>
 				                        <?php if (!empty($location->is_hh)): ?>
-				                            <span class='badge bg-primary label-hh'><?php echo $siteNameAbbr; ?></span><br>
+				                            <span class='badge bg-hh'><?php echo $siteNameAbbr; ?></span><br>
 				                        <?php endif; ?>
 				                        <?php if (!empty($location->is_retail)): ?>
 				                            <span class='badge bg-primary'>Retail</span><br>

@@ -85,7 +85,7 @@ class CrmSearchesController extends BaseAdminController
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
         }
 
-        $users = $this->CrmSearches->Users->find('list', ['limit' => 200])->all();
+        $users = $this->CrmSearches->Users->find('list', ['keyField' => 'id','valueField' => 'username', 'conditions' => ['is_admin' => 1]])->toArray();
         $this->set(compact('crmSearch', 'users'));
     }
 

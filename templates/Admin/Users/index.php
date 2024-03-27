@@ -97,12 +97,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <tr>
 				                        <td><?= h($user->id) ?></td>
 				                        <td>
-											<span class="badge bg-default"><?= $user->username ?></span><br>
+											<span class="badge bg-light"><?= $user->username ?></span><br>
 											<strong><?= $user->first_name.' '.$user->last_name ?></strong><br>
 											<?= $user->email ?>
 				                        </td>
 				                        <td>
-											<?= $this->Html->badge($user->role, ['class'=>'bg-default']) ?><br>
+											<?= $this->Html->badge($user->role, ['class'=>'bg-light']) ?><br>
 											<?php if (!empty($user->locations)): ?>
 												<?=
 													$this->Html->link(

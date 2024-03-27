@@ -19,17 +19,6 @@ enum LocationListingType: string
             self::LISTING_TYPE_NONE => 'None (not shown in directory)',
         };
     }
-
-    public function getColorClass(): string
-    {
-        return match($this)
-        {
-            self::LISTING_TYPE_BASIC => 'label-danger',
-            self::LISTING_TYPE_ENHANCED => 'bg-primary',
-            self::LISTING_TYPE_PREMIER => 'label-success',
-            self::LISTING_TYPE_NONE => 'label-default',
-        };
-    }
 }
 
 

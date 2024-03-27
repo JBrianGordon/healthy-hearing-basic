@@ -17,9 +17,6 @@ $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
 	<?= $this->Html->link("Delete Spam (".$spamCount.")", ['controller' => 'ca_call_groups', 'action' => 'delete_spam'], ['class' => $class, 'escape' => false], 'Are you sure you want to delete '.$spamCount.' spam call groups?') ?>
 <?php endif; ?>
 <?= $this->Html->link(" Outbound calls", ['controller' => 'ca_call_groups', 'action' => 'outbound'], ['class' => 'btn btn-default bi bi-megaphone-fill', 'escape' => false]) ?>
-<?php /* HIDE SURVEYS #15351
-<?= $this->Html->link("<i class='bi bi-megaphone-fill'></i> Survey Calls", ['controller' => 'ca_call_groups', 'action' => 'surveys'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-*/ ?>
 <?php if ($isCallSupervisor): ?>
 	<?= $this->Html->link("Calls", ['controller' => 'ca_calls', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?= $this->Html->link("Call groups", ['controller' => 'ca_call_groups', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>

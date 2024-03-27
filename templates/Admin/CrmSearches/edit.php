@@ -4,6 +4,12 @@
  * @var \App\Model\Entity\CrmSearch $crmSearch
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+
+//Populate user dropdown with usernames rather than id's
+$userOptions = [];
+foreach ($users as $userId => $username) {
+    $userOptions[$userId] = $username;
+}
  
 $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
@@ -13,9 +19,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link("<i class='bi bi-search'></i> Browse", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-				<?= $this->Html->link("<i class='bi bi-plus-lg'></i> Add", ['action' => 'edit'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 				<?= $this->Html->link("<i class='bi bi-trash'></i> Delete", ['action' => 'delete', $crmSearch->id], ['class' => 'btn btn-danger', 'escape' => false], ['confirm' => __('Are you sure you want to delete # {0}?', $crmSearch->id)]) ?>
-				<?= $this->Html->link("<i class='bi bi-person-fill'></i> CRM", ['action' => 'locations'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 			</div>
 		</div>
 	</div>
@@ -38,7 +42,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		                    <?= $this->Form->control('is_public') ?>
 		                </div>
 		                <?php
-							echo $this->Form->control('user_id', ['options' => $users]);
+							echo $this->Form->control('user_id', ['options' => $userOptions]);
 	                        echo $this->Form->control('created', ['disabled' => true]);
 		                ?>
 		            </fieldset>

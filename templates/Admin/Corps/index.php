@@ -42,7 +42,7 @@
 				                <?php foreach ($corps as $corp): ?>
 				                <tr>
 					                <td><?= $this->Number->format($corp->priority) ?></td>
-				                    <td><?= $corp->is_active ? '<span class="label label-success bi bi-check-lg"> Yes</span>' : '<span class="label label-danger bi bi-x-lg"> No</span>' ?><br><span class="label label-default"><?= h($corp->id) ?></span></td>
+				                    <td><?= $corp->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?><br><span class="badge bg-light"><?= h($corp->id) ?></span></td>
 				                    <td><?= h($corp->title) ?><br><?= h($corp->slug) ?></td>
 				                    <td><?= h($corp->short) ?></td>
 				                    <td><?= h($corp->website_url) ?></td>

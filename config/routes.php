@@ -109,6 +109,10 @@ return static function (RouteBuilder $routes) {
             ->setPass(['id', 'title'])
             ->setPatterns(['id' => '[0-9]+']);
     });
+
+    // Redirect from /hearing-aids/DC-Dist--Of-Columbia to /hearing-aids/DC-Dist--Of-Columbia/Washington
+    $routes->redirect('/hearing-aids/DC-Dist--Of-Columbia', '/hearing-aids/DC-Dist--Of-Columbia/Washington', ['status' => 301]);
+
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
         $builder->setExtensions(['rss']);

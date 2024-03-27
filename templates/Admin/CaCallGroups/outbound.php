@@ -112,15 +112,6 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                         case CaCall::CALL_TYPE_FOLLOWUP_TENTATIVE_APPT:
                                             $class = 'ivory-bg';
                                             break;
-                                        case CaCall::CALL_TYPE_SURVEY_DIRECT:
-                                            $class = 'purple-bg';
-                                            break;
-                                        case CaCall::CALL_TYPE_OUTBOUND_CLINIC:
-                                            $class = 'lt-blue-bg';
-                                            break;
-                                        case CaCall::CALL_TYPE_OUTBOUND_CALLER:
-                                            $class = 'green-bg';
-                                            break;
                                     }
                                     ?>
 				                    <tr class='<?= $class ?>'>
@@ -140,7 +131,7 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                                 if (!empty($caCallGroup->location->title)) {
                                                     echo $this->Html->link($caCallGroup->location->title, ['controller' => 'locations', 'action' => 'edit', $caCallGroup->location_id]).'<br>';
                                                     echo $caCallGroup->location->city.', '.$caCallGroup->location->state.'<br>';
-                                                    echo '<span class="label label-default">'.$this->Clinic->getClinicTimezone($caCallGroup->location_id).'</span>';
+                                                    echo '<span class="badge bg-light">'.$this->Clinic->getClinicTimezone($caCallGroup->location_id).'</span>';
                                                 } else {
                                                     echo "<span class='error'>ERROR:</span> Location ".$caCallGroup->location_id." no longer exists. Please notify supervisor.";
                                                 }

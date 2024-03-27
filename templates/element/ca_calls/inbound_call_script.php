@@ -568,7 +568,6 @@ if ($copyPage) {
 </div>
 
 <?php
-echo $this->element('ca_calls/outcome');
 echo $this->Form->control("ca_call_group.ca_call_group_note.$noteCount.body", [
 	'label' => [
 		'class' => 'col col-md-3 control-label ml10',
