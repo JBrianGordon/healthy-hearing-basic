@@ -32,6 +32,10 @@ return [
     ],
     // Google tag manager
     'gtmId' => 'GTM-TC3K3WL',
+    // Google Maps API
+    'googleMapsApiKey' => 'AIzaSyAdwuk4zA0Qf4vHkcvgs--KUEa62wpF4MU',
+    'googleMapsStaticApiKey' => 'AIzaSyC2yyY0gUKa9BwjQI9B0iafy9ebTpH4C0Y',
+    'googleMapsWebServicesApiKey' => 'AIzaSyBNN0_W1SW0RK9a6qSmiBtXU5DJxEPmMJ8',
     // From email address
     'email' => ['contacthd@hearingdirectory.ca' => 'Hearing Directory'],
     'customer-support-email' => 'contacthd@hearingdirectory.ca',
