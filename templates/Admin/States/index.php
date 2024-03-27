@@ -8,7 +8,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading">States Actions</div>
+		<div class="panel-heading"><?= ucfirst($stateLabel) ?>s Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -20,7 +20,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 	<section class="panel">
 		<div class="panel-body">
 			<div class="panel-section expanded">
-				<h2>States</h2>
+				<h2><?= ucfirst($stateLabel) ?>s</h2>
 				<div class="states index content">
 				    <?= $this->element('pagination') ?>
 				    <div class="table-responsive">
@@ -64,9 +64,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                                    'region' =>  $this->Clinic->stateSlug($state->name)
 				                                ],
 				                                ['class' => 'btn btn-default btn-xs bi bi-eye-fill']) ?>
-				                            <?= $this->Form->postLink(__(' Delete'),
+				                            <?= $user->is_it_admin ? $this->Form->postLink(__(' Delete'),
 				                                ['action' => 'delete', $state->id],
-				                                ['class' => 'btn btn-danger btn-xs bi bi-trash', 'confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) ?>
+				                                ['class' => 'btn btn-danger btn-xs bi bi-trash', 'confirm' => __('Are you sure you want to delete # {0}?', $state->id)]) : '' ?>
 				                        </div>
 				                    </td>
 				                </tr>

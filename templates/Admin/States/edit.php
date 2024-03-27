@@ -9,7 +9,7 @@ $this->Html->script('dist/admin_edit_state.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 <div class="panel panel-light">
-	<div class="panel-heading">States Actions</div>
+	<div class="panel-heading"><?= ucfirst($stateLabel) ?>s Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -40,7 +40,7 @@ $this->Html->script('dist/admin_edit_state.min', ['block' => true]);
 				                ?>
 				            </fieldset>
 				            <div class="form-actions tar">
-				            	<?= $this->Form->button(__('Save State Page'), ['class' => 'btn btn-primary btn-lg']) ?>
+				            	<?= $this->Form->button('Save '.$stateLabel.' Page', ['class' => 'btn btn-primary btn-lg']) ?>
 				            </div>
 				            <?= $this->Form->end() ?>
 				        </div>
