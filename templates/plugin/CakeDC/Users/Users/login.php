@@ -39,9 +39,8 @@ $this->Html->script('dist/common.min.js', ['block' => true]);
                                     <?= $this->Flash->render('auth') ?>
                                     <?= $this->Form->create() ?>
                                     <fieldset>
-                                        <?php $usernamePlaceholder = (Configure::read('country') == 'CA') ? "This is the four digit number sent to you by Hearing Directory." : "This is the 10 digit number starting with 8119 sent to you by Healthy Hearing.";
-                                        ?>
-                                        <?= $this->Form->control('username', ['label' => 'Email or Username', 'required' => true, 'placeholder' => $usernamePlaceholder]) ?>
+                                        <?= $this->Form->control('username', ['label' => 'Email or Username', 'required' => true]) ?>
+                                        <small class="mb10 pull-right"><?= Configure::read('country') == 'CA' ? "This is the four digit number sent to you by Hearing Directory." : "This is the 10 digit number starting with 8119 sent to you by Healthy Hearing." ?></small>
                                         <?= $this->Form->control('password') ?>
                                         <?php
                                         if (Configure::read('Users.reCaptcha.login')) {
