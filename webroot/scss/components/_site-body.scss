@@ -222,6 +222,14 @@
 	    }
 	  }
 
+	  &.is-invalid {
+	  	flex-wrap: wrap;
+
+	  	#password-error {
+	  		text-align: right;
+	  	}
+	  }
+
 	  @media (max-width: $screen-sm-max) {
 	    flex-direction: column;
 
