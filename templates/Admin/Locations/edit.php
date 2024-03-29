@@ -8,6 +8,7 @@
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
@@ -108,12 +109,12 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 									<td><?= $location->location_segment ?></td>
 								</tr>
 								<tr>
-									<th class="tar">Profile_status</th>
+									<th class="tar">Profile Status</th>
 									<td><?= $location->completeness . ' - ' . $location->review_status ?></td>
 								</tr>
 								<tr>
 									<th class="tar">Location URL</th>
-									<td><?= $location->url ?></td>
+									<td><?= $this->Html->link(Router::url($location->hh_url, true), null, array('id' => 'LocationUrl')); ?></td>
 								</tr>
 							</tbody>
 						</table>
@@ -691,6 +692,23 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 									<?php $noteCount = count($location->location_notes); ?>
 									<div class="notes">
 										<?php
+											echo $this->Form->control("LocationNote.$noteCount.body", [
+												'label' => 'New note',
+												'class' => 'editor',
+												'required' => false,
+												// TODO: Is there a command to simplify toolbar?
+												//'toolbar' => 'Basic',
+												//'height' => '200px',
+												//'var_name' => "NoteBody"
+											]);
+										?>
+										<div class="row">
+											<div class="col-lg-12">
+												<input type="submit" value="Save Location" class="btn btn-primary btn-lg pull-right">
+											</div>
+										</div>
+										<br />
+										<?php
 											foreach ($location->location_notes as $note) {
 												echo $this->element('locations/note', ['note' => $note]);
 											}
@@ -742,15 +760,18 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 												<div class="controls">
 													<div class="btn-group">
 														<?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update or Create CS Number',
-															['action' => 'call_source', $id, '#' => 'CallAssist'],
+															['action' => 'createUpdateCallSource', $id, '#' => 'CallAssist'],
 															['escape' => false, 'class' => 'btn btn-xs btn-default']) ?>
+														<!-- TODO -->
 														<?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> End and create new CS Number',
 															['action' => 'cs_end_create', $id, '#' => 'CallAssist'],
 															['escape' => false, 'class' => 'btn btn-xs btn-info'],
 															'This will end this CS number, but leaves the CS customer active. Then creates a new CS number. Are you sure?') ?>
+														<!-- TODO -->
 														<?= $this->Html->link('<span class="glyphicon glyphicon-eye-open"></span> Raw Lookup',
 															['action' => 'call_source_raw', $id, '#' => 'CallAssist'],
 															['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
+														<!-- TODO -->
 														<?= $this->Html->link('<span class="glyphicon glyphicon-trash"></span> End CS Number',
 															['action' => 'end', $id, '#' => 'CallAssist'],
 															['class' => 'btn btn-xs btn-danger', 'escape' => false],

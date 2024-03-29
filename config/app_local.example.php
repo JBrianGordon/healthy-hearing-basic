@@ -107,4 +107,8 @@ return [
     'mailchimpApiKey' => '_mailchimp_api_key_',
     'mailchimpListIdNewsletter' => '_mailchimp_list_id_',
     'mailchimpServerPrefix' => '_mailchimp_server_prefix_', // e.g. 'us10'
+
+    // CallSource API
+    //'callSourceUsername' => '_example_', //prod only
+    //'callSourcePassword' => '_example_', //prod only
 ];

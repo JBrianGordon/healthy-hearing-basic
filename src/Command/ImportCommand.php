@@ -499,7 +499,7 @@ class ImportCommand extends Command
         /*******
          * Method 3: Attempt to match on Zip + Address 1 + Address 2
          ********/
-        $matchedLocation = $this->Location->find('all', [
+        $matchedLocation = $this->Locations->find('all', [
             'conditions' => [
                 'AND' => [
                     'zip' => $locationData['zip'],

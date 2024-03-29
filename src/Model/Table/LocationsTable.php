@@ -1918,4 +1918,16 @@ class LocationsTable extends Table
         }
         return $hoursToday;
     }
+
+    /**
+    * Set a location as show or no-show
+    * @param integer $locationId
+    * @param bool $isShow
+    * @return bool success
+    */
+    public function setShow($locationId, $isShow) {
+        $location = $this->get($locationId);
+        $location->is_show = $isShow;
+        $this->save($location);
+    }
 }

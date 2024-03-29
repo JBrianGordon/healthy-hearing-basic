@@ -17,5 +17,8 @@ return [
             'countrySiteURL' => 'https://www.hearingdirectory.ca/hearing-aids',
             'isOticonSite' => false
         ],
-    ]
+    ],
+    // CallSource API
+    'callSourceUsername' => 'xmluser_hh', // dev/test account
+    'callSourcePassword' => 'xmlapihh1' // dev/test account
 ];

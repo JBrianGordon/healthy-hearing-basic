@@ -209,12 +209,28 @@ class LocationsController extends BaseAdminController
                 $cmd .= ' -e '.$this->request->data['Util']['end_date'];
             }
             if (Queue::add($cmd, 'shell')) {
-                $this->goodFlash('The tier status change report will be emailed.');
+                $this->Flash->success('The tier status change report will be emailed.');
             } else {
-                $this->badFlash('Unable to add to queue: '.$cmd);
+                $this->Flash->error('Unable to add to queue: '.$cmd);
             }
             return $this->redirect(['action' => 'tier-status-report']);
         }
         //$this->set('email', $email);
+    }
+
+    // Create or update the CallSource number for this location
+    public function createUpdateCallSource($id = 0) {
+        // Since this is a manual method of modifying CS numbers with the button press,
+        // we can allow CS access on the test account
+        $this->Locations->CallSources->allowCsTest();
+        $result = $this->Locations->CallSources->saveCallSource($id);
+        $this->Locations->CallSources->disallowCsTest();
+        if ($result) {
+            $this->Flash->success('Call Source Number created/updated successfully!');
+        } else {
+            $errors = r_implode('<br />',$this->Locations->CallSources->errors);
+            $this->Flash->error("Unable to obtain number from callsource <br />Error(s): " . $errors);
+        }
+        return $this->redirect(['action' => 'edit', $id]);
     }
 }
