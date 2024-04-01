@@ -25,7 +25,7 @@ $logo = Configure::read('logo');
 <div class="navbar navbar-expand-lg navbar-clinic sticky-top" style="background-color: #fff;">
     <div class="container">
         <a href="/" class="navbar-brand clinic-portal-logo d-inline-block float-start <?= Configure::read('country') ?>" <?= $logoBorder ?>>
-            <img src="<?= $logo ?>" alt="<?= $siteName ?>" height="40"><br />
+            <img src="<?= $logo ?>" alt="<?= $siteName ?>" style="max-width: 200px;"><br />
             <div class="portal-title">Clinic Administration Portal</div>
         </a>
         <div class="collapse navbar-collapse show d-inline-block float-end pt20" id="navbarSupportedContent">
