@@ -5,9 +5,9 @@ $this->Breadcrumbs->add([
 	['title'=>'Home', 'url'=>'/'],
     ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
-if (!empty($region) && $region != 'DC-Dist--Of-Columbia') {
+if (!empty($region) && $region != 'DC-Dist-Of-Columbia') {
 	$this->Breadcrumbs->add($state, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
-} else if($region == 'DC-Dist--Of-Columbia'){
+} else if($region == 'DC-Dist-Of-Columbia'){
 	$url = ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city];
 	$this->Breadcrumbs->add($state, $url);
 }

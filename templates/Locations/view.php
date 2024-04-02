@@ -25,7 +25,7 @@ $this->Breadcrumbs->add([
 	['title'=>'Home', 'url'=>'/'],
     ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
-if ($region == 'DC-Dist--Of-Columbia') {
+if ($region == 'DC-Dist-Of-Columbia') {
 	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
 } else {
 	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);

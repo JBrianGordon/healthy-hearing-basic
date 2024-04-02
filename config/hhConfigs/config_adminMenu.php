@@ -79,7 +79,7 @@ $locationsItems['Clinic portal'] = [
 $locationsItems['Cities'] = [
     'url' => '/admin/cities',
 ];
-$locationsItems[Inflector::pluralize(ucfirst('state'))] = [
+$locationsItems[Inflector::pluralize(ucfirst(Configure::read('stateLabel')))] = [
     'url' => '/admin/states',
 ];
 $zipCodes = Inflector::pluralize(ucfirst('zip code'));
