@@ -76,7 +76,11 @@ class CrmSearchesController extends BaseAdminController
             if ($this->CrmSearches->save($crmSearch)) {
                 $this->Flash->success(__('The crm search has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect([
+                    'controller' => $crmSearch->model,
+                    'prefix' => 'Admin',
+                    'action' => 'index',
+                ]);
             }
             $this->Flash->error(__('The crm search could not be saved. Please, try again.'));
         }
@@ -104,7 +108,11 @@ class CrmSearchesController extends BaseAdminController
             $this->Flash->error(__('The crm search could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect([
+            'controller' => $crmSearch->model,
+            'prefix' => 'Admin',
+            'action' => 'index',
+        ]);
     }
 
     /**
