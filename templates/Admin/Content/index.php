@@ -143,17 +143,15 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 				                    <td class="actions">
 				                        <div class="btn-group-vertical btn-group-sm">
 				                            <?=
-				                                $this->Html->link(
-				                                    __(' View'),
+				                                $this->Html->link(' View',
 				                                    array_merge(['prefix' => false], $content->hh_url),
-				                                    ['class' => 'btn btn-default bi-eye-fill']
+				                                    ['class' => 'btn btn-default bi-eye-fill btn-xs']
 				                                )
 				                            ?>
 				                            <?=
-				                                $this->Html->link(
-				                                    __(' Edit'),
+				                                $this->Html->link(' Edit',
 				                                    ['action' => 'edit', $content->id],
-				                                    ['class' => 'btn btn-default bi-pencil-fill']
+				                                    ['class' => 'btn btn-default bi-pencil-fill btn-xs']
 				                                )
 				                            ?>
 				                        </div>
