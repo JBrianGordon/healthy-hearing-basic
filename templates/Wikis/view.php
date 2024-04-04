@@ -158,6 +158,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 						</div>
 						<?= $this->element('content/share') ?>
 					</div>
+					<?= $this->element('responsive_slider') ?>
 					<?= $this->element('side_panel') ?>
 				</div>
 			</div>

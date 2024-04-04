@@ -165,6 +165,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 					<?php echo $this->element('content/share'); ?>
 				</article>
 			</div>
+			<?= $this->element('responsive_slider') ?>
 			<?= $this->element('side_panel') ?>
 		</div>
 	</div>
