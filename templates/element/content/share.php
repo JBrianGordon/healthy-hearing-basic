@@ -28,35 +28,7 @@ $image = Router::url($image, true);
 	  }, function(response){});
 	}
 	</script>
-	<?= $this->Share->twitter([
-		'linkOptions' => [
-			'class' => 'btn btn-share btn-twitter twitter-share-button ml15',
-			'id' => 'twitter-wjs',
-			'target' => '_blank',
-			'rel' => 'noopener',
-			'escape' => false,
-			'onclick' => false
-		],
-		'label' => '<span class="hh-icon-x"></span> Tweet'
-	])
-	?>
-	<!-- X JS -->
-	<script>window.twttr = (function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0],
-	    t = window.twttr || {};
-	  if (d.getElementById(id)) return t;
-	  js = d.createElement(s);
-	  js.id = id;
-	  js.src = "https://platform.twitter.com/widgets.js";
-	  fjs.parentNode.insertBefore(js, fjs);
-
-	  t._e = [];
-	  t.ready = function(f) {
-	    t._e.push(f);
-	  };
-
-	  return t;
-	}(document, "script", "twitter-wjs"));</script>
+	<a href="https://twitter.com/intent/tweet?url=<?= urlencode($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']) ?>" class="btn btn-share btn-twitter twitter-share-button ml15" id="twitter-wjs" target="_blank" rel="noopener"><span class="hh-icon-x"></span> Tweet</a>
 	<!-- LinkedIN JS -->
 	<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
 	<script type="IN/Share" data-url="https://<?= htmlspecialchars($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>"></script>
