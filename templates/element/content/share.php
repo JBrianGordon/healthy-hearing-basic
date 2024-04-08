@@ -14,13 +14,23 @@ if (isset($wiki)) {
 $image = Router::url($image, true);
 ?>
 <footer class="panel-footer text-center btn-set noprint">
-	<div class="fb-share-button btn btn-share btn-facebook" data-href="https://<?= htmlspecialchars($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])?>">
-		<span class="hh-icon-facebook"></span>
-		<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://<?= htmlspecialchars($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])?>&src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0" nonce="8cB2VAXE"></script>
+	<div id="fbBtn" class="btn btn-share btn-facebook ml0">
+		<span class="hh-icon-facebook"></span>Share
 	</div>
+	<script>
+	document.getElementById('fbBtn').onclick = function(e) {
+	  e.preventDefault();
+	  FB.ui({
+	    display: 'popup',
+	    method: 'share',
+	    href: window.location.href,
+	  }, function(response){});
+	}
+	</script>
 	<?= $this->Share->twitter([
 		'linkOptions' => [
-			'class' => 'btn btn-share btn-twitter twitter-share-button',
+			'class' => 'btn btn-share btn-twitter twitter-share-button ml15',
 			'id' => 'twitter-wjs',
 			'target' => '_blank',
 			'rel' => 'noopener',
@@ -54,7 +64,7 @@ $image = Router::url($image, true);
 	if(empty($hidePinterest)) {
 		echo $this->Share->pinterest([
 			'linkOptions' => [
-				'class' => 'btn btn-share btn-pinterest',
+				'class' => 'btn btn-share btn-pinterest ml15',
 				'target' => '_blank',
 				'rel' => 'noopener',
 				'escape' => false,
