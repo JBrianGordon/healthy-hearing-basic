@@ -17,9 +17,10 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<div class="row">
-					<?php foreach($locations as $distance => $location): ?>
+					<?php foreach($locations as $location): ?>
 						<?php
 							$locationId = $location->id;
+							$distance = $location->distance;
 							$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($locationId);
 							$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationId);
 							$locationUrl = Router::url($location->hh_url);
