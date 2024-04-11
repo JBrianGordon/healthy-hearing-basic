@@ -16,9 +16,8 @@ $ignoreFields = [];
 $fields['CaCallGroups.status'] = 'string';
 $fields['CaCallGroups.score'] = 'string';
 $fields['CaCallGroups.caller_first_name'] = 'string';
-$fields['CaCallGroups.caller_last'] = 'string';
-//$fields['CaCallGroups.score'] = 'string';
-//$fields['CaCallGroups.score'] = 'string';
+$fields['CaCallGroups.caller_last_name'] = 'string';
+$fields['CaCallGroups.location_id'] = 'biginteger';
 $additionalBlacklist = ['CaCallGroups'];
 foreach ($fields as $field => $type) {
     if (!in_array($field, $ignoreFields)) {
@@ -44,6 +43,15 @@ foreach ($fields as $field => $type) {
                 $label = 'Score';
                 $type = 'selectMultiple';
                 $options = CaCallGroup::$scores;
+                break;
+            case 'CaCallGroups.location_id':
+                $label = 'Location id';
+                break;
+            case 'CaCallGroups.caller_first_name':
+                $label = 'Caller first name';
+                break;
+            case 'CaCallGroups.caller_last_name':
+                $label = 'Caller last name';
                 break;
             case 'user_id':
                 $label = 'Agent';
