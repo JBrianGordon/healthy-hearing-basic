@@ -233,7 +233,7 @@ $groupedFields = [
 				                    </th>
 				                    <th>
 				                        <?= $this->Paginator->sort('phone'); ?><br>
-				                        <?= $this->Paginator->sort('is_call_assist', 'Call Assist');?>
+				                        <?= $this->Paginator->sort('is_call_assist', 'Call Concierge');?>
 				                    </th>
 				                    <th>
 				                        <?= $this->Paginator->sort('last_contact_date', 'Last Contact'); ?><br>
@@ -304,7 +304,7 @@ $groupedFields = [
 				                    </td>
 				                    <td nowrap>
 				                        <?= formatPhoneNumber($location->phone) ?><br>
-				                        <?php echo $location->is_call_assist ? "<span class='badge bg-success'><span class='glyphicon glyphicon-ok'></span> Call Assist</span>" : "<span class='badge bg-danger'><span class='glyphicon glyphicon-remove'></span> Not Call Assist</span>"; ?>
+				                        <?php echo $location->is_call_assist ? "<span class='badge bg-success'><span class='glyphicon glyphicon-ok'></span> Call Concierge</span>" : "<span class='badge bg-danger'><span class='glyphicon glyphicon-remove'></span> Not Call Concierge</span>"; ?>
 				                    </td>
 				                    <td>
 				                        <?php

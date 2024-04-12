@@ -31,8 +31,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                 <?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'locations', 'action' => 'view', $location->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
                 <?= $this->Html->link(__(' Clinic Edit'), ['prefix' => false, 'controller' => 'locations', 'action' => 'edit', $location->id], ['class' => 'btn btn-default bi bi-pencil-fill', 'target' => '_blank']) ?>
                 <?= $this->Html->link(__(' Copy Location Data'), ['action' => 'copy', $location->id], ['class' => 'btn btn-default bi bi-clipboard2-check-fill']) ?>
-                <?= $this->Html->link(__(' Calls'), ['prefix' => false, 'controller' => 'caCalls', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
-                <?= $this->Html->link(__(' Call Call Groups'), ['prefix' => false, 'controller' => 'caCallGroups', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
+                <?= $this->Html->link(__(' Calls'), ['prefix' => 'Admin', 'controller' => 'caCalls', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
+                <?= $this->Html->link(__(' Call Call Groups'), ['prefix' => 'Admin', 'controller' => 'caCallGroups', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
             </div>
         </div>
     </div>
@@ -140,7 +140,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <button class="nav-link" data-bs-target="#Notes" data-bs-toggle="tab" aria-controls="Notes"  aria-expanded="false" type="button" role="tab">Notes</button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-target="#CallSource" data-bs-toggle="tab" aria-controls="CallSource" aria-expanded="false" type="button" role="tab">Call Source</button>
+                                    <button class="nav-link" data-bs-target="#CallSource" data-bs-toggle="tab" aria-controls="CallSource" aria-expanded="false" type="button" role="tab">CallSource</button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-target="#User" data-bs-toggle="tab" aria-controls="User" aria-expanded="false" type="button" role="tab">User</button>
@@ -717,7 +717,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     </div>
                                 </div>
 
-                                <!-- Call Source Tab -->
+                                <!-- CallSource Tab -->
                                 <?php if (Configure::read('isCallAssistEnabled')): ?>
                                     <div class="tab-pane" id="CallSource">
                                         <?php if ($location->is_call_assist): ?>

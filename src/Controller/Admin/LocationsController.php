@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Locations Controller
@@ -232,5 +233,14 @@ class LocationsController extends BaseAdminController
             $this->Flash->error("Unable to obtain number from callsource <br />Error(s): " . $errors);
         }
         return $this->redirect(['action' => 'edit', $id]);
+    }
+
+    /**
+    * Simple callsource raw lookup
+    */
+    public function callSourceRaw($locationId = 0) {
+        Configure::write('debug', true);
+        $this->set('call_source', $this->Locations->CallSources->customerLookup($locationId));
+        $this->set('locationId', $locationId);
     }
 }
