@@ -8,8 +8,9 @@
  * @var string[]|\Cake\Collection\CollectionInterface $wikis
  */
 use App\Model\Entity\User;
+use Cake\Core\Configure;
  
-$this->Html->script('dist/admin_edit_user.min', ['block' => true]);
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_admin_edit_user.min', ['block' => true]) : $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 ?>
 <header class="col-sm-12 mt10">
 	<div class="panel panel-light">

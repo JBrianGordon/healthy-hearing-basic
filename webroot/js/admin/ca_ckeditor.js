@@ -245,8 +245,8 @@ editorElements.forEach((element) => {
             tokenUrl: ckTokenUrl
         },
         wproofreader: {
-            lang:'en_US',
-            serviceId:'S4GVljxeHzqGrTO',
+            lang:'en_CA',
+            serviceId:'fu3PtF9xYtAkFgt',
             srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
         }
     	}).catch( error => {
