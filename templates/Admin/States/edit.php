@@ -4,8 +4,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\State $state
  */
+use Cake\Core\Configure;
  
-$this->Html->script('dist/admin_edit_state.min', ['block' => true]);
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_admin_edit_state.min', ['block' => true]) : $this->Html->script('dist/admin_edit_state.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 <div class="panel panel-light">

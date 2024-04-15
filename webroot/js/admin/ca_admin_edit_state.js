@@ -1,2 +1,2 @@
 import './admin_common';
-import './ckpackage';
+import './ca_ckpackage';

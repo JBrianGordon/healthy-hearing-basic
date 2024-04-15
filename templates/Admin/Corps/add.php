@@ -4,7 +4,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Corp $corp
  */
-$this->Html->script('dist/corp_edit.min', ['block' => true]);
+use Cake\Core\Configure;
+
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_corp_edit.min', ['block' => true]) : $this->Html->script('dist/corp_edit.min', ['block' => true]);
 
 $author_default = false;
 ?>

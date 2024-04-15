@@ -5,8 +5,9 @@
  * @var \App\Model\Entity\Wiki $wiki
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+use Cake\Core\Configure;
  
-$this->Html->script('dist/wiki_edit.min', ['block' => true]);
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_wiki_edit.min', ['block' => true]) : $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
 $author_default = false;
 $isFrozen = !empty($content->is_frozen);

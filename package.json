@@ -39,7 +39,6 @@
     "@ckeditor/ckeditor5-style": "~38.1.1",
     "@ckeditor/ckeditor5-table": "~38.1.1",
     "@ckeditor/ckeditor5-word-count": "~38.1.1",
-    "@webspellchecker/wproofreader-ckeditor5": "~2.3.1",
     "ckeditor5": "~38.1.1",
     "imagemin-svgo": "~10.0.1",
     "jquery": "~3.7.1",
@@ -50,6 +49,7 @@
     "webpack-cli": "~4.10.0"
   },
   "devDependencies": {
+    "@webspellchecker/wproofreader-ckeditor5": "^2.3.1",
     "css-loader": "~6.8.1",
     "image-minimizer-webpack-plugin": "~3.8.3",
     "imagemin": "~8.0.1",

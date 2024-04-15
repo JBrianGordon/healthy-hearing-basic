@@ -6,8 +6,9 @@
  */
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
+use Cake\Core\Configure;
  
-$this->Html->script('dist/content_edit.min', ['block' => true]);
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_content_edit.min', ['block' => true]) : $this->Html->script('dist/content_edit.min', ['block' => true]);
 
 $author_default = false;
 $isFrozen = !empty($content->is_frozen);

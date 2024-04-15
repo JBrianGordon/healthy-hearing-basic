@@ -5,6 +5,7 @@
  * @var \App\Model\Entity\Corp $corp
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+use Cake\Core\Configure;
 
 $author_default = false;
 if (empty($content->id)) {
@@ -12,8 +13,8 @@ if (empty($content->id)) {
 		$author_default = $user->id;
 	}
 }
- 
-$this->Html->script('dist/corp_edit.min', ['block' => true]);
+
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_corp_edit.min', ['block' => true]) : $this->Html->script('dist/corp_edit.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

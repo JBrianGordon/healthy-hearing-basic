@@ -10,7 +10,7 @@ use App\Model\Entity\Review;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
-$this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
+Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_admin_edit_locations.min', ['block' => true]) : $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 $id = $location->id;
 $isCqPremier = $location->is_cq_premier;
