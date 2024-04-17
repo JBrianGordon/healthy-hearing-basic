@@ -140,7 +140,7 @@
 								<small class="help-block tar p20">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</small>
 							<?= $this->Form->end() ?>
 							<div id="subscribe_success" class="tal text-error alert alert-success" style="display:none;">
-								<p>Thank you for subscribing to our newseltter!</p>
+								<p>Thank you for subscribing to our newsletter!</p>
 								<br>
 								<p>Please check your inbox for a confirmation message from Healthy Hearing with the subject line: <strong>Healthy Hearing Newsletter: Please Confirm Subscription</strong>.</p>
 								<br>

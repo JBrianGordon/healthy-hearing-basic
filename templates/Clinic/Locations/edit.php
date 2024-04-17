@@ -36,7 +36,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
-                                            <img class="hh-symbol" src="/img/hh-symbol.svg">
+                                            <img class="hh-symbol" src="/img/hh-symbol.svg" style="max-width:50px;">
                                         </div>
                                     </div>
                                     <div class="review-card">
@@ -47,7 +47,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
-                                            <img class="hh-symbol" src="/img/hh-symbol.svg">
+                                            <img class="hh-symbol" src="/img/hh-symbol.svg" style="max-width:50px;">
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +60,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?=$shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
-                                            <img class="hh-symbol" src="/img/hh-symbol.svg">
+                                            <img class="hh-symbol" src="/img/hh-symbol.svg" style="max-width:50px;">
                                         </div>
                                     </div>
                                     <div class="review-card">
@@ -71,7 +71,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             <p class="mb5">Please share your feedback about your experience here and help others to choose us, too. To write a review, type this into your internet browser:</p>
                                             <p class="text-center clinic-url mb10"><?= $shortReviewUrl ?></p>
                                             <p>Then click the orange "write a review" button. It only takes a minute. Thank you!</p>
-                                            <img class="hh-symbol" src="/img/hh-symbol.svg">
+                                            <img class="hh-symbol" src="/img/hh-symbol.svg" style="max-width:50px;">
                                         </div>
                                     </div>
                                 </div>
