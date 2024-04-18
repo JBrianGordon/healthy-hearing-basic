@@ -329,6 +329,10 @@ summary {
   .site-body, .panel-section {
     padding: 0;
     background-color: #fff;
+
+    .col-md-12 {
+      padding: 0;
+    }
   }
 
   .panel {
@@ -363,7 +367,7 @@ summary {
   .card-row {
     width: 8.5in;
     padding-bottom: 5px;
-    margin-left: -20px;
+    margin-left: -20px !important;
     display: flex !important;
 
     &:nth-child(2) {
