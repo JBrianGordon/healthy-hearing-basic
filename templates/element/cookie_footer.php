@@ -20,21 +20,25 @@
     
     document.getElementById('acceptAll').addEventListener('click', function() {
       setConsent({
-	    functionality: true,
-	    security: true,
+	      functionality: true,
+	      security: true,
         analytics: true,
         marketing: true,
-        personalization: true
+        personalization: true,
+        adPersonalization: true,
+        adUserData: true
       });
       hideBanner();
     });
     document.getElementById('rejectAll').addEventListener('click', function() {
       setConsent({
-	    functionality: false,
-	    security: false,
+	      functionality: false,
+	      security: false,
         analytics: false,
         marketing: false,
-        personalization: false
+        personalization: false,
+        adPersonalization: false,
+        adUserData: false
       });
       hideBanner();
     });
@@ -44,11 +48,13 @@
   
   function setConsent(consent) {
     const consentMode = {
-		'functionality_storage': consent.functionality ? 'granted' : 'denied',
-		'security_storage': consent.security ? 'granted' : 'denied',
-		'ad_storage': consent.marketing ? 'granted' : 'denied',
-		'analytics_storage': consent.analytics ? 'granted' : 'denied',
-		'personalization_storage': consent.personalization ? 'granted' : 'denied',
+  		'functionality_storage': consent.functionality ? 'granted' : 'denied',
+  		'security_storage': consent.security ? 'granted' : 'denied',
+  		'ad_storage': consent.marketing ? 'granted' : 'denied',
+  		'analytics_storage': consent.analytics ? 'granted' : 'denied',
+  		'personalization_storage': consent.personalization ? 'granted' : 'denied',
+      'ad_personalization': consent.adPersonalization ? 'granted' : 'denied',
+      'ad_user_data': consent.adUserData ? 'granted' : 'denied',
     };
     gtag('consent', 'update', consent);  
     localStorage.setItem('consentMode', JSON.stringify(consentMode));
