@@ -4,9 +4,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Provider $provider
  */
-use Cake\Core\Configure;
 
-Configure::read('country') == 'CA' ? $this->Html->script('dist/ca_admin_providers.min', ['block' => true]) : $this->Html->script('dist/admin_providers.min', ['block' => true]);
+$this->Html->script('dist/admin_providers.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

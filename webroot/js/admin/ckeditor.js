@@ -128,128 +128,141 @@ Editor.builtinPlugins = [
     WProofreader
 ];
 
-// Get all elements with the "editor" class
-const editorElements = document.querySelectorAll(".editor");
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all elements with the "editor" class
+    const editorElements = document.querySelectorAll(".editor");
 
-// Iterate over each element and create the editor
-editorElements.forEach((element) => {
+    //Set serviceId and site language depending on site
+    let servId, siteLang;
 
-    Editor.create(element, {
-        toolbar: {
-            items: [
-                'sourceEditing',
-                '|',
-                'heading',
-                '|',
-                'bold',
-                'italic',
-                'link',
-                'bulletedList',
-                'numberedList',
-                'subscript',
-                'superscript',
-                'underline',
-                '|',
-                'ckbox',
-                'blockQuote',
-                'insertTable',
-                'mediaEmbed',
-                'alignment',
-                'findAndReplace',
-                '|',
-                'removeFormat',
-                'specialCharacters',
-                '|',
-                'fontColor',
-                'fontSize',
-                'fontFamily',
-                '|',
-                'horizontalLine',
-                'highlight',
-                'style',
-                'restrictedEditingException',
-                'wproofreader'
-            ],
-            shouldNotGroupWhenFull: true
-        },
-        htmlSupport: {
-            allow: [
-                {
-                    name: 'div',
-                    attributes: true,
-                    classes: true
-                },
-                {
-                    name: 'span',
-                    attributes: true,
-                    classes: true
-                },
-                {
-                    name: 'script',
-                    attributes: {
-                        type: 'application/ld+json'
+    if(document.documentElement.lang === 'en-CA'){
+        servId = 'fu3PtF9xYtAkFgt';
+        siteLang = 'en_CA';
+    } else {
+        servId = 'S4GVljxeHzqGrTO';
+        siteLang = 'en_US';
+    }
+
+    // Iterate over each element and create the editor
+    editorElements.forEach((element) => {
+
+        Editor.create(element, {
+            toolbar: {
+                items: [
+                    'sourceEditing',
+                    '|',
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'link',
+                    'bulletedList',
+                    'numberedList',
+                    'subscript',
+                    'superscript',
+                    'underline',
+                    '|',
+                    'ckbox',
+                    'blockQuote',
+                    'insertTable',
+                    'mediaEmbed',
+                    'alignment',
+                    'findAndReplace',
+                    '|',
+                    'removeFormat',
+                    'specialCharacters',
+                    '|',
+                    'fontColor',
+                    'fontSize',
+                    'fontFamily',
+                    '|',
+                    'horizontalLine',
+                    'highlight',
+                    'style',
+                    'restrictedEditingException',
+                    'wproofreader'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            htmlSupport: {
+                allow: [
+                    {
+                        name: 'div',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'span',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'script',
+                        attributes: {
+                            type: 'application/ld+json'
+                        }
+                    },
+                    {
+                        name: 'img',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'figure',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'input',
+                        attributes: true,
+                        classes: true
                     }
-                },
-                {
-                    name: 'img',
-                    attributes: true,
-                    classes: true
-                },
-                {
-                    name: 'figure',
-                    attributes: true,
-                    classes: true
-                },
-                {
-                    name: 'input',
-                    attributes: true,
-                    classes: true
-                }
-            ]
-        },
-        language: 'en',
-        image: {
-            toolbar: [
-                'imageTextAlternative',
-                'toggleImageCaption',
-                'imageStyle:inline',
-                'imageStyle:block',
-                'imageStyle:side',
-                'linkImage'
-            ]
-        },
-        table: {
-            contentToolbar: [
-                'tableColumn',
-                'tableRow',
-                'mergeTableCells',
-                'tableCellProperties',
-                'tableProperties'
-            ]
-        },
-        heading: {
-            options: [
-                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-            ]
-        },
-        CloudServices: {
-            tokenUrl: ckTokenUrl
-        },
-        ckbox: {
-            tokenUrl: ckTokenUrl
-        },
-        wproofreader: {
-            lang:'en_US',
-            serviceId:'S4GVljxeHzqGrTO',
-            srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
-        }
-    	}).catch( error => {
-	    console.error( error );
+                ]
+            },
+            language: 'en',
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'toggleImageCaption',
+                    'imageStyle:inline',
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    'linkImage'
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells',
+                    'tableCellProperties',
+                    'tableProperties'
+                ]
+            },
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                    { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                    { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                ]
+            },
+            CloudServices: {
+                tokenUrl: ckTokenUrl
+            },
+            ckbox: {
+                tokenUrl: ckTokenUrl
+            },
+            wproofreader: {
+                lang: siteLang,
+                serviceId: servId,
+                srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
+            }
+        	}).catch( error => {
+    	    console.error( error );
+        });
     });
 });
