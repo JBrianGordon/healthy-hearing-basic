@@ -558,8 +558,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('mobile_text')
             ->maxLength('mobile_text', 400)
-            ->requirePresence('mobile_text', 'create')
-            ->notEmptyString('mobile_text');
+            ->allowEmptyString('mobile_text');
 
         $validator
             ->integer('radius')
@@ -927,14 +926,16 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->requirePresence('direct_book_url', 'create')
-            ->notEmptyString('direct_book_url');
+            ->notEmptyString('direct_book_url', 'This field is required', function ($context) {
+                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
+            });
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->requirePresence('direct_book_iframe', 'create')
-            ->notEmptyString('direct_book_iframe');
+            ->notEmptyString('direct_book_iframe', 'This field is required', function ($context) {
+                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
+            });
 
         $validator
             ->boolean('is_yhn')

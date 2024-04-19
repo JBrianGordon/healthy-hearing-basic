@@ -171,20 +171,27 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             echo $this->Form->control('address', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
                                             echo $this->Form->control('city', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
                                             echo $this->Form->control('zip', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo $this->Form->control('radius', ['label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Radius (miles)'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo '<span id="radiusHelp" class="help-block col-md-12 tar">How far are you willing to travel?</span>';
+                                            echo $this->Form->control('radius', [
+                                                'label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Radius (miles)'],
+                                                'class' => 'col col-md-8-override mb0 fg-2',
+                                                'spacing' => 'mb0'
+                                            ]);
+                                            echo '<span id="radiusHelp" class="help-block col-md-12 tar mt0 mb10">How far are you willing to travel?</span>';
                                         ?>
                                     </div>
                                     <div class="col-md-6 p0 row">
-                                        <?php
-                                            echo $this->Form->control('address_2', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo $this->Form->control('state', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo '<div class="col-md-8 col-md-offset-4 pl0 mb25">';
-                                            echo $this->Form->control('is_mobile', ['label' => ' Mobile-only clinic?']);
-                                            echo '</div>';
-                                            echo $this->Form->control('mobile_text', ['label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Mobile clinic description'], 'required' => false, 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo '<span id="addressHelp" class="help-block col-md-12 tar">This will be displayed instead of street address</span>';
-                                        ?>
+                                        <?= $this->Form->control('address_2', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
+                                        <?= $this->Form->control('state', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
+                                        <div class="col-md-8 col-md-offset-4 pl0 mb25">
+                                            <?= $this->Form->control('is_mobile', ['label' => ' Mobile-only clinic?']) ?>
+                                        </div>
+                                        <?= $this->Form->control('mobile_text', [
+                                            'label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Mobile clinic description'],
+                                            'placeholder' => 'Mobile clinic - we come to you!',
+                                            'class' => 'col col-md-8-override mb0 fg-2',
+                                            'spacing' => 'mb0'
+                                        ]) ?>
+                                        <span id="addressHelp" class="help-block col-md-12 tar mt0 mb10">This will be displayed instead of street address</span>
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row pl0">
@@ -721,9 +728,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <?php if (Configure::read('isCallAssistEnabled')): ?>
                                     <div class="tab-pane" id="CallSource">
                                         <?php if ($location->is_call_assist): ?>
-                                            <div class="well"><span class="bi bi-check-lg" style="color:limegreen;"></span> Call Concierge is enabled. The CallSource number will route to our call center.</div>
+                                            <div class="well">
+                                                <span class="bi bi-check-lg" style="color:limegreen;"></span> Call Concierge is enabled. The CallSource number will route to our call center.
+                                            </div>
                                         <?php else: ?>
-                                            <div class="well"><span class="bi bi-x-lg" style="color:red;"></span> Call Concierge is disabled. The CallSource number will route directly to clinic.</div>
+                                            <div class="well">
+                                                <span class="bi bi-x-square-fill" style="color:red;"></span> Call Concierge is disabled. The CallSource number will route directly to clinic.
+                                            </div>
                                         <?php endif; ?>
                                         <div class="col-md-12 p0">
                                         <?= $this->Form->control('is_bypassed', [
@@ -744,13 +755,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <div id="direct-book-links">
                                             <?= $this->Form->control('direct_book_url', [
                                                 'label' => 'Direct book URL',
-                                                'type' => 'text',
+                                                'type' => 'textarea',
                                                 'rows' => 4,
-                                                'required' => false,
+                                                'required' => true,
                                             ]); ?>
                                             <?= $this->Form->control('direct_book_iframe', [
                                                 'label' => 'Direct book iFrame',
-                                                'type' => 'text',
+                                                'type' => 'textarea',
                                                 'rows' => 4,
                                                 'required' => false
                                             ]); ?>
@@ -759,20 +770,20 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <div class="control-group mb20">
                                             <div class="controls">
                                                 <div class="btn-group">
-                                                    <?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update or Create CS Number',
+                                                    <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> Update or Create CS Number',
                                                         ['action' => 'createUpdateCallSource', $id, '#' => 'CallAssist'],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-default']) ?>
                                                     <!-- TODO -->
-                                                    <?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> End and create new CS Number',
+                                                    <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> End and create new CS Number',
                                                         ['action' => 'cs_end_create', $id, '#' => 'CallAssist'],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-info'],
                                                         'This will end this CS number, but leaves the CS customer active. Then creates a new CS number. Are you sure?') ?>
                                                     <!-- TODO -->
-                                                    <?= $this->Html->link('<span class="glyphicon glyphicon-eye-open"></span> Raw Lookup',
+                                                    <?= $this->Html->link('<i class="bi bi-eye-fill"></i> Raw Lookup',
                                                         ['action' => 'call_source_raw', $id, '#' => 'CallAssist'],
                                                         ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
                                                     <!-- TODO -->
-                                                    <?= $this->Html->link('<span class="glyphicon glyphicon-trash"></span> End CS Number',
+                                                    <?= $this->Html->link('<i class="bi bi-trash"></i> End CS Number',
                                                         ['action' => 'end', $id, '#' => 'CallAssist'],
                                                         ['class' => 'btn btn-xs btn-danger', 'escape' => false],
                                                         'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?') ?>
@@ -919,7 +930,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <div class="control-group">
                                             <div class="controls">
                                             <?php foreach($location->reviews as $review): ?>
-                                                <?= $this->element('locations/review_body', ['review' => $review]) ?>
+                                                <?= $this->element('locations/review_body', ['review' => $review, 'clinicName' => $location->title]) ?>
                                                 <div class="ml20 mt10">
                                                     <span class='badge bg-light'><?= Review::$statuses[$review->status] ?></span>
                                                     <?= $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",

@@ -268,7 +268,6 @@ class CallSourcesTable extends Table
                         $callSourceEntity->end_date = '01/01/2025';
                         // Show location if number is active. No-show location if number needs to be tested.
                         $this->Locations->setShow($locationId, $callSourceEntity->is_active);
-                        $this->create();
                         return $this->save($callSourceEntity);
                     }
                     return false;
@@ -290,7 +289,6 @@ class CallSourcesTable extends Table
                     $callSourceEntity->end_date = '01/01/2025';
                     // Show location if number is active. No-show location if number needs to be tested.
                     $this->Locations->setShow($locationId, $callSourceEntity->is_active);
-                    $this->create();
                     return $this->save($callSourceEntity);
                 }
                 return false;

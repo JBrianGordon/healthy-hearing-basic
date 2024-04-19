@@ -235,6 +235,28 @@ class LocationsController extends BaseAdminController
         return $this->redirect(['action' => 'edit', $id]);
     }
 
+    // End the CS number and create a new one for this location
+    public function csEndCreate($locationId = 0) {
+        // End the number but do not inactivate the customer
+        if ($this->Locations->CallSources->endCallSource($locationId, false)) {
+            // Number ended successfully. Create new number.
+            // Allow CS access on the test account
+            $this->Locations->CallSources->allowCsTest();
+            $result = $this->Locations->CallSources->saveCallSource($locationId);
+            $this->Locations->CallSources->disallowCsTest();
+            if ($result) {
+                $this->Flash->success('CS number ended and new number created successfully.');
+            } else {
+                $errors = $this->r_implode('<br>',$this->Location->CallSource->errors);
+                $this->Flash->error('Failed to create new CS number.<br>Error(s): ' . $errors);
+            }
+        } else {
+            $errors = $this->r_implode('<br>',$this->Location->CallSource->errors);
+            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors);
+        }
+        return $this->redirect(['action' => 'edit', $locationId]);
+    }
+
     /**
     * Simple callsource raw lookup
     */
