@@ -631,8 +631,7 @@ class ClinicHelper extends Helper
             return $this->Html->image('/tmp/' . $provider->file->name, array('width' => 150));
         }
         if (!empty($provider->thumb_url)) {
-            $filename = basename($provider->thumb_url);
-            $url = "/cloudfiles/clinicians/" . rawurlencode($filename);
+            $url = $provider->thumb_url;
             $classLead = ' class="';
             $classClose = '"';
             if ($options['url_only']) {

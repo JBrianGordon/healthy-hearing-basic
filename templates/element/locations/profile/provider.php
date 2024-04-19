@@ -26,8 +26,6 @@ $this->set('hideProvider', $hideProvider);
 									echo $this->Clinic->providerImage($provider, [
 										'class' => 'img-responsive',
 										'alt' => $alt,
-										'width' => 150,
-										'height' => 200
 									]);
 									?>
 									<?php if($provider->is_ida_verified): ?>

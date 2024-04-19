@@ -62,7 +62,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 											<?php endif; ?>
 											<h1 class="text-primary name"><?= $location->title ?></h1>
 											<?php if(!empty($location->logo_url) && $location->listing_type == 'Premier'){
-												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
+												echo '<img class="clinic-logo" src="'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
 											}; ?>
 											<div class="geo" style="display:none;">
 												<span class="latitude">
