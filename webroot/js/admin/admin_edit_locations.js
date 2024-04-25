@@ -96,22 +96,30 @@ class locationsAdminEdit {
     });
 
     document.getElementById('direct-book-type').addEventListener('change', function () {
-      editObj.onChangeDirectBookType(this.value);
+      // If directBookType is EarQ or Blueprint, display and require the direct_book_url
+      // and direct_book_iframe fields. Otherwise hide those fields.
+      const directBookType = this.value;
+      let urlRequired = false;
+      if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
+        // Display and require the direct_book_url and direct_book_iframe fields
+        urlRequired = true;
+      }
+      editObj.onChangeFeature(urlRequired, '#direct-book-url');
+      editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
     });
     document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
     /*** TODO: add frozen-expiration field to view: ***
     document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'is-listing-type-frozen', <frozen expiration field here>);
+      editObj.onChangeFeature(this.checked, '#is-listing-type-frozen');
     });
     document.getElementById('is-listing-type-frozen').dispatchEvent(new Event('change'));*/
-    /*** TODO: add library-expiration field to view:
     document.getElementById('feature-content-library').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'feature-content-library', <library expiration field here>);
+      editObj.onChangeFeature(this.checked, '#content-library-expiration');
     });
-    document.getElementById('feature-content-library').dispatchEvent(new Event('change'));*/
+    document.getElementById('feature-content-library').dispatchEvent(new Event('change'));
   /* TODO: add special-feature-expiration field to view: ***
     document.getElementById('feature-special-announcement').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'feature-special-announcement', <feature content expiration here>);
+      editObj.onChangeFeature(this.checked, '#feature-special-announcement');
     });
     document.getElementById('feature-special-announcement').dispatchEvent(new Event('change'));*/
     /* TODO: add hour-is-closed-lunch field to view: ***
@@ -121,8 +129,8 @@ class locationsAdminEdit {
     document.getElementById('hour-is-closed-lunch').dispatchEvent(new Event('change'));*/
 
     document.getElementById('is-mobile').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'label[for="radius"]', '#radius');
-      editObj.onChangeFeature(this.checked, 'label[for="mobile-text"]', '#mobile-text');
+      editObj.onChangeFeature(this.checked, '#radius');
+      editObj.onChangeFeature(this.checked, '#mobile-text');
       document.getElementById('addressHelp').classList.toggle("hidden");
       document.getElementById('radiusHelp').classList.toggle("hidden");
     });
@@ -409,34 +417,19 @@ class locationsAdminEdit {
     });
   }
 
-  onChangeDirectBookType(directBookType) {
-    const directBookLinks = document.querySelector('#direct-book-links');
-    const directBookUrl = document.querySelector('#direct-book-url');
-    const directBookIframe = document.querySelector('#direct-book-iframe');
-
-    if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
-      directBookLinks.style.display = 'block';
-      directBookUrl.required = true;
-      directBookIframe.required = true;
-    } else {
-      directBookLinks.style.display = 'none';
-      directBookUrl.required = true;
-      directBookIframe.required = true;
-    }
-  }
-
-  onChangeFeature(isFeature, label, requiredElementId) {
-    const elementLabel = document.querySelector(label);
+  // Display and require an extra field based on if this feature is enabled
+  onChangeFeature(isFeature, requiredElementId) {
     const requiredElement = document.querySelector(requiredElementId);
+    const formGroup = requiredElement.closest('.form-group');
 
     if (isFeature) {
-      elementLabel.style.display = 'block';
-      requiredElement.style.display = 'block';
       requiredElement.required = true;
+      formGroup.style.display = 'flex';
+      formGroup.classList.add('required');
     } else {
       requiredElement.required = false;
-      requiredElement.style.display = 'none';
-      elementLabel.style.display = 'none';
+      formGroup.style.display = 'none';
+      formGroup.classList.remove('required');
     }
   }
 

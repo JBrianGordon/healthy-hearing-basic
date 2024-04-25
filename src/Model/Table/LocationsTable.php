@@ -926,16 +926,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->notEmptyString('direct_book_url', 'This field is required', function ($context) {
-                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
-            });
+            ->allowEmptyString('direct_book_url');
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->notEmptyString('direct_book_iframe', 'This field is required', function ($context) {
-                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
-            });
+            ->allowEmptyString('direct_book_iframe');
 
         $validator
             ->boolean('is_yhn')
@@ -974,8 +970,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('optional_message')
             ->maxLength('optional_message', 400)
-            ->requirePresence('optional_message', 'create')
-            ->notEmptyString('optional_message');
+            ->allowEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')

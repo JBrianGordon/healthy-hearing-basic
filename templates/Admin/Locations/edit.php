@@ -46,14 +46,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                     <fieldset>
                         <?php
                             echo $this->Form->control('title');
-                            echo '<div class="col-md-3 col-md-offset-3 pl0 mb-3">';
+                            echo '<div class="col-md-3 offset-md-3 pl0 mb-3">';
                             echo $this->Form->control('is_active');
                             echo '</div>';
                             echo '<div class="col-md-3 pl0 mb-3">';
                             echo $this->Form->control('is_show', ['required' => true]);
                             echo '</div>';
                             echo '<div class="form-group">';
-                            echo '<div class="col col-md-9 col-md-offset-3 pl0 mb10">';
+                            echo '<div class="col-md-9 offset-md-3 pl0 mb10">';
                             echo $location->is_yhn ? '<span class="badge bg-yhn bi bi-globe-americas mr5"> YHN ' . $location->yhn_tier . '</span>' : '';
                             echo $location->is_cqp ? '<span class="badge bg-cqp bi bi-briefcase-fill mr5">CQP ' . $location->cqp_tier . '</span>' : '';
                             echo $location->_ ? '<span class="badge bg-cqp mr5">CQ Premier</span>' : '';
@@ -66,11 +66,10 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 'type' => 'select',
                                 'options' => Location::$listingTypes,
                                 'class' => 'form-control',
-                                'label' => ['class' => 'col col-md-3 control-label'],
                                 'div' => ['class' => 'form-group mb5'],
                                 'required' => false
                             ]);
-                            echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
+                            echo '<div class="col-md-9 offset-md-3 pl0 mb-3">';
                             echo $this->Form->control('is_listing_type_frozen', ['label' => ' Freeze Listing Type']);
                             echo '</div>';
                         ?>
@@ -118,7 +117,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 </tr>
                             </tbody>
                         </table>
-                        <?= $this->Form->control('priority', ['label' => ['class' => 'col col-md-3 control-label'], 'class' => 'col col-md-9 mb10']); ?>
+                        <?= $this->Form->control('priority'); ?>
                         <div class="tabbable">
                             <ul class="nav nav-tabs location-tabs clearfix" role="tablist">
                                 <li class="nav-item">
@@ -162,59 +161,85 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <!-- Location Tab -->
                                 <div class="tab-pane active" id="Location">
                                     <div class="form-group">
-                                        <div class="col col-md-offset-2 col-md-8 mb10 pl0">
+                                        <div class="col-md-8 offset-md-2 mb10 pl0">
                                             <?= $this->Html->link(' Geocode', ['action' => 'geocode'], ['class' => 'btn btn-xs btn-primary bi bi-geo-alt-fill']) ?>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 p0 row">
+                                    <div class="row">
+                                    <div class="col-md-6">
                                         <?php
-                                            echo $this->Form->control('address', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo $this->Form->control('city', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
-                                            echo $this->Form->control('zip', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']);
+                                            echo $this->Form->control('address', [
+                                                'label' => ['class' => 'col-form-label col-md-4-override'],
+                                                'class' => 'form-control col-md-8-override']);
+                                            echo $this->Form->control('city', [
+                                                'label' => ['class' => 'form-label col-md-4-override'],
+                                                'class' => 'form-control col-md-8-override']);
+                                            echo $this->Form->control('zip', [
+                                                'label' => ['class' => 'form-label col-md-4-override'],
+                                                'class' => 'form-control col-md-8-override']);
                                             echo $this->Form->control('radius', [
-                                                'label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Radius (miles)'],
-                                                'class' => 'col col-md-8-override mb0 fg-2',
+                                                'label' => ['class' => 'form-label col-md-4-override', 'text' => 'Radius (miles)'],
+                                                'class' => 'form-control col-md-8-override mb0',
                                                 'spacing' => 'mb0'
                                             ]);
-                                            echo '<span id="radiusHelp" class="help-block col-md-12 tar mt0 mb10">How far are you willing to travel?</span>';
+                                            echo '<span id="radiusHelp" class="help-block col-md-12 tar mt0">How far are you willing to travel?</span>';
                                         ?>
                                     </div>
-                                    <div class="col-md-6 p0 row">
-                                        <?= $this->Form->control('address_2', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
-                                        <?= $this->Form->control('state', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
-                                        <div class="col-md-8 col-md-offset-4 pl0 mb25">
-                                            <?= $this->Form->control('is_mobile', ['label' => ' Mobile-only clinic?']) ?>
+                                    <div class="col-md-6">
+                                        <?= $this->Form->control('address_2') ?>
+                                        <!-- TODO: state should be a select -->
+                                        <?= $this->Form->control('state') ?>
+                                        <div class="col-md-9 offset-md-3 pl0">
+                                            <?= $this->Form->control('is_mobile', [
+                                                'label' => ' Mobile-only clinic?']) ?>
                                         </div>
                                         <?= $this->Form->control('mobile_text', [
-                                            'label' => ['class' => 'col col-md-4-override control-label fg-1', 'text' => 'Mobile clinic description'],
+                                            'label' => ['class' => 'form-label', 'text' => 'Mobile clinic description'],
                                             'placeholder' => 'Mobile clinic - we come to you!',
-                                            'class' => 'col col-md-8-override mb0 fg-2',
+                                            'class' => 'form-control mt10',
                                             'spacing' => 'mb0'
                                         ]) ?>
                                         <span id="addressHelp" class="help-block col-md-12 tar mt0 mb10">This will be displayed instead of street address</span>
                                     </div>
+                                </div>
                                     <div class="clearfix"></div>
                                     <div class="row pl0">
                                         <div class="col-md-12">
                                             <?php
-                                                echo $this->Form->control('phone', ['label' => ['class' => 'col col-md-2-override control-label fg-1'], 'class' => 'col col-md-10-override mb10 fg-6']);
-                                                echo $this->Form->control('email', ['label' => ['class' => 'col col-md-2-override control-label fg-1'], 'class' => 'col col-md-10-override mb10 fg-6']);
+                                                echo $this->Form->control('phone', [
+                                                    'label' => ['class' => 'form-label col-md-2-override'],
+                                                    'class' => 'form-control col-md-10-override']);
+                                                echo $this->Form->control('email', [
+                                                    'label' => ['class' => 'form-label col-md-2-override'],
+                                                    'class' => 'form-control col-md-10-override']);
                                             ?>
                                         </div>
-                                        <div class="col-md-6 p0">
-                                            <?= $this->Form->control('lat', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
+                                        <div class="col-md-6 mb-3">
+                                            <?= $this->Form->control('lat', [
+                                                'label' => [
+                                                    'class' => 'form-label col-md-4-override'],
+                                                'class' => 'form-control col-md-8-override'
+                                            ]) ?>
                                         </div>
-                                        <div class="col-md-6 pl0">
-                                            <?= $this->Form->control('lon', ['label' => ['class' => 'col col-md-4-override control-label fg-1'], 'class' => 'col col-md-8-override mb10 fg-2']) ?>
+                                        <div class="col-md-6 mb-3">
+                                            <?= $this->Form->control('lon', [
+                                                'label' => [
+                                                    'class' => 'form-label col-md-2-override'],
+                                                'class' => 'form-control col-md-10-override']) ?>
                                         </div>
                                         <div class="col-md-12">
-                                            <?= $this->Form->control('timezone', ['label' => ['class' => 'col col-md-2-override control-label fg-1'], 'class' => 'col col-md-10-override mb10 fg-6', 'required' => false]) ?>
-                                            <?= $this->Form->control('landmarks', ['label' => ['class' => 'col col-md-2-override control-label fg-1'], 'class' => 'col col-md-10-override mb10 fg-6'])?>
-                                            <span class="help-block col-md-10 col-md-offset-2">Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic.</span>
+                                            <?= $this->Form->control('timezone', [
+                                                'label' => ['class' => 'form-label col-md-2-override'],
+                                                'class' => 'form-control col-md-10-override',
+                                                'required' => false]) ?>
+                                            <?= $this->Form->control('landmarks', [
+                                                'label' => ['class' => 'form-label col-md-2-override'],
+                                                'class' => 'form-control col-md-10-override'])?>
+                                            <span class="help-block col-md-10 offset-md-2">Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic.</span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-offset-2 col-md-10">
+                                        <div class="col-md-10 offset-md-2">
                                             <div class="thumbnail">
                                                 <?= $this->element('locations/map', ['location' => $location]) ?>
                                             </div>
@@ -224,9 +249,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <hr class="mt25">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <label class="col col-md-2 control-label">Linked Locations</label>
+                                            <label class="form-label col-md-2">Linked Locations</label>
                                             <div class="clearfix"></div>
-                                            <table class="table-striped table-bordered col-md-offset-2 col-md-10 p0">
+                                            <table class="table-striped table-bordered col-md-10 offset-md-2 p0">
                                                 <?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
                                                     <tbody class="d-table w-100">
                                                         <tr id="tr-link-<?= $key ?>">
@@ -259,7 +284,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <span class="help-block col-md-offset-2 col-md-10">
+                                            <span class="help-block col-md-10 offset-md-2">
                                                 <?php if (Configure::read('isTieringEnabled')): ?>These are displayed on Enhanced/Premier profiles only. <?php endif; ?>
                                                 Search by typing in clinic name, <?= $zipShort ?>, or <?= Configure::read('siteNameAbbr') ?> ID. Select the correct clinic from the drop-down list.
                                             </span>
@@ -279,20 +304,20 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         echo $this->Form->control('slogan', ['class' => 'text', 'type' => 'text']);
                                         echo $this->Form->control('url');
                                     ?>
-                                    <span class="help-block col-md-9 col-md-offset-3">Must start with http: or https:</span>
+                                    <span class="help-block col-md-9 offset-md-3">Must start with http: or https:</span>
                                     <?php
                                         echo $this->Form->control('facebook');
                                         echo $this->Form->control('youtube');
-                                        echo $this->Form->control('services', ['required' => true, 'class' => 'editor']);
-                                        echo $this->Form->control('about_us', ['required' => true, 'class' => 'editor']);
+                                        echo $this->Form->control('services', ['class' => 'editor']);
+                                        echo $this->Form->control('about_us', ['class' => 'editor']);
                                     ?>
                                     <div class="panel panel-default pb20">
                                         <div class="panel-heading">Enhanced features</div>
                                         <div class="panel-body m10<?php if ($location->listing_type != 'Enhanced' && $location->listing_type != 'Premier'){echo " panel-disabled";}?>">
                                             <!-- Badges -->
                                             <div class="form-group">
-                                                <label class="col col-md-3 control-label">Badges</label>
-                                                <div class="col col-md-4">
+                                                <label class="form-label col-md-3">Badges</label>
+                                                <div class="col-md-4">
                                                     <?= $this->element('locations/badges'); ?>
                                                 </div>
                                             </div>
@@ -305,8 +330,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <!-- Clinic logo -->
                                                 <!-- *** TODO: This code will need to be updated once logo uploading added *** -->
                                                 <div>
-                                                    <label class="col col-md-3 control-label">Clinic logo</label>
-                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9">
+                                                    <label class="form-label col-md-3">Clinic logo</label>
+                                                    <table class="table-striped table-bordered col-md-9 offset-md-3">
                                                         <tbody>
                                                             <tr>
                                                                 <td>
@@ -321,14 +346,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                    <span class="help-block col-md-9 col-md-offset-3">Logos must be JPG format and less than 500KB. To add a logo, click on "Choose File" then select the logo from your computer. For best results, please use logo images that are a minimum of 250 x 250 pixels and a maximum of 800 x 800 pixels. Logos with icons or images are highly recommended over text based logos.</span>
+                                                    <span class="help-block col-md-9 offset-md-3">Logos must be JPG format and less than 500KB. To add a logo, click on "Choose File" then select the logo from your computer. For best results, please use logo images that are a minimum of 250 x 250 pixels and a maximum of 800 x 800 pixels. Logos with icons or images are highly recommended over text based logos.</span>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <!-- Photo Album -->
                                                 <div>
-                                                    <label class="col col-md-3 control-label">Photos</label><div class="clearfix"></div>
-                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9">
+                                                    <label class="form-label col-md-3">Photos</label><div class="clearfix"></div>
+                                                    <table class="table-striped table-bordered col-md-9 offset-md-3">
                                                         <tbody>
                                                             <!-- *** TODO: This code will need to be updated once locationphoto added *** -->
                                                             <?php foreach ($location->location_photos as $key => $photo): ?>
@@ -337,7 +362,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                         <td>
                                                                             <span class="hidden"><?= $photo->id; ?></span>
                                                                             <div class='row mt5 mb10'>
-                                                                                <div class='col-md-offset-3 col-md-9'>
+                                                                                <div class='col-md-9 offset-md-3'>
                                                                                     <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>">
                                                                                 </div>
                                                                             </div>
@@ -364,7 +389,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 <td>
                                                                     <?php $key = count($location->location_photos); ?>
                                                                     <div class='row mt5 mb10'>
-                                                                        <div class='col-md-offset-3 col-md-9'>
+                                                                        <div class='col-md-9 offset-md-3'>
                                                                             <img id="photo-thumb-<?= $key ?>">
                                                                         </div>
                                                                     </div>
@@ -390,14 +415,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                    <span class="help-block col-md-9 col-md-offset-3">Photos must be JPG format and less than 2MB. To add a photo, click on "Choose File". To remove a photo, click on "Delete".</span>
+                                                    <span class="help-block col-md-9 offset-md-3">Photos must be JPG format and less than 2MB. To add a photo, click on "Choose File". To remove a photo, click on "Delete".</span>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <?php if ($showSpecialAnnouncement): ?>
                                                     <!-- Special announcements / Flex space / Coupons -->
                                                     <div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= $adId; ?>" data-couponid="<?= $couponId; ?>">
-                                                        <label class="col col-md-3 control-label">Special announcement</label>
+                                                        <label class="form-label col-md-3">Special announcement</label>
                                                         <div class="clearfix"></div>
                                                         <div id="couponLibrary" style="display:none;">
                                                             <div class="row mb20 pr20 pl20">
@@ -447,7 +472,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         </div>
                                                         <div id="couponSelected" style="display:none;">
                                                             <span class="hidden"><?= $location->id_coupon ?></span>
-                                                            <div class='col-md-offset-4 col-md-3'>
+                                                            <div class='col-md-3 offset-md-4'>
                                                                 <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                             </div>
                                                             <div class='col-md-5'></div>
@@ -462,11 +487,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 ?>
                                                             <?php endif; ?>
                                                             <?php if ($isCqPremier): ?>
-                                                                <div class="col-md-offset-3 mb20"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
+                                                                <div class="offset-md-3 mb20"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
                                                             <?php endif; ?>
                                                             <?php //if (!empty($locationAd->photo_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
                                                                 <div class='row mb20' id='location-ad-preview'>
-                                                                    <div class='col-md-offset-3 col-md-3'>
+                                                                    <div class='col-md-3 offset-md-3'>
                                                                         <div class="panel panel-light text-center mb5">
                                                                             <?php if (!empty($locationAd->title)): ?>
                                                                                 <div class="panel-heading"><?= $locationAd->title ?></div>
@@ -514,13 +539,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 ]);
                                                             ?>
                                                             <div class="form-group">
-                                                                <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
+                                                                <label for="LocationAdBorder" class="form-label col-md-3">Border</label>
                                                                 <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
-                                                                <div class="col col-md-9">
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'blank'){ echo ' selected-border';} ?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php //if($locationAd->border == 'blank'){ echo ' checked';} ?>> No Border</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dashed'){ echo ' selected-border';} ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php //if($locationAd->border == 'border-dashed'){ echo ' checked';} ?>> Dashed</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dotted'){ echo ' selected-border';} ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php //if($locationAd->border == 'border-dotted'){ echo ' checked';} ?>> Dotted</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-inset'){ echo ' selected-border';} ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php //if($locationAd->border == 'border-inset'){ echo ' checked';} ?>> Inset</label></div>
+                                                                <div class="col-md-9">
+                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'blank'){ echo ' selected-border';} ?>"><label for="LocationAdBlank" class="form-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php //if($locationAd->border == 'blank'){ echo ' checked';} ?>> No Border</label></div>
+                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dashed'){ echo ' selected-border';} ?>"><label for="LocationAdDashed" class="form-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php //if($locationAd->border == 'border-dashed'){ echo ' checked';} ?>> Dashed</label></div>
+                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dotted'){ echo ' selected-border';} ?>"><label for="LocationAdDotted" class="form-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php //if($locationAd->border == 'border-dotted'){ echo ' checked';} ?>> Dotted</label></div>
+                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-inset'){ echo ' selected-border';} ?>"><label for="LocationAdInset" class="form-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php //if($locationAd->border == 'border-inset'){ echo ' checked';} ?>> Inset</label></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -540,7 +565,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     'value' => $location->location_vidscrip->id
                                                 ]);
                                             ?>
-                                            <label class="col col-md-3 control-label mb20">Vidscrips</label>
+                                            <label class="form-label col-md-3 mb20">Vidscrips</label>
                                             <div class="clearfix"></div>
                                             <?php
                                                 echo $this->Form->control("LocationVidscrips.vidscrip", [
@@ -576,7 +601,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <?= $this->Form->control('optional_message', [
-                                                    'label' => ['class' => 'col col-md-2 control-label'],
+                                                    'label' => ['class' => 'form-label col-md-2'],
                                                     'rows' => 3,
                                                     'maxlength' => 400,
                                                     'required' => false,
@@ -638,7 +663,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     'label' => [
                                                         'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
                                                         'escape' => false,
-                                                        'class' => 'col col-md-12 control-label tal',
+                                                        'class' => 'form-label col-md-12 tal',
                                                     ],
                                                     'checked' => $location->location_hour->is_evening_weekend_hours
                                                 ]) ?>
@@ -651,15 +676,15 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     'label' => [
                                                         'text' => '<strong class="ml5">Closed for lunch</strong>',
                                                         'escape' => false,
-                                                        'class' => 'col col-md-12 control-label tal',
+                                                        'class' => 'form-label col-md-12 tal',
                                                     ],
                                                     'checked' => $location->location_hour->is_closed_lunch
                                                 ]) ?>
                                                 <!--*** TODO: add lunch break logic: -->
-                                                <div id="closedLunch" class="col col-md-12 hidden">
+                                                <div id="closedLunch" class="col-md-12 hidden">
                                                     <div class="form-group required">
-                                                        <label class="col col-md-2 tal">Lunch break</label>
-                                                        <div class="col col-md-10">
+                                                        <label class="col-md-2 tal">Lunch break</label>
+                                                        <div class="col-md-10">
                                                             <?= $this->Form->control('LocationHour.lunch_start', [
                                                                 'type' => 'time',
                                                                 'label' => false,
@@ -752,20 +777,16 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             'type' => 'select',
                                             'options' => Location::$directBookTypes,
                                         ]); ?>
-                                        <div id="direct-book-links">
-                                            <?= $this->Form->control('direct_book_url', [
-                                                'label' => 'Direct book URL',
-                                                'type' => 'textarea',
-                                                'rows' => 4,
-                                                'required' => true,
-                                            ]); ?>
-                                            <?= $this->Form->control('direct_book_iframe', [
-                                                'label' => 'Direct book iFrame',
-                                                'type' => 'textarea',
-                                                'rows' => 4,
-                                                'required' => false
-                                            ]); ?>
-                                        </div>
+                                        <?= $this->Form->control('direct_book_url', [
+                                            'label' => 'Direct book URL',
+                                            'type' => 'textarea',
+                                            'rows' => 4,
+                                        ]); ?>
+                                        <?= $this->Form->control('direct_book_iframe', [
+                                            'label' => 'Direct book iFrame',
+                                            'type' => 'textarea',
+                                            'rows' => 4,
+                                        ]); ?>
                                         <hr>
                                         <div class="control-group mb20">
                                             <div class="controls">
@@ -821,7 +842,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <div class="tab-pane" id="User">
                                     <?php $user = $location->users[0]; ?>
                                     <div class="form-group mb20">
-                                        <div class="controls col-md-offset-3 col-md-9">
+                                        <div class="controls col-md-9 offset-md-3">
                                             <div class="btn-group">
                                                 <?= $this->Html->link('<span class="glyphicon glyphicon-envelope"></span> Send Default Email', ['controller' => 'Users', 'action' => 'default_email', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
                                                 <?= $this->Html->link('<span class="glyphicon glyphicon-lock"></span> Send Password Reset Email', ['controller' => 'Users', 'action' => 'change_password', $user->id, $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
@@ -850,8 +871,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <?= $this->Form->control('User.last_name', ['required' => false, 'value'=>$user->last_name]) ?>
                                     <?= $this->Form->control('User.email', ['required' => false, 'value'=>$user->email]) ?>
                                     <div class="form-group">
-                                        <label class="col col-md-3 control-label">Last Login</label>
-                                        <div class="col col-md-9 p0">
+                                        <label class="form-label col-md-3">Last Login</label>
+                                        <div class="col-md-9 p0">
                                             <div class="form-control" disabled="true">
                                                 <?php
                                                 if ($user->lastlogin) {
@@ -871,7 +892,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <?php foreach($location->location_emails as $key => $email): ?>
                                                 <?php if (!empty($email->email)): /* Only show if we have something to show*/ ?>
                                                     <div class="form-group">
-                                                        <div class="col col-md-offset-3 col-md-9">
+                                                        <div class="col-md-9 offset-md-3">
                                                             <?= $this->Html->link('Delete This Email',['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'deluser', $email->id], [], 'Are you sure?') ?>
                                                         </div>
                                                     </div>
@@ -884,7 +905,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <?php endforeach; ?>
                 
                                             <div class="form-group">
-                                                <div class="col col-md-offset-3 col-md-9">
+                                                <div class="col-md-9 offset-md-3">
                                                     <?= $this->Html->link('Add Another Email', '#', ['onclick' => '$("#additional-notification").slideDown(); return false;']); ?>
                                                 </div>
                                             </div>
@@ -901,7 +922,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <hr>
                                     <h3>Login History</h3>
                                     <div class="form-group">
-                                        <div class="col col-md-9 col-md-offset-3">
+                                        <div class="col-md-9 offset-md-3">
                                             <div class="table-responsive">
                                                 <table class="table table-condensed table-striped table-bordered">
                                                     <tr>
@@ -1040,12 +1061,12 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                         $confirmMessage);*/ ?>
                                                                     <?php /*echo $this->Form->control('is_'.$field.'_ignore', [
                                                                         'label' => [
-                                                                            'class' => 'control-label',
+                                                                            'class' => 'form-label',
                                                                             'text' => 'Ignore '.$ucField.' Changes',
                                                                         ],
                                                                         'type' => 'checkbox',
                                                                         'class' => false,
-                                                                        'wrapInput' => 'col col-md-12'
+                                                                        'wrapInput' => 'col-md-12'
                                                                     ]);*/ ?>
                                                                 </td>
                                                             </tr>
@@ -1089,8 +1110,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <!-- YHN Tab -->
                                             <div class="tab-pane" id="YHN">
                                                 <div class="row">
-                                                    <label class="col-md-3 control-label">YHN Import Date</label>
-                                                    <div class="col col-md-3">
+                                                    <label class="form-label col-md-3">YHN Import Date</label>
+                                                    <div class="col-md-3">
                                                         <select class="form-control js-import-select">
                                                             <!-- *** TODO: Uncomment once importLocation is set *** -->
                                                             <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
@@ -1106,7 +1127,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
                                                 <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
                                                     <?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
-                                                        <div class="import col-md-11 col-md-offset-1" import="<?php //echo $importLocation['import_id']; ?>">
+                                                        <div class="import col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
                                                             <br /><br />
                                                             <table class="table table-striped table-bordered table-condensed">
                                                                 <?php //foreach ($importLocation AS $label => $value): ?>
@@ -1142,8 +1163,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <!-- CQP Tab -->
                                             <div class="tab-pane" id="CQP">
                                                 <div class="row">
-                                                    <label class="col-md-3 control-label">CQP Import Date</label>
-                                                    <div class="col col-md-3">
+                                                    <label class="form-label col-md-3">CQP Import Date</label>
+                                                    <div class="col-md-3">
                                                         <select class="form-control js-cqp-import-select">
                                                         <!-- *** TODO: uncomment once $importLocation is called in *** -->
                                                         <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
@@ -1159,7 +1180,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail']; ?>
                                                 <?php //foreach ($this->request->data['ImportLocation'] as $importLocation): ?>
                                                     <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-                                                        <div class="cqpImport col-md-11 col-md-offset-1" import="<?php //echo $importLocation['import_id']; ?>">
+                                                        <div class="cqpImport col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
                                                             <br><br>
                                                             <table class="table table-striped table-bordered table-condensed">
                                                                 <?php //foreach ($importLocation AS $label => $value): ?>
@@ -1200,8 +1221,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <?php if (!Configure::read('isYhnImportEnabled')): ?>
                                     <div class="tab-pane" id="Import">
                                         <div class="row">
-                                            <label class="col-md-3 control-label">Import Date</label>
-                                            <div class="col col-md-3">
+                                            <label class="col-md-3 form-label">Import Date</label>
+                                            <div class="col-md-3">
                                                 <select class="form-control js-import-select">
                                                 <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
                                                     <option value="<?= $importLocation['import_id'] ?>">
@@ -1213,7 +1234,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         </div>
                                         <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
                                         <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                        <div class="import col-md-11 col-md-offset-1" import="<?= $importLocation['import_id'] ?>">
+                                        <div class="import col-md-11 offset-md-1" import="<?= $importLocation['import_id'] ?>">
                                             <br /><br />
                                             <table class="table table-striped table-bordered table-condensed">
                                                 <?php //foreach ($importLocation AS $label => $value): ?>
@@ -1257,30 +1278,30 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="col col-md-9 col-md-offset-3">
+                                            <div class="col-md-9 offset-md-3">
                                                 <?= $this->Form->control('filter_has_photo', [
                                                     'label' => [
-                                                        'class' => 'col control-label tal',
+                                                        'class' => 'form-label tal',
                                                         'text' => 'Has Photo',
                                                     ],
                                                     'type' => 'checkbox',
                                                     'class' => ''
                                                 ]); ?>
                                             </div>
-                                            <div class="col col-md-9 col-md-offset-3">
+                                            <div class="col-md-9 offset-md-3">
                                                 <?= $this->Form->control('filter_insurance', [
                                                     'label' => [
-                                                        'class' => 'col control-label tal',
+                                                        'class' => 'form-label tal',
                                                         'text' => 'Accepts Insurance',
                                                     ],
                                                     'type' => 'checkbox',
                                                     'class' => ''
                                                 ]); ?>
                                             </div>
-                                            <div class="col col-md-9 col-md-offset-3">
+                                            <div class="col-md-9 offset-md-3">
                                                 <?= $this->Form->control('filter_evening_weekend', [
                                                     'label' => [
-                                                        'class' => 'col control-label tal',
+                                                        'class' => 'form-label tal',
                                                         'text' => 'Evening or Weekend Hours',
                                                     ],
                                                     'type' => 'checkbox',
@@ -1289,20 +1310,20 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="col col-md-9 col-md-offset-3">
+                                            <div class="col-md-9 offset-md-3">
                                                 <?= $this->Form->control('filter_adult_hearing_test', [
                                                     'label' => [
-                                                        'class' => 'col control-label tal',
+                                                        'class' => 'form-label tal',
                                                         'text' => 'Adult Hearing Test',
                                                     ],
                                                     'type' => 'checkbox',
                                                     'class' => ''
                                                 ]); ?>
                                             </div>
-                                            <div class="col col-md-9 col-md-offset-3">
+                                            <div class="col-md-9 offset-md-3">
                                             <?= $this->Form->control('filter_hearing_aid_fitting', [
                                                 'label' => [
-                                                    'class' => 'col control-label tal',
+                                                    'class' => 'form-label tal',
                                                     'text' => 'Hearing Test Aid Fitting',
                                                 ],
                                                 'type' => 'checkbox',
@@ -1369,44 +1390,51 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             'default' => 0,
                                         ]);
                                     ?>
-                                    <div class="col col-md-9 col-md-offset-3 pl0">
+                                    <div class="col-md-9 offset-md-3 pl0">
                                         <?= $this->Form->control('is_email_allowed', [
                                             'label' => [
-                                                'class' => 'control-label',
+                                                'class' => 'form-label',
                                                 'text' => 'Allow email notifications for profile updates'
                                             ]
                                         ]); ?>
                                     </div>
                                     <?php if (Configure::read('isTieringEnabled')): ?>
-                                        <div class="col col-md-9 col-md-offset-3 pl0">
+                                        <div class="col-md-9 offset-md-3 pl0">
                                             <?= $this->Form->control('is_service_agreement_signed', [
                                                 'label' => [
-                                                    'class' => 'control-label',
+                                                    'class' => 'form-label',
                                                     'text' => 'Service agreement signed'
                                                 ]
                                             ]); ?>
                                         </div>
-                                        <strong class="col col-md-9 col-md-offset-2">Premier Features -- Individual purchase</strong>
-                                        <div class="row col-md-12 mb25<?php if($location->is_cqp){echo ' panel-disabled';}?>">
-                                            <div class="col col-md-9 col-md-offset-3">
-                                                <?= $this->Form->control('feature_content_library', [
-                                                    'label' => [
-                                                        'class' => 'control-label',
-                                                        'text' => 'Social media library'
-                                                    ]
-                                                ]); ?>
+                                        <strong class="col-md-10 offset-md-2">Premier Features -- Individual purchase</strong>
+                                        <?php if ($location->is_cq_premier || $location->is_iris_plus): ?>
+                                            <div class="row">
+                                                <?php $membership = $location->is_iris_plus ? 'Iris+' : 'CQ Premier'; ?>
+                                                <div class="col-md-9 offset-md-3"><span class="glyphicon glyphicon-check"></span> Social Media Library is included in <?php echo $membership; ?> membership</div>
                                             </div>
-                                            <div id="content-library-expiration" class="col col-md-6" style="display:none;">
-                                                <?= $this->Form->control('content_library_expiration', [
-                                                    'label' => 'Expires',
-                                                    'type' => 'text',
-                                                    'class' => 'form-control datepicker',
-                                                    'div' => 'form-group mb0',
-                                                    'autocomplete' => 'off'
-                                                ])
-                                                ?>
+                                        <?php else: ?>
+                                            <div class="row">
+                                                <div class="col-md-3 offset-md-3">
+                                                    <?= $this->Form->control('feature_content_library', [
+                                                        'label' => 'Social media library'
+                                                    ]); ?>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <?= $this->Form->control('content_library_expiration', [
+                                                        'type' => 'date',
+                                                        'min' => date("Y-m-d", strtotime('today')),
+                                                        'label' => [
+                                                            'text' => 'Expires',
+                                                            'id' => 'content-library-expiration-label',
+                                                            'class' => 'ml10'],
+                                                        //'empty' => true,
+                                                        'default' => '',
+                                                        'required' => true
+                                                    ]) ?>
+                                                </div>
                                             </div>
-                                        </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <hr class="clearfix">
                                     <div id="versions">
