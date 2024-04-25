@@ -663,12 +663,14 @@ insertLabelBefore(document.querySelector(".provider .checkbox .show-license"), "
 const borderRadioElements = document.querySelectorAll(".border-radio");
 
 //remove selected-border class and add to recently clicked selection
-const handleClick = (e) => {
+const handleClick = e => {
+  const parentDiv = e.target.closest('.border-radio');
   const selectedBorderElement = document.querySelector(".selected-border");
+  
   if (selectedBorderElement) {
     selectedBorderElement.classList.remove("selected-border");
   }
-  e.target.classList.add("selected-border");
+  parentDiv.classList.add('selected-border');
 };
 
 borderRadioElements.forEach((element) => {

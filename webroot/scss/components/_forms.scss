@@ -100,8 +100,11 @@ form {
     border-color: $brand-light;
   }
 
-  label {
+  label.control-label {
     padding: 10px 20px;
+  }
+
+  .control-label {
     border: 3px solid #ddd;
   }
 

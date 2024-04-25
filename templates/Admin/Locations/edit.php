@@ -224,7 +224,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <hr class="mt25">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <label class="col col-md-2 control-label">Linked Locations</label>
+                                            <label class="col col-md-2-override control-label">Linked Locations</label>
                                             <div class="clearfix"></div>
                                             <table class="table-striped table-bordered col-md-offset-2 col-md-10 p0">
                                                 <?php foreach ($uniqueLocationLinks as $key => $linkedLocationId): ?>
@@ -306,10 +306,10 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <!-- *** TODO: This code will need to be updated once logo uploading added *** -->
                                                 <div>
                                                     <label class="col col-md-3 control-label">Clinic logo</label>
-                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
+                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
+                                                        <tbody class="d-block">
+                                                            <tr class="d-block">
+                                                                <td class="d-block">
                                                                     <img class="ml60 mb10" id="photo-thumb-logo" src="<?php if(!empty($location->logo_url)){echo '/cloudfiles/clinics/' . $location->logo_url;} ?>">
                                                                 <?= $this->Form->control("logo_file", [
                                                                         'type' => 'file',
@@ -328,13 +328,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <!-- Photo Album -->
                                                 <div>
                                                     <label class="col col-md-3 control-label">Photos</label><div class="clearfix"></div>
-                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9">
+                                                    <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
                                                         <tbody>
                                                             <!-- *** TODO: This code will need to be updated once locationphoto added *** -->
                                                             <?php foreach ($location->location_photos as $key => $photo): ?>
                                                                 <?php if (!empty($photo->photo_url)): ?>
                                                                     <tr>
-                                                                        <td>
+                                                                        <td class="w-100">
                                                                             <span class="hidden"><?= $photo->id; ?></span>
                                                                             <div class='row mt5 mb10'>
                                                                                 <div class='col-md-offset-3 col-md-9'>
@@ -517,10 +517,10 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 <label for="LocationAdBorder" class="col col-md-3 control-label">Border</label>
                                                                 <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
                                                                 <div class="col col-md-9">
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'blank'){ echo ' selected-border';} ?>"><label for="LocationAdBlank" class="col control-label"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php //if($locationAd->border == 'blank'){ echo ' checked';} ?>> No Border</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dashed'){ echo ' selected-border';} ?>"><label for="LocationAdDashed" class="col control-label border-dashed"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php //if($locationAd->border == 'border-dashed'){ echo ' checked';} ?>> Dashed</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-dotted'){ echo ' selected-border';} ?>"><label for="LocationAdDotted" class="col control-label border-dotted"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php //if($locationAd->border == 'border-dotted'){ echo ' checked';} ?>> Dotted</label></div>
-                                                                    <div class="col-md-3 border-radio<?php //if($locationAd->border == 'border-inset'){ echo ' selected-border';} ?>"><label for="LocationAdInset" class="col control-label border-inset"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php //if($locationAd->border == 'border-inset'){ echo ' checked';} ?>> Inset</label></div>
+                                                                    <div class="col-md-3 border-radio<?php if($location->location_ad->border == 'blank'){ echo ' selected-border';} ?>"><label for="LocationAdBlank" class="col control-label w-100 tac"><input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?php //if($locationAd->border == 'blank'){ echo ' checked';} ?>> No Border</label></div>
+                                                                    <div class="col-md-3 border-radio<?php if($location->location_ad->border == 'border-dashed'){ echo ' selected-border';} ?>"><label for="LocationAdDashed" class="col control-label border-dashed w-100 tac"><input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?php //if($locationAd->border == 'border-dashed'){ echo ' checked';} ?>> Dashed</label></div>
+                                                                    <div class="col-md-3 border-radio<?php if($location->location_ad->border == 'border-dotted'){ echo ' selected-border';} ?>"><label for="LocationAdDotted" class="col control-label border-dotted w-100 tac"><input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?php //if($locationAd->border == 'border-dotted'){ echo ' checked';} ?>> Dotted</label></div>
+                                                                    <div class="col-md-3 border-radio<?php if($location->location_ad->border == 'border-inset'){ echo ' selected-border';} ?>"><label for="LocationAdInset" class="col control-label border-inset w-100 tac"><input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?php //if($locationAd->border == 'border-inset'){ echo ' checked';} ?>> Inset</label></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -596,13 +596,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <span class="hidden"><?= $location->location_hour->id; ?></span>
                                         <?php foreach ($days as $day): ?>
                                             <tr>
-                                                <td><?php echo date("l", strtotime($day)); ?></td>
+                                                <td><?= date("l", strtotime($day)) ?></td>
                                                 <td class="form-inline">
                                                     <?= $this->Form->control("LocationHour.".$day."_open", [
                                                         'label' => false,
                                                         'type' => 'time',
                                                         'empty' => true,
-                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'})
+                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'}) ?: '08:00'
                                                     ]) ?>
                                                 </td>
                                                 <td>
@@ -610,7 +610,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         'label' => false,
                                                         'type' => 'time',
                                                         'empty' => true,
-                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'})
+                                                        'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'}) ?: '17:00'
                                                     ]) ?>
                                                 </td>
                                                 <td>

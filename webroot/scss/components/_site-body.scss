@@ -171,6 +171,12 @@
 	    padding: 0;
 	    border: 0;
 	  }
+
+	  &[disabled] {
+	    cursor: not-allowed;
+	    background-color: #eee;
+	    opacity: 1;
+	  }
 	}
 
 	.form-check {
@@ -501,5 +507,39 @@
 	  [data-hh-side-nav] {
 	    display: block;
 	  }
+	}
+
+	.notes {
+		margin: 20px 0px;
+	}
+	.single_note {
+		padding: 5px;
+		border: 1px solid #DDD;
+
+		&:nth-child(even) {
+			background: #F9F9F9;
+		}
+
+		table {
+			width: 100%;
+		}
+
+		.note_who {
+			width: 140px;
+		}
+
+		.when {
+			width: 210px;
+			text-align: right;
+		}
+
+		.delete {
+			width: 90px;
+			text-align: right;
+		}
+
+		.status {
+			text-align: center;
+		}
 	}
 }

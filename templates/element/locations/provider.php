@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 ?>
 
 <?php $hidingBasicProviders = (Configure::read('country') != 'CA' && $isBasicClinic && $key >= 1 && empty($new)); ?>
-<div class="well provider" provider="<?php echo $key; ?>">
+<div class="well provider" provider="<?= $key ?>">
 	<?php if (!empty($new)): ?>
 		<div class="control-group mb0">
 			<div class="controls">
@@ -91,7 +91,7 @@ use Cake\Core\Configure;
 
 	<div class="col-md-12 mb20 form-group pl0">
 		<div class="checkbox form-check form-switch pl0 w-100">
-				<?= $this->Form->label('Provider.' . $key . '.is_ida_verified', 'Is IDA verified', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
+				<?= $this->Form->label('Provider.' . $key . '.is_ida_verified', 'IDA verified provider', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
 				<?= $this->Form->checkbox('Provider.' . $key . '.is_ida_verified', [
 					'type' => 'checkbox',
 					'class' => 'form-check-input ml0'
