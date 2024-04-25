@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Make validation errors on tabs more visible
   function displayErrorsOnTabs() {
-    document.querySelectorAll('input:invalid, textarea:invalid, input.form-error, textarea.form-error').forEach(input => {
+    document.querySelectorAll('input:invalid, textarea:invalid, select:invalid, input.form-error, textarea.form-error, select.form-error').forEach(input => {
       const parentDiv = input.parentElement;
       if (parentDiv) {
         parentDiv.classList.add('has-error');

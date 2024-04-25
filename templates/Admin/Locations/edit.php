@@ -44,35 +44,43 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                 <div class="form">
                     <?= $this->Form->create($location) ?>
                     <fieldset>
-                        <?php
-                            echo $this->Form->control('title');
-                            echo '<div class="col-md-3 offset-md-3 pl0 mb-3">';
-                            echo $this->Form->control('is_active');
-                            echo '</div>';
-                            echo '<div class="col-md-3 pl0 mb-3">';
-                            echo $this->Form->control('is_show', ['required' => true]);
-                            echo '</div>';
-                            echo '<div class="form-group">';
-                            echo '<div class="col-md-9 offset-md-3 pl0 mb10">';
-                            echo $location->is_yhn ? '<span class="badge bg-yhn bi bi-globe-americas mr5"> YHN ' . $location->yhn_tier . '</span>' : '';
-                            echo $location->is_cqp ? '<span class="badge bg-cqp bi bi-briefcase-fill mr5">CQP ' . $location->cqp_tier . '</span>' : '';
-                            echo $location->_ ? '<span class="badge bg-cqp mr5">CQ Premier</span>' : '';
-                            echo $location->is_iris_plus ? '<span class="badge bg-earq mr5">Iris+</span>' : '';
-                            echo $location->is_call_assist ? '<span class="badge bg-success bi bi-telephone-fill mr5"> Call Concierge</span>' : '<span class="badge bg-danger bi bi-telephone-fill"> Not Call Concierge</span>';
-                            echo $location->is_retail ? '<span class="badge bg-primary mr5">Retail</span>' : '';
-                            echo '</div>';
-                            echo '</div>';
-                            echo $this->Form->control('listing_type', [
-                                'type' => 'select',
-                                'options' => Location::$listingTypes,
-                                'class' => 'form-control',
-                                'div' => ['class' => 'form-group mb5'],
-                                'required' => false
+                        <?= $this->Form->control('title') ?>
+                        <div class="col-md-2 offset-md-3 pl0">
+                            <?= $this->Form->control('is_active') ?>
+                         </div>
+                         <div class="col-md-3">
+                            <?= $this->Form->control('is_show') ?>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-9 offset-md-3">
+                                <?php
+                                echo $location->is_yhn ? '<span class="badge bg-yhn bi bi-globe-americas mr5"> YHN ' . $location->yhn_tier . '</span>' : ''; 
+                                echo $location->is_cqp ? '<span class="badge bg-cqp bi bi-briefcase-fill mr5">CQP ' . $location->cqp_tier . '</span>' : ''; 
+                                echo $location->is_cq_premier ? '<span class="badge bg-cqp mr5">CQ Premier</span>' : '';
+                                echo $location->is_iris_plus ? '<span class="badge bg-earq mr5">Iris+</span>' : '';
+                                echo $location->is_call_assist ? '<span class="badge bg-success bi bi-telephone-fill mr5"> Call Concierge</span>' : '<span class="badge bg-danger bi bi-telephone-fill"> Not Call Concierge</span>';
+                                echo $location->is_retail ? '<span class="badge bg-primary mr5">Retail</span>' : '';
+                                ?>
+                            </div>
+                        </div>
+                        <?= $this->Form->control('listing_type', [
+                            'type' => 'select',
+                            'options' => Location::$listingTypes,
+                            'required' => false
+                        ]); ?>
+                        <div class="col-md-3 offset-md-3 pl0">
+                            <?= $this->Form->control('is_listing_type_frozen', ['label' => ' Freeze Listing Type']) ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php
+                            echo $this->Form->control('frozen_expiration', [
+                                'type' => 'date',
+                                'min' => date("Y-m-d", strtotime('today')),
+                                'label' => 'Expires',
+                                'default' => ''
                             ]);
-                            echo '<div class="col-md-9 offset-md-3 pl0 mb-3">';
-                            echo $this->Form->control('is_listing_type_frozen', ['label' => ' Freeze Listing Type']);
-                            echo '</div>';
-                        ?>
+                            ?>
+                        </div>
                         <table class="table table-striped table-bordered table-condensed mb5">
                             <tbody>
                                 <tr>
@@ -187,8 +195,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     </div>
                                     <div class="col-md-6">
                                         <?= $this->Form->control('address_2') ?>
-                                        <!-- TODO: state should be a select -->
-                                        <?= $this->Form->control('state') ?>
+                                        <?= $this->Form->control('state', [
+                                            'label' => ucfirst(Configure::read('stateLabel')),
+                                            'options' => Configure::read('states')]) ?>
                                         <div class="col-md-9 offset-md-3 pl0">
                                             <?= $this->Form->control('is_mobile', [
                                                 'label' => ' Mobile-only clinic?']) ?>
@@ -1411,7 +1420,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <?php if ($location->is_cq_premier || $location->is_iris_plus): ?>
                                             <div class="row">
                                                 <?php $membership = $location->is_iris_plus ? 'Iris+' : 'CQ Premier'; ?>
-                                                <div class="col-md-9 offset-md-3"><span class="glyphicon glyphicon-check"></span> Social Media Library is included in <?php echo $membership; ?> membership</div>
+                                                <div class="col-md-9 offset-md-3"><span class="glyphicon glyphicon-check"></span> Social Media Library is included in <?= $membership ?> membership</div>
                                             </div>
                                         <?php else: ?>
                                             <div class="row">
@@ -1424,22 +1433,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <?= $this->Form->control('content_library_expiration', [
                                                         'type' => 'date',
                                                         'min' => date("Y-m-d", strtotime('today')),
-                                                        'label' => [
-                                                            'text' => 'Expires',
-                                                            'id' => 'content-library-expiration-label',
-                                                            'class' => 'ml10'],
-                                                        //'empty' => true,
-                                                        'default' => '',
-                                                        'required' => true
+                                                        'label' => 'Expires',
+                                                        'default' => ''
                                                     ]) ?>
                                                 </div>
                                             </div>
                                         <?php endif; ?>
                                     <?php endif; ?>
-                                    <hr class="clearfix">
-                                    <div id="versions">
-                                        <a href="#" id="load-versions" class="btn btn-info">Load Versions</a> <img id="version-loader" src="/img/ajax-loader.gif" class="hide">
-                                    </div>
                                 </div>
                             </div>
                         </div>

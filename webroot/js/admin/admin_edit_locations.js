@@ -108,11 +108,10 @@ class locationsAdminEdit {
       editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
     });
     document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
-    /*** TODO: add frozen-expiration field to view: ***
     document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#is-listing-type-frozen');
+      editObj.onChangeFeature(this.checked, '#frozen-expiration');
     });
-    document.getElementById('is-listing-type-frozen').dispatchEvent(new Event('change'));*/
+    document.getElementById('is-listing-type-frozen').dispatchEvent(new Event('change'));
     document.getElementById('feature-content-library').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, '#content-library-expiration');
     });
