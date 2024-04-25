@@ -370,7 +370,6 @@ class ReviewsTable extends Table
         // after I included the no-clinic-email condition.
         // I *think* this could be very clean with enums, but maybe not worth it :)
         if ($sendReviewEmail !== false) {
-            $mailer = $this->getMailer('Review');
             $locationNotes = $this->fetchTable('LocationNotes');
 
             // Set up note body
@@ -386,26 +385,28 @@ class ReviewsTable extends Table
                     break;
             }
 
-            $locationEmail = $this
+            $locationEmails = $this
                 ->getTableLocator()
                 ->get('Locations')
-                ->findById($entity->location_id)
-                ->first()
-                ->email;
+                ->getEmailList($entity->location_id);
 
-            // If there is no location email, alert site admins.
-            if ($locationEmail === '') {
-                 $mailer->send('noEmailSentToClinic', [$entity]);
+            // If there are no location emails, alert site admin(s).
+            if ($locationEmails === []) {
+                $this->sendReviewEmail(
+                    'noEmailSentToClinic',
+                    $entity,
+                    [Configure::read('customer-support-email')]
+                );
             } else {
                 switch ($sendReviewEmail) {
                     case 'emailPositiveReviewReceived':
-                        $mailer->send('emailPositiveReviewReceived', [$entity, $locationEmail]);
+                        $this->sendReviewEmail('emailPositiveReviewReceived', $entity, $locationEmails);
                         break;
                     case 'emailNegativeReviewReceived':
-                        $mailer->send('emailNegativeReviewReceived', [$entity, $locationEmail]);
+                        $this->sendReviewEmail('emailNegativeReviewReceived', $entity, $locationEmails);
                         break;
                     case 'emailReviewResponsePosted':
-                        $mailer->send('emailReviewResponsePosted', [$entity, $locationEmail]);
+                        $this->sendReviewEmail('emailReviewResponsePosted', $entity, $locationEmails);
                         break;
                 }
             }
@@ -539,5 +540,21 @@ class ReviewsTable extends Table
                 return $exp->eq('status', $options['status']);
             }
         });
+    }
+
+
+    /**
+     * Send Review notification emails
+     *
+     * @param string $reviewEmailType Type of Review notification email
+     * @param \Cake\Datasource\EntityInterface $entity Review entity
+     * @param array $reviewEmailAddresses Array of location's emails
+     */
+    public function sendReviewEmail(string $reviewEmailType, EntityInterface $reviewEntity, array $reviewEmailAddresses)
+    {
+        $mailer = $this->getMailer('Review');
+        foreach ($reviewEmailAddresses as $toEmail) {
+           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail]);
+        }
     }
 }

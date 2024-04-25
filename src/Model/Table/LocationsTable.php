@@ -1931,4 +1931,44 @@ class LocationsTable extends Table
         $location->is_show = $isShow;
         $this->save($location);
     }
+
+    /**
+    * Get a list of emails to send clinic notifications to.
+    * sends to all LocationEmails.
+    * @param integer $locationId
+    * @return array of email addresses
+    */
+    public function getEmailList($locationId)
+    {
+        $location = $this->get($locationId, [
+            'contain' => ['LocationEmails', 'Users']
+        ]);
+
+        $emails = [];
+
+        // Location Email
+        if ($location->has('email')) {
+            $emails[] = $location->email;
+        }
+
+        // Extra 'Location Emails' for notifications
+        if ($location->has('location_emails')) {
+            foreach ($location->location_emails as $locationEmail) {
+                if ($locationEmail->hasValue('email')) { // Not NULL by default
+                    $emails[] = $locationEmail->email;
+                }
+            }
+        }
+
+        // Location User Emails
+        if ($location->has('users')) {
+            foreach ($location->users as $user) {
+                if ($user->hasValue('email')) { // Not NULL by default
+                    $emails[] = $user->email;
+                }
+            }
+        }
+
+        return $emails;
+    }
 }
