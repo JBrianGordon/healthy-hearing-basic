@@ -1947,7 +1947,7 @@ class LocationsTable extends Table
         $emails = [];
 
         // Location Email
-        if ($location->has('email')) {
+        if ($location->hasValue('email')) {
             $emails[] = $location->email;
         }
 
