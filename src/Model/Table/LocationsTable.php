@@ -558,8 +558,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('mobile_text')
             ->maxLength('mobile_text', 400)
-            ->requirePresence('mobile_text', 'create')
-            ->notEmptyString('mobile_text');
+            ->allowEmptyString('mobile_text');
 
         $validator
             ->integer('radius')
@@ -927,14 +926,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->requirePresence('direct_book_url', 'create')
-            ->notEmptyString('direct_book_url');
+            ->allowEmptyString('direct_book_url');
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->requirePresence('direct_book_iframe', 'create')
-            ->notEmptyString('direct_book_iframe');
+            ->allowEmptyString('direct_book_iframe');
 
         $validator
             ->boolean('is_yhn')
@@ -973,8 +970,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('optional_message')
             ->maxLength('optional_message', 400)
-            ->requirePresence('optional_message', 'create')
-            ->notEmptyString('optional_message');
+            ->allowEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
@@ -1929,5 +1925,45 @@ class LocationsTable extends Table
         $location = $this->get($locationId);
         $location->is_show = $isShow;
         $this->save($location);
+    }
+
+    /**
+    * Get a list of emails to send clinic notifications to.
+    * sends to all LocationEmails.
+    * @param integer $locationId
+    * @return array of email addresses
+    */
+    public function getEmailList($locationId)
+    {
+        $location = $this->get($locationId, [
+            'contain' => ['LocationEmails', 'Users']
+        ]);
+
+        $emails = [];
+
+        // Location Email
+        if ($location->hasValue('email')) {
+            $emails[] = $location->email;
+        }
+
+        // Extra 'Location Emails' for notifications
+        if ($location->has('location_emails')) {
+            foreach ($location->location_emails as $locationEmail) {
+                if ($locationEmail->hasValue('email')) { // Not NULL by default
+                    $emails[] = $locationEmail->email;
+                }
+            }
+        }
+
+        // Location User Emails
+        if ($location->has('users')) {
+            foreach ($location->users as $user) {
+                if ($user->hasValue('email')) { // Not NULL by default
+                    $emails[] = $user->email;
+                }
+            }
+        }
+
+        return $emails;
     }
 }
