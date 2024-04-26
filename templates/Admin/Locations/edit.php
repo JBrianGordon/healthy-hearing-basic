@@ -770,17 +770,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 <span class="bi bi-x-square-fill" style="color:red;"></span> Call Concierge is disabled. The CallSource number will route directly to clinic.
                                             </div>
                                         <?php endif; ?>
-                                        <div class="col-md-12 p0">
-                                        <?= $this->Form->control('is_bypassed', [
-                                            'label' => [
-                                                'text' => 'Send outbound survey calls directly to consumer<br><span class="text-muted">(Clinic will not answer)</span>',
-                                                'escape' => false,
-                                                'class' => 'pt0'
-                                            ],
-                                            'type' => 'select',
-                                            'options' => [0 => 'No', 1 => 'Yes']
-                                        ]); ?>
-                                        </div>
                                         <?= $this->Form->control('direct_book_type', [
                                             'label' => 'Direct book type',
                                             'type' => 'select',

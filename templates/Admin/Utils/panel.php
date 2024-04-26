@@ -46,8 +46,8 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                   <h5 class="card-header bg-primary text-white panel-heading"><?= $menuHeader ?></h5>
                                   <div class="card-body">
                                     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-2 w-100 mx-auto">
-                                    <?php foreach ($menuContents as $itemTitle => $itemContents) : ?>
-                                        <?php if (array_key_exists('items', $itemContents)) : ?>
+                                      <?php foreach ($menuContents as $itemTitle => $itemContents) : ?>
+                                        <?php if (array_key_exists('items', $itemContents)): ?>
                                           <div class="col dropdown">
                                             <button class="btn btn-default dropdown-toggle w-100 rounded-pill"
                                               type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -77,7 +77,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                               </ul>
                                             <?php endif; ?>
                                           </div>
-                                        <?php else : ?>
+                                        <?php elseif (!empty($itemContents)): ?>
                                           <div class="col">
                                             <a class="btn btn-default w-100 rounded-pill"
                                               href="<?= $itemContents['url'] ?>"
@@ -90,7 +90,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                             </a>
                                           </div>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
+                                      <?php endforeach; ?>
                                     </div>
                                   </div>
                                 </div>

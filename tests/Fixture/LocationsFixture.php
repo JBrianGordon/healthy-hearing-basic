@@ -129,7 +129,6 @@ class LocationsFixture extends TestFixture
                 'is_cqp' => 1,
                 'is_cq_premier' => 1,
                 'is_iris_plus' => 1,
-                'is_bypassed' => 1,
                 'is_call_assist' => 1,
                 'timezone' => 'Lorem ipsum dolor sit amet',
                 'optional_message' => 'Lorem ipsum dolor sit amet',
