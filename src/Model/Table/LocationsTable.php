@@ -183,7 +183,6 @@ class LocationsTable extends Table
             ->boolean('is_cqp')
             ->boolean('is_cq_premier')
             ->boolean('is_iris_plus')
-            ->boolean('is_bypassed')
             ->boolean('is_call_assist')
             ->boolean('is_service_agreement_signed')
             ->boolean('is_last_edit_by_owner')
@@ -952,10 +951,6 @@ class LocationsTable extends Table
         $validator
             ->boolean('is_iris_plus')
             ->notEmptyString('is_iris_plus');
-
-        $validator
-            ->boolean('is_bypassed')
-            ->notEmptyString('is_bypassed');
 
         $validator
             ->boolean('is_call_assist')
