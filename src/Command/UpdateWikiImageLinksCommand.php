@@ -73,11 +73,21 @@ class UpdateWikiImageLinksCommand extends Command
             foreach ($imgs as $img) {
                 // Get the src attribute
                 $oldSrc = $img->getAttribute('src');
-                $oldSrc = 'https://www.healthyhearing.com' . $this->urlEncoder($oldSrc);
+                $oldSrcWithUrl = 'https://www.healthyhearing.com' . $oldSrc;
+                $oldSrcEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($oldSrc);
+                $io->out($oldSrcWithUrl);
 
                 // Check if any old filename partially matches the src
                 foreach ($filenameMap as $oldFilename => $newFilename) {
-                    if (strpos($oldSrc, $oldFilename) !== false) {
+                    if (strpos($oldSrcWithUrl, $oldFilename) !== false) {
+                        // Update the src attribute
+                        $img->setAttribute('src', $newFilename);
+                        break; // Stop checking other old filenames
+                    }
+                }
+                // Check if any old filename partially matches the src with encoding
+                foreach ($filenameMap as $oldFilename => $newFilename) {
+                    if (strpos($oldSrcEncoded, $oldFilename) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
                         break; // Stop checking other old filenames
@@ -94,10 +104,19 @@ class UpdateWikiImageLinksCommand extends Command
 
             // ---- Facebook Image ---- //
 
-            $facebookImage = 'https://www.healthyhearing.com' . $this->urlEncoder($wiki->facebook_image);
+            $facebookImage = 'https://www.healthyhearing.com' . $wiki->facebook_image;
+            $facebookImageEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($wiki->facebook_image);
             // Check if any old filename matches the wiki record's facebook_image
             foreach ($filenameMap as $oldFilename => $newFilename) {
                 if (strpos($facebookImage, $oldFilename) !== false) {
+                    // Update the wiki record's facebook_image
+                    $wiki->facebook_image = $newFilename;
+                    break; // Stop checking other old filenames
+                }
+            }
+            // Check if any old filename matches the wiki record's facebook_image with encoding
+            foreach ($filenameMap as $oldFilename => $newFilename) {
+                if (strpos($facebookImageEncoded, $oldFilename) !== false) {
                     // Update the wiki record's facebook_image
                     $wiki->facebook_image = $newFilename;
                     break; // Stop checking other old filenames

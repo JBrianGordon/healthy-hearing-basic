@@ -63,21 +63,34 @@ class UpdateUserImageLinksCommand extends Command
 
             // ---- User image_url ---- //
 
-            $imageUrl = 
-                'https://www.healthyhearing.com' . 
-                str_replace('/img/about', '/images', $this->urlEncoder($user->image_url));
+            if ($user->image_url !== NULL) {
+                $imageUrl = 
+                    'https://www.healthyhearing.com' . 
+                    str_replace('/img/about', '/images', $user->image_url);
+                $imageUrlEncoded = 
+                    'https://www.healthyhearing.com' . 
+                    str_replace('/img/about', '/images', $this->urlEncoder($user->image_url));
 
-            // Check if any old filename matches the user record's image_url
-            foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($imageUrl, $oldFilename) !== false) {
-                    // Update the user record's image_url
-                    $user->image_url = $newFilename;
-                    break; // Stop checking other old filenames
+                // Check if any old filename matches the user record's image_url
+                foreach ($filenameMap as $oldFilename => $newFilename) {
+                    if (strpos($imageUrl, $oldFilename) !== false) {
+                        // Update the user record's image_url
+                        $user->image_url = $newFilename;
+                        break; // Stop checking other old filenames
+                    }
                 }
-            }
+                // Check if any old filename matches the user record's image_url with encoding
+                foreach ($filenameMap as $oldFilename => $newFilename) {
+                    if (strpos($imageUrlEncoded, $oldFilename) !== false) {
+                        // Update the user record's image_url
+                        $user->image_url = $newFilename;
+                        break; // Stop checking other old filenames
+                    }
+                }
 
-            // Save the entity back to the database
-            $usersTable->save($user);
+                // Save the entity back to the database
+                $usersTable->save($user);                
+            }
         }
     }
 

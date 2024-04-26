@@ -11,9 +11,9 @@ use Cake\ORM\TableRegistry;
 use DOMDocument;
 
 /**
- * UpdateProviderImageLinks command.
+ * UpdateLocationPhotosLinks command.
  */
-class UpdateProviderImageLinksCommand extends Command
+class UpdateLocationPhotosLinksCommand extends Command
 {
     /**
      * Hook method for defining this command's option parser.
@@ -54,44 +54,44 @@ class UpdateProviderImageLinksCommand extends Command
             fclose($handle);
         }
 
-        // Fetch all Provider entities
-        $providersTable =$this->fetchTable('providers');
-        $providersItems = $providersTable->find('all');
+        // Fetch all LocationPhoto entities
+        $locationPhotosTable =$this->fetchTable('location_photos');
+        $locationPhotosItems = $locationPhotosTable->find('all');
 
-        foreach ($providersItems as $provider) {
-            $io->out('Provider ID: ' . $provider->id);
+        foreach ($locationPhotosItems as $locationPhoto) {
+            $io->out('Location Photo ID: ' . $locationPhoto->id);
 
-            // ---- Provider thumb_url ---- //
+            // ---- Location Photo photo_url ---- //
 
-            $thumbUrl = 'https://www.healthyhearing.com/cloudfiles/clinicians/' . $provider->thumb_url;
-            $thumbUrlEncoded = 'https://www.healthyhearing.com/cloudfiles/clinicians/' . $this->urlEncoder($provider->thumb_url);
+            $photoUrl = str_replace('https://www.healthyhearing.com', '', $locationPhoto->photo_url);
+            $photoUrl = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $locationPhoto->photo_url;
+            $photoUrlEncoded = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $this->urlEncoder($locationPhoto->photo_url);
 
-            // Check if any old filename matches the provider record's thumb_url
+            // Check if any old filename matches the locationPhoto record's photo_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrl, $oldFilename) !== false) {
-                    // Update the provider record's thumb_url
-                    $provider->thumb_url = $newFilename;
+                if (strpos($photoUrl, $oldFilename) !== false) {
+                    // Update the locationPhoto record's photo_url
+                    $locationPhoto->photo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
-
-            // Check if any old filename matches the provider record's thumb_url with encoding
+            // Check if any old filename matches the locationPhoto record's photo_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrlEncoded, $oldFilename) !== false) {
-                    // Update the provider record's thumb_url
-                    $provider->thumb_url = $newFilename;
+                if (strpos($photoUrlEncoded, $oldFilename) !== false) {
+                    // Update the locationPhoto record's photo_url
+                    $locationPhoto->photo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
 
             // Save the entity back to the database
-            $providersTable->save($provider);
+            $locationPhotosTable->save($locationPhoto);
         }
     }
 
     public function urlEncoder($url)
     {
-        if ($url == null) {
+        if ($url === null) {
             return '';
         }
         return str_replace(
