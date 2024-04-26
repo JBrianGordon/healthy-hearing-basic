@@ -801,20 +801,17 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <div class="controls">
                                                 <div class="btn-group">
                                                     <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> Update or Create CS Number',
-                                                        ['action' => 'createUpdateCallSource', $id, '#' => 'CallAssist'],
+                                                        ['action' => 'createUpdateCallSource', $id],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-default']) ?>
-                                                    <!-- TODO -->
                                                     <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> End and create new CS Number',
-                                                        ['action' => 'cs_end_create', $id, '#' => 'CallAssist'],
+                                                        ['action' => 'cs_end_create', $id],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-info'],
                                                         'This will end this CS number, but leaves the CS customer active. Then creates a new CS number. Are you sure?') ?>
-                                                    <!-- TODO -->
                                                     <?= $this->Html->link('<i class="bi bi-eye-fill"></i> Raw Lookup',
-                                                        ['action' => 'call_source_raw', $id, '#' => 'CallAssist'],
+                                                        ['action' => 'call_source_raw', $id],
                                                         ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
-                                                    <!-- TODO -->
                                                     <?= $this->Html->link('<i class="bi bi-trash"></i> End CS Number',
-                                                        ['action' => 'end', $id, '#' => 'CallAssist'],
+                                                        ['action' => 'cs_end', $id],
                                                         ['class' => 'btn btn-xs btn-danger', 'escape' => false],
                                                         'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?') ?>
                                                 </div>

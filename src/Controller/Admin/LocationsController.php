@@ -220,19 +220,19 @@ class LocationsController extends BaseAdminController
     }
 
     // Create or update the CallSource number for this location
-    public function createUpdateCallSource($id = 0) {
+    public function createUpdateCallSource($locationId = 0) {
         // Since this is a manual method of modifying CS numbers with the button press,
         // we can allow CS access on the test account
         $this->Locations->CallSources->allowCsTest();
-        $result = $this->Locations->CallSources->saveCallSource($id);
+        $result = $this->Locations->CallSources->saveCallSource($locationId);
         $this->Locations->CallSources->disallowCsTest();
         if ($result) {
             $this->Flash->success('Call Source Number created/updated successfully!');
         } else {
-            $errors = r_implode('<br />',$this->Locations->CallSources->errors);
-            $this->Flash->error("Unable to obtain number from callsource <br />Error(s): " . $errors);
+            $errors = r_implode('<br>',$this->Locations->CallSources->errors);
+            $this->Flash->error("Unable to obtain number from CallSource.<br>Error(s): " . $errors, ['escape' => false]);
         }
-        return $this->redirect(['action' => 'edit', $id]);
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
     }
 
     // End the CS number and create a new one for this location
@@ -247,14 +247,26 @@ class LocationsController extends BaseAdminController
             if ($result) {
                 $this->Flash->success('CS number ended and new number created successfully.');
             } else {
-                $errors = $this->r_implode('<br>',$this->Location->CallSource->errors);
-                $this->Flash->error('Failed to create new CS number.<br>Error(s): ' . $errors);
+                $errors = r_implode('<br>',$this->Locations->CallSources->errors);
+                $this->Flash->error('Failed to create new CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
             }
         } else {
-            $errors = $this->r_implode('<br>',$this->Location->CallSource->errors);
-            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors);
+            $errors = r_implode('<br>', $this->Locations->CallSources->errors);
+            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
         }
-        return $this->redirect(['action' => 'edit', $locationId]);
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
+    }
+
+    // End the CS number for this location
+    public function csEnd($locationId = 0) {
+        // End all campaigns and inactivate the customer
+        if ($this->Locations->CallSources->endCallSource($locationId)) {
+            $this->Flash->success('CallSource number(s) ended successfully!');
+        } else {
+            $errors = r_implode('<br>', $this->Locations->CallSources->errors);
+            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
+        }
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
     }
 
     /**
