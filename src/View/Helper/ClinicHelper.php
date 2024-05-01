@@ -655,11 +655,12 @@ class ClinicHelper extends Helper
             unset($options['url_only']);
             return '<div class="profile-pic-container"><img src="'.$url.'" loading="lazy"' . $classLead . $options['class'] . $classClose . ' alt="'.$options['alt'].'" width="'.$options['width'].'" height="'.$options['height'].'"></div>';
         }
-        /*
-        $image_path = WWW_ROOT . $provider->thumb_url;
-        if(!empty($provider->thumb_url) && file_exists($image_path)){
-        return $this->Html->image($provider->thumb_url);
-        }*/
+        if (!empty($provider->thumb_url)) {
+            $image_path = WWW_ROOT . $provider->thumb_url;
+            if (file_exists($image_path)) {
+                return $this->Html->image($provider->thumb_url);
+            }
+        }
         return "";
     }
 

@@ -29,7 +29,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
             <div class="btn-group">
                 <?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
                 <?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'locations', 'action' => 'view', $location->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-                <?= $this->Html->link(__(' Clinic Edit'), ['prefix' => false, 'controller' => 'locations', 'action' => 'edit', $location->id], ['class' => 'btn btn-default bi bi-pencil-fill', 'target' => '_blank']) ?>
+                <?= $this->Html->link(__(' Clinic Edit'), ['prefix' => 'Clinic', 'controller' => 'locations', 'action' => 'edit', $location->id], ['class' => 'btn btn-default bi bi-pencil-fill', 'target' => '_blank']) ?>
                 <?= $this->Html->link(__(' Copy Location Data'), ['action' => 'copy', $location->id], ['class' => 'btn btn-default bi bi-clipboard2-check-fill']) ?>
                 <?= $this->Html->link(__(' Calls'), ['prefix' => 'Admin', 'controller' => 'caCalls', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
                 <?= $this->Html->link(__(' Call Call Groups'), ['prefix' => 'Admin', 'controller' => 'caCallGroups', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
