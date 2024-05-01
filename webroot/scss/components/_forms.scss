@@ -11,6 +11,12 @@ form {
     margin-bottom: 30px;
   }
 
+  .editor {
+    position: absolute;
+    width: 1px!important;
+    height: 1px;
+  }
+
   &#contentForm, &#wikisForm {
     .provider {
       .ck-editor__main {

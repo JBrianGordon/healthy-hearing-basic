@@ -757,7 +757,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                 'label' => 'Direct book URL',
                                                 'type' => 'textarea',
                                                 'rows' => 4,
-                                                'required' => true,
+                                                'required' => false,
                                             ]); ?>
                                             <?= $this->Form->control('direct_book_iframe', [
                                                 'label' => 'Direct book iFrame',

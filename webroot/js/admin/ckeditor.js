@@ -261,7 +261,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 serviceId: servId,
                 srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
             }
-        	}).catch( error => {
+        	}).then(editor => {
+                const editorElements = document.querySelectorAll(".editor");
+              
+                editorElements.forEach(element => {
+                  element.style.display = "block";
+                });
+            }).catch( error => {
     	    console.error( error );
         });
     });

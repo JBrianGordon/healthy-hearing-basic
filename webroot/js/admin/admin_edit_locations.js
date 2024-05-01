@@ -411,17 +411,13 @@ class locationsAdminEdit {
 
   onChangeDirectBookType(directBookType) {
     const directBookLinks = document.querySelector('#direct-book-links');
-    const directBookUrl = document.querySelector('#direct-book-url');
-    const directBookIframe = document.querySelector('#direct-book-iframe');
 
     if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
-      directBookLinks.style.display = 'block';
-      directBookUrl.required = true;
-      directBookIframe.required = true;
+      directBookLinks.style.position = 'static';
+      directBookLinks.style.zIndex = '1';
     } else {
-      directBookLinks.style.display = 'none';
-      directBookUrl.required = true;
-      directBookIframe.required = true;
+      directBookLinks.style.position = 'absolute';
+      directBookLinks.style.zIndex = '-1';
     }
   }
 
