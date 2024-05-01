@@ -65,21 +65,20 @@ class locationsAdminEdit {
       }
     }
 
-    /*** TODO: Where is selectByImport coming from???: ***
     const importSelectElements = document.querySelectorAll('.js-import-select');
     importSelectElements.forEach((element) => {
       element.addEventListener('change', function () {
         const importId = this.value;
-        editObj.selectByImport('import', importId);
+        editObj.selectImport(importId);
       });
       element.dispatchEvent(new Event('change'));
     });
-
+    /*
     const cqpImportSelectElements = document.querySelectorAll('.js-cqp-import-select');
     cqpImportSelectElements.forEach((element) => {
       element.addEventListener('change', function () {
         const cqpImportId = this.value;
-        editObj.selectByImport('cqpImport', cqpImportId);
+        editObj.selectCqpImport(cqpImportId);
       });
       element.dispatchEvent(new Event('change'));
     });*/
@@ -95,27 +94,36 @@ class locationsAdminEdit {
       }
     });
 
-    document.getElementById('direct-book-type').addEventListener('change', function () {
-      // If directBookType is EarQ or Blueprint, display and require the direct_book_url
-      // and direct_book_iframe fields. Otherwise hide those fields.
-      const directBookType = this.value;
-      let urlRequired = false;
-      if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
-        // Display and require the direct_book_url and direct_book_iframe fields
-        urlRequired = true;
-      }
-      editObj.onChangeFeature(urlRequired, '#direct-book-url');
-      editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
-    });
-    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
-    document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#frozen-expiration');
-    });
-    document.getElementById('is-listing-type-frozen').dispatchEvent(new Event('change'));
-    document.getElementById('feature-content-library').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#content-library-expiration');
-    });
-    document.getElementById('feature-content-library').dispatchEvent(new Event('change'));
+    const directBookTypeElement = document.getElementById('direct-book-type');
+    if (directBookTypeElement) {
+      directBookTypeElement.addEventListener('change', function () {
+        // If directBookType is EarQ or Blueprint, display and require the direct_book_url
+        // and direct_book_iframe fields. Otherwise hide those fields.
+        const directBookType = this.value;
+        let urlRequired = false;
+        if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
+          // Display and require the direct_book_url and direct_book_iframe fields
+          urlRequired = true;
+        }
+        editObj.onChangeFeature(urlRequired, '#direct-book-url');
+        editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
+      });
+      directBookTypeElement.dispatchEvent(new Event('change'));
+    }
+    const isListingTypeFrozenElement = document.getElementById('is-listing-type-frozen');
+    if (isListingTypeFrozenElement) {
+      isListingTypeFrozenElement.addEventListener('change', function () {
+        editObj.onChangeFeature(this.checked, '#frozen-expiration');
+      });
+      isListingTypeFrozenElement.dispatchEvent(new Event('change'));
+    }
+    const featureContentLibraryElement = document.getElementById('feature-content-library');
+    if (featureContentLibraryElement) {
+      featureContentLibraryElement.addEventListener('change', function () {
+        editObj.onChangeFeature(this.checked, '#content-library-expiration');
+      });
+      featureContentLibraryElement.dispatchEvent(new Event('change'));
+    }
   /* TODO: add special-feature-expiration field to view: ***
     document.getElementById('feature-special-announcement').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, '#feature-special-announcement');

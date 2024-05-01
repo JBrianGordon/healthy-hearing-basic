@@ -68,19 +68,19 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                             'options' => Location::$listingTypes,
                             'required' => false
                         ]); ?>
-                        <div class="col-md-3 offset-md-3 pl0">
-                            <?= $this->Form->control('is_listing_type_frozen', ['label' => ' Freeze Listing Type']) ?>
-                        </div>
-                        <div class="col-md-6">
-                            <?php
-                            echo $this->Form->control('frozen_expiration', [
-                                'type' => 'date',
-                                'min' => date("Y-m-d", strtotime('today')),
-                                'label' => 'Expires',
-                                'default' => ''
-                            ]);
-                            ?>
-                        </div>
+                        <?php if (Configure::read('isTieringEnabled')): ?>
+                            <div class="col-md-3 offset-md-3 pl0">
+                                <?= $this->Form->control('is_listing_type_frozen', ['label' => ' Freeze Listing Type']) ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= $this->Form->control('frozen_expiration', [
+                                    'type' => 'date',
+                                    'min' => date("Y-m-d", strtotime('today')),
+                                    'label' => 'Expires',
+                                    'default' => ''
+                                ]); ?>
+                            </div>
+                        <?php endif; ?>
                         <table class="table table-striped table-bordered table-condensed mb5">
                             <tbody>
                                 <tr>
@@ -759,8 +759,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 </div>
 
                                 <!-- CallSource Tab -->
-                                <?php if (Configure::read('isCallAssistEnabled')): ?>
-                                    <div class="tab-pane" id="CallSource">
+                                <div class="tab-pane" id="CallSource">
+                                    <?php if (Configure::read('isCallAssistEnabled')): ?>
                                         <?php if ($location->is_call_assist): ?>
                                             <div class="well">
                                                 <span class="bi bi-check-lg" style="color:limegreen;"></span> Call Concierge is enabled. The CallSource number will route to our call center.
@@ -786,52 +786,52 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             'rows' => 4,
                                         ]); ?>
                                         <hr>
-                                        <div class="control-group mb20">
-                                            <div class="controls">
-                                                <div class="btn-group">
-                                                    <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> Update or Create CS Number',
-                                                        ['action' => 'createUpdateCallSource', $id],
-                                                        ['escape' => false, 'class' => 'btn btn-xs btn-default']) ?>
-                                                    <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> End and create new CS Number',
-                                                        ['action' => 'cs_end_create', $id],
-                                                        ['escape' => false, 'class' => 'btn btn-xs btn-info'],
-                                                        'This will end this CS number, but leaves the CS customer active. Then creates a new CS number. Are you sure?') ?>
-                                                    <?= $this->Html->link('<i class="bi bi-eye-fill"></i> Raw Lookup',
-                                                        ['action' => 'call_source_raw', $id],
-                                                        ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
-                                                    <?= $this->Html->link('<i class="bi bi-trash"></i> End CS Number',
-                                                        ['action' => 'cs_end', $id],
-                                                        ['class' => 'btn btn-xs btn-danger', 'escape' => false],
-                                                        'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?') ?>
-                                                </div>
+                                    <?php endif; ?>
+                                    <div class="control-group mb20">
+                                        <div class="controls">
+                                            <div class="btn-group">
+                                                <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> Update or Create CS Number',
+                                                    ['action' => 'createUpdateCallSource', $id],
+                                                    ['escape' => false, 'class' => 'btn btn-xs btn-default']) ?>
+                                                <?= $this->Html->link('<i class="bi bi-arrow-repeat"></i> End and create new CS Number',
+                                                    ['action' => 'cs_end_create', $id],
+                                                    ['escape' => false, 'class' => 'btn btn-xs btn-info'],
+                                                    'This will end this CS number, but leaves the CS customer active. Then creates a new CS number. Are you sure?') ?>
+                                                <?= $this->Html->link('<i class="bi bi-eye-fill"></i> Raw Lookup',
+                                                    ['action' => 'call_source_raw', $id],
+                                                    ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
+                                                <?= $this->Html->link('<i class="bi bi-trash"></i> End CS Number',
+                                                    ['action' => 'cs_end', $id],
+                                                    ['class' => 'btn btn-xs btn-danger', 'escape' => false],
+                                                    'This will end all CallSource campaigns for this location and inactivate this CS customer. Are you sure?') ?>
                                             </div>
                                         </div>
-                                        <table class="table table-striped table-bordered table-condensed mb10">
-                                            <tr>
-                                                <th>CallSource Number</th>
-                                                <th>Target Number</th>
-                                                <th>Clinic Number</th>
-                                                <th>Is Active</th>
-                                            </tr>
-                                            <?php foreach ($location->call_sources as $callSource): ?>
-                                                <tr>
-                                                    <td>
-                                                        <?= formatPhoneNumber($callSource->phone_number) ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= formatPhoneNumber($callSource->target_number) ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= formatPhoneNumber($callSource->clinic_number) ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= $callSource->is_active ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </table>
                                     </div>
-                                <?php endif; ?>
+                                    <table class="table table-striped table-bordered table-condensed mb10">
+                                        <tr>
+                                            <th>CallSource tracking number</th>
+                                            <th>Target number</th>
+                                            <th>Clinic number</th>
+                                            <th>Is Active</th>
+                                        </tr>
+                                        <?php foreach ($location->call_sources as $callSource): ?>
+                                            <tr>
+                                                <td>
+                                                    <?= formatPhoneNumber($callSource->phone_number) ?>
+                                                </td>
+                                                <td>
+                                                    <?= formatPhoneNumber($callSource->target_number) ?>
+                                                </td>
+                                                <td>
+                                                    <?= formatPhoneNumber($callSource->clinic_number) ?>
+                                                </td>
+                                                <td>
+                                                    <?= $callSource->is_active ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
 
                                 <!-- User Tab -->
                                 <div class="tab-pane" id="User">
@@ -969,298 +969,300 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <!-- US Imports Tab -->
                                 <!-- *** TODO: add import specific variables, e.g. $lastOticonImportDate *** -->
                                 <div class="tab-pane" id="Imports">
-                                    <h4>Imports</h4>
-                                    <div class="tabbable">
-                                        <ul class="nav nav-tabs import-tabs clearfix" role="tablist">
-                                            <?php if (Configure::read('isOticonImportEnabled')): ?>
-                                                <li class="nav-item">
-                                                    <button class="nav-link active" data-bs-target="#Oticon" data-bs-toggle="tab" aria-controls="Oticon" aria-expanded="true" type="button" role="tab">Oticon</button>
-                                                </li>
-                                            <?php endif; ?>
-                                            <?php if (Configure::read('isYhnImportEnabled')): ?>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" data-bs-target="#YHN" data-bs-toggle="tab" aria-controls="YHN" aria-expanded="true" type="button" role="tab">YHN</button>
-                                                </li>
-                                            <?php endif; ?>
-                                            <?php if (Configure::read('isCqpImportEnabled')): ?>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" data-bs-target="#CQP" data-bs-toggle="tab" aria-controls="CQP" aria-expanded="true" type="button" role="tab">CQP</button>
-                                                </li>
-                                            <?php endif; ?>
-                                        </ul>
-                                        <div class="tab-content mt10">
-                                            <!-- Oticon Tab -->
-                                            <div class="tab-pane active" id="Oticon">
-                                                <span><strong>Most recent Oticon import:</strong> <?= $lastOticonImportDate ?></span><br><br>
-                                                <?php if (!empty($location->oticon_tier)): ?>
-                                                    <!-- Show change status only if this in an active Oticon clinic -->
-                                                    <div class="form-group col-md-12">
-                                                        <div class="btn-group">
-                                                            <?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Field Statuses Without Accepting Oticon Changes', ['controller' => 'locations', 'action' => 'check_oticon', $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
+                                    <?php if (Configure::read('isYhnImportEnabled')): ?>
+                                        <!-- US Imports -->
+                                        <h4>Imports</h4>
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs import-tabs clearfix" role="tablist">
+                                                <?php if (Configure::read('isOticonImportEnabled')): ?>
+                                                    <li class="nav-item">
+                                                        <button class="nav-link active" data-bs-target="#Oticon" data-bs-toggle="tab" aria-controls="Oticon" aria-expanded="true" type="button" role="tab">Oticon</button>
+                                                    </li>
+                                                <?php endif; ?>
+                                                <?php if (Configure::read('isYhnImportEnabled')): ?>
+                                                    <li class="nav-item">
+                                                        <button class="nav-link" data-bs-target="#YHN" data-bs-toggle="tab" aria-controls="YHN" aria-expanded="true" type="button" role="tab">YHN</button>
+                                                    </li>
+                                                <?php endif; ?>
+                                                <?php if (Configure::read('isCqpImportEnabled')): ?>
+                                                    <li class="nav-item">
+                                                        <button class="nav-link" data-bs-target="#CQP" data-bs-toggle="tab" aria-controls="CQP" aria-expanded="true" type="button" role="tab">CQP</button>
+                                                    </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                            <div class="tab-content mt10">
+                                                <!-- Oticon Tab -->
+                                                <div class="tab-pane active" id="Oticon">
+                                                    <span><strong>Most recent Oticon import:</strong> <?= $lastOticonImportDate ?></span><br><br>
+                                                    <?php if (!empty($location->oticon_tier)): ?>
+                                                        <!-- Show change status only if this in an active Oticon clinic -->
+                                                        <div class="form-group col-md-12">
+                                                            <div class="btn-group">
+                                                                <?= $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Update Field Statuses Without Accepting Oticon Changes', ['controller' => 'locations', 'action' => 'check_oticon', $id], ['class' => 'btn btn-xs btn-default', 'escape' => false]) ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
+                                                        <div class="clearfix"></div>
+                                                        <table class="table table-striped table-bordered table-condensed">
+                                                            <tr>
+                                                                <th>Field</th>
+                                                                <th>Status</th>
+                                                                <th>HH value</th>
+                                                                <th>Oticon value</th>
+                                                                <th></th>
+                                                            </tr>
+                                                            <?php foreach (['email', 'phone', 'title', 'address'] as $field): ?>
+                                                                <?php $ucField = ucfirst($field); ?>
+                                                                <tr>
+                                                                    <td><?php echo $ucField; ?></td>
+                                                                    <td><?php //echo $this->Clinic->{"readable".$ucField."Status"}($this->request->data); ?></td>
+                                                                    <td>
+                                                                        <?php /*
+                                                                        if ($field == 'address') {
+                                                                            echo $this->Clinic->get('address').' ';
+                                                                            echo $this->Clinic->get('address_2').' ';
+                                                                            echo $this->Clinic->get('city').' ';
+                                                                            echo $this->Clinic->get('state').' ';
+                                                                            echo $this->Clinic->get('zip');
+                                                                        } else {
+                                                                            echo $this->Clinic->get($field);
+                                                                        }*/
+                                                                        ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?php /*
+                                                                        if ($field == 'address') {
+                                                                            echo $this->Clinic->getOticonField(null, 'address').' ';
+                                                                            echo $this->Clinic->getOticonField(null, 'address_2').' ';
+                                                                            echo $this->Clinic->getOticonField(null, 'city').' ';
+                                                                            echo $this->Clinic->getOticonField(null, 'state').' ';
+                                                                            echo $this->Clinic->getOticonField(null, 'zip');
+                                                                        } else {
+                                                                            echo $this->Clinic->getOticonField(null, $field);
+                                                                        } */
+                                                                        ?>
+                                                                    </td>
+                                                                    <td nowrap>
+                                                                        <?php /*
+                                                                        $confirmMessage = 'Are you sure?';
+                                                                        if ($field == 'phone') {
+                                                                            $confirmMessage .= ' This will also update the CallSource number for you.';
+                                                                        }
+                                                                        if ($field == 'address') {
+                                                                            $confirmMessage .= ' This will also re-geolocate the clinic for you.';
+                                                                        }*/
+                                                                        ?>
+                                                                        <? //endif; ?>
+                                                                        <?php /*echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span> Accept Oticon Change',
+                                                                            ['controller' => 'locations', 'action' => 'take_oticon', $this->request->data['Location']['id'], $field],
+                                                                            ['class' => 'btn btn-xs btn-danger pull-left m5', 'escape' => false],
+                                                                            $confirmMessage);*/ ?>
+                                                                        <?php /*echo $this->Form->control('is_'.$field.'_ignore', [
+                                                                            'label' => [
+                                                                                'class' => 'form-label',
+                                                                                'text' => 'Ignore '.$ucField.' Changes',
+                                                                            ],
+                                                                            'type' => 'checkbox',
+                                                                            'class' => false,
+                                                                            'wrapInput' => 'col-md-12'
+                                                                        ]);*/ ?>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
+                                                        </table>
+                                                        <hr>
+                                                    <?php endif; ?>
+                    
+                                                    <h4>Raw Parsed of Last XML from Oticon:</h4>
+                                                    <?php //$this->Clinic->lastXml($this->request->data); ?>
+                    
+                                                    <hr>
+                                                    <p><strong>Oticon Import Status</strong></p>
                                                     <table class="table table-striped table-bordered table-condensed">
                                                         <tr>
-                                                            <th>Field</th>
+                                                            <th>Import Date</th>
                                                             <th>Status</th>
-                                                            <th>HH value</th>
-                                                            <th>Oticon value</th>
-                                                            <th></th>
+                                                            <th>Oticon Tier</th>
+                                                            <th>HH Listing Type</th>
+                                                            <th>Active</th>
+                                                            <th>Show</th>
+                                                            <th>Grace Period</th>
                                                         </tr>
-                                                        <?php foreach (['email', 'phone', 'title', 'address'] as $field): ?>
-                                                            <?php $ucField = ucfirst($field); ?>
+                                                        <?php //foreach($this->request->data['ImportStatus'] as $importStatus): ?>
                                                             <tr>
-                                                                <td><?php echo $ucField; ?></td>
-                                                                <td><?php //echo $this->Clinic->{"readable".$ucField."Status"}($this->request->data); ?></td>
-                                                                <td>
-                                                                    <?php /*
-                                                                    if ($field == 'address') {
-                                                                        echo $this->Clinic->get('address').' ';
-                                                                        echo $this->Clinic->get('address_2').' ';
-                                                                        echo $this->Clinic->get('city').' ';
-                                                                        echo $this->Clinic->get('state').' ';
-                                                                        echo $this->Clinic->get('zip');
-                                                                    } else {
-                                                                        echo $this->Clinic->get($field);
-                                                                    }*/
-                                                                    ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php /*
-                                                                    if ($field == 'address') {
-                                                                        echo $this->Clinic->getOticonField(null, 'address').' ';
-                                                                        echo $this->Clinic->getOticonField(null, 'address_2').' ';
-                                                                        echo $this->Clinic->getOticonField(null, 'city').' ';
-                                                                        echo $this->Clinic->getOticonField(null, 'state').' ';
-                                                                        echo $this->Clinic->getOticonField(null, 'zip');
-                                                                    } else {
-                                                                        echo $this->Clinic->getOticonField(null, $field);
-                                                                    } */
-                                                                    ?>
-                                                                </td>
-                                                                <td nowrap>
-                                                                    <?php /*
-                                                                    $confirmMessage = 'Are you sure?';
-                                                                    if ($field == 'phone') {
-                                                                        $confirmMessage .= ' This will also update the CallSource number for you.';
-                                                                    }
-                                                                    if ($field == 'address') {
-                                                                        $confirmMessage .= ' This will also re-geolocate the clinic for you.';
-                                                                    }*/
-                                                                    ?>
-                                                                    <? //endif; ?>
-                                                                    <?php /*echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span> Accept Oticon Change',
-                                                                        ['controller' => 'locations', 'action' => 'take_oticon', $this->request->data['Location']['id'], $field],
-                                                                        ['class' => 'btn btn-xs btn-danger pull-left m5', 'escape' => false],
-                                                                        $confirmMessage);*/ ?>
-                                                                    <?php /*echo $this->Form->control('is_'.$field.'_ignore', [
-                                                                        'label' => [
-                                                                            'class' => 'form-label',
-                                                                            'text' => 'Ignore '.$ucField.' Changes',
-                                                                        ],
-                                                                        'type' => 'checkbox',
-                                                                        'class' => false,
-                                                                        'wrapInput' => 'col-md-12'
-                                                                    ]);*/ ?>
-                                                                </td>
+                                                                <td><?php //echo dateTimeCentralToEastern($importStatus['created']); ?></td>
+                                                                <td><?php //echo $this->Clinic->getImportStatus($importStatus); ?></td>
+                                                                <td><?php //echo $importStatus['oticon_tier']; ?></td>
+                                                                <td><?php //echo $importStatus['listing_type']; ?></td>
+                                                                <td><?php //echo $this->Clinic->getActiveStatus($importStatus); ?></td>
+                                                                <td><?php //echo $this->Clinic->getShowStatus($importStatus); ?></td>
+                                                                <td><?php //echo $this->Clinic->getGracePeriodStatus($importStatus); ?></td>
                                                             </tr>
-                                                        <?php endforeach; ?>
+                                                        <?php //endforeach; ?>
                                                     </table>
-                                                    <hr>
-                                                <?php endif; ?>
-                
-                                                <h4>Raw Parsed of Last XML from Oticon:</h4>
-                                                <?php //$this->Clinic->lastXml($this->request->data); ?>
-                
-                                                <hr>
-                                                <p><strong>Oticon Import Status</strong></p>
-                                                <table class="table table-striped table-bordered table-condensed">
-                                                    <tr>
-                                                        <th>Import Date</th>
-                                                        <th>Status</th>
-                                                        <th>Oticon Tier</th>
-                                                        <th>HH Listing Type</th>
-                                                        <th>Active</th>
-                                                        <th>Show</th>
-                                                        <th>Grace Period</th>
-                                                    </tr>
-                                                    <?php //foreach($this->request->data['ImportStatus'] as $importStatus): ?>
-                                                        <tr>
-                                                            <td><?php //echo dateTimeCentralToEastern($importStatus['created']); ?></td>
-                                                            <td><?php //echo $this->Clinic->getImportStatus($importStatus); ?></td>
-                                                            <td><?php //echo $importStatus['oticon_tier']; ?></td>
-                                                            <td><?php //echo $importStatus['listing_type']; ?></td>
-                                                            <td><?php //echo $this->Clinic->getActiveStatus($importStatus); ?></td>
-                                                            <td><?php //echo $this->Clinic->getShowStatus($importStatus); ?></td>
-                                                            <td><?php //echo $this->Clinic->getGracePeriodStatus($importStatus); ?></td>
-                                                        </tr>
+                                                    <?php //if ($id): ?>
+                                                        <?php //echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Load All Statuses For This Clinic', array($id, '#' => 'Oticon', 'loadall' => 1), array('class' => 'btn btn-xs btn-info', 'escape' => false)); ?>
+                                                    <?php //endif; ?>
+                                                </div>
+                    
+                                                <!-- YHN Tab -->
+                                                <div class="tab-pane" id="YHN">
+                                                    <div class="row">
+                                                        <label class="form-label col-md-3">YHN Import Date</label>
+                                                        <div class="col-md-3">
+                                                            <select class="form-control js-import-select">
+                                                                <!-- *** TODO: Uncomment once importLocation is set *** -->
+                                                                <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
+                                                                    <?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
+                                                                        <option value="<?php echo '1' //Populating with dummy value for now $importLocation['import_id']; ?>">
+                                                                            <?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
+                                                                        </option>
+                                                                    <?php //endif; ?>
+                                                                <?php //endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
+                                                    <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
+                                                        <?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
+                                                            <div class="import col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
+                                                                <br /><br />
+                                                                <table class="table table-striped table-bordered table-condensed">
+                                                                    <?php //foreach ($importLocation AS $label => $value): ?>
+                                                                        <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
+                                                                        <?php /*
+                                                                        switch ($label) {
+                                                                            case "zip":
+                                                                                $label = Configure::read('zipLabel');
+                                                                                break;
+                                                                            case "state":
+                                                                                $label = Configure::read('stateLabel');
+                                                                                break;
+                                                                            case "id_external":
+                                                                                $label = $externalIdLabel;
+                                                                                break;
+                                                                            default:
+                                                                                break;
+                                                                        } */?>
+                                                                        <tr>
+                                                                            <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
+                                                                            <td class="col-md-9"><?php //echo $value; ?></td>
+                                                                        </tr>
+                                                                    <?php //endforeach; ?>
+                                                                </table>
+                                                            </div>
+                                                        <?php //endif; ?>
                                                     <?php //endforeach; ?>
-                                                </table>
-                                                <?php //if ($id): ?>
-                                                    <?php //echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Load All Statuses For This Clinic', array($id, '#' => 'Oticon', 'loadall' => 1), array('class' => 'btn btn-xs btn-info', 'escape' => false)); ?>
-                                                <?php //endif; ?>
-                                            </div>
-                
-                                            <!-- YHN Tab -->
-                                            <div class="tab-pane" id="YHN">
-                                                <div class="row">
-                                                    <label class="form-label col-md-3">YHN Import Date</label>
-                                                    <div class="col-md-3">
-                                                        <select class="form-control js-import-select">
-                                                            <!-- *** TODO: Uncomment once importLocation is set *** -->
+                                                    <div class="form-group col-md-12">
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                    
+                                                <!-- CQP Tab -->
+                                                <div class="tab-pane" id="CQP">
+                                                    <div class="row">
+                                                        <label class="form-label col-md-3">CQP Import Date</label>
+                                                        <div class="col-md-3">
+                                                            <select class="form-control js-cqp-import-select">
+                                                            <!-- *** TODO: uncomment once $importLocation is called in *** -->
                                                             <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                                                <?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
-                                                                    <option value="<?php echo '1' //Populating with dummy value for now $importLocation['import_id']; ?>">
+                                                                <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
+                                                                    <option value="<?php echo '1' //Populate with dummy value for now $importLocation['import_id']; ?>">
                                                                         <?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
                                                                     </option>
                                                                 <?php //endif; ?>
                                                             <?php //endforeach; ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
-                                                <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                                    <?php //if ($importLocation['Import']['type'] == 'yhn'): ?>
-                                                        <div class="import col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
-                                                            <br /><br />
-                                                            <table class="table table-striped table-bordered table-condensed">
-                                                                <?php //foreach ($importLocation AS $label => $value): ?>
-                                                                    <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
-                                                                    <?php /*
-                                                                    switch ($label) {
-                                                                        case "zip":
-                                                                            $label = Configure::read('zipLabel');
-                                                                            break;
-                                                                        case "state":
-                                                                            $label = Configure::read('stateLabel');
-                                                                            break;
-                                                                        case "id_external":
-                                                                            $label = $externalIdLabel;
-                                                                            break;
-                                                                        default:
-                                                                            break;
-                                                                    } */?>
-                                                                    <tr>
-                                                                        <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
-                                                                        <td class="col-md-9"><?php //echo $value; ?></td>
-                                                                    </tr>
-                                                                <?php //endforeach; ?>
-                                                            </table>
+                                                            </select>
                                                         </div>
-                                                    <?php //endif; ?>
-                                                <?php //endforeach; ?>
-                                                <div class="form-group col-md-12">
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                
-                                            <!-- CQP Tab -->
-                                            <div class="tab-pane" id="CQP">
-                                                <div class="row">
-                                                    <label class="form-label col-md-3">CQP Import Date</label>
-                                                    <div class="col-md-3">
-                                                        <select class="form-control js-cqp-import-select">
-                                                        <!-- *** TODO: uncomment once $importLocation is called in *** -->
-                                                        <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                                            <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-                                                                <option value="<?php echo '1' //Populate with dummy value for now $importLocation['import_id']; ?>">
-                                                                    <?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
-                                                                </option>
-                                                            <?php //endif; ?>
-                                                        <?php //endforeach; ?>
-                                                        </select>
                                                     </div>
+                                                    <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail']; ?>
+                                                    <?php //foreach ($this->request->data['ImportLocation'] as $importLocation): ?>
+                                                        <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
+                                                            <div class="cqpImport col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
+                                                                <br><br>
+                                                                <table class="table table-striped table-bordered table-condensed">
+                                                                    <?php //foreach ($importLocation AS $label => $value): ?>
+                                                                        <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
+                                                                        <?php /*
+                                                                        switch ($label) {
+                                                                            case "zip":
+                                                                                $label = Configure::read('zipLabel');
+                                                                                break;
+                                                                            case "state":
+                                                                                $label = Configure::read('stateLabel');
+                                                                                break;
+                                                                            case "id_external":
+                                                                                $label = $externalIdLabel;
+                                                                                break;
+                                                                            default:
+                                                                                break;
+                                                                        } */?>
+                                                                        <tr>
+                                                                            <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
+                                                                            <td class="col-md-9" style="word-break: break-word;"><?php //echo $value; ?></td>
+                                                                        </tr>
+                                                                    <?php //endforeach; ?>
+                                                                </table>
+                                                                <?php //echo $this->Clinic->cqpImportNotes($importLocation['notes']); ?>
+                                                            </div>
+                                                        <?php //endif; ?>
+                                                    <?php //endforeach; ?>
+                                                    <div class="form-group col-md-12">
+                                                    </div>
+                                                    <div class="clearfix"></div>
                                                 </div>
-                                                <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail']; ?>
-                                                <?php //foreach ($this->request->data['ImportLocation'] as $importLocation): ?>
-                                                    <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-                                                        <div class="cqpImport col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
-                                                            <br><br>
-                                                            <table class="table table-striped table-bordered table-condensed">
-                                                                <?php //foreach ($importLocation AS $label => $value): ?>
-                                                                    <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
-                                                                    <?php /*
-                                                                    switch ($label) {
-                                                                        case "zip":
-                                                                            $label = Configure::read('zipLabel');
-                                                                            break;
-                                                                        case "state":
-                                                                            $label = Configure::read('stateLabel');
-                                                                            break;
-                                                                        case "id_external":
-                                                                            $label = $externalIdLabel;
-                                                                            break;
-                                                                        default:
-                                                                            break;
-                                                                    } */?>
-                                                                    <tr>
-                                                                        <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
-                                                                        <td class="col-md-9" style="word-break: break-word;"><?php //echo $value; ?></td>
-                                                                    </tr>
-                                                                <?php //endforeach; ?>
-                                                            </table>
-                                                            <?php //echo $this->Clinic->cqpImportNotes($importLocation['notes']); ?>
-                                                        </div>
-                                                    <?php //endif; ?>
-                                                <?php //endforeach; ?>
-                                                <div class="form-group col-md-12">
-                                                </div>
-                                                <div class="clearfix"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- CA Import Tab -->
-                                <?php if (!Configure::read('isYhnImportEnabled')): ?>
-                                    <div class="tab-pane" id="Import">
-                                        <div class="row">
-                                            <label class="col-md-3 form-label">Import Date</label>
-                                            <div class="col-md-3">
-                                                <select class="form-control js-import-select">
-                                                <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                                    <option value="<?= $importLocation['import_id'] ?>">
-                                                        <?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
-                                                    </option>
-                                                <?php //endforeach; ?>
-                                                </select>
+                                    <?php else: ?>
+                                        <!-- CA Imports -->
+                                        <?php
+                                        $importOptions = [];
+                                        foreach ($importLocations as $importLocation) {
+                                            $importOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
+                                        }
+                                        echo $this->Form->control('importSelect', [
+                                            'type' => 'select',
+                                            'options' => $importOptions,
+                                            'label' => 'Import Date',
+                                            'class' => 'form-select js-import-select'
+                                        ]);
+                                        $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office'];
+                                        ?>
+                                        <?php foreach ($importLocations as $importLocation): ?>
+                                            <div class="import col-md-11 offset-md-1" import="<?= $importLocation['import_id'] ?>">
+                                                <br><br>
+                                                <table class="table table-striped table-bordered table-condensed">
+                                                    <?php foreach ($importLocation as $label => $value): ?>
+                                                        <?php
+                                                        if (is_array($value) || in_array($label, $hideFields)) {
+                                                            continue;
+                                                        }
+                                                        switch ($label) {
+                                                            case "zip":
+                                                                $label = Configure::read('zipLabel');
+                                                                break;
+                                                            case "state":
+                                                                $label = Configure::read('stateLabel');
+                                                                break;
+                                                            case "id_external":
+                                                                $label = $externalIdLabel;
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                        ?>
+                                                        <tr>
+                                                            <th class="text-right col-md-3">
+                                                                <?php echo ucfirst(str_replace('_', ' ', $label)); ?>
+                                                            </th>
+                                                            <td class="col-md-9"><?php echo $value; ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </table>
                                             </div>
-                                        </div>
-                                        <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office']; ?>
-                                        <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                        <div class="import col-md-11 offset-md-1" import="<?= $importLocation['import_id'] ?>">
-                                            <br /><br />
-                                            <table class="table table-striped table-bordered table-condensed">
-                                                <?php //foreach ($importLocation AS $label => $value): ?>
-                                                    <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
-                                                    <?php /*
-                                                    switch ($label) {
-                                                        case "zip":
-                                                            $label = Configure::read('zipLabel');
-                                                            break;
-                                                        case "state":
-                                                            $label = Configure::read('stateLabel');
-                                                            break;
-                                                        case "id_external":
-                                                            $label = $externalIdLabel;
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    } */?>
-                                                    <tr>
-                                                        <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
-                                                        <td class="col-md-9"><?php //echo $value; ?></td>
-                                                    </tr>
-                                                <?php //endforeach; ?>
-                                            </table>
-                                        </div>
-                                        <?php //endforeach; ?>
-                                        <div class="form-group col-md-12">
-                                        </div>
+                                        <?php endforeach; ?>
                                         <div class="clearfix"></div>
-                                    </div>
-                                <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
                                 
                                 <!-- Filters Tab -->
                                 <div class="tab-pane" id="Filters">
