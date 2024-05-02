@@ -435,7 +435,8 @@ class UsersTable extends CakeDcUsersTable
                     'id',
                 ],
             ],
-        ]);
+        ])
+        ->find('active'); // 'Active' finder in AuthFinderBehavior
 
         return $query;
     }

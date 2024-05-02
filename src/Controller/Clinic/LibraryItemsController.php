@@ -1,9 +1,9 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Clinic;
 
 use App\Controller\AppController;
 
-class LibraryItemsController extends AppController
+class LibraryItemsController extends BaseClinicController
 {
     public function index()
     {

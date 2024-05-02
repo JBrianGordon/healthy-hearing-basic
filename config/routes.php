@@ -61,7 +61,6 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
         $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
-        $builder->connect('/clinic/library', ['controller' => 'LibraryItems', 'action' => 'index', 'index']);
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');
@@ -154,6 +153,10 @@ return static function (RouteBuilder $routes) {
         ->setPatterns([
             'location_id' => '^81190\d{5}$',
         ]);
+
+        $clinicBuilder->connect(
+            '/library',
+            'LibraryItems::index');
 
         // All routes here will be prefixed with `/clinic`, and
         // have the `'prefix' => 'Clinic'` route element added that

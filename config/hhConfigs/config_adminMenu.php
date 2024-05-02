@@ -291,6 +291,36 @@ $itUtilitiesMenu = [
     'items' => $itUtilitiesItems,
 ];
 
+
+// Items for SEPARATE EDITORIAL MENU -- TESTING FOR NOW
+$browseReports = [
+    'url' => '/admin/content',
+    'icon' => 'bi bi-file-richtext',
+];
+$browseHelpPages = [
+    'url' => '/admin/wikis',
+    'icon' => 'bi bi-file-medical',
+];
+$browseCompanies = [
+    'url' => '/admin/corps',
+    'icon' => 'bi bi-building',
+];
+$browseAds = [
+    'url' => '/admin/ad',
+    'icon' => 'bi bi-card-image',
+];
+$addArticle = [
+    'url' => '/admin/content/edit',
+    'icon' => 'bi bi-plus-lg',
+];
+$miscPages = [
+    'url' => '/admin/pages',
+    'icon' => 'bi bi-book-fill',
+];
+$tags = [
+    'url' => '/admin/tags',
+];
+
 /********************************
 ********** Writer Menu **********
 *********************************/
@@ -413,6 +443,15 @@ return [
         'IT Admin' => [
             'permissions' => ['admin', 'it_admin'], //todo: This panel should only show for it_admin. (More work needed on roles/user types)
             'IT - Utilities' => $itUtilitiesMenu,
+        ],
+        'Editorial' => [
+            'permissions' => ['admin'],
+            'Browse Reports' => $browseReports,
+            'Browse help pages' => $browseHelpPages,
+            'Browse ads' => $browseAds,
+            'Add article' => $addArticle,
+            'Misc. pages' => $miscPages,
+            'Tags' => $tags
         ],
         'Writer' => [
             'permissions' => ['writer', 'it_admin', 'admin'],
