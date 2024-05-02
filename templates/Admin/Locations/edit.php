@@ -534,27 +534,27 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <?php if ($isCqPremier): ?>
                                         <!-- Vidscrips -->
                                         <div id="vidscrips">
-                                            <?php echo $this->Form->control('LocationVidscrips.id',
+                                            <?= $this->Form->control('LocationVidscrips.id',
                                                 [
                                                     'type' => 'hidden',
-                                                    'value' => $location->location_vidscrip->id
-                                                ]);
+                                                    'value' => $location->location_vidscrip->id ?? ''
+                                                ])
                                             ?>
                                             <label class="col col-md-3 control-label mb20">Vidscrips</label>
                                             <div class="clearfix"></div>
-                                            <?php
-                                                echo $this->Form->control("LocationVidscrips.vidscrip", [
+                                            <?= $this->Form->control("LocationVidscrips.vidscrip", [
                                                     'label' => 'Vidscrip ID',
                                                     'maxlength' => 30,
                                                     'help_block' => 'Add your Vidscrip ID to access embedded Vidscrip videos.'
-                                                ]); 
+                                                ])
                                             ?>
-                                            <?php
-                                                echo $this->Form->control("LocationVidscrips.email", [
+                                            <span class="help-block">Add your Vidscrip ID to access embedded Vidscrip videos.</span>
+                                            <?= $this->Form->control("LocationVidscrips.email", [
                                                     'label' => 'Vidscrip related email',
                                                     'help_block' => 'Enter the email address associated with your Vidscrip account.'
-                                                ]); 
+                                                ]);
                                             ?>
+                                            <span class="help-block">Enter the email address associated with your Vidscrip account.</span>
                                         </div>
                                     <?php endif; ?>
                                 </div>
