@@ -183,7 +183,6 @@ class LocationsTable extends Table
             ->boolean('is_cqp')
             ->boolean('is_cq_premier')
             ->boolean('is_iris_plus')
-            ->boolean('is_bypassed')
             ->boolean('is_call_assist')
             ->boolean('is_service_agreement_signed')
             ->boolean('is_last_edit_by_owner')
@@ -475,6 +474,11 @@ class LocationsTable extends Table
             1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
             2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
         ];
+
+        if (!Configure::read('isTieringEnabled')) {
+            unset(Location::$listingTypes[Location::LISTING_TYPE_BASIC]);
+            unset(Location::$listingTypes[Location::LISTING_TYPE_PREMIER]);
+        }
     }
 
     /**
@@ -926,16 +930,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->notEmptyString('direct_book_url', 'This field is required', function ($context) {
-                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
-            });
+            ->allowEmptyString('direct_book_url');
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->notEmptyString('direct_book_iframe', 'This field is required', function ($context) {
-                return (in_array($context['data']['direct_book_type'], [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]));
-            });
+            ->allowEmptyString('direct_book_iframe');
 
         $validator
             ->boolean('is_yhn')
@@ -958,10 +958,6 @@ class LocationsTable extends Table
             ->notEmptyString('is_iris_plus');
 
         $validator
-            ->boolean('is_bypassed')
-            ->notEmptyString('is_bypassed');
-
-        $validator
             ->boolean('is_call_assist')
             ->notEmptyString('is_call_assist');
 
@@ -974,8 +970,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('optional_message')
             ->maxLength('optional_message', 400)
-            ->requirePresence('optional_message', 'create')
-            ->notEmptyString('optional_message');
+            ->allowEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
@@ -1930,5 +1925,45 @@ class LocationsTable extends Table
         $location = $this->get($locationId);
         $location->is_show = $isShow;
         $this->save($location);
+    }
+
+    /**
+    * Get a list of emails to send clinic notifications to.
+    * sends to all LocationEmails.
+    * @param integer $locationId
+    * @return array of email addresses
+    */
+    public function getEmailList($locationId)
+    {
+        $location = $this->get($locationId, [
+            'contain' => ['LocationEmails', 'Users']
+        ]);
+
+        $emails = [];
+
+        // Location Email
+        if ($location->hasValue('email')) {
+            $emails[] = $location->email;
+        }
+
+        // Extra 'Location Emails' for notifications
+        if ($location->has('location_emails')) {
+            foreach ($location->location_emails as $locationEmail) {
+                if ($locationEmail->hasValue('email')) { // Not NULL by default
+                    $emails[] = $locationEmail->email;
+                }
+            }
+        }
+
+        // Location User Emails
+        if ($location->has('users')) {
+            foreach ($location->users as $user) {
+                if ($user->hasValue('email')) { // Not NULL by default
+                    $emails[] = $user->email;
+                }
+            }
+        }
+
+        return $emails;
     }
 }

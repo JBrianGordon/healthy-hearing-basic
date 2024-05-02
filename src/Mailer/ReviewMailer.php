@@ -89,11 +89,11 @@ class ReviewMailer extends Mailer
      * @param \Cake\ORM\Entity $review Review entity
      * @return $this
      */
-    public function noEmailSentToClinic($review)
+    public function noEmailSentToClinic($review, $toEmail)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo(Configure::read('customer-support-email'))
+            ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review email not sent')
             ->viewBuilder()
                 ->setTemplate('Review/reviewNoEmail')

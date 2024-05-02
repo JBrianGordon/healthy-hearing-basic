@@ -81,6 +81,8 @@ editorElements.forEach((element) => {
           
             editorElements.forEach(element => {
               element.style.display = "block";
+              element.style.position = "absolute";
+              element.style.zIndex = "-1";
             });
         }).catch( error => {
     	    console.error( error );

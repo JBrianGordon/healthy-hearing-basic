@@ -65,21 +65,20 @@ class locationsAdminEdit {
       }
     }
 
-    /*** TODO: Where is selectByImport coming from???: ***
     const importSelectElements = document.querySelectorAll('.js-import-select');
     importSelectElements.forEach((element) => {
       element.addEventListener('change', function () {
         const importId = this.value;
-        editObj.selectByImport('import', importId);
+        editObj.selectImport(importId);
       });
       element.dispatchEvent(new Event('change'));
     });
-
+    /*
     const cqpImportSelectElements = document.querySelectorAll('.js-cqp-import-select');
     cqpImportSelectElements.forEach((element) => {
       element.addEventListener('change', function () {
         const cqpImportId = this.value;
-        editObj.selectByImport('cqpImport', cqpImportId);
+        editObj.selectCqpImport(cqpImportId);
       });
       element.dispatchEvent(new Event('change'));
     });*/
@@ -95,23 +94,39 @@ class locationsAdminEdit {
       }
     });
 
-    document.getElementById('direct-book-type').addEventListener('change', function () {
-      editObj.onChangeDirectBookType(this.value);
-    });
-    document.getElementById('direct-book-type').dispatchEvent(new Event('change'));
-    /*** TODO: add frozen-expiration field to view: ***
-    document.getElementById('is-listing-type-frozen').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'is-listing-type-frozen', <frozen expiration field here>);
-    });
-    document.getElementById('is-listing-type-frozen').dispatchEvent(new Event('change'));*/
-    /*** TODO: add library-expiration field to view:
-    document.getElementById('feature-content-library').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'feature-content-library', <library expiration field here>);
-    });
-    document.getElementById('feature-content-library').dispatchEvent(new Event('change'));*/
+    const directBookTypeElement = document.getElementById('direct-book-type');
+    if (directBookTypeElement) {
+      directBookTypeElement.addEventListener('change', function () {
+        // If directBookType is EarQ or Blueprint, display and require the direct_book_url
+        // and direct_book_iframe fields. Otherwise hide those fields.
+        const directBookType = this.value;
+        let urlRequired = false;
+        if (directBookType === 'Blueprint' || directBookType === 'EarQ') {
+          // Display and require the direct_book_url and direct_book_iframe fields
+          urlRequired = true;
+        }
+        editObj.onChangeFeature(urlRequired, '#direct-book-url');
+        editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
+      });
+      directBookTypeElement.dispatchEvent(new Event('change'));
+    }
+    const isListingTypeFrozenElement = document.getElementById('is-listing-type-frozen');
+    if (isListingTypeFrozenElement) {
+      isListingTypeFrozenElement.addEventListener('change', function () {
+        editObj.onChangeFeature(this.checked, '#frozen-expiration');
+      });
+      isListingTypeFrozenElement.dispatchEvent(new Event('change'));
+    }
+    const featureContentLibraryElement = document.getElementById('feature-content-library');
+    if (featureContentLibraryElement) {
+      featureContentLibraryElement.addEventListener('change', function () {
+        editObj.onChangeFeature(this.checked, '#content-library-expiration');
+      });
+      featureContentLibraryElement.dispatchEvent(new Event('change'));
+    }
   /* TODO: add special-feature-expiration field to view: ***
     document.getElementById('feature-special-announcement').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'feature-special-announcement', <feature content expiration here>);
+      editObj.onChangeFeature(this.checked, '#feature-special-announcement');
     });
     document.getElementById('feature-special-announcement').dispatchEvent(new Event('change'));*/
     /* TODO: add hour-is-closed-lunch field to view: ***
@@ -121,8 +136,8 @@ class locationsAdminEdit {
     document.getElementById('hour-is-closed-lunch').dispatchEvent(new Event('change'));*/
 
     document.getElementById('is-mobile').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, 'label[for="radius"]', '#radius');
-      editObj.onChangeFeature(this.checked, 'label[for="mobile-text"]', '#mobile-text');
+      editObj.onChangeFeature(this.checked, '#radius');
+      editObj.onChangeFeature(this.checked, '#mobile-text');
       document.getElementById('addressHelp').classList.toggle("hidden");
       document.getElementById('radiusHelp').classList.toggle("hidden");
     });
@@ -421,18 +436,19 @@ class locationsAdminEdit {
     }
   }
 
-  onChangeFeature(isFeature, label, requiredElementId) {
-    const elementLabel = document.querySelector(label);
+  // Display and require an extra field based on if this feature is enabled
+  onChangeFeature(isFeature, requiredElementId) {
     const requiredElement = document.querySelector(requiredElementId);
+    const formGroup = requiredElement.closest('.form-group');
 
     if (isFeature) {
-      elementLabel.style.display = 'block';
-      requiredElement.style.display = 'block';
       requiredElement.required = true;
+      formGroup.style.display = 'flex';
+      formGroup.classList.add('required');
     } else {
       requiredElement.required = false;
-      requiredElement.style.display = 'none';
-      elementLabel.style.display = 'none';
+      formGroup.style.display = 'none';
+      formGroup.classList.remove('required');
     }
   }
 

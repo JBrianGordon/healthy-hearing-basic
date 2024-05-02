@@ -631,8 +631,7 @@ class ClinicHelper extends Helper
             return $this->Html->image('/tmp/' . $provider->file->name, array('width' => 150));
         }
         if (!empty($provider->thumb_url)) {
-            $filename = basename($provider->thumb_url);
-            $url = "/cloudfiles/clinicians/" . rawurlencode($filename);
+            $url = $provider->thumb_url;
             $classLead = ' class="';
             $classClose = '"';
             if ($options['url_only']) {
@@ -1147,7 +1146,7 @@ class ClinicHelper extends Helper
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
         foreach ($payments as $keyIndex => $nameIcon) {
             $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
-            $retval .= '<div class="col-md-6 flex mb20"><label class="control-label p0 tal fg-1" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
+            $retval .= '<div class="col-md-6 flex mb20"><label class="form-label p0 tal fg-1" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
             $formOptions = array_merge([
                 'type' => 'checkbox',
                 'checked' => $checked,

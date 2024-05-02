@@ -265,7 +265,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const editorElements = document.querySelectorAll(".editor");
               
                 editorElements.forEach(element => {
-                  element.style.display = "block";
+                    element.style.display = "block";
+                    element.style.position = "absolute";
+                    element.style.zIndex = "-1";
                 });
             }).catch( error => {
     	    console.error( error );

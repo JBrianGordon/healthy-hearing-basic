@@ -121,7 +121,6 @@ use Cake\Utility\Text;
  * @property bool $is_cqp
  * @property bool $is_cq_premier
  * @property bool $is_iris_plus
- * @property bool $is_bypassed
  * @property bool $is_call_assist
  * @property string $timezone
  * @property string $optional_message
@@ -417,7 +416,6 @@ class Location extends Entity
         'is_cqp' => true,
         'is_cq_premier' => true,
         'is_iris_plus' => true,
-        'is_bypassed' => true,
         'is_call_assist' => true,
         'timezone' => true,
         'optional_message' => true,
