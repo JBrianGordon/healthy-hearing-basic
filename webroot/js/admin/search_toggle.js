@@ -150,15 +150,6 @@ if (document.querySelector("form").action.includes("/admin/locations") ||
 		document.querySelector("form").action.includes("/admin/crm-searches") ||
 		document.querySelector("form").action.includes("/search") ||
 		exportModal !== null) {
-  // Update labels for specific elements
-  const updateLabels = () => {
-    if (document.querySelector("label[for='id-cqp-practice']")) {
-			document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
-    }
-  };
-
-  updateLabels();
-
   //Wrap binary search options in spans
 	const inputElements = Array.from(document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']"));
 

@@ -667,9 +667,7 @@ providerCheckboxes.forEach((checkbox) => {
   insertAfter(checkbox.parentNode, "<span class='slider' style='margin-left:235px'></span>");
 });
 /* TODO: uncomment when provider info pulled into view:
-insertLabelBefore(document.querySelector(".provider .checkbox .ida-verified"), "Ida verified provider");
-insertLabelBefore(document.querySelector(".provider .checkbox .show-npi"), "Show NPI number");
-insertLabelBefore(document.querySelector(".provider .checkbox .show-license"), "Show licenses");*/
+insertLabelBefore(document.querySelector(".provider .checkbox .ida-verified"), "Ida verified provider");*/
 
 //special announcement border selection
 const borderRadioElements = document.querySelectorAll(".border-radio");

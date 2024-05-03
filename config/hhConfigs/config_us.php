@@ -47,9 +47,7 @@ return [
     'showAds' => true,
     'showReviewsByCity' => true,
     // Provider Variables
-    'showProviderLicenses' => false, // Hide provider licenses
     'showProviderCredentialButtons' => true,
-    'showProviderNpi' => true,
     'showProviderAudOrHis' => true,
     // Call Tracking
     'isCallSourceGenerationEnabled' => true,

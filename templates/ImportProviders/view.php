@@ -43,14 +43,6 @@
                     <td><?= h($importProvider->aud_or_his) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Caqh Number') ?></th>
-                    <td><?= h($importProvider->caqh_number) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Npi Number') ?></th>
-                    <td><?= h($importProvider->npi_number) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($importProvider->id) ?></td>
                 </tr>
@@ -59,12 +51,6 @@
                     <td><?= $this->Number->format($importProvider->id_external) ?></td>
                 </tr>
             </table>
-            <div class="text">
-                <strong><?= __('Licenses') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($importProvider->licenses)); ?>
-                </blockquote>
-            </div>
             <div class="related">
                 <h4><?= __('Related Import Location Providers') ?></h4>
                 <?php if (!empty($importProvider->import_location_providers)) : ?>

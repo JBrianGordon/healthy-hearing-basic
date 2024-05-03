@@ -67,7 +67,7 @@ class AdminHelper extends Helper
     * @param string 'field'
     * @param string 'type'
     */
-    public function formInput($field, $type, $label=null, $options=false, $empty=false, $value=null) {
+    public function formInput($field, $type, $label=null, $options=false, $empty=false, $value=null, $placeholder=null) {
         $fieldSlug = mb_strtolower(Text::slug($field, '-'));
         $labelClass = isset($label['class']) ? $label['class'] : "";
         $label = isset($label['text']) ? $label['text'] : $label;
@@ -122,6 +122,7 @@ class AdminHelper extends Helper
                 $formInput = $this->Form->control($field, [
                     'type' => 'text',
                     'label' => ['text' => $label],
+                    'placeholder' => $placeholder
                 ]);
                 break;
         }

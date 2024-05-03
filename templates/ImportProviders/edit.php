@@ -31,9 +31,6 @@
                     echo $this->Form->control('last_name');
                     echo $this->Form->control('email');
                     echo $this->Form->control('aud_or_his');
-                    echo $this->Form->control('caqh_number');
-                    echo $this->Form->control('npi_number');
-                    echo $this->Form->control('licenses');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
