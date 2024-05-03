@@ -153,13 +153,17 @@ return [
             'prefix' => 'Clinic',
             'controller' => 'LibraryItems',
             'action' => 'index',
-            // 'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
-            //     'table' => 'LocationsUsers',
-            //     'id' => 'location_id',
-            //     'ownerForeignKey' => 'user_id',
-            // ]),
         ],
 
+        /*******************************
+        * Clinic - Clinic/Pages
+        ********************************/
+        [ // Clinics can access clinic FAQ
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Pages',
+            'action' => 'clinicFaq',
+        ],
 
 
 
