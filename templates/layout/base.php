@@ -42,7 +42,7 @@ use Cake\Core\Configure;
             echo $this->Html->css('/css/atf/state-page.css');
         } elseif ($_SERVER['REQUEST_URI'] == '/about') {
             echo $this->Html->css('/css/atf/about.css');
-        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers' || preg_match('/\/admin\/locations\/edit\//', $_SERVER['REQUEST_URI'])) {
+        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers' || preg_match('/\/clinic\/locations\/edit\//', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturers.css');
         } elseif (preg_match('/[A-Za-z]*-hearing-aids/', $_SERVER['REQUEST_URI']) || preg_match('/[A-Za-z]*-implants/', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturer.css');
