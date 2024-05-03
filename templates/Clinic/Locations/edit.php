@@ -16,6 +16,11 @@ $adId = $location->location_ad->id ?? null;
 
 $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
+<style type="text/css">
+    .hidden {
+        display: none;
+    }
+</style>
 <div class="container-fluid site-body">
     <div class="row">
         <div class="backdrop-container">
