@@ -73,7 +73,7 @@ class locationsAdminEdit {
       });
       element.dispatchEvent(new Event('change'));
     });
-    /*
+
     const cqpImportSelectElements = document.querySelectorAll('.js-cqp-import-select');
     cqpImportSelectElements.forEach((element) => {
       element.addEventListener('change', function () {
@@ -81,7 +81,7 @@ class locationsAdminEdit {
         editObj.selectCqpImport(cqpImportId);
       });
       element.dispatchEvent(new Event('change'));
-    });*/
+    });
 
     document.body.addEventListener('change', (event) => {
       const target = event.target;

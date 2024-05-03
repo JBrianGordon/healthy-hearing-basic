@@ -1179,30 +1179,31 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                     
                                                 <!-- CQP Tab -->
                                                 <div class="tab-pane" id="CQP">
-                                                    <div class="row">
-                                                        <label class="form-label col-md-3">CQP Import Date</label>
-                                                        <div class="col-md-3">
-                                                            <select class="form-control js-cqp-import-select">
-                                                            <!-- *** TODO: uncomment once $importLocation is called in *** -->
-                                                            <?php //foreach ($this->request->data['ImportLocation'] AS $importLocation): ?>
-                                                                <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-                                                                    <option value="<?php echo '1' //Populate with dummy value for now $importLocation['import_id']; ?>">
-                                                                        <?php //echo date('F d, Y', strtotime($importLocation['Import']['created'])); ?>
-                                                                    </option>
-                                                                <?php //endif; ?>
-                                                            <?php //endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <?php $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail']; ?>
-                                                    <?php //foreach ($this->request->data['ImportLocation'] as $importLocation): ?>
-                                                        <?php //if ($importLocation['Import']['type'] == 'cqp'): ?>
-                                                            <div class="cqpImport col-md-11 offset-md-1" import="<?php //echo $importLocation['import_id']; ?>">
+                                                    <?php
+                                                    $cqpImportOptions = [];
+                                                    foreach ($importLocations as $importLocation) {
+                                                        if ($importLocation['import']['type'] == 'cqp') {
+                                                            $cqpImportOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
+                                                        }
+                                                    }
+                                                    echo $this->Form->control('cqpImportSelect', [
+                                                        'type' => 'select',
+                                                        'options' => $cqpImportOptions,
+                                                        'label' => 'CQP Import Date',
+                                                        'class' => 'form-select js-cqp-import-select'
+                                                    ]);
+                                                    $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail'];
+                                                    ?>
+                                                    <?php foreach ($importLocations as $importLocation): ?>
+                                                        <?php if ($importLocation['import']['type'] == 'cqp'): ?>
+                                                            <div class="cqpImport col-md-11 offset-md-1" import="<?= $importLocation['import_id']; ?>">
                                                                 <br><br>
-                                                                <table class="table table-striped table-bordered table-condensed">
-                                                                    <?php //foreach ($importLocation AS $label => $value): ?>
-                                                                        <?php //if (is_array($value) || in_array($label, $hideFields)) { continue; } ?>
-                                                                        <?php /*
+                                                                <table class="table table-striped table-bordered table-condensed mb30">
+                                                                    <?php foreach ($importLocation as $label => $value): ?>
+                                                                        <?php
+                                                                        if (is_array($value) || in_array($label, $hideFields)) {
+                                                                            continue;
+                                                                        }
                                                                         switch ($label) {
                                                                             case "zip":
                                                                                 $label = Configure::read('zipLabel');
@@ -1215,19 +1216,18 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                                 break;
                                                                             default:
                                                                                 break;
-                                                                        } */?>
+                                                                        }
+                                                                        ?>
                                                                         <tr>
-                                                                            <th class="text-right col-md-3"><?php //echo ucfirst(str_replace('_', ' ', $label)); ?></th>
-                                                                            <td class="col-md-9" style="word-break: break-word;"><?php //echo $value; ?></td>
+                                                                            <th class="text-right col-md-3"><?= ucfirst(str_replace('_', ' ', $label)); ?></th>
+                                                                            <td class="col-md-9" style="word-break: break-word;"><?= $value; ?></td>
                                                                         </tr>
-                                                                    <?php //endforeach; ?>
+                                                                    <?php endforeach; ?>
                                                                 </table>
-                                                                <?php //echo $this->Clinic->cqpImportNotes($importLocation['notes']); ?>
+                                                                <?= $this->Clinic->cqpImportNotes($importLocation['notes']); ?>
                                                             </div>
-                                                        <?php //endif; ?>
-                                                    <?php //endforeach; ?>
-                                                    <div class="form-group col-md-12">
-                                                    </div>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </div>
@@ -1239,7 +1239,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         foreach ($importLocations as $importLocation) {
                                             $caImportOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
                                         }
-                                        echo $this->Form->control('importSelect', [
+                                        echo $this->Form->control('caImportSelect', [
                                             'type' => 'select',
                                             'options' => $caImportOptions,
                                             'label' => 'Import Date',
