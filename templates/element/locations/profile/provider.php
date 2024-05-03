@@ -2,6 +2,7 @@
 use Cake\Core\Configure;
 
 $this->set('hideProvider', $hideProvider);
+$this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 ?>
 <!-- Provider -->
 <?php if(!$hideProvider): ?>
@@ -13,7 +14,7 @@ $this->set('hideProvider', $hideProvider);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<?php foreach($location->providers as $providerKey => $provider): ?>
-					<?php if(!empty($provider->title) || !empty($provider->credentials) || !empty($provider->thumb_url) || !empty($provider->description)) : ?>
+					<?php if((Configure::read('country') == 'CA' || $isEnhancedOrPremier || $providerKey < 1) && (!empty($provider['title']) || !empty($provider['credentials']) || !empty($provider['thumb_url']) || !empty($provider['description']))) : ?>
 						<div class="row provider-bio">
 							<?php if(!empty($provider->thumb_url) || (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name))): ?>
 								<div class="col-md-4">

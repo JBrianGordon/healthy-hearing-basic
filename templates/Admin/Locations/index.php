@@ -196,10 +196,8 @@ $groupedFields = [
 				            <thead>
 				                <tr>
 				                    <th>
-				                        <?= $this->Paginator->sort('id') ?>
-				                        <?php if (Configure::read('isTieringEnabled')): ?>
-				                            <br><?= $this->Paginator->sort('listing_type') ?>
-				                        <?php endif; ?>
+				                        <?= $this->Paginator->sort('id') ?><br>
+				                        <?= $this->Paginator->sort('listing_type') ?>
 				                        <?php if (Configure::read('isYhnImportEnabled')): ?>
 				                            <br><?= $this->Paginator->sort('is_cq_premier', 'CQ Premier') ?>
 				                            <br><?= $this->Paginator->sort('is_iris_plus', 'CQ Iris+') ?>
@@ -247,10 +245,8 @@ $groupedFields = [
 				                <?php foreach ($locations as $location): ?>
 				                <tr>
 				                    <td>
-				                        <span class="badge bg-primary"><?= $location->id; ?></span><br />
-				                        <?php if (Configure::read('isTieringEnabled')): ?>
-				                            <?php echo $this->Clinic->badgeListingType($location->listing_type); ?><br>
-				                        <?php endif; ?>
+				                        <span class="badge bg-primary"><?= $location->id; ?></span><br>
+				                        <?= $this->Clinic->badgeListingType($location->listing_type) ?><br>
 				                        <?php if (Configure::read('isYhnImportEnabled')): ?>
 				                            <?php if (!empty($location->is_cq_premier)): ?>
 				                                <span class='badge bg-cqp'>CQ Premier</span><br>

@@ -654,11 +654,12 @@ class ClinicHelper extends Helper
             unset($options['url_only']);
             return '<div class="profile-pic-container"><img src="'.$url.'" loading="lazy"' . $classLead . $options['class'] . $classClose . ' alt="'.$options['alt'].'" width="'.$options['width'].'" height="'.$options['height'].'"></div>';
         }
-        /*
-        $image_path = WWW_ROOT . $provider->thumb_url;
-        if(!empty($provider->thumb_url) && file_exists($image_path)){
-        return $this->Html->image($provider->thumb_url);
-        }*/
+        if (!empty($provider->thumb_url)) {
+            $image_path = WWW_ROOT . $provider->thumb_url;
+            if (file_exists($image_path)) {
+                return $this->Html->image($provider->thumb_url);
+            }
+        }
         return "";
     }
 
@@ -1180,6 +1181,39 @@ class ClinicHelper extends Helper
         }
         if ($showRemoveBtn) {
             $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>';
+        }
+        return $retval;
+    }
+
+    // Takes the json encoded notes from CQP import and displays them in a nice table format
+    public function cqpImportNotes($notes) {
+        $contacts = json_decode($notes, true);
+        $retval = '';
+        if (!empty($contacts)) {
+            $retval = '<div class="panel panel-default">';
+                $retval .= '<div class="panel-heading">CQP contacts</div>';
+                $retval .= '<div class="panel-body m10">';
+                    $retval .= '<p>We do not automatically import providers from CQP. Here is a list of contacts associated with the practice (not necessarily this location). </p>';
+                    $retval .= '<table class="table table-striped table-bordered table-condensed">';
+                        $retval .= '<tr>';
+                            $retval .= '<th>First</th>';
+                            $retval .= '<th>Last</th>';
+                            $retval .= '<th>Title</th>';
+                            $retval .= '<th>Email</th>';
+                            $retval .= '<th>Office ID?</th>';
+                        $retval .= '</tr>';
+                        foreach ($contacts as $contact) {
+                            $first = empty($contact['ContactFName']) ? '' : $contact['ContactFName'];
+                            $retval .= '<tr>';
+                                foreach (['ContactFName', 'ContactLName', 'ContactTitle', 'ContactEmail', 'ContactOfficeID'] as $fieldName) {
+                                    $field = empty($contact[$fieldName]) ? '' : $contact[$fieldName];
+                                    $retval .= '<td>'.$field.'</td>';
+                                }
+                            $retval .= '</tr>';
+                        }
+                    $retval .= '</table>';
+                $retval .= '</div>';
+            $retval .= '</div>';
         }
         return $retval;
     }

@@ -115,6 +115,11 @@ class LocationsController extends BaseAdminController
             'order' => ['ImportStatus.created DESC']
         ])->first();
         $lastOticonImportDate = empty($lastOticonImport->created) ? 'N/A' : dateTimeCentralToEastern($lastOticonImport->created);
+        $importLocations = $this->Locations->ImportLocations->find('all', [
+            'contain' => ['Imports'],
+            'conditions' => ['location_id' => $id],
+            'order' => ['ImportLocations.import_id DESC']
+        ])->disableHydration()->toArray();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
             if ($this->Locations->save($location)) {
@@ -124,7 +129,7 @@ class LocationsController extends BaseAdminController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $this->set(compact('location', 'lastOticonImportDate'));
+        $this->set(compact('location', 'lastOticonImportDate', 'importLocations'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
         $this->set('days', $this->Locations->LocationHours->days);
     }

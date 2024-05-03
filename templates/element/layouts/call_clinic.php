@@ -15,7 +15,7 @@ $isCallAssistEnabled = Configure::read('isCallAssistEnabled');
 			<div class="clinicPhone text-center" data-id="<?= $location->id ?>">
 				<!-- Show number for CA clinics, basic clinics and open Premier clinics -->
 				<?php if (!$isCallAssistEnabled || !$isEnhancedOrPremier || ($displayOpenClosed && $isEnhancedOrPremier)): ?>
-					<div class="telephone h2 text-secondary mt0 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?></div>
+					<div class="telephone h2 mt0 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?></div>
 				<?php endif; ?>
 				<!-- Appointment request -->
 				<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>

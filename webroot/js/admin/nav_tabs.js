@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // Display the selected tab
+  var hash = window.location.hash;
+  if (hash.length > 0) {
+    const tab = document.querySelector("button[data-bs-target='"+hash+"']");
+    if (tab) {
+      var parentTabPane = tab.closest('.tab-pane');
+      if (parentTabPane) {
+        // If tab is nested with a parent tab, click both
+        const parentTab = document.querySelector("button[data-bs-target='#"+parentTabPane.id+"']");
+        parentTab.click();
+      }
+      tab.click();
+    }
+  }
+
+  // When a tab is clicked, change the URL to our new hash
+  document.querySelectorAll('button.nav-link').forEach(tabButton => {
+    tabButton.addEventListener('click', function() {
+      const hash = this.getAttribute('data-bs-target');
+      if (hash) {
+        //var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+        window.location.hash = hash;
+        //$('html,body').scrollTop(scrollmem);
+      }
+    });
+  });
 
   // On submit, make any validation errors on tabs visible
   document.querySelectorAll('input[type=submit], button[type=submit]').forEach(submitBtn => {

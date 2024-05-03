@@ -474,6 +474,11 @@ class LocationsTable extends Table
             1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
             2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
         ];
+
+        if (!Configure::read('isTieringEnabled')) {
+            unset(Location::$listingTypes[Location::LISTING_TYPE_BASIC]);
+            unset(Location::$listingTypes[Location::LISTING_TYPE_PREMIER]);
+        }
     }
 
     /**

@@ -318,9 +318,9 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 										echo $this->element('locations/profile/services');
 									}
 									echo $this->element('locations/profile/review_section');
-									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider, 'isEnhancedOrPremier' => $isEnhancedOrPremier]);
 								} else {
-									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider, 'isEnhancedOrPremier' => $isEnhancedOrPremier]);
 									if (Configure::read('country') != 'CA') {
 										echo "<span id='mapBuffer'></span>";
 										echo '<section id="mobileMap" class="panel panel-primary">';

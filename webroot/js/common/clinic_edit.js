@@ -200,42 +200,42 @@ initSpecialAnnouncements();
 	
 // Clinic profile completion. Currently we are only checking the first provider
 const providerArray = [
-  document.querySelector("#Provider0FirstName"),
-  document.querySelector("#Provider0LastName"),
-  document.querySelector("#Provider0Description"),
-  document.querySelector("#Provider0ThumbUrl")
+  document.querySelector("#provider-0-first-name"),
+  document.querySelector("#providers-0-last-name"),
+  document.querySelector("#provider-0-description"),
+  document.querySelector("#provider-0-thumb-url")
 ];
 const incompleteArray = [];
 let completionPercentage = 100;
 
-/*** TODO: rewrite this when CKEditor 5 is added:
-if (document.querySelector("#cke_1_contents iframe").contentDocument.body.textContent.trim() === "") {
-  completionPercentage -= 25;
-  incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
-  document.querySelector("#aboutLabel").classList.add("red");
-}
-if (document.querySelector("#cke_2_contents iframe").contentDocument.body.textContent.trim() === "") {
-  completionPercentage -= 25;
-  incompleteArray.push("<li><a href='#services'>- Services</a></li>");
-  document.querySelector("#servicesLabel").classList.add("red");
-}
-providerArray.forEach(function(input) {
-  if ((input.closest("#cke_Provider0Description").length === 0 && input.value === "") || (input.closest("#cke_Provider0Description").length > 0 && document.querySelector("#cke_Provider0Description iframe").contentDocument.body.textContent.trim() === "")) {
-    input.closest(".form-group").classList.add("has-error");
-    input.closest(".form-group").previousElementSibling.classList.add("red");
+document.addEventListener("DOMContentLoaded", function() {
+  if (document.querySelector("#location-about-us").nextSibling.querySelector(".ck-content").innerHTML === "") {
+    completionPercentage -= 25;
+    incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
+    document.querySelector("#aboutLabel").classList.add("red");
   }
+  if (document.querySelector("#location-services").nextSibling.querySelector(".ck-content").innerHTML === "") {
+    completionPercentage -= 25;
+    incompleteArray.push("<li><a href='#services'>- Services</a></li>");
+    document.querySelector("#servicesLabel").classList.add("red");
+  }
+  providerArray.forEach(function(input) {
+    if ((document.querySelector("#provider-0-description").length === 0 && input.value === "") || (document.querySelector("#provider-0-description").length > 0 && document.querySelector("#provider-0-description").nextSibling.querySelector(".ck-content").innerHTML === "")) {
+      input.closest(".form-group").classList.add("has-error");
+      input.closest(".form-group").previousElementSibling.classList.add("red");
+    }
+  });
 });
-*/
 
-// document.querySelector("#hhtvButton").addEventListener("click", function() {
-//   window.scrollTo({
-//     top: document.querySelector("#hhTv").offsetTop,
-//     behavior: 'smooth'
-//   });
-// });
+document.querySelector("#hhtvButton").addEventListener("click", function() {
+  window.scrollTo({
+    top: document.querySelector("#hhTv").offsetTop,
+    behavior: 'smooth'
+  });
+});
 
 // Remove error class if at least one photo field has a value
-/*** TODO: uncomment when providerImage function is fixed in template/element/locations/provider.php:
+/***  TODO: uncomment when thumb urls are finally pulled in and update query selectors: ***
 if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.querySelector("#Provider0File").value !== "") {
   document.querySelector("#Provider0ThumbUrl").closest(".form-group").classList.remove("has-error");
   document.querySelector("#Provider0File").closest(".form-group").classList.remove("has-error");
@@ -246,21 +246,22 @@ if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.queryS
 // Provider first name
 if (document.querySelector("#provider-0-first-name").value === "") {
   completionPercentage -= 5;
-  incompleteArray.push("<li><a href='#provider0First'>- Provider first name</a></li>");
+  incompleteArray.push("<li><a href='#provider-0-first-name'>- Provider first name</a></li>");
 }
 
 // Provider last name
 if (document.querySelector("#providers-0-last-name").value === "") {
   completionPercentage -= 5;
-  incompleteArray.push("<li><a href='#provider0Last'>- Provider last name</a></li>");
+  incompleteArray.push("<li><a href='#providers-0-last-name'>- Provider last name</a></li>");
 }
 
 // Provider description
-/*** TODO: uncomment when CKEditor added:
-if (document.querySelector("#provider-0-description iframe").contentDocument.body.textContent.trim() === "") {
-  completionPercentage -= 5;
-  incompleteArray.push("<li><a href='#provider0Desc'>- Provider description</a></li>");
-}*/
+document.addEventListener("DOMContentLoaded", function() {
+  if (document.querySelector("#provider-0-description").nextSibling.querySelector(".ck-content").innerHTML === "") {
+    completionPercentage -= 5;
+    incompleteArray.push("<li><a href='#provider-0-description'>- Provider description</a></li>");
+  }
+})
 
 // Provider photo
 /*** TODO: uncomment when ~line 85 is uncommented above

@@ -11,6 +11,12 @@ form {
     margin-bottom: 30px;
   }
 
+  .editor {
+    position: absolute;
+    width: 1px!important;
+    height: 1px;
+  }
+
   &#contentForm, &#wikisForm {
     .provider {
       .ck-editor__main {
@@ -100,8 +106,11 @@ form {
     border-color: $brand-light;
   }
 
-  label {
+  label.control-label {
     padding: 10px 20px;
+  }
+
+  .control-label {
     border: 3px solid #ddd;
   }
 
