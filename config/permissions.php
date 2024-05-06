@@ -47,49 +47,6 @@ return [
             'controller' => '*',
             'action' => '*',
         ],
-        // admin prefix roles
-        // [
-        //     'role' => ['admin', 'testing'],
-        //     'prefix' => 'Admin',
-        //     'extension' => '*',
-        //     'controller' => 'Utils',
-        //     'action' => 'panel',
-        // ],
-
-        // // admin prefix roles
-        // // TESTING ROLE STUFF
-        // [
-        //     'role' => ['admin', 'testing'],
-        //     'prefix' => 'Admin',
-        //     'controller' => 'Content',
-        //     'action' => ['index', 'edit'],
-        // ],
-        // [
-        //     'role' => ['testing'],
-        //     'prefix' => 'Admin',
-        //     'controller' => 'Wikis',
-        //     'action' => ['index'],
-        // ],
-        // [
-        //     'role' => ['testing'],
-        //     'prefix' => 'Admin',
-        //     'controller' => 'Corps',
-        //     'action' => ['index'],
-        // ],
-        // [
-        //     'role' => ['testing'],
-        //     'prefix' => 'Admin',
-        //     'controller' => 'Ads',
-        //     'action' => ['index'],
-        // ],
-        // [
-        //     'role' => ['testing'],
-        //     'prefix' => 'Admin',
-        //     'controller' => 'Pages',
-        //     'action' => ['index'],
-        // ],
-        // TESTING ROLE STUFF
-
 
 /****************************************************
 *************** ROLE: 'clinic' routes ***************
@@ -165,8 +122,6 @@ return [
             'action' => 'clinicFaq',
         ],
 
-
-
 /********************************************
 *************** Public routes ***************
 *********************************************/
@@ -227,6 +182,5 @@ return [
             'action' => ['index', 'view'],
             'bypassAuth' => true,
         ],
-
     ],
 ];
