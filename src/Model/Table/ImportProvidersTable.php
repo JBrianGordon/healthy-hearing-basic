@@ -91,20 +91,6 @@ class ImportProvidersTable extends Table
             ->maxLength('aud_or_his', 255)
             ->allowEmptyString('aud_or_his');
 
-        $validator
-            ->scalar('caqh_number')
-            ->maxLength('caqh_number', 255)
-            ->allowEmptyString('caqh_number');
-
-        $validator
-            ->scalar('npi_number')
-            ->maxLength('npi_number', 255)
-            ->allowEmptyString('npi_number');
-
-        $validator
-            ->scalar('licenses')
-            ->allowEmptyString('licenses');
-
         return $validator;
     }
 

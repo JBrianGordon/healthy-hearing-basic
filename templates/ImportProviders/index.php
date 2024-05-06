@@ -19,8 +19,6 @@
                     <th><?= $this->Paginator->sort('last_name') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
                     <th><?= $this->Paginator->sort('aud_or_his') ?></th>
-                    <th><?= $this->Paginator->sort('caqh_number') ?></th>
-                    <th><?= $this->Paginator->sort('npi_number') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -35,8 +33,6 @@
                     <td><?= h($importProvider->last_name) ?></td>
                     <td><?= h($importProvider->email) ?></td>
                     <td><?= h($importProvider->aud_or_his) ?></td>
-                    <td><?= h($importProvider->caqh_number) ?></td>
-                    <td><?= h($importProvider->npi_number) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $importProvider->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $importProvider->id]) ?>

@@ -50,9 +50,7 @@ return [
     'showAds' => false,
     'showReviewsByCity' => false,
     // Provider Variables
-    'showProviderLicenses' => false,
     'showProviderCredentialButtons' => false,
-    'showProviderNpi' => false,
     'showProviderAudOrHis' => false,
     // Call Tracking
     'isCallSourceGenerationEnabled' => true,

@@ -16,9 +16,6 @@ use Cake\ORM\Entity;
  * @property string|null $last_name
  * @property string|null $email
  * @property string|null $aud_or_his
- * @property string|null $caqh_number
- * @property string|null $npi_number
- * @property string|null $licenses
  *
  * @property \App\Model\Entity\Import $import
  * @property \App\Model\Entity\Provider $provider
@@ -43,9 +40,6 @@ class ImportProvider extends Entity
         'last_name' => true,
         'email' => true,
         'aud_or_his' => true,
-        'caqh_number' => true,
-        'npi_number' => true,
-        'licenses' => true,
         'import' => true,
         'provider' => true,
         'import_location_providers' => true,

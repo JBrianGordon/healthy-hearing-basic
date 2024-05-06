@@ -26,6 +26,7 @@ foreach ($fields as $field => $type) {
     $options = false;
     $empty = false;
     $value = $queryParams[$field] ?? null;
+    $placeholder = null;
     if (in_array($type, ['date', 'datetime'])) {
         $value['start'] = $queryParams[$field . '_start'] ?? null;
         $value['end'] = $queryParams[$field . '_end'] ?? null;
@@ -64,6 +65,7 @@ foreach ($fields as $field => $type) {
         'options' => $options,
         'empty' => $empty,
         'value' => $value,
+        'placeholder' => $placeholder
     ];
 }
 
