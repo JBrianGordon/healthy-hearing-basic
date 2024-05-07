@@ -16,7 +16,26 @@ $adId = $location->location_ad->id ?? null;
 
 $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
+<!-- Additional ATF CSS, since the css generator can't access our pages behind the login -->
 <style type="text/css">
+    .clinicLayout .basic-info {
+        width: 70%;
+        display: inline-block;
+        float: left;
+    }
+    table.basic-info th, table.basic-info td {
+        padding: 12px 24px;
+    }
+    .clinicLayout #quickButtons {
+        width: 29%;
+        display: inline-block;
+        float: left;
+    }
+    .clinicLayout #quickButtons a {
+        display: block;
+        margin: 0 auto 20px;
+        width: 250px;
+    }
     .hidden {
         display: none;
     }
