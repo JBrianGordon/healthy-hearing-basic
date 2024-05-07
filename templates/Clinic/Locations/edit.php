@@ -18,6 +18,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
 ?>
 <!-- Additional ATF CSS, since the css generator can't access our pages behind the login -->
 <style type="text/css">
+    .pt20 {
+        padding-top: 20px;
+    }
+    .clear, .clearfix {
+        display: block;
+        clear: both;
+    }
     .clinicLayout .basic-info {
         width: 70%;
         display: inline-block;
