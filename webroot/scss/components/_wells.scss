@@ -89,6 +89,10 @@
     min-height: 175px;
     max-width: 116px;
 
+    img {
+      width: 100%;
+    }
+
     @media (max-width: $screen-sm-max) {
       margin: 0 auto;
       min-height: 0;
