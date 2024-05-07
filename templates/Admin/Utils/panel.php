@@ -37,8 +37,8 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                           <div class="clearfix"></div>
                           <?php foreach ($adminMenu as $menuHeader => $menuContents): ?>
                             <?php
-                            $allowedRoles = $menuContents['permissions'];
-                            unset($menuContents['permissions']);
+                              $allowedRoles = $menuContents['permissions'];
+                              unset($menuContents['permissions']);
                             ?>
                             <?php if (in_array($user->role, $allowedRoles)): ?>
                               <div class="col panel panel-primary">
