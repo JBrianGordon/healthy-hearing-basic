@@ -61,20 +61,20 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                             <?php if (!empty($itemContents['items'])) : ?>
                                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <?php foreach ($itemContents['items'] as $subItemTitle => $subItem) : ?>
+                                                  <?php if ($subItemTitle == 'divider' && $subItem === true) : ?>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                  <?php else : ?>
                                                     <?php if ($this->AuthLink->isAuthorized($subItem['url'])): ?>
-                                                      <?php if ($subItemTitle == 'divider' && $subItem === true) : ?>
-                                                        <li><hr class="dropdown-divider"></li>
-                                                      <?php else : ?>
-                                                        <li>
-                                                          <a class="dropdown-item" href="<?= $subItem['url'] ?>">
-                                                            <?php if (!empty($subItem['icon'])) : ?>
-                                                                  <?= '<i class="' . $subItem['icon'] . '"></i> ' ?>
-                                                            <?php endif; ?>
-                                                            <?= $subItemTitle ?>
-                                                          </a>
-                                                        </li>
-                                                      <?php endif; ?>
+                                                      <li>
+                                                        <a class="dropdown-item" href="<?= $subItem['url'] ?>">
+                                                          <?php if (!empty($subItem['icon'])) : ?>
+                                                                <?= '<i class="' . $subItem['icon'] . '"></i> ' ?>
+                                                          <?php endif; ?>
+                                                          <?= $subItemTitle ?>
+                                                        </a>
+                                                      </li>
                                                     <?php endif; ?>
+                                                  <?php endif; ?>
                                                 <?php endforeach; ?>
                                               </ul>
                                             <?php endif; ?>
