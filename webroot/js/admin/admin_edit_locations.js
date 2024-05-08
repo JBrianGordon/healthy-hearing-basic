@@ -587,21 +587,17 @@ class locationsAdminEdit {
     const isChecked = obj.checked;
 
     if (isChecked) {
-      clearHours(day);
+      this.clearHours(day);
     } else {
-      setDefaultHours(day);
+      this.setDefaultHours(day);
     }
   }
 
   //Function to clear the values in each field if closed
   clearHours(day) {
     const hourFields = [
-      `#LocationHour${day}OpenHour`,
-      `#LocationHour${day}OpenMin`,
-      `#LocationHour${day}OpenMeridian`,
-      `#LocationHour${day}CloseHour`,
-      `#LocationHour${day}CloseMin`,
-      `#LocationHour${day}CloseMeridian`
+      `#locationhour-${day}-open`,
+      `#locationhour-${day}-close`,
     ];
 
     hourFields.forEach((field) => {
@@ -611,12 +607,8 @@ class locationsAdminEdit {
 
   //Function to set the values to defaults if closed checkbox is unchecked
   setDefaultHours(day) {
-    document.querySelector(`#LocationHour${day}OpenHour`).value = "08";
-    document.querySelector(`#LocationHour${day}OpenMin`).value = "00";
-    document.querySelector(`#LocationHour${day}OpenMeridian`).value = "am";
-    document.querySelector(`#LocationHour${day}CloseHour`).value = "05";
-    document.querySelector(`#LocationHour${day}CloseMin`).value = "00";
-    document.querySelector(`#LocationHour${day}CloseMeridian`).value = "pm";
+    document.querySelector(`#locationhour-${day}-open`).value = "08:00:00";
+    document.querySelector(`#locationhour-${day}-close`).value = "17:00:00";
   }
 
   onChangeIsClosedLunch(isClosedLunch) {

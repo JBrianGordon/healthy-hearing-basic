@@ -227,12 +227,13 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-document.querySelector("#hhtvButton").addEventListener("click", function() {
-  window.scrollTo({
-    top: document.querySelector("#hhTv").offsetTop,
-    behavior: 'smooth'
-  });
-});
+/*** TODO: uncomment when hhtv added: */
+// document.querySelector("#hhtvButton").addEventListener("click", function() {
+//   window.scrollTo({
+//     top: document.querySelector("#hhTv").offsetTop,
+//     behavior: 'smooth'
+//   });
+// });
 
 // Remove error class if at least one photo field has a value
 /***  TODO: uncomment when thumb urls are finally pulled in and update query selectors: ***
@@ -398,27 +399,15 @@ checkbox.addEventListener('click', function() {
   const day = this.dataset.day;
   const isOpen = !this.checked;
   
-  const openHour = document.querySelector(`#LocationHour${day}OpenHour`);
-  const openMin = document.querySelector(`#LocationHour${day}OpenMin`);
-  const openMeridian = document.querySelector(`#LocationHour${day}OpenMeridian`);
-  const closeHour = document.querySelector(`#LocationHour${day}CloseHour`);
-  const closeMin = document.querySelector(`#LocationHour${day}CloseMin`);
-  const closeMeridian = document.querySelector(`#LocationHour${day}CloseMeridian`);
+  const openHour = document.querySelector(`#locationhour-${day}-open`);
+  const closeHour = document.querySelector(`#locationhour-${day}-close`);
   
   if (isOpen) {
-    openHour.value = null;
-    openMin.value = null;
-    openMeridian.value = null;
-    closeHour.value = null;
-    closeMin.value = null;
-    closeMeridian.value = null;
+    openHour.value = '08:00:00';
+    closeHour.value = '17:00:00';
   } else {
-    openHour.value = '08';
-    openMin.value = '00';
-    openMeridian.value = 'am';
-    closeHour.value = '05';
-    closeMin.value = '00';
-    closeMeridian.value = 'pm';
+    openHour.value = null;
+    closeHour.value = null;
   }
 });
 });

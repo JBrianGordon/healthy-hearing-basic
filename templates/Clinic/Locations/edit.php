@@ -373,7 +373,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                             'label' => false,
                                                             'type' => 'checkbox',
                                                             'class' => 'is-closed-checkbox',
-                                                            'data-day' => ucfirst($day),
+                                                            'data-day' => $day,
                                                             'checked' => $location->location_hour->{$day.'_is_closed'}
                                                         ]) ?>
                                                     </td>

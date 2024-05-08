@@ -125,7 +125,7 @@ class LocationsController extends BaseAdminController
             if ($this->Locations->save($location)) {
                 $this->Flash->success(__('The location has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($this->request->referer());
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }

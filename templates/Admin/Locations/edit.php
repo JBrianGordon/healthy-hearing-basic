@@ -668,7 +668,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         'label' => false,
                                                         'type' => 'checkbox',
                                                         'class' => 'is-closed-checkbox',
-                                                        'data-day' => ucfirst($day),
+                                                        'data-day' => $day,
                                                         'checked' => $location->location_hour->{$day.'_is_closed'}
                                                     ]) ?>
                                                 </td>
