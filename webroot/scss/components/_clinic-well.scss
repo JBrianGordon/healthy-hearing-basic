@@ -202,7 +202,6 @@
 
   .basic-info {
     width: 70%;
-    display: inline-block;
     float: left;
 
     @media screen and (max-width: $screen-sm-max) {
@@ -212,7 +211,6 @@
 
   #quickButtons {
     width: 29%;
-    display: inline-block;
     float: left;
 
     @media screen and (max-width: $screen-sm-max) {
@@ -460,7 +458,6 @@ iframe[title='recaptcha challenge'] {
   .col-md-8 {
     .yhn-container.desktop,
     .earq-container.desktop {
-      display: inline-block;
       float: right;
 
       @media (max-width: $screen-sm-max) {
