@@ -29,7 +29,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 							<div class="col-md-12 gutter-below">
 									<?php
 										$ninetyDaysAgo = date('m/d/y', mktime(0, 0, 0, date("m") , date("d") - 90, date("Y")));
-										if ($location->last_review_date < $ninetyDaysAgo){
+										if (!empty($location->last_review_date) && $location->last_review_date < $ninetyDaysAgo){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise recent-review"><a href="' . $locationUrl . '#reviews">Recent review</a></legend>';
 										} else if($location->reviews_approved > 10){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise"><a href="' . $locationUrl . '#reviews">More than 10 reviews</a></legend>';
