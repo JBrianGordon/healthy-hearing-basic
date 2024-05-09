@@ -405,7 +405,7 @@ iframe[title='recaptcha challenge'] {
 
 .clinicPhone {
   .telephone {
-    .glyphicon-earphone {
+    .bi-telephone-fill {
       color: $brand-secondary;
       top: 3px;
       font-size: 22px;
@@ -415,7 +415,7 @@ iframe[title='recaptcha challenge'] {
     }
 
     &.h4 {
-      .glyphicon-earphone {
+      .bi-telephone-fill {
         font-size: 18px;
       }
     }
