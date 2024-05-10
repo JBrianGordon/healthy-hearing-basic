@@ -35,6 +35,7 @@ h5, .h5,
 h6, .h6 {
   margin-top: 0;
   margin-bottom: $line-height-computed;
+  line-height: 1.1;
   @include font($font-family-secondary, 'normal', "500");
 }
 

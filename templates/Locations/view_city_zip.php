@@ -39,7 +39,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 									<h1 class="text-primary">Hearing aids <?= (!empty($is_near)) ? 'near' : 'in' ?> <?= $this->Clinic->nearText($region,$city,$zip) ?></h1>
 								</div>
 							</header>
-							<p class="lead text-primary" id="filter-results">
+							<p class="lead text-primary mb20" id="filter-results">
 								<?php if($state == "Quebec") : ?>
 								<p>If you are looking for a clinic in Quebec, please visit the <a href="https://www.ordreaudio.qc.ca/chercher-un-audioprothesiste/" rel="noopener" target="_blank">Ordre des Audioprothésistes du Québec</a> website.</p>
 								<?php elseif (empty($locations)): ?>
@@ -68,8 +68,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 										<?php endif; ?>
 									</i>
 									<br>
-									<p><?= $siteName ?> provides listings from audiologists, hearing instrument specialists and hearing aid <?= Configure::read('regionalSpelling.center') ?>s near you. If you need hearing aids or a hearing test, choose a clinic from the list below to schedule an appointment in your area.
-									</p>
+									<p class="mb15"><?= $siteName ?> provides listings from audiologists, hearing instrument specialists and hearing aid <?= Configure::read('regionalSpelling.center') ?>s near you. If you need hearing aids or a hearing test, choose a clinic from the list below to schedule an appointment in your area.</p>
 									<?php if ($isAdmin): ?>
 										<?php
 										$exportLink = "/admin/locations/export";
@@ -81,7 +80,6 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 										<a href=<?= $exportLink ?> class="btn btn-default btn-xs">Export clinics for this area</a>
 									<?php endif; ?>
 								<?php endif; ?>
-							</p>
 						</div>
 					</div>
 				</section>
