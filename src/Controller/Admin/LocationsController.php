@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Locations Controller
@@ -11,7 +12,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\LocationsTable $Locations
  * @method \App\Model\Entity\Location[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class LocationsController extends AppController
+class LocationsController extends BaseAdminController
 {
     /**
      * Initialize
@@ -88,7 +89,22 @@ class LocationsController extends AppController
     {
         $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
         $location = $this->Locations->get($id, [
-            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers', 'LocationNotes', 'LocationEmails', 'Reviews', 'Users.LoginIps'],
+            'contain' => [
+                'CallSources',
+                'LocationHours',
+                'LocationAds',
+                'LocationPhotos',
+                'LocationVidscrips',
+                'Providers',
+                'LocationNotes' => [
+                    'sort' => ['LocationNotes.created' => 'DESC']
+                ],
+                'LocationEmails',
+                'Reviews' => [
+                    'sort' => ['Reviews.created' => 'DESC'],
+                ],
+                'Users.LoginIps'
+            ],
         ]);
         $lastOticonImport = $this->Locations->ImportStatus->find('all', [
             'contain' => [],
@@ -99,16 +115,21 @@ class LocationsController extends AppController
             'order' => ['ImportStatus.created DESC']
         ])->first();
         $lastOticonImportDate = empty($lastOticonImport->created) ? 'N/A' : dateTimeCentralToEastern($lastOticonImport->created);
+        $importLocations = $this->Locations->ImportLocations->find('all', [
+            'contain' => ['Imports'],
+            'conditions' => ['location_id' => $id],
+            'order' => ['ImportLocations.import_id DESC']
+        ])->disableHydration()->toArray();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
             if ($this->Locations->save($location)) {
                 $this->Flash->success(__('The location has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($this->request->referer());
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
-        $this->set(compact('location', 'lastOticonImportDate'));
+        $this->set(compact('location', 'lastOticonImportDate', 'importLocations'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
         $this->set('days', $this->Locations->LocationHours->days);
     }
@@ -159,7 +180,7 @@ class LocationsController extends AppController
         $requestParams = $this->request->getQueryParams();
         $options = [
             'search' => $requestParams,
-            'contain' => ['LocationUsers', 'LocationEmails', 'Providers'],
+            'contain' => ['Users', 'LocationEmails', 'Providers'],
         ];
         // TODO: So far, this seems to work okay even for larger exports.
         //     : But in Cake2 we sent large exports to the queue. Do we need to do the same?
@@ -172,5 +193,93 @@ class LocationsController extends AppController
 
         $this->viewBuilder()->setClassName('CsvView.Csv');
         $this->set(compact('emails', '_serialize', '_header', '_extract'));
+    }
+
+    /**
+    * Runs a Tier Status Change report and sends the results via email
+    */
+    /*** TODO: update this action ***/
+    public function tierStatusReport() {
+        //$email = $this->Auth->user('email');
+        if (!empty($this->request->data)) {
+            // Large file. Dispatch shell.
+            App::uses('Queue','Queue.Lib');
+            $cmd = "util tier_status_changes";
+            if (!empty($this->request->data['Util']['email'])) {
+                $cmd .= ' -t '.$this->request->data['Util']['email'];
+            }
+            if (!empty($this->request->data['Util']['start_date'])) {
+                $cmd .= ' -s '.$this->request->data['Util']['start_date'];
+            }
+            if (!empty($this->request->data['Util']['end_date'])) {
+                $cmd .= ' -e '.$this->request->data['Util']['end_date'];
+            }
+            if (Queue::add($cmd, 'shell')) {
+                $this->Flash->success('The tier status change report will be emailed.');
+            } else {
+                $this->Flash->error('Unable to add to queue: '.$cmd);
+            }
+            return $this->redirect(['action' => 'tier-status-report']);
+        }
+        //$this->set('email', $email);
+    }
+
+    // Create or update the CallSource number for this location
+    public function createUpdateCallSource($locationId = 0) {
+        // Since this is a manual method of modifying CS numbers with the button press,
+        // we can allow CS access on the test account
+        $this->Locations->CallSources->allowCsTest();
+        $result = $this->Locations->CallSources->saveCallSource($locationId);
+        $this->Locations->CallSources->disallowCsTest();
+        if ($result) {
+            $this->Flash->success('Call Source Number created/updated successfully!');
+        } else {
+            $errors = r_implode('<br>',$this->Locations->CallSources->errors);
+            $this->Flash->error("Unable to obtain number from CallSource.<br>Error(s): " . $errors, ['escape' => false]);
+        }
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
+    }
+
+    // End the CS number and create a new one for this location
+    public function csEndCreate($locationId = 0) {
+        // End the number but do not inactivate the customer
+        if ($this->Locations->CallSources->endCallSource($locationId, false)) {
+            // Number ended successfully. Create new number.
+            // Allow CS access on the test account
+            $this->Locations->CallSources->allowCsTest();
+            $result = $this->Locations->CallSources->saveCallSource($locationId);
+            $this->Locations->CallSources->disallowCsTest();
+            if ($result) {
+                $this->Flash->success('CS number ended and new number created successfully.');
+            } else {
+                $errors = r_implode('<br>',$this->Locations->CallSources->errors);
+                $this->Flash->error('Failed to create new CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
+            }
+        } else {
+            $errors = r_implode('<br>', $this->Locations->CallSources->errors);
+            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
+        }
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
+    }
+
+    // End the CS number for this location
+    public function csEnd($locationId = 0) {
+        // End all campaigns and inactivate the customer
+        if ($this->Locations->CallSources->endCallSource($locationId)) {
+            $this->Flash->success('CallSource number(s) ended successfully!');
+        } else {
+            $errors = r_implode('<br>', $this->Locations->CallSources->errors);
+            $this->Flash->error('Unable to end CallSource number.<br>Error(s): ' . $errors, ['escape' => false]);
+        }
+        return $this->redirect(['action' => 'edit', $locationId, '#'=>'CallSource']);
+    }
+
+    /**
+    * Simple callsource raw lookup
+    */
+    public function callSourceRaw($locationId = 0) {
+        Configure::write('debug', true);
+        $this->set('call_source', $this->Locations->CallSources->customerLookup($locationId));
+        $this->set('locationId', $locationId);
     }
 }

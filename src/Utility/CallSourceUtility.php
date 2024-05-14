@@ -6,6 +6,7 @@ namespace App\Utility;
 use Cake\Core\Configure;
 use GuzzleHttp\Client;
 use Cake\Utility\Xml;
+use App\Model\Entity\Location;
 
 class CallSourceUtility
 {

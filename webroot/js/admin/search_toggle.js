@@ -133,10 +133,10 @@ if(exportSubmit !== null){
       .then(response => response.json())
       .then(data => {
         if (data.success == true) {
-          console.debug('success');q
+          console.debug('success');
           console.debug(data);
         } else {
-          console.log('failed');q
+          console.log('failed');
         }
       })
       .catch(error => {
@@ -146,15 +146,10 @@ if(exportSubmit !== null){
 }
 
 // Reorganize search options and change booleans into a toggle
-if (document.querySelector("form").action.includes("/admin/locations") || document.querySelector("form").action.includes("/admin/crm-searches") || exportModal !== null) {
-
-  // Update labels for specific elements
-  const updateLabels = () => {
-    document.querySelector("label[for='id-cqp-practice']").textContent = "Practice";
-  };
-
-  updateLabels();
-
+if (document.querySelector("form").action.includes("/admin/locations") ||
+		document.querySelector("form").action.includes("/admin/crm-searches") ||
+		document.querySelector("form").action.includes("/search") ||
+		exportModal !== null) {
   //Wrap binary search options in spans
 	const inputElements = Array.from(document.querySelectorAll(".filter-group input[placeholder='0 [or] 1']"));
 

@@ -1,4 +1,7 @@
 <?php
+use App\Model\Entity\CaCallGroup;
+use Cake\Core\Configure;
+
 $topicOptions = [
 	CaCallGroup::TOPIC_WANTS_APPT => 'Hearing test or hearing aid consultation</span><span class="topic-label vwo-test-new-label pl5" style="display:none;">Difficulty hearing in certain situations',
 	CaCallGroup::TOPIC_AID_LOST_OLD => 'Hearing aid lost or broken</span><span class="topic-label vwo-test-new-label pl5" style="display:none;">My hearing aid is lost or broken',
@@ -11,21 +14,16 @@ $topicOptions = [
 	<span id="apptRequestModalAnchor"></span>
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<?= $this->Form->create('CaCall', [
-				'url' => ['controller' => 'ca_calls', 'action' => 'appt_request'],
-				'inputDefaults' => [
-					'div' => 'form-group',
-					'label' => [
-						'class' => 'col col-md-3 control-label'
-					],
-					'wrapInput' => 'col col-md-9',
-					'class' => 'form-control'
+			<?= $this->Form->create(null, [
+				'url' => [
+					'controller' => 'CaCalls',
+					'action' => 'ajaxApptRequest'
 				],
 				'class' => 'form-horizontal apptRequestForm',
 			]) ?>
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Request an appointment at <?= $location->title ?>:</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
 					<?php
@@ -37,28 +35,28 @@ $topicOptions = [
 					?>
 					<div class='form-fields'>
 						<?php
-							echo $this->Form->input('CaCallGroup.caller_first_name', [
+							echo $this->Form->control('CaCallGroup.caller_first_name', [
 								'label' => 'Patient first name:',
 								'placeholder' => 'First name',
 								'required' => true,
 								'autocomplete' => 'given-name',
 								'maxlength' => 30
 							]);
-							echo $this->Form->input('CaCallGroup.caller_last_name', [
+							echo $this->Form->control('CaCallGroup.caller_last_name', [
 								'label' => 'Patient last name:',
 								'placeholder' => 'Last name',
 								'required' => true,
 								'autocomplete' => 'family-name',
 								'maxlength' => 30
 							]);
-							echo $this->Form->input('CaCallGroup.caller_phone', [
+							echo $this->Form->control('CaCallGroup.caller_phone', [
 								'label' => 'Phone number:',
 								'placeholder' => 'Phone number',
 								'required' => true,
 								'div' => 'form-group required',
 								'autocomplete' => 'tel'
 							]);
-							echo $this->Form->input('CaCallGroup.email', [
+							echo $this->Form->control('CaCallGroup.email', [
 								'type' => 'email',
 								'label' => 'Email:',
 								'placeholder' => 'Email address',
@@ -71,15 +69,16 @@ $topicOptions = [
 								<div class="checkbox">
 									<?php
 									foreach ($topicOptions as $topicKey => $label) {
-										echo $this->Form->input('CaCallGroup.'.$topicKey, [
+										echo $this->Form->control('CaCallGroup.'.$topicKey, [
+											'type' => 'checkbox',
 											'label' => [
 												'class' => 'control-label pt0',
 												'style' => 'text-align:left;',
 												'text' => '<span class="topic-label vwo-test-old-label pl5">' . $label . '</span>',
 											],
+											'escape' => false,
 											'wrapInput' => false,
 											'div' => false,
-											'class' => false,
 										]);
 									}
 									?>
@@ -89,15 +88,17 @@ $topicOptions = [
 					</div>
 				</div>
 				<div class="modal-footer">
-					<p><small class="tac help-block"><?= Configure::read('siteName') ?> will contact you regarding your request as soon as possible.</small></p>
-					<div class="row">
+					<p class="mx-auto mb10">
+						<small class="tac help-block"><?= Configure::read('siteName') ?> will contact you regarding your request as soon as possible.</small>
+					</p>
+					<div class="row mx-auto">
 						<div class="col col-sm-12">
 							<div id="apptRequestSubmitError" class="alert alert-danger tal hidden" role="alert">
 								<button type="button" class="close" data-dismiss="alert">x</button>
 								<span id="apptRequestSubmitErrorMessage">Error</span>
 							</div>
 						</div>
-						<div class="col col-xs-12 col-sm-4 col-sm-offset-4">
+						<div class="col col-12 col-sm-4 col-sm-offset-4 mx-auto">
 							<button id="apptRequestSubmitBtn" type="submit" class="btn btn-secondary btn-block btn-lg">Submit</button>
 						</div>
 						<div class="g-recaptcha"

@@ -8,7 +8,7 @@ $auto_id = isset($auto_id) ? $auto_id : 'LocationSearchId';
 $search_id = isset($search_id) ? $search_id : 'LocationSearch';
 $btnId = isset($btnId) ? $btnId : 'LocationSearchBtn';
 $inline = isset($inline) ? $inline : false;
-$class = $autocomplete ? 'form-control autocomplete col-xs-12 mb30' : 'form-control'; 
+$class = $autocomplete ? 'form-control autocomplete col-xs-12 mb15' : 'form-control'; 
 ?>
 
 

@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\WikisTable $Wikis
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class WikisController extends AppController
+class WikisController extends BaseAdminController
 {
     /**
      * Index method
@@ -42,8 +42,9 @@ class WikisController extends AppController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $users = $this->Wikis->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('wiki', 'users'));
+        $authors = $this->Wikis->Authors->authorList();
+        $this->set(compact('wiki', 'authors'));
+        $this->set('tags', $this->Wikis->Tags->findTagList());
     }
 
     /**
@@ -67,8 +68,9 @@ class WikisController extends AppController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Authors->find('all', ['limit' => 200]);
+        $authors = $this->Wikis->Authors->authorList();
         $this->set(compact('wiki', 'authors'));
+        $this->set('tags', $this->Wikis->Tags->findTagList());
     }
 
     /**

@@ -26,11 +26,18 @@ const clinic = new Clinic();
 document.addEventListener('DOMContentLoaded', () => {
 
 	window.addEventListener('hashchange', () => {
-	  const offset = window.pageYOffset;
-	  window.scrollTo({
-	    top: offset - 70,
-	    behavior: 'smooth'
-	  });
+    const targetElementId = window.location.hash.substring(1);
+    const targetElement = document.getElementById(targetElementId);
+
+    if (targetElement) {
+        const offset = 70;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
 	});
 
 	// Rearrange clinic elements on mobile
@@ -78,23 +85,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const moreReviewsContainer = document.getElementById("more-reviews");
 	if(moreReviewsContainer){
-		const hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll("div"));
+		let hiddenReviews = Array.from(moreReviewsContainer.querySelectorAll(".well"));
 
 		hiddenReviews.forEach(review => {
 		  review.classList.add("hidden-review");
 		});
 
-		const hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
-		let hiddenRevNum = hiddenReviewElements.length;
-
 		const moreReviewsButton = document.getElementById("more-reviews-button");
+		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
+		let hiddenReviewElements, hiddenRevNum;
+
 		moreReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		  fewerReviewsButton.style.display = "block";
+			hiddenReviewElements = Array.from(document.querySelectorAll(".hidden-review"));
+			hiddenRevNum = hiddenReviewElements.length;
 
 		  for (let i = 0; i < 5; i++) {
 		    hiddenReviewElements[0].classList.remove("hidden-review");
+		    hiddenReviewElements = Array.from(hiddenReviewElements).slice(1);
 		    hiddenRevNum--;
 
 		    if (hiddenRevNum === 0) {
@@ -103,21 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		    }
 		  }
 
-		  const moreReviewsContainer = document.getElementById("more-reviews");
 		  moreReviewsContainer.style.display = "block";
 
 		  return false;
 		});
 
-		const fewerReviewsButton = document.getElementById("fewer-reviews-button");
 		fewerReviewsButton.addEventListener("click", function(e) {
 			e.preventDefault();
-		  const moreReviewsContainer = document.getElementById("more-reviews");
 		  moreReviewsContainer.style.display = "none";
 
 		  this.style.display = "none";
 
-		  const moreReviewsButton = document.getElementById("more-reviews-button");
 		  moreReviewsButton.style.display = "block";
 
 		  window.scrollTo({

@@ -28,6 +28,15 @@ $this->Breadcrumbs->add([
 ]);
 $isPreview = isset($isPreview) ? $isPreview : false;
 
+$meta = '<!--Facebook meta tags-->
+    <meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'].'" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="'.$content->facebook_title.'" />
+    <meta property="og:description" content="'.$content->facebook_description.'" />
+    <meta property="og:image" content="'.$content->facebook_image.'" />';
+
+$this->assign('meta', $meta);
+
 $contentSchema = '<script type="application/ld+json">{
 	"@context": "https://schema.org",
 	"@type": "NewsArticle",';
@@ -165,6 +174,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 					<?php echo $this->element('content/share'); ?>
 				</article>
 			</div>
+			<?= $this->element('responsive_slider') ?>
 			<?= $this->element('side_panel') ?>
 		</div>
 	</div>

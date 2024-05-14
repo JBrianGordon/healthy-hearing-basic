@@ -3,6 +3,14 @@
  * @var \App\View\AppView $this
  */
 $userId = $this->Identity->getId();
+
+// function to sort by priority values
+function compareByPriority($a, $b) {
+    return $a['priority'] <=> $b['priority'];
+}
+
+// Sort the $crmSearches array
+usort($crmSearches, 'compareByPriority');
 ?>
 <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
     <?php foreach ($crmSearches as $crmSearch) : ?>

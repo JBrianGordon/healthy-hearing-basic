@@ -12,7 +12,7 @@
 	      <div class="modal-body">
 			<?php foreach($locationPhotos as $photo): ?>
 				<div class="modal-slide-container photo gallery">
-					<img loading="lazy" src="/cloudfiles/clinics/<?= $photo->url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+					<img loading="lazy" src="<?= $photo->url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 				</div>
 			<?php endforeach ?>
 	      </div>
@@ -30,24 +30,24 @@
 						<!-- These images are loaded with a carousel plugin. Do not use lazy loading. -->
 						<?php foreach($locationPhotos as $photo): ?>
 							<button data-toggle="modal" class="photo-button" data-target="#photoModal" aria-label="Display photo carousel">
-								<img class="photo gallery" loading="lazy" src="/cloudfiles/clinics/<?= $photo->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+								<img class="photo gallery" loading="lazy" src="<?= $photo->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 							</button>
 						<?php endforeach ?>
 					<?php elseif (count($locationPhotos) == 3): ?>
 						<?php foreach($locationPhotos as $photo): ?>
 							<button data-toggle="modal" class="photo-button col-sm-4" data-target="#photoModal" aria-label="Display photo carousel">
-								<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="/cloudfiles/clinics/<?= $photo->phot_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+								<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="<?= $photo->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 							</button>
 						<?php endforeach ?>
 					<?php elseif (count($locationPhotos) == 2): ?>
 						<?php foreach($locationPhotos as $photo): ?>
 							<button data-toggle="modal" class="photo-button col-sm-6" data-target="#photoModal" aria-label="Display photo carousel">
-								<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="/cloudfiles/clinics/<?= $photo->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+								<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="<?= $photo->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 							</button>
 						<?php endforeach ?>
 					<?php else: ?>
 						<button data-toggle="modal" class="photo-button col-sm-6 offset-sm-3" data-target="#photoModal" aria-label="Display photo carousel">
-							<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="/cloudfiles/clinics/<?= $locationPhotos->first()->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+							<img class="photo gallery" loading="lazy" style="margin-bottom: 20px" src="<?= $locationPhotos->first()->photo_url; ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 						</button>
 					<?php endif; ?>
 				</div>

@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CorpsTable $Corps
  * @method \App\Model\Entity\Corp[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CorpsController extends AppController
+class CorpsController extends BaseAdminController
 {
 	
 	public $paginate = [
@@ -65,8 +65,8 @@ class CorpsController extends AppController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
-        $users = $this->Corps->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('corp', 'users'));
+        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set(compact('corp'));
     }
 
     /**
@@ -79,7 +79,7 @@ class CorpsController extends AppController
     public function edit($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Users'],
+            'contain' => ['Author'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
@@ -90,8 +90,8 @@ class CorpsController extends AppController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
-        $users = $this->Corps->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('corp', 'users'));
+        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set(compact('corp'));
     }
 
     /**

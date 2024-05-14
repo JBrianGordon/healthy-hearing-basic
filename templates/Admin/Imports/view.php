@@ -196,9 +196,6 @@
                             <th><?= __('Last Name') ?></th>
                             <th><?= __('Email') ?></th>
                             <th><?= __('Aud Or His') ?></th>
-                            <th><?= __('Caqh Number') ?></th>
-                            <th><?= __('Npi Number') ?></th>
-                            <th><?= __('Licenses') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($import->import_providers as $importProviders) : ?>
@@ -211,9 +208,6 @@
                             <td><?= h($importProviders->last_name) ?></td>
                             <td><?= h($importProviders->email) ?></td>
                             <td><?= h($importProviders->aud_or_his) ?></td>
-                            <td><?= h($importProviders->caqh_number) ?></td>
-                            <td><?= h($importProviders->npi_number) ?></td>
-                            <td><?= h($importProviders->licenses) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'ImportProviders', 'action' => 'view', $importProviders->id]) ?>
                                 <?= $this->Html->link(__('Edit'), ['controller' => 'ImportProviders', 'action' => 'edit', $importProviders->id]) ?>

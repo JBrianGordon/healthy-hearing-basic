@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CitiesTable $Cities
  * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CitiesController extends AppController
+class CitiesController extends BaseAdminController
 {
     /**
      * Initialize
@@ -39,7 +39,7 @@ class CitiesController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'City');
+            $this->set('currentModel', 'Cities');
         }
         $citiesQuery = $this->Cities
             ->find('search', [

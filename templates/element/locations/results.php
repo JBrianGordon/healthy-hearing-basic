@@ -17,9 +17,10 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<div class="row">
-					<?php foreach($locations as $distance => $location): ?>
+					<?php foreach($locations as $location): ?>
 						<?php
 							$locationId = $location->id;
+							$distance = $location->distance;
 							$displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($locationId);
 							$isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationId);
 							$locationUrl = Router::url($location->hh_url);
@@ -27,8 +28,8 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 						<?php if ($isEnhancedOrPremier): ?>
 							<div class="col-md-12 gutter-below">
 									<?php
-										$ninetyDaysAgo = date('Y-m-d', mktime(0, 0, 0, date("m") , date("d") - 90, date("Y")));
-										if ($location->last_review_date > $ninetyDaysAgo){
+										$ninetyDaysAgo = date('m/d/y', mktime(0, 0, 0, date("m") , date("d") - 90, date("Y")));
+										if (!empty($location->last_review_date) && $location->last_review_date < $ninetyDaysAgo){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise recent-review"><a href="' . $locationUrl . '#reviews">Recent review</a></legend>';
 										} else if($location->reviews_approved > 10){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise"><a href="' . $locationUrl . '#reviews">More than 10 reviews</a></legend>';
@@ -121,7 +122,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 										<div class="col-md-6">
 											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
 											<?= $this->Clinic->addressSchemaHidden($location) ?>
-											<div class="address visible-sm visible-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
+											<div class="address d-block d-sm-none"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
 											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
 												<div class="reviews">
@@ -131,7 +132,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 												</div>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
-												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
+												<div class="telephone h4"><span><span class="bi bi-telephone-fill"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 													<div>
 														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" data-bs-toggle="modal" data-button="<?= $location->id ?>" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
@@ -141,7 +142,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 											</div>
 										</div>
 										<div class="col-md-6">
-											<div class="address mt5 hidden-sm hidden-xs"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
+											<div class="address mt5 d-none d-sm-block"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
 											<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">View clinic details</a></div>
 										</div>
 									</div>
@@ -179,4 +180,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 			</div>
 		</div>
 	</section>
+	<div id="ajaxModals">
+	</div>
 <?php endif; ?>

@@ -10,12 +10,11 @@ document.querySelectorAll('table').forEach(table => {
   });
 });
 
-// Open social media links in a new window
-document.querySelectorAll('.btn-share').forEach(btn => {
-  btn.addEventListener('click', function(event) {
-    event.preventDefault();
-    window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-  });
+// Open twitter share links in a small window
+const twitterButton = document.querySelector('.twitter-share-button');
+twitterButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
 });
 
 // Add "noprint" class to all wistia videos in help pages

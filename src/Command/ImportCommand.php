@@ -499,7 +499,7 @@ class ImportCommand extends Command
         /*******
          * Method 3: Attempt to match on Zip + Address 1 + Address 2
          ********/
-        $matchedLocation = $this->Location->find('all', [
+        $matchedLocation = $this->Locations->find('all', [
             'conditions' => [
                 'AND' => [
                     'zip' => $locationData['zip'],
@@ -679,14 +679,6 @@ class ImportCommand extends Command
                 }
 
                 $previousImportProvider = $sortedPreviousProviders[$externalLocationId][$externalProviderId];
-
-                //TODO: these fields will be removed from future cakephp4 migrations. For now we need to unset them.
-                unset($previousImportProvider['caqh_number']);
-                unset($previousImportProvider['npi_number']);
-                unset($previousImportProvider['licenses']);
-                unset($importProvider['caqh_number']);
-                unset($importProvider['npi_number']);
-                unset($importProvider['licenses']);
 
                 // These fields should be automatically saved to the provider and not marked as an import diff
                 $providerEntity = $this->Providers->get($providerId);

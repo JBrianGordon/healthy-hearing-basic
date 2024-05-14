@@ -1,671 +1,687 @@
 .clinic-info {
-	h1.h2{
-		margin-top: 0;
-	}
-	.btn {
-		-webkit-box-shadow: 0px 1.5px 3px rgba(0,0,0,0.3);
-		box-shadow: 0px 1.5px 3px rgba(0,0,0,0.3);
-		
-		&[data-bs-target='#reviewSubmitModal']{
-			margin: 0 auto!important;
-			display: block;
-			max-width: 160px;
-			
-			@media only screen and (min-width: $screen-sm-min){
-				margin: auto;
-				display: inline-block;
-				max-width: none;
-			}
-		}
-	}
-	.btn-lg {
-		-webkit-box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
-		box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
-	}
+  h1.h2 {
+    margin-top: 0;
+  }
 
-	.name {
-		margin-bottom: 5px;
-		
-		&.pull-left {
-			margin-left: 15px;
-		}
-	}
+  small {
+    font-size: 65%;
+  }
 
-	.address {
-		color: #555657;
-		min-height: 50px;
-		
-		@media only screen and (max-width: $screen-md-max){
-			min-height: 50px;
-		}
+  .btn {
+    -webkit-box-shadow: 0px 1.5px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1.5px 3px rgba(0, 0, 0, 0.3);
 
-		[class*="hh-icon-"] {
-			color: #cacacb;
-			display: inline-block;
-			margin-top: -7px;
-			vertical-align: middle;
-		}
-	}
+    &[data-bs-target='#reviewSubmitModal'] {
+      margin: 0 auto !important;
+      display: block;
+      max-width: 160px;
 
-	.hours {
-		color: #555657;
+      @media only screen and (min-width: $screen-sm-min) {
+        margin: auto;
+        display: inline-block;
+        max-width: none;
+      }
+    }
+  }
 
-		.glyphicon-time {
-			color: #999;
-			margin-left: 1px;
-			margin-right: 2px;
-		}
-		.open {
-			color: green;
-		}
-	}
+  .btn-lg {
+    -webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+  }
 
-	.telephone {
-		letter-spacing: -0.04em;
-		margin-top: 0;
-		margin-bottom: 5px;
-		a {
-			letter-spacing: -0.04em;
-		}
-	}
+  .name {
+    margin-bottom: 5px;
 
-	.reviews {
-		color: #555657;
-		margin-bottom: 5px;
+    &.pull-left {
+      margin-left: 15px;
+    }
+  }
 
-		i {
-			color: #ffcc00;
-		}
-		
-		blockquote{
-			color: #555657;
-		}
+  .address {
+    color: #555657;
+    min-height: 50px;
 
-		.author {
-			text-wrap: balance;
-			
-			[class*="hh-icon-"] {
-				color: #ffcc00;
-			}
-		}
-		
-		#sortSpan {
-			margin-top: 20px;
-			display: block;
-			float:none;
-			text-align: center;
+    @media only screen and (max-width: $screen-md-max) {
+      min-height: 50px;
+    }
 
-			@media only screen and (min-width: $screen-sm-min){
-				margin-top: 3px;
-				float: right;
-			}
-		}
+    [class*="hh-icon-"] {
+      color: #cacacb;
+      display: inline-block;
+      margin-top: -7px;
+      vertical-align: middle;
+    }
+  }
 
-		#sortSelect {
-			border: 1px solid;
+  .hours {
+    color: #555657;
 
-			&:focus {
-				outline: 0;
-			}	
-		}
-		
-		a:hover {
-			text-decoration: none;
-		}
-		
-		.link-text {
-			display: inline;
-			
-			&:hover{
-				text-decoration: underline;
-			}
-		}
-	}
-	
-	.clinic-logo {
-		width: auto;
-		max-width: 100%;
-	    height: 80px;
-	    display: block;
-	    
-	    @media(max-width:$screen-md-max){
-		    height: auto;
-		    max-height: 80px;
-		}
-	}
+    .glyphicon-time {
+      color: #999;
+      margin-left: 1px;
+      margin-right: 2px;
+    }
 
-	&.t2 {
-		.details {
-			padding-left: 21px;
-		}
-		
-		small {
-			color: $text-color;
-		}
-	}
-	
-	&.well {
-		.logo-container.mr10 {
-			width: 120px;
-			height: auto;
-			display: inline-block;
-			padding:0;
-			
-			@media(max-width:$screen-sm-max){
-				display: block;
-				width: 100%;
-				clear: both;
-			}
-			
-			.clinic-logo {
-				display: block;
-				width: auto;
-				height: auto;
-				margin: 0 auto;
-			}
-			
-		}
-		
-		&.high-reviews {
-			border: solid 2px gold!important;
-			box-sizing: border-box; 
-			grid-area: 1 / 1;
-			padding: 20px; 
-			width: inherit;
-			
-			.patient-praise {
-				display:inline-block;
-				margin: 0 calc(50% - 82px);
-				width: auto;
-				padding: 0 4px;
-				border: 0;
-				
-				&.recent-review {
-					margin: 0 calc(50% - 55px);
-				}
-			}
-		}
-		
-		.patient-praise {
-			display:none;
-			font-size: 16px;
-			float: none;
-		}
-	}
+    .open {
+      color: green;
+    }
+  }
+
+  .telephone {
+    letter-spacing: -0.04em;
+    margin-top: 0;
+    margin-bottom: 5px;
+
+    a {
+      letter-spacing: -0.04em;
+    }
+  }
+
+  .clinic-logo {
+    width: auto;
+    max-width: 100%;
+    height: 80px;
+    display: block;
+
+    @media (max-width: $screen-md-max) {
+      height: auto;
+      max-height: 80px;
+    }
+  }
+
+  .reviews {
+    color: #555657;
+    margin-bottom: 5px;
+
+    i {
+      color: #ffcc00;
+    }
+
+    .author {
+      text-wrap: balance;
+
+      [class*="hh-icon-"] {
+        color: #ffcc00;
+      }
+    }
+
+    #sortSpan {
+      margin-top: 20px;
+      display: block;
+      float: none;
+      text-align: center;
+
+      @media only screen and (min-width: $screen-sm-min) {
+        margin-top: 3px;
+        float: right;
+      }
+    }
+
+    #sortSelect {
+      border: 1px solid;
+
+      &:focus {
+        outline: 0;
+      }
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .link-text {
+      display: inline;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &.t2 {
+    .details {
+      padding-left: 21px;
+    }
+
+    small {
+      color: $text-color;
+    }
+  }
+
+  &.well {
+    .logo-container.mr10 {
+      width: 120px;
+      height: auto;
+      display: inline-block;
+      padding: 0;
+
+      @media (max-width: $screen-sm-max) {
+        display: block;
+        width: 100%;
+        clear: both;
+      }
+
+      .clinic-logo {
+        display: block;
+        width: auto;
+        height: auto;
+        margin: 0 auto;
+      }
+    }
+
+    &.high-reviews {
+      border: solid 2px gold !important;
+      box-sizing: border-box;
+      grid-area: 1 / 1;
+      padding: 20px;
+      width: inherit;
+
+      .patient-praise {
+        display: inline-block;
+        margin: 0 calc(50% - 82px);
+        width: auto;
+        padding: 0 4px;
+        border: 0;
+
+        &.recent-review {
+          margin: 0 calc(50% - 55px);
+        }
+      }
+    }
+
+    .patient-praise {
+      display: none;
+      font-size: 16px;
+      float: none;
+    }
+  }
 }
 
 .clinicLayout {
-    background-color: #f9f9f9;
-    
-    .basic-info {
-	    width: 70%;
-	    display: inline-block;
-	    float: left;
-	    
-	    @media screen and (max-width:$screen-sm-max) {
-		    width: 100%;
-	    }
-    }
-    
-    #quickButtons {
-	    width: 29%;
-	    display: inline-block;
-	    float: left;
-	    
-	    @media screen and (max-width:$screen-sm-max) {
-		    width: 100%;
-		    margin-top: 40px;
-	    }
-	    
-	    a {
-		    display: block;
-		    margin: 0 auto 20px;
-		    width: 250px;
+  background-color: #f9f9f9;
 
-		    &:hover {
-		    	color: #fff;
-		    }
-	    }
+  .basic-info {
+    width: 70%;
+    float: left;
+
+    @media screen and (max-width: $screen-sm-max) {
+      width: 100%;
     }
+  }
+
+  #quickButtons {
+    width: 29%;
+    float: left;
+
+    @media screen and (max-width: $screen-sm-max) {
+      width: 100%;
+      margin-top: 40px;
+    }
+
+    a {
+      display: block;
+      margin: 0 auto 20px;
+      width: 250px;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  #liveLibraryItemSearch {
+    width: 250px;
+    border-color: #ef642f;
+    border-style: solid;
+    padding-right: 20px;
+  }
 }
 
 #staticMap {
-	width: 100%;
-	height: auto;
-		
-	@media screen and (max-width:$screen-sm-max) {
-		display: block;
+  width: 100%;
+  height: auto;
+
+  @media screen and (max-width: $screen-sm-max) {
+    display: block;
+  }
+}
+
+@media screen and (max-width: $screen-xs-max){
+	//Hide most google maps controls on mobile
+	.gm-style-iw.gm-style-iw-c, .gm-style-mtc, button.gm-control-active.gm-fullscreen-control, .gm-svpc, .gm-style .gm-style-iw-t::after{
+		display: none;
 	}
+}
+
+.directions-link {
+	margin: 10px auto 0;
+    display: block;
+    max-width: 220px;
 }
 
 #apptRequestPanel {
-	float:left;
-	margin-left: 0;
-	max-width: 100%;
-	
-	@media screen and (min-width:$screen-md-min) {
-		width:39.5%;
-		margin-left: 20px;
-	}
-	
-	@media screen and (min-width:$screen-lg-min) {
-		width:39.9%;
-	}
-	
-	&.contracted {
-		transition: 0.5s;
-		transform: scale(1);
-	}
+  float: left;
+  margin-left: 0;
+  max-width: 100%;
 
-	&.expanded {
-		transition: 0.5s;
-		transform: scale(1.1);
-	}
-	
-	&.fixed {
-		position: fixed;
-	    z-index: 2;
-	    width: 87vw;
-	    margin: 0 auto;
-	    top: 80px;
-	    
-		button.close {
-			display: block;
-		    color: #fff;
-		    opacity: 1;
-		    margin: 5px;
-		}
-	    
-	    .checkbox {
-			width: 100%;
-			float: left;
-	    }
-	}
-	
-	button.close {
-		display: none;
-	}
-	
-	.modal-content {
-		border: none;
-		height: auto;
-		box-shadow: none;
-		
-		@media only screen and (min-width: $screen-md-min) {
-			height: 650px;
-		}
-		
-		@media only screen and (min-width: $screen-lg-min) {
-			height: 590px;
-		}
-	
-		.panel-heading {
-			padding: 0;
-			
-			h2 {
-				background-color: $brand-secondary;
-				color:#fff;
-				padding: 10px 0;
-				margin: 0;
-				line-height: 1.5;
-			}
-		}
-		
-		.form-group {
-			margin-left: 0;
-			margin-right: 0;
-		}
-		
-		label {
-		    font-size: 14px;
-		    display: block;
-		    text-align: left;
-		    
-		    @media only screen and (min-width: $screen-md-min) {
-			    display: inline-block;
-			}
-		}
-		
-		.col-md-7 {
-			display: block;
-			width: 100%;
-			
-			@media only screen and (min-width: $screen-md-min) {
-				width: 58.33333%;
-			}
-		}
-		
-		.help-block {
-			font-size: 14px;
-		}
-		
-		.form-fields {
-			padding: 0 10px;
-			
-			@media only screen and (min-width: $screen-md-min) {
-				padding: 0;
-			}
-		}
-		
-		.form-group {
-			margin-bottom: 5px;
-			width: 100%;
-		}
-		
-		.form-control {
-			height: 30px;
-			font-size: 12px;
-		}
-		
-		.checkbox {
-			clear: both;
-		    min-height: 24px;
-		    padding-top: 3px;
-		}
-		
-		#apptRequestSubmitBtn{
-		    width: auto;
-		    margin: 0 auto;
-		}
-		
-	}
+  @media screen and (min-width: $screen-md-min) {
+    width: 39.5%;
+    margin-left: 20px;
+  }
+
+  @media screen and (min-width: $screen-lg-min) {
+    width: 39.9%;
+  }
+
+  &.contracted {
+    transition: 0.5s;
+    transform: scale(1);
+  }
+
+  &.expanded {
+    transition: 0.5s;
+    transform: scale(1.1);
+  }
+
+  &.fixed {
+    position: fixed;
+    z-index: 2;
+    width: 87vw;
+    margin: 0 auto;
+    top: 80px;
+
+    button.close {
+      display: block;
+      color: #fff;
+      opacity: 1;
+      margin: 5px;
+    }
+
+    .checkbox {
+      width: 100%;
+      float: left;
+    }
+  }
+
+  button.close {
+    display: none;
+  }
+
+  .modal-content {
+    border: none;
+    height: auto;
+    box-shadow: none;
+
+    @media only screen and (min-width: $screen-md-min) {
+      height: 650px;
+    }
+
+    @media only screen and (min-width: $screen-lg-min) {
+      height: 590px;
+    }
+
+    .panel-heading {
+      padding: 0;
+
+      h2 {
+        background-color: $brand-secondary;
+        color: #fff;
+        padding: 10px 0;
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    .form-group {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+
+      &.checkbox {
+      	margin-bottom: 0!important;
+      }
+    }
+
+    label {
+      font-size: 14px;
+      display: block;
+      text-align: left;
+
+      @media only screen and (min-width: $screen-md-min) {
+        display: inline-block;
+      }
+    }
+
+    .help-block {
+      font-size: 14px;
+    }
+
+    .form-fields {
+      padding: 0 10px;
+
+      @media only screen and (min-width: $screen-md-min) {
+        padding: 0;
+      }
+    }
+
+    .form-control {
+      height: 30px;
+      font-size: 12px;
+    }
+
+    .checkbox {
+      clear: both;
+      min-height: 24px;
+      padding-top: 3px;
+    }
+
+    #apptRequestSubmitBtn {
+      width: auto;
+      margin: 0 auto;
+    }
+  }
 }
 
 #apptRequestThankYouModal {
-	.modal-header {
-		padding: 0;
-		
-		h4 {
-			padding: 10px;
-		}
-	}
+  .modal-header {
+    padding: 0;
+
+    h4 {
+      padding: 10px;
+    }
+  }
 }
 
 .modal-backdrop {
-	display: none;
+  display: none;
 }
 
 iframe[title='recaptcha challenge'] {
-	@media only screen and (max-width: $screen-md-max) {
-		position: fixed;
-		top: 0;	
-	}
+  @media only screen and (max-width: $screen-md-max) {
+    position: fixed;
+    top: 0;
+  }
 }
 
 .clinicPhone {
-	.telephone {
-		.glyphicon-earphone{
-			color: $brand-secondary;
-		    top: 3px;
-		    font-size: 22px;
-		    width: 21px;
-		    height: 22px;
-		    display: inline-block;
-		}
-		
-		&.h4 {
-			.glyphicon-earphone{
-			    font-size: 18px;
-			}
-		}
-	}
-	.directBookBtn, .apptRequestBtn {
-	    margin-top: 10px;
-		width: 270px;
-	}
+  .telephone {
+    .bi-telephone-fill {
+      color: $brand-secondary;
+      top: 3px;
+      font-size: 22px;
+      width: 21px;
+      height: 22px;
+      display: inline-block;
+    }
+
+    &.h4 {
+      .bi-telephone-fill {
+        font-size: 18px;
+      }
+    }
+  }
+  .directBookBtn,
+  .apptRequestBtn {
+    margin-top: 10px;
+    width: 270px;
+  }
 }
 
 .row.provider-bio {
-	margin-bottom: 30px;
-	
-	.gutter-below {
-		em {
-			font-size: 9px;
-			line-height: 9px;
-		}
-	}
-	
-	.col-md-4 {
-		
-		.profile-pic-container {
-			min-height: 120px;
-			
-			.img-responsive {
-				@media(max-width:$screen-sm-max){
-					margin: 0 auto;
-				}
-			}
-		}
-		
-		small {
-			@media(max-width:$screen-sm-max){
-				margin: 0 auto;
-			}
-		}
-	}
-	
-	.col-md-8{
-		
-		.yhn-container.desktop, .earq-container.desktop{
-			display: inline-block;
-			float: right;
-			
-			@media screen and (max-width:$screen-sm-max){
-				display: none;
-			}
-		}
-		
-		.earq-container.desktop {
-			width: auto;
-		}
-		
-		.col-xs-12.gutter-below{
-			float: left;
-	
-			@media screen and (max-width:$screen-sm-max){
-				width: 150px;
-				padding: 0;
-				clear: left;
-			}
-			
-			.yhn-container, .ear1-container {
-			    width: 150px;
-			    margin: 0 auto;
-			    
-			    a{
-				    margin-top: 10px;
-			    }
-			}
-		}
-	}
-	
-	.popover.bottom{
-		min-width: 210px;
-	}
-	
-	.popover.right {
-	    min-width: 270px;
-	}
-	
-	.provider-name{
-		display: inline-block;
-		word-break: break-word;
-		margin-top: 5px;
-		margin-bottom: 10px;
-		font-size: 22px;
+  margin-bottom: 30px;
 
-		a {
-			font-size:16px;
-		}
-		
-		@media screen and (max-width:$screen-sm-max){
-			display: block;
-			margin-bottom: 0;
-			clear: both;
-			max-width: none;
-			text-align: center;
-		}
-		.cred-text {
-			margin-bottom: 10px;
-			display: inline-block;
-		}
-		.popover-content {
-			padding-left: 20px;
-			min-width:230px;
-		}
-		.provider-qualifications {
-			font-size:20px;
-		}
-	}
-	
-	.provider-title{
-		font-size: 18px;
-		font-weight: bold;
-		min-height: 33px;
-		margin-bottom: 5px;
+  .gutter-below {
+    em {
+      font-size: 9px;
+      line-height: 9px;
+    }
+  }
 
-		@media screen and (max-width:$screen-sm-max){
-			margin-bottom: 0;
-			clear: both;
-			text-align: center;
-		}
-	}
+  .col-md-4 {
+    .profile-pic-container {
+      min-height: 120px;
 
-	.ida-container.visible-xs-inline-block{
-		float: right;
-	}
-	
-	.provider-bio{
-		clear: both;
-	}
+      .img-responsive {
+        @media (max-width: $screen-sm-max) {
+          margin: 0 auto;
+        }
+      }
+    }
+
+    small {
+      @media (max-width: $screen-sm-max) {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .col-md-8 {
+    .yhn-container.desktop,
+    .earq-container.desktop {
+      float: right;
+
+      @media (max-width: $screen-sm-max) {
+        display: none;
+      }
+    }
+
+    .earq-container.desktop {
+      width: auto;
+    }
+
+    .col-xs-12.gutter-below {
+      float: left;
+
+      @media (max-width: $screen-sm-max) {
+        width: 150px;
+        padding: 0;
+        clear: left;
+      }
+
+      .yhn-container,
+      .ear1-container {
+        width: 150px;
+        margin: 0 auto;
+
+        a {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .popover {
+  	&.bottom {
+      min-width: 210px;
+    }
+	&.right {
+      min-width: 270px;
+    }
+  }
+
+  .provider-name {
+    display: inline-block;
+    word-break: break-word;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 22px;
+
+    a {
+      font-size: 16px;
+    }
+
+    @media (max-width: $screen-sm-max) {
+      display: block;
+      margin-bottom: 0;
+      clear: both;
+      max-width: none;
+      text-align: center;
+    }
+    .cred-text {
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .popover-content {
+      padding-left: 20px;
+      min-width: 230px;
+    }
+    .provider-qualifications {
+      font-size: 20px;
+    }
+  }
+
+  .provider-title {
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 33px;
+    margin-bottom: 5px;
+
+    @media (max-width: $screen-sm-max) {
+      margin-bottom: 0;
+      clear: both;
+      text-align: center;
+    }
+  }
+
+  .ida-container.visible-xs-inline-block {
+    float: right;
+  }
+
+  .provider-bio {
+    clear: both;
+  }
 }
 
 #moreInformation {
-	
-	.ida-container {
-		margin-top: -40px;
-		
-		@media screen and (max-width:$screen-sm-max){
-		    margin: 0 auto 20px;
-		    float: none!important;
-		    width: 141px;
-		}
-		
-		.ida-badge {
-			width: 120px;
-			margin: 20px auto;
-		}
-		
-		.ida-tooltip {
-			position: relative;
-			bottom: 45px;
-		}
-	}
-	
-	.about-container {
-		clear: both;
-		
-		.clinic-logo {
-			float: left;
-			margin-right: 10px;
-			width: auto;
-			height: auto;
-			max-width: 180px;
-			max-height: 120px;
-		}
-	}
-	
+  .ida-container {
+    margin-top: -40px;
+
+    @media (max-width: $screen-sm-max) {
+      margin: 0 auto 20px;
+      float: none !important;
+      width: 141px;
+    }
+
+    .ida-badge {
+      width: 120px;
+      margin: 20px auto;
+    }
+
+    .ida-tooltip {
+      position: relative;
+      bottom: 45px;
+    }
+  }
+
+  .about-container {
+    clear: both;
+
+    .clinic-logo {
+      float: left;
+      margin-right: 10px;
+      width: auto;
+      height: auto;
+      max-width: 180px;
+      max-height: 120px;
+    }
+  }
 }
 
 #optionalMessage {
-	min-height: 152px;
-	
-	@media screen and (max-width:$screen-md-max){
-		min-height: 177px;
-	}
-	
-	h2 {
-		font-family:'Lato',Arial,sans-serif;
-		font-size:18px;
-		font-weight:bold;
-		color:#fff;
-		background-color:#304369;
-		padding:10px 10px 10px 25px;
-		margin-bottom:0;
-		border:1px solid #304369;
-		line-height: 1.5;
-		margin-top:0
-	}
-	
-	p {
-		padding: 20px 25px;
-		border: 1px solid #ddd;
-		border-top:0;
-		background-color:#fff;
-		margin-bottom: 2em
-	}
+
+  @media screen and (max-width: $screen-md-max) {
+    min-height: 177px;
+  }
+
+  h2 {
+    font-family: 'Lato', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #304369;
+    padding: 10px 10px 10px 25px;
+    margin-bottom: 0;
+    border: 1px solid #304369;
+    line-height: 1.5;
+    margin-top: 0;
+  }
+
+  p {
+    padding: 20px 25px;
+    border: 1px solid #ddd;
+    border-top: 0;
+    background-color: #fff;
+    margin-bottom: 2em;
+  }
 }
 
-#earqProvider, #earqReviews, #earqServices, #earqHours {
-    margin-top: -70px;
-    position: absolute;
+#earqProvider,
+#earqReviews,
+#earqServices,
+#earqHours {
+  margin-top: -70px;
+  position: absolute;
 }
 
 #mapBuffer {
-	position: absolute;
-	margin-top: -70px;
+  position: absolute;
+  margin-top: -70px;
 }
 
 .linked-location {
-	.text-caption {
-		color: #555657;
-		.hh-icon-address {
-			color: #555657;
-		}
-	}
+  .text-caption {
+    color: #555657;
+    .hh-icon-address {
+      color: #555657;
+    }
+  }
 }
 
 .clinic-anchor {
-	position: absolute;
-	margin-top: -84px;
+  position: absolute;
+  margin-top: -84px;
 }
 
 .ida-badge {
-    width: 80px;
-    margin: 10px auto 0 35px;
-    
-    &.block {
-	    margin: 0 auto;
-	    display: block;
-    }
-    
-    @media screen and (max-width:$screen-sm-max){
-	    width: 75px;
-	    margin: 10px auto;
-	    display: block;
-	}
+  width: 80px;
+  margin: 10px auto 0 35px;
+
+  &.block {
+    margin: 0 auto;
+    display: block;
+  }
+
+  @media screen and (max-width: $screen-sm-max) {
+    width: 75px;
+    margin: 10px auto;
+    display: block;
+  }
 }
 
-#idaAnchor, #apptRequestModalAnchor {
-	margin-top: -70px;
-	position: absolute;
+#idaAnchor,
+#apptRequestModalAnchor {
+  margin-top: -70px;
+  position: absolute;
 }
 
 // EarQ Direct Book appearance
-#scheduler iframe, #scheduler object, #scheduler embed, .scheduler {
-	border: 0;
-	display: block;
-	width: 100%;
-	max-width: 800px;
-	height: 770px !important;
-	min-height: 770px !important;
-	padding: 0px;
-	margin-left: 0px;
+#scheduler iframe,
+#scheduler object,
+#scheduler embed,
+.scheduler {
+  border: 0;
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 770px !important;
+  min-height: 770px !important;
+  padding: 0px;
+  margin-left: 0px;
 }
 #schedulerHolder {
-	display: block;
-	width: 100%;
-	max-width: 800px;
-	height: 770px;
-	overflow: hidden;
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 770px;
+  overflow: hidden;
 }

@@ -11,13 +11,11 @@ images.forEach(image => {
   }
 });
 
-// Open social media links in a small window
-const shareButtons = document.querySelectorAll('.btn-share');
-shareButtons.forEach(button => {
-  button.addEventListener('click', function(event) {
-    event.preventDefault();
-    window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-  });
+// Open twitter share links in a small window
+const twitterButton = document.querySelector('.twitter-share-button');
+twitterButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
 });
 
 // Add 'noprint' class to all wistia videos in report pages

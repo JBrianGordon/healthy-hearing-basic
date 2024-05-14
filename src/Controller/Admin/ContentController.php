@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\Content;
+use Cake\Routing\Router;
 
 /**
  * Content Controller
@@ -11,7 +13,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\ContentTable $Content
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ContentController extends AppController
+class ContentController extends BaseAdminController
 {
     public $paginate = [
         'order' => [
@@ -122,29 +124,6 @@ class ContentController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $content = $this->Content->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $content = $this->Content->patchEntity($content, $this->request->getData());
-            if ($this->Content->save($content)) {
-                $this->Flash->success(__('The content has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The content could not be saved. Please, try again.'));
-        }
-        $users = $this->Content->Users->find('list', ['limit' => 200])->all();
-        $locations = $this->Content->Locations->find('list', ['limit' => 200])->all();
-        $tags = $this->Content->Tags->find('list', ['limit' => 200])->all();
-        $this->set(compact('content', 'users', 'locations', 'tags'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Content id.
@@ -153,9 +132,12 @@ class ContentController extends AppController
      */
     public function edit($id = null)
     {
-        $content = $this->Content->get($id, [
-            'contain' => ['PrimaryAuthor', 'Contributors'],
-        ]);
+        $content = null;
+        if (!empty($id)) {
+            $content = $this->Content->get($id, [
+                'contain' => ['PrimaryAuthor', 'Contributors'],
+            ]);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $content = $this->Content->patchEntity($content, $this->request->getData());
             if ($this->Content->save($content)) {
@@ -166,6 +148,19 @@ class ContentController extends AppController
             $this->Flash->error(__('The content could not be saved. Please, try again.'));
         }
         $this->set(compact('content'));
+        if (!empty($content->hh_url)) {
+            $seoUrlSlug =  Router::url($this->Content->findForRedirectById($id));
+            $seoRedirect = $this->fetchTable('SeoRedirects')->find('all', [
+                'contain' => ['SeoUris'],
+                'conditions' => [
+                    'SeoUris.uri' => $seoUrlSlug
+                ]
+            ])->first();
+            $this->set('seoRedirect', $seoRedirect);
+        }
+        $this->set('tags', $this->Content->Tags->findTagList());
+        $this->set('types', Content::$typeOptions);
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList());
     }
 
     /**

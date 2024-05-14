@@ -6,6 +6,10 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Log\LogTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
+use Cake\View\JsonView;
+use Cake\Utility\Inflector;
+use Cake\View\ViewBuilder;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Reviews Controller
@@ -13,14 +17,15 @@ use Cake\ORM\Exception\PersistenceFailedException;
  * @property \App\Model\Table\ReviewsTable $Reviews
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ReviewsController extends AppController
+class ReviewsController extends BaseAdminController
 {
     use LogTrait;
+    use LocatorAwareTrait;
 
     public $paginate = [
         'limit' => 50,
         'order' => ['created' => 'desc'],
-        'contain' => ['Zips', 'Locations'],
+        'contain' => ['Locations'],
     ];
 
     /**
@@ -35,6 +40,14 @@ class ReviewsController extends AppController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
     }
 
     /**
@@ -253,30 +266,150 @@ class ReviewsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * Multiple review approval method
-     *
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     */
-    public function approveAll()
+    public function massAction()
     {
         $this->request->allowMethod(['post']);
 
         $ids = $this->request->getData('ids');
 
-        try {
-            $this->Reviews->approveAll($ids);
-        } catch (PersistenceFailedException $e) {
-            $this->log($e->getMessage(), 'error');
+        $massAction = $this->request->getData('massAction');
+
+        if ($ids === [] || $ids === null) {
+            $desiredAction = ($massAction === 'approveAllSelected') ? 'approved' : 'deleted';
             $this->Flash->error(
-                'Unable to delete selected reviews. Please contact a developer for assistance in troubleshooting.'
+                "No reviews were selected, so none were {$desiredAction}."
             );
 
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->Flash->success('Selected review(s) approved.');
+        if ($massAction === 'approveAllSelected') {
+            try {
+                $this->Reviews->approveAllSelected($ids);
+            } catch (PersistenceFailedException $e) {
+                $this->log($e->getMessage(), 'error');
+                $badEntity = $e->getEntity();
+                $this->Flash->error(
+                    'Unable to approve selected reviews. Please contact a developer for assistance in troubleshooting. The failing Review ID is ' . $badEntity
+                );
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->success('Selected review(s) approved.');
+
+            return $this->redirect(['action' => 'index']);
+        } elseif ($massAction === 'deleteAllSelected') {
+            try {
+                $this->Reviews->deleteAllSelected($ids);
+            } catch (PersistenceFailedException $e) {
+                $this->log($e->getMessage(), 'error');
+                $badEntity = $e->getEntity();
+                $this->Flash->error(
+                    'Unable to delete selected reviews. Please contact a developer for assistance in troubleshooting. The failing Review ID is ' . $badEntity
+                );
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->success('Selected review(s) deleted.');
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Flash->error('Mass action failed.');
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+    * Checks the IP address of a specific review for matches within other reviews, notes and logins.
+    */
+    public function checkIp($reviewId) {
+
+        $this->viewBuilder()->setLayout('ajax');
+
+        $data = $this->Reviews->findIpMatches($reviewId);
+
+        $this->set(compact('data'));
+        $this->viewBuilder()->setOption('serialize', 'data');
+
+        return;
+    }
+
+    /**
+     * Export
+     */
+    public function export()
+    {
+        $extract = [
+            'id',
+            'location_id',
+            'body',
+            'first_name',
+            'last_name',
+            'zip',
+            'rating',
+            'is_spam',
+            'status',
+            'origin',
+            'response',
+            'created',
+            'denied_date',
+            'ip',
+            'character_count',
+            'location.listing_type',
+            'location.oticon_id',
+            'location.title',
+            'location.is_yhn',
+            'location.is_retail',
+            'location.email',
+            'location.hh_url'
+        ];
+
+        $header = array_map(
+            function($item) {
+                return str_replace('location.', '', $item);
+            },
+            $extract
+        );
+        $header = array_map([new Inflector(), 'humanize'], $header);
+
+        $reviews = $this->Reviews
+            ->find('search', [
+                'search' => $this->request->getQueryParams(),
+            ])
+            ->contain(['Locations']);
+
+        if ($reviews->count() < 2000) { // Immediately download small exports
+
+            $this->setResponse($this->getResponse()->withDownload('reviewsExport.csv'));
+            $this->set(compact('reviews'));
+            $this->viewBuilder()
+                ->setClassName('CsvView.Csv')
+                ->setOptions([
+                    'serialize' => 'reviews',
+                    'header' => $header,
+                    'extract' => $extract,
+                ]);
+
+        } else { // Email large exports
+            $data = [
+                'vars' => [
+                    'table' => 'Reviews',
+                    'queryParams' => $this->request->getQueryParams(),
+                    'containedTables' => ['Locations'],
+                    'extract' => $extract,
+                    'header' => $header,
+                    'csvExportFile' => '/tmp/reviewsExport.csv',
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+
+            $this->Flash->success(__('Large file export. Results will be emailed.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }

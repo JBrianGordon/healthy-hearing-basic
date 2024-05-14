@@ -2,18 +2,20 @@
 /**
  * @var \App\View\AppView $this
  */
+
+use Cake\Core\Configure;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Healthy Hearing</title>
     <?= $this->Html->meta('icon') ?>
+    <?= $this->element('google_tag_manager_head') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
-    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icons'],['rel' => 'preload', 'as' => 'font', 'type' => 'font/woff']) ?>
 
     <?= $this->fetch('meta') ?>
     <!-- Above the fold CSS -->
@@ -40,7 +42,7 @@
             echo $this->Html->css('/css/atf/state-page.css');
         } elseif ($_SERVER['REQUEST_URI'] == '/about') {
             echo $this->Html->css('/css/atf/about.css');
-        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers') {
+        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers' || preg_match('/\/clinic\/locations\/edit\//', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturers.css');
         } elseif (preg_match('/[A-Za-z]*-hearing-aids/', $_SERVER['REQUEST_URI']) || preg_match('/[A-Za-z]*-implants/', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturer.css');
@@ -52,6 +54,7 @@
     ?>
 </head>
 <body>
+    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
@@ -60,10 +63,10 @@
     <?= $this->element('footer') ?>
     <?= $this->Html->css('responsive', ['rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"']); ?>
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
-    <?= $this->Html->css(['BootstrapUI./font/bootstrap-icon-sizes']); ?>
+    <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
     <div id="footerContainer">
-        <!--/*** TODO: uncomment this once GTM is pulled in: ?= $this->element('cookie_footer')*/ ?-->
+        <?= $this->element('cookie_footer') ?>
         <?= $this->element('sticky_footer') ?>
     </div>
 </body>

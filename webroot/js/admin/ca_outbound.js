@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	// Call Type filter buttons
 	document.querySelector("body").addEventListener("click", function(e) {
 		const target = e.target;
-
 		if (target.id === "vmCallbackBtn") {
 			$("#CaCallGroupStatus").val(STATUS_VM_NEEDS_CALLBACK + "[or]" + STATUS_VM_CALLBACK_ATTEMPTED);
 			$("#CaCallGroupScore").val("");
@@ -28,20 +27,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		} else if (target.id === "surveyDirectBtn") {
 			$("#CaCallGroupStatus").val(STATUS_APPT_SET);
 				$("#CaCallGroupScore").val(SCORE_APPT_SET_DIRECT);
-		} else if (target.id === "surveyClinicBtn") {
-			$("#CaCallGroupStatus").val(STATUS_APPT_SET + "[or]" + STATUS_OUTBOUND_CLINIC_ATTEMPTED);
-			$("#CaCallGroupScore").val("!" + SCORE_APPT_SET_DIRECT);
-		} else if (target.id === "surveyCallerBtn") {
-			$("#CaCallGroupStatus").val(STATUS_OUTBOUND_CLINIC_DECLINED + "[or]" + STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS + "[or]" + STATUS_OUTBOUND_CUST_ATTEMPTED);
-			$("#CaCallGroupScore").val("");
 		}
 	});
 
-	document.querySelector("body").addEventListener("change", function(event) {
+	document.querySelector("body").addEventListener("change", function(e) {
 		const target = e.target;
-
 		if (target.classList.contains("timezoneFilter")) {
-			$("#CaCallGroupAdminOutboundForm").submit();
+			$("#OutboundCallsForm").submit();
 		}
 	});
 });

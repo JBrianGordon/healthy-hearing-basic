@@ -235,4 +235,8 @@ class AppController extends Controller
         }
         return false;
     }
+
+    public function hasRecoveryEmail() {
+        return (!empty($this->user->email));
+    }
 }

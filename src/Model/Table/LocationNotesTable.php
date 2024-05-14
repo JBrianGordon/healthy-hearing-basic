@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Model\Entity\User;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -94,5 +95,26 @@ class LocationNotesTable extends Table
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+
+    public function add($locationId, $noteBody, ?User $user = null)
+    {
+        $userId = User::USER_ID_AUTOMATED_USER;
+        if ($user) {
+            if ($user->role == 'clinic') {
+                $userId = 0;
+            } elseif ($user->role == 'admin') {
+                $userId = $user->id;
+            }
+        }
+
+        $noteData = [
+            'location_id' => $locationId,
+            'body' => $noteBody,
+            'user_id' => $userId,
+        ];
+        $entity = $this->newEntity($noteData);
+        $this->save($entity);
     }
 }

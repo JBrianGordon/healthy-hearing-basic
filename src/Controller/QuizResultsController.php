@@ -39,6 +39,16 @@ class QuizResultsController extends AppController
         $this->set(compact('quizResult'));
     }
 
+    public function onlineHearingTest() {
+        $this->set('canonical', ['controller' => 'quiz_results', 'action' => 'online_hearing_test']);
+        $this->socialOptions['og:type'] = 'article';
+        $this->socialOptions['og:image'] = '/img/quiz/hh19-free-online-hearing-test.jpg';
+        $this->socialOptions['article:section'] = 'Hearing Help';
+        $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
+        $this->set('show_ad', false);
+        $this->set('show_slider', false);
+    }
+
     /**
      * Add method
      *

@@ -24,8 +24,8 @@ $logo = Configure::read('logo');
 <!-- TODO: set background color variable in CSS -->
 <div class="navbar navbar-expand-lg navbar-clinic sticky-top" style="background-color: #fff;">
     <div class="container">
-        <a href="/" class="navbar-brand clinic-portal-logo d-inline-block float-start <?php echo Configure::read('country'); ?>" <?php echo $logoBorder; ?>>
-            <img src="<?php echo $logo; ?>" alt="<?php echo $siteName; ?>"><br />
+        <a href="/" class="navbar-brand clinic-portal-logo d-inline-block float-start <?= Configure::read('country') ?>" <?= $logoBorder ?>>
+            <img src="<?= $logo ?>" alt="<?= $siteName ?>" style="max-width: 200px;"><br />
             <div class="portal-title">Clinic Administration Portal</div>
         </a>
         <div class="collapse navbar-collapse show d-inline-block float-end pt20" id="navbarSupportedContent">
@@ -44,7 +44,7 @@ $logo = Configure::read('logo');
                                 'class' => 'nav-link d-inline-block',
                             ]
                     ) ?>
-                    <ul class="dropdown-menu dropdown-menu-end pt20" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <!-- TODO: MAKE SURE LINKS BELOW WORK; CREATE ROUTES -->
                         <!-- TODO: USE ROUTING ARRAYS WHERE APPROPRIATE -->
                         <li>

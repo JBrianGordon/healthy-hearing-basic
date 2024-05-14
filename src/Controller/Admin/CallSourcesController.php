@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CallSourcesTable $CallSources
  * @method \App\Model\Entity\CallSource[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CallSourcesController extends AppController
+class CallSourcesController extends BaseAdminController
 {
     /**
      * Initialize
@@ -46,7 +46,7 @@ class CallSourcesController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'CallSource');
+            $this->set('currentModel', 'CallSources');
         }
         $callSourcesQuery = $this->CallSources
             ->find('search', [

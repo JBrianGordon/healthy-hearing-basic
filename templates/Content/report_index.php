@@ -64,6 +64,7 @@ $this->Breadcrumbs->add([
 						</div>
 					</section>
 				</div>
+				<?= $this->element('responsive_slider') ?>
 				<?= $this->element('side_panel') ?>
 			</div>
 		</div>

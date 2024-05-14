@@ -6,6 +6,7 @@ namespace App\View\Helper;
 use Cake\View\Helper;
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
+use App\Enums\Model\Review\ReviewOrigin;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -63,7 +64,7 @@ class ClinicHelper extends Helper
     // TO-DO: Remove this function from reviewVerification() below
     public function reviewOrigin($key = null) {
         if ($key !== null) {
-            return Review::$origins[$key];
+            return ReviewOrigin::from($key)->getOriginLabel();
         }
     }
 
@@ -154,13 +155,13 @@ class ClinicHelper extends Helper
         if (isset($review->origin)) {
             switch ($this->reviewOrigin($review->origin)) {
                 case 'Online':
-                    $retval = '<br>Review submitted online';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review submitted online';
                     break;
                 case 'Mail':
-                    $retval = '<br>Review received via mail';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review received via mail';
                     break;
                 case 'Phone':
-                    $retval = '<br>Review verified by phone';
+                    $retval = '&nbsp;&nbsp;&nbsp;Review verified by phone';
                     break;
             }
         }
@@ -587,8 +588,8 @@ class ClinicHelper extends Helper
                 }
 
             }
-            if ($location->is_evening_weekend_hours) {
-                $retval .= "<tr><td colspan=\"2\">Evening and/or weekend hours available by appointment. Please call to schedule.</td></tr>";
+            if ($hours->is_evening_weekend_hours) {
+                $retval .= "<tr style='border-bottom-color:transparent'><td colspan=\"2\">Evening and/or weekend hours available by appointment. Please call to schedule.</td></tr>";
             }
         }
         if (!empty($retval)) {
@@ -630,8 +631,7 @@ class ClinicHelper extends Helper
             return $this->Html->image('/tmp/' . $provider->file->name, array('width' => 150));
         }
         if (!empty($provider->thumb_url)) {
-            $filename = basename($provider->thumb_url);
-            $url = "/cloudfiles/clinicians/" . rawurlencode($filename);
+            $url = $provider->thumb_url;
             $classLead = ' class="';
             $classClose = '"';
             if ($options['url_only']) {
@@ -654,11 +654,12 @@ class ClinicHelper extends Helper
             unset($options['url_only']);
             return '<div class="profile-pic-container"><img src="'.$url.'" loading="lazy"' . $classLead . $options['class'] . $classClose . ' alt="'.$options['alt'].'" width="'.$options['width'].'" height="'.$options['height'].'"></div>';
         }
-        /*
-        $image_path = WWW_ROOT . $provider->thumb_url;
-        if(!empty($provider->thumb_url) && file_exists($image_path)){
-        return $this->Html->image($provider->thumb_url);
-        }*/
+        if (!empty($provider->thumb_url)) {
+            $image_path = WWW_ROOT . $provider->thumb_url;
+            if (file_exists($image_path)) {
+                return $this->Html->image($provider->thumb_url);
+            }
+        }
         return "";
     }
 
@@ -840,7 +841,7 @@ class ClinicHelper extends Helper
                 ) . '</span>';
             case 'twitter':
                 $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
-                return '<span class="twitter"><span class="hh-icon-twitter clinic-share"></span> ' . $this->Html->link(
+                return '<span class="twitter"><span class="hh-icon-x clinic-share"></span> ' . $this->Html->link(
                     'Twitter',
                     'https://twitter.com/' . $text,
                     ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
@@ -1145,7 +1146,7 @@ class ClinicHelper extends Helper
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
         foreach ($payments as $keyIndex => $nameIcon) {
             $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
-            $retval .= '<div class="form-group col-md-6 flex mb20"><label class="control-label p0" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
+            $retval .= '<div class="col-md-6 flex mb20"><label class="form-label p0 tal fg-1" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
             $formOptions = array_merge([
                 'type' => 'checkbox',
                 'checked' => $checked,
@@ -1180,6 +1181,39 @@ class ClinicHelper extends Helper
         }
         if ($showRemoveBtn) {
             $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>';
+        }
+        return $retval;
+    }
+
+    // Takes the json encoded notes from CQP import and displays them in a nice table format
+    public function cqpImportNotes($notes) {
+        $contacts = json_decode($notes, true);
+        $retval = '';
+        if (!empty($contacts)) {
+            $retval = '<div class="panel panel-default">';
+                $retval .= '<div class="panel-heading">CQP contacts</div>';
+                $retval .= '<div class="panel-body m10">';
+                    $retval .= '<p>We do not automatically import providers from CQP. Here is a list of contacts associated with the practice (not necessarily this location). </p>';
+                    $retval .= '<table class="table table-striped table-bordered table-condensed">';
+                        $retval .= '<tr>';
+                            $retval .= '<th>First</th>';
+                            $retval .= '<th>Last</th>';
+                            $retval .= '<th>Title</th>';
+                            $retval .= '<th>Email</th>';
+                            $retval .= '<th>Office ID?</th>';
+                        $retval .= '</tr>';
+                        foreach ($contacts as $contact) {
+                            $first = empty($contact['ContactFName']) ? '' : $contact['ContactFName'];
+                            $retval .= '<tr>';
+                                foreach (['ContactFName', 'ContactLName', 'ContactTitle', 'ContactEmail', 'ContactOfficeID'] as $fieldName) {
+                                    $field = empty($contact[$fieldName]) ? '' : $contact[$fieldName];
+                                    $retval .= '<td>'.$field.'</td>';
+                                }
+                            $retval .= '</tr>';
+                        }
+                    $retval .= '</table>';
+                $retval .= '</div>';
+            $retval .= '</div>';
         }
         return $retval;
     }

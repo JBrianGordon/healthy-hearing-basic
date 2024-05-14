@@ -1,12 +1,12 @@
 <?php
+use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewResponseStatus;
+
 if (!isset($review) && isset($review->body)) {
 	$review = $review;
 }
 // Only show the response after the response has been approved
-$show_response = !empty($review->response) && ($review->response_status == ReviewResponseStatus::RESPONSE_STATUS_PUBLISHED);
-/*** TODO: build nameById ***/
-//$clinic_name = isset($clinic_name) ? $clinic_name : $this->Clinic->nameById($review->location_id);
+$show_response = !empty($review->response) && ($review->response_status === ReviewResponseStatus::RESPONSE_STATUS_PUBLISHED->value);
 $truncate = isset($truncate) ? $truncate : false;
 $onclick = isset($onclick) ? $onclick : false;
 $min_height = isset($min_height) ? $min_height : false;
@@ -28,8 +28,7 @@ $name = empty($name) ? null : $name;
 
 			echo '<br />';
 			echo date('m/d/Y', strtotime($review->created)) . '&nbsp;&nbsp;&nbsp;';
-			//*** TODO: uncomment once updates to reviewVerification are made ***/
-			//echo $this->Clinic->reviewVerification($review);
+			echo ReviewOrigin::from($review->origin)->getOriginVerification();
 
 			?>
 		</div>
@@ -38,7 +37,7 @@ $name = empty($name) ? null : $name;
 			<br />
 			<blockquote>
 				<div class="who">
-					<strong>Official Response<?php if($clinic_name && !$response_trunc) { echo " from $clinic_name";} ?>:</strong>
+					<strong>Official Response<?php if($clinicName && !$response_trunc) { echo " from $clinicName";} ?>:</strong>
 				</div>
 				<div class="quote"><?php echo $this->Clinic->formatReview($review->response, $response_trunc); ?></div>
 			</blockquote>

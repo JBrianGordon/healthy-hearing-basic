@@ -5,7 +5,7 @@ $this->Breadcrumbs->add([
 	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => ''],
 ]);
-$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['block' => true, 'defer' => 'defer']);
+$this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block' => true, 'defer' => 'defer']);
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">
@@ -44,18 +44,12 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['blo
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-lg-12 hidden-sm hidden-xs">
+								<div class="col-lg-12 d-none d-md-block">
 									<br />
-									<p class="h3">It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the lists below.</p>
+									<h4>It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the lists below.</h4>
 								</div>
 							</div>
-							<?php if (Configure::read('country') == 'US'): ?>
-								<div data-hh-map class="hidden-sm hidden-xs"></div>
-							<?php else: ?>
-								<center>
-									<object data="<?= Configure::read('map') ?>" type="image/svg+xml" id="interactiveMap" style="width: 600px;" class="hidden-sm hidden-xs"></object>
-								</center>
-							<?php endif; ?>
+							<div data-hh-map class="d-none d-md-block"></div>
 						</div>
 					</div>
 				</section>

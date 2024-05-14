@@ -47,9 +47,7 @@ return [
     'showAds' => true,
     'showReviewsByCity' => true,
     // Provider Variables
-    'showProviderLicenses' => false, // Hide provider licenses
     'showProviderCredentialButtons' => true,
-    'showProviderNpi' => true,
     'showProviderAudOrHis' => true,
     // Call Tracking
     'isCallSourceGenerationEnabled' => true,
@@ -73,6 +71,8 @@ return [
     'isTieringEnabled' => true,
     'isYhnAutoMatched' => false,
     'importTag' => 'YHN',
+    // Google tag manager
+    'gtmId' => 'GTM-P2V6GQ',
 	// Google Maps API
 	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
 	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',

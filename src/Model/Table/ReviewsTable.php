@@ -36,7 +36,6 @@ use Search\Model\Filter\Base;
  * @method \App\Model\Entity\Review saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -70,6 +69,12 @@ class ReviewsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
+
+        $this->addBehavior('Muffin/Footprint.Footprint', [
+            'events' => [
+                'Model.afterSave',
+            ],
+        ]);
 
         $this->addBehavior('CounterCache', [
             'Locations' => [
@@ -117,12 +122,6 @@ class ReviewsTable extends Table
             'joinType' => 'LEFT',
         ]);
 
-        $this->hasOne('Zips', [
-            'foreignKey' => 'zip',
-            'bindingKey' => 'zip',
-            'propertyName' => 'reviewer_zip',
-        ]);
-
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
@@ -137,7 +136,7 @@ class ReviewsTable extends Table
             ->value('rating', [
                 'multiValue' => true
             ])
-            ->value('status')
+            ->finder('status', ['finder' => 'pendingOrResponded'])
             ->value('origin')
             ->like('response', [
                 'before' => true,
@@ -225,6 +224,18 @@ class ReviewsTable extends Table
             ->requirePresence('last_name')
             ->notEmptyString('last_name');
 
+        $validator
+            ->add('last_name', 'moreThanOne', [
+                'rule' => function ($value, $context) {
+                    $input = strval($value);
+                    if (strlen($input) < 2 || (strlen($input) < 3 && !ctype_alpha($input))) {
+                        return false;
+                    }
+                    return true;
+                },
+                'message' => Configure::read('siteName').' requires you to submit your full last name for our review verification process. Although we show only the first name and last initial of the submitter, we cannot publish reviews submitted without a complete and accurate last name.'
+            ]);
+
         // Country-specific postal code validation
         $country = ucfirst(strtolower(Configure::read('country')));
         $countryValidator = 'Cake\\Localized\\Validation\\' . $country . 'Validation';
@@ -306,6 +317,11 @@ class ReviewsTable extends Table
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        // If we're passing in the body, update character_count.
+        if ($entity->isDirty('body')) {
+            $entity->set('character_count', strlen($entity->get('body')));
+        }
+
         $entity->set('sendReviewEmail', false);
 
         // Check if 'status' OR 'response_status' has changed
@@ -349,18 +365,54 @@ class ReviewsTable extends Table
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $sendReviewEmail = $entity->get('sendReviewEmail');
-        if ($sendReviewEmail !== false) {
-            $mailer = $this->getMailer('Review');
-            match ($sendReviewEmail) {
-                'emailPositiveReviewReceived' => $mailer->send('emailPositiveReviewReceived', [$entity]),
-                'emailNegativeReviewReceived' => $mailer->send('emailNegativeReviewReceived', [$entity]),
-                'emailReviewResponsePosted' => $mailer->send('emailReviewResponsePosted', [$entity]),
-            };
-        };
 
-        // averageRating()
-        // updateReviewCount()
-        // updateReviewStatus()
+        // The following got uglier (1 switch statement turned into 2)
+        // after I included the no-clinic-email condition.
+        // I *think* this could be very clean with enums, but maybe not worth it :)
+        if ($sendReviewEmail !== false) {
+            $locationNotes = $this->fetchTable('LocationNotes');
+
+            // Set up note body
+            switch ($sendReviewEmail) {
+                case 'emailPositiveReviewReceived':
+                    $noteBody = 'Positive review received';
+                    break;
+                case 'emailNegativeReviewReceived':
+                    $noteBody = 'Negative review received';
+                    break;
+                case 'emailReviewResponsePosted':
+                    $noteBody = 'Review response posted';
+                    break;
+            }
+
+            $locationEmails = $this
+                ->getTableLocator()
+                ->get('Locations')
+                ->getEmailList($entity->location_id);
+
+            // If there are no location emails, alert site admin(s).
+            if ($locationEmails === []) {
+                $this->sendReviewEmail(
+                    'noEmailSentToClinic',
+                    $entity,
+                    [Configure::read('customer-support-email')]
+                );
+            } else {
+                switch ($sendReviewEmail) {
+                    case 'emailPositiveReviewReceived':
+                        $this->sendReviewEmail('emailPositiveReviewReceived', $entity, $locationEmails);
+                        break;
+                    case 'emailNegativeReviewReceived':
+                        $this->sendReviewEmail('emailNegativeReviewReceived', $entity, $locationEmails);
+                        break;
+                    case 'emailReviewResponsePosted':
+                        $this->sendReviewEmail('emailReviewResponsePosted', $entity, $locationEmails);
+                        break;
+                }
+            }
+
+            $locationNotes->add($entity->location_id, $noteBody, $options['_footprint']);
+        };
     }
 
     /**
@@ -397,32 +449,32 @@ class ReviewsTable extends Table
      * @param array $ids Array of Review ids to be approved
      * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
      */
-    public function approveAll(array $ids)
+    public function approveAllSelected(array $ids)
     {
         $reviews = $this->find()
             ->where(['id IN' => $ids])
-            ->toList();
+            ->all();
 
-        // Create patch data array of Review ids and APPROVED statuses
-        $patchData = array_fill(0, count($ids), ['status' => ReviewStatus::APPROVED->value]);
-        foreach ($patchData as $key => &$entityData) {
-            $entityData = array_merge(
-                [
-                    'id' => $reviews[$key]->id,
-                ],
-                $entityData
-            );
+        foreach ($reviews as $review) {
+            $review->status = ReviewStatus::APPROVED->value;
         }
 
-        $patchedEntities = $this->patchEntities(
-            $reviews,
-            $patchData,
-            [
-                'fields' => ['status'],
-            ]
-        );
+        return $this->saveManyOrFail($reviews);
+    }
 
-        return $this->saveManyOrFail($patchedEntities);
+    /**
+     * Delete-all function for Reviews
+     *
+     * @param array $ids Array of Review ids to be deleted
+     * @return iterable<\Cake\Datasource\EntityInterface> Entities list.
+     */
+    public function deleteAllSelected(array $ids)
+    {
+        $reviews = $this->find()
+            ->where(['id IN' => $ids])
+            ->all();
+
+        return $this->deleteManyOrFail($reviews);
     }
 
     /**
@@ -440,16 +492,17 @@ class ReviewsTable extends Table
     }
 
     public function findIpMatches($reviewId) {
-        $data['ipWarningsFound'] = [];
+        $data['ipWarningsFound'] = false;
         $reviewIp = $this->get($reviewId)->ip;
         if (!empty($reviewIp)) {
             // Login IP matches
-            $loginMatches = $this->getTableLocator()->get('LoginIps')->find()
+            $loginMatches = $this->getTableLocator()->get('LoginIps')->find('all')
+                ->contain(['Users.Locations' => ['fields' => ['id']]])
                 ->where([
                     'ip' => $reviewIp
                 ])
                 ->order(['login_date' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['loginMatches'] = $loginMatches;
             // Review IP matches
             $reviewMatches = $this->find()
@@ -458,7 +511,7 @@ class ReviewsTable extends Table
                     'ip' => $reviewIp
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['reviewMatches'] = $reviewMatches;
             // LocationNote IP matches
             $noteMatches = $this->getTableLocator()->get('LocationNotes')->find()
@@ -466,12 +519,42 @@ class ReviewsTable extends Table
                     'body LIKE' => '%'.$reviewIp.'%'
                 ])
                 ->order(['created' => 'DESC'])
-                ->all();
+                ->toArray();
             $data['noteMatches'] = $noteMatches;
-            if (!empty($loginMatches) || !empty($reviewMatches) || !empty($noteMatches)) {
+            if ($loginMatches !== [] || $reviewMatches !== [] || $noteMatches !== []) {
                 $data['ipWarningsFound'] = true;
             }
         }
         return $data;
+    }
+
+    public function findPendingOrResponded(Query $query, array $options)
+    {
+        return $query->where(function (QueryExpression $exp, Query $q) use ($options) {
+            if ($options['status'] == ReviewStatus::PENDING->value) {
+                return $exp->or([
+                    'status' => ReviewStatus::PENDING->value,
+                    'response_status' => ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value
+                ]);
+            } else {
+                return $exp->eq('status', $options['status']);
+            }
+        });
+    }
+
+
+    /**
+     * Send Review notification emails
+     *
+     * @param string $reviewEmailType Type of Review notification email
+     * @param \Cake\Datasource\EntityInterface $entity Review entity
+     * @param array $reviewEmailAddresses Array of location's emails
+     */
+    public function sendReviewEmail(string $reviewEmailType, EntityInterface $reviewEntity, array $reviewEmailAddresses)
+    {
+        $mailer = $this->getMailer('Review');
+        foreach ($reviewEmailAddresses as $toEmail) {
+           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail]);
+        }
     }
 }

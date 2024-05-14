@@ -46,21 +46,7 @@ showNav = thisTrigger => {
 	
 	document.addEventListener('click', autoClose);
 	document.addEventListener('keyup', autoClose);
-},
-
-toggleDropdown = e =>{
-	const dropdown = e.currentTarget;
-    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-    if (dropdownMenu) {
-        dropdownMenu.classList.toggle('show');
-    }
-}
-
-const dropdowns = document.querySelectorAll('.dropdown');
-
-dropdowns.forEach(dropdown => {
-    dropdown.addEventListener('click', toggleDropdown);
-});
+};
 
 for(let navTrigger of navTriggers) {
 	navTrigger.addEventListener('click', e => {

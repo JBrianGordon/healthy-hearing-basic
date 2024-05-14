@@ -41,7 +41,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     <?php endif; ?>
                 </div>
-            <div class="col-sm-5 col-lg-offset-1 over-backdrop right-desktop">
+            <div class="col-sm-5 col-lg-offset-1 over-backdrop pull-right">
                 <div class="panel panel-secondary">
                     <header class="panel-heading text-center">
                       Find a clinic
@@ -60,14 +60,10 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                 <a href="/hearing-aids" class="btn btn-secondary">Browse by <?php echo $stateLabel; ?></a>
                             </p>
                         </div>
-                        <div class="panel-section hidden-xs">
-                            <?php if (Configure::read('country') == 'US'): ?>
-                                <div data-hh-map></div>
-                            <?php else: ?>
-                                <object data="<?php Configure::read('map'); ?>" type="image/svg+xml" id="interactiveMap"></object>
-                            <?php endif; ?>
+                        <div class="panel-section d-none d-sm-block">
+                            <div data-hh-map></div>
                             <p class="text-center">
-                                <button class="btn btn-secondary hidden-sm" data-toggle="modal" data-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
                             </p>
                         </div>
                         <?php if (!empty($clinicsNearMe)): ?>
@@ -103,17 +99,13 @@ $this->Html->script('dist/common.min', ['block' => true]);
         <div class="modal fade" id="enlargeMap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4>Pick a <?php echo $stateLabel; ?></h4>
+                    <div class="modal-header p15">
+                        <h4>Pick a <?= Configure::read('stateLabel') ?></h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <center>
-                            <?php if (Configure::read('country') == 'US'): ?>
-                                <div data-hh-map></div>
-                            <?php else: ?>
-                                <object data="<?php echo Configure::read('map'); ?>" type="image/svg+xml" id="bigMap" style="width: 60%;"></object>
-                            <?php endif; ?>
+                            <div data-hh-map></div>
                         </center>
                     </div>
                 </div>

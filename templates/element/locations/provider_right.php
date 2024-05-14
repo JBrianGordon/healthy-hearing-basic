@@ -11,7 +11,7 @@ $locationUrl = Router::url($location->hh_url);
 <div class='well provider-well mb0'>
     <div class='row'>
         <div class='col-sm-8'>
-        	<?php
+            <?php
             $providerName = $provider->first_name . ' ' . $provider->last_name;
             if (!empty($provider->credentials)) {
                 $providerName .= ', <span class="provider-credentials">' . $provider->credentials . '</span>';
@@ -29,18 +29,18 @@ $locationUrl = Router::url($location->hh_url);
             <?php endif; ?>
             <p class="clinic-provider-bio mb0"><?php echo $this->Clinic->truncate(strip_tags($provider->description), 100, "..."); ?></p>
         </div>
-		<div class='col-sm-4'>
+        <div class='col-sm-4'>
             <a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
-            	<?php if(!empty($location->logo_url) && !$isMobileDevice && $location->listing_type == 'Premier'): ?>
-                	<div class="logo-container mr10 col-xs-12"><img loading="lazy" class="clinic-logo" src="/cloudfiles/clinics/<?=$location->logo_url?>" alt="<?=$location->title?> logo" width="120" height="40"></div>
-            	<?php endif; ?>
-            	<?php echo $this->Clinic->providerImage($provider, [
+                <?php if(!empty($location->logo_url) && !$isMobileDevice && $location->listing_type == 'Premier'): ?>
+                    <div class="logo-container mr10 col-xs-12"><img loading="lazy" class="clinic-logo" src="<?=$location->logo_url?>" alt="<?=$location->title?> logo" width="120" height="40"></div>
+                <?php endif; ?>
+                <?php echo $this->Clinic->providerImage($provider, [
                     'class' => 'img-responsive align-center',
                     'alt' => $alt,
                     'width' => 200,
                     'height' => 150,
                 ]); ?>
              </a>
-		</div>
+        </div>
     </div>
 </div>

@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 ?>
 
 <?php $hidingBasicProviders = (Configure::read('country') != 'CA' && $isBasicClinic && $key >= 1 && empty($new)); ?>
-<div class="well provider" provider="<?php echo $key; ?>">
+<div class="well provider" provider="<?= $key ?>">
 	<?php if (!empty($new)): ?>
 		<div class="control-group mb0">
 			<div class="controls">
@@ -44,12 +44,12 @@ use Cake\Core\Configure;
 		<div class="form-group mb5">
 			<label class="col col-sm-3 control-label">Credentials</label>
 			<div class="col col-sm-9 p0">
-				<?= $this->Clinic->credSelect($provider->credentials ?? '') ?>
+				<?= $this->Clinic->credSelect("provider-" . $key . "-credentials") ?>
 			</div>
 		</div>
 		<?php
 			echo '<div class="form-group"><div class="col col-sm-9 col-md-offset-3 mb10 p0">';
-				echo $this->Form->control("Provider." . $key . ".credentials", ['label' => false, 'wrapInput' => 'col col-sm-9 col-md-offset-3', 'value'=>$provider->credentials ?? '']); 
+				echo $this->Form->control("provider-" . $key . "-credentials", ['label' => false, 'value'=>$provider->credentials ?? '']); 
 			echo '</div></div>';
 		?>
 	<?php else: ?>
@@ -62,7 +62,7 @@ use Cake\Core\Configure;
 		$calculatedTitle = $this->Clinic->getProviderTitle($credentials);
 		echo '<div class="form-group">';
 			echo $this->Form->control("Provider." . $key . ".title", ['class' => 'col col-sm-9', 
-			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'], 'placeholder' => $calculatedTitle, 'value' => $provider->title ?? ''
+			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'], 'required' => false, 'placeholder' => $calculatedTitle, 'value' => $provider->title ?? ''
 		]);
 		echo '</div>';
 	?>
@@ -75,7 +75,7 @@ use Cake\Core\Configure;
 		}
 		echo '<span id="provider' . $key . 'Desc" class="clinic-anchor"></span>';
 		echo '<div class="col-sm-9 col-md-offset-3"><small>Tell us about you! What makes you different from other hearing professionals? Why should customers choose your clinic over others?</small></div>';
-		echo $this->Form->control("Provider." . $key . ".description", ['required' => false, 'value' => $provider->description ?? '']);
+		echo $this->Form->control("Provider." . $key . ".description", ['label' => ['class' => 'col-sm-3 tar control-label'], 'class' => 'col-sm-9 mb20 editor', 'required' => false, 'value' => $provider->description ?? '', 'cols' => '30', 'rows' => '6']);
 		//*** TODO: update when CKEditor is ready ***
 		//echo $this->Ckeditor->replace("Provider" . $key . "Description", ['var_name' => "Provider" . $key . "Description", 'height'=>'200', 'var_name' => "Provider" . $key . "Description"]);
 		echo '<span id="upsellMessage' . $key .'" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
@@ -86,19 +86,19 @@ use Cake\Core\Configure;
 					'disabled' => 'disabled'
 				]);
 			}
-			echo $this->Form->control('Provider.' . $key . '.is_ida_verified', [
-					'div' => false,
-					'label' => [
-						'class' => 'col control-label switch boolean-switch ida-verified',
-						'text' => 'Ida verified provider',
-					],
-					'type' => 'checkbox',
-					'class' => '',
-					'wrapInput' => 'col-md-12'
-			]);
 		endif;
 	?>
 
+	<div class="col-md-12 mb20 form-group pl0">
+		<div class="checkbox form-check form-switch pl0 w-100">
+				<?= $this->Form->label('Provider.' . $key . '.is_ida_verified', 'IDA verified provider', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
+				<?= $this->Form->checkbox('Provider.' . $key . '.is_ida_verified', [
+					'type' => 'checkbox',
+					'class' => 'form-check-input ml0'
+					])
+				?>
+		</div>
+	</div>
 	<div class="form-group clearfix">
 		<div class="col-sm-4 col-sm-offset-2">
 			<?= $this->Form->control("Provider." . $key . ".order", ['label' => ['text' => 'Order', 'class' => 'col-sm-3 control-label'], 'value' => $key + 1, 'required' => true, 'id'=>"order-" . $key, 'readonly'=>true, 'class' => 'provider-order col-sm-9'])	?>

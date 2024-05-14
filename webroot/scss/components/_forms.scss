@@ -1,54 +1,86 @@
 form {
-	&[action="/search"] {
-		label{
-		    font-size: 0;
-		    line-height: 0;
-		    position: absolute;
-		}
-	}
-	&#FapMegaSearch {
-		margin-bottom: 30px;
-	}
-	label {
-	    &[for="FooterContactEmail"] {
-			font-size: 0;
-			line-height: 0;
-			position: absolute;
-	    }
-	}
+  &[action="/search"] {
+    label {
+      font-size: 0;
+      line-height: 0;
+      position: absolute;
+    }
+  }
 
-	&.form-horizontal {
-		.control-label {
-			text-align: right;
-    	margin-bottom: 0;
-    	padding-top: 7px;
-    	font-weight: bold;
+  &#FapMegaSearch {
+    margin-bottom: 30px;
+  }
 
-    	&.form-check-label {
-    		font-weight: normal;
-    	}
-		}
-	}
+  .editor {
+    position: absolute;
+    width: 1px!important;
+    height: 1px;
+  }
+
+  &#contentForm, &#wikisForm {
+    .provider {
+      .ck-editor__main {
+        width: 75%;
+        margin-left: 25%;
+      }
+    }
+
+    .ck.ck-editor {
+      width: 100%;
+    }
+  }
+
+  label {
+    &[for="FooterContactEmail"] {
+      font-size: 0;
+      line-height: 0;
+      position: absolute;
+    }
+  }
+
+  &.form-horizontal {
+    .control-label {
+      text-align: right;
+      margin-bottom: 0;
+      padding-top: 7px;
+      font-weight: bold;
+
+      &.form-check-label {
+        font-weight: normal;
+      }
+    }
+
+    .is-invalid ~ .invalid-feedback {
+      display: none;
+    }
+  }
+
+  .form-check-input {
+    &:checked {
+      background-color: $brand-primary;
+      border-color: $brand-primary;
+    }
+  }
 }
 
-.form-control {
-  @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
-  padding: (10px) $padding-base-horizontal;
-  font-size:16px;
+.form-control, .form-control[type=text], .form-control[type=tel], .form-control[type=email] {
+  @include box-shadow(inset 0px 0px 3px rgba(0, 0, 0, 0.15));
+  padding: 10px $padding-base-horizontal;
+  font-size: 16px;
 
   &#LocationSearch {
-	  @media(max-width:$screen-sm-max){
-		  font-size: 13px;
-	  }
+    @media (max-width: $screen-sm-max) {
+      font-size: 13px;
+    }
   }
 
   &:focus {
-    @include box-shadow(inset 0px 0px 3px rgba(0,0,0,0.15));
+    @include box-shadow(inset 0px 0px 3px rgba(0, 0, 0, 0.15));
   }
 }
 
 .form-select {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 .has-warning {
@@ -60,90 +92,88 @@ form {
 }
 
 .has-success {
- @include form-control-validation($brand-success, $brand-success, $state-success-bg);
+  @include form-control-validation($brand-success, $brand-success, $state-success-bg);
 }
 
-/*input[type="checkbox"] {
-  height: 1em;
-  width: 1.5em;
-}*/
-
 #LocationForm, .clinic-badges {
-	input[type="checkbox"] {
-		margin-left: -25px;
-	}
+  input[type="checkbox"] {
+    margin-left: -25px;
+  }
 }
 
 .border-radio {
-	
-	&.selected-border label{
-		border-color: $brand-light;
-	}
-	
-	label {
-		padding: 10px 20px;
-		border: 3px solid #ddd;
-	}
-	
-	.border-dashed {
-		border: dashed #ddd;
-	}
-	
-	.border-dotted {
-		border: dotted #ddd;
-	}
-	
-	.border-inset {
-		border: inset #ddd;
-	}
-	
-	input {
-		visibility: hidden;
-		width: 0;
-	}
+  &.selected-border label {
+    border-color: $brand-light;
+  }
+
+  label.control-label {
+    padding: 10px 20px;
+  }
+
+  .control-label {
+    border: 3px solid #ddd;
+  }
+
+  .border-dashed {
+    border: dashed #ddd;
+  }
+
+  .border-dotted {
+    border: dotted #ddd;
+  }
+
+  .border-inset {
+    border: inset #ddd;
+  }
+
+  input {
+    visibility: hidden;
+    width: 0;
+  }
 }
 
 .help-block {
   font-weight: normal;
-	display: block;
-	margin-top: 5px;
-	margin-bottom: 10px;
-	color: #6a6c6e;
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #6a6c6e;
 }
 
-#charLimit{
-	font-size: 12px;
+#charLimit {
+  font-size: 12px;
 }
 
-.max-chars{
-	color: #e51c23;
-	font-weight: bold;
+.max-chars {
+  color: #e51c23;
+  font-weight: bold;
 }
 
 .submit {
-	display: inline-block;
+  display: inline-block;
 }
 
 #q {
-    width: 500px;
+  width: 500px;
 }
+
 #query-results {
   border: 1px solid #ddd;
-  border-top:0;
+  border-top: 0;
   width: 500px;
   position: relative;
   bottom: 11px;
-}
 
-#query-results ul {
-  list-style-type: none;
-  margin: 0;
-}
+  ul {
+    list-style-type: none;
+    margin: 0;
 
-#query-results ul li {
-  padding: 5px 0;
-}
+    li {
+      padding: 5px 0;
 
-#query-results ul li:hover {
-  background: #eee;
+      &:hover {
+        background: #eee;
+      }
+    }
+  }
 }

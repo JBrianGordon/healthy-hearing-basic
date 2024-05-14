@@ -100,7 +100,7 @@ class LocationsController extends AppController
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
-        $show_ad = false;
+        $show_ad = true;
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 
@@ -367,7 +367,7 @@ class LocationsController extends AppController
                 if (!empty($location)) {
                     $this->response->disableCache();
                     // Found an inactive clinic, redirect to the zip page
-                    $this->badFlash('<div class="p10"><strong><span class="glyphicon glyphicon-search pr10" aria-hidden="true"></span> '.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.</div>');
+                    $this->Flash->error('<div class="p10"><strong><span class="glyphicon glyphicon-search pr10" aria-hidden="true"></span> '.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.</div>');
                     return $this->redirect([
                         'controller' => 'locations',
                         'action' => 'viewCityZip',
@@ -601,5 +601,16 @@ class LocationsController extends AppController
         //TODO: This needs to be tested
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         return (stripos($referer, ".healthyhearing.") == false);
+    }
+
+    /**
+    * Loads an appointment request modal via ajax for a specified locationId.
+    */
+    public function ajaxApptRequestModal($locationId) {
+        $this->viewBuilder()->setLayout('ajax');
+        //$this->meta['robots'] = "NOINDEX, FOLLOW";
+        $location = $this->Locations->findByIdForView($locationId);
+        $this->set(compact('location'));
+        $this->viewBuilder()->setOption('serialize', 'location');
     }
 }

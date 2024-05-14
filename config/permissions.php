@@ -1,102 +1,43 @@
 <?php
-/**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright 2010 - 2018, Cake Development Corporation (https://www.cakedc.com)
- * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
-
-/*
- * IMPORTANT:
- * This is an example configuration file. Copy this file into your config directory and edit to
- * setup your app permissions.
- *
- * This is a quick roles-permissions implementation
- * Rules are evaluated top-down, first matching rule will apply
- * Each line define
- *      [
- *          'role' => 'role' | ['roles'] | '*'
- *          'prefix' => 'Prefix' | , (default = null)
- *          'plugin' => 'Plugin' | , (default = null)
- *          'controller' => 'Controller' | ['Controllers'] | '*',
- *          'action' => 'action' | ['actions'] | '*',
- *          'allowed' => true | false | callback (default = true)
- *      ]
- * You could use '*' to match anything
- * 'allowed' will be considered true if not defined. It allows a callable to manage complex
- * permissions, like this
- * 'allowed' => function (array $user, $role, Request $request) {}
- *
- * Example, using allowed callable to define permissions only for the owner of the Posts to edit/delete
- *
- * (remember to add the 'uses' at the top of the permissions.php file for Hash, TableRegistry and Request
-   [
-        'role' => ['user'],
-        'controller' => ['Posts'],
-        'action' => ['edit', 'delete'],
-        'allowed' => function(array $user, $role, Request $request) {
-            $postId = Hash::get($request->params, 'pass.0');
-            $post = TableRegistry::getTableLocator()->get('Posts')->get($postId);
-            $userId = Hash::get($user, 'id');
-            if (!empty($post->user_id) && !empty($userId)) {
-                return $post->user_id === $userId;
-            }
-            return false;
-        }
-    ],
- */
 
 return [
     'CakeDC/Auth.permissions' => [
-        //all bypass
+/****************************************************
+*************** Non-HH CakePHP routes ***************
+*****************************************************/
+
+        /*******************************
+        * CakeDC/Users Plugin routes
+        ********************************/
         [
             'prefix' => false,
             'plugin' => 'CakeDC/Users',
             'controller' => 'Users',
             'action' => [
-                // LoginTrait
-                'socialLogin',
                 'login',
                 'logout',
-                'socialEmail',
-                'verify',
-                // RegisterTrait
-                'register',
-                'validateEmail',
-                // PasswordManagementTrait used in RegisterTrait
                 'changePassword',
                 'resetPassword',
                 'requestResetPassword',
-                // UserValidationTrait used in PasswordManagementTrait
-                'resendTokenValidation',
-                'linkSocial',
-                //U2F actions
-                'u2f',
-                'u2fRegister',
-                'u2fRegisterFinish',
-                'u2fAuthenticate',
-                'u2fAuthenticateFinish',
-                'webauthn2fa',
-                'webauthn2faRegister',
-                'webauthn2faRegisterOptions',
-                'webauthn2faAuthenticate',
-                'webauthn2faAuthenticateOptions',
             ],
             'bypassAuth' => true,
         ],
+
+        /*******************************
+        * DebugKit Plugin routes
+        ********************************/
         [
-            'prefix' => false,
-            'plugin' => 'CakeDC/Users',
-            'controller' => 'SocialAccounts',
-            'action' => [
-                'validateAccount',
-                'resendValidation',
-            ],
+            'role' => '*', // add 'admin' as a layer of protection?
+            'plugin' => 'DebugKit',
+            'controller' => '*',
+            'action' => '*',
             'bypassAuth' => true,
         ],
+
+/****************************************************
+*************** ROLE: 'admin' routes ***************
+*****************************************************/
+
         //admin role allowed to all the things
         [
             'role' => 'admin',
@@ -106,18 +47,16 @@ return [
             'controller' => '*',
             'action' => '*',
         ],
-        // admin prefix roles
+
+/****************************************************
+*************** ROLE: 'clinic' routes ***************
+*****************************************************/
+
+        /*******************************
+        * Clinic - Clinic/Locations
+        ********************************/
         [
-            'role' => 'admin',
-            'prefix' => 'Admin',
-            'extension' => '*',
-            'plugin' => '*',
-            'controller' => '*',
-            'action' => '*',
-        ],
-        // clinic-prefixed routes
-        [
-        // Clinics can only access their clinic's info when logged in
+        // Clinics can only access their clinic's location edit page when logged in
             'role' => 'clinic',
             'prefix' => 'Clinic',
             'controller' => 'Locations',
@@ -128,87 +67,119 @@ return [
                 'ownerForeignKey' => 'user_id',
             ]),
         ],
-        // Logged in clinics can access Reviews controller pages
-        [
+
+        /*******************************
+        * Clinic - Clinic/Reviews
+        ********************************/
+        [ // Clinics can only access their clinic's review index page
             'role' => 'clinic',
             'prefix' => 'Clinic',
             'controller' => 'Reviews',
-            'action' => ['index', 'respond'],
+            'action' => 'index',
+            'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'table' => 'LocationsUsers',
+                'id' => 'location_id',
+                'ownerForeignKey' => 'user_id',
+            ]),
         ],
-        //specific actions allowed for the all roles in Users plugin
-        [
-            'role' => '*',
-            'plugin' => 'CakeDC/Users',
-            'controller' => 'Users',
-            'action' => ['profile', 'logout', 'linkSocial', 'callbackLinkSocial'],
-        ],
-        [
-            'role' => '*',
-            'plugin' => 'CakeDC/Users',
-            'controller' => 'Users',
-            'action' => 'resetOneTimePasswordAuthenticator',
-            'allowed' => function (array $user, $role, \Cake\Http\ServerRequest $request) {
-                $userId = \Cake\Utility\Hash::get($request->getAttribute('params'), 'pass.0');
-                if (!empty($userId) && !empty($user)) {
-                    return $userId === $user['id'];
+        [ // Clinics can only access the 'respond' pages for their clinic's reviews
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'Reviews',
+            'action' => 'respond',
+            'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
+                $reviewId = $request->getParam('pass.0');
+                $review = \Cake\ORM\TableRegistry::get('Reviews')->get($reviewId);
+                $userId = $user['id'];
+                $locationsUsersRecord = \Cake\ORM\TableRegistry::get('LocationsUsers')
+                    ->find('all')
+                    ->where(['location_id' => $review->location_id])
+                    ->first();
+                if (!empty($locationsUsersRecord)) {
+                    return $userId === $locationsUsersRecord->user_id;
                 }
-
                 return false;
-            },
+            }
         ],
-        // Pages - no auth required
-        [
-            'prefix' => false,
+
+        /*******************************
+        * Clinic - Clinic/LibraryItems
+        ********************************/
+        [ // Clinics can access the sharing library
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'LibraryItems',
+            'action' => 'index',
+        ],
+
+        /*******************************
+        * Clinic - Clinic/Pages
+        ********************************/
+        [ // Clinics can access clinic FAQ
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
             'controller' => 'Pages',
-            'action' => [
-                'contactUs',
-                'home',
-                'newsletter',
-                'newsletterSuccess',
-                'clinicInfo',
-            ],
-            'bypassAuth' => true,
+            'action' => 'clinicFaq',
         ],
-        [
-            'prefix' => false,
-            'controller' => 'Locations',
-            'action' => '*',
-            'bypassAuth' => true,
-        ],
-        // Content - no auth required
+
+/********************************************
+*************** Public routes ***************
+*********************************************/
+
+        /*******************************
+        * Public - Content
+        ********************************/
         [
             'prefix' => false,
             'controller' => 'Content',
             'action' => ['reportIndex', 'view'],
             'bypassAuth' => true,
         ],
-        // Corps - no auth required
+
+        /*******************************
+        * Public - Corps
+        ********************************/
         [
             'prefix' => false,
             'controller' => 'Corps',
             'action' => ['index', 'view'],
             'bypassAuth' => true,
         ],
-        // Reviews - no auth required
+
+        /*******************************
+        * Public - Locations
+        ********************************/
         [
             'prefix' => false,
-            'controller' => 'Reviews',
-            'action' => [],
+            'controller' => 'Locations',
+            'action' => '*',
             'bypassAuth' => true,
         ],
-        // Wikis - no auth required
+
+        /*******************************
+        * Public - Pages
+        ********************************/
+        [
+            'prefix' => false,
+            'controller' => 'Pages',
+            'action' => [
+                'about',
+                'clinicInfo',
+                'contactUs',
+                'home',
+                'newsletter',
+                'newsletterSuccess',
+            ],
+            'bypassAuth' => true,
+        ],
+
+        /*******************************
+        * Public - Wikis
+        ********************************/
         [
             'prefix' => false,
             'controller' => 'Wikis',
             'action' => ['index', 'view'],
-            'bypassAuth' => true,
-        ],
-        // DebugKit
-        [
-            'role' => '*',
-            'plugin' => 'DebugKit',
-            'controller' => '*',
-            'action' => '*',
             'bypassAuth' => true,
         ],
     ],

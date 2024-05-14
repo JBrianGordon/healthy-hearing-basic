@@ -2,6 +2,8 @@
 /*
 These buttons are displayed in the action bar for all Call Assist admin pages.
 */
+$requestParams = $this->request->getAttribute('params');
+$action = $requestParams['action'];
 $spamCount = isset($spamCount) ? $spamCount : 0;
 // TODO: some features only for call supervisor or admin. Is there a better way to check this?
 $user = $this->Identity->get();
@@ -15,11 +17,10 @@ $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
 	<?= $this->Html->link("Delete Spam (".$spamCount.")", ['controller' => 'ca_call_groups', 'action' => 'delete_spam'], ['class' => $class, 'escape' => false], 'Are you sure you want to delete '.$spamCount.' spam call groups?') ?>
 <?php endif; ?>
 <?= $this->Html->link(" Outbound calls", ['controller' => 'ca_call_groups', 'action' => 'outbound'], ['class' => 'btn btn-default bi bi-megaphone-fill', 'escape' => false]) ?>
-<?php /* HIDE SURVEYS #15351
-<?= $this->Html->link("<i class='bi bi-megaphone-fill'></i> Survey Calls", ['controller' => 'ca_call_groups', 'action' => 'surveys'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-*/ ?>
 <?php if ($isCallSupervisor): ?>
 	<?= $this->Html->link("Calls", ['controller' => 'ca_calls', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?= $this->Html->link("Call groups", ['controller' => 'ca_call_groups', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-	<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+	<?php if ($action == 'index'): ?>
+		<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+	<?php endif; ?>
 <?php endif; ?>

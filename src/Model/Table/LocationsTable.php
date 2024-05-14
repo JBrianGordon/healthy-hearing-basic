@@ -119,16 +119,17 @@ class LocationsTable extends Table
                 'Providers.id' => 'ASC',
             ]
         ]);
-        $this->hasMany('LocationUsers', [
-            'foreignKey' => 'location_id',
-        ]);
         $this->hasOne('LocationVidscrips', [
             'foreignKey' => 'location_id',
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
         ]);
-        $this->belongsToMany('Users');
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'location_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'locations_users'
+        ]);
 
         // Allow us to search for multiple values using '[or]'
         $defaultOptions = ['multiValue'=>true, 'multiValueSeparator'=>'[or]'];
@@ -182,7 +183,6 @@ class LocationsTable extends Table
             ->boolean('is_cqp')
             ->boolean('is_cq_premier')
             ->boolean('is_iris_plus')
-            ->boolean('is_bypassed')
             ->boolean('is_call_assist')
             ->boolean('is_service_agreement_signed')
             ->boolean('is_last_edit_by_owner')
@@ -474,6 +474,11 @@ class LocationsTable extends Table
             1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
             2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
         ];
+
+        if (!Configure::read('isTieringEnabled')) {
+            unset(Location::$listingTypes[Location::LISTING_TYPE_BASIC]);
+            unset(Location::$listingTypes[Location::LISTING_TYPE_PREMIER]);
+        }
     }
 
     /**
@@ -557,8 +562,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('mobile_text')
             ->maxLength('mobile_text', 400)
-            ->requirePresence('mobile_text', 'create')
-            ->notEmptyString('mobile_text');
+            ->allowEmptyString('mobile_text');
 
         $validator
             ->integer('radius')
@@ -926,14 +930,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->requirePresence('direct_book_url', 'create')
-            ->notEmptyString('direct_book_url');
+            ->allowEmptyString('direct_book_url');
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->requirePresence('direct_book_iframe', 'create')
-            ->notEmptyString('direct_book_iframe');
+            ->allowEmptyString('direct_book_iframe');
 
         $validator
             ->boolean('is_yhn')
@@ -956,10 +958,6 @@ class LocationsTable extends Table
             ->notEmptyString('is_iris_plus');
 
         $validator
-            ->boolean('is_bypassed')
-            ->notEmptyString('is_bypassed');
-
-        $validator
             ->boolean('is_call_assist')
             ->notEmptyString('is_call_assist');
 
@@ -972,8 +970,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('optional_message')
             ->maxLength('optional_message', 400)
-            ->requirePresence('optional_message', 'create')
-            ->notEmptyString('optional_message');
+            ->allowEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
@@ -1347,9 +1344,6 @@ class LocationsTable extends Table
                     'conditions' => [
                         'Reviews.status' => ReviewStatus::APPROVED->value
                     ],
-                    'Zips' => [
-                        'fields' => ['city','state']
-                    ],
                 ]
             ]
         ])->first();
@@ -1384,6 +1378,36 @@ class LocationsTable extends Table
             }
         }
         return $location;
+    }
+
+    /**
+    * Find a Location ID by the Location User username
+    * @param string username
+    * @return int LocationID
+    */
+    public function findByUsername($username) {
+
+        if (empty($username)) {
+            return null;
+        }
+
+        // Does username match a location_id?
+        $count = $this->findById($username)->count();
+        if (!empty($count)) {
+            return $username;
+        }
+
+        // Find location_id match for user
+        $locationsUser = $this->LocationsUsers->find('all', [
+            'conditions' => [
+                'user_id' => $username,
+            ],
+            'contain' => []
+        ])->first();
+        if (!empty($locationsUser)) {
+            return $locationsUser->location_id;
+        }
+        return null;
     }
 
     /**
@@ -1595,9 +1619,10 @@ class LocationsTable extends Table
     * @return bool
     */
     public function isValidZip($input) {
-        if (Configure::read('country') == 'US') {
+        $country = Configure::read('country');
+        if ($country == 'US') {
             $regex = '/^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/';
-        } elseif ($settings['country'] == 'CA') {
+        } elseif ($country == 'CA') {
             $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
         }
         return (preg_match($regex,$input));
@@ -1759,16 +1784,16 @@ class LocationsTable extends Table
                     ];
                 }
             }
-            // Get email from LocationUser recovery email
-            foreach ($location->location_users as $locationUser) {
-                if (!empty($locationUser->email) && !in_array($locationUser->email, $uniqueEmails)) {
-                    $uniqueEmails[] = $locationUser->email;
+            // Get email from User recovery email
+            foreach ($location->users as $user) {
+                if (!empty($user->email) && !in_array($user->email, $uniqueEmails)) {
+                    $uniqueEmails[] = $user->email;
                     $data[] = [
                         'hhid' => $location->id,
                         'clinic_title' => $location->title,
-                        'first_name' => $locationUser->first_name,
-                        'last_name' => $locationUser->last_name,
-                        'email' => $locationUser->email,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
                     ];
                 }
             }
@@ -1785,5 +1810,160 @@ class LocationsTable extends Table
             }
         }
         return $data;
+    }
+
+    /**
+    * Get the timezone conditions based on tzFilter
+    * @param array tzFilter
+    */
+    public function getTimezoneConditions($tzFilter) {
+        $timezone = [];
+        $isDST = date('I');
+        if (!empty($tzFilter['Eastern'])) {
+            $timezone[] = 'America/New_York';
+            $timezone[] = 'America/Indiana/Indianapolis';
+        }
+        if (!empty($tzFilter['Central'])) {
+            $timezone[] = 'America/Chicago';
+        }
+        if (!empty($tzFilter['Mountain'])) {
+            $timezone[] = 'America/Denver';
+            if (!$isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Pacific'])) {
+            $timezone[] = 'America/Los_Angeles';
+            if ($isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Alaska'])) {
+            $timezone[] = 'America/Anchorage';
+        }
+        if (!empty($tzFilter['Hawaii'])) {
+            $timezone[] = 'Pacific/Honolulu';
+        }
+        return $timezone;
+    }
+
+    /**
+    * Get the datetime for display in the clinic's timezone
+    */
+    public function getClinicDateTime($locationId, $datetime, $format='m/d/Y g:i a T') {
+        $timezone = $this->getClinicTimezone($locationId);
+        $date = new DateTime($datetime, new DateTimeZone($timezone));
+        return $date->format($format);
+    }
+
+    /**
+    * Gets a string of clinic hours for display
+    * @param integer $locationId
+    * @return string hours
+    */
+    public function getHours($locationId) {
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        // Get the string to display
+        $result = '';
+        if (!empty($locationHour)) {
+            $dayMap = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            foreach ($dayMap as $day) {
+                $time = '';
+                if ($locationHour->{$day.'_is_closed'} == true) {
+                    $time = 'Closed';
+                } else if ($locationHour->{$day.'_is_byappt'} == true) {
+                    $time = 'Open by appointment.';
+                }
+                if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                    $time = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+                }
+                if (!empty($time)) {
+                    $result .= ucfirst($day).': '.$time.'<br>';
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+    * Gets a string of today's clinic hours for display
+    * @param integer $locationId
+    * @return string today's hours
+    */
+    public function getHoursToday($locationId) {
+        $day = strtolower(date('D'));
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        $hoursToday = '';
+        if (!empty($locationHour)) {
+            if ($locationHour->{$day.'_is_closed'} == true) {
+                $hoursToday = 'closed';
+            }
+            if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                $hoursToday = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+            }
+        }
+        return $hoursToday;
+    }
+
+    /**
+    * Set a location as show or no-show
+    * @param integer $locationId
+    * @param bool $isShow
+    * @return bool success
+    */
+    public function setShow($locationId, $isShow) {
+        $location = $this->get($locationId);
+        $location->is_show = $isShow;
+        $this->save($location);
+    }
+
+    /**
+    * Get a list of emails to send clinic notifications to.
+    * sends to all LocationEmails.
+    * @param integer $locationId
+    * @return array of email addresses
+    */
+    public function getEmailList($locationId)
+    {
+        $location = $this->get($locationId, [
+            'contain' => ['LocationEmails', 'Users']
+        ]);
+
+        $emails = [];
+
+        // Location Email
+        if ($location->hasValue('email')) {
+            $emails[] = $location->email;
+        }
+
+        // Extra 'Location Emails' for notifications
+        if ($location->has('location_emails')) {
+            foreach ($location->location_emails as $locationEmail) {
+                if ($locationEmail->hasValue('email')) { // Not NULL by default
+                    $emails[] = $locationEmail->email;
+                }
+            }
+        }
+
+        // Location User Emails
+        if ($location->has('users')) {
+            foreach ($location->users as $user) {
+                if ($user->hasValue('email')) { // Not NULL by default
+                    $emails[] = $user->email;
+                }
+            }
+        }
+
+        return $emails;
     }
 }

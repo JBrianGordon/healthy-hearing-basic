@@ -8,6 +8,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\CaCallGroup;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 
 /**
  * CaCallGroups Model
@@ -84,15 +87,8 @@ class CaCallGroupsTable extends Table
             ->value('ca_call_count')
             ->value('clinic_followup_count')
             ->value('patient_followup_count')
-            ->value('clinic_outbound_count')
-            ->value('patient_outbound_count')
             ->value('vm_outbound_count')
             ->boolean('is_locked')
-            ->value('question_visit_clinic')
-            ->value('question_what_for')
-            ->value('question_purchase')
-            ->value('question_brand')
-            ->value('question_brand_other')
             ->boolean('did_they_want_help')
             ->value('traffic_source')
             ->value('traffic_medium')
@@ -179,12 +175,12 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('caller_first_name')
             ->maxLength('caller_first_name', 255)
-            ->allowEmptyString('caller_first_name');
+            ->notEmptyString('caller_first_name');
 
         $validator
             ->scalar('caller_last_name')
             ->maxLength('caller_last_name', 255)
-            ->allowEmptyString('caller_last_name');
+            ->notEmptyString('caller_last_name');
 
         $validator
             ->boolean('is_patient')
@@ -193,12 +189,12 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('patient_first_name')
             ->maxLength('patient_first_name', 255)
-            ->allowEmptyString('patient_first_name');
+            ->notEmptyString('patient_first_name');
 
         $validator
             ->scalar('patient_last_name')
             ->maxLength('patient_last_name', 255)
-            ->allowEmptyString('patient_last_name');
+            ->notEmptyString('patient_last_name');
 
         $validator
             ->boolean('refused_name')
@@ -365,14 +361,6 @@ class CaCallGroupsTable extends Table
             ->notEmptyString('patient_followup_count');
 
         $validator
-            ->integer('clinic_outbound_count')
-            ->notEmptyString('clinic_outbound_count');
-
-        $validator
-            ->integer('patient_outbound_count')
-            ->notEmptyString('patient_outbound_count');
-
-        $validator
             ->integer('vm_outbound_count')
             ->notEmptyString('vm_outbound_count');
 
@@ -386,37 +374,11 @@ class CaCallGroupsTable extends Table
 
         $validator
             ->integer('id_locked_by_user')
-            ->requirePresence('id_locked_by_user', 'create')
-            ->notEmptyString('id_locked_by_user');
+            ->allowEmptyString('id_locked_by_user');
 
         $validator
             ->numeric('outbound_priority')
             ->allowEmptyString('outbound_priority');
-
-        $validator
-            ->scalar('question_visit_clinic')
-            ->maxLength('question_visit_clinic', 255)
-            ->allowEmptyString('question_visit_clinic');
-
-        $validator
-            ->scalar('question_what_for')
-            ->maxLength('question_what_for', 255)
-            ->allowEmptyString('question_what_for');
-
-        $validator
-            ->scalar('question_purchase')
-            ->maxLength('question_purchase', 255)
-            ->allowEmptyString('question_purchase');
-
-        $validator
-            ->scalar('question_brand')
-            ->maxLength('question_brand', 255)
-            ->allowEmptyString('question_brand');
-
-        $validator
-            ->scalar('question_brand_other')
-            ->maxLength('question_brand_other', 255)
-            ->allowEmptyString('question_brand_other');
 
         $validator
             ->boolean('did_they_want_help')
@@ -429,8 +391,7 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('traffic_medium')
             ->maxLength('traffic_medium', 50)
-            ->requirePresence('traffic_medium', 'create')
-            ->notEmptyString('traffic_medium');
+            ->allowEmptyString('traffic_medium');
 
         $validator
             ->boolean('is_appt_request_form')
@@ -443,8 +404,7 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('id_xml_file')
             ->maxLength('id_xml_file', 30)
-            ->requirePresence('id_xml_file', 'create')
-            ->notEmptyFile('id_xml_file');
+            ->allowEmptyString('id_xml_file');
 
         return $validator;
     }
@@ -461,5 +421,98 @@ class CaCallGroupsTable extends Table
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isNew()) {
+            if (empty($entity->id_locked_by_user)) {
+                $entity->id_locked_by_user = 0;
+            }
+            if (empty($entity->id_xml_file)) {
+                $entity->id_xml_file = '';
+            }
+            if (empty($entity->traffic_medium)) {
+                $entity->traffic_medium = '';
+            }
+        }
+        return true;
+    }
+
+    /**
+    * Get the 10 most recent calls for the specified location id. Or the 10 most recent calls (all locations) if no id specified.
+    * @param location id - leave empty to find calls for all locations
+    * @param followupOnly - true to only find 'followup to set appt' calls
+    * @return array of previous calls
+    */
+    function getPreviousCalls($locationId = null, $followupOnly = false) {
+        $previousCalls = [];
+        $conditions = [];
+        if (!empty($locationId)) {
+            // Find calls for this clinic only
+            $conditions['location_id'] = $locationId;
+        }
+        $now = getDateTime('now', 'GMT', 'Y-m-d H:i:s');
+        if ($followupOnly) {
+            // Find followup calls only
+            $conditions['OR'] = [
+                [
+                    'status IN' => [CaCallGroup::STATUS_FOLLOWUP_SET_APPT, CaCallGroup::STATUS_TENTATIVE_APPT]
+                ],
+            ];
+        } else {
+            // Find all calls that are not 'complete'
+            $conditions['OR'] = [
+                [
+                    'final_score_date <' => '2000-01-01'
+                ],
+                [
+                    'status IN' => [CaCallGroup::STATUS_INCOMPLETE],
+                ],
+            ];
+        }
+        // Find 10 most recent calls
+        $callGroups = $this->find('all', [
+            'contain' => [],
+            'conditions' => $conditions,
+            'order' => 'created DESC',
+            'limit' => 10,
+        ])->all();
+        foreach ($callGroups as $callGroup) {
+            $callDescription = $callGroup->created->format("n/d/y g:i A");
+            if (!empty($callGroup->caller_first_name) || !empty($callGroup->caller_last_name)) {
+                $callDescription .= " - ".$callGroup->caller_first_name." ".$callGroup->caller_last_name;
+            }
+            if (!empty($callGroup->patient_first_name) || !empty($callGroup->patient_last_name)) {
+                $callDescription .= " calling for ".$callGroup->patient_first_name." ".$callGroup->patient_last_name;
+            }
+            $status = empty($callGroup->status) ? "Incomplete" : CaCallGroup::$statuses[$callGroup->status];
+            $callDescription .= " (".$status.")";
+            $previousCalls[$callGroup->id] = $callDescription;
+        }
+        return $previousCalls;
+    }
+
+    /**
+    * Lock the record to the current user
+    */
+    function lock($id = null, $userId = null) {
+        //TODO: handle call group locking
+        return true;
+        /*
+        if ($id) {
+            $this->id = $id;
+        }
+        if ($this->isLocked($id, $userId)) {
+            return false;
+        }
+        if ($this->saveField('is_locked', true)) {
+            if ($this->saveField('locked_by_user_id', $userId)) {
+                $retval = $this->saveField('lock_time', $this->str2datetime());
+                return $retval === false ? false : true;
+            }
+        }
+        return false;
+        */
     }
 }

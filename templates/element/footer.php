@@ -6,7 +6,7 @@
 				<ul class="no-bullets">
 					<li><a href="/" class="text-link">Home</a></li>
 					<li><a href="/about" class="text-link">About us</a></li>
-					<li><a href="/contact-us" class="text-link">Contact <?php echo $siteName; ?></a></li>
+					<li><a href="/contact-us" class="text-link">Contact <?= $siteName ?></a></li>
 					<?php if (Configure::read('showFeeds')): ?>
 						<li><a href="/feeds" class="text-link">RSS feeds</a></li>
 					<?php endif; ?>
@@ -39,12 +39,10 @@
 			<div class="col-md-6">
 				<?php if (Configure::read('showNewsletter')): ?>
 					<p class="text-primary text-small">
-					<strong>Get the best of <?php echo $siteName; ?> delivered to your inbox!</strong>
+					<strong>Get the best of <?= $siteName; ?> delivered to your inbox!</strong>
 					</p>
 					<p>
-					<?php
-					echo $this->Html->link('Sign up for our newsletter', '/newsletter', ['class' => 'btn btn-primary btn-sm']);
-					?>
+					<?= $this->Html->link('Sign up for our newsletter', '/newsletter', ['class' => 'btn btn-primary btn-sm']) ?>
 					</p>
 				<?php endif; ?>
 				<div class="soc-icons">
@@ -52,7 +50,7 @@
 						<a href="<?= Configure::read('sameAsSocialLinks.facebook') ?>" class="text-light" target="_blank" rel="noopener"><span class="hh-icon-circle-facebook"></span><?= Configure::read('siteNameAbbr') ?> Facebook page</a>
 					<?php endif; ?>
 					<?php if(Configure::read('sameAsSocialLinks.twitter')): ?>
-						<a href="<?= Configure::read('sameAsSocialLinks.twitter') ?>" class="text-light" target="_blank" rel="noopener"><?= Configure::read('siteNameAbbr') ?> Twitter page<span class="hh-icon-circle-twitter"></span></a>
+						<a href="<?= Configure::read('sameAsSocialLinks.twitter') ?>" class="text-light" target="_blank" rel="noopener"><?= Configure::read('siteNameAbbr') ?> Twitter page<span class="hh-icon-circle-x"></span></a>
 					<?php endif; ?>
 					<?php if(Configure::read('sameAsSocialLinks.youtube')): ?>
 						<a href="<?= Configure::read('sameAsSocialLinks.youtube') ?>" class="text-light" target="_blank" rel="noopener"><span class="hh-icon-circle-youtube"></span><?= Configure::read('siteNameAbbr') ?> YouTube page</a>
@@ -74,7 +72,7 @@
 			<!-- In Partnership With -->
 			<div class="<?php if (Configure::read('country') == 'CA') {echo 'ca-';} ?>partner-block col-md-6">
 				<p class="text-primary text-small">
-					<em>In partnership <br class="hidden-xs hidden-sm">with</em>            
+					<em>In partnership <br class="d-none d-md-block">with</em>            
 					<?php if (Configure::read('country') == 'US'): ?>
 						<a href="https://www.oticon.com/?utm_medium=banner&utm_source=HealthyHearingFooter&utm_campaign=Oticonlogo&utm_content=146750_oticonlogo" target="_blank" rel="noopener">
 							<img id="oticon-logo-footer" loading="lazy" class="oticon-logo" src="/img/Oticon_Logo_LCT_250.png" alt="In partnership with Oticon" width="125" />
@@ -91,7 +89,7 @@
 				<!-- Digital Health Awards -->
 				<div class="dha-block col-md-6">
 					<div class="mobile-row">
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2023.jpg" alt="Digital Health Award winner for 2023" border="0" width="97" height="80" />
+						<a href="https://healthawards.com/dha/" target="_blank"><img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2023.jpg" alt="Digital Health Award winner for 2023" border="0" width="97" height="80" /></a>
 						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2022.jpg" alt="Digital Health Award winner for Fall 2022" border="0" width="97" height="80" />
 					</div>
 					<div class="mobile-row">
@@ -104,8 +102,8 @@
 </footer>
 <footer class="row site-colophon noprint">
 	<div class="col-md-12 text-center text-small">
-		<strong>&copy; Copyright <?php echo date('Y'); ?>. All Rights Reserved.</strong> 
-		<?= Configure::read('siteUrl') ?>HealthyHearing.com does not provide medical advice, diagnosis or treatment.
+		<strong>&copy; Copyright <?= date('Y') ?>. All Rights Reserved.</strong> 
+		<?= Configure::read('siteUrl') ?> does not provide medical advice, diagnosis or treatment.
 	</div>
 </footer>
 
@@ -114,22 +112,23 @@
 		<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 	<!-- End TrustBox script -->
 <?php endif; ?>
-
-<script type="application/ld+json">
-{
-	"@context" : "https://schema.org",
-	"@type" : "Organization",
-	"name" : "<?= Configure::read('siteName') ?>",
-	"url" : "https://www.<?= Configure::read('siteUrl') ?>",
-	"logo": "https://www.<?= Configure::read('siteUrl') . Configure::read('logo') ?>"
-	<?php if (Configure::read('country') == 'US'): ?>
-	,
-	"sameAs" : [
-		"https://www.facebook.com/healthyhearing",
-		"https://twitter.com/HearingAids",
-		"https://www.youtube.com/user/HealthyHearing",
-		"https://www.linkedin.com/company/9426778"
-	]
-	<?php endif; ?>
-}
-</script>
+<?php if (!empty($show_organization_schema)): ?>
+	<script type="application/ld+json">
+	{
+		"@context" : "https://schema.org",
+		"@type" : "Organization",
+		"name" : "<?= Configure::read('siteName') ?>",
+		"url" : "https://www.<?= Configure::read('siteUrl') ?>",
+		"logo": "https://www.<?= Configure::read('siteUrl') . Configure::read('logo') ?>"
+		<?php if (Configure::read('country') == 'US'): ?>
+		,
+		"sameAs" : [
+			"https://www.facebook.com/healthyhearing",
+			"https://twitter.com/HearingAids",
+			"https://www.youtube.com/user/HealthyHearing",
+			"https://www.linkedin.com/company/9426778"
+		]
+		<?php endif; ?>
+	}
+	</script>
+<?php endif; ?>

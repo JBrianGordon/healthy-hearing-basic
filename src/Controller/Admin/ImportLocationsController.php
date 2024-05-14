@@ -12,7 +12,7 @@ use Cake\Core\Configure;
  * @property \App\Model\Table\ImportLocationsTable $ImportLocations
  * @method \App\Model\Entity\ImportLocation[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ImportLocationsController extends AppController
+class ImportLocationsController extends BaseAdminController
 {
     /**
      * Initialize

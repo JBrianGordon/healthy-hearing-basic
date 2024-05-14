@@ -286,6 +286,29 @@ function cleanPhone($phone){
 }
 
 /**
+* Removes non-numeric characters from phone number and strips off the country code and extensions
+*/
+function tenDigitPhone($phone){
+    $extOffset = strpos($phone, "x");
+    if ($extOffset) {
+        // Remove extensions after 'x' or 'ext'
+        $phone = substr($phone, 0, $extOffset);
+    }
+    $phone = preg_replace("/[^0-9]/",'',$phone);
+    if (strlen($phone) > 10) {
+        $firstDigit = substr($phone, 0, 1);
+        if ($firstDigit == '1') {
+            // US and Canada both use country code 1
+            // Remove the country code
+            $phone = substr($phone, 1);
+        }
+    }
+    // truncate to 10 digits
+    $phone = substr($phone, 0, 10);
+    return $phone;
+}
+
+/**
 * Inserts a new key/value after the key in the array.
 *
 * @param $key - key to insert after
@@ -326,12 +349,29 @@ function arrayFilterRecursive($array) {
     return $array;
 }
 
+// Recursively implode a multi-dimensional array
+function r_implode($glue, $pieces) {
+    $retVal = array();
+    foreach ($pieces as $r_pieces) {
+        if (is_array( $r_pieces )) {
+            $retVal[] = r_implode( $glue, $r_pieces );
+        }   else {
+            $retVal[] = $r_pieces;
+        }
+    }
+    return implode( $glue, $retVal );
+}
+
 /**
 * Returns a datetime formatted to display in the specified timezone
 */
 function getDateTime($datetime, $timezone='America/New_York', $format='m/d/Y g:i a T') {
-    $date = new DateTime($datetime, new DateTimeZone($timezone));
-    return $date->format($format);
+    if (is_string($datetime)) {
+        $date = new DateTime($datetime, new DateTimeZone($timezone));
+        return $date->format($format);
+    } else { // frozenTime passed in
+        return $datetime->setTimezone($timezone)->format($format);
+    }
 }
 
 /**

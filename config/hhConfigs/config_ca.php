@@ -30,6 +30,12 @@ return [
         'facebook' => 'https://www.facebook.com/HearingDirectoryCANADA',
         'twitter' => 'https://twitter.com/HearingaidsCAN',
     ],
+    // Google tag manager
+    'gtmId' => 'GTM-TC3K3WL',
+    // Google Maps API
+    'googleMapsApiKey' => 'AIzaSyAdwuk4zA0Qf4vHkcvgs--KUEa62wpF4MU',
+    'googleMapsStaticApiKey' => 'AIzaSyC2yyY0gUKa9BwjQI9B0iafy9ebTpH4C0Y',
+    'googleMapsWebServicesApiKey' => 'AIzaSyBNN0_W1SW0RK9a6qSmiBtXU5DJxEPmMJ8',
     // From email address
     'email' => ['contacthd@hearingdirectory.ca' => 'Hearing Directory'],
     'customer-support-email' => 'contacthd@hearingdirectory.ca',
@@ -44,9 +50,7 @@ return [
     'showAds' => false,
     'showReviewsByCity' => false,
     // Provider Variables
-    'showProviderLicenses' => false,
     'showProviderCredentialButtons' => false,
-    'showProviderNpi' => false,
     'showProviderAudOrHis' => false,
     // Call Tracking
     'isCallSourceGenerationEnabled' => true,
@@ -123,6 +127,10 @@ return [
     'reviewExportFieldOverrides' => [
         'zip' => 'postal_code',
         'hh_url' => 'hd_url',
+    ],
+    'Sitemap.tables' => [
+        'Main',
+        'Corps',
     ],
     'states' => [
         'AB' => 'Alberta',

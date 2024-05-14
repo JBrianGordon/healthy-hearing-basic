@@ -7,7 +7,7 @@
 		echo '"@type": "BreadcrumbList",';
 		echo '"itemListElement": [';
 			foreach ($crumbs as $key => $crumb) {
-				$url = $crumb['url'];
+				$url = $this->Url->build($crumb['url']);
 				$fullUrl = $schemeDomain.$url;
 				$name = $crumb['title'];
 				if($key + 1 >= count($crumbs)){

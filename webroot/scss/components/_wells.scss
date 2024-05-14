@@ -1,29 +1,27 @@
+// Common well styling
 .well {
-	border: solid 1px $well-border;
-	padding: 25px;
-	@include box-shadow(none);
-	margin-bottom: 20px;
-	
-	&.hidden-review{
-		display: none;
-	}
+  border: solid 1px $well-border;
+  padding: 25px;
+  @include box-shadow(none);
+  margin-bottom: 20px;
 
-	&.manufacturer {
-		float: left;
-	}
-	
-	.about-team {
-		float: left;
-		margin-right: 20px;
-		
-		@media(max-width: $screen-xs-max) and (orientation: portrait) {
-			float: none;
-			margin: -10px auto 10px;
-			display: block;
-		}
-	}
+  &.hidden-review {
+    display: none;
+  }
+
+  &.manufacturer, .about-team {
+    float: left;
+    margin-right: 20px;
+
+    @media (max-width: $screen-xs-max) and (orientation: portrait) {
+      float: none;
+      margin: -10px auto 10px;
+      display: block;
+    }
+  }
 }
 
+// Styles for specific well types
 .import-well {
   padding: 10px;
   margin-bottom: 0px;
@@ -31,68 +29,94 @@
 }
 
 .blue-well {
-	background-color: $well-blue-bg;
-	
-	.text-muted.bold-number{
-		font-weight: bold;
-		font-size: 18px;
-	}
-	
-	.filter-group {
-		padding: 20px;
-		border: 2px solid #a3a3a3;
-		margin-bottom: 20px;
-	    
-	    .form-group {
-			width: 100%;
-			display: inline-block;
-			
-			@media(max-width: $screen-sm-max) {
-				width: 100%;
-			}
-	    }
-	}
+  background-color: $well-blue-bg;
+
+  .text-muted.bold-number {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .filter-group {
+    padding: 20px;
+    border: 2px solid #a3a3a3;
+    margin-bottom: 20px;
+
+    .form-group {
+      width: 100%;
+      display: inline-block;
+
+      @media (max-width: $screen-sm-max) {
+        width: 100%;
+      }
+    }
+  }
 }
 
 .green-well {
-	background-color: $well-green-bg;
+  background-color: $well-green-bg;
 }
 
 .gray-well {
-	background-color: $well-gray-bg;
+  background-color: $well-gray-bg;
 }
 
 .provider-well {
-	border: solid 1px $well-border;
-	margin-bottom: 5px;
-	padding: 25px;
-	
-	.profile-pic-container {
-		min-height: 175px;
-		max-width: 116px;
-		
-		@media(max-width: $screen-sm-max) {
-			margin: 0 auto;
-			min-height: 0;
-		}
-	}
-	
-	.earq-logo {
-		max-width: 80%;
-		display: block;
-		
-		@media(max-width: $screen-sm-max) {
-			max-width: none;
-			margin: 0 auto 20px;
-		}
-	}
+  border: solid 1px $well-border;
+  margin-bottom: 5px;
+  padding: 25px;
+
+  .clinic-provider-name {
+    font-size: 22px;
+    margin-bottom: 10px;
+
+    .provider-credentials {
+      font-size: 20px;
+    }
+  }
+  .provider-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .clinic-provider-bio {
+    @media (max-width: $screen-sm-max) {
+      display: none;
+    }
+  }
+
+  .profile-pic-container {
+    min-height: 175px;
+    max-width: 116px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: $screen-sm-max) {
+      margin: 0 auto;
+      min-height: 0;
+    }
+  }
+
+  .earq-logo {
+    max-width: 80%;
+    display: block;
+
+    @media (max-width: $screen-sm-max) {
+      max-width: none;
+      margin: 0 auto 20px;
+    }
+  }
 }
 
-	.amenity-popover{
-		color: #000;
-		padding: 0 1px;
-	
-		.badge-img{
-			margin:5px;
-		}
-	}
+// Amenity popover styling
+.amenity-popover {
+  color: #000;
+  padding: 0 1px;
+
+  .badge-img {
+    margin: 5px;
+  }
+}

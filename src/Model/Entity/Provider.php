@@ -26,12 +26,7 @@ use Cake\ORM\Entity;
  * @property string|null $phone
  * @property int $priority
  * @property string|null $aud_or_his
- * @property string|null $caqh_number
- * @property string|null $npi_number
- * @property bool $show_npi
  * @property bool $is_ida_verified
- * @property string|null $licenses
- * @property bool $show_license
  * @property int|null $id_yhn_provider
  * @property int $location_count
  *
@@ -67,12 +62,7 @@ class Provider extends Entity
         'phone' => true,
         'priority' => true,
         'aud_or_his' => true,
-        'caqh_number' => true,
-        'npi_number' => true,
-        'show_npi' => true,
         'is_ida_verified' => true,
-        'licenses' => true,
-        'show_license' => true,
         'id_yhn_provider' => true,
         'import_providers' => true,
         'locations' => true,

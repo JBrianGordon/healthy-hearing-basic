@@ -13,6 +13,7 @@
         "cakephp/plugin-installer": "^1.3",
         "crabstudio/recaptcha": "^3.0",
         "dereuromark/cakephp-geo": "^2.2",
+        "dereuromark/cakephp-queue": "^6.9",
         "firebase/php-jwt": "^6.8",
         "friendsofcake/bootstrap-ui": "^4.0.0",
         "friendsofcake/cakephp-csvview": "^4.1",
@@ -23,6 +24,7 @@
         "mailchimp/marketing": "^3.0",
         "middlewares/trailing-slash": "^2.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "muffin/footprint": "^3.0",
         "php-http/cakephp-adapter": "^0.3.2",
         "php-http/message": "^1.13",
         "riesenia/cakephp-duplicatable": "^4.0"
@@ -82,7 +84,8 @@
         "allow-plugins": {
             "cakephp/plugin-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true
         }
     }
 }

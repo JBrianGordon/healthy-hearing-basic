@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\UsersTable $Users
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UsersController extends AppController
+class UsersController extends BaseAdminController
 {
     /**
      * Initialize
@@ -39,15 +39,26 @@ class UsersController extends AppController
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
-            $this->set('currentModel', 'User');
+            $this->set('currentModel', 'Users');
         }
+
         $usersQuery = $this->Users
             ->find('search', [
                 'search' => $requestParams,
-            ])
-            ->contain('Locations');
+                'contain' => ['Locations'],
+            ]);
+        // Search by location id
+        if (!empty($requestParams['Locations']['id'])) {
+            $locationId = $requestParams['Locations']['id'];
+            $usersQuery->matching('Locations', function($q) use ($locationId) {
+                return $q->where(['Locations.id' => $locationId]);
+            });
+        }
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()->where(['model' => 'Users'])->toArray();
         $this->set('users', $this->paginate($usersQuery));
         $this->set('fields', $this->Users->getSchema()->typeMap());
+        $this->set('crmSearches', $crmSearches);
     }
 
     /**
@@ -83,7 +94,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Corps', 'Content', 'Wikis'],
+            'contain' => ['Corps', 'Content', 'Wikis', 'LoginIps', 'Locations'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());

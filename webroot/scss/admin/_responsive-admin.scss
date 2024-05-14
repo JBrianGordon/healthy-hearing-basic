@@ -1,0 +1,74 @@
+// Common styles for backgrounds
+@mixin bg-styles($bg-color) {
+    background-color: $bg-color;
+    color: #ffffff;
+    border: none;
+}
+
+.bg-oticon { @include bg-styles(#c6168d); }
+.bg-hh { @include bg-styles(#78afc9); }
+.bg-yhn { @include bg-styles(#ff9800); }
+.bg-cqp { @include bg-styles(#0089bb); }
+.bg-earq { @include bg-styles(#ee3a3c); }
+
+// Common styles for labels
+@mixin label-styles($bg-color) {
+    background-color: $bg-color;
+    color: #ffffff;
+    border: none;
+}
+
+// Common styles for table backgrounds
+@mixin table-bg-styles($bg-color) {
+    td { background-color: $bg-color; }
+}
+
+.orange-bg { @include table-bg-styles(#ffebc6); }
+.purple-bg { @include table-bg-styles(#f3e5f5); }
+.ivory-bg { @include table-bg-styles(#fffff0); }
+.lavender-bg { @include table-bg-styles(#e6e6fa); }
+.red-bg { @include table-bg-styles(#d9534f); }
+.beige-bg { @include table-bg-styles(#fcf8e3); }
+.lt-blue-bg { @include table-bg-styles(#5bc0de); }
+.green-bg { @include table-bg-styles(#5cb85c); }
+
+// Common styles for text colors
+@mixin text-color-styles($color) {
+    color: $color;
+}
+
+.pink { @include text-color-styles(#ffb6c1); }
+.orange { @include text-color-styles(#ffb900); }
+.yellow { @include text-color-styles(#ffd700); }
+.purple { @include text-color-styles(#dda0dd); }
+.ivory { @include text-color-styles(#f0e68c); }
+.lavender { @include text-color-styles(#c8c8f7); }
+.blue { @include text-color-styles(#add8e6); }
+.green { @include text-color-styles(#B3DA65); }
+.red { @include text-color-styles(#ee3322); }
+
+// Common styles for alert messages
+@mixin alert-styles($bg-color) {
+    background-color: $bg-color;
+    font-size: larger;
+}
+
+#flash-message .alert-danger { @include alert-styles(#ad0000); }
+
+// Other shared styles
+span.error { color: red; }
+
+.metric-reported {
+    color: red;
+    font-weight: bold;
+}
+
+.admin-filter-well {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.locationCovid {
+    color: #ff8c00;
+}
