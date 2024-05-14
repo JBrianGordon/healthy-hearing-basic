@@ -63,7 +63,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         <div class="panel-section d-none d-sm-block">
                             <div data-hh-map></div>
                             <p class="text-center">
-                                <button class="btn btn-secondary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
                             </p>
                         </div>
                         <?php if (!empty($clinicsNearMe)): ?>
