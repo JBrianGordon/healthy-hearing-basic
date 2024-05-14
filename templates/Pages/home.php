@@ -60,10 +60,10 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                 <a href="/hearing-aids" class="btn btn-secondary">Browse by <?php echo $stateLabel; ?></a>
                             </p>
                         </div>
-                        <div class="panel-section hidden-xs">
+                        <div class="panel-section d-none d-sm-block">
                             <div data-hh-map></div>
                             <p class="text-center">
-                                <button class="btn btn-secondary hidden-sm" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                <button class="btn btn-secondary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
                             </p>
                         </div>
                         <?php if (!empty($clinicsNearMe)): ?>

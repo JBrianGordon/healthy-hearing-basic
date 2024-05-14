@@ -44,12 +44,12 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-lg-12 hidden-sm hidden-xs">
+								<div class="col-lg-12 d-none d-md-block">
 									<br />
 									<h4>It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the lists below.</h4>
 								</div>
 							</div>
-							<div data-hh-map class="hidden-sm hidden-xs"></div>
+							<div data-hh-map class="d-none d-md-block"></div>
 						</div>
 					</div>
 				</section>
