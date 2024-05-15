@@ -295,14 +295,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             'value' => $location->facebook,
                                             'class' => 'col-sm-9 mb10'
                                             ]);
-                                        echo $this->Form->control('Location.twitter', [
-                                            'label' => ['text' => 'Twitter', 'class' => 'col-sm-3 control-label'],
-                                            'placeholder' => 'Copy and paste the entire URL into this field',
-                                            'beforeInput' => '<div class="input-group col-12">',
-                                            'afterInput' => '</div>',
-                                            'value' => $location->twitter,
-                                            'class' => 'col-sm-9 mb10'
-                                            ]);
                                         echo $this->Form->control('Location.youtube', [
                                             'label' => ['text' => 'YouTube', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
