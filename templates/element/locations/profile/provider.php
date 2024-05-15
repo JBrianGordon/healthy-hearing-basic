@@ -57,8 +57,8 @@ $this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 										<br class="br-mobile">
 										<span class="provider-qualifications"><?= $provider->credentials ?></span>
 										<?php if (Configure::read('showProviderCredentialButtons')): ?>
-											<a data-toggle='popover' data-trigger='hover click' data-bs-content='' data-html='true' data-bs-placement='bottom' class='cred-popover-<?= $providerKey; ?>'>
-												<span class='glyphicon glyphicon-question-sign'></span>
+											<a data-toggle='popover' data-bs-trigger='hover click' data-bs-placement='bottom' class='cred-popover-<?= $providerKey; ?>'>
+												<span class='bi bi-question-circle-fill'></span>
 											</a>
 										<?php endif; ?>
 									<?php endif; ?>

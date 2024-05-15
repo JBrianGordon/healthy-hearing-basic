@@ -272,7 +272,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </div>
                                         <?php
                                         echo $this->Form->control('Location.landmarks', [
-                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
+                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="bi bi-question-circle-fill"></span></a>',
                                                 'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,

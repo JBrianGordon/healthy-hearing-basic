@@ -496,15 +496,6 @@
 	  margin-bottom: 2em;
 	}
 
-	.show-side-nav .site-body {
-	  transform: translateX(-100vw) translateX(calc($navbar-height / 1.5));
-	  @include transition(all 0.3s ease-out);
-
-	  @media only screen and (min-width: $screen-sm-min) {
-	    transform: translateX(0vw) translateX(0);
-	  }
-	}
-
 	html.show-side-nav {
 	  overflow: hidden;
 
@@ -545,5 +536,14 @@
 		.status {
 			text-align: center;
 		}
+	}
+}
+
+.show-side-nav .site-body {
+	transform: translateX(-100vw) translateX(calc($navbar-height / 1.5));
+	@include transition(all 0.3s ease-out);
+
+	@media only screen and (min-width: $screen-sm-min) {
+		transform: translateX(0vw) translateX(0);
 	}
 }
