@@ -487,7 +487,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         </div>
                                                         <div id="uploadCoupon" style="display:none;">
                                                             <?php if ($adId): ?>
-                                                                <?php echo $this->Form->control('LocationAd.id',
+                                                                <?php echo $this->Form->control('location_ad.id',
                                                                     [
                                                                         'type' => 'hidden',
                                                                         'value' => $adId
@@ -518,26 +518,26 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 </div>
                                                             <?php //endif; ?>
                                                             <?php
-                                                                echo $this->Form->control("LocationAd.photo_url", [
+                                                                echo $this->Form->control("location_ad.photo_url", [
                                                                     'label' => 'File name',
                                                                     'readonly' => 'readonly',
                                                                     'wrapInput' => 'col-md-7',
                                                                     'after' => '<label class="btn btn-sm btn-default mt5">
                                                                         <span>Upload image</span>
-                                                                        <input type="file" name="data[LocationAd][file]" class="form-control hidden" id="LocationAdFile">
+                                                                        <input type="file" name="location_ad[file]" class="form-control hidden" id="LocationAdFile">
                                                                         </label>',
                                                                     'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
                                                                         <span class="text-danger" id="location-ad-error" style="display:none;" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
                                                                 ]);
                                                             ?>
                                                             <?php
-                                                                echo $this->Form->control("LocationAd.title", [
+                                                                echo $this->Form->control("location_ad.title", [
                                                                     'label' => 'Title',
                                                                     'maxlength' => 50,
                                                                     'required' => false,
                                                                     'help' => 'This text will appear in the header of this space. 50 characters max.'
                                                                 ]);
-                                                                echo $this->Form->control("LocationAd.description", [
+                                                                echo $this->Form->control("location_ad.description", [
                                                                     'type' => 'textarea',
                                                                     'rows' => 2,
                                                                     'label' => 'Message',
@@ -548,26 +548,27 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             ?>
                                                             <div class="form-group">
                                                                 <label for="LocationAdBorder" class="form-label col-md-3">Border</label>
-                                                                <input type="hidden" name="data[LocationAd][border]" id="LocationAdBlank_" value="">
+                                                                <input type="hidden" name="location_ad[border]" id="LocationAdBlank_" value="">
+                                                                <?php $borderIsBlank = in_array($location->location_ad->border, ['blank', '']); ?>
                                                                 <div class="col col-md-9">
-                                                                    <div class="col-md-3 border-radio<?= $location->location_ad->border == 'blank' ? ' selected-border' : '' ?>">
+                                                                    <div class="col-md-3 border-radio<?= $borderIsBlank ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdBlank" class="col control-label w-100 tac">
-                                                                            <input type="radio" name="data[LocationAd][border]" value="blank" id="LocationAdBlank"<?= $location->location_ad->border == 'blank' ? ' checked' : '' ?>> No Border
+                                                                            <input type="radio" name="location_ad[border]" value="blank" id="LocationAdBlank"<?= $borderIsBlank ? ' checked' : '' ?>> No Border
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-dashed' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdDashed" class="col control-label border-dashed w-100 tac">
-                                                                            <input type="radio" name="data[LocationAd][border]" value="border-dashed" id="LocationAdDashed"<?= $location->location_ad->border == 'border-dashed' ? ' checked' : '' ?>> Dashed
+                                                                            <input type="radio" name="location_ad[border]" value="border-dashed" id="LocationAdDashed"<?= $location->location_ad->border == 'border-dashed' ? ' checked' : '' ?>> Dashed
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-dotted' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdDotted" class="col control-label border-dotted w-100 tac">
-                                                                            <input type="radio" name="data[LocationAd][border]" value="border-dotted" id="LocationAdDotted"<?= $location->location_ad->border == 'border-dotted' ? ' checked' : '' ?>> Dotted
+                                                                            <input type="radio" name="location_ad[border]" value="border-dotted" id="LocationAdDotted"<?= $location->location_ad->border == 'border-dotted' ? ' checked' : '' ?>> Dotted
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-inset' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdInset" class="col control-label border-inset w-100 tac">
-                                                                            <input type="radio" name="data[LocationAd][border]" value="border-inset" id="LocationAdInset"<?= $location->location_ad->border == 'border-inset' ? ' checked' : '' ?>> Inset
+                                                                            <input type="radio" name="location_ad[border]" value="border-inset" id="LocationAdInset"<?= $location->location_ad->border == 'border-inset' ? ' checked' : '' ?>> Inset
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -583,7 +584,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <?php if ($isCqPremier): ?>
                                         <!-- Vidscrips -->
                                         <div id="vidscrips">
-                                            <?= $this->Form->control('LocationVidscrips.id',
+                                            <?= $this->Form->control('location_vidscrip.id',
                                                 [
                                                     'type' => 'hidden',
                                                     'value' => $location->location_vidscrip->id ?? ''
@@ -591,14 +592,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             ?>
                                             <label class="form-label col-md-3 mb20">Vidscrips</label>
                                             <div class="clearfix"></div>
-                                            <?= $this->Form->control("LocationVidscrips.vidscrip", [
+                                            <?= $this->Form->control("location_vidscrip.vidscrip", [
                                                     'label' => 'Vidscrip ID',
                                                     'maxlength' => 30,
                                                     'help' => 'Add your Vidscrip ID to access embedded Vidscrip videos.'
                                                 ])
                                             ?>
                                             <span class="help-block">Add your Vidscrip ID to access embedded Vidscrip videos.</span>
-                                            <?= $this->Form->control("LocationVidscrips.email", [
+                                            <?= $this->Form->control("location_vidscrip.email", [
                                                     'label' => 'Vidscrip related email',
                                                     'help' => 'Enter the email address associated with your Vidscrip account.'
                                                 ]);

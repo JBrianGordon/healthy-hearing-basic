@@ -88,7 +88,7 @@ class LocationAdsTable extends Table
         $validator
             ->scalar('border')
             ->maxLength('border', 255)
-            ->notEmptyString('border');
+            ->allowEmptyString('border');
 
         return $validator;
     }

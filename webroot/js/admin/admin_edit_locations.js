@@ -653,22 +653,20 @@ borderRadioElements.forEach((element) => {
 });
 
 //Vidscrip validation
-const locationVidscripsVidscrip = document.querySelector("#LocationVidscripsVidscrip");
-const locationVidscripsEmail = document.querySelector("#LocationVidscripsEmail");
-
+const locationVidscripVidscrip = document.querySelector("#location-vidscrip-vidscrip");
+const locationVidscripEmail = document.querySelector("#location-vidscrip-email");
 //remove field requirements if neither constant has a value
 const handleBlur = () => {
-  if (locationVidscripsVidscrip.value === "" && locationVidscripsEmail.value === "") {
-    locationVidscripsVidscrip.required = false;
-    locationVidscripsEmail.required = false;
+  if (locationVidscripVidscrip.value === "" && locationVidscripEmail.value === "") {
+    locationVidscripVidscrip.required = false;
+    locationVidscripEmail.required = false;
   } else {
-    locationVidscripsVidscrip.required = true;
-    locationVidscripsEmail.required = true;
+    locationVidscripVidscrip.required = true;
+    locationVidscripEmail.required = true;
   }
 };
-/*** TODO: uncomment when vidscrips is pulled into view: ***
-locationVidscripsVidscrip.addEventListener("blur", handleBlur);
-locationVidscripsEmail.addEventListener("blur", handleBlur);*/
+locationVidscripVidscrip.addEventListener("blur", handleBlur);
+locationVidscripEmail.addEventListener("blur", handleBlur);
 
 //Prevent enter button from submitting form in inputs
 const inputElements = document.querySelectorAll("input");

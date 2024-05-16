@@ -146,8 +146,7 @@ class LocationsController extends BaseAdminController
                 $this->Flash->success(__('The location has been saved.'));
                 return $this->redirect($this->request->referer());
             }
-            $errors = r_implode('<br>',$location->getErrors());
-            $this->Flash->error('The location could not be saved.<br>' . $errors, ['escape' => false]);
+            $this->Flash->error('The location could not be saved.<br>' . $this->displayErrors($location->getErrors()), ['escape' => false]);
         }
         $this->set(compact('location', 'lastOticonImportDate', 'importLocations'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
@@ -301,5 +300,22 @@ class LocationsController extends BaseAdminController
         Configure::write('debug', true);
         $this->set('call_source', $this->Locations->CallSources->customerLookup($locationId));
         $this->set('locationId', $locationId);
+    }
+
+    /**
+    * Simple callsource raw lookup
+    */
+    private function displayErrors($errors) {
+        $displayErrors = [];
+        foreach ($errors as $key => $error) {
+            if (is_array($error)) {
+                foreach ($error as $nestedKey => $nestedError) {
+                    $displayErrors[] = $key.'->'.$nestedKey.': '.implode($nestedError);
+                }
+            } else {
+                $displayErrors[] = $key.': '.print_r($error);
+            }
+        }
+        return r_implode('<br>', $displayErrors);
     }
 }
