@@ -35,7 +35,7 @@
 		<?php elseif ($this->getRequest()->getParam('controller') == 'Locations'): ?>
 		<!--*** TODO: set up quick pick ***-->
 			<?php if (isFeatureOn('quick_pick')): ?>
-				<p class="message-800-number" class="text-large">
+				<p class="message-800-number mb0" class="text-large">
 					<span class="telephone">Call <a href=<?= "tel:+".Configure::read('quickPickNumber'); ?>><?= Configure::read('quickPickNumber'); ?></a></span> to book a test<br>with a clinic near you.
 				</p>
 			<?php else: ?>
