@@ -67,7 +67,7 @@ use Cake\Core\Configure;
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
     <div id="footerContainer">
         <?= $this->element('cookie_footer') ?>
-        <?= ($_SERVER['REQUEST_URI'] != '/help' && $_SERVER['REQUEST_URI'] != '/report') ? $this->element('sticky_footer') : '' ?>
+        <?= (!preg_match('/\/help\//', $_SERVER['REQUEST_URI']) && !preg_match('/\/report\//', $_SERVER['REQUEST_URI'])) ? $this->element('sticky_footer') : '' ?>
     </div>
 </body>
 <?= $this->fetch('script') ?>
