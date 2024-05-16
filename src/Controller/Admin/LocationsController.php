@@ -88,23 +88,24 @@ class LocationsController extends BaseAdminController
     public function edit($id = null)
     {
         $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
-        $location = $this->Locations->get($id, [
-            'contain' => [
-                'CallSources',
-                'LocationHours',
-                'LocationAds',
-                'LocationPhotos',
-                'LocationVidscrips',
-                'Providers',
-                'LocationNotes' => [
-                    'sort' => ['LocationNotes.created' => 'DESC']
-                ],
-                'LocationEmails',
-                'Reviews' => [
-                    'sort' => ['Reviews.created' => 'DESC'],
-                ],
-                'Users.LoginIps'
+        $associations = [
+            'CallSources',
+            'LocationHours',
+            'LocationAds',
+            'LocationPhotos',
+            'LocationVidscrips',
+            'Providers',
+            'LocationNotes' => [
+                'sort' => ['LocationNotes.created' => 'DESC']
             ],
+            'LocationEmails',
+            'Reviews' => [
+                'sort' => ['Reviews.created' => 'DESC'],
+            ],
+            'Users.LoginIps'
+        ];
+        $location = $this->Locations->get($id, [
+            'contain' => $associations
         ]);
         $lastOticonImport = $this->Locations->ImportStatus->find('all', [
             'contain' => [],
@@ -121,13 +122,32 @@ class LocationsController extends BaseAdminController
             'order' => ['ImportLocations.import_id DESC']
         ])->disableHydration()->toArray();
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $location = $this->Locations->patchEntity($location, $this->request->getData());
+            $data = $this->request->getData();
+            // convert payment array to json string
+            $data['payment'] = json_encode($data['payment']);
+            // remove empty providers
+            foreach ($data['providers'] as $key => $provider) {
+                if (empty($provider['id']) && empty($provider['first_name'])) {
+                    unset($data['providers'][$key]);
+                }
+            }
+            // remove empty location emails
+            foreach ($data['location_emails'] as $key => $locationEmail) {
+                if (empty($locationEmail['id']) && empty($locationEmail['email'])) {
+                    unset($data['location_emails'][$key]);
+                }
+            }
+            $location = $this->Locations->patchEntity(
+                $location,
+                $data,
+                ['associated' => $associations]
+            );
             if ($this->Locations->save($location)) {
                 $this->Flash->success(__('The location has been saved.'));
-
                 return $this->redirect($this->request->referer());
             }
-            $this->Flash->error(__('The location could not be saved. Please, try again.'));
+            $errors = r_implode('<br>',$location->getErrors());
+            $this->Flash->error('The location could not be saved.<br>' . $errors, ['escape' => false]);
         }
         $this->set(compact('location', 'lastOticonImportDate', 'importLocations'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));

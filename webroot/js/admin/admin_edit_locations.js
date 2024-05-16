@@ -129,12 +129,12 @@ class locationsAdminEdit {
       editObj.onChangeFeature(this.checked, '#feature-special-announcement');
     });
     document.getElementById('feature-special-announcement').dispatchEvent(new Event('change'));*/
-    /* TODO: add hour-is-closed-lunch field to view: ***
-    document.getElementById('hour-is-closed-lunch').addEventListener('change', function () {
-      editObj.onChangeIsClosedLunch(this.checked);
+    document.getElementById('location-hour-is-closed-lunch').addEventListener('change', function () {
+      editObj.onChangeFeature(this.checked, '#location-hour-lunch-start');
+      editObj.onChangeFeature(this.checked, '#location-hour-lunch-end');
+      editObj.onChangeFeature(this.checked, '#closedLunch');
     });
-    document.getElementById('hour-is-closed-lunch').dispatchEvent(new Event('change'));*/
-
+    document.getElementById('location-hour-is-closed-lunch').dispatchEvent(new Event('change'));
     document.getElementById('is-mobile').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, '#radius');
       editObj.onChangeFeature(this.checked, '#mobile-text');
@@ -596,8 +596,8 @@ class locationsAdminEdit {
   //Function to clear the values in each field if closed
   clearHours(day) {
     const hourFields = [
-      `#locationhour-${day}-open`,
-      `#locationhour-${day}-close`,
+      `#location-hour-${day}-open`,
+      `#location-hour-${day}-close`,
     ];
 
     hourFields.forEach((field) => {
@@ -607,35 +607,8 @@ class locationsAdminEdit {
 
   //Function to set the values to defaults if closed checkbox is unchecked
   setDefaultHours(day) {
-    document.querySelector(`#locationhour-${day}-open`).value = "08:00:00";
-    document.querySelector(`#locationhour-${day}-close`).value = "17:00:00";
-  }
-
-  onChangeIsClosedLunch(isClosedLunch) {
-    if (isClosedLunch) {
-      document.querySelector("#closedLunch").style.display = "block";
-      setRequiredFields(true);
-    } else {
-      document.querySelector("#closedLunch").style.display = "none";
-      setRequiredFields(false);
-    }
-  }
-
-  //Array of fields to cycle through to set true or false value
-  setRequiredFields(required) {
-    const requiredFields = [
-      "#LocationHourLunchStartHour",
-      "#LocationHourLunchStartMin",
-      "#LocationHourLunchStartMeridian",
-      "#LocationHourLunchEndHour",
-      "#LocationHourLunchEndMin",
-      "#LocationHourLunchEndMeridian"
-    ];
-
-    requiredFields.forEach((field) => {
-      const element = document.querySelector(field);
-      element.required = required;
-    });
+    document.querySelector(`#location-hour-${day}-open`).value = "08:00";
+    document.querySelector(`#location-hour-${day}-close`).value = "17:00";
   }
 }
 

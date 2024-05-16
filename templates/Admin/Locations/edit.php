@@ -305,7 +305,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 <div class="tab-pane" id="Details">
                                     <div class="col-md-12 ida-wrapper mb20">
                                         <div class="checkbox form-check form-switch w-100">
-                                                <?= $this->Form->label('is_ida_verified', 'Is IDA Verified', ['class' => 'fw-bold form-check-label w-25 float-left pl15 pr15 mr10', 'for' => 'isIdaVerified']) ?>
+                                                <?= $this->Form->label('is_ida_verified', 'IDA verified clinic', ['class' => 'fw-bold form-check-label w-25 float-left pl15 pr15 mr10', 'for' => 'isIdaVerified']) ?>
                                                 <?= $this->Form->checkbox('is_ida_verified', ['class' => 'form-check-input', 'id' => 'isIdaVerified']) ?>
                                         </div>
                                     </div>
@@ -364,7 +364,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <label class="col col-md-3 control-label">Photos</label><div class="clearfix"></div>
                                                     <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
                                                         <tbody>
-                                                            <!-- *** TODO: This code will need to be updated once locationphoto added *** -->
                                                             <?php foreach ($location->location_photos as $key => $photo): ?>
                                                                 <?php if (!empty($photo->photo_url)): ?>
                                                                     <tr>
@@ -376,12 +375,12 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                                 </div>
                                                                             </div>
                                                                             <?php
-                                                                            echo $this->Form->control("LocationPhoto.$key.photo_url", [
+                                                                            echo $this->Form->control("location_photos.$key.photo_url", [
                                                                                 'value' => $photo->photo_url,
                                                                                 'label' => 'File name',
                                                                                 'readonly' => 'readonly',
                                                                             ]);
-                                                                            echo $this->Form->control("LocationPhoto.$key.alt", [
+                                                                            echo $this->Form->control("location_photos.$key.alt", [
                                                                                 'value' => $photo->alt,
                                                                                 'label' => 'Description',
                                                                                 'required' => true
@@ -402,14 +401,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                             <img id="photo-thumb-<?= $key ?>">
                                                                         </div>
                                                                     </div>
-                                                                    <?= $this->Form->input("LocationPhoto." . $key . ".file", [
+                                                                    <?= $this->Form->input("location_photos." . $key . ".file", [
                                                                         'type' => 'file',
                                                                         'label' => 'File name',
                                                                         'class' => 'form-control photo-url'
                                                                     ])?>
                                                                     <div id="photo-description-<?= $key ?>" style="display:none;">
                                                                         <?php
-                                                                        echo $this->Form->input("LocationPhoto.$key.alt", [
+                                                                        echo $this->Form->input("location_photos.$key.alt", [
                                                                             'label' => 'Description',
                                                                             'disabled' => true,
                                                                             'required' =>true,
@@ -527,7 +526,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                         <span>Upload image</span>
                                                                         <input type="file" name="data[LocationAd][file]" class="form-control hidden" id="LocationAdFile">
                                                                         </label>',
-                                                                    'help_block' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
+                                                                    'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
                                                                         <span class="text-danger" id="location-ad-error" style="display:none;" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
                                                                 ]);
                                                             ?>
@@ -536,7 +535,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                     'label' => 'Title',
                                                                     'maxlength' => 50,
                                                                     'required' => false,
-                                                                    'help_block' => 'This text will appear in the header of this space. 50 characters max.'
+                                                                    'help' => 'This text will appear in the header of this space. 50 characters max.'
                                                                 ]);
                                                                 echo $this->Form->control("LocationAd.description", [
                                                                     'type' => 'textarea',
@@ -544,7 +543,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                     'label' => 'Message',
                                                                     'maxlength' => 500,
                                                                     'required' => false,
-                                                                    'help_block' => 'This text will appear in the low text of this space. 500 characters max.'
+                                                                    'help' => 'This text will appear in the low text of this space. 500 characters max.'
                                                                 ]);
                                                             ?>
                                                             <div class="form-group">
@@ -595,13 +594,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <?= $this->Form->control("LocationVidscrips.vidscrip", [
                                                     'label' => 'Vidscrip ID',
                                                     'maxlength' => 30,
-                                                    'help_block' => 'Add your Vidscrip ID to access embedded Vidscrip videos.'
+                                                    'help' => 'Add your Vidscrip ID to access embedded Vidscrip videos.'
                                                 ])
                                             ?>
                                             <span class="help-block">Add your Vidscrip ID to access embedded Vidscrip videos.</span>
                                             <?= $this->Form->control("LocationVidscrips.email", [
                                                     'label' => 'Vidscrip related email',
-                                                    'help_block' => 'Enter the email address associated with your Vidscrip account.'
+                                                    'help' => 'Enter the email address associated with your Vidscrip account.'
                                                 ]);
                                             ?>
                                             <span class="help-block">Enter the email address associated with your Vidscrip account.</span>
@@ -630,7 +629,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     'rows' => 3,
                                                     'maxlength' => 400,
                                                     'required' => false,
-                                                    'help_block' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.']) ?>
+                                                    'help' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.']) ?>
                                             </div>
                                         </div>
                                     <?php endif; ?>
@@ -642,29 +641,30 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <th width="12%">Closed</th>
                                             <th width="12%">By Appt</th>
                                         </tr>
-                                        <!-- *** TODO: update once locationHour is pulled in ***-->
                                         <span class="hidden"><?= $location->location_hour->id; ?></span>
                                         <?php foreach ($days as $day): ?>
                                             <tr>
                                                 <td><?= date("l", strtotime($day)) ?></td>
                                                 <td class="form-inline">
-                                                    <?= $this->Form->control("LocationHour.".$day."_open", [
+                                                    <?= $this->Form->control("location_hour.".$day."_open", [
                                                         'label' => false,
                                                         'type' => 'time',
+                                                        'step' => 60, //minutes
                                                         'empty' => true,
                                                         'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_open'}) ?: '08:00'
                                                     ]) ?>
                                                 </td>
                                                 <td>
-                                                    <?= $this->Form->control("LocationHour.".$day."_close", [
+                                                    <?= $this->Form->control("location_hour.".$day."_close", [
                                                         'label' => false,
                                                         'type' => 'time',
+                                                        'step' => 60, //minutes
                                                         'empty' => true,
                                                         'value' => $this->Clinic->convert24hours($location->location_hour->{$day.'_close'}) ?: '17:00'
                                                     ]) ?>
                                                 </td>
                                                 <td>
-                                                    <?= $this->Form->control("LocationHour.".$day."_is_closed", [
+                                                    <?= $this->Form->control("location_hour.".$day."_is_closed", [
                                                         'label' => false,
                                                         'type' => 'checkbox',
                                                         'class' => 'is-closed-checkbox',
@@ -673,7 +673,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     ]) ?>
                                                 </td>
                                                 <td>
-                                                    <?= $this->Form->control("LocationHour.".$day."_is_byappt", [
+                                                    <?= $this->Form->control("location_hour.".$day."_is_byappt", [
                                                         'label' => false,
                                                         'type' => 'checkbox',
                                                         'checked' => $location->location_hour->{$day.'_is_byappt'}
@@ -683,7 +683,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <?php endforeach; ?>
                                         <tr>
                                             <td colspan="5">
-                                                <?= $this->Form->control('LocationHour.is_evening_weekend_hours', [
+                                                <?= $this->Form->control('location_hour.is_evening_weekend_hours', [
                                                     'type' => 'checkbox',
                                                     'label' => [
                                                         'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
@@ -696,7 +696,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         </tr>
                                         <tr>
                                             <td colspan="5">
-                                                <?= $this->Form->control('LocationHour.is_closed_lunch', [
+                                                <?= $this->Form->control('location_hour.is_closed_lunch', [
                                                     'type' => 'checkbox',
                                                     'label' => [
                                                         'text' => '<strong class="ml5">Closed for lunch</strong>',
@@ -705,30 +705,25 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     ],
                                                     'checked' => $location->location_hour->is_closed_lunch
                                                 ]) ?>
-                                                <!--*** TODO: add lunch break logic: -->
-                                                <div id="closedLunch" class="col-md-12 hidden">
-                                                    <div class="form-group required">
-                                                        <label class="col-md-2 tal">Lunch break</label>
-                                                        <div class="col-md-10">
-                                                            <?= $this->Form->control('LocationHour.lunch_start', [
-                                                                'type' => 'time',
-                                                                'label' => false,
-                                                                'empty' => true,
-                                                                'autocomplete' => 'off',
-                                                                'interval' => 15,
-                                                                'value' => $this->Clinic->convert24hours($location->location_hour->lunch_start),
-                                                            ]) ?>
-                                                            <span class="mr5 ml5">-</span>
-                                                            <?= $this->Form->control('LocationHour.lunch_end', [
-                                                                'type' => 'time',
-                                                                'label' => false,
-                                                                'empty' => true,
-                                                                'autocomplete' => 'off',
-                                                                'interval' => 15,
-                                                                'value' => $this->Clinic->convert24hours($location->location_hour->lunch_end),
-                                                            ]) ?>
-                                                        </div>
-                                                    </div>
+                                                <div id="closedLunch" class="form-group required">
+                                                    <label class="col-md-2 tal">Lunch break</label>
+                                                    <?= $this->Form->control('location_hour.lunch_start', [
+                                                        'type' => 'time',
+                                                        'label' => false,
+                                                        'empty' => true,
+                                                        'autocomplete' => 'off',
+                                                        'step' => 60, //minutes
+                                                        'value' => $this->Clinic->convert24hours($location->location_hour->lunch_start),
+                                                    ]) ?>
+                                                    <span class="mr5 ml5"> - </span>
+                                                    <?= $this->Form->control('location_hour.lunch_end', [
+                                                        'type' => 'time',
+                                                        'label' => false,
+                                                        'empty' => true,
+                                                        'autocomplete' => 'off',
+                                                        'step' => 60, //minutes
+                                                        'value' => $this->Clinic->convert24hours($location->location_hour->lunch_end),
+                                                    ]) ?>
                                                 </div>
                                             </td>
                                         </tr>
@@ -880,11 +875,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <td class="col-md-9"><?= dateTimeCentralToEastern($user->modified) ?></td>
                                         </tr>
                                     </table>
-                                    <?= $this->Form->control('User.id', ['value'=>$user->id]) ?>
-                                    <?= $this->Form->control('User.username', ['value'=>$user->username]) ?>
-                                    <?= $this->Form->control('User.first_name', ['required' => false, 'value'=>$user->first_name]) ?>
-                                    <?= $this->Form->control('User.last_name', ['required' => false, 'value'=>$user->last_name]) ?>
-                                    <?= $this->Form->control('User.email', ['required' => false, 'value'=>$user->email]) ?>
+                                    <?= $this->Form->control('users.0.id', ['value'=>$user->id]) ?>
+                                    <?= $this->Form->control('users.0.username', ['value'=>$user->username]) ?>
+                                    <?= $this->Form->control('users.0.first_name', ['required' => false, 'value'=>$user->first_name]) ?>
+                                    <?= $this->Form->control('users.0.last_name', ['required' => false, 'value'=>$user->last_name]) ?>
+                                    <?= $this->Form->control('users.0.email', ['required' => false, 'value'=>$user->email]) ?>
                                     <div class="form-group">
                                         <label class="form-label col-md-3">Last Login</label>
                                         <div class="col-md-9 p0">
@@ -911,9 +906,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             <?= $this->Html->link('Delete This Email',['prefix' => 'Admin', 'controller' => 'Users', 'action' => 'deluser', $email->id], [], 'Are you sure?') ?>
                                                         </div>
                                                     </div>
-                                                    <?= $this->Form->control("LocationEmail.$key.id", ['default' => isset($email->id) ? $email->id : '']) ?>
+                                                    <?= $this->Form->control("location_emails.$key.id", ['default' => isset($email->id) ? $email->id : '']) ?>
                                                     <?php foreach(['email','first_name','last_name'] as $field): ?>
-                                                        <?= $this->Form->control("LocationEmail.$key.$field", ['default' => isset($email->$field) ? $email->$field : '']) ?>
+                                                        <?= $this->Form->control("location_emails.$key.$field", ['default' => isset($email->$field) ? $email->$field : '']) ?>
                                                     <?php endforeach; ?>
                                                     <hr>
                                                 <?php endif; ?>
@@ -927,9 +922,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <?php $key = count($location->location_emails); ?>
                                             <?php $notificationStyle = !empty($this->validationErrors) ? '' : 'display:none;'; ?>
                                             <div id="additional-notification" style=<?= $notificationStyle ?>>
-                                                <?= $this->Form->control("LocationEmail.$key.id") ?>
+                                                <?= $this->Form->control("location_emails.$key.id") ?>
                                                 <?php foreach(['email','first_name','last_name'] as $field): ?>
-                                                    <?= $this->Form->control("LocationEmail.$key.$field", ['required' => false]) ?>
+                                                    <?= $this->Form->control("location_emails.$key.$field", ['required' => false]) ?>
                                                 <?php endforeach; ?>
                                             </div>
                                         </div>
@@ -1393,7 +1388,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     1 => 'Yes',
                                                 ],
                                                 'default' => 0,
-                                                'help_block' => 'If clinic is Iris+, select both "CQ Premier" and "Iris+"',
+                                                'help' => 'If clinic is Iris+, select both "CQ Premier" and "Iris+"',
                                             ]);
                                         ?>
                                     <?php endif; ?>

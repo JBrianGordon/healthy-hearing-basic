@@ -213,15 +213,11 @@ class LocationHoursTable extends Table
 
         $validator
             ->scalar('lunch_start')
-            ->maxLength('lunch_start', 128)
-            ->requirePresence('lunch_start', 'create')
-            ->notEmptyString('lunch_start');
+            ->maxLength('lunch_start', 128);
 
         $validator
             ->scalar('lunch_end')
-            ->maxLength('lunch_end', 128)
-            ->requirePresence('lunch_end', 'create')
-            ->notEmptyString('lunch_end');
+            ->maxLength('lunch_end', 128);
 
         return $validator;
     }
