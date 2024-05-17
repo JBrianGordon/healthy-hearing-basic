@@ -9,8 +9,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <div class="backdrop backdrop-home-gradient backdrop-height"></div>
             <picture class="backdrop-home">
                 <source media="(max-width: 991px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
-                <source media="(min-width:992px)" srcset="/img/home-hero.png">
-                <img src="/img/home-hero.png" alt="smiling doctor giving a consultation" height="520">
+                <source media="(min-width:992px)" srcset="/img/home-hero.webp">
+                <img src="/img/home-hero.webp" alt="smiling doctor giving a consultation">
             </picture>
             <div class="backdrop backdrop-home-gradient backdrop-opacity backdrop-height"></div>
         </div>
@@ -32,7 +32,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                     <?php if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$isMobileDevice): ?>
                         <div class="hearing-test">
                             <br>
-                            <h3>Online hearing test</h3>
+                            <h2>Online hearing test</h2>
                             <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
                             <br>
                             <p>
@@ -41,7 +41,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     <?php endif; ?>
                 </div>
-            <div class="col-sm-5 col-lg-offset-1 over-backdrop pull-right">
+            <div class="col-sm-5 col-lg-offset-1 over-backdrop pull-right" style="min-height:1350px;float:right">
                 <div class="panel panel-secondary">
                     <header class="panel-heading text-center">
                       Find a clinic
@@ -68,8 +68,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                         <?php if (!empty($clinicsNearMe)): ?>
                             <div class="panel-section text-center">
-                                <h4>Hearing clinics near me</h4>
-                                <?php echo $this->element($this->Clinic->nearMe($clinicsNearMe)); ?>
+                                <h2 class="h3">Hearing clinics near me</h2>
+                                <?= $this->element($this->Clinic->nearMe($clinicsNearMe)); ?>
                             </div>
                         <?php endif; ?>
                     </div>
