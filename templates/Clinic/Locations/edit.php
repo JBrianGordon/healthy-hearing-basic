@@ -490,7 +490,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 <tr id="tr-link-<?= $key ?>" class="col-12 p0">
                                                                     <td class="col-sm-8 p0">
                                                                         <div id="div-link-<?= $key ?>">
-                                                                            <?= $this->Form->hidden('linked_location_id') ?>
+                                                                            <?= $this->Form->hidden('id_linked_location') ?>
                                                                             <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
                                                                             <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
                                                                         </div>

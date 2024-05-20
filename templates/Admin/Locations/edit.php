@@ -15,7 +15,7 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 $id = $location->id;
 $isCqPremier = $location->is_cq_premier;
 $adId = $location->location_ad->id ?? null;
-$couponId = $location->coupon_id;
+$couponId = $location->id_coupon;
 $showSpecialAnnouncement = (
     ($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
     ($location->feature_special_announcement)
@@ -281,7 +281,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <tr id="tr-link-<?= $key ?>">
                                                         <td>
                                                             <div id="div-link-<?= $key ?>">
-                                                                <?= $this->Form->hidden('linked_location_id') ?>
+                                                                <?= $this->Form->hidden('id_linked_location') ?>
                                                                 <input class="form-control linked-location w-100" data-key="<?= $key ?>" data-id="<?= $id ?>" />
                                                                 <span class="help-block text-danger" style="display:none;" id="link-error-<?= $key ?>"></span>
                                                             </div>
@@ -344,13 +344,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         <tbody class="d-block">
                                                             <tr class="d-block">
                                                                 <td class="d-block">
-                                                                    <img class="ml60 mb10" id="photo-thumb-logo" src="<?php if(!empty($location->logo_url)){echo '/cloudfiles/clinics/' . $location->logo_url;} ?>">
-                                                                <?= $this->Form->control("logo_file", [
+                                                                    <?php $logoSrc = empty($location->logo_url) ? "" : '/cloudfiles/clinics/'.$location->logo_url; ?>
+                                                                    <img class="ml60 mb10" id="photo-thumb-logo" src="<?= $logoSrc ?>">
+                                                                    <?= $this->Form->control("logo_file", [
                                                                         'type' => 'file',
                                                                         'label' => 'File name',
                                                                         'class' => 'form-control photo-url',
                                                                         'id' => 'LocationLogo0Url'
-                                                                    ])?>
+                                                                    ]) ?>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -368,20 +369,18 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 <?php if (!empty($photo->photo_url)): ?>
                                                                     <tr>
                                                                         <td class="w-100">
-                                                                            <span class="hidden"><?= $photo->id; ?></span>
                                                                             <div class='row mt5 mb10'>
                                                                                 <div class='col-md-9 offset-md-3'>
                                                                                     <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <?php
+                                                                            echo $this->Form->hidden("location_photos.$key.id");
                                                                             echo $this->Form->control("location_photos.$key.photo_url", [
-                                                                                'value' => $photo->photo_url,
                                                                                 'label' => 'File name',
                                                                                 'readonly' => 'readonly',
                                                                             ]);
                                                                             echo $this->Form->control("location_photos.$key.alt", [
-                                                                                'value' => $photo->alt,
                                                                                 'label' => 'Description',
                                                                                 'required' => true
                                                                             ]);
@@ -479,7 +478,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             </div>
                                                         </div>
                                                         <div id="couponSelected" style="display:none;">
-                                                            <span class="hidden"><?= $location->id_coupon ?></span>
+                                                            <?= $this->Form->hidden('id_coupon'); ?>
                                                             <div class='col-md-3 offset-md-4'>
                                                                 <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                             </div>
@@ -642,7 +641,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <th width="12%">Closed</th>
                                             <th width="12%">By Appt</th>
                                         </tr>
-                                        <span class="hidden"><?= $location->location_hour->id; ?></span>
+                                        <?= $this->Form->hidden('location_hour.id'); ?>
                                         <?php foreach ($days as $day): ?>
                                             <tr>
                                                 <td><?= date("l", strtotime($day)) ?></td>
@@ -736,7 +735,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <div class="control-group">
                                         <div class="controls">
                                             <p><strong>Acceptable Methods of Payment</strong></p>
-                                            <!-- *** TODO: set up payment methods *** -->
                                             <?= $this->Clinic->paymentForm($location->payment) ?>
                                         </div>
                                     </div>
@@ -744,7 +742,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 
                                 <!-- Notes Tab -->
                                 <div class="tab-pane" id="Notes">
-                                    <!-- *** TODO: set up notes *** -->
                                     <?php $noteCount = count($location->location_notes); ?>
                                     <div class="notes">
                                         <?php

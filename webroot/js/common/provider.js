@@ -74,12 +74,12 @@ class Provider {
       return false;
     }
 
-    // Change provider attr in div, and the order input.
+    // Change provider attr in div, and the priority input.
     const swapDiv = swapProvider;
     swapDiv.setAttribute('provider', providerKey);
-    swapDiv.querySelector('.provider-order').value = parseInt(providerKey) + 1;
+    swapDiv.querySelector('.provider-priority').value = parseInt(providerKey) + 1;
     providerDiv.setAttribute('provider', swapKey);
-    providerDiv.querySelector('.provider-order').value = parseInt(swapKey) + 1;
+    providerDiv.querySelector('.provider-priority').value = parseInt(swapKey) + 1;
   }
 
   addCredential(obj) {
