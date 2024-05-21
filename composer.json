@@ -14,7 +14,7 @@
         "crabstudio/recaptcha": "^3.0",
         "dereuromark/cakephp-geo": "^2.2",
         "dereuromark/cakephp-queue": "^6.9",
-        "firebase/php-jwt": "^6.8",
+        "firebase/php-jwt": "^6.10",
         "friendsofcake/bootstrap-ui": "^4.0.0",
         "friendsofcake/cakephp-csvview": "^4.1",
         "friendsofcake/search": "^6.2",

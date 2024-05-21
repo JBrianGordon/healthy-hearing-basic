@@ -92,6 +92,15 @@ return [
         ],
     ],
 
+    // CKEditor & CKBox
+    'CK' => [
+        'envId' => '_ck_env_id_',
+        'apiSecret' => '_ck_api_secret_',
+        'userId' => '_ck_user_id_',
+        'role' => '_ck_user_role_',
+        'categoryId' => '_ck_category_id_',
+        'categoryId-testing' => '_ck_category_id_',
+    ],
     'GoogleMap' => [
         'key' => '_google_map_key_',
     ],

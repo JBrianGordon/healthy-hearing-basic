@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Advertisement[]|\Cake\Collection\CollectionInterface $advertisements
+ * @var iterable<\App\Model\Entity\Advertisement> $advertisements
  */
 ?>
 <div class="advertisements index content">
@@ -14,10 +14,7 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th><?= $this->Paginator->sort('modified_by') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
-                    <th><?= $this->Paginator->sort('slug') ?></th>
-                    <th><?= $this->Paginator->sort('corp_id') ?></th>
                     <th><?= $this->Paginator->sort('type') ?></th>
                     <th><?= $this->Paginator->sort('src') ?></th>
                     <th><?= $this->Paginator->sort('dest') ?></th>
@@ -25,16 +22,6 @@
                     <th><?= $this->Paginator->sort('height') ?></th>
                     <th><?= $this->Paginator->sort('width') ?></th>
                     <th><?= $this->Paginator->sort('alt') ?></th>
-                    <th><?= $this->Paginator->sort('class') ?></th>
-                    <th><?= $this->Paginator->sort('style') ?></th>
-                    <th><?= $this->Paginator->sort('onclick') ?></th>
-                    <th><?= $this->Paginator->sort('onmouseover') ?></th>
-                    <th><?= $this->Paginator->sort('weight') ?></th>
-                    <th><?= $this->Paginator->sort('active_expires') ?></th>
-                    <th><?= $this->Paginator->sort('is_ao') ?></th>
-                    <th><?= $this->Paginator->sort('is_hh') ?></th>
-                    <th><?= $this->Paginator->sort('is_sp') ?></th>
-                    <th><?= $this->Paginator->sort('is_ei') ?></th>
                     <th><?= $this->Paginator->sort('is_active') ?></th>
                     <th><?= $this->Paginator->sort('tag_corps') ?></th>
                     <th><?= $this->Paginator->sort('tag_basic') ?></th>
@@ -47,10 +34,7 @@
                     <td><?= $this->Number->format($advertisement->id) ?></td>
                     <td><?= h($advertisement->created) ?></td>
                     <td><?= h($advertisement->modified) ?></td>
-                    <td><?= $this->Number->format($advertisement->modified_by) ?></td>
                     <td><?= h($advertisement->title) ?></td>
-                    <td><?= h($advertisement->slug) ?></td>
-                    <td><?= $advertisement->has('corp') ? $this->Html->link($advertisement->corp->title, ['controller' => 'Corps', 'action' => 'view', $advertisement->corp->id]) : '' ?></td>
                     <td><?= h($advertisement->type) ?></td>
                     <td><?= h($advertisement->src) ?></td>
                     <td><?= h($advertisement->dest) ?></td>
@@ -58,16 +42,6 @@
                     <td><?= h($advertisement->height) ?></td>
                     <td><?= h($advertisement->width) ?></td>
                     <td><?= h($advertisement->alt) ?></td>
-                    <td><?= h($advertisement->class) ?></td>
-                    <td><?= h($advertisement->style) ?></td>
-                    <td><?= h($advertisement->onclick) ?></td>
-                    <td><?= h($advertisement->onmouseover) ?></td>
-                    <td><?= $this->Number->format($advertisement->weight) ?></td>
-                    <td><?= h($advertisement->active_expires) ?></td>
-                    <td><?= h($advertisement->is_ao) ?></td>
-                    <td><?= h($advertisement->is_hh) ?></td>
-                    <td><?= h($advertisement->is_sp) ?></td>
-                    <td><?= h($advertisement->is_ei) ?></td>
                     <td><?= h($advertisement->is_active) ?></td>
                     <td><?= h($advertisement->tag_corps) ?></td>
                     <td><?= h($advertisement->tag_basic) ?></td>
