@@ -28,8 +28,8 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 						<?php if ($isEnhancedOrPremier): ?>
 							<div class="col-md-12 gutter-below">
 									<?php
-										$ninetyDaysAgo = date('Y-m-d', mktime(0, 0, 0, date("m") , date("d") - 90, date("Y")));
-										if ($location->last_review_date > $ninetyDaysAgo){
+										$ninetyDaysAgo = date('m/d/y', mktime(0, 0, 0, date("m") , date("d") - 90, date("Y")));
+										if (!empty($location->last_review_date) && $location->last_review_date < $ninetyDaysAgo){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise recent-review"><a href="' . $locationUrl . '#reviews">Recent review</a></legend>';
 										} else if($location->reviews_approved > 10){
 											echo '<fieldset class="well clinic-info t1 high-reviews reviewed"><legend class="patient-praise"><a href="' . $locationUrl . '#reviews">More than 10 reviews</a></legend>';
@@ -132,7 +132,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 												</div>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
-												<div class="telephone h4"><span><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
+												<div class="telephone h4"><span><span class="bi bi-telephone-fill"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 													<div>
 														<a href="#" class="btn btn-lg btn-secondary directBookBtn mb5" data-bs-toggle="modal" data-button="<?= $location->id ?>" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>

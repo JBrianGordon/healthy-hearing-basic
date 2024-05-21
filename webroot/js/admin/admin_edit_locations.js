@@ -124,17 +124,12 @@ class locationsAdminEdit {
       });
       featureContentLibraryElement.dispatchEvent(new Event('change'));
     }
-  /* TODO: add special-feature-expiration field to view: ***
-    document.getElementById('feature-special-announcement').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#feature-special-announcement');
+    document.getElementById('location-hour-is-closed-lunch').addEventListener('change', function () {
+      editObj.onChangeFeature(this.checked, '#location-hour-lunch-start');
+      editObj.onChangeFeature(this.checked, '#location-hour-lunch-end');
+      editObj.onChangeFeature(this.checked, '#closedLunch');
     });
-    document.getElementById('feature-special-announcement').dispatchEvent(new Event('change'));*/
-    /* TODO: add hour-is-closed-lunch field to view: ***
-    document.getElementById('hour-is-closed-lunch').addEventListener('change', function () {
-      editObj.onChangeIsClosedLunch(this.checked);
-    });
-    document.getElementById('hour-is-closed-lunch').dispatchEvent(new Event('change'));*/
-
+    document.getElementById('location-hour-is-closed-lunch').dispatchEvent(new Event('change'));
     document.getElementById('is-mobile').addEventListener('change', function () {
       editObj.onChangeFeature(this.checked, '#radius');
       editObj.onChangeFeature(this.checked, '#mobile-text');
@@ -142,8 +137,7 @@ class locationsAdminEdit {
       document.getElementById('radiusHelp').classList.toggle("hidden");
     });
     document.getElementById('is-mobile').dispatchEvent(new Event('change'));
-    //*** TODO: uncomment once linked locations added to page: ***/
-    //editObj.locationAutocomplete();
+    editObj.locationAutocomplete();
     editObj.initSpecialAnnouncements();
   }
 
@@ -172,8 +166,8 @@ class locationsAdminEdit {
     const key = obj.dataset.key;
     
     if (type === "photo") {
-      document.querySelector(`#LocationPhoto${key}PhotoUrl`).value = '';
-      const fileInput = document.querySelector(`#LocationPhoto${key}File`);
+      document.querySelector(`#location-photos-${key}-photo-url`).value = '';
+      const fileInput = document.querySelector(`#location-photos-${key}-file`);
       if (fileInput !== null) {
         fileInput.value = '';
       }
@@ -191,11 +185,11 @@ class locationsAdminEdit {
     
     if (type === "ad") {
       document.querySelector("#location-ad-preview").style.display = 'none';
-      document.querySelector("#LocationAdFile").value = "";
-      document.querySelector("#LocationAdTitle").value = "";
-      document.querySelector("#LocationAdDescription").value = "";
-      document.querySelector("#LocationAdPhotoUrl").value = "";
-      document.querySelector("#LocationCouponId").value = null;
+      document.querySelector("#location-ad-file").value = "";
+      document.querySelector("#location-ad-title").value = "";
+      document.querySelector("#location-ad-description").value = "";
+      document.querySelector("#location-ad-photo-url").value = "";
+      document.querySelector("#id-coupon").value = null;
       document.querySelector('#specialAnnouncements').dataset.adid = null;
       document.querySelector('#specialAnnouncements').dataset.couponid = null;
       this.initSpecialAnnouncements();
@@ -548,12 +542,12 @@ class locationsAdminEdit {
 
   addCoupon(obj) {
     const couponId = obj.getAttribute("data-coupon-id");
-    const locationAdFile = document.querySelector("#LocationAdFile");
-    const locationAdTitle = document.querySelector("#LocationAdTitle");
-    const locationAdDescription = document.querySelector("#LocationAdDescription");
-    const locationAdPhotoUrl = document.querySelector("#LocationAdPhotoUrl");
+    const locationAdFile = document.querySelector("#location-ad-file");
+    const locationAdTitle = document.querySelector("#location-ad-title");
+    const locationAdDescription = document.querySelector("#location-ad-description");
+    const locationAdPhotoUrl = document.querySelector("#location-ad-photo-url");
     const specialAnnouncements = document.querySelector("#specialAnnouncements");
-    const locationCouponId = document.querySelector("#LocationCouponId");
+    const locationCouponId = document.querySelector("#id-coupon");
     const couponSelectedImage = document.querySelector("#couponSelected .coupon-image");
     const couponLibrary = document.querySelector("#couponLibrary");
     const couponSelected = document.querySelector("#couponSelected");
@@ -587,21 +581,17 @@ class locationsAdminEdit {
     const isChecked = obj.checked;
 
     if (isChecked) {
-      clearHours(day);
+      this.clearHours(day);
     } else {
-      setDefaultHours(day);
+      this.setDefaultHours(day);
     }
   }
 
   //Function to clear the values in each field if closed
   clearHours(day) {
     const hourFields = [
-      `#LocationHour${day}OpenHour`,
-      `#LocationHour${day}OpenMin`,
-      `#LocationHour${day}OpenMeridian`,
-      `#LocationHour${day}CloseHour`,
-      `#LocationHour${day}CloseMin`,
-      `#LocationHour${day}CloseMeridian`
+      `#location-hour-${day}-open`,
+      `#location-hour-${day}-close`,
     ];
 
     hourFields.forEach((field) => {
@@ -611,39 +601,8 @@ class locationsAdminEdit {
 
   //Function to set the values to defaults if closed checkbox is unchecked
   setDefaultHours(day) {
-    document.querySelector(`#LocationHour${day}OpenHour`).value = "08";
-    document.querySelector(`#LocationHour${day}OpenMin`).value = "00";
-    document.querySelector(`#LocationHour${day}OpenMeridian`).value = "am";
-    document.querySelector(`#LocationHour${day}CloseHour`).value = "05";
-    document.querySelector(`#LocationHour${day}CloseMin`).value = "00";
-    document.querySelector(`#LocationHour${day}CloseMeridian`).value = "pm";
-  }
-
-  onChangeIsClosedLunch(isClosedLunch) {
-    if (isClosedLunch) {
-      document.querySelector("#closedLunch").style.display = "block";
-      setRequiredFields(true);
-    } else {
-      document.querySelector("#closedLunch").style.display = "none";
-      setRequiredFields(false);
-    }
-  }
-
-  //Array of fields to cycle through to set true or false value
-  setRequiredFields(required) {
-    const requiredFields = [
-      "#LocationHourLunchStartHour",
-      "#LocationHourLunchStartMin",
-      "#LocationHourLunchStartMeridian",
-      "#LocationHourLunchEndHour",
-      "#LocationHourLunchEndMin",
-      "#LocationHourLunchEndMeridian"
-    ];
-
-    requiredFields.forEach((field) => {
-      const element = document.querySelector(field);
-      element.required = required;
-    });
+    document.querySelector(`#location-hour-${day}-open`).value = "08:00";
+    document.querySelector(`#location-hour-${day}-close`).value = "17:00";
   }
 }
 
@@ -654,20 +613,10 @@ const providerCheckboxes = document.querySelectorAll(".provider .checkbox label 
 const insertAfter = (targetElement, htmlString) => {
   targetElement.insertAdjacentHTML("afterend", htmlString);
 };
-const insertLabelBefore = (targetElement, labelText) => {
-  const label = document.createElement("label");
-  label.classList.add("col", "col-md-3", "pr30", "control-label");
-  label.innerHTML = `<strong>${labelText}</strong>`;
-  targetElement.parentNode.insertBefore(label, targetElement);
-};
-
-const locationIsIdaVerified = document.querySelector("#location-is-ida-verified");
 
 providerCheckboxes.forEach((checkbox) => {
   insertAfter(checkbox.parentNode, "<span class='slider' style='margin-left:235px'></span>");
 });
-/* TODO: uncomment when provider info pulled into view:
-insertLabelBefore(document.querySelector(".provider .checkbox .ida-verified"), "Ida verified provider");*/
 
 //special announcement border selection
 const borderRadioElements = document.querySelectorAll(".border-radio");
@@ -688,22 +637,22 @@ borderRadioElements.forEach((element) => {
 });
 
 //Vidscrip validation
-const locationVidscripsVidscrip = document.querySelector("#LocationVidscripsVidscrip");
-const locationVidscripsEmail = document.querySelector("#LocationVidscripsEmail");
-
+const locationVidscripVidscrip = document.querySelector("#location-vidscrip-vidscrip");
+const locationVidscripEmail = document.querySelector("#location-vidscrip-email");
 //remove field requirements if neither constant has a value
 const handleBlur = () => {
-  if (locationVidscripsVidscrip.value === "" && locationVidscripsEmail.value === "") {
-    locationVidscripsVidscrip.required = false;
-    locationVidscripsEmail.required = false;
+  if (locationVidscripVidscrip.value === "" && locationVidscripEmail.value === "") {
+    locationVidscripVidscrip.required = false;
+    locationVidscripEmail.required = false;
   } else {
-    locationVidscripsVidscrip.required = true;
-    locationVidscripsEmail.required = true;
+    locationVidscripVidscrip.required = true;
+    locationVidscripEmail.required = true;
   }
 };
-/*** TODO: uncomment when vidscrips is pulled into view: ***
-locationVidscripsVidscrip.addEventListener("blur", handleBlur);
-locationVidscripsEmail.addEventListener("blur", handleBlur);*/
+if (locationVidscripVidscrip) {
+  locationVidscripVidscrip.addEventListener("blur", handleBlur);
+  locationVidscripEmail.addEventListener("blur", handleBlur);
+}
 
 //Prevent enter button from submitting form in inputs
 const inputElements = document.querySelectorAll("input");

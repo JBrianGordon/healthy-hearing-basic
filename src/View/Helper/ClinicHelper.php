@@ -839,13 +839,6 @@ class ClinicHelper extends Helper
                     'https://www.facebook.com/' . $text,
                     ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
                 ) . '</span>';
-            case 'twitter':
-                $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
-                return '<span class="twitter"><span class="hh-icon-x clinic-share"></span> ' . $this->Html->link(
-                    'Twitter',
-                    'https://twitter.com/' . $text,
-                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
-                ) . '</span>';
             case 'youtube':
                 $youtubeLink = 'https://www.youtube.com/';
                 $youtubeSuffix = '';
@@ -1146,15 +1139,15 @@ class ClinicHelper extends Helper
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
         foreach ($payments as $keyIndex => $nameIcon) {
             $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
-            $retval .= '<div class="col-md-6 flex mb20"><label class="form-label p0 tal fg-1" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
+            $retval .= '<div class="col-md-6 flex mb20"><label class="form-label p0 tal fg-1" for="payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
             $formOptions = array_merge([
                 'type' => 'checkbox',
                 'checked' => $checked,
                 'default' => in_array($nameIcon['name'], $defaultChecked),
-                'id' => 'Payment'.$keyIndex,
+                'id' => 'payment'.$keyIndex,
                 'class' => 'checkbox-left mr5'
             ], $options);
-            $retval .= $this->Form->input("Payment.$keyIndex", $formOptions).'</div>';
+            $retval .= $this->Form->input("payment.$keyIndex", $formOptions).'</div>';
         }
         return $retval;
     }

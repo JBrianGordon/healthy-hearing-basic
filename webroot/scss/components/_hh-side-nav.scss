@@ -42,7 +42,7 @@
   overflow-x: hidden;
   transform: translateZ(0);
   width: calc(100vw - ($navbar-height / 1.75));
-  display: none;
+  display: block;
   
   .col-sm-12 {
     .side-nav-links {

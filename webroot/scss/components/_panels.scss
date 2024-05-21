@@ -802,16 +802,16 @@
 }
 
 .back-to-top-link {
-  position: absolute;
-  right: 10px;
-  bottom: -38px;
-  z-index: 100;
-
-  &#backToTop {
-    position: fixed;
-    right: -90px;
-    bottom: -30px;
-    height: 30px;
-    width: 105px;
-  }
+	position: absolute;
+	right: 10px;
+	bottom: -38px;
+	z-index: 100;
+	
+	&#backToTop {
+		position: fixed;
+		right: -90px;
+		bottom: -30px;
+		height: 30px;
+		width: 120px;
+	}
 }

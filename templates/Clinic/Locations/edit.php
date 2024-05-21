@@ -272,7 +272,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </div>
                                         <?php
                                         echo $this->Form->control('Location.landmarks', [
-                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="glyphicon glyphicon-question-sign"></span></a>',
+                                            'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="bi bi-question-circle-fill"></span></a>',
                                                 'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,
@@ -293,14 +293,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                             'beforeInput' => '<div class="input-group col-12">',
                                             'afterInput' => '</div>',
                                             'value' => $location->facebook,
-                                            'class' => 'col-sm-9 mb10'
-                                            ]);
-                                        echo $this->Form->control('Location.twitter', [
-                                            'label' => ['text' => 'Twitter', 'class' => 'col-sm-3 control-label'],
-                                            'placeholder' => 'Copy and paste the entire URL into this field',
-                                            'beforeInput' => '<div class="input-group col-12">',
-                                            'afterInput' => '</div>',
-                                            'value' => $location->twitter,
                                             'class' => 'col-sm-9 mb10'
                                             ]);
                                         echo $this->Form->control('Location.youtube', [
@@ -373,7 +365,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                             'label' => false,
                                                             'type' => 'checkbox',
                                                             'class' => 'is-closed-checkbox',
-                                                            'data-day' => ucfirst($day),
+                                                            'data-day' => $day,
                                                             'checked' => $location->location_hour->{$day.'_is_closed'}
                                                         ]) ?>
                                                     </td>
@@ -498,7 +490,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 <tr id="tr-link-<?= $key ?>" class="col-12 p0">
                                                                     <td class="col-sm-8 p0">
                                                                         <div id="div-link-<?= $key ?>">
-                                                                            <?= $this->Form->hidden('linked_location_id') ?>
+                                                                            <?= $this->Form->hidden('id_linked_location') ?>
                                                                             <input class="form-control linked-location" data-key="<?= $key ?>" data-id="<?= $locationId ?>" />
                                                                             <span class="help-block text-danger hidden" id="link-error-<?= $key ?>"></span>
                                                                         </div>

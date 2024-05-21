@@ -72,7 +72,7 @@
 			<!-- In Partnership With -->
 			<div class="<?php if (Configure::read('country') == 'CA') {echo 'ca-';} ?>partner-block col-md-6">
 				<p class="text-primary text-small">
-					<em>In partnership <br class="hidden-xs hidden-sm">with</em>            
+					<em>In partnership <br class="d-none d-md-block">with</em>            
 					<?php if (Configure::read('country') == 'US'): ?>
 						<a href="https://www.oticon.com/?utm_medium=banner&utm_source=HealthyHearingFooter&utm_campaign=Oticonlogo&utm_content=146750_oticonlogo" target="_blank" rel="noopener">
 							<img id="oticon-logo-footer" loading="lazy" class="oticon-logo" src="/img/Oticon_Logo_LCT_250.png" alt="In partnership with Oticon" width="125" />

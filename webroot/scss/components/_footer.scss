@@ -190,6 +190,7 @@
 #footerContainer {
     position: fixed;
     bottom: 0;
+    left:0;
     z-index: 2;
     background: #fff;
     width: 100%;
@@ -268,7 +269,7 @@
 	}
 	
 	.telephone {
-		.glyphicon-earphone{
+		.bi-telephone-fill{
 		    top: 3px;
 		    font-size: 14px;
 		}

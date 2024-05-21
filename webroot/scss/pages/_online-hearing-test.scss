@@ -143,5 +143,5 @@
 /* Sprites */
 .sprite-test { background: url('/img/quiz/hearing-test-sprite.png') no-repeat top left; }
 .sprite-test-check-mark { background-position: -10px -10px; width: 32px; height: 32px; }
-.sprite-test-answer-box:hover { background-position: -10px -62px; width: 32px; height: 32px; }
-.sprite-test-answer-box { background-position: -10px -114px; width: 32px;}
+.sprite-test-answer-box:hover { background-position: -10px -62px; width: 32px!important; height: 32px; }
+.sprite-test-answer-box { background-position: -10px -114px; width: 32px!important; height: 32px;}

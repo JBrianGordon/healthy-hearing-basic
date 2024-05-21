@@ -65,7 +65,11 @@ use Cake\Core\Configure;
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
     <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
-    <?= $this->element('cookie_footer') ?>
+    <div id="footerContainer">
+        <?= $this->element('cookie_footer') ?>
+        <!-- Regex check to show sticky footer on city or clinic pages only-->
+        <?= preg_match('/\/hearing-aids\/([0-9]{5}\-[A-Za-z\-]+|[A-Z]{2}\-[A-Za-z\-]+\/[A-Za-z\-]+)/', $_SERVER['REQUEST_URI']) ? $this->element('sticky_footer') : '' ?>
+    </div>
 </body>
 <?= $this->fetch('script') ?>
 </html>

@@ -55,7 +55,7 @@ $(window).ready(function() {
     }
     
     //Attach popovers to all elements that need it
-    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="popover"]').popover({html:true});
 
 
 });

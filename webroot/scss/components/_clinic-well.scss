@@ -3,6 +3,10 @@
     margin-top: 0;
   }
 
+  small {
+    font-size: 65%;
+  }
+
   .btn {
     -webkit-box-shadow: 0px 1.5px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 1.5px 3px rgba(0, 0, 0, 0.3);
@@ -198,7 +202,6 @@
 
   .basic-info {
     width: 70%;
-    display: inline-block;
     float: left;
 
     @media screen and (max-width: $screen-sm-max) {
@@ -208,7 +211,6 @@
 
   #quickButtons {
     width: 29%;
-    display: inline-block;
     float: left;
 
     @media screen and (max-width: $screen-sm-max) {
@@ -403,7 +405,7 @@ iframe[title='recaptcha challenge'] {
 
 .clinicPhone {
   .telephone {
-    .glyphicon-earphone {
+    .bi-telephone-fill {
       color: $brand-secondary;
       top: 3px;
       font-size: 22px;
@@ -413,7 +415,7 @@ iframe[title='recaptcha challenge'] {
     }
 
     &.h4 {
-      .glyphicon-earphone {
+      .bi-telephone-fill {
         font-size: 18px;
       }
     }
@@ -456,7 +458,6 @@ iframe[title='recaptcha challenge'] {
   .col-md-8 {
     .yhn-container.desktop,
     .earq-container.desktop {
-      display: inline-block;
       float: right;
 
       @media (max-width: $screen-sm-max) {
@@ -489,15 +490,6 @@ iframe[title='recaptcha challenge'] {
     }
   }
 
-  .popover {
-  	&.bottom {
-      min-width: 210px;
-    }
-	&.right {
-      min-width: 270px;
-    }
-  }
-
   .provider-name {
     display: inline-block;
     word-break: break-word;
@@ -515,17 +507,6 @@ iframe[title='recaptcha challenge'] {
       clear: both;
       max-width: none;
       text-align: center;
-    }
-    .cred-text {
-      margin-bottom: 10px;
-      display: inline-block;
-    }
-    .popover-content {
-      padding-left: 20px;
-      min-width: 230px;
-    }
-    .provider-qualifications {
-      font-size: 20px;
     }
   }
 
@@ -683,4 +664,32 @@ iframe[title='recaptcha challenge'] {
   max-width: 800px;
   height: 770px;
   overflow: hidden;
+}
+
+//Popover text
+.popover {
+  font-family: "Lato", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.6;
+  text-align: left;
+  
+  &.bottom {
+    min-width: 210px;
+  }
+  &.right {
+    min-width: 270px;
+  }
+
+  .cred-text {
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .popover-content {
+    padding-left: 20px;
+    min-width: 230px;
+  }
+  .provider-qualifications {
+    font-size: 20px;
+  }
 }

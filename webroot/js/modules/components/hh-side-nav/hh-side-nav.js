@@ -1,4 +1,4 @@
-export let htmlDiv = document.getElementsByTagName('html'),
+let htmlDiv = document.getElementsByTagName('html'),
 sideNavTrigger = document.getElementById('desktopSideNavTrigger'),
 sideNavLinks = document.getElementsByClassName('side-nav-links'),
 stickyFooter = document.getElementsByClassName('sticky-footer'),
@@ -10,7 +10,7 @@ Array.from(sideNavLinks).forEach((element) => {
     sideNavLinksLis.push(...childLiElements);
 });
 
-export let hideSide = () => {
+let hideSide = () => {
     htmlDiv[0].classList.remove('show-side-nav');
     document.removeEventListener('click', sideClickCheck);
 },

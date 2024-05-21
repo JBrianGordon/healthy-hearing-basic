@@ -12,7 +12,7 @@ $class = $autocomplete ? 'form-control autocomplete col-xs-12 mb15' : 'form-cont
 ?>
 
 
-<?= $this->Form->create();
+<?= $this->Form->create(null, ['role' => 'search']);
 	/*** TODO: leftover code from B3F, see if it's still need once search functionality is built out ***: Location', [
 	'url' => '/search',
 	'inputDefaults' => array(

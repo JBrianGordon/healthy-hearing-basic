@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  }
 	  if (popoverData !== "") {
 	    const popoverElement = document.querySelector(".cred-popover-" + i);
-	    popoverElement.setAttribute("data-content", popoverData);
+	    popoverElement.setAttribute("data-bs-content", popoverData);
 	  } else {
 	    const emptyPopoverElement = document.querySelector(".cred-popover-" + i);
 	    if (emptyPopoverElement) {
