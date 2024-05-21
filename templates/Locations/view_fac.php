@@ -55,7 +55,7 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 				</section>
 				<section class="panel panel-secondary">
 					<header class="panel-heading text-center">
-						<h3>Choose my <?= $stateLabel ?></h3>
+						<h2 class="h3">Choose my <?= $stateLabel ?></h2>
 					</header>
 					<div class="panel-body">
 						<table class="table choose-state">
