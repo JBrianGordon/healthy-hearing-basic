@@ -24,7 +24,7 @@
 	        <p<?= $location->state == 'ON'? ' style="height:20px"' : null ?>>
 	          <button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
 	          <?php if (isset($location->reviews) && count($location->reviews)): ?>
-	          	<span id="sortSpan">Sort by: <select id="sortSelect">
+	          	<span id="sortSpan"><label for="sortSelect" class="w-auto pt0">Sort by: </label><select id="sortSelect">
                     <option value="newestArr">Newest</option><option value="highestRating">Highest Rating</option><option value="lowestRating">Lowest Rating</option>
                   </select>
                 </span>
