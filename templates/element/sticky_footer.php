@@ -3,9 +3,6 @@
 	use Cake\ORM\TableRegistry;
 	use App\Model\Entity\Location;
 ?>
-<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm" href="#top">
-	<p>Back to top</p>
-</a>
 <footer id="stickyFooter" class="d<?= isset($location->id) || $this->getRequest()->getParam('controller') == 'Locations' || $this->getRequest()->getParam('controller') == 'Content' || $this->getRequest()->getParam('controller') == 'Wikis' || $this->getRequest()->getParam('controller') == 'Corps' ? "-lg" : ""?>-none col-xs-12 w-100 sticky-footer noprint">
 	<div class="col-xs-12 w-100 mt10 mb10">
 		<?php if (isset($location->id)): ?>

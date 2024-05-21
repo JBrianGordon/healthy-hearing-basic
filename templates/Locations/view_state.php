@@ -153,6 +153,9 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 		</div>
 	</div>
 </div>
+<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm" href="#top">
+	<p>Back to top</p>
+</a>
 <?php if (isFeatureOn('quick_pick')): ?>
 	<?= $this->element('responsive_slider') ?>
 <?php endif; ?>
