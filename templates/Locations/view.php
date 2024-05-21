@@ -160,8 +160,9 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 										        'action' => 'apptRequest'
 										    ],
 										    'class' => 'form-horizontal apptRequestForm',
-										    'id' => 'CaCallApptRequestForm'
-										]); ?>
+										    'id' => 'CaCallApptRequestForm',
+											'role' => false
+										]) ?>
 											<button type="button" class="close pt10" data-dismiss="modal" aria-hidden="true">X</button>
 											<div class="panel-heading text-center mb10">
 												<h2 class="modal-title">Request an appointment</h2>
