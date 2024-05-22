@@ -77,7 +77,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php endif; ?>
 	<section class="panel panel-secondary"<?= $facOrder ?>>
 		<header class="panel-heading text-center">
-			<h4>Find a clinic</h4>
+			<h2 class="h4">Find a clinic</h2>
 		</header>
 		<div class="panel-body pt20 pl20 pr20">
 			<?= $this->element('locations/search', ['label' => 'Enter city']) ?>
@@ -87,7 +87,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php if (!empty($contents)): ?>
 		<section class="panel panel-light related-reports" style="order:10">
 			<header class="panel-heading text-center">
-				<h4>Related content</h4>
+				<h2 class="h4">Related content</h2>
 			</header>
 			<table class="table table-bordered mb0">
 				<?php foreach ($contents as $content): ?>
