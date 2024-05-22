@@ -76,10 +76,6 @@ return [
 
     /*
      * Email configuration.
-     *
-     * Host and credential configuration in case you are using SmtpTransport
-     *
-     * See app.php for more configuration options.
      */
     'EmailTransport' => [
         'default' => [
@@ -89,6 +85,27 @@ return [
             'password' => null,
             'client' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        ],
+    ],
+
+    /*
+     * Email configuration.
+     */
+    'EmailTransport' => [
+        'default' => [
+            'host' => '_mail_catcher_host_',
+            'port' => '_mail_catcher_port_',
+            'username' => '_mail_catcher_username_',
+            'password' => '_mail_catcher_password_',
+            'className' => 'Smtp',
+            'tls' => true
+        ]
+    ],
+    'Email' => [
+        'default' => [
+            'transport' => 'default',
+            'from' => 'it@healthyhearing.com',
+            'to' => '_to_email_'
         ],
     ],
 
