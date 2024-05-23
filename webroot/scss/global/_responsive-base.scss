@@ -145,6 +145,12 @@ a {
   }
 }
 
+li[aria-level="1"] {
+  a {
+    text-decoration: underline;
+  }
+}
+
 table {
 
   &.basic-info {

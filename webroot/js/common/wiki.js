@@ -1,5 +1,6 @@
 import './common';
 import './responsive_slider';
+import '../modules/pinterest';
 /*** TODO: most or all of this file can likely be deleted ***/
 
 // Add "mobile_table" class to each table
@@ -19,20 +20,6 @@ if(twitterButton) {
     window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
   });
 };
-
-//Add href to Pinterest button for Lighthouse SEO
-document.addEventListener('DOMContentLoaded', function() {
-    var observer = new MutationObserver(function(mutations) {
-        var pinterestButton = document.querySelector('.btn-pinterest');
-        if (pinterestButton) {
-            pinterestButton.href = '';
-            observer.disconnect();
-        }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-});
-
 
 // Add "noprint" class to all wistia videos in help pages
 const wistiaEmbeds = document.querySelectorAll('.wistia_embed');
