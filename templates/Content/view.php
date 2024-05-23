@@ -139,7 +139,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 							<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName');?>" class="print-logo" width="200" height="40">
 							<p class="print-link"><?= "www.".Configure::read('siteUrl') ?></p>
 						</div>
-						<div class="panel-body">
+						<div class="panel-body anchor-underline">
 							<div class="panel-section expanded">
 								<?= $this->Editorial->adminLink($content->id, $isAdmin);	?>
 								<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>">

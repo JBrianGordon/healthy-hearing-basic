@@ -145,12 +145,6 @@ a {
   }
 }
 
-li[aria-level="1"] {
-  a {
-    text-decoration: underline;
-  }
-}
-
 table {
 
   &.basic-info {
@@ -319,6 +313,10 @@ summary {
   .print-head {
     display: none;
   }
+}
+
+.panel-body.anchor-underline a {
+  text-decoration: underline;
 }
 
 // Printer-friendly styles

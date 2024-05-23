@@ -25,11 +25,11 @@ $this->Html->script('dist/contact.min', ['block' => true]);
             <div class="row page-content">
                 <div class="col-lg-9 float-start">
                     <article class="panel">
-                        <div class="panel-body">
+                        <div class="panel-body anchor-underline">
                             <div class="panel-section expanded">
-                                <h1 class="text-primary blog-title">Contact <?php echo $siteName; ?></h1>
+                                <h1 class="text-primary blog-title">Contact <?= $siteName ?></h1>
 
-                                    <?= $this->Form->create($contactUsForm, ['class' => 'form-horizontal']) ?>
+                                    <?= $this->Form->create($contactUsForm, ['class' => 'form-horizontal', 'role' => false]) ?>
                                         <p><strong>If you are trying to reach a specific clinic, please click on the "Find a clinic" menu above and enter your <?= strtolower(Configure::read('zipLabel')) ?>.</strong></p>
                                         <?php 
                                             echo $this->Form->control('first_name', ['placeholder' => 'First name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0']]);
