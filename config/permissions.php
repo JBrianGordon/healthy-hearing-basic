@@ -166,9 +166,36 @@ return [
                 'about',
                 'clinicInfo',
                 'contactUs',
+                'feeds',
                 'home',
                 'newsletter',
                 'newsletterSuccess',
+                'privacyPolicy',
+                'termsOfUse'
+            ],
+            'bypassAuth' => true,
+        ],
+
+        /*******************************
+        * Public - Online Hearing Test
+        ********************************/
+        [
+            'prefix' => false,
+            'controller' => 'QuizResults',
+            'action' => [
+                'onlineHearingTest',
+            ],
+            'bypassAuth' => true,
+        ],
+
+        /*******************************
+        * Public - Sitemap
+        ********************************/
+        [
+            'prefix' => false,
+            'controller' => 'Sitemaps',
+            'action' => [
+                'index',
             ],
             'bypassAuth' => true,
         ],
