@@ -24,9 +24,9 @@
                 </div>
             </div>
 	        <div class="row">
-	          	<div class="col-sm-9">
+	          	<div class="col-lg-9">
 	          		<section class="panel">
-	          			<div class="panel-body">
+	          			<div class="panel-body anchor-underline">
 		          			<div class="panel-section expanded">
 		            			<div class="about">
 									<?= $page->content ?>
