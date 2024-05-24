@@ -111,6 +111,20 @@ return static function (RouteBuilder $routes) {
     // Redirect from /hearing-aids/DC-Dist--Of-Columbia to /hearing-aids/DC-Dist--Of-Columbia/Washington
     $routes->redirect('/hearing-aids/DC-Dist--Of-Columbia', '/hearing-aids/DC-Dist--Of-Columbia/Washington', ['status' => 301]);
 
+    // Ads routes
+    $routes->scope('/ads', function (RouteBuilder $builder) {
+        $builder->connect(
+            '/', [
+                'controller' => 'Advertisements'
+            ]
+        );
+        $builder->connect(
+            '/{action}/*', [
+                'controller' => 'Advertisements'
+            ]
+        );
+    });
+
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
         $builder->setExtensions(['rss']);
@@ -135,6 +149,17 @@ return static function (RouteBuilder $routes) {
     // Admin-prefixed routes
     $routes->prefix('Admin', function (RouteBuilder $adminBuilder) {
         $adminBuilder->connect('/', 'Utils::panel');
+
+        $adminBuilder->connect(
+            '/ads', [
+                'controller' => 'Advertisements'
+            ]
+        );
+        $adminBuilder->connect(
+            '/ads/{action}/*', [
+                'controller' => 'Advertisements'
+            ]
+        );
 
         // All routes here will be prefixed with `/admin`, and
         // have the `'prefix' => 'Admin'` route element added that

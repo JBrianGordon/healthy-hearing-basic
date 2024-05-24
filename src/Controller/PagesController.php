@@ -100,7 +100,6 @@ class PagesController extends AppController
         }
     }
 
-
     /**
      * RSS feeds page
      *

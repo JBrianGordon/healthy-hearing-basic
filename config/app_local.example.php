@@ -76,10 +76,6 @@ return [
 
     /*
      * Email configuration.
-     *
-     * Host and credential configuration in case you are using SmtpTransport
-     *
-     * See app.php for more configuration options.
      */
     'EmailTransport' => [
         'default' => [
@@ -92,6 +88,36 @@ return [
         ],
     ],
 
+    /*
+     * Email configuration.
+     */
+    'EmailTransport' => [
+        'default' => [
+            'host' => '_mail_catcher_host_',
+            'port' => '_mail_catcher_port_',
+            'username' => '_mail_catcher_username_',
+            'password' => '_mail_catcher_password_',
+            'className' => 'Smtp',
+            'tls' => true
+        ]
+    ],
+    'Email' => [
+        'default' => [
+            'transport' => 'default',
+            'from' => 'it@healthyhearing.com',
+            'to' => '_to_email_'
+        ],
+    ],
+
+    // CKEditor & CKBox
+    'CK' => [
+        'envId' => '_ck_env_id_',
+        'apiSecret' => '_ck_api_secret_',
+        'userId' => '_ck_user_id_',
+        'role' => '_ck_user_role_',
+        'categoryId' => '_ck_category_id_',
+        'categoryId-testing' => '_ck_category_id_',
+    ],
     'GoogleMap' => [
         'key' => '_google_map_key_',
     ],

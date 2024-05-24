@@ -7,6 +7,7 @@
  
 use App\Model\Entity\Location;
 use App\Model\Entity\Review;
+use App\Model\Entity\ImportStatus;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
@@ -15,12 +16,13 @@ $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External 
 $id = $location->id;
 $isCqPremier = $location->is_cq_premier;
 $adId = $location->location_ad->id ?? null;
-$couponId = $location->coupon_id;
+$couponId = $location->id_coupon;
 $showSpecialAnnouncement = (
     ($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
     ($location->feature_special_announcement)
 );
 $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
+$loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
@@ -281,7 +283,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <tr id="tr-link-<?= $key ?>">
                                                         <td>
                                                             <div id="div-link-<?= $key ?>">
-                                                                <?= $this->Form->hidden('linked_location_id') ?>
+                                                                <?= $this->Form->hidden('id_linked_location') ?>
                                                                 <input class="form-control linked-location w-100" data-key="<?= $key ?>" data-id="<?= $id ?>" />
                                                                 <span class="help-block text-danger" style="display:none;" id="link-error-<?= $key ?>"></span>
                                                             </div>
@@ -344,13 +346,14 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                         <tbody class="d-block">
                                                             <tr class="d-block">
                                                                 <td class="d-block">
-                                                                    <img class="ml60 mb10" id="photo-thumb-logo" src="<?php if(!empty($location->logo_url)){echo '/cloudfiles/clinics/' . $location->logo_url;} ?>">
-                                                                <?= $this->Form->control("logo_file", [
+                                                                    <?php $logoSrc = empty($location->logo_url) ? "" : '/cloudfiles/clinics/'.$location->logo_url; ?>
+                                                                    <img class="ml60 mb10" id="photo-thumb-logo" src="<?= $logoSrc ?>">
+                                                                    <?= $this->Form->control("logo_file", [
                                                                         'type' => 'file',
                                                                         'label' => 'File name',
                                                                         'class' => 'form-control photo-url',
                                                                         'id' => 'LocationLogo0Url'
-                                                                    ])?>
+                                                                    ]) ?>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -368,20 +371,18 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 <?php if (!empty($photo->photo_url)): ?>
                                                                     <tr>
                                                                         <td class="w-100">
-                                                                            <span class="hidden"><?= $photo->id; ?></span>
                                                                             <div class='row mt5 mb10'>
                                                                                 <div class='col-md-9 offset-md-3'>
                                                                                     <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <?php
+                                                                            echo $this->Form->hidden("location_photos.$key.id");
                                                                             echo $this->Form->control("location_photos.$key.photo_url", [
-                                                                                'value' => $photo->photo_url,
                                                                                 'label' => 'File name',
                                                                                 'readonly' => 'readonly',
                                                                             ]);
                                                                             echo $this->Form->control("location_photos.$key.alt", [
-                                                                                'value' => $photo->alt,
                                                                                 'label' => 'Description',
                                                                                 'required' => true
                                                                             ]);
@@ -479,7 +480,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             </div>
                                                         </div>
                                                         <div id="couponSelected" style="display:none;">
-                                                            <span class="hidden"><?= $location->id_coupon ?></span>
+                                                            <?= $this->Form->hidden('id_coupon'); ?>
                                                             <div class='col-md-3 offset-md-4'>
                                                                 <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                             </div>
@@ -642,7 +643,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                             <th width="12%">Closed</th>
                                             <th width="12%">By Appt</th>
                                         </tr>
-                                        <span class="hidden"><?= $location->location_hour->id; ?></span>
+                                        <?= $this->Form->hidden('location_hour.id'); ?>
                                         <?php foreach ($days as $day): ?>
                                             <tr>
                                                 <td><?= date("l", strtotime($day)) ?></td>
@@ -736,7 +737,6 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <div class="control-group">
                                         <div class="controls">
                                             <p><strong>Acceptable Methods of Payment</strong></p>
-                                            <!-- *** TODO: set up payment methods *** -->
                                             <?= $this->Clinic->paymentForm($location->payment) ?>
                                         </div>
                                     </div>
@@ -744,18 +744,13 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                 
                                 <!-- Notes Tab -->
                                 <div class="tab-pane" id="Notes">
-                                    <!-- *** TODO: set up notes *** -->
                                     <?php $noteCount = count($location->location_notes); ?>
                                     <div class="notes">
                                         <?php
                                             echo $this->Form->control("location_notes.$noteCount.body", [
                                                 'label' => 'New note',
                                                 'class' => 'editor',
-                                                'required' => false,
-                                                // TODO: Is there a setting to simplify the ckeditor toolbar?
-                                                //'toolbar' => 'Basic',
-                                                //'height' => '200px',
-                                                //'var_name' => "NoteBody"
+                                                'required' => false
                                             ]);
                                         ?>
                                         <div class="row">
@@ -961,7 +956,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     <div id="reviews" class="pb10">
                                         <div class="control-group">
                                             <div class="controls">
-                                            <?php foreach($location->reviews as $review): ?>
+                                            <?php foreach($reviews as $review): ?>
                                                 <?= $this->element('locations/review_body', ['review' => $review, 'clinicName' => $location->title]) ?>
                                                 <div class="ml20 mt10">
                                                     <span class='badge bg-light'><?= Review::$statuses[$review->status] ?></span>
@@ -976,7 +971,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                     </div>
                                     <div class="control-group">
                                         <div class="controls">
-                                            <?= $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Load All Reviews For This Clinic', [$id, '#' => 'Reviews', 'loadall' => 1], ['class' => 'btn btn-xs btn-info', 'escape' => false]) ?>
+                                            <?php if (!$loadAllReviewsAndImports): ?>
+                                                <?= $this->Html->link('<span class="glyphicon glyphicon-retweet"></span> Load All Reviews For This Clinic', [$id, '#' => 'Reviews', '?' => ['loadall' => 1]], ['class' => 'btn btn-xs btn-info', 'escape' => false]) ?>
+                                            <?php endif; ?>
                                             <?= $this->Html->link('<span class="glyphicon glyphicon-plus"></span> Add A Review For This Clinic', ['controller' => 'reviews', 'action' => 'edit', 0, $id], ['class' => 'btn btn-xs btn-primary', 'escape' => false]) ?>
                                         </div>
                                     </div>
@@ -1030,57 +1027,51 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                 <?php $ucField = ucfirst($field); ?>
                                                                 <tr>
                                                                     <td><?php echo $ucField; ?></td>
-                                                                    <td><?php //echo $this->Clinic->{"readable".$ucField."Status"}($this->request->data); ?></td>
+                                                                    <td><?php echo Location::$changeStatuses[$location->{$field.'_status'}]; ?></td>
                                                                     <td>
-                                                                        <?php /*
+                                                                        <?php
                                                                         if ($field == 'address') {
-                                                                            echo $this->Clinic->get('address').' ';
-                                                                            echo $this->Clinic->get('address_2').' ';
-                                                                            echo $this->Clinic->get('city').' ';
-                                                                            echo $this->Clinic->get('state').' ';
-                                                                            echo $this->Clinic->get('zip');
+                                                                            echo $location->address.' ';
+                                                                            echo $location->address_2.' ';
+                                                                            echo $location->city.' ';
+                                                                            echo $location->state.' ';
+                                                                            echo $location->zip;
                                                                         } else {
-                                                                            echo $this->Clinic->get($field);
-                                                                        }*/
+                                                                            echo $location->$field;
+                                                                        }
                                                                         ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?php /*
+                                                                        <?php
                                                                         if ($field == 'address') {
-                                                                            echo $this->Clinic->getOticonField(null, 'address').' ';
-                                                                            echo $this->Clinic->getOticonField(null, 'address_2').' ';
-                                                                            echo $this->Clinic->getOticonField(null, 'city').' ';
-                                                                            echo $this->Clinic->getOticonField(null, 'state').' ';
-                                                                            echo $this->Clinic->getOticonField(null, 'zip');
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, 'address').' ';
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, 'address_2').' ';
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, 'city').' ';
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, 'state').' ';
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, 'zip');
                                                                         } else {
-                                                                            echo $this->Clinic->getOticonField(null, $field);
-                                                                        } */
+                                                                            echo $this->Clinic->getOticonField($location->last_xml, $field);
+                                                                        }
                                                                         ?>
                                                                     </td>
                                                                     <td nowrap>
-                                                                        <?php /*
+                                                                        <?php
                                                                         $confirmMessage = 'Are you sure?';
                                                                         if ($field == 'phone') {
                                                                             $confirmMessage .= ' This will also update the CallSource number for you.';
                                                                         }
                                                                         if ($field == 'address') {
                                                                             $confirmMessage .= ' This will also re-geolocate the clinic for you.';
-                                                                        }*/
+                                                                        }
                                                                         ?>
-                                                                        <? //endif; ?>
-                                                                        <?php /*echo $this->Html->link('<span class="glyphicon glyphicon-edit"></span> Accept Oticon Change',
-                                                                            ['controller' => 'locations', 'action' => 'take_oticon', $this->request->data['Location']['id'], $field],
+                                                                        <?= $this->Html->link('<span class="glyphicon glyphicon-edit"></span> Accept Oticon Change',
+                                                                            ['controller' => 'locations', 'action' => 'take_oticon', $location->id, $field],
                                                                             ['class' => 'btn btn-xs btn-danger pull-left m5', 'escape' => false],
-                                                                            $confirmMessage);*/ ?>
-                                                                        <?php /*echo $this->Form->control('is_'.$field.'_ignore', [
-                                                                            'label' => [
-                                                                                'class' => 'form-label',
-                                                                                'text' => 'Ignore '.$ucField.' Changes',
-                                                                            ],
-                                                                            'type' => 'checkbox',
-                                                                            'class' => false,
-                                                                            'wrapInput' => 'col-md-12'
-                                                                        ]);*/ ?>
+                                                                            $confirmMessage);
+                                                                        ?>
+                                                                        <?= $this->Form->control('is_'.$field.'_ignore', [
+                                                                            'label' => 'Ignore '.$ucField.' Changes',
+                                                                        ]); ?>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
@@ -1089,7 +1080,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <?php endif; ?>
                     
                                                     <h4>Raw Parsed of Last XML from Oticon:</h4>
-                                                    <?php //$this->Clinic->lastXml($this->request->data); ?>
+                                                    <?php $this->Clinic->printLastXml($location->last_xml); ?>
                     
                                                     <hr>
                                                     <p><strong>Oticon Import Status</strong></p>
@@ -1103,21 +1094,37 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                             <th>Show</th>
                                                             <th>Grace Period</th>
                                                         </tr>
-                                                        <?php //foreach($this->request->data['ImportStatus'] as $importStatus): ?>
+                                                        <?php foreach($oticonImportStatuses as $importStatus): ?>
                                                             <tr>
-                                                                <td><?php //echo dateTimeCentralToEastern($importStatus['created']); ?></td>
-                                                                <td><?php //echo $this->Clinic->getImportStatus($importStatus); ?></td>
-                                                                <td><?php //echo $importStatus['oticon_tier']; ?></td>
-                                                                <td><?php //echo $importStatus['listing_type']; ?></td>
-                                                                <td><?php //echo $this->Clinic->getActiveStatus($importStatus); ?></td>
-                                                                <td><?php //echo $this->Clinic->getShowStatus($importStatus); ?></td>
-                                                                <td><?php //echo $this->Clinic->getGracePeriodStatus($importStatus); ?></td>
+                                                                <td><?php echo dateTimeCentralToEastern($importStatus->created); ?></td>
+                                                                <td><?= isset($importStatus->status) ? ImportStatus::$statuses[$importStatus->status] : '' ?></td>
+                                                                <td><?php echo $importStatus->oticon_tier; ?></td>
+                                                                <td><?php echo $importStatus->listing_type; ?></td>
+                                                                <td>
+                                                                    <?php if (isset($importStatus->is_active) && ($importStatus->is_active !== NULL)): ?>
+                                                                        <?= empty($importStatus->is_active) ? "No" : "Yes" ?>
+                                                                    <?php endif; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php if (isset($importStatus->is_show) && ($importStatus->is_show !== NULL)): ?>
+                                                                        <?= empty($importStatus->is_show) ? "No" : "Yes" ?>
+                                                                    <?php endif; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php
+                                                                    if ($importStatus->oticon_tier == 3) {
+                                                                        if (isset($importStatus->is_grace_period) && ($importStatus->is_grace_period !== NULL)) {
+                                                                            echo empty($importStatus->is_grace_period) ? "No" : "Yes";
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </td>
                                                             </tr>
-                                                        <?php //endforeach; ?>
+                                                        <?php endforeach; ?>
                                                     </table>
-                                                    <?php //if ($id): ?>
-                                                        <?php //echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Load All Statuses For This Clinic', array($id, '#' => 'Oticon', 'loadall' => 1), array('class' => 'btn btn-xs btn-info', 'escape' => false)); ?>
-                                                    <?php //endif; ?>
+                                                    <?php if (!$loadAllReviewsAndImports): ?>
+                                                        <?php echo $this->Html->link('<span class="glyphicon glyphicon-refresh"></span> Load All Statuses For This Clinic', [$id, '#' => 'Oticon', '?' => ['loadall' => 1]], ['class' => 'btn btn-xs btn-info', 'escape' => false]); ?>
+                                                    <?php endif; ?>
                                                 </div>
                     
                                                 <!-- YHN Tab -->
@@ -1125,8 +1132,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <?php
                                                     $yhnImportOptions = [];
                                                     foreach ($importLocations as $importLocation) {
-                                                        if ($importLocation['import']['type'] == 'yhn') {
-                                                            $yhnImportOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
+                                                        if ($importLocation->import->type == 'yhn') {
+                                                            $yhnImportOptions[$importLocation->import_id] = date('F d, Y', strtotime($importLocation->import->created));
                                                         }
                                                     }
                                                     echo $this->Form->control('yhnImportSelect', [
@@ -1138,11 +1145,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office'];
                                                     ?>
                                                     <?php foreach ($importLocations as $importLocation): ?>
-                                                        <?php if ($importLocation['import']['type'] == 'yhn'): ?>
-                                                            <div class="import col-md-11 offset-md-1" import="<?= $importLocation['import_id']; ?>">
+                                                        <?php if ($importLocation->import->type == 'yhn'): ?>
+                                                            <div class="import col-md-11 offset-md-1" import="<?= $importLocation->import_id; ?>">
                                                                 <br><br>
                                                                 <table class="table table-striped table-bordered table-condensed">
-                                                                    <?php foreach ($importLocation as $label => $value): ?>
+                                                                    <?php foreach ($importLocation->toArray() as $label => $value): ?>
                                                                         <?php
                                                                         if (is_array($value) || in_array($label, $hideFields)) {
                                                                             continue;
@@ -1156,6 +1163,9 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                                 break;
                                                                             case "id_external":
                                                                                 $label = $externalIdLabel;
+                                                                                break;
+                                                                            case "id_oticon":
+                                                                                $label = 'Oticon ID';
                                                                                 break;
                                                                             default:
                                                                                 break;
@@ -1178,8 +1188,8 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     <?php
                                                     $cqpImportOptions = [];
                                                     foreach ($importLocations as $importLocation) {
-                                                        if ($importLocation['import']['type'] == 'cqp') {
-                                                            $cqpImportOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
+                                                        if ($importLocation->import->type == 'cqp') {
+                                                            $cqpImportOptions[$importLocation->import_id] = date('F d, Y', strtotime($importLocation->import->created));
                                                         }
                                                     }
                                                     echo $this->Form->control('cqpImportSelect', [
@@ -1191,11 +1201,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                     $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_external', 'id_oticon', 'is_retail'];
                                                     ?>
                                                     <?php foreach ($importLocations as $importLocation): ?>
-                                                        <?php if ($importLocation['import']['type'] == 'cqp'): ?>
-                                                            <div class="cqpImport col-md-11 offset-md-1" import="<?= $importLocation['import_id']; ?>">
+                                                        <?php if ($importLocation->import->type == 'cqp'): ?>
+                                                            <div class="cqpImport col-md-11 offset-md-1" import="<?= $importLocation->import_id; ?>">
                                                                 <br><br>
                                                                 <table class="table table-striped table-bordered table-condensed mb30">
-                                                                    <?php foreach ($importLocation as $label => $value): ?>
+                                                                    <?php foreach ($importLocation->toArray() as $label => $value): ?>
                                                                         <?php
                                                                         if (is_array($value) || in_array($label, $hideFields)) {
                                                                             continue;
@@ -1207,8 +1217,11 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                                                             case "state":
                                                                                 $label = Configure::read('stateLabel');
                                                                                 break;
-                                                                            case "id_external":
-                                                                                $label = $externalIdLabel;
+                                                                            case "id_cqp_office":
+                                                                                $label = 'CQP Office ID';
+                                                                                break;
+                                                                            case "id_cqp_practice":
+                                                                                $label = 'CQP Practice ID';
                                                                                 break;
                                                                             default:
                                                                                 break;
@@ -1233,7 +1246,7 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         <?php
                                         $caImportOptions = [];
                                         foreach ($importLocations as $importLocation) {
-                                            $caImportOptions[$importLocation['import_id']] = date('F d, Y', strtotime($importLocation['import']['created']));
+                                            $caImportOptions[$importLocation->import_id] = date('F d, Y', strtotime($importLocation->import->created));
                                         }
                                         echo $this->Form->control('caImportSelect', [
                                             'type' => 'select',
@@ -1244,10 +1257,10 @@ $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
                                         $hideFields = ['id', 'import_id', 'location_id', 'match_type', 'notes', 'id_cqp_practice', 'id_cqp_office'];
                                         ?>
                                         <?php foreach ($importLocations as $importLocation): ?>
-                                            <div class="import col-md-11 offset-md-1" import="<?= $importLocation['import_id'] ?>">
+                                            <div class="import col-md-11 offset-md-1" import="<?= $importLocation->import_id ?>">
                                                 <br><br>
                                                 <table class="table table-striped table-bordered table-condensed">
-                                                    <?php foreach ($importLocation as $label => $value): ?>
+                                                    <?php foreach ($importLocation->toArray() as $label => $value): ?>
                                                         <?php
                                                         if (is_array($value) || in_array($label, $hideFields)) {
                                                             continue;

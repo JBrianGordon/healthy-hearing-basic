@@ -15,6 +15,7 @@ use Cake\Core\Configure;
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use DateTime;
 use DateTimeZone;
 
@@ -466,7 +467,7 @@ class LocationsTable extends Table
             4 => ['name' => 'MasterCard', 'icon' => 'card1.gif'],
             8 => ['name' => 'American Express', 'icon' => 'card4.gif'],
             16 => ['name' => 'Discover', 'icon' => 'card6.gif'],
-            //32 => array('name' => 'Diners Club', 'icon' => ''),
+            //32 => ['name' => 'Diners Club', 'icon' => ''],
             64 => ['name' => 'Cash', 'icon' => ''],
             128 => ['name' => Configure::read('checkPayment'), 'icon' => ''],
             256 => ['name' => 'Debit', 'icon' => 'card3.gif'],
@@ -1283,7 +1284,7 @@ class LocationsTable extends Table
         if ($uri === Router::url($this->findForRedirectById($id))) {
             return $this->findByIdForView($id);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -1633,13 +1634,13 @@ class LocationsTable extends Table
     * @param array of options
     * @return array of slugged zip, region, and city
     */
-    public function findRedirectByRegionCityZip($options = array(), $url=null) {
+    public function findRedirectByRegionCityZip($options = [], $url=null) {
         $options = array_merge(
-            array(
+            [
                 'zip' => null,
                 'region' => null,
                 'city' => null
-            ),
+            ],
             $options
         );
         $retval = $options;
@@ -1678,7 +1679,7 @@ class LocationsTable extends Table
             list($region_st, $region_state) = explode("-", $retval['region']);
             if (strtolower($st) == strtolower($region_st) || strtolower($st) == strtolower($region_state)) {
                 $city = array_pop($title);
-                if (!TableRegistry::get('Cities')->hasAny(array('City.city' => $city, 'City.state' => $region_st))) {
+                if (!TableRegistry::get('Cities')->hasAny(['City.city' => $city, 'City.state' => $region_st])) {
                     $retval['city'] = array_pop($title) . "-" . $city;
                 } else {
                     $retval['city'] = $city;
@@ -1965,5 +1966,126 @@ class LocationsTable extends Table
         }
 
         return $emails;
+    }
+
+    /**
+    * Parses the last_xml field of a location (saved in json format)
+    * @param json string
+    * @return array parsed of Location fields to save. false if unable to parse.
+    */
+    public function parseOticonXml($data) {
+        $is_last_xml = false;
+        if (is_string($data)) {
+            // If data is a json, we're reading the last_xml data already stored
+            // Convert it to an object
+            $data = json_decode($data);
+            $is_last_xml = true;
+        }
+
+        if (!$data) {
+            return false;
+        }
+        $save_data = (object)[];
+        $save_data->last_xml = json_encode($data);
+
+        foreach ($data as $locKey => $locValue) {
+            //Organize Location data
+            switch($locKey) {
+                case 'Id':
+                    $locKey = 'id_oticon';
+                    break;
+                case 'SFID':
+                    $locKey = 'id_sf';
+                    break;
+                case 'ParentAccountId':
+                    $locKey = 'id_parent';
+                    break;
+                default:
+                    $locKey = Inflector::underscore($locKey);
+            }
+            $save_data->{$locKey} = $this->parseXmlField($locValue, $is_last_xml);
+        }
+
+        //If we have this location, update it.
+        if ($locationId = $this->findIdByOticonId($save_data->id_oticon)) {
+            $save_data->id = $locationId;
+            $location = $this->get($locationId);
+            $save_data->is_active = $location->is_active;
+        } else {
+            $save_data->is_active = true;
+        }
+
+        // Calculate oticon tier based on segment
+        $save_data->location_segment ?? null;
+        if (in_array($save_data->location_segment, ['A1', 'B1', 'C1', 'D1', 'A2'])) {
+            $oticonTier = 1;
+        } elseif (in_array($save_data->location_segment, ['B2', 'C2', 'D2', 'A3', 'B3', 'C3', 'D3'])) {
+            $oticonTier = 2;
+        } elseif (in_array($save_data->location_segment, ['A4', 'B4', 'C4', 'D4'])) {
+            $oticonTier = 3;
+        } else {
+            $oticonTier = 0;
+            $locationId ?? $save_data->id_oticon;
+            pr('Warning. Unknown segment ('.$save_data->location_segment.') for location '.$locationId);
+        }
+        $save_data->oticon_tier = $oticonTier;
+
+        //Find their phone number
+        if (!empty($save_data->cs_phone_mapped_to)) {
+            $save_data->phone = $save_data->cs_phone_mapped_to;
+        }
+        unset($save_data->cs_phone_mapped_to);
+        $save_data->phone = trim(str_replace(['(', ')','-', ' '], '', $save_data->phone));
+
+        //Address fix if we have an address_2 but no address
+        $save_data->address_2 ?? '';
+        if (!empty($save_data->address_2) && empty($save_data->address)) {
+            $save_data->address = $save_data->address_2;
+            $save_data->address_2 = "";
+        }
+
+        $save_data->id_parent_id ?? null;
+        $save_data->title = empty($save_data->title) ? $save_data->subtitle : $save_data->title;
+        $save_data->city = cleanCityName($save_data->city);
+        $save_data->state = $this->stateAbbr($save_data->state);
+        $save_data->country = Configure::read('country');
+        $save_data->zip = (strlen($save_data->zip) == 10 && strpos($save_data->zip,'-') > 0 ? substr($save_data->zip,0,5) : $save_data->zip);//99576-0130
+
+        unset($save_data->created,
+            $save_data->modified,
+            $save_data->tier);
+        return $save_data;
+    }
+
+    /**
+    * Parse the actual field out,
+    * this depends on the is_last_xml
+    * @param mixed field (could be a stdObject, could be an array, could be a string
+    * @param boolean is_last_xml we know could be a special case becasue we parsed it out again instead of original xml.
+    * @return string return value of whatever we're passing in.
+    */
+    private function parseXmlField($mixed_field, $is_last_xml = false) {
+        if ($is_last_xml) {
+            $array_val = (array) $mixed_field;
+            if (!empty($array_val) && isset($array_val[0])) {
+                return trim( (string) $array_val[0]);
+            } else {
+                return '';
+            }
+        }
+        return trim( (string) $mixed_field);
+    }
+
+    public function findIdByOticonId($idOticon = '') {
+        if (trim($idOticon)) {
+            $location = $this->find('all', [
+                'conditions' => ['id_oticon' => $idOticon],
+                'order' => ['created DESC', 'is_active DESC', 'id DESC'],
+            ])->first();
+            if (isset($location->id)) {
+                return $location->id;
+            }
+        }
+        return false;
     }
 }

@@ -412,14 +412,14 @@ class ClinicHelper extends Helper
     * - link 'tel' | 'skype' | false (default false)
     * @return string phone number
     */
-    public function phone($location = null, $options = array(), $isCallTrackingBypassed = null) {
+    public function phone($location = null, $options = [], $isCallTrackingBypassed = null) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);
         }
 
-        $options = array_merge(array(
+        $options = array_merge([
             'link' => false
-        ),(array)$options);
+        ],(array)$options);
 
         $retval = $location->phone;
 
@@ -497,7 +497,7 @@ class ClinicHelper extends Helper
     * @param boolean full link (default false)
     * @return HtmlLink
     */
-    public function link($location = null, $full = false, $options = array()) {
+    public function link($location = null, $full = false, $options = []) {
         if (!is_object($location)) {
            $location = $this->Locations->get($location);
         }
@@ -613,22 +613,22 @@ class ClinicHelper extends Helper
     * @param provider
     * @return string HTML image or empty
     */
-    public function providerImage($provider, $options = array()) {
+    public function providerImage($provider, $options = []) {
         if (is_numeric($provider)) {
             $provider = $this->Locations->Providers->get($provider);
         }
         //Changing
         if (is_bool($options)) {
             $url_only = $options;
-            $options = array();
+            $options = [];
             $options['url_only'] = $url_only;
         }
-        $options = array_merge(array(
+        $options = array_merge([
             'url_only' => false
-        ),(array) $options);
+        ], (array)$options);
 
         if (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name)) {
-            return $this->Html->image('/tmp/' . $provider->file->name, array('width' => 150));
+            return $this->Html->image('/tmp/' . $provider->file->name, ['width' => 150]);
         }
         if (!empty($provider->thumb_url)) {
             $url = $provider->thumb_url;
@@ -703,24 +703,24 @@ class ClinicHelper extends Helper
         //Show list of payment types accepted
         if (!empty($location->payment)) {
             $payment_array = json_decode($location->payment, true);
-            $rows = array();
-            $cards_to_show = array();
+            $rows = [];
+            $cards_to_show = [];
             $payments = $this->Locations->payments;
             foreach ($payment_array as $methodindex => $methodvalue) {
                 if ($methodvalue == 1) {
-                    @$rows[] = $this->Html->tag('li', $payments[$methodindex]['name'], array('escape' => false));
+                    @$rows[] = $this->Html->tag('li', $payments[$methodindex]['name'], ['escape' => false]);
                     if (!empty($payments[$methodindex]['icon'])) {
                         //$cards_to_show[] = $methodindex; //dont show icons
                     }
                 }
             }
 
-            $retval = $this->Html->tag('ul', implode('', $rows), array('class' => 'no-bullets'));
+            $retval = $this->Html->tag('ul', implode('', $rows), ['class' => 'no-bullets']);
 
             //Show list of cards
             $cards = '<p class="text-center">';
             foreach ($cards_to_show as $card_index){
-                $cards .= ' ' . $this->Html->image("/images/{$payments[$card_index]['icon']}", array('alt' => $payments[$card_index]['name'], 'title' => $payments[$card_index]['name'], 'class' => 'pr10'));
+                $cards .= ' ' . $this->Html->image("/images/{$payments[$card_index]['icon']}", ['alt' => $payments[$card_index]['name'], 'title' => $payments[$card_index]['name'], 'class' => 'pr10']);
             }
             $cards .= "</p>";
 
@@ -833,7 +833,7 @@ class ClinicHelper extends Helper
         //Not empty, continue.
         switch ($key) {
             case 'facebook':
-                $text = str_replace(array('https://','http://','www.facebook.com/','facebook.com/'), '', $social);
+                $text = str_replace(['https://','http://','www.facebook.com/','facebook.com/'], '', $social);
                 return '<span class="facebook"><span class="hh-icon-facebook clinic-share"></span> ' . $this->Html->link(
                     'Facebook',
                     'https://www.facebook.com/' . $text,
@@ -1133,7 +1133,7 @@ class ClinicHelper extends Helper
         if (is_array($paymentJson)) {
             $paymentArray = $paymentJson;
         } else {
-            $paymentArray = json_decode($paymentJson, true);
+            $paymentArray = empty($paymentJson) ? [] : json_decode($paymentJson, true);
         }
         $payments = $this->Locations->payments;
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
@@ -1209,5 +1209,24 @@ class ClinicHelper extends Helper
             $retval .= '</div>';
         }
         return $retval;
+    }
+
+    /**
+    * Get oticon field
+    */
+    public function getOticonField($last_xml, $field) {
+        $parsedXml = $this->Locations->parseOticonXml($last_xml);
+        if (!isset($parsedXml->{$field})) {
+            return null;
+        }
+        return $parsedXml->{$field};
+    }
+
+    public function printLastXml($lastXml) {
+        $debug = Configure::read('debug');
+        Configure::write('debug', 1);
+        $xml = empty($lastXml) ? null : json_decode($lastXml, true);
+        debug($xml, true, false);
+        Configure::write('debug', $debug);
     }
 }

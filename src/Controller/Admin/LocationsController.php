@@ -87,7 +87,10 @@ class LocationsController extends BaseAdminController
      */
     public function edit($id = null)
     {
-        $reviewLimit = !empty($this->request->getQuery('loadall')) ? 99999 : $this->Locations->Reviews->reviewLimit;
+        if (!$id) {
+            return $this->redirect(['action' => 'add']);
+        }
+        $reviewLimit = empty($this->request->getQuery('loadall')) ? $this->Locations->Reviews->reviewLimit : null;
         $associations = [
             'CallSources',
             'LocationHours',
@@ -99,14 +102,16 @@ class LocationsController extends BaseAdminController
                 'sort' => ['LocationNotes.created' => 'DESC']
             ],
             'LocationEmails',
-            'Reviews' => [
-                'sort' => ['Reviews.created' => 'DESC'],
-            ],
             'Users.LoginIps'
         ];
         $location = $this->Locations->get($id, [
             'contain' => $associations
         ]);
+        $reviews = $this->Locations->Reviews->find('all', [
+            'conditions' => ['location_id' => $id],
+            'limit' => $reviewLimit,
+            'sort' => ['Reviews.created' => 'DESC']
+        ])->all();
         $lastOticonImport = $this->Locations->ImportStatus->find('all', [
             'contain' => [],
             'conditions' => [
@@ -116,11 +121,16 @@ class LocationsController extends BaseAdminController
             'order' => ['ImportStatus.created DESC']
         ])->first();
         $lastOticonImportDate = empty($lastOticonImport->created) ? 'N/A' : dateTimeCentralToEastern($lastOticonImport->created);
+        $oticonImportStatuses = $this->Locations->ImportStatus->find('all', [
+            'conditions' => ['location_id' => $id],
+            'limit' => $reviewLimit,
+            'order' => ['ImportStatus.created DESC']
+        ])->all();
         $importLocations = $this->Locations->ImportLocations->find('all', [
             'contain' => ['Imports'],
             'conditions' => ['location_id' => $id],
             'order' => ['ImportLocations.import_id DESC']
-        ])->disableHydration()->toArray();
+        ])->all();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             // convert payment array to json string
@@ -148,7 +158,7 @@ class LocationsController extends BaseAdminController
             }
             $this->Flash->error('The location could not be saved.<br>' . $this->displayErrors($location->getErrors()), ['escape' => false]);
         }
-        $this->set(compact('location', 'lastOticonImportDate', 'importLocations'));
+        $this->set(compact('location', 'lastOticonImportDate', 'importLocations', 'oticonImportStatuses', 'reviews'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
         $this->set('days', $this->Locations->LocationHours->days);
     }

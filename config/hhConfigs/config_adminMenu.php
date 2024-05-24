@@ -29,7 +29,7 @@ if (Configure::read('showManufacturers')) {
 }
 if (Configure::read('showAds')) {
     $editorialItems['Browse ads'] = [
-        'url' => '/admin/ad',
+        'url' => '/admin/ads',
         'icon' => 'bi bi-card-image',
     ];
 }

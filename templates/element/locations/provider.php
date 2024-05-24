@@ -57,37 +57,43 @@ use Cake\Core\Configure;
 	<?php endif; ?>
 
 	<?php
-		$credentials = isset($provider->credentials) ? $provider->credentials : '';
-		
-		$calculatedTitle = $this->Clinic->getProviderTitle($credentials);
-		echo '<div class="form-group">';
-			echo $this->Form->control("providers." . $key . ".title", ['class' => 'col col-sm-9', 
-			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'], 'required' => false, 'placeholder' => $calculatedTitle, 'value' => $provider->title ?? ''
-		]);
-		echo '</div>';
+	$credentials = isset($provider->credentials) ? $provider->credentials : '';
+	$calculatedTitle = $this->Clinic->getProviderTitle($credentials);
 	?>
-
+	<div class="form-group">
+		<?= $this->Form->control("providers." . $key . ".title", [
+			'class' => 'col col-sm-9',
+			'label' => ['text' => 'Title', 'class' => 'col-sm-3 control-label'],
+			'required' => false,
+			'placeholder' => $calculatedTitle,
+			'value' => $provider->title ?? ''
+		]); ?>
+	</div>
 	<?php
-//todo
-		if (!empty($this->request->data['Provider'][$key]['description'])) {
-			// Ckeditor doesn't handle office namespace tags well
-			$this->request->data['Provider'][$key]['description'] = str_replace('<o:', '<', $this->request->data['Provider'][$key]['description']);
-			$this->request->data['Provider'][$key]['description'] = str_replace('</o:', '</', $this->request->data['Provider'][$key]['description']);
+	if (!empty($provider->description)) {
+		// Ckeditor doesn't handle office namespace tags well
+		$provider->description = str_replace('<o:', '<', $provider->description);
+		$provider->description = str_replace('</o:', '</', $provider->description);
+	}
+	?>
+	<span id="provider{$key}Desc" class="clinic-anchor"></span>
+	<div class="col-sm-9 col-md-offset-3">
+		<small>Tell us about you! What makes you different from other hearing professionals? Why should customers choose your clinic over others?</small>
+	</div>
+	<?php
+	echo $this->Form->control("providers." . $key . ".description", [
+		'class' => 'editor',
+		'required' => false
+	]);
+	echo '<span id="upsellMessage' . $key .'" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
+	if (!$clinic) {
+		if (Configure::read('showProviderAudOrHis')) {
+			echo $this->Form->control('providers.' . $key . '.aud_or_his', [
+				'label' => 'Audiologist or HIS',
+				'disabled' => 'disabled'
+			]);
 		}
-		echo '<span id="provider' . $key . 'Desc" class="clinic-anchor"></span>';
-		echo '<div class="col-sm-9 col-md-offset-3"><small>Tell us about you! What makes you different from other hearing professionals? Why should customers choose your clinic over others?</small></div>';
-		echo $this->Form->control("providers." . $key . ".description", ['label' => ['class' => 'col-sm-3 tar control-label'], 'class' => 'col-sm-9 mb20 editor', 'required' => false, 'value' => $provider->description ?? '', 'cols' => '30', 'rows' => '6']);
-		//*** TODO: update when CKEditor is ready ***
-		//echo $this->Ckeditor->replace("Provider" . $key . "Description", ['var_name' => "Provider" . $key . "Description", 'height'=>'200', 'var_name' => "Provider" . $key . "Description"]);
-		echo '<span id="upsellMessage' . $key .'" class="text-danger pb20 col-xs-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
-		if (!$clinic):
-			if (Configure::read('showProviderAudOrHis')) {
-				echo $this->Form->control('providers.' . $key . '.aud_or_his', [
-					'label' => 'Audiologist or HIS',
-					'disabled' => 'disabled'
-				]);
-			}
-		endif;
+	}
 	?>
 
 	<div class="col-md-12 mb20 form-group pl0">
@@ -102,7 +108,15 @@ use Cake\Core\Configure;
 	</div>
 	<div class="form-group clearfix">
 		<div class="col-sm-4 col-sm-offset-2">
-			<?= $this->Form->control("providers." . $key . ".order", ['label' => ['text' => 'Order', 'class' => 'col-sm-3 control-label'], 'value' => $key + 1, 'required' => true, 'id'=>"order-" . $key, 'readonly'=>true, 'class' => 'provider-order col-sm-9'])	?>
+			<?= $this->Form->control("providers." . $key . ".priority", [
+				'label' => [
+					'text' => 'Order',
+					'class' => 'col-sm-3 control-label'
+				],
+				'required' => true,
+				'readonly'=>true,
+				'class' => 'provider-priority col-sm-9'
+			])?>
 			<span class="help-block ml70">1 = top</span>
 		</div>
 		<div class="col-sm-6">
