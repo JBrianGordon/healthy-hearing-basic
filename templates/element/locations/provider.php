@@ -44,7 +44,7 @@ use Cake\Core\Configure;
 		<div class="form-group mb5">
 			<label class="col col-sm-3 control-label">Credentials</label>
 			<div class="col col-sm-9 p0">
-				<?= $this->Clinic->credSelect("providers." . $key . ".credentials") ?>
+				<?= $this->Clinic->credSelect("providers-" . $key . "-credentials") ?>
 			</div>
 		</div>
 		<?php
@@ -100,10 +100,8 @@ use Cake\Core\Configure;
 		<div class="checkbox form-check form-switch pl0 w-100">
 				<?= $this->Form->label('providers.' . $key . '.is_ida_verified', 'IDA verified provider', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
 				<?= $this->Form->checkbox('providers.' . $key . '.is_ida_verified', [
-					'type' => 'checkbox',
 					'class' => 'form-check-input ml0'
-					])
-				?>
+				]) ?>
 		</div>
 	</div>
 	<div class="form-group clearfix">
@@ -119,7 +117,7 @@ use Cake\Core\Configure;
 			])?>
 			<span class="help-block ml70">1 = top</span>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-3">
 			<p>
 				<?= $this->Html->link('Move Up &#8679;', '#', ['class' => 'btn btn-default btn-xs btn-block js-provider-up mb5', 'provider' => $key, 'escape' => false]) ?>
 				<?= $this->Html->link('Move Down &#8681;', '#', ['class' => 'btn btn-default btn-xs btn-block js-provider-down mb5', 'provider' => $key, 'escape' => false], []) ?>
