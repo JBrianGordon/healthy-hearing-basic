@@ -24,7 +24,7 @@ class ProvidersControllerTest extends TestCase
     protected $fixtures = [
         'app.Providers',
         'app.ImportProviders',
-        'app.LocationProviders',
+        'app.LocationsProviders',
         'app.Locations',
     ];
 

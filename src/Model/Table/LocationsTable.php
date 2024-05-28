@@ -1131,7 +1131,7 @@ class LocationsTable extends Table
         $locationEntity = $this->get($locationId, [
             'contain' => [
                 'LocationHours',
-                'LocationProviders.Providers'
+                'Providers'
             ]
         ]);
         if (empty($locationEntity)) {
@@ -1147,8 +1147,8 @@ class LocationsTable extends Table
         $locationEntity->filter_hearing_aid_fitting = false;
 
         //Check photo
-        foreach ($locationEntity->location_providers as $locationProvider) {
-            if (!empty($locationProvider->provider->thumb_url)) {
+        foreach ($locationEntity->providers as $provider) {
+            if (!empty($provider->thumb_url)) {
                 $locationEntity->filter_has_photo = true;
             }
         }

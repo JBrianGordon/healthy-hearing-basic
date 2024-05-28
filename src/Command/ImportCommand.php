@@ -97,7 +97,7 @@ class ImportCommand extends Command
         $this->ImportDiffs = $this->fetchTable('ImportDiffs');
         $this->Providers = $this->fetchTable('Providers');
         $this->Locations = $this->fetchTable('Locations');
-        $this->LocationProviders = $this->fetchTable('LocationProviders');
+        $this->LocationsProviders = $this->fetchTable('LocationsProviders');
         $this->CallSources = $this->fetchTable('CallSources');
 
         $io->out("Importing clinic data from {$importType}...");
@@ -526,15 +526,15 @@ class ImportCommand extends Command
 
         // Attempt to match to an existing YHN Provider
         if (!empty($externalId) && !empty($locationId)) {
-            $locationProviders = $this->LocationProviders->find('list', [
+            $locationsProviders = $this->LocationsProviders->find('list', [
                 'keyField' => 'id',
                 'valueField' => 'provider_id',
                 'conditions' => ['location_id' => $locationId]
             ])->toArray();
-            if (!empty($locationProviders)) {
+            if (!empty($locationsProviders)) {
                 $provider = $this->Providers->find('all', [
                     'conditions' => [
-                        'id IN' => $locationProviders,
+                        'id IN' => $locationsProviders,
                         'id_yhn_provider' => $externalId
                     ]
                 ])->first();
@@ -546,7 +546,7 @@ class ImportCommand extends Command
 
         // Attempt to match to an existing HH Provider
         if (!empty($locationId)) {
-            $providerMatch = $this->LocationProviders->find('all', [
+            $providerMatch = $this->LocationsProviders->find('all', [
                 'contain' => ['Providers'],
                 'conditions' => [
                     'Providers.first_name' => $importProvider->first_name,
@@ -617,7 +617,7 @@ class ImportCommand extends Command
 
             // This location didn't exist last time.
             if (empty($sortedPreviousLocations[$externalLocationId])) {
-                $importLocationEntity = $this->ImportLocations->get($importLocation->id);
+                $importLocationEntity = $this->ImportLocations->get($importLocation['id']);
                 $importLocationEntity->is_new = 1;
                 $this->ImportLocations->save($importLocationEntity);
                 $locationsNew++;
@@ -710,15 +710,15 @@ class ImportCommand extends Command
 
             }
             // Find any providers from previous imports that are not on this import
-            $existingLocationProviders = $this->LocationProviders->find('all', [
+            $existingLocationsProviders = $this->LocationsProviders->find('all', [
                 'contain' => ['Providers' => ['fields' => ['id_yhn_provider']]],
                 'conditions' => [
                     'location_id' => $locationId
                 ]
             ])->disableHydration()->all();
-            foreach ($existingLocationProviders as $existingLocationProvider) {
-                if (!empty($existingLocationProvider['provider']['id_yhn_provider'])) {
-                    if (!in_array($existingLocationProvider['provider']['id_yhn_provider'], $importProviderIds)) {
+            foreach ($existingLocationsProviders as $existingLocationsProvider) {
+                if (!empty($existingLocationsProvider['provider']['id_yhn_provider'])) {
+                    if (!in_array($existingLocationsProvider['provider']['id_yhn_provider'], $importProviderIds)) {
                         // This provider came from a previous import, but is not in this import. Mark as needs_review.
                         $diff = true;
                     }
