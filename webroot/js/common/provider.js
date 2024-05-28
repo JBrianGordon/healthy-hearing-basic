@@ -11,13 +11,7 @@ class Provider {
     document.body.addEventListener('click', (e) => {
       const target = e.target;
       
-      if (target.matches('.js-provider-license-add')) {
-        this.addLicenseRow(target);
-        e.preventDefault();
-      } else if (target.matches('.js-provider-license-delete')) {
-        this.removeLicenseRow(target);
-        e.preventDefault();
-      } else if (target.matches('.credLink')) {
+      if (target.matches('.credLink')) {
         this.addCredential(target);
         e.preventDefault();
       } else if (target.matches('.js-provider-up')) {
@@ -101,71 +95,6 @@ class Provider {
 
     field.value += credential;
     return false;
-  }
-
-  addLicenseRow(obj) {
-    const row = obj.closest('tr');
-    const newRow = document.createElement('tr');
-    const newLicense = row.querySelector('[name=provider-license]');
-    const newIssueState = row.querySelector('[name=provider-issue-state]');
-    const newLicenseNumber = row.querySelector('[name=provider-license-number]');
-    const newExpDate = row.querySelector('[name=provider-exp-date]');
-    const errorCheck = [
-      this.checkEmpty(newLicense),
-      this.checkEmpty(newIssueState),
-      this.checkEmpty(newLicenseNumber),
-      this.checkEmpty(newExpDate)
-    ];
-
-    errorCheck.forEach(error => {
-      if (!error) {
-        return false;
-      }
-    });
-
-    newRow.innerHTML = `
-      <td>${newLicense.value}</td>
-      <td>${newIssueState.value}</td>
-      <td>${newLicenseNumber.value}</td>
-      <td>${newExpDate.value}</td>
-      <td><button class="btn btn-md btn-danger js-provider-license-delete">delete</button></td>
-    `;
-    row.before(newRow);
-
-    newLicense.value = '';
-    newIssueState.value = '';
-    newLicenseNumber.value = '';
-    newExpDate.value = '';
-
-    this.parseLicenses(row.parentNode);
-  }
-
-  removeLicenseRow(obj) {
-    const row = obj.closest('tr');
-    const table = row.parentNode;
-    row.remove();
-    this.parseLicenses(table);
-  }
-
-  parseLicenses(table) {
-    const providerId = table.querySelector('.providerKey').value;
-    const licenses = [];
-    Array.from(table.children).forEach(row => {
-      if (!row.classList.contains('header') && !row.classList.contains('footer')) {
-        const [licenseTypeCol, licenseIssueStateCol, licenseNumberCol, licenseExpDateCol] = row.children;
-        const isYhn = row.getAttribute('yhn') === '1';
-        const license = {
-          LicenseType: licenseTypeCol.innerHTML,
-          IssueState: licenseIssueStateCol.innerHTML,
-          LicenseNumber: licenseNumberCol.innerHTML,
-          ExpDate: licenseExpDateCol.innerHTML,
-          yhn: isYhn
-        };
-        licenses.push(license);
-      }
-    });
-    const jsonLicenses = JSON.stringify(licenses);
-    document.querySelector(`#Provider${providerId}Licenses`).value = jsonLicenses;
   }
 }
 const provider = new Provider();

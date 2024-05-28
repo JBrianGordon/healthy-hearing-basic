@@ -980,7 +980,6 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                 </div>
                                 
                                 <!-- US Imports Tab -->
-                                <!-- *** TODO: add import specific variables, e.g. $lastOticonImportDate *** -->
                                 <div class="tab-pane" id="Imports">
                                     <?php if (Configure::read('isYhnImportEnabled')): ?>
                                         <!-- US Imports -->
