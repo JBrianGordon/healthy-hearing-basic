@@ -38,7 +38,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php if(!empty($locations)): ?>
 		<section class="panel panel-secondary"<?= $preferredDisplay ?>>
 			<header class="panel-heading text-center">
-				<h3>Featured clinics near me</h3>
+				<h2 class="h3">Featured clinics near me</h2>
 			</header>
 			<div class="panel-body">
 				<?php if ($display === 'sameCountry'): ?>

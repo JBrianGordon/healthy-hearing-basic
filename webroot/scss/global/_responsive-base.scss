@@ -315,7 +315,7 @@ summary {
   }
 }
 
-.panel-body.anchor-underline a {
+.panel-body.anchor-underline a:not(.btn) {
   text-decoration: underline;
 }
 

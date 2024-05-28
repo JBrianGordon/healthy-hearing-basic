@@ -26,7 +26,7 @@
 	        <div class="row">
 	          	<div class="col-md-12">
 	          		<section class="panel">
-	          			<div class="panel-body">
+	          			<div class="panel-body anchor-underline">
 		          			<div class="panel-section expanded">
 		            			<div class="p20">
 									<?= $page->content ?>

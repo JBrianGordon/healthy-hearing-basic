@@ -15,7 +15,7 @@
     <div class="container">
       <div class="row noprint">
         <div class="col-sm-9 inverse">
-            <?= $this->Breadcrumbs->render(); ?>
+            <?= $this->Breadcrumbs->render() ?>
             <?= $this->element('breadcrumb_schema') ?>
             <div id="ellipses">...</div>
         </div>
@@ -23,12 +23,17 @@
       <div class="row page-content">
 		<div class="col-lg-9">
 			<article class="panel hearing-test">
-			<div class="panel-body">
-				<div class="panel-section expanded">
+			<div class="panel-body anchor-underline">
+				<div class="panel-section expanded p15">
 					<h1 class="text-primary" id="start-h1">How's your hearing?</h1>
 					<h2 id="result-h2" class="text-primary" style="display:none;">Your hearing test results</h2>
 					<div id="start-test" class="test-start clear">
-						<img src="/img/quiz/hh19-free-online-hearing-test.jpg" class="img-rounded img-responsive center-block mb30" style="max-width:100%" alt="A woman struggles to hear a friend talking">
+						<img src="/img/quiz/hh19-free-online-hearing-test.jpg" 
+							srcset="/img/quiz/hh19-free-online-hearing-test.jpg 1x, /img/quiz/hh19-free-online-hearing-test@2x.jpg 2x" 
+							width="450" 
+							height="300" 
+							class="img-rounded img-responsive center-block mb30" 
+							alt="A woman struggles to hear a friend talking">
 						<p class="lead text-primary">Hearing loss is a touchy subject that can bring out the procrastinator in even the best of us. If you think you have hearing loss, take our free online hearing test and then schedule an appointment for a complete hearing assessment at a hearing clinic near you.</p>
 						<p>The questions on this online hearing test can help you prepare for your first appointment with an audiologist or hearing aid specialist.</p>
 						<div class="mt5 mb20 text-center">
