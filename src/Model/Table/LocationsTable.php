@@ -1532,9 +1532,8 @@ class LocationsTable extends Table
 
         $sort = $preferredOnly ? 'preferred' : 'distance';
         $cacheKey = 'top_nav_' . implode('_', $geoLocData) . '_' . $sort . '_' . $limit;
-        if (false/*$TODO: cache = Cache::read($cacheKey)*/) {
-            return $cache;
-        } else {
+        $clinicsNearMe = Cache::read($cacheKey);
+        if ($clinicsNearMe === null) {
             $options['zip'] = $geoLocData['zip'];
             $options['region'] = $geoLocData['region'];
             $options['city'] = $geoLocData['city'];
@@ -1543,10 +1542,11 @@ class LocationsTable extends Table
             if ($preferredOnly) {
                 $conditions['Locations.listing_type !='] = Location::LISTING_TYPE_BASIC;
             }
-            $cache = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
-            Cache::write($cacheKey, $cache);
-            return $cache;
+            $clinicsNearMe = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
+            Cache::write($cacheKey, $clinicsNearMe);
         }
+
+        return $clinicsNearMe;
     }
 
     /**
