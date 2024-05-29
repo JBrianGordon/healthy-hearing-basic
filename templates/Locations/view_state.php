@@ -66,7 +66,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 							<div class="panel-heading text-center panel-section-header">
 								<h2>Resources in <?= $stateNice ?></h2>
 							</div>
-							<div class="panel-body">
+							<div class="panel-body anchor-underline">
 								<div class="panel-section expanded">
 									<?= $stateInfo ?>
 								</div>

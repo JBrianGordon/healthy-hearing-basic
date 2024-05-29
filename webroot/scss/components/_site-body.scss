@@ -332,7 +332,7 @@
 
 	  .row {
 	    @media (max-width: $screen-sm-max) {
-	      display: block;
+	      display: flex;
 
 	      .col-md-3, .col-md-9 {
 	        padding: 0;

@@ -41,7 +41,7 @@ $this->Breadcrumbs->add([
 					                <?= $corp->short ?>
 					              </p>
 					              <p>
-					              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
+					              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more about <?= $corp->title ?></a>
 					              </p>
 					            </div>
 					          </div>
