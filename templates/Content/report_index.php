@@ -24,7 +24,7 @@ $this->Breadcrumbs->add([
 				<div class="col-lg-9 float-start">
 					<?php if (!empty($reportIntro)): ?>
 						<section class="panel">
-							<div class="panel-body">
+							<div class="panel-body anchor-underline">
 								<header class="panel-section expanded"><?=$reportIntro ?></header>
 							</div>
 						</section>

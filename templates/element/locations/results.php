@@ -170,7 +170,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 				<div class="clearfix"></div>
 
 				<h2 class="text-primary">Learn more about hearing health</h2>
-				<p>If you're not ready to make that call, visit our <a href="/help">Hearing Help</a> pages for extensive information about <a href="/help/hearing-loss">hearing loss</a>, <a href="/help/hearing-aids">hearing aids</a>, 
+				<p class="anchor-underline">If you're not ready to make that call, visit our <a href="/help">Hearing Help</a> pages for extensive information about <a href="/help/hearing-loss">hearing loss</a>, <a href="/help/hearing-aids">hearing aids</a>, 
 				<?php if (Configure::read('country') == 'CA'): ?>
 					<a href="/help/hearing-loss/tinnitus-treatment">tinnitus</a> and <a href="/help/hearing-aids/assistive-listening-devices">assistive listening devices</a>.
 				<?php else: ?>
