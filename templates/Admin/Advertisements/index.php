@@ -34,7 +34,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                     <!-- ***TODO*** : Populate fields for advanced search --> 
                                     <?= $this->element('advanced_search') ?>
                                     <div class="advertisements index content">
-                                        <?= $this->Html->link('New Advertisement', ['action' => 'add'], ['class' => 'button float-right']) ?>
                                         <div class="table-responsive">
                                             <table class="table table-striped table-bordered table-condensed mt20">
                                                 <thead>
