@@ -36,6 +36,6 @@ class LocationsController extends BaseClinicController
         $this->set('days', $this->Locations->LocationHours->days);
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
         $this->set('isCqPremier', $location->is_cq_premier);
-        $this->set('couponId', $location->coupon_id);
+        $this->set('couponId', $location->id_coupon);
     }
 }

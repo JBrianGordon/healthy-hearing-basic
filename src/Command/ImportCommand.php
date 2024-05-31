@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Model\Entity\Location;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -10,8 +11,10 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Validation\Validation;
 use SoapClient;
 use SoapHeader;
+use DOMDocument;
 
 /**
  * Import command.
@@ -37,6 +40,7 @@ class ImportCommand extends Command
         'pass' => "bhme8zCxbbFdhLMwqNnv",
         'url' => "https://bizlink.consultnavigator.com/crminformation/api/Practice/",
     ];
+    protected $cqpFilename = 'tmp/latestCqpImport.xml';
 
     // Used for tracking which locations changed tiers for reporting purposes.
     private $changedTiers = [];
@@ -130,12 +134,27 @@ class ImportCommand extends Command
         }
         $yhnStart = microtime(true);
 
-        // Populate the YHN Locations, YHN Provider, and Oticon Location arrays for later use.
+        // Populate list of YHN and Oticon locations for later use.
         $this->yhnLocations = $this->Locations->find('list', [
             'keyField' => 'id_yhn_location',
             'valueField' => 'id',
             'conditions' => ['id_yhn_location != ""'],
         ])->toArray();
+        $this->oticonLocations = $this->Locations->find('list', [
+            'keyField' => 'id_oticon',
+            'valueField' => 'id',
+            'conditions' => [
+                'id_oticon !=' => '""',
+                'listing_type !=' => Location::LISTING_TYPE_NONE,
+                'is_active' => 1,
+                'is_show' => 1,
+            ],
+        ])->toArray();
+        // Create a version without preceding zeros
+        foreach ($this->oticonLocations as $idOticon => $locationId) {
+            $idOticon = ltrim((string)$idOticon, '0');
+            $this->noZeroOticonLocations[$idOticon] = $locationId;
+        }
 
         $this->setPreviousImportId('yhn');
 
@@ -186,6 +205,8 @@ class ImportCommand extends Command
         // Calculate listing types for each location
         $this->Locations->calculateListingTypes($io);
 
+        // Add CallSource numbers if needed
+        $this->Locations->addCallSourceNumbers($io);
         // End CallSource numbers that are no longer needed
         $this->CallSources->endInvalidCallSourceNumbers($io);
         $this->Locations->noShowLocations($io);
@@ -226,7 +247,7 @@ class ImportCommand extends Command
      */
     function displayVerboseStats() {
         $io = $this->io;
-        $importData = $this->Imports->findById($this->importId)->first()->toArray();
+        $importData = $this->Imports->get($this->importId)->toArray();
         $io->helper('BaseShell')->title('Import statistics');
         foreach ($importData as $importKey => $importValue) {
             $importLabel = ucfirst(str_replace('_', ' ', $importKey));
@@ -308,7 +329,7 @@ class ImportCommand extends Command
             ];
 
             // Attempt to match this location
-            $locationInfo = $this->matchLocation($officeData);
+            $locationInfo = $this->matchYhnLocation($officeData);
             $officeData['location_id'] = $locationInfo['locationId'];
             $officeData['match_type'] = $locationInfo['method'];
 
@@ -405,12 +426,16 @@ class ImportCommand extends Command
                         $io->error('Failed to save ImportProvider entity');
                         $errors = print_r($importProviderEntity->getErrors(), true);
                         $io->out($errors);
+                        pr($importProviderEntity);
+                        exit;
                     }
                 }
             } else {
                 // Failed to save the ImportLocation data
                 $io->error('Failed to save ImportLocation entity');
                 $io->out($importLocationEntity['error']);
+                pr($importLocationEntity);
+                exit;
             }
         }
 
@@ -428,7 +453,7 @@ class ImportCommand extends Command
     /*
      *  Attempt to match the YHN location data provided to a current HH location already in the system, and return the location_id.
      */
-    function matchLocation($locationData) {
+    function matchYhnLocation($locationData) {
         $yhnOfficeId = (string) $locationData['id_external'];
 
         // Check to see if we've matched this location previously.
@@ -665,7 +690,7 @@ class ImportCommand extends Command
                 $importProvider = $importProvider['import_provider'];
                 $externalProviderId = $importProvider['id_external'];
                 $importProviderIds[] = $externalProviderId;
-                // New provider, did not exist last import.
+                // New provider, did not exist last import
                 if (empty($sortedPreviousProviders[$externalLocationId][$externalProviderId])) {
                     $providersNew++;
                     $diff = true;
@@ -875,5 +900,466 @@ class ImportCommand extends Command
         // Send email
         $this->getMailer('Admin')->send('importComplete', [$email]);
         $io->out('Import report email sent to '.implode(', ', $email['to']));
+    }
+
+    /*
+     *  Import CQPartners XML and parse it into our database.
+     */
+    function cqp() {
+        $io = $this->io;
+        $io->helper('BaseShell')->title("CQ Partners Import");
+        if (!Configure::read('isCqpImportEnabled')) {
+            $io->error('CQP imports are disabled on this server.');
+            return;
+        }
+        if(!function_exists('curl_init')) {
+            $io->error("Error: Curl is not installed on this server");
+        }
+
+        $cqpStart = microtime(true);
+        $this->setPreviousImportId('cqp');
+
+        // Populate list of CQP locations for later use
+        $this->cqpLocations = $this->Locations->find('list', [
+            'keyField' => 'id_cqp_office',
+            'valueField' => 'id',
+            'conditions' => ['id_cqp_office != ""'],
+        ])->toArray();
+
+        // Generate a new CQP Import row
+        $newImport = $this->Imports->newEmptyEntity();
+        $newImport->type = 'cqp';
+        $this->importId = $this->previousImportId;
+        $this->Imports->save($newImport);
+        $this->importId = $newImport->id;
+
+        $io->info('New import ID = ' . $this->importId);
+        $io->info('Previous import ID = ' . $this->previousImportId);
+
+        // Retrieve our data feed
+        if ($this->bypass) {
+            // Read most recent downloaded file
+            $io->out('Bypassing file download. Reading local file: '.$this->cqpFilename);
+            if (!file_exists($this->cqpFilename)) {
+                $io->error('Unable to read file.');
+                exit;
+            }
+            $dataFeed = file_get_contents($this->cqpFilename);
+        } else {
+            // Download a new file from CQP
+            $dataFeed = $this->retrieveCqpXml();
+        }
+        if ($dataFeed === false) {
+            $io->error('Unable to read file.');
+            exit;
+        }
+
+        // Parse our data feed
+        $cqpLogData = $this->parseCqpXml($dataFeed);
+
+        // Save our location counts to import table
+        $this->Imports->patchEntity($newImport, $cqpLogData);
+        $this->Imports->save($newImport);
+
+        // Find changes between this import and last
+        $this->findCqpImportChanges();
+
+        // Remove cqp_tier from locations that are no longer in the import
+        $this->removedCqpLocations($this->importId);
+
+        // Calculate listing types for each location
+        $this->Locations->calculateListingTypes($io);
+
+        // Add CallSource numbers if needed
+        $this->Locations->addCallSourceNumbers($io);
+        // End CallSource numbers that are no longer needed
+        $this->CallSources->endInvalidCallSourceNumbers($io);
+        $this->Locations->noShowLocations($io);
+        $this->Locations->showClinicsWithActiveCS($io);
+
+        // Update filters
+        $this->Locations->updateAllFilters($io);
+
+        // Create an email report
+        $this->createReport($this->importId);
+
+        $io->success('Import complete.');
+
+        // Show stats
+        $cqpEnd = microtime(true);
+        $cqpTime = number_format(($cqpEnd - $cqpStart), 2);
+        $this->displayVerboseStats();
+        $io->out();
+        $io->out('Import Duration: ' . $cqpTime . 's');
+    }
+
+    /*
+     *  Retrieve the XML feed from CQP.
+     */
+    function retrieveCqpXml() {
+        $io = $this->io;
+        $io->out('Retrieving XML file from CQP');
+
+        $post = [
+            "UserName" => $this->cqp['user'],
+            "Password" => $this->cqp['pass']
+        ];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curl, CURLOPT_URL, $this->cqp['url']);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Accept-Type: application/json'
+        ]);
+
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        if (empty($result)) {
+            $io->error('Failed to get import file from CQP web server.');
+            exit;
+        } else {
+            // Convert the result from string to proper XML format
+            $dom = new DOMDocument;
+            $dom->loadXML($result);
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $xmlResult = $dom->saveXML();
+            // Save a copy of the import result (for debugging)
+            $file = new File($this->cqpFilename, true, 0644);
+            $file->write($xmlResult);
+            $file->close();
+            // Reformat as SimpleXMLElement
+            $xmlData = simplexml_load_string($xmlResult);
+            return $xmlData;
+        }
+    }
+
+    /*
+     *  Parse out the CQP data we got from the data feed.
+     */
+    function parseCqpXml($xml) {
+        $io = $this->io;
+        // Convert XML data to array format
+        if (is_string($xml)) {
+            $xml = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
+        }
+        $xml = json_decode(json_encode($xml), true);
+        // Set our variables for use by the parsing script
+        $practiceCount      = 0;
+        $locationCount      = 0;
+        $newLocationCount   = 0;
+        $missingPhoneCount  = 0;
+        $missingEmailCount  = 0;
+        $invalidEmailCount  = 0;
+
+        $io->out('Parsing XML');
+        $io->out(count($xml['Practice']) . ' Practices');
+
+        // Loop through practice data
+        foreach ($xml['Practice'] as $practice) {
+            $practiceCount++;
+            if ($practice['PracticeID'] == 'H6790') {
+                // Ignore HearingLife
+                pr('Warning: Ignoring practice H6790 (HearingLife).');
+                continue;
+            }
+            if (!empty($practice['Offices']['Office']) && !isset($practice['Offices']['Office'][0])) {
+                // Only 1 office. Map it to key=0.
+                $practice['Offices']['Office'] = [0 => $practice['Offices']['Office']];
+            }
+            if (!isset($practice['Offices']['Office'])) {
+                $practice['Offices']['Office'] = [];
+            }
+            if (!empty($practice['Contacts']['Contact']) && !isset($practice['Contacts']['Contact'][0])) {
+                // Only 1 contact. Map it to key=0.
+                $practice['Contacts']['Contact'] = [0 => $practice['Contacts']['Contact']];
+            }
+            foreach ($practice['Offices']['Office'] as $office) {
+                $locationCount++;
+                unset($importLocationData);
+                // Collect data for this office
+                $importLocationData = [
+                    'import_id' => $this->importId,
+                    'id_external' => '',
+                    'id_cqp_practice' => $practice['PracticeID'],
+                    'id_cqp_office' => $office['OfficeID'],
+                    'title' => $practice['PracticeName'],
+                    'subtitle' => $office['OfficeName'],
+                    'address' => $office['OfficeAddress1'],
+                    'address_2' => $office['OfficeAddress2'],
+                    'city' => $office['OfficeCity'],
+                    'state' => $office['OfficeState'],
+                    'zip' => $office['OfficeZip'],
+                    'phone' => $office['OfficePhone'],
+                    'email' => $office['OfficeEmail'],
+                ];
+                if (empty($office['OfficePhone'])) {
+                    pr('Warning: Office '.$office['OfficeID'].' ('.$office['OfficeName'].') has no phone and will not be included.');
+                    $missingPhoneCount++;
+                    continue;
+                }
+                if (empty($office['OfficeEmail'])) {
+                    $importLocationData['email'] = '';
+                    $missingEmailCount++;
+                } elseif (!Validation::email($office['OfficeEmail'])) {
+                    $importLocationData['email'] = '';
+                    $invalidEmailCount++;
+                }
+                foreach ($importLocationData as $field => $value) {
+                    // All fields should be formatted as string
+                    if (empty($value)) {
+                        $importLocationData[$field] = '';
+                    } else if (is_array($value)) {
+                        pr('Error invalid data for practice '.$practice['PracticeID'].', field '.$field);
+                        pr($value);
+                    }
+                }
+
+                // Add a note that includes all contact data for this practice
+                if (!empty($practice['Contacts']['Contact'])) {
+                    foreach ($practice['Contacts']['Contact'] as $contact) {
+                        $importLocationData['notes'] = json_encode($practice['Contacts']['Contact']);
+                    }
+                }
+
+                // Attempt to match this location.
+                $locationInfo = $this->matchCqpLocation($importLocationData);
+                $importLocationData['location_id']  = $locationInfo['locationId'];
+                $importLocationData['match_type']   = $locationInfo['method'];
+
+                // Save ImportLocation with the matched location ID
+                $importLocationEntity = $this->ImportLocations->newEntity($importLocationData);
+                if ($importLocationEntity->getErrors()) {
+                    $io->error('Failed to save ImportLocation');
+                    $io->error(print_r($importLocationEntity->getErrors(), true));
+                    pr($importLocationEntity);
+                    exit;
+                }
+                $this->ImportLocations->save($importLocationEntity);
+
+                $locationId = $locationInfo['locationId'];
+                if (!empty($locationId)) {
+                    // We found a matching location for this CQP office
+                    $locationEntity = $this->Locations->get($locationId);
+                    $locationEntity->is_cqp = true;
+                    $locationEntity->cqp_tier = 2;
+                    $locationEntity->id_cqp_practice = $practice['PracticeID'];
+                    if ($locationEntity->id_cqp_office != $office['OfficeID']) {
+                        $io->out('Associated Location ' . $locationId . ' with CQP office ' . $office['OfficeID']);
+                        $locationEntity->id_cqp_office = $office['OfficeID'];
+                        $locationEntity->review_needed = 1;
+                    }
+                    $this->Locations->save($locationEntity);
+
+                    // Calculate listing_type
+                    $origListingType = $locationEntity->listing_type;
+                    $newListingType = $this->Locations->calculateListingType($locationId);
+                    if ($origListingType != $newListingType) {
+                        $io->out('Changing Location ' . $locationId . ' from listing type ' . $origListingType . ' to ' . $newListingType);
+                        $this->changedTiers[] = $locationId;
+                    }
+                } else {
+                    // No match found
+                    $newLocationCount++;
+                }
+            }
+        }
+
+        // Print some stats about our data quality
+        $io->out('total practices = '.$practiceCount);
+        $io->out('total locations = '.$locationCount);
+        $io->out('missingPhoneCount = '.$missingPhoneCount);
+        $io->out('missingEmailCount = '.$missingEmailCount);
+        $io->out('invalidEmailCount = '.$invalidEmailCount);
+
+        // Set up our return data, unused right now.
+        $cqpLogData = [
+            'total_locations' => $locationCount,
+            'new_locations' => $newLocationCount
+        ];
+        return $cqpLogData;
+    }
+
+    /*
+     *  Attempt to match the CQP location data provided to a current HH location already in the system, and return the location_id.
+     */
+    function matchCqpLocation($locationData) {
+        $cqpOfficeId = $locationData['id_cqp_office'];
+
+        /*******
+         * Method 6: Attempt to match on id_cqp_office
+         ********/
+        if (!empty($cqpOfficeId) && !empty($this->cqpLocations[$cqpOfficeId])) {
+            // Return the location's ID
+            $locationId = $this->cqpLocations[$cqpOfficeId];
+            return ['method' => 6, 'locationId' => $locationId];
+        }
+
+        /*******
+         * Method -1: Auto matching is disabled
+         ********/
+        return ['method' => -1, 'locationId' => null];
+    }
+
+    /*
+     *  Find changes between this import and the previous import.
+     */
+    function findCqpImportChanges() {
+        $io = $this->io;
+        $io->helper('BaseShell')->title('Finding CQP import changes');
+
+        if (empty($this->previousImportId)) {
+            return false;
+        }
+
+        $locationsUpdated   = 0;
+        $locationsNew       = 0;
+
+        $cqpLocations = $this->ImportLocations->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'import_id' => $this->importId,
+            ],
+        ])->all();
+        $previousCqpLocations = $this->ImportLocations->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'import_id' => $this->previousImportId,
+            ],
+        ])->all();
+
+        // Sort out the locations from the previous import, using the CQP office ID as the array key
+        $sortedPreviousLocations = [];
+        foreach ($previousCqpLocations as $previousCqpLocation) {
+            $previousCqpOfficeId = $previousCqpLocation->id_cqp_office;
+            $sortedPreviousLocations[$previousCqpOfficeId] = $previousCqpLocation;
+        }
+
+        $locationsChanged = 0;
+        foreach ($cqpLocations as $cqpLocation) {
+            // Flag for if we need to set 'review_needed' for this location.
+            $diff = false;
+
+            $cqpOfficeId = $cqpLocation->id_cqp_office;
+
+            // This location didn't exist last time.
+            if (empty($sortedPreviousLocations[$cqpOfficeId])) {
+                $cqpLocation->is_new = 1;
+                $this->ImportLocations->save($cqpLocation);
+                $locationsNew++;
+                continue;
+            }
+
+            $locationId = $cqpLocation->location_id;
+            if (empty($locationId)) {
+                // If this CQP location is not related to an HH location, then we don't need to diff
+                continue;
+            }
+
+            $previousCqpLocation    = $sortedPreviousLocations[$cqpOfficeId];
+            $locationDiff           = array_diff($cqpLocation->toArray(), $previousCqpLocation->toArray());
+
+            // These will always be different, so remove them for the diffing.
+            unset($locationDiff['id']);
+            unset($locationDiff['import_id']);
+            unset($locationDiff['match_type']);
+
+            // Don't bother with Email or notes either
+            unset($locationDiff['email']);
+            unset($locationDiff['notes']);
+
+            if (!empty($locationDiff)) {
+                $locationsUpdated++;
+                $diff = true;
+                // Save Location Diff
+                foreach ($locationDiff as $field => $value) {
+                    $importDiff = $this->ImportDiffs->newEmptyEntity();
+                    $importDiff->import_id = $this->importId;
+                    $importDiff->model = 'Location';
+                    $importDiff->id_model = $locationId;
+                    $importDiff->field = $field;
+                    $importDiff->value = $value;
+                    $importDiff->review_needed = 1;
+                    $this->ImportDiffs->save($importDiff);
+                }
+            }
+            if ($diff) {
+                $locationsChanged++;
+                $locationEntity = $this->Locations->get($locationId);
+                $locationEntity->review_needed = 1;
+                $this->Locations->save($locationEntity);
+            }
+        }
+
+        $importEntity = $this->Imports->get($this->importId);
+        $importEntity->new_locations = $locationsNew;
+        $importEntity->updated_locations = $locationsUpdated;
+        $this->Imports->save($importEntity);
+
+        // Clear out the large arrays to free up memory
+        unset($sortedPreviousLocations);
+        unset($previousCqpLocations);
+        unset($cqpLocations);
+
+        $io->out("Found ".$locationsChanged." locations with changes since last import");
+        return $locationsChanged;
+    }
+
+    /*
+     *  Remove Locations that were not in the last CQP Import
+     */
+    function removedCqpLocations($importId = 0) {
+        $io = $this->io;
+        $io->helper('BaseShell')->title('Find locations that are no longer in CQP import');
+        $count = 0;
+        if (empty($importId)) {
+            $io->error('Import ID is required.');
+            return false;
+        }
+
+        // Get a list of all CQP office IDs from the last import
+        $importLocations = $this->ImportLocations->find('list', [
+            'keyField' => 'location_id',
+            'valueField' => 'id_cqp_office',
+            'conditions' => [
+                'import_id' => $importId,
+                'location_id IS NOT NULL'
+            ],
+        ])->toArray();
+
+        // Get a list of all current Locations that are CQP
+        $currentLocations = $this->Locations->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'id_cqp_office',
+            'conditions' => [
+                'id_cqp_office !=' => ''
+            ],
+        ])->toArray();
+
+        // Determine which of the CQP Locations is no longer in the import
+        $removedLocations = [];
+        foreach ($currentLocations as $locationId => $cqpOfficeId) {
+            if (!in_array($cqpOfficeId, $importLocations)) {
+                $removedLocations[] = $locationId;
+            }
+        }
+
+        // Set CQP tier data for each removed location
+        foreach ($removedLocations as $locationId) {
+            $location = $this->Locations->get($locationId);
+            if ($location->cqp_tier != 0) {
+                $count++;
+                // Keep the id_cqp_office, id_cqp_practice and the is_cqp flag, but set cqp_tier to 0
+                $location->cqp_tier = 0;
+                $this->Locations->save($location);
+                $this->Locations->calculateListingType($locationId);
+                $io->out('Location: ' . $locationId . ' is no longer a CQP Location.');
+            }
+        }
+        $io->out($count." locations are no longer in the CQP import");
     }
 }

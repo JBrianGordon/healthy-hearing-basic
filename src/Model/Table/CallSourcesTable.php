@@ -384,6 +384,7 @@ class CallSourcesTable extends Table
             //'fields' => ['DISTINCT location_id'],
             'conditions' => []
         ])->all();
+        $count = 0;
         // Find invalid call source numbers
         foreach ($callSources as $callSource) {
             $locationId = $callSource->location_id;
@@ -405,6 +406,7 @@ class CallSourcesTable extends Table
                 $io->info('Ending numbers for location '.$locationId);
                 // This will end the CS numbers and remove the CS number mapping from our database
                 if ($this->endCallSource($locationId)) {
+                    $count++;
                     $io->success("success");
                 } else {
                     $io->error("f:{$locationId}");
@@ -412,7 +414,7 @@ class CallSourcesTable extends Table
                 }
             }
         }
-        $io->out("Finished.");
+        $io->out($count." CS numbers ended");
     }
 
     /**

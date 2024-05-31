@@ -996,20 +996,17 @@ class LocationsTable extends Table
     * Calculate the listing types for all location ids
     */
     public function calculateListingTypes(ConsoleIo $io) {
-        $io->hr();
-        $io->out('Calculate listing types for all locations');
-        $io->hr();
+        $io->helper('BaseShell')->title('Calculate listing types for all locations');
         $locations = $this->find('all', [
             'contain' => [],
             'fields' => ['id', 'yhn_tier', 'oticon_tier', 'cqp_tier', 'is_grace_period', 'listing_type', 'is_listing_type_frozen', 'is_show']
         ])->all();
+        $progress = $io->helper('Progress')->init(['total'=> count($locations)]);
         foreach ($locations as $location) {
             $this->calculateListingType($location);
-            echo '.';
+            $progress->increment()->draw();
         }
-
         $io->out();
-        $io->out('Done.');
     }
 
     /**
@@ -1065,7 +1062,7 @@ class LocationsTable extends Table
             if ($locationEntity->is_show == true) {
                 $locationEntity->is_show = false;
                 $this->save($locationEntity);
-                $this->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
+                $io->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
             }
         }
         $locationIds = $this->find('list', [
@@ -1106,7 +1103,7 @@ class LocationsTable extends Table
             $locationEntity->is_show = true;
             $this->save($locationEntity);
         }
-        $io->out("Done. Found ".count($callSources)." locations to mark is_show.");
+        $io->out("Found ".count($callSources)." locations to mark is_show.");
     }
 
     public function updateAllFilters(ConsoleIo $io) {
@@ -1118,7 +1115,6 @@ class LocationsTable extends Table
             $progress->increment()->draw();
         }
         $io->out();
-        $io->out('Done.');
     }
 
     /**
@@ -2044,7 +2040,7 @@ class LocationsTable extends Table
             $save_data->address_2 = "";
         }
 
-        $save_data->id_parent_id ?? null;
+        $save_data->id_parent ?? null;
         $save_data->title = empty($save_data->title) ? $save_data->subtitle : $save_data->title;
         $save_data->city = cleanCityName($save_data->city);
         $save_data->state = $this->stateAbbr($save_data->state);
@@ -2087,5 +2083,55 @@ class LocationsTable extends Table
             }
         }
         return false;
+    }
+
+    /**
+    * Generate a CallSource number for all locations that need one
+    */
+    function addCallSourceNumbers(ConsoleIo $io) {
+        $io->helper('BaseShell')->title("Generate CallSource numbers");
+        $locationIds = $this->findForCallSource();
+        $count = 0;
+        if (!empty($locationIds)) {
+            $io->out(count($locationIds) . " locations need a new CallSource number.");
+            foreach ($locationIds as $locationId) {
+                $io->out("Generate for {$locationId}: ");
+                if (Configure::read('env') == 'prod')  {
+                    $result = $this->CallSources->saveCallSource($locationId);
+                    if ($result == false) {
+                        $io->error("f:{$locationId}");
+                        pr($this->CallSources->errors);
+                    } else {
+                        $count++;
+                    }
+                } else {
+                    $io->error(" Skipping. Dev environment.");
+                }
+            }
+            $io->out($count." CS numbers created");
+        } else {
+            $io->out("There are no locations that need CallSource numbers.");
+        }
+    }
+
+    /**
+    * Find all locations that need a new call source number created
+    */
+    public function findForCallSource() {
+        $locations = $this->find('all', [
+            'conditions' => [
+                'Locations.listing_type !=' => Location::LISTING_TYPE_NONE,
+                'Locations.is_active' => true,
+            ],
+            'contain' => ['CallSources']
+        ])->all();
+        $locationIdsNeedCs = [];
+        foreach ($locations as $location) {
+            if (empty($location->call_sources)) {
+                // Did not find a Call Assist CS number for this location. Need to add one.
+                $locationIdsNeedCs[] = $location->id;
+            }
+        }
+        return $locationIdsNeedCs;
     }
 }

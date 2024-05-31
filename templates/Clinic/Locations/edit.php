@@ -155,7 +155,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                 </tr>
                                                 <tr>
                                                     <th>Oticon ID</th>
-                                                    <td><?= $location->oticon_id ?></td>
+                                                    <td><?= $location->id_oticon ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th>Clinic email</th>
@@ -244,7 +244,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <h2 class="mt20">Profile information</h2>
                                         <?php
                                         echo $this->Form->hidden('Location.id');
-                                        echo $this->Form->hidden('Location.oticon_id');
+                                        echo $this->Form->hidden('Location.id_oticon');
                                         echo $this->Form->control('Location.title', ['value' => $location->title, 'class' => 'col-sm-9 mb10', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         echo $this->Form->control('Location.slogan', ['value' => $location->slogan, 'class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         ?>
@@ -590,7 +590,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 </div>
                                                             </div>
                                                             <div id="couponSelected" class="hidden">
-                                                                <?= $this->Form->hidden("Location.coupon_id", ['id' => 'location-coupon-id']) ?>
+                                                                <?= $this->Form->hidden("Location.id_coupon") ?>
                                                                 <div class='col-md-offset-4 col-md-3'>
                                                                     <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                                 </div>

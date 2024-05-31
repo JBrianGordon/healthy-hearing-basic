@@ -359,7 +359,7 @@ class ReviewsController extends BaseAdminController
             'ip',
             'character_count',
             'location.listing_type',
-            'location.oticon_id',
+            'location.id_oticon',
             'location.title',
             'location.is_yhn',
             'location.is_retail',

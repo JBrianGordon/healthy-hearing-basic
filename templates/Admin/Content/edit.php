@@ -11,7 +11,7 @@ $this->Html->script('dist/content_edit.min', ['block' => true]);
 
 $author_default = false;
 $isFrozen = !empty($content->is_frozen);
-$isDraft = !empty($content->draft_parent_id);
+$isDraft = !empty($content->id_draft_parent);
 if (empty($content->id)) {
 	if (in_array($user->id, $authors)) {
 		$author_default = $user->id;
@@ -47,7 +47,7 @@ if (empty($content->id)) {
 			<div class="panel-section expanded">
 				<?php if($isDraft): ?>
 					<div class="alert alert-warning" role="alert">
-						This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->draft_parent_id], ['target' => '_blank']) ?>.
+						This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->id_draft_parent], ['target' => '_blank']) ?>.
 					</div>
 				<?php endif; ?>
 				<div class="row">

@@ -10,7 +10,7 @@ $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
 $author_default = false;
 $isFrozen = !empty($content->is_frozen);
-$isDraft = !empty($content->draft_parent_id);
+$isDraft = !empty($content->id_draft_parent);
 if (empty($content->id)) {
     if (in_array($user->id, $authors)) {
         $author_default = $user->id;

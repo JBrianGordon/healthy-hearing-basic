@@ -100,13 +100,22 @@ class ImportLocationsTable extends Table
         $validator
             ->scalar('id_external')
             ->maxLength('id_external', 50)
-            ->requirePresence('id_external', 'create')
-            ->notEmptyString('id_external');
+            ->allowEmptyString('id_external');
 
         $validator
             ->scalar('id_oticon')
             ->maxLength('id_oticon', 255)
             ->allowEmptyString('id_oticon');
+
+        $validator
+            ->scalar('id_cqp_practice')
+            ->maxLength('id_cqp_practice', 255)
+            ->allowEmptyString('id_cqp_practice');
+
+        $validator
+            ->scalar('id_cqp_office')
+            ->maxLength('id_cqp_office', 255)
+            ->allowEmptyString('id_cqp_office');
 
         $validator
             ->scalar('title')

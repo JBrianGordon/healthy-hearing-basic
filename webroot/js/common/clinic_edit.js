@@ -615,7 +615,7 @@ if (type === 'ad') {
   document.getElementById('locationad-title').value = '';
   document.getElementById('locationad-description').value = '';
   document.getElementById('locationad-photo-url').value = '';
-  document.getElementById('location-coupon-id').value = null;
+  document.getElementById('id-coupon').value = null;
   document.getElementById('specialAnnouncements').dataset.adid = null;
   document.getElementById('specialAnnouncements').dataset.couponid = null;
   initSpecialAnnouncements();
@@ -643,7 +643,7 @@ document.getElementById("LocationAdTitle").value = "";
 document.getElementById("LocationAdDescription").value = "";
 document.getElementById("LocationAdPhotoUrl").value = "";
 document.getElementById("specialAnnouncements").dataset.adid = null;
-document.getElementById("LocationCouponId").value = couponId;
+document.getElementById("id-coupon").value = couponId;
 document.getElementById("specialAnnouncements").dataset.couponid = couponId;
 document.querySelector("#couponSelected .coupon-image").setAttribute("src", `/img/coupons/coupon-${couponId}.jpg`);
 document.getElementById("couponLibrary").style.display = 'none';
