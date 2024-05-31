@@ -53,7 +53,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                     <tr>
                                                         <td><?= $this->Number->format($advertisement->id) ?></td>
                                                         <td><?= h($advertisement->is_active) ? "<span class='badge bg-success bi bi-check-lg'> Active</span>" : "<span class='badge bg-danger bi bi-x-lg'> Inactive</span>"; ?></td>
-                                                        <td><?= h($advertisement->title) ?><br><?= h($advertisement->src) ?></td>
+                                                        <td style="max-width:450px;word-wrap:break-word"><?= h($advertisement->title) ?><br><?= h($advertisement->src) ?></td>
                                                         <td><?= h($advertisement->slot) ?><br><span class="label label-default"><?= h($advertisement->type) ?></span></td>
                                                         <td><?= h($advertisement->tag_corps) ?></td>
                                                         <td><?= h($advertisement->tag_basic) ?></td>
