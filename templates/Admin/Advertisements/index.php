@@ -40,7 +40,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                     <tr>
                                                         <th><?= $this->Paginator->sort('id') ?></th>
                                                         <th><?= $this->Paginator->sort('is_active') ?></th>
-                                                        <th><?= $this->Paginator->sort('title') ?><br><?= $this->Paginator->sort('src') ?></th>
+                                                        <th style="width:450px"><?= $this->Paginator->sort('title') ?><br><?= $this->Paginator->sort('src') ?></th>
                                                         <th><?= $this->Paginator->sort('slot') ?><br><?= $this->Paginator->sort('type') ?></th>
                                                         <th><?= $this->Paginator->sort('tag_corps') ?></th>
                                                         <th><?= $this->Paginator->sort('tag_basic') ?></th>
