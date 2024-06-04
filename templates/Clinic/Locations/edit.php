@@ -385,7 +385,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Evening and/or weekend hours available by appointment. Please call to schedule.</strong>',
                                                             'escape' => false,
-                                                            'class' => 'col col-md-12 control-label tal p0',
+                                                            'class' => 'col col-md-12 control-label tal',
                                                         ],
                                                         'checked' => $location->location_hour->is_evening_weekend_hours
                                                     ]) ?>
@@ -398,7 +398,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         'label' => [
                                                             'text' => '<strong class="ml5">Closed for lunch</strong>',
                                                             'escape' => false,
-                                                            'class' => 'col col-md-12 control-label tal p0',
+                                                            'class' => 'col col-md-12 control-label tal',
                                                         ],
                                                         'checked' => $location->location_hour->is_closed_lunch
                                                     ]) ?>

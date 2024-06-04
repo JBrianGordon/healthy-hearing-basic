@@ -24,6 +24,180 @@ $showSpecialAnnouncement = (
 $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
 ?>
+<style type="text/css">
+    .p10 {
+        padding: 10px;
+    }
+    .pt20 {
+        padding-top: 20px;
+    }
+    .clear, .clearfix {
+        display: block;
+        clear: both;
+    }
+    .hidden {
+        display: none;
+    }
+    .panel-heading {
+        padding: 13px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .site-body label {
+        width: 25%;
+        float: left;
+        text-align: right;
+        padding: 7px 15px 0;
+        font-weight: bold;
+    }
+    .site-body .form-control, .site-body .form-select {
+        width: 75%;
+        font-size: 16px;
+        flex-flow: row-reverse;
+    }
+    .site-body .form-check.checkbox label {
+        width: auto;
+    }
+    .form-group {
+        clear: both;
+        margin-bottom: 15px;
+    }
+    .site-body .form-group {
+        display: flex;
+        flex-grow: 1;
+        margin-bottom: 10px;
+    }
+    fieldset {
+        min-width: 0;
+        padding: 0;
+        margin: 0;
+        border: 0;
+    }
+    [hh-search], [data-hh-search] {
+        display: block;
+        float: right;
+        overflow: visible;
+        position: relative;
+        text-align: center;
+        width: 46.66666px;
+        z-index: 2;
+
+        .search-link {
+            color: transparent;
+            display: block;
+            font-size: 0;
+            height: 70px;
+            padding: 20px 10px;
+            text-decoration: none;
+
+            @media only screen and (max-width: $screen-sm-min) {
+            display: none;
+            }
+
+            span {
+            color: $brand-primary;
+            font-size: 22px;
+            }
+
+            &:hover, &:active {
+            background: $navbar-default-link-hover-bg;
+            text-decoration: none;
+            }
+
+            &:focus {
+            outline-color: transparent;
+            outline-style: none;
+            }
+        }
+
+        .search-wrapper {
+            background: $navbar-default-bg;
+            display: inline-block;
+            height: $navbar-height;
+            margin-right: -0.25em;
+            position: fixed;
+            right: 0;
+            top: 0;
+            transform: translate(100%, 0);
+            transform: translate3d(100%, 0, 0);
+            transition: all 0.2s ease-in;
+            width: 100vw;
+
+            &.show {
+            transform: translate(0, 0);
+            transform: translate3d(0, 0, 0);
+            transition: all 0.2s ease-out;
+
+            .close-link {
+                background: $navbar-default-link-hover-bg;
+
+                &:hover, &:active {
+                background: shade($navbar-default-link-hover-bg, 3%);
+                text-decoration: none;
+                }
+            }
+            }
+        }
+
+        .close-link {
+            color: transparent;
+            font-size: 0;
+            display: inline-block;
+            left: 0;
+            line-height: $navbar-height;
+            position: absolute;
+            text-align: center;
+            width: $navbar-height;
+
+            span {
+            color: $brand-primary;
+            font-size: 16px;
+            }
+
+            &:focus {
+            outline-color: transparent;
+            outline-style: none;
+            }
+        }
+
+        .search-input {
+            border: 0;
+            box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.15);
+            font-size: 114%;
+            height: $navbar-height;
+            left: $navbar-height;
+            padding: 1em 2em;
+            position: absolute;
+            top: 0;
+            width: calc(100% - #{$navbar-height});
+
+            &:focus {
+            box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.15);
+            outline: none;
+            }
+        }
+    }
+    .pl0 {
+        padding-left: 0px !important;
+    }
+    @media (min-width: 768px) {
+        .col-md-2, .col-md-3 {
+            float:left;
+            position: relative;
+        }
+        .col-md-2 {
+            flex: 0 0 auto;
+            width: 16.66666667%;
+        }
+        .col-md-3 {
+            flex: 0 0 auto;
+            width: 25%;
+        }
+        .offset-md-3 {
+            margin-left: 25%;
+        }
+    }
+</style>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
         <div class="panel-heading">Locations Actions</div>
@@ -630,8 +804,9 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                     'label' => ['class' => 'form-label col-md-2'],
                                                     'rows' => 3,
                                                     'maxlength' => 400,
-                                                    'required' => false,
-                                                    'help' => 'Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.']) ?>
+                                                    'required' => false])
+                                                ?>
+                                                <span class="help-block col-md-9 offset-md-3">Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.</span>
                                             </div>
                                         </div>
                                     <?php endif; ?>
@@ -716,8 +891,9 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                         'autocomplete' => 'off',
                                                         'step' => 60, //minutes
                                                         'value' => $this->Clinic->convert24hours($location->location_hour->lunch_start),
+                                                        'class' => 'w-100'
                                                     ]) ?>
-                                                    <span class="mr5 ml5"> - </span>
+                                                    <span class="mr5 ml5 mt10"> - </span>
                                                     <?= $this->Form->control('location_hour.lunch_end', [
                                                         'type' => 'time',
                                                         'label' => false,
@@ -725,6 +901,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                         'autocomplete' => 'off',
                                                         'step' => 60, //minutes
                                                         'value' => $this->Clinic->convert24hours($location->location_hour->lunch_end),
+                                                        'class' => 'w-100'
                                                     ]) ?>
                                                 </div>
                                             </td>
@@ -959,7 +1136,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             <?php foreach($reviews as $review): ?>
                                                 <?= $this->element('locations/review_body', ['review' => $review, 'clinicName' => $location->title]) ?>
                                                 <div class="ml20 mt10">
-                                                    <span class='badge bg-light'><?= Review::$statuses[$review->status] ?></span>
+                                                    <span class='label label-default'><?= Review::$statuses[$review->status] ?></span>
                                                     <?= $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",
                                                         ['controller' => 'reviews', 'action' => 'edit', $review->id],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-default ml10']) ?>
@@ -1172,7 +1349,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                         ?>
                                                                         <tr>
                                                                             <th class="text-right col-md-3"><?= ucfirst(str_replace('_', ' ', $label)); ?></th>
-                                                                            <td class="col-md-9"><?= $value; ?></td>
+                                                                            <td class="col-md-9"><?= isset($value) && $value !== '' && $value !== false  ? $value : '&nbsp;'; ?></td>
                                                                         </tr>
                                                                     <?php endforeach; ?>
                                                                 </table>
