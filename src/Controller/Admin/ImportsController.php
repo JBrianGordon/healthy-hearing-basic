@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Utility\Hash;
 
 /**
  * Imports Controller
@@ -218,6 +219,9 @@ class ImportsController extends BaseAdminController
             $locationData = $this->request->getData();
             $providerData = $locationData['providers'] ?? [];
 
+            // Make sure we are saving a valid state abbr
+            $locationData['state'] = $this->Locations->stateAbbr($locationData['state']);
+
             // Mark the location as no longer needing review
             $locationData['review_needed'] = 0;
 
@@ -312,10 +316,11 @@ class ImportsController extends BaseAdminController
             $location = $this->Locations->patchEntity(
                 $location,
                 $locationData,
-                //['associated' => $associations]
+                ['associated' => []]
             );
             if (!$this->Locations->save($location)) {
-                $this->Flash->error('Failed to save location '.$locationId.'<br> > '.implode('<br> > ', array_column($this->Location->validationErrors, 0)));
+                $errors = json_encode(Hash::flatten($location->getErrors()));
+                $this->Flash->error('Failed to save location '.$locationId.'<br>'.$errors, ['escape' => false]);
                 $this->redirect('/admin/imports');
             }
 
