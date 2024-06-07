@@ -537,8 +537,11 @@ class ClinicHelper extends Helper
                     $time = 'Open by appointment';
                 }
                 if ($hours[$day.'_open'] != "" && $hours[$day.'_close'] != "" && $hours[$day.'_is_closed']==false) {
-                    $open = str_replace(":00", "", $hours[$day.'_open']);
-                    $close = str_replace(":00", "", $hours[$day.'_close']);
+                    $open = date("g:i a", strtotime($hours[$day.'_open']));
+                    $close = date("g:i a", strtotime($hours[$day.'_close']));
+                    // Remove :00 if the time is on the hour
+                    $open = preg_replace("/:00(?= [ap]m)/", "", $open);
+                    $close = preg_replace("/:00(?= [ap]m)/", "", $close);
                     $time = $open.' - '.$close;
                     if ($hours['is_closed_lunch']) {
                         $lunchStart = str_replace(":00", "", $hours['lunch_start']);
