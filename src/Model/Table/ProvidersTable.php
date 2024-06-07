@@ -230,4 +230,11 @@ class ProvidersTable extends Table
 
         return $validator;
     }
+
+    function findByLocationId($locationId) {
+        return $this->find('all')
+            ->innerJoinWith('Locations')
+            ->where(['LocationsProviders.location_id' => $locationId])
+            ->all();
+    }
 }

@@ -496,14 +496,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('id_oticon')
             ->maxLength('id_oticon', 50)
-            ->requirePresence('id_oticon', 'create')
-            ->notEmptyString('id_oticon');
+            ->allowEmptyString('id_oticon');
 
         $validator
             ->scalar('id_parent')
             ->maxLength('id_parent', 50)
-            ->requirePresence('id_parent', 'create')
-            ->notEmptyString('id_parent');
+            ->allowEmptyString('id_parent');
 
         $validator
             ->scalar('id_sf')
@@ -2133,5 +2131,72 @@ class LocationsTable extends Table
             }
         }
         return $locationIdsNeedCs;
+    }
+
+    /**
+    * Decides the completeness of the locationId
+    * Returns the completeness back for saving.
+    * @param locationId
+    * @return string 'Complete', 'BasicInfo', 'ProfilePic', 'Incomplete'
+    */
+    public function completeness($locationId) {
+        if (!$this->exists($locationId)) {
+            return false;
+        }
+
+        // Retrieve our location info
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id' => $locationId
+            ],
+            'contain' => [
+                'LocationsProviders',
+                'Providers',
+                'LocationHours'
+            ]
+        ])->first();
+
+        // Set our bools to false
+        $completeProvider = false;
+        $completeLocation = false;
+
+        // Check to see if we have a "complete" provider
+        foreach ($location->providers as $provider) {
+            // If there's a thumb_url and description, we have a complete provider!
+            if (!empty($provider->thumb_url) && !empty($provider->description)) {
+                $completeProvider = true;
+                break;
+            }
+        }
+
+        // If we have an about us, and services, and hours, we've got a complete location!
+        if (!empty($location->about_us) && !empty($location->services)) {
+            if (!empty($location->location_hour)) {
+                foreach ($this->LocationHours->days as $day) {
+                    if (!empty($location->location_hour->{$day.'_open'}) || !empty($location->location_hour->{$day.'_close'}) || !empty($location->location_hour->{$day.'_is_byappt'}) || !empty($location->location_hour->{$day.'_is_closed'})) {
+                        $completeLocation = true;
+                        break;
+                    }
+                }
+            }
+        }
+        // Set 'completeness' based on what elements are complete
+        if ($completeLocation && $completeProvider) {
+            $completeness = Location::COMPLETENESS_COMPLETE;
+        } else if ($completeLocation) {
+            $completeness = Location::COMPLETENESS_BASIC_INFO;
+        } else if ($completeProvider) {
+            $completeness = Location::COMPLETENESS_PROFILE_PIC;
+        } else {
+            $completeness = Location::COMPLETENESS_INCOMPLETE;
+        }
+
+        // Save our completeness
+        if ($completeness != $location->completeness) {
+            $location->completeness = $completeness;
+            $this->save($location, ['associated' => false]);
+        }
+        // Return our completeness
+        return $completeness;
     }
 }

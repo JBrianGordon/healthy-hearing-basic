@@ -35,8 +35,8 @@ class ClinicHelper extends Helper
 
     public function initialize(array $config): void
     {
-        $this->Locations = TableRegistry::getTableLocator()->get('Locations');
-        $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+        $this->Locations = TableRegistry::get('Locations');
+        $this->LocationHours = TableRegistry::get('LocationHours');
         $this->lettersSeen = [];
     }
 

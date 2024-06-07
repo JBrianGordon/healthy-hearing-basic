@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * ImportLocations Controller
@@ -32,7 +33,7 @@ class ImportLocationsController extends BaseAdminController
         ];
     }
     /**
-     * Index method
+     * Index method - Dashboard
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
@@ -82,6 +83,8 @@ class ImportLocationsController extends BaseAdminController
             ]
         ]);
         $importLocations = $this->paginate($importLocationsQuery);
+        // Set to current index page with any applied filters
+        $this->request->getSession()->write('importIndexReferer', Router::url());
         $this->set('importLocations', $importLocations);
         $this->set('selectedImportType', $selectedImportType);
         $this->set('selectedFilter', $selectedFilter);

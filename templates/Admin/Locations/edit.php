@@ -724,26 +724,29 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                             <div class="form-group">
                                                                 <label for="LocationAdBorder" class="form-label col-md-3">Border</label>
                                                                 <input type="hidden" name="location_ad[border]" id="LocationAdBlank_" value="">
-                                                                <?php $borderIsBlank = in_array($location->location_ad->border, ['blank', '']); ?>
+                                                                <?php
+                                                                $border = $location->location_ad->border ?? '';
+                                                                $borderIsBlank = in_array($border, ['blank', '']);
+                                                                ?>
                                                                 <div class="col col-md-9">
                                                                     <div class="col-md-3 border-radio<?= $borderIsBlank ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdBlank" class="col control-label w-100 tac">
                                                                             <input type="radio" name="location_ad[border]" value="blank" id="LocationAdBlank"<?= $borderIsBlank ? ' checked' : '' ?>> No Border
                                                                         </label>
                                                                     </div>
-                                                                    <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-dashed' ? ' selected-border' : '' ?>">
+                                                                    <div class="col-md-3 border-radio<?= $border == 'border-dashed' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdDashed" class="col control-label border-dashed w-100 tac">
-                                                                            <input type="radio" name="location_ad[border]" value="border-dashed" id="LocationAdDashed"<?= $location->location_ad->border == 'border-dashed' ? ' checked' : '' ?>> Dashed
+                                                                            <input type="radio" name="location_ad[border]" value="border-dashed" id="LocationAdDashed"<?= $border == 'border-dashed' ? ' checked' : '' ?>> Dashed
                                                                         </label>
                                                                     </div>
-                                                                    <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-dotted' ? ' selected-border' : '' ?>">
+                                                                    <div class="col-md-3 border-radio<?= $border == 'border-dotted' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdDotted" class="col control-label border-dotted w-100 tac">
-                                                                            <input type="radio" name="location_ad[border]" value="border-dotted" id="LocationAdDotted"<?= $location->location_ad->border == 'border-dotted' ? ' checked' : '' ?>> Dotted
+                                                                            <input type="radio" name="location_ad[border]" value="border-dotted" id="LocationAdDotted"<?= $border == 'border-dotted' ? ' checked' : '' ?>> Dotted
                                                                         </label>
                                                                     </div>
-                                                                    <div class="col-md-3 border-radio<?= $location->location_ad->border == 'border-inset' ? ' selected-border' : '' ?>">
+                                                                    <div class="col-md-3 border-radio<?= $border == 'border-inset' ? ' selected-border' : '' ?>">
                                                                         <label for="LocationAdInset" class="col control-label border-inset w-100 tac">
-                                                                            <input type="radio" name="location_ad[border]" value="border-inset" id="LocationAdInset"<?= $location->location_ad->border == 'border-inset' ? ' checked' : '' ?>> Inset
+                                                                            <input type="radio" name="location_ad[border]" value="border-inset" id="LocationAdInset"<?= $border == 'border-inset' ? ' checked' : '' ?>> Inset
                                                                         </label>
                                                                     </div>
                                                                 </div>

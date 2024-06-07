@@ -31,6 +31,12 @@ use Cake\Validation\Validator;
  */
 class ImportProvidersTable extends Table
 {
+    public $fields = [
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'email' => 'Email'
+    ];
+
     /**
      * Initialize method
      *
@@ -107,5 +113,11 @@ class ImportProvidersTable extends Table
         $rules->add($rules->existsIn('provider_id', 'Providers'), ['errorField' => 'provider_id']);
 
         return $rules;
+    }
+
+    public function getByImportLocationId($importLocationId) {
+        return $this->find()->matching('ImportLocationProviders', function ($q) use ($importLocationId) {
+            return $q->where(['ImportLocationProviders.import_location_id' => $importLocationId]);
+        })->all();
     }
 }
