@@ -447,7 +447,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 									</header>
 									<div class="panel-body">
 										<div class="panel-section condensed">
-											<?php echo $hours; ?>
+											<?= $hours ?>
 										</div>
 									</div>
 								</div>

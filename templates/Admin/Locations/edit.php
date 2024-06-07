@@ -1577,10 +1577,10 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                     0 => 'No',
                                                     1 => 'Yes',
                                                 ],
-                                                'default' => 0,
-                                                'help' => 'If clinic is Iris+, select both "CQ Premier" and "Iris+"',
+                                                'default' => 0
                                             ]);
                                         ?>
+                                        <span class="help-block col-md-9 offset-md-3">If clinic is Iris+, select both "CQ Premier" and "Iris+"</span>
                                     <?php endif; ?>
                                     <?= $this->Form->control('is_junk', [
                                             'label' => 'Junk',
