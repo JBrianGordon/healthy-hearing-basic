@@ -28,7 +28,7 @@ $image = Router::url($image, true);
 	  }, function(response){});
 	}
 	</script>
-	<a href="https://twitter.com/intent/tweet?url=<?= urlencode($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']) ?>" class="btn btn-share btn-twitter twitter-share-button ml15" id="twitter-wjs" target="_blank" rel="noopener"><span class="hh-icon-x"></span> Tweet</a>
+	<a href="https://x.com/intent/tweet?url=<?= urlencode($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']) ?>" class="btn btn-share btn-twitter twitter-share-button ml15" id="twitter-wjs" target="_blank" rel="noopener"><span class="hh-icon-x"></span> Tweet</a>
 	<!-- LinkedIN JS -->
 	<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
 	<script type="IN/Share" data-url="https://<?= htmlspecialchars($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>"></script>

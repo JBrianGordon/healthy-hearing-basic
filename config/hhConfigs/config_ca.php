@@ -28,7 +28,7 @@ return [
     'ogLocale' => 'en_CA',
     'sameAsSocialLinks' => [
         'facebook' => 'https://www.facebook.com/HearingDirectoryCANADA',
-        'twitter' => 'https://twitter.com/HearingaidsCAN',
+        'twitter' => 'https://x.com/HearingaidsCAN',
     ],
     // Google tag manager
     'gtmId' => 'GTM-TC3K3WL',

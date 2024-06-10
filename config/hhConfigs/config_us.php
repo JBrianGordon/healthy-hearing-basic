@@ -29,7 +29,7 @@ return [
     'ogLocale' => 'en_US',
     'sameAsSocialLinks' => [
         'facebook' => 'https://www.facebook.com/healthyhearing',
-        'twitter' => 'https://twitter.com/HearingAids',
+        'twitter' => 'https://x.com/HearingAids',
         'youtube' => 'https://www.youtube.com/user/HealthyHearing',
         'linkedIn' => 'https://www.linkedin.com/company/9426778',
     ],

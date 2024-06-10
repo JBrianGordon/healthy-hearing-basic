@@ -124,7 +124,7 @@
 		,
 		"sameAs" : [
 			"https://www.facebook.com/healthyhearing",
-			"https://twitter.com/HearingAids",
+			"https://x.com/HearingAids",
 			"https://www.youtube.com/user/HealthyHearing",
 			"https://www.linkedin.com/company/9426778"
 		]

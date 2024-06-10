@@ -21,7 +21,7 @@ class ShareHelper extends Helper
     * Map of social services to links
     */
     public $baseUrls = array(
-        'twitter' => 'https://twitter.com/intent/tweet?',
+        'twitter' => 'https://x.com/intent/tweet?',
         'googleplus' => 'https://plus.google.com/share?',
         'facebook' => 'https://www.facebook.com/sharer/sharer.php?',
         'pinterest' => 'https://www.pinterest.com/pin/create/button/?',
@@ -63,7 +63,7 @@ class ShareHelper extends Helper
                 'escape' => false,
                 'rel' => 'nofollow',
                 ),
-            'url' =>'https://twitter.com/intent/tweet',
+            'url' =>'https://x.com/intent/tweet',
             'text' => '',
         ), (array) $options);
 
