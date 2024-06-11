@@ -436,6 +436,7 @@ function slugify($input='', $splitter = "-") {
 */
 function slugifyRegion($region = null){
     $region = str_replace(' ', '-', $region);
+    $region = str_replace('.', '', $region);
     $region_parts = explode('-',$region);
     $region_parts[0] = strtoupper($region_parts[0]);
     for($i = 1; $i < count($region_parts); $i++){
