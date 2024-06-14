@@ -174,18 +174,18 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                             <table class="table-condensed border-0">
                                                 <tbody>
                                                     <tr provider="<?= $provider->id ?>" providerCount="<?= $providerCount ?>">
-                                                        <td class="text-center border-0">
-                                                            <button class="js-link-delete form-control bi bi-x-circle"> Delete</button>
+                                                        <td class="text-center border-0 w-25 p10">
+                                                            <button class="js-link-delete form-control bi bi-x-circle w-100"> Delete</button>
                                                             <?php if (empty($provider->id_yhn_provider) || !in_array($provider->id_yhn_provider, $importProviderIds)): ?>
                                                                 <button class="js-link hh-link hidden form-control bi bi-link-45deg"></button>
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td colspan=3 class="text-center border-0">
+                                                        <td colspan=3 class="text-center border-0 p10">
                                                             <div class='well import-well'>
                                                                 <?php if ($isLinked): ?>
-                                                                    <span class="label label-warning bi bi-globe-americas"><?= ' ' . Configure::read('importTag') ?></span>
+                                                                    <span class="label label-warning bi bi-globe2"><?= ' ' . Configure::read('importTag') ?></span>
                                                                 <?php elseif (!empty($provider->id_yhn_provider)): ?>
-                                                                    <span class="label label-danger bi bi-exclaimation-triangle"></span>
+                                                                    <span class="label label-danger"><span class="bi bi-cone-striped"></span></span>
                                                                 <?php else: ?>
                                                                     <span class="label label-success bi bi-check"><?= ' ' . Configure::read('siteNameAbbr') ?></span>
                                                                 <?php endif ?>
@@ -212,15 +212,15 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                         $class = ($isMatch) ? "linked match" : "linked different";
                                                         ?>
                                                         <tr providerCount="<?=  $providerCount ?>">
-                                                            <td class="border-0 <?= $reviewNeeded ?>">
-                                                                <label class="control-label"><?= $label ?></label>
+                                                            <td class="border-0 p10 <?= $reviewNeeded ?>">
+                                                                <label class="control-label w-100 tal"><?= $label ?></label>
                                                                 <?php if (!empty($providerDiffs[$providerId][$field])): ?>
                                                                     <?php $diff = current($providerDiffs[$providerId][$field]); ?>
                                                                     <br />
                                                                     <small>Changed: <?= date('F j, Y', strtotime($diff['created'])) ?></small>
                                                                 <?php endif; ?>
                                                             </td>
-                                                            <td class="text-center border-0">
+                                                            <td class="text-center border-0 p10">
                                                                 <?= $this->Form->text("providers.$providerCount.$field", [
                                                                     'label' => false,
                                                                     'field' => $field,
@@ -228,8 +228,8 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                                     'class' => 'w-100',
                                                                 ]) ?>
                                                             </td>
-                                                            <td class="border-0"><button class="js-copy-left form-control" type="button">&larr;</button></td>
-                                                            <td class="text-center border-0">
+                                                            <td class="border-0 p20"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
+                                                            <td class="text-center border-0 pl0">
                                                                 <?php if ($isLinked): ?>
                                                                     <?= $this->Form->control("providers.$providerCount.$field", [
                                                                         'label' => false,
