@@ -139,7 +139,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								        echo 'Filter: '.implode(' &bull; ', $filterLinks);
 								    ?>
 								    <div class="table-responsive">
-								        <table class="table table-striped table-bordered table-sm">
+								        <table class="table table-bordered table-sm">
 								            <thead>
 								                <tr>
 									                <!-- *** TODO: Test out sorting when DB is updated and controller further built out *** -->
@@ -149,12 +149,12 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                        <?php if (Configure::read('isCqpImportEnabled')): ?>
 								                            Linked HH ID<br>External IDs
 								                        <?php else: ?>
-								                            Oticon ID /<br><?php echo $externalIdLabel; ?>
+								                            Oticon ID /<br><?= $externalIdLabel ?>
 								                        <?php endif; ?>
 								                    </th>
 								                    <th class="p5"><?= $this->Paginator->sort('address') ?></th>
 								                    <th class="p5"><?= $this->Paginator->sort('city') ?>, <?= $this->Paginator->sort('state', ucwords($stateLabel)) ?></th>
-								                    <th class="p5" style="min-width: 110px"><?php echo ucwords($zipShort); ?></th>
+								                    <th class="p5" style="min-width: 110px"><?= ucwords($zipShort) ?></th>
 								                    <th class="actions p5"><?= __('Actions') ?></th>
 								                </tr>
 								            </thead>
@@ -174,83 +174,79 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                    ?>
 								                    <tr id="<?= $trId ?>" class="<?= $trClass ?>">
 								                        <td class="p5">
-								                            <span class="badge bg-primary"><?php echo $importLocation->import_id; ?></span>
+								                            <span class="badge bg-primary"><?= $importLocation->import_id ?></span>
 								                            <?php if (Configure::read('isCqpImportEnabled')): ?>
 								                                <?php $badgeType = ($importLocation->import->type == 'cqp') ? 'bg-cqp' : 'bg-yhn'; ?>
-								                                    <span class="badge <?php echo $badgeType; ?>"><?php echo strtoupper($importLocation->import->type); ?></span>
+								                                    <span class="badge <?= $badgeType ?>"><?= strtoupper($importLocation->import->type) ?></span>
 								                            <?php endif; ?>
 								                            <br>
-								                            <?php echo date('m/d/Y', strtotime($importLocation->import->created)); ?>
+								                            <?= date('m/d/Y', strtotime($importLocation->import->created)) ?>
 								                        </td>
 								                        <td class="p5">
 								                            <?php if (!empty($importLocation->location_id)): ?>
-								                                <a target="_blank" href="/admin/locations/edit/<?php echo $importLocation->location_id; ?>">
-								                                    <?php echo $importLocation->title; ?><br>
-								                                    <?php echo $importLocation->subtitle; ?>
+								                                <a target="_blank" href="/admin/locations/edit/<?= $importLocation->location_id ?>">
+								                                    <?= $importLocation->title ?><br>
+								                                    <?= $importLocation->subtitle ?>
 								                                </a>
 								                            <?php else: ?>
 								                                <?php if ($importLocation->is_new): ?>
 								                                    <span class="badge bg-success"><span class="glyphicon glyphicon-leaf"></span> New</span>
 								                                <?php endif; ?>
-								                                <?php echo $importLocation->title; ?><br>
-								                                <?php echo $importLocation->subtitle; ?>
+								                                <?= $importLocation->title ?><br>
+								                                <?= $importLocation->subtitle ?>
 								                            <?php endif; ?>
 								                        </td>
 								                        <td class="p5">
 								                            <?php if (!empty($importLocation->location_id)): ?>
-								                                <span class="badge bg-hh"><?php echo $importLocation->location_id; ?></span><br>
+								                                <span class="badge bg-hh"><?= $importLocation->location_id ?></span><br>
 								                            <?php endif; ?>
 								                            <?php if (!empty($importLocation->id_oticon)): ?>
-								                                <span class="badge bg-oticon"><?php echo $importLocation->id_oticon; ?></span><br>
+								                                <span class="badge bg-oticon"><?= $importLocation->id_oticon ?></span><br>
 								                            <?php endif; ?>
 								                            <?php if (!empty($importLocation->id_external)): ?>
-								                                <span class="badge bg-yhn"><?php echo $importLocation->id_external; ?></span><br>
+								                                <span class="badge bg-yhn"><?= $importLocation->id_external ?></span><br>
 								                            <?php endif; ?>
 								                            <?php if (!empty($importLocation->id_cqp_practice)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_practice; ?></span><br>
+								                                <span class="badge bg-cqp"><?= $importLocation->id_cqp_practice ?></span><br>
 								                            <?php endif; ?>
 								                            <?php if (!empty($importLocation->id_cqp_office)): ?>
-								                                <span class="badge bg-cqp"><?php echo $importLocation->id_cqp_office; ?></span><br>
+								                                <span class="badge bg-cqp"><?= $importLocation->id_cqp_office ?></span><br>
 								                            <?php endif; ?>
 								                        </td>
-								                        <td class="p5"><?php echo $importLocation->address; ?></td>
-								                        <td class="p5"><?php echo $importLocation->city . ', ' . $importLocation->state; ?></td>
-								                        <td class="p5"><?php echo $importLocation->zip; ?></td>
+								                        <td class="p5"><?= $importLocation->address ?></td>
+								                        <td class="p5"><?= $importLocation->city . ', ' . $importLocation->state ?></td>
+								                        <td class="p5"><?= $importLocation->zip ?></td>
 								                        <td class="actions p5">
 								                            <?php if (!empty($importLocation->location->is_junk)): ?>
-								                                <div class="btn-group-xs btn-group-vertical">
-								                                    <?php echo $this->Html->link(
+								                                <div class="btn-group-sm btn-group-vertical">
+								                                    <?= $this->Html->link(
 								                                        'Not Junk',
 								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
-								                                        ['escape' => false, 'class' => 'btn btn-default'],
+								                                        ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-slash-circle'],
 								                                        'Are you sure you want to remove this location from junk?'
-								                                    ); ?>
+								                                    ) ?>
 								                                </div>
 								                            <?php elseif (!empty($importLocation->location_id)): ?>
-								                                <div class="btn-group-xs btn-group-vertical">
-								                                    <a href="/admin/imports/location_review/<?php echo $importLocation->location_id; ?>/<?php echo $importLocation->id; ?>" class="btn btn-default bi bi-eye-fill"> Review</a>                            
-								                                    <a href="/admin/imports/location_unlink/<?php echo $importLocation->id; ?>" class="btn btn-default js-unlink bi bi-x-circle"> Unlink</a>
-								                                    <?php echo $this->Html->link(
+								                                <div class="btn-group-sm btn-group-vertical">
+								                                    <a href="/admin/imports/location_review/<?= $importLocation->location_id ?>/<?= $importLocation->id ?>" class="btn btn-default btn-xs bi bi-eye-fill"> Review</a>                            
+								                                    <a href="/admin/imports/location_unlink/<?= $importLocation->id ?>" class="btn btn-default btn-xs js-unlink bi bi-x-circle"> Unlink</a>
+								                                    <?= $this->Html->link(
 								                                        ' Junk',
 								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
-								                                        ['escape' => false, 'class' => 'btn btn-default bi bi-slash-circle'],
+								                                        ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-slash-circle'],
 								                                        'Are you sure you want to mark this location as junk?'
-								                                    ); ?>
+								                                    ) ?>
 								                                </div>
 								                            <?php else: ?>
-								                                <div class="btn-group-xs btn-group-vertical">
-								                                    <a href="/admin/imports/location_add/<?php echo $importLocation->id; ?>" class="btn btn-default">
-								                                        <span class="glyphicon glyphicon-plus-sign"></span> Add
-								                                    </a>
-								                                    <a href="/admin/imports/location_link/<?php echo $importLocation->id; ?>" class="btn btn-default">
-								                                        <span class="glyphicon glyphicon-link"></span> Link
-								                                    </a>
-								                                    <?php echo $this->Html->link(
+								                                <div class="btn-group-sm btn-group-vertical">
+								                                    <a href="/admin/imports/location_add/<?= $importLocation->id ?>" class="btn btn-default btn-xs bi bi-plus-circle-fill"> Add</a>
+								                                    <a href="/admin/imports/location_link/<?= $importLocation->id ?>" class="btn btn-default btn-xs bi bi-link-45deg"> Link</a>
+								                                    <?= $this->Html->link(
 								                                        ' Junk',
 								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_add_junk', $importLocation->id],
-								                                        ['escape' => false, 'class' => 'btn btn-default'],
+								                                        ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-slash-circle'],
 								                                        'Are you sure you want to mark this location as junk?'
-								                                    ); ?>
+								                                    ) ?>
 								                                </div>
 								                            <?php endif; ?>
 								                        </td>
