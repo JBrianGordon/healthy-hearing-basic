@@ -109,6 +109,13 @@ return [
         ],
     ],
 
+     // Azure FTP
+    'AzureFtp' => [
+        'accountName' => '_azure_storage_account_name_',
+        'containerName' => '_azure_storage_container_name_',
+        'accountKey' => '_azure_storage_account_key_',
+    ],
+
     // CKEditor & CKBox
     'CK' => [
         'envId' => '_ck_env_id_',
