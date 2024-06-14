@@ -222,7 +222,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
 								                                    <?= $this->Html->link(
 								                                        'Not Junk',
 								                                        ['prefix' => 'Admin', 'controller' => 'imports', 'action' => 'location_not_junk', $importLocation->location_id],
-								                                        ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-slash-circle'],
+								                                        ['escape' => false, 'class' => 'btn btn-default btn-xs'],
 								                                        'Are you sure you want to remove this location from junk?'
 								                                    ) ?>
 								                                </div>
