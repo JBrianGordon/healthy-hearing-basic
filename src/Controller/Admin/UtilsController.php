@@ -7,6 +7,8 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Http\Session\Session;
+use Cake\Core\Configure;
+use CakeDC\Users\Plugin;
 
 /**
  * Utils Controller
@@ -70,5 +72,71 @@ class UtilsController extends BaseAdminController
         $session->delete('zip');
         $this->Flash->success('Session Data Deleted.');
         return $this->redirect("/admin");
+    }
+
+    public function queuedJobs() {
+        $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
+        $queryParams = $this->request->getQueryParams();
+        $archived = empty($queryParams['archived']) ? false : true;
+        if ($archived) {
+            $conditions = ['completed IS NOT NULL'];
+        } else {
+            $conditions = ['completed IS NULL'];
+        }
+        $queuedJobsQuery = $this->QueuedJobs->find('all', [
+            'conditions' => $conditions,
+            'contain' => []
+        ]);
+        $queuedJobs = $this->paginate($queuedJobsQuery);
+        $this->set('queuedJobs', $queuedJobs);
+        $this->set('count', $queuedJobsQuery->count());
+        $this->set('archived', $archived);
+    }
+
+    /**
+     * Run a queued job
+     */
+    public function runQueuedJob($id = null) {
+        $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
+        if (!$this->QueuedJobs->exists($id)) {
+            throw new NotFoundException(__('Invalid queue task'));
+        }
+        if ($this->QueuedJobs->run($id)) {
+            $this->Flash->success('Queue '.$id.' ran successfully.');
+        } else {
+            $this->Flash->error('Queue '.$id .' failed to run.');
+        }
+        return $this->redirect(['admin' => true, 'action' => 'viewQueuedJob', $id]);
+    }
+
+    /**
+     * View a queued job
+     */
+    public function viewQueuedJob($id = null) {
+        $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
+        if (!$this->QueuedJobs->exists($id)) {
+            throw new NotFoundException(__('Invalid queue task'));
+        }
+        $queuedJob = $this->QueuedJobs->get($id);
+        $this->set('queuedJob', $queuedJob);
+    }
+
+    /**
+     * Delete method
+     *
+     * @param int|null $id Queued Job id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     */
+    public function deleteQueuedJob($id = null) {
+        $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
+        $this->request->allowMethod(['post', 'delete']);
+        $queuedJob = $this->QueuedJobs->get($id);
+        if ($this->QueuedJobs->delete($queuedJob)) {
+            $this->Flash->success('The queued job has been deleted.');
+        } else {
+            $this->Flash->error('The queued job could not be deleted. Please try again.');
+        }
+
+        return $this->redirect(['action' => 'queuedJobs']);
     }
 }

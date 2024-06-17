@@ -239,8 +239,8 @@ $utilitiesItems['Clear cache'] = [
 $utilitiesItems['Clear session'] = [
     'url' => '/admin/utils/clear-session',
 ];
-$utilitiesItems['Queues'] = [
-    'url' => '/admin/queue/queue-tasks',
+$utilitiesItems['Queued Jobs'] = [
+    'url' => '/admin/utils/queued-jobs',
 ];
 $utilitiesItems['CRM searches'] = [
     'url' => '/admin/crm-searches',
