@@ -190,6 +190,6 @@ class Application extends BaseApplication
         $this->addOptionalPlugin('Bake');
 
         $this->addPlugin('Migrations');
-        $this->addPlugin('IdeHelper');
+        //$this->addPlugin('IdeHelper'); //Commented out for testing Deployer
     }
 }
