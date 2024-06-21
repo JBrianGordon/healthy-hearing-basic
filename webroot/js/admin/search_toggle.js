@@ -229,6 +229,23 @@ if (document.querySelector("form").action.includes("/admin/locations") ||
   });
 }
 
+// Load styles when sliders have been used in a previous search
+const switchInputs = Array.from(document.querySelectorAll("label.switch input"));
+
+switchInputs.forEach((input) => {
+	const value = new URLSearchParams(window.location.search).get(input.name);
+
+	if (value === "1") {
+		input.classList.add("switch-positive");
+		input.classList.remove("switch-negative");
+		input.value = 1;
+	} else if (value === "0") {
+		input.classList.add("switch-negative");
+		input.classList.remove("switch-positive");
+		input.value = 0;
+	}
+});
+
 let minDate = '';
 let maxDate = '';
 if ($('.datepicker').attr('minDate')) {
@@ -268,24 +285,6 @@ if(exportModal !== null) {
 	    }
 	  }, 200);
 	});
-
-	const exportSubmit = document.querySelector("#exportModal #exportSubmit");
-	const exportModalFormControls = document.querySelectorAll("#exportModal .form-control");
-
-	/* TODO: I THINK THIS CAN BE DELETED
-	exportSubmit.addEventListener("click", function() {
-	  const searchAndExcludedFieldArray = exportButton.getAttribute("href").split("/admin/locations/crm").pop();
-	  
-	  let excludedFields = "";
-	  exportModalFormControls.forEach(formControl => {
-	    if (formControl.value === "0") {
-	      const excludedFieldName = formControl.name;
-	      excludedFields += ("/field%5B" + excludedFieldName + "%5D:" + excludedFieldName);
-	    }
-	  });
-	  
-	  window.location.pathname = "admin/locations/export" + searchAndExcludedFieldArray + excludedFields + ".csv";
-	});*/
 
 	//export button modal and functionality
 	$("#exportButton").on("click",function(e) {
