@@ -67,12 +67,7 @@ $this->loadHelper('Search.Search', [
     </div>
 </div>
 <div class="collapse well blue-well" id="advanced_search">
-    <?php
-    echo $this->Form->create(null, [
-        'class' => 'mb-2',
-        'valueSources' => 'query',
-    ]);
-    ?>
+    <?= $this->Form->create(null, ['class' => 'mb-2','valueSources' => 'query']) ?>
     <!-- GROUPED FIELDS -->
     <?php if (!empty($groupedFields)): ?>
         <?php foreach ($groupedFields as $groupName => $groupFields): ?>
