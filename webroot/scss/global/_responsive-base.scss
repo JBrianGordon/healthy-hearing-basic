@@ -529,8 +529,12 @@ pre {
   float: right;
 }
 
-.pagination {
-  font-size: 16px;
+.paginator {
+  display: inline-block;
+
+  .pagination {
+    font-size: 16px;
+  }
 }
 
 .text-secondary {

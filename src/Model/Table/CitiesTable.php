@@ -67,7 +67,7 @@ class CitiesTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'short', 'body'],
+                'fields' => ['city', 'state'],
             ]);
     }
 
