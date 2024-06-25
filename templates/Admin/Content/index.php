@@ -88,7 +88,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 				<div class="panel-section expanded">
 				    <h2><?= __('Reports') ?></h2>
 				    <?= $this->element('pagination') ?>
-					<?= $this->element('admin_filter', ['modelName' => 'Content']) ?>
+					<?= $this->element('admin_filter', ['modelName' => 'content']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <div class="table-responsive">

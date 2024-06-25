@@ -135,6 +135,15 @@ class WikisTable extends Table
             ->like('background_alt', [
                 'before' => true,
                 'after' => true,
+            ])
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['name', 'slug', 'short', 'body'],
             ]);
     }
 

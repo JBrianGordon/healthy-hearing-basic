@@ -61,6 +61,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<div class="wikis index">
 					<h2>Help Pages</h2>
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'helpPages']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 					<div class="wikis index content">
 					    <div class="table-responsive">

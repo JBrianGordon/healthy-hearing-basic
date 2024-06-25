@@ -53,7 +53,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<h2><?= __('Cities') ?></h2>
 				<div class="cities index">
 				    <?= $this->element('pagination') ?>
-					<?= $this->element('admin_filter', ['modelName' => 'City']) ?>
+					<?= $this->element('admin_filter', ['modelName' => 'city']) ?>
 					<?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm">
