@@ -188,16 +188,20 @@ if (document.querySelector("form").action.includes("/admin/locations") ||
 	    const input = slider.closest("label").querySelector("input");
 
 	    if (slideClass === "switch-positive") {
-	      input.classList.remove("switch-negative");
+	      input.classList.remove("switch-negative", "d-none");
 	      input.classList.add("switch-positive");
 	      input.value = 1;
+		  input.disabled = false;
 	    } else if (slideClass === "switch-negative") {
-	      input.classList.remove("switch-positive");
+	      input.classList.remove("switch-positive", "d-none");
 	      input.classList.add("switch-negative");
 	      input.value = 0;
+		  input.disabled = false;
 	    } else {
 	      input.classList.remove("switch-negative", "switch-positive");
+		  input.classList.add("d-none");
 	      input.removeAttribute("value");
+		  input.disabled = true;
 	    }
 	  });
 	});

@@ -54,11 +54,13 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php if (!empty($this->request->getQueryParams())) : ?>
-        <div class="col col-md-auto p-0">
-            Showing search results.
-            <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
-        </div>
+    <?php 
+        $queryParams = $this->request->getQueryParams();
+        if (count($queryParams) > 1 || (count($queryParams) === 1 && (!isset($queryParams['q']) && !isset($queryParams['preserve'])))) : ?>
+            <div class="col col-md-auto p-0">
+                Showing search results.
+                <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
+            </div>
     <?php endif; ?>
     <div class="col col-md-auto mb20">
         <span class="btn btn-primary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advanced_search" aria-expanded="false" aria-controls="advanced_search">
