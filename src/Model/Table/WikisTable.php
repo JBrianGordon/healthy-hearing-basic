@@ -143,7 +143,7 @@ class WikisTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['name', 'slug', 'short', 'body'],
+                'fields' => ['name', 'slug', 'short'],
             ]);
     }
 
