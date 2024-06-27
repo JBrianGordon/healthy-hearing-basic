@@ -53,6 +53,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<h2>ZIP Codes</h2>
 				<div class="zips index content">
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'zips']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm mb30">
