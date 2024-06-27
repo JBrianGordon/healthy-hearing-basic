@@ -94,6 +94,15 @@ class CaCallGroupsTable extends Table
             ->value('traffic_medium')
             ->boolean('is_appt_request_form')
             ->boolean('is_spam')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['Locations.title', 'caller_first_name', 'caller_last_name', 'patient_first_name', 'patient_last_name'],
+            ])
             // appt_date
             ->add('appt_date_start', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
