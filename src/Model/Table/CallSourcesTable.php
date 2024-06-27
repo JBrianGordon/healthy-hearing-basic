@@ -79,7 +79,7 @@ class CallSourcesTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'subtitle','city', 'address', 'address_2'],
+                'fields' => ['Locations.title', 'Locations.subtitle','Locations.city', 'Locations.address', 'Locations.address_2'],
             ]);
     }
 
