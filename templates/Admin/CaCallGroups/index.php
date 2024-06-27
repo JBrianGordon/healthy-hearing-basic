@@ -90,6 +90,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				<h2>Call Groups</h2>
 				<div class="caCallGroups index content">
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'caCallGroups']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <div class="table-responsive">
