@@ -8,7 +8,7 @@ $upperCaseSpace = preg_replace('/(?<=\\w)(?=[A-Z])/', " $1", ucwords($modelName)
     </div>
     <div class="input-group">
         <div class="input text">
-            <?= $this->Form->control('q', ['label' => false, 'placeholder' => "{$upperCaseSpace} Search", 'class' => 'form-control w-100 rounded-0', 'id' => "{$modelName}Filter", 'value' => $this->request->getQuery('q')]) ?>
+            <?= $this->Form->control('q', ['label' => false, 'placeholder' => "{$upperCaseSpace} Search", 'class' => 'form-control w-100 rounded-0', 'id' => "{$modelName}Filter", 'value' => $this->request->getQuery('q'), 'style' => 'height:46px']) ?>
         </div>				
         <span class="input-group-btn position-relative">
             <?= $this->Form->button(' Search', ['type' => 'submit', 'class' => 'btn btn-default bi bi-search rounded-0', 'style' => 'height:46px']) ?>

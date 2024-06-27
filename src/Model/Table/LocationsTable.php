@@ -228,7 +228,7 @@ class LocationsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'city', 'state', 'zip'],
+                'fields' => ['title', 'city', 'address', 'address_2', 'zip'],
             ])
             // frozen_expiration
             ->add('frozen_expiration_start', 'Search.Callback', [
