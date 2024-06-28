@@ -82,6 +82,15 @@ class CaCallsTable extends Table
             ->value('CaCallGroups.location_id')
             ->value('CaCallGroups.caller_first_name')
             ->value('CaCallGroups.caller_last_name')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['CaCallGroups.caller_first_name', 'CaCallGroups.caller_last_name'],
+            ])
             ->add('start_time_start', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
                     $query->andWhere(["start_time >=" => $args['start_time_start']]);
