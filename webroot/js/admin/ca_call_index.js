@@ -31,3 +31,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+
+const searchButton = document.querySelector(".me-3.btn-primary.btn");
+const advSearchForm = document.querySelector("#advanced_search form");
+
+advSearchForm.appendChild(searchButton);
