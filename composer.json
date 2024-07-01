@@ -36,6 +36,7 @@
         "cakephp/debug_kit": "^4.5",
         "cakephp/repl": "^0.1",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "deployer/deployer": "^7.4",
         "dereuromark/cakephp-ide-helper": "^1.17",
         "josegonzalez/dotenv": "^3.2",
         "lordsimal/cakephp-psalm": "@dev",

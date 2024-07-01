@@ -51,3 +51,5 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
+# Deployer config
+deploy.php
