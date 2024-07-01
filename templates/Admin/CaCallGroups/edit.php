@@ -14,13 +14,13 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
         <div class="panel-heading">Ca Call Groups Actions</div>
         <div class="panel-body p10">
             <div class="btn-group">
-                <?= $this->Html->link(__(' Delete'), ['action' => 'delete', $caCallGroup->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger bi bi-trash']) ?>
-                <?= $this->Html->link(__(' Inbound Call'), ['controller' => 'CaCalls', 'action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
-                <?= $this->Html->link(__(' Calls from clinic'), ['controller' => 'CaCalls', 'action' => 'clinic_lookup'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
-                <?= $this->Html->link(__(' Quick Pick'), ['controller' => 'CaCalls', 'action' => 'quick_pick'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
-                <?= $this->Html->link(__(' Outbound Calls'), ['action' => 'outbound'], ['class' => 'btn btn-default bi bi-megaphone-fill']) ?>
-                <?= $this->Html->link(__(' Calls'), ['controller' => 'CaCalls', 'action' => 'index'], ['class' => 'btn btn-default']) ?>
-                <?= $this->Html->link(__(' Call Groups'), ['action' => 'index'], ['class' => 'btn btn-default']) ?>
+                <?= $this->Html->link(' Delete', ['action' => 'delete', $caCallGroup->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger bi bi-trash']) ?>
+                <?= $this->Html->link(' Inbound Call', ['controller' => 'CaCalls', 'action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+                <?= $this->Html->link(' Calls from clinic', ['controller' => 'CaCalls', 'action' => 'clinic_lookup'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+                <?= $this->Html->link(' Quick Pick', ['controller' => 'CaCalls', 'action' => 'quick_pick'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+                <?= $this->Html->link(' Outbound Calls', ['action' => 'outbound'], ['class' => 'btn btn-default bi bi-megaphone-fill']) ?>
+                <?= $this->Html->link(' Calls', ['controller' => 'CaCalls', 'action' => 'index'], ['class' => 'btn btn-default']) ?>
+                <?= $this->Html->link(' Call Groups', ['action' => 'index'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>
     </div>
@@ -107,8 +107,8 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                 <td>
                                     <div class="notes">
                                         <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
-                                            <div class="single_note">
-                                                <table cellpadding="0" cellspacing="0">
+                                            <div class="single_note p0">
+                                                <table cellpadding="0" cellspacing="0" class="mb0">
                                                     <tbody>             
                                                         <tr>
                                                             <td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
