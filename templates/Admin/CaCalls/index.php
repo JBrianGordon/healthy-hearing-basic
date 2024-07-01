@@ -91,6 +91,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				<h2>Calls</h2>
 				<div class="caCalls index content">
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'caCall']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <?= $this->Form->input('hiddenCount', ['id' => 'hiddenCount', 'type' => 'hidden', 'value' => $count]) ?>

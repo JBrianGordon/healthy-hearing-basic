@@ -63,14 +63,9 @@ class CaCallsController extends BaseAdminController
         }
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()->where(['model' => 'CaCalls'])->toArray();
-        $contain = [];
-        if (isset($requestParams['CaCallGroups'])) {
-            // Only contain CaCallGroups if we are searching by CallGroup data. Page loads slower.
-            $contain[] = 'CaCallGroups';
-        }
         $caCallsQuery = $this->CaCalls->find('search', [
             'search' => $requestParams,
-            'contain' => $contain
+            'contain' => ['CaCallGroups']
         ]);
         $caCalls = $this->paginate($caCallsQuery);
         // Contain data after pagination (containing in query is too slow)
