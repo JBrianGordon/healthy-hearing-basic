@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\Wikis;
 
 /**
  * Wikis Controller
@@ -13,6 +14,21 @@ use App\Controller\AppController;
  */
 class WikisController extends BaseAdminController
 {
+
+    /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+    
     /**
      * Index method
      *
@@ -20,9 +36,19 @@ class WikisController extends BaseAdminController
      */
     public function index()
     {
-        $wikis = $this->paginate($this->Wikis);
+        //$wikis = $this->paginate($this->Wikis);
 
-        $this->set(compact('wikis'));
+        $requestParams = $this->request->getQueryParams();
+        $wikiQuery = $this->Wikis
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
+
+        $this->set('wikis', $this->paginate($wikiQuery));
+        $this->set('count', $wikiQuery->count());
+
+        $this->set('fields', $this->Wikis->getSchema()->typeMap());
+        //$this->set(compact('wikis'));
     }
 
     /**

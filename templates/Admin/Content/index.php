@@ -21,8 +21,6 @@ $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 $advancedSearchFields = [];
 $ignoreFields = ['is_frozen', 'id_brafton', 'date', 'modified', 'alt_title', 'title_head', 'meta_description', 'bodyclass', 'facebook_title', 'facebook_image_width', 'facebook_image_height', 'facebook_image_alt', 'old_url', 'slug', 'facebook_description'];
 $fields = array_diff_key($fields, array_flip($ignoreFields));
-// Add additional fields
-$fields['q'] = 'string';
 foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
@@ -90,6 +88,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 				<div class="panel-section expanded">
 				    <h2><?= __('Reports') ?></h2>
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'content']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <div class="table-responsive">

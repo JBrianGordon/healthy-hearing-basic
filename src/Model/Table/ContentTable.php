@@ -152,7 +152,7 @@ class ContentTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'subtitle', 'short', 'body'],
+                'fields' => ['title', 'subtitle', 'short'],
             ]);
     }
 

@@ -8,6 +8,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Search\Model\Filter\Base;
 
 /**
  * Wikis Model
@@ -50,6 +51,7 @@ class WikisTable extends Table
 
         $this->addBehaviors([
             'Timestamp',
+            'Search.Search',
             'Draft',
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
@@ -75,6 +77,74 @@ class WikisTable extends Table
             'joinTable' => 'reviewers_wikis',
             'targetForeignKey' => 'user_id'
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('name')
+            ->value('slug')
+            ->value('user_id')
+            ->like('body', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('short', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->boolean('is_active')
+            ->exists('id_draft_parent', [
+                'nullValue' => '0',
+            ])
+            ->value('priority')
+            ->like('title_head', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('title_h1', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('background_file', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('meta_description', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('facebook_title', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->boolean('facebook_image')
+            ->boolean('facebook_image_bypass')
+            ->value('facebook_image_width')
+            ->boolean('facebook_image_height')
+            ->like('facebook_image_alt', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('facebook_description', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->value('last_modified')
+            ->value('modified')
+            ->value('created')
+            ->like('background_alt', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['name', 'slug', 'short'],
+            ]);
     }
 
     /**

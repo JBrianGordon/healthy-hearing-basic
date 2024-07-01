@@ -1,0 +1,18 @@
+<?php
+$upperCaseSpace = preg_replace('/(?<=\\w)(?=[A-Z])/', " $1", ucwords($modelName));
+?>
+<div id="admin_filter" class="pull-right col-md-4 pr0">
+    <?= $this->Form->create(null, ['id' => "{$modelName}IndexForm"]) ?>
+    <div style="display:none;">
+        <?= $this->Form->hidden('_method', ['value' => 'POST']) ?>
+    </div>
+    <div class="input-group">
+        <div class="input text">
+            <?= $this->Form->control('q', ['label' => false, 'placeholder' => "{$upperCaseSpace} Search", 'class' => 'form-control w-100 rounded-0', 'id' => "{$modelName}Filter", 'value' => $this->request->getQuery('q'), 'style' => 'height:46px']) ?>
+        </div>				
+        <span class="input-group-btn position-relative">
+            <?= $this->Form->button(' Search', ['type' => 'submit', 'class' => 'btn btn-default bi bi-search rounded-0', 'style' => 'height:46px']) ?>
+        </span>
+    </div>
+    <?= $this->Form->end() ?>
+</div>

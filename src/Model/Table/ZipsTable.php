@@ -63,7 +63,7 @@ class ZipsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'short', 'body'],
+                'fields' => ['zip', 'city'],
             ]);
     }
 

@@ -3,6 +3,43 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Wiki[]|\Cake\Collection\CollectionInterface $wikis
  */
+
+ use Cake\Routing\Router;
+ use App\Model\Entity\Wiki;
+
+$queryParams = $this->request->getQueryParams();
+$exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
+// Advanced search details
+$advancedSearchFields = [];
+// Add additional fields
+foreach ($fields as $field => $type) {
+    $label = '';
+    $options = false;
+    $empty = false;
+    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
+    $placeholder = null;
+    if (in_array($type, ['date', 'datetime'])) {
+        $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
+        $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
+    }
+    switch ($field) {
+		case 'priority':
+			$label = 'Order';
+			break;
+        case 'facebook_image':
+            $type = 'boolean';
+            break;
+    }
+    $advancedSearchFields[] = [
+        'field' => $field,
+        'type' => $type,
+        'label' => $label,
+        'options' => $options,
+        'empty' => $empty,
+        'value' => $value,
+        'placeholder' => $placeholder
+    ];
+}
  
 $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
@@ -24,8 +61,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<div class="wikis index">
 					<h2>Help Pages</h2>
 				    <?= $this->element('pagination') ?>
-				    <!-- ***TODO*** : Populate fields for advanced search --> 
-				    <?= $this->element('advanced_search') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'helpPages']) ?>
+				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 					<div class="wikis index content">
 					    <div class="table-responsive">
 					        <table class="table table-striped table-bordered table-condensed mt20">
@@ -36,7 +73,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                    <th><?= $this->Paginator->sort('slug') ?></th>
 					                    <th><?= $this->Paginator->sort('short') ?></th>
 					                    <th width="120"><?= $this->Paginator->sort('last_modified', ['label' => 'Last Mod']) ?><br><?= $this->Paginator->sort('modified', ['label' => 'Last Saved']) ?></th>
-					                    <th class="actions"><?= __('Actions') ?></th>
+					                    <th class="actions">Actions</th>
 					                </tr>
 					            </thead>
 					            <tbody>

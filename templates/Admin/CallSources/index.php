@@ -54,6 +54,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				<h2>CallSource Numbers</h2>
 				<div class="callSources index">
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'callSource']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <?= $this->Form->input('hiddenCount', ['id' => 'hiddenCount', 'type' => 'hidden', 'value' => $count]) ?>
 				    <?= $this->Form->input('hiddenExport', ['id' => 'hiddenExport', 'type' => 'hidden', 'value' => $exportUrl]) ?>

@@ -215,6 +215,7 @@ $groupedFields = [
                 <h2><?= __('Locations CRM') ?></h2>
                 <div class="locations index content">
                     <?= $this->element('pagination') ?>
+                    <?= $this->element('admin_filter', ['modelName' => 'location']) ?>
                     <?= $this->element('advanced_search', ['groupedFields' => $groupedFields, 'fields' => $otherFields]) ?>
                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                     <div class="table-responsive mt20">
