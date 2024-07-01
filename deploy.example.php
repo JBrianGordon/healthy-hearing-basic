@@ -38,7 +38,7 @@ host($devUrl)
         'system' => $devAlias
     ]);
 
-host('ca-depl.hhcake.com')
+host($caDevUrl)
     ->set('remote_user', $remoteUser)
     ->set('identity_file', $identityFile)
     ->set('ssh_control_path', $sshControlPath . '%r@%h:%p')
