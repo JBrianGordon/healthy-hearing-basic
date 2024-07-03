@@ -82,7 +82,7 @@ $locationsItems['Cities'] = [
 $locationsItems[Inflector::pluralize(ucfirst(Configure::read('stateLabel')))] = [
     'url' => '/admin/states',
 ];
-$zipCodes = Inflector::pluralize(ucfirst('zip code'));
+$zipCodes = Inflector::pluralize(ucfirst(Configure::read('zipLabel')));
 $locationsItems[$zipCodes] = [
     'url' => '/admin/zips',
 ];

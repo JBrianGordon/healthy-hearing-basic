@@ -37,7 +37,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading">Zips Actions</div>
+		<div class="panel-heading"><?= ucfirst($zipShort) ?>s Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -50,7 +50,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 	<section class="panel">
 		<div class="panel-body">
 			<div class="panel-section expanded">
-				<h2>ZIP Codes</h2>
+				<h2><?= ucfirst($zipLabel) ?>s</h2>
 				<div class="zips index content">
 				    <?= $this->element('pagination') ?>
 					<?= $this->element('admin_filter', ['modelName' => 'zips']) ?>
@@ -59,7 +59,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				        <table class="table table-striped table-bordered table-sm mb30">
 				            <thead>
 				                <tr>
-				                    <th class="p5"><?= $this->Paginator->sort('zip', ['label' => 'ZIP']) ?></th>
+				                    <th class="p5"><?= $this->Paginator->sort('zip', ['label' => ucfirst($zipShort)]) ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('lat') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('lon') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('city') ?></th>

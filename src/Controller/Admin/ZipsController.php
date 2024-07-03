@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Zips Controller
@@ -46,6 +47,8 @@ class ZipsController extends BaseAdminController
             ]);
         $this->set('zips', $this->paginate($zipsQuery));
         $this->set('fields', $this->Zips->getSchema()->typeMap());
+        $this->set('zipLabel', Configure::read('zipLabel'));
+        $this->set('zipShort', Configure::read('zipShort'));
     }
 
     /**
