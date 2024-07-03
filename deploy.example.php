@@ -20,7 +20,6 @@ $caDevDeployPath = '/CA/DEV/DEPLOY/PATH';
 // SSH settings
 $remoteUser = 'REMOTE_USER';
 $identityFile = '~/.ssh/IDENTITY_FILE';
-$sshControlPath = '/SSH/CONTROL/PATH/';
 
 set('repository', 'git@github.com:GIT_ORG/GIT_REPO.git');
 set('keep_releases', 3);
@@ -32,7 +31,7 @@ set('keep_releases', 3);
 host($devUrl)
     ->set('remote_user', $remoteUser)
     ->set('identity_file', $identityFile)
-    ->set('ssh_control_path', $sshControlPath . '%r@%h:%p')
+    ->set('ssh_multiplexing', false)
     ->set('deploy_path', $devDeployPath)
     ->setLabels([
         'system' => $devAlias
@@ -41,7 +40,7 @@ host($devUrl)
 host($caDevUrl)
     ->set('remote_user', $remoteUser)
     ->set('identity_file', $identityFile)
-    ->set('ssh_control_path', $sshControlPath . '%r@%h:%p')
+    ->set('ssh_multiplexing', false)
     ->set('deploy_path', $caDevDeployPath)
     ->setLabels([
         'system' => $caDevAlias
@@ -58,10 +57,6 @@ task('build', function () {
     run('npm install');
     run('npm run build');
     run('npm run compile-sass');
-});
-
-task('deployDevSites', function() {
-    runLocally('dep deploy system=' . $devAlias . ' && dep deploy system=' . $caDevAlias);
 });
 
 
