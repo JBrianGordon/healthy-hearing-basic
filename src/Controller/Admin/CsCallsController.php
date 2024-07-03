@@ -12,15 +12,66 @@ namespace App\Controller\Admin;
 class CsCallsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $csCalls = $this->paginate($this->CsCalls);
+        $requestParams = $this->request->getQueryParams();
 
-        $this->set(compact('csCalls'));
+        $crmSearches = $this->fetchTable('CrmSearches')
+            ->find()
+            ->where([
+                'model' => 'Content',
+            ])->toArray();
+
+        // Call date range
+        $callDateRange =
+            array_key_exists('start_time_start', $requestParams) &&
+            array_key_exists('start_time_end', $requestParams);
+
+        if ($callDateRange) {
+            $requestParams['start_time_range'] =
+                $requestParams['start_time_start'] . ',' . $requestParams['start_time_end'];
+        }
+
+        // Remove fields with default values from search parameters
+        foreach ($requestParams as $field => $value) {
+            if (urldecode($value) == '(select one)') {
+                unset($requestParams[$field]);
+            }
+        }
+
+        if (array_key_exists('saved_search', $requestParams)) {
+            $this->set('savedSearch', true);
+        } else {
+            $this->set('savedSearch', false);
+            $this->set('currentModel', 'CsCalls');
+        }
+
+        $query = $this->CsCalls->find('search', ['search' => $requestParams]);
+        $this->paginate = [
+            'contain' => ['Locations'],
+        ];
+        $csCalls = $this->paginate($query);
+        $this->set('csCalls', $csCalls);
+        $this->set('fields', $this->CsCalls->getSchema()->typeMap());
+        $this->set('crmSearches', $crmSearches);
     }
 
     /**

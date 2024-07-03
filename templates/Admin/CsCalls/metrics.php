@@ -28,8 +28,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create() ?>
                             <fieldset>
                                 <?php
-                                    echo $this->Form->control('start_date');
-                                    echo $this->Form->control('end_date');
+                                    echo $this->Form->control('start_date', ['type' => 'date']);
+                                    echo $this->Form->control('end_date', ['type' => 'date']);
                                 ?>
                             </fieldset>
                             <div class="form-actions tar">
