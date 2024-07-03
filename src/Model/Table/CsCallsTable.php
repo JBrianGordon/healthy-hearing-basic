@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Database\Expression\QueryExpression;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -43,6 +45,7 @@ class CsCallsTable extends Table
         $this->setTable('cs_calls');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->addBehavior('Search.Search');
 
         $this->belongsTo('Calls', [
             'foreignKey' => 'call_id',
@@ -52,6 +55,26 @@ class CsCallsTable extends Table
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('call_id')
+            ->value('location_id')
+            ->like('leadscore')
+            ->like('caller_firstname')
+            ->like('caller_lastname')
+            ->like('prospect')
+            ->add('start_time_range', 'Search.Callback', [
+                    'callback' => function (Query $query, array $args, \Search\Model\Filter\Callback $filter) {
+                    [$start, $end] = explode(',', $args['start_time_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('start_time', $startDate, $endDate, 'date');
+                    });
+                },
+            ]);
     }
 
     /**
