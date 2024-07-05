@@ -129,8 +129,7 @@ return [
         'key' => '_google_map_key_',
     ],
     'localIp' => '_my_ip_',
-    'country' => 'US',
-    //'country' => 'CA',
+    'country' => 'US', // 'CA' for HD
 
     // reCAPTCHA keys
     'recaptchaPublicKey' => '_recaptcha_public_key_',
