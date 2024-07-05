@@ -6,6 +6,7 @@ use Queue\Queue\Task;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\View\ViewBuilder;
 use Cake\Mailer\Mailer;
+use Cake\Core\Configure;
 
 class ExportCsvTask extends Task {
 
@@ -41,8 +42,15 @@ class ExportCsvTask extends Task {
         file_put_contents($data['vars']['csvExportFile'], $view->render());
 
         $this->Mailer = new Mailer('default');
+        $to = $data['vars']['to'] ?? Configure::read('itEmails');
+        $subject = $data['vars']['subject'] ?? 'Data export : '.date('Y-m-d');
+        if (Configure::read('env') != 'prod') {
+            $subject = '('.Configure::read('env').') '.$subject;
+        }
         $this->Mailer
             ->setEmailFormat('html')
+            ->setTo($to)
+            ->setSubject($subject)
             ->viewBuilder()
             ->setTemplate('Export/reviews');
 

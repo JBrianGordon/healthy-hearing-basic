@@ -18,6 +18,9 @@ return [
             'isOticonSite' => false
         ],
     ],
+    // Emails
+    'developerEmails' => ['blemons@healthyhearing.com', 'btalkington@healthyhearing.com'],
+    'itEmails' => ['it@healthyhearing.com'],
     // CallSource API
     'callSourceUsername' => 'xmluser_hh', // dev/test account
     'callSourcePassword' => 'xmlapihh1' // dev/test account

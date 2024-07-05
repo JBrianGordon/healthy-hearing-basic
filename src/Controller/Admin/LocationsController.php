@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 /**
  * Locations Controller
@@ -227,30 +228,30 @@ class LocationsController extends BaseAdminController
     /**
     * Runs a Tier Status Change report and sends the results via email
     */
-    /*** TODO: update this action ***/
     public function tierStatusReport() {
-        //$email = $this->Auth->user('email');
-        if (!empty($this->request->data)) {
+        $requestData = $this->request->getData();
+        $email = $requestData['email'] ?? $this->user->email;
+        if (!empty($requestData)) {
             // Large file. Dispatch shell.
-            App::uses('Queue','Queue.Lib');
-            $cmd = "util tier_status_changes";
-            if (!empty($this->request->data['Util']['email'])) {
-                $cmd .= ' -t '.$this->request->data['Util']['email'];
+            $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
+            $cmd = "tier_status_change";
+            if (!empty($requestData['email'])) {
+                $cmd .= ' -t '.$email;
             }
-            if (!empty($this->request->data['Util']['start_date'])) {
-                $cmd .= ' -s '.$this->request->data['Util']['start_date'];
+            if (!empty($requestData['start_date'])) {
+                $cmd .= ' -s '.$requestData['start_date'];
             }
-            if (!empty($this->request->data['Util']['end_date'])) {
-                $cmd .= ' -e '.$this->request->data['Util']['end_date'];
+            if (!empty($requestData['end_date'])) {
+                $cmd .= ' -e '.$requestData['end_date'];
             }
-            if (Queue::add($cmd, 'shell')) {
+            $data = ['vars' => ['command' => $cmd]];
+            if ($this->QueuedJobs->createJob('Shell', $data)) {
                 $this->Flash->success('The tier status change report will be emailed.');
             } else {
                 $this->Flash->error('Unable to add to queue: '.$cmd);
             }
             return $this->redirect(['action' => 'tier-status-report']);
         }
-        //$this->set('email', $email);
     }
 
     // Create or update the CallSource number for this location

@@ -554,3 +554,18 @@ function isFeatureOn($featureName) {
     }
     return true;
 }
+
+/**
+* Search for keywords like [or] in our search queries. Reformat the search correctly.
+* @param search query
+* @return reformatted search query
+*/
+function formatSearchQuery($searchQuery) {
+    // TODO: Handle '!'
+    foreach ($searchQuery as $key => $value) {
+        if (!is_array($value) && str_contains($value, '[or]')) {
+            $searchQuery[$key] = explode('[or]', $value);
+        }
+    }
+    return $searchQuery;
+}

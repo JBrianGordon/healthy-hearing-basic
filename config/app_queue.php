@@ -32,7 +32,7 @@ return [
 		'maxworkers' => 3,
 
 		// instruct a Workerprocess quit when there are no more tasks for it to execute (true = exit, false = keep running)
-		'exitwhennothingtodo' => false,
+		'exitwhennothingtodo' => true,
 
 		// seconds of running time after which the PHP process will terminate, null uses workermaxruntime * 100
 		'workertimeout' => null,

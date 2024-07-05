@@ -10,6 +10,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
+use App\Model\Entity\ImportStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
 use Cake\Cache\Cache;
@@ -2198,5 +2199,43 @@ class LocationsTable extends Table
         }
         // Return our completeness
         return $completeness;
+    }
+
+    public function tierChangeStats($id = null, $startDate=null, $endDate=null) {
+        $location = $this->get($id);
+        if (empty($location)) {
+            return false;
+        }
+        // If no dates specified, get all
+        $startDate = isset($startDate) ? $startDate : '2013-01-01';
+        $endDate = isset($endDate) ? $endDate : 'today';
+        $startDate = date('Y-m-d', strtotime($startDate));
+        $endDate = date('Y-m-d', strtotime($endDate));
+        $retval = array(
+            'current_tier' => $location->oticon_tier,
+            'total_updates' => 0,
+            'tier_1' => 0,
+            'tier_2' => 0,
+            'tier_3' => 0,
+            'tier_0' => 0,
+            'times_changed' => 0,
+        );
+        $importStatuses = TableRegistry::get('ImportStatus')->find('all', [
+            'conditions' => [
+                'location_id' => $id,
+                'AND' => [
+                    'created >=' => $startDate,
+                    'created <=' => $endDate
+                ]
+            ]
+        ])->all();
+        $retval['total_updates'] = count($importStatuses);
+        foreach ($importStatuses as $importStatus) {
+            $retval['tier_' . $importStatus->oticon_tier]++;
+            if ($importStatus->status == ImportStatus::IMPORT_STATUS_TIER_CHANGED) {
+                $retval['times_changed']++;
+            }
+        }
+        return $retval;
     }
 }

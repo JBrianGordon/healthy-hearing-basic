@@ -104,7 +104,7 @@ class ReviewsController extends BaseAdminController
 
         $reviewsQuery = $this->Reviews
             ->find('search', [
-                'search' => $requestParams,
+                'search' => formatSearchQuery($requestParams),
             ]);
 
         $this->set('reviews', $this->paginate($reviewsQuery));
@@ -366,6 +366,8 @@ class ReviewsController extends BaseAdminController
             'location.email',
             'location.hh_url'
         ];
+        $locationFields = ['Locations.id', 'Locations.listing_type', 'Locations.id_oticon', 'Locations.title', 'Locations.is_yhn', 'Locations.is_retail', 'Locations.email'];
+        $containedTables = ['Locations' => ['fields' => $locationFields]];
 
         $header = array_map(
             function($item) {
@@ -374,12 +376,11 @@ class ReviewsController extends BaseAdminController
             $extract
         );
         $header = array_map([new Inflector(), 'humanize'], $header);
-
         $reviews = $this->Reviews
             ->find('search', [
                 'search' => $this->request->getQueryParams(),
             ])
-            ->contain(['Locations']);
+            ->contain($containedTables);
 
         if ($reviews->count() < 2000) { // Immediately download small exports
 
@@ -394,14 +395,16 @@ class ReviewsController extends BaseAdminController
                 ]);
 
         } else { // Email large exports
+
             $data = [
                 'vars' => [
                     'table' => 'Reviews',
                     'queryParams' => $this->request->getQueryParams(),
-                    'containedTables' => ['Locations'],
+                    'containedTables' => $containedTables,
                     'extract' => $extract,
                     'header' => $header,
                     'csvExportFile' => '/tmp/reviewsExport.csv',
+                    'to' => $this->user->email
                 ],
             ];
             $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');

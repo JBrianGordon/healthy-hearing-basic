@@ -12,7 +12,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-heading">Imports Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(" Dashboard", ['controller' => 'import_locations', 'action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
+                <?= $this->Html->link(" Dashboard", ['controller' => 'import-locations', 'action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
+                <?= $this->Html->link(" Stats", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+                <?= $this->Html->link(" Tier Status Change", ['controller' => 'locations', 'action' => 'tier-status-report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
 			</div>
 		</div>
 	</div>

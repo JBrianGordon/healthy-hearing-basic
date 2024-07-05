@@ -71,7 +71,7 @@ class ImportCommand extends Command
             ->addArgument('importType', [
                 'help' => 'The type of import to run (YHN, CQP, ...)',
                 'required' => true,
-                'choices' => ['yhn', 'cqp'],
+                'choices' => ['yhn', 'cqp', 'ca'],
             ])
             ->addOption('bypass', [
                 'short' => 'b',
@@ -898,7 +898,7 @@ class ImportCommand extends Command
             $email['subject'] = '('.Configure::read('env').') '.$email['subject'];
         }
         // Send email
-        $this->getMailer('Admin')->send('importComplete', [$email]);
+        $this->getMailer('Admin')->send('default', [$email]);
         $io->out('Import report email sent to '.implode(', ', $email['to']));
     }
 

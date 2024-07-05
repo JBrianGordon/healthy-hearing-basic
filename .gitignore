@@ -10,6 +10,7 @@ webpack_cache
 webroot/css/*
 !webroot/css/atf
 !webroot/css/ckeditor
+webroot/csvs/*
 webroot/js/dist/*.min.js*
 webroot/debug_kit
 webroot/coverage

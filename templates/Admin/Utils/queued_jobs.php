@@ -5,6 +5,7 @@
             <div class="btn-group">
                 <?= $this->Html->link('Queued Jobs', ['action' => 'queuedJobs'], ['class' => 'btn btn-default']) ?>
                 <?= $this->Html->link('Archived', ['action' => 'queuedJobs', '?' => ['archived' => true]], ['class' => 'btn btn-default']) ?>
+                <?= $this->Html->link('Run All', ['action' => 'runQueuedJobs'], ['class' => 'btn btn-success']) ?>
             </div>
         </div>
     </div>
@@ -66,20 +67,14 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-vertical">
-                                                <!-- TODO: Run and View -->
-                                                <?php if (!$archived): ?>
-                                                    <?php echo $this->Html->link('<span class="glyphicon glyphicon-play"></span> Run',
-                                                        ['action' => 'run', $queuedJob->id],
-                                                        ['class' => 'btn btn-xs btn-success', 'escape' => false]); ?>
-                                                <?php endif; ?>
                                                 <?php echo $this->Html->link('<span class="glyphicon glyphicon-eye-open"></span> View',
                                                     ['action' => 'viewQueuedJob', $queuedJob->id],
                                                     ['class' => 'btn btn-xs btn-default', 'escape' => false]); ?>
                                                 <?php if (!$archived): ?>
                                                     <?php echo $this->Form->postLink('<span class="glyphicon glyphicon-trash"></span> Delete',
                                                         ['action' => 'deleteQueuedJob', $queuedJob->id],
-                                                        ['class' => 'btn btn-xs btn-danger', 'escape' => false],
-                                                        __('Are you sure you want to delete # %s?', $queuedJob->id)); ?>
+                                                        ['class' => 'btn btn-xs btn-danger', 'escape' => false,
+                                                        'confirm' => __('Are you sure you want to delete # {0}?', $queuedJob->id)]); ?>
                                                 <?php endif; ?>
                                             </div>
                                         </td>
