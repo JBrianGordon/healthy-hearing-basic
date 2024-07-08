@@ -12,16 +12,31 @@ namespace App\Controller\Admin;
 class SeoMetaTagsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['SeoUris'],
-        ];
-        $seoMetaTags = $this->paginate($this->SeoMetaTags);
+        $query = $this->SeoMetaTags
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['SeoUris']);
+
+        $seoMetaTags = $this->paginate($query);
 
         $this->set(compact('seoMetaTags'));
     }
@@ -36,6 +51,12 @@ class SeoMetaTagsController extends BaseAdminController
         $seoMetaTag = $this->SeoMetaTags->newEmptyEntity();
         if ($this->request->is('post')) {
             $seoMetaTag = $this->SeoMetaTags->patchEntity($seoMetaTag, $this->request->getData());
+
+            $seoUri = $this->SeoMetaTags->SeoUris->newEmptyEntity();
+            $seoUri = $this->SeoMetaTags->SeoUris->patchEntity($seoUri, $this->request->getData());
+
+            $seoMetaTag->seo_uri = $seoUri;
+
             if ($this->SeoMetaTags->save($seoMetaTag)) {
                 $this->Flash->success(__('The seo meta tag has been saved.'));
 
@@ -57,7 +78,7 @@ class SeoMetaTagsController extends BaseAdminController
     public function edit($id = null)
     {
         $seoMetaTag = $this->SeoMetaTags->get($id, [
-            'contain' => [],
+            'contain' => ['SeoUris'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $seoMetaTag = $this->SeoMetaTags->patchEntity($seoMetaTag, $this->request->getData());
