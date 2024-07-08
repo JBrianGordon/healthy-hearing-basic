@@ -38,7 +38,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <fieldset>
                                 <?php
                                     /*** TODO: replace seo_uri_id with the uri value (e.g. /beltone-hearing-aids) ***/
-                                    echo $this->Form->control('seo_uri_id', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
+                                    echo $this->Form->control('seo_uri.uri', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
                                     echo $this->Form->control('name', ['required' => true]);
                                     echo $this->Form->control('content', ['required' => true]);
                                 ?>

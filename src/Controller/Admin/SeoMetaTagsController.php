@@ -51,6 +51,12 @@ class SeoMetaTagsController extends BaseAdminController
         $seoMetaTag = $this->SeoMetaTags->newEmptyEntity();
         if ($this->request->is('post')) {
             $seoMetaTag = $this->SeoMetaTags->patchEntity($seoMetaTag, $this->request->getData());
+
+            $seoUri = $this->SeoMetaTags->SeoUris->newEmptyEntity();
+            $seoUri = $this->SeoMetaTags->SeoUris->patchEntity($seoUri, $this->request->getData());
+
+            $seoMetaTag->seo_uri = $seoUri;
+
             if ($this->SeoMetaTags->save($seoMetaTag)) {
                 $this->Flash->success(__('The seo meta tag has been saved.'));
 
@@ -72,7 +78,7 @@ class SeoMetaTagsController extends BaseAdminController
     public function edit($id = null)
     {
         $seoMetaTag = $this->SeoMetaTags->get($id, [
-            'contain' => [],
+            'contain' => ['SeoUris'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $seoMetaTag = $this->SeoMetaTags->patchEntity($seoMetaTag, $this->request->getData());
