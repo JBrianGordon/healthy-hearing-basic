@@ -8,7 +8,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
-        <div class="panel-heading">Seo Canonicals Actions</div>
+        <div class="panel-heading">Seo Meta Tags Actions</div>
         <div class="panel-body p10">
             <div class="btn-group">
                 <?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -28,8 +28,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Seo Meta Tags</h2>
-                <!-- ***TODO: add search feature*** -->
                 <div class="seoMetaTags index content">
+                    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'seoMetaTag']) ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-condensed">
                             <thead>

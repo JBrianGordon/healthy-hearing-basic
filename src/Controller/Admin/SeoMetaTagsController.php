@@ -12,16 +12,31 @@ namespace App\Controller\Admin;
 class SeoMetaTagsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['SeoUris'],
-        ];
-        $seoMetaTags = $this->paginate($this->SeoMetaTags);
+        $query = $this->SeoMetaTags
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['SeoUris']);
+
+        $seoMetaTags = $this->paginate($query);
 
         $this->set(compact('seoMetaTags'));
     }
