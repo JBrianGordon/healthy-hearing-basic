@@ -6,6 +6,12 @@
  * into source code version control.
  */
 return [
+    'env' => 'local', // change this on dev/qa servers
+    'host' => 'hh.loc', // change this on dev/qa servers
+    'localIp' => '_my_ip_',
+    'country' => 'US',
+    //'country' => 'CA',
+
     /*
      * Debug Level:
      *
@@ -128,8 +134,6 @@ return [
     'GoogleMap' => [
         'key' => '_google_map_key_',
     ],
-    'localIp' => '_my_ip_',
-    'country' => 'US', // 'CA' for HD
 
     // reCAPTCHA keys
     'recaptchaPublicKey' => '_recaptcha_public_key_',

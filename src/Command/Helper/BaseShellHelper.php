@@ -73,11 +73,8 @@ class BaseShellHelper extends Helper
             $filename = trim($this->in("Enter filename"));
         }
         $File = new File($filename);
-        if ($File->exists()) {
-            if (!$bypass) {
-                $this->promptContinue("$filename exists, are you sure you want to overwrite?");
-            }
-            $this->deleteFile($filename);
+        if ($File->exists() && !$bypass) {
+            $this->promptContinue("$filename exists, are you sure you want to overwrite?");
         }
         $this->_io->out();
         if ($File->write($data)) {
