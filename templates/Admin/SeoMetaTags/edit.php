@@ -37,14 +37,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoMetaTag) ?>
                             <fieldset>
                                 <?php
-                                    /*** TODO: replace seo_uri_id with the uri value (e.g. /beltone-hearing-aids) ***/
                                     echo $this->Form->control('seo_uri.uri', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
                                     echo $this->Form->control('name', ['required' => true]);
                                     echo $this->Form->control('content', ['required' => true]);
                                 ?>
-                                <div class="col-md-9 col-md-offset-3 pl0">
-                                    <?= $this->Form->control('is_http_equiv', ['required' => true]) ?>
-                                </div>
                             </fieldset>
                             <div class="form-actions tar">
                                 <?= $this->Form->button('Save Meta Tag', ['class' => 'btn btn-primary btn-lg']) ?>
