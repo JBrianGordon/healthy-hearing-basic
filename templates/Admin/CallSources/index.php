@@ -19,6 +19,11 @@ foreach ($fields as $field => $type) {
     $empty = false;
     $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
     $placeholder = null;
+	switch ($field) {
+		case 'phone_number':
+			$label = 'CS Number';
+			break;
+	}
     if (in_array($type, ['date', 'datetime'])) {
         $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
@@ -41,7 +46,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 		<div class="panel-heading">Call Sources Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Form->button(' Export', ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
 			</div>
 		</div>
