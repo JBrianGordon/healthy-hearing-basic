@@ -23,6 +23,7 @@ $identityFile = '~/.ssh/IDENTITY_FILE';
 
 set('repository', 'git@github.com:GIT_ORG/GIT_REPO.git');
 set('keep_releases', 3);
+set('update_code_strategy', 'clone');
 
 //*******************\\
 //****** Hosts ******\\
