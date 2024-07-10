@@ -28,7 +28,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Seo Redirects</h2>
-                <!-- ***TODO: add search feature*** -->
+                <?= $this->element('pagination') ?>
+				<?= $this->element('admin_filter', ['modelName' => 'seoRedirects']) ?>
                 <div class="seoRedirects index content">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-condensed">
