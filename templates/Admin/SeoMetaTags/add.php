@@ -36,7 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoMetaTag) ?>
                             <fieldset>
                                 <?php
-                                    echo $this->Form->control('seo_uri_id', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
+                                    echo $this->Form->control('seo_uri.uri', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
                                     echo $this->Form->control('name', ['required' => true]);
                                     echo $this->Form->control('content', ['required' => true]);
                                 ?>
