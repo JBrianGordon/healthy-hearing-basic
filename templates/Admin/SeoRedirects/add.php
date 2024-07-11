@@ -35,8 +35,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoRedirect) ?>
                             <fieldset>
                                 <?php
-                                    /*** TODO: change seo_uri_id to a uri value ***/
-                                    echo $this->Form->control('seo_uri_id', ['required' => true]);
+                                    echo $this->Form->control('seo_uri.uri', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
                                     echo $this->Form->control('redirect', ['required' => true]);
                                 ?>
                                 <span class="help-block col-md-9 col-md-offset-3 pl0">Redirect via SeoAppError-&gt;catch404() will always be 301.</span>

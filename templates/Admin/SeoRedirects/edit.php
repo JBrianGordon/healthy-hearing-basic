@@ -36,8 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoRedirect) ?>
                             <fieldset>
                                 <?php
-                                    /*** TODO: replace with uri link value ***/
-                                    echo $this->Form->control('seo_uri_id', ['required' => true]);
+                                    echo $this->Form->control('seo_uri.uri', ['type' => 'text', 'label' => 'Uri', 'required' => true]);
                                     echo $this->Form->control('redirect', ['required' => true]);
                                     echo $this->Form->control('priority', ['required' => true]);
                                     echo $this->Form->control('callback');

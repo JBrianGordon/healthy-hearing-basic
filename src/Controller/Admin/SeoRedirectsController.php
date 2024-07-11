@@ -12,16 +12,31 @@ namespace App\Controller\Admin;
 class SeoRedirectsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['SeoUris'],
-        ];
-        $seoRedirects = $this->paginate($this->SeoRedirects);
+        $query = $this->SeoRedirects
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['SeoUris']);
+
+        $seoRedirects = $this->paginate($query);
 
         $this->set(compact('seoRedirects'));
     }
@@ -34,6 +49,12 @@ class SeoRedirectsController extends BaseAdminController
     public function add()
     {
         $seoRedirect = $this->SeoRedirects->newEmptyEntity();
+
+        $seoUri = $this->SeoRedirects->SeoUris->newEmptyEntity();
+        $seoUri = $this->SeoRedirects->SeoUris->patchEntity($seoUri, $this->request->getData());
+
+        $seoRedirect->seo_uri = $seoUri;
+
         if ($this->request->is('post')) {
             $seoRedirect = $this->SeoRedirects->patchEntity($seoRedirect, $this->request->getData());
             if ($this->SeoRedirects->save($seoRedirect)) {
@@ -57,7 +78,7 @@ class SeoRedirectsController extends BaseAdminController
     public function edit($id = null)
     {
         $seoRedirect = $this->SeoRedirects->get($id, [
-            'contain' => [],
+            'contain' => ['SeoUris'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $seoRedirect = $this->SeoRedirects->patchEntity($seoRedirect, $this->request->getData());
