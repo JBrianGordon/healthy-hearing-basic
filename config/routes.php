@@ -59,6 +59,7 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'aboutIda', 'aboutIda']);
         $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
         $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
+        $builder->connect('/sitemap', ['controller' => 'Pages', 'action' => 'sitemap', 'sitemap']);
         $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
 
         // Misc pages with more complicated actions, integrations, etc.
