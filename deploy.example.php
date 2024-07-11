@@ -2,6 +2,7 @@
 namespace Deployer;
 
 require 'recipe/common.php';
+require 'contrib/slack.php';
 
 //*******************\\
 //***** Config ******\\
@@ -24,6 +25,12 @@ $identityFile = '~/.ssh/IDENTITY_FILE';
 set('repository', 'git@github.com:GIT_ORG/GIT_REPO.git');
 set('keep_releases', 3);
 set('update_code_strategy', 'clone');
+
+// Slack settings
+set('slack_webhook', 'https://hooks.slack.com/services/WEB_HOOK_URL');
+before('deploy', 'slack:notify');
+after('deploy:success', 'slack:notify:success');
+after('deploy:failed', 'slack:notify:failure');
 
 //*******************\\
 //****** Hosts ******\\
