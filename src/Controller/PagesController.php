@@ -237,6 +237,26 @@ class PagesController extends AppController
     }
 
     /**
+     * Sitemap page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function sitemap()
+    {
+        // Load the Sitemaps table
+        $this->loadModel('Sitemaps');
+    
+        // Fetch sitemap data
+        $sitemapData = $this->Sitemaps->fetchSitemapData();
+
+        $page = true;
+        $this->set(compact('page'));
+    
+        // Pass data to the view
+        $this->set('sitemapData', $sitemapData);
+    }
+
+    /**
      * Terms of use page
      *
      * @return \Cake\Http\Response|null|void Renders view
