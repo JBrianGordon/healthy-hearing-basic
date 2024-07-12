@@ -102,6 +102,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                 <h2>Reviews</h2>
                 <div class="reviews index content">
                     <?= $this->element('pagination') ?>
+                    <?= $this->element('admin_filter', ['modelName' => 'review']) ?>
                     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                     <div class="table-responsive">
