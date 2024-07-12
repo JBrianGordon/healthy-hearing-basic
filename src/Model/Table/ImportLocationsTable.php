@@ -145,7 +145,16 @@ class ImportLocationsTable extends Table
             ->value('Imports.type')
             ->exists('location_exists', ['fields' => 'location_id'])
             ->value('Locations.is_junk')
-            ->value('Locations.review_needed');
+            ->value('Locations.review_needed')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['Locations.title', 'Locations.subtitle'],
+            ]);
     }
 
     /**
