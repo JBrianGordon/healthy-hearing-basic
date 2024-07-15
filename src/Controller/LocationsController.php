@@ -365,9 +365,9 @@ class LocationsController extends AppController
                     'conditions' => ['Locations.id' => $locationId]
                 ])->first();
                 if (!empty($location)) {
-                    $this->response->disableCache();
+                    $this->response->withDisabledCache();
                     // Found an inactive clinic, redirect to the zip page
-                    $this->Flash->error('<div class="p10"><strong><span class="glyphicon glyphicon-search pr10" aria-hidden="true"></span> '.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.</div>');
+                    $this->Flash->error('<strong>'.$location->title.'</strong> is not currently listed on '.$this->siteName.'.<br>Find another clinic near '.cleanZip($location->zip).'.', ['escape'=> false]);
                     return $this->redirect([
                         'controller' => 'locations',
                         'action' => 'viewCityZip',
