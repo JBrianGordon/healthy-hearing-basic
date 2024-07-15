@@ -36,8 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoTitle) ?>
                             <fieldset>
                                 <?php
-                                    /*** TODO: replace seo_uri_id with the uri value (e.g. /advanced-bionics-cochlear-implants) ***/
-                                    echo $this->Form->control('seo_uri_id');
+                                    echo $this->Form->control('seo_uri.uri', ['required' => true]);
                                     echo $this->Form->control('title');
                                 ?>
                             </fieldset>
