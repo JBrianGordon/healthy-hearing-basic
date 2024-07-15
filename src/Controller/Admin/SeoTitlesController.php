@@ -12,16 +12,31 @@ namespace App\Controller\Admin;
 class SeoTitlesController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['SeoUris'],
-        ];
-        $seoTitles = $this->paginate($this->SeoTitles);
+        $query = $this->SeoTitles
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['SeoUris']);
+
+        $seoTitles = $this->paginate($query);
 
         $this->set(compact('seoTitles'));
     }
@@ -34,6 +49,12 @@ class SeoTitlesController extends BaseAdminController
     public function add()
     {
         $seoTitle = $this->SeoTitles->newEmptyEntity();
+
+        $seoUri = $this->SeoTitles->SeoUris->newEmptyEntity();
+        $seoUri = $this->SeoTitles->SeoUris->patchEntity($seoUri, $this->request->getData());
+
+        $seoTitle->seo_uri = $seoUri;
+        
         if ($this->request->is('post')) {
             $seoTitle = $this->SeoTitles->patchEntity($seoTitle, $this->request->getData());
             if ($this->SeoTitles->save($seoTitle)) {
@@ -57,7 +78,7 @@ class SeoTitlesController extends BaseAdminController
     public function edit($id = null)
     {
         $seoTitle = $this->SeoTitles->get($id, [
-            'contain' => [],
+            'contain' => ['SeoUris'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $seoTitle = $this->SeoTitles->patchEntity($seoTitle, $this->request->getData());
