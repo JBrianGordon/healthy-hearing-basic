@@ -69,6 +69,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<div class="users index content">
 				    <h3>Users</h3>
 				    <?= $this->element('pagination') ?>
+					<?= $this->element('admin_filter', ['modelName' => 'user']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <div class="table-responsive">
@@ -77,21 +78,18 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                <tr>
 				                    <th><?= $this->Paginator->sort('id') ?></th>
 				                    <th>
-										<?= $this->Paginator->sort('username') ?><br>
-										<?= $this->Paginator->sort('first_name') ?> / <?= $this->Paginator->sort('last_name') ?><br>
-										<?= $this->Paginator->sort('email') ?>
+										<?= $this->Paginator->sort('first_name') ?> / <?= $this->Paginator->sort('last_name') ?> / <?= $this->Paginator->sort('username') ?> / <?= $this->Paginator->sort('email') ?>
 				                    </th>
 				                    <th>
-										<?= $this->Paginator->sort('role') ?><br>
+										<?= $this->Paginator->sort('company') ?><br>
 										Clinic
 				                    </th>
 				                    <th><?= $this->Paginator->sort('active') ?></th>
+									<th><?= $this->Paginator->sort('role', ['label' => 'Is Admin']) ?></th>
 				                    <th>
-										<?= $this->Paginator->sort('created') ?><br>
-										<?= $this->Paginator->sort('modified') ?><br>
-										<?= $this->Paginator->sort('last_login') ?>
+										<?= $this->Paginator->sort('created') ?> / <?= $this->Paginator->sort('modified') ?>
 				                    </th>
-				                    <th class="actions"><?= __('Actions') ?></th>
+				                    <th class="actions">Actions</th>
 				                </tr>
 				            </thead>
 				            <tbody>
@@ -99,21 +97,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <tr>
 				                        <td><?= h($user->id) ?></td>
 				                        <td>
-											<span class="badge bg-light"><?= $user->username ?></span><br>
 											<strong><?= $user->first_name.' '.$user->last_name ?></strong><br>
+											<span class="badge bg-light"><?= $user->username ?></span><br>
 											<?= $user->email ?>
 				                        </td>
 				                        <td>
-											<?= $this->Html->badge($user->role, ['class'=>'bg-light']) ?><br>
-											<?php if (!empty($user->locations)): ?>
-												<?=
-													$this->Html->link(
-														$user->locations[0]->title,
-														['controller' => 'Locations', 'action' => 'edit', $user->locations[0]->id]
-													)
-												?><br>
-												<?= $user->locations[0]->city.', '.$user->locations[0]->state ?>
-											<?php endif; ?>
+											<?= $user->company ?>
 										</td>
 										<td>
 											<?= $this->Html->badge(
@@ -121,10 +110,29 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 												['class' => $user->active ? 'success' : 'danger']
 											); ?>
 										</td>
+										<td>
+										<?php
+											$roles = [
+												'is_admin' => 'Admin',
+												'is_it_admin' => 'IT Admin',
+												'is_agent' => 'Call Assist Agent',
+												'is_call_supervisor' => 'Call Assist Supervisor',
+												'is_csa' => 'Customer Support Assistant',
+												'is_writer' => 'Content Writer',
+												'is_author' => 'Author',
+												'is_reviewer' => 'Reviewer',
+											];
+
+											foreach ($roles as $roleField => $roleName) {
+												if ($user->$roleField) {
+													echo $this->Html->badge($roleName, ['class'=>'bg-light mb5 d-inline-block']) . '<br>';
+												}
+											}
+										?>
+										</td>
 										<td nowrap>
-											<?= empty($user->created) ? '' : date('Y-m-d', strtotime($user->created)) ?><br>
-											<?= empty($user->modified) ? '' : date('Y-m-d', strtotime($user->modified)) ?><br>
-											<?= empty($user->last_login) ? '' : date('Y-m-d', strtotime($user->last_login)) ?>
+											<?= empty($user->created) ? '' : (date('Y-m-d') == date('Y-m-d', strtotime($user->created)) ? 'Today' : date('M jS Y', strtotime($user->created))) . ', ' . date('H:i', strtotime($user->created)) ?><br>
+											<?= empty($user->modified) ? '' : (date('Y-m-d') == date('Y-m-d', strtotime($user->modified)) ? 'Today' : date('M jS Y', strtotime($user->modified))) . ', ' . date('H:i', strtotime($user->modified)) ?>
 										</td>
 				                        <td class="actions">
 			                                <?= $this->Html->link(__(' Edit'),
