@@ -130,6 +130,7 @@ class PagesController extends AppController
         $newsletterForm = new newsletterForm();
         $page = $this->Pages->findByTitle('newsletter')->first();
         $this->set(compact('newsletterForm', 'page'));
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
 
         if ($this->request->is('post')) {
             if (!$this->Recaptcha->verify()) {

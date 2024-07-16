@@ -107,20 +107,19 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		  <h2>The Healthy Hearing Report</h2>
 		</header>
 		<div class="panel-body">
-		  <!--?php *** TODO: uncomment when recent articles logic built: $articles = ClassRegistry::init('Content')->findLatest(4);) ?-->
-		  <!--?php foreach ($articles as $content): ?-->
+		  <?php foreach ($articles as $content): ?>
 		    <div class="panel-section condensed blog-preview">
 		      <div class="row">
 		        <div class="col-sm-3">
-		          <!--?= $this->Content->dateHome($content, ['large' => false]); ?-->
+		          <?= $this->Editorial->dateHome($content, ['large' => false]); ?>
 		        </div>
 		        <div class="col-sm-9">
-		          <div class="subtitle"><!--?= $this->Content->getType(); ?--></div>
-		          <!--?= $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?-->
+		          <div class="subtitle"><?= $this->Editorial->getType(); ?></div>
+		          <?= $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']); ?>
 		        </div>
 		      </div>
 		    </div>
-		  <!--?php endforeach; ?-->
+		  <?php endforeach; ?>
 		</div>
 		</section>
 	<?php endif; ?>
