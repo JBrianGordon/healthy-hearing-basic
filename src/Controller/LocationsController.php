@@ -202,6 +202,7 @@ class LocationsController extends AppController
         $this->set('roundedReviews', number_format($roundedReviews));
         $this->set('preferredClinicsNearMe', $this->Locations->findClinicsNearMe(4, true));
         $this->set('fapterm', $this->fapSearchTerm());
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
     }
 
     // City/zip page ( previously called index() )

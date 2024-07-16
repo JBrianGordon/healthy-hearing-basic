@@ -92,6 +92,7 @@ class ContentController extends AppController
         $this->set('reports', $reports);
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
         $this->set('reportIntro', $this->fetchTable('Pages')->getContent('reportIntro'));
+        $this->set('articles', $this->Content->findLatest(4));
 
         return $this->render($render);
     }

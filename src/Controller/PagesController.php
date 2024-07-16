@@ -76,9 +76,8 @@ class PagesController extends AppController
     {
         $contactUsForm = new ContactUsForm();
         $page = $this->Pages->findByTitle('contactUs')->first();
-        $this->loadModel('Content');
         $this->set(compact('contactUsForm', 'page'));
-        $this->set('articles', $this->Content->findLatest(4));
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
 
         if ($this->request->is('post')) {
             if (!$this->Recaptcha->verify()) {
@@ -108,12 +107,9 @@ class PagesController extends AppController
     public function feeds() {
         $page = $this->Pages->findByTitle('feeds')->first();
 
-        $this->Content = $this->fetchTable('Content');
-        $articles = $this->Content->findLatest(4);
-        $this->set('articles', $articles);
-
         $this->set(compact('page'));
         $this->set('show_slider', false);
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
     }
 
     /**
@@ -255,6 +251,7 @@ class PagesController extends AppController
     
         // Pass data to the view
         $this->set('sitemapData', $sitemapData);
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
     }
 
     /**

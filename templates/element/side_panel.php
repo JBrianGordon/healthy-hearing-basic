@@ -101,7 +101,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if (Configure::read('showReports') && ($controller != 'QuizResults')): ?>
+	<?php if (Configure::read('showReports') && ($controller != 'QuizResults') && !empty($articles)): ?>
 		<section class="panel panel-light blog-previews" style="order:12">
 		<header class="panel-heading text-center">
 		  <h2>The Healthy Hearing Report</h2>
