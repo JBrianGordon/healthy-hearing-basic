@@ -114,7 +114,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		          <?= $this->Editorial->dateHome($content, ['large' => false]); ?>
 		        </div>
 		        <div class="col-sm-9">
-		          <div class="subtitle"><?= $this->Editorial->getType(); ?></div>
+		          <div class="subtitle"><?= $this->Editorial->getType($content); ?></div>
 		          <?= $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']); ?>
 		        </div>
 		      </div>
