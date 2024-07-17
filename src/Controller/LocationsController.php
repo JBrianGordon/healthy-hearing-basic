@@ -250,7 +250,7 @@ class LocationsController extends AppController
         }
         if (!empty($zip)) {
             // Verify that this is a valid zip in our zip table. If not, redirect to city page.
-            if (!$this->fetchTable('zips')->exists(['zip' => $zip])) {
+            if (!$this->fetchTable('Zips')->exists(['zip' => $zip])) {
                 $zip = null;
             }
         }
