@@ -516,7 +516,7 @@ class CaCallGroupsTable extends Table
             return false;
         }
         if ($this->saveField('is_locked', true)) {
-            if ($this->saveField('locked_by_user_id', $userId)) {
+            if ($this->saveField('id_locked_by_user', $userId)) {
                 $retval = $this->saveField('lock_time', $this->str2datetime());
                 return $retval === false ? false : true;
             }

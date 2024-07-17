@@ -6,6 +6,7 @@ namespace App\View\Helper;
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCall;
+use App\Model\Entity\CaCallGroup;
 
 class CaCallGroupHelper extends Helper {
     /**

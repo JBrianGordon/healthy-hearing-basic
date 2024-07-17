@@ -77,11 +77,11 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
 				            <thead>
 				                <tr>
 				                    <th><?= $this->Paginator->sort('id', 'Group ID') ?></th>
-				                    <th><?= $this->Paginator->sort('status', 'Outbound call type') ?></th>
-				                    <th><?php echo 'Initial call ('.getEasternTimezone().')'; ?></th>
-				                    <th><?php echo $this->Paginator->sort('scheduled_call_date','Next call time ('.getEasternTimezone().')'); ?></th>
+				                    <th nowrap><?= $this->Paginator->sort('status', 'Outbound call type') ?></th>
+				                    <th style="min-width:120px"><?php echo 'Initial call ('.getEasternTimezone().')'; ?></th>
+				                    <th style="min-width:120px"><?php echo $this->Paginator->sort('scheduled_call_date','Next call time ('.getEasternTimezone().')'); ?></th>
 				                    <th>Clinic</th>
-				                    <th nowrap>Caller Name/<br>Patient Name</th>
+				                    <th nowrap style="min-width:120px">Caller Name/<br>Patient Name</th>
 				                    <th>Actions</th>
 				                </tr>
 				            </thead>
@@ -90,7 +90,8 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                     <?php
                                     $class = '';
                                     $supervisorCall = false;
-                                    $callType = $this->CaCallGroup->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $caCallGroup->location->direct_book_type, $caCallGroup->wants_hearing_test);
+                                    $directBookType = !empty($caCallGroup->location) ? $caCallGroup->location->direct_book_type : null;
+                                    $callType = $this->CaCallGroup->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $directBookType, $caCallGroup->wants_hearing_test);
                                     $readableCallType = $this->CaCallGroup->getReadableCallType($callType, $caCallGroup->status);
                                     switch ($callType) {
                                         case null:
@@ -131,7 +132,7 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                                 if (!empty($caCallGroup->location->title)) {
                                                     echo $this->Html->link($caCallGroup->location->title, ['controller' => 'locations', 'action' => 'edit', $caCallGroup->location_id]).'<br>';
                                                     echo $caCallGroup->location->city.', '.$caCallGroup->location->state.'<br>';
-                                                    echo '<span class="badge bg-light">'.$this->Clinic->getClinicTimezone($caCallGroup->location_id).'</span>';
+                                                    echo '<span class="badge label-default">'.$this->Clinic->getClinicTimezone($caCallGroup->location_id).'</span>';
                                                 } else {
                                                     echo "<span class='error'>ERROR:</span> Location ".$caCallGroup->location_id." no longer exists. Please notify supervisor.";
                                                 }
@@ -144,12 +145,12 @@ $this->Html->script('dist/ca_outbound.min', ['block' => true]);
                                         </td>
 				                        <td class="p5" nowrap>
                                             <?php if ($caCallGroup->is_locked): ?>
-                                                <span class="glyphicon glyphicon-lock"></span> Locked by <?= $this->App->getUserFirstName($caCallGroup->locked_by_user_id) ?><br/>
+                                                <span class="glyphicon glyphicon-lock"></span> Locked by <?= $this->App->getUserFirstName($caCallGroup->id_locked_by_user) ?><br/>
                                                 <?= date('M d, g:i a', strtotime($caCallGroup->lock_time.' +1hour')) ?><br/>
-                                                <?php if ($caCallGroup->locked_by_user_id == $user->id): ?>
+                                                <?php if ($caCallGroup->id_locked_by_user == $user->id): ?>
                                                     <?= $this->Html->link('Call', ['controller'=>'ca_calls', 'action'=>'add_outbound', $caCallGroup->id], ['class' => 'btn btn-default btn-sm']) ?>
                                                 <?php endif; ?>
-                                                <?php if (($caCallGroup->locked_by_user_id == $user->id) || ($isAdmin || $isCallSupervisor)): ?>
+                                                <?php if (($caCallGroup->id_locked_by_user == $user->id) || ($isAdmin || $isCallSupervisor)): ?>
                                                     <?= $this->Html->link('Unlock', ['action' => 'unlock', $caCallGroup->id], ['class' => 'btn btn-default btn-sm', 'rel' => 'nofollow']) ?>
                                                 <?php endif; ?>
                                             <?php else: ?>

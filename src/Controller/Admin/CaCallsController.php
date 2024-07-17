@@ -234,7 +234,7 @@ class CaCallsController extends BaseAdminController
             } else {
                 $lockTime = date('n/d g:i a', strtotime($lockTime));
             }
-            $lockedByUserId = $this->CaCallGroup->field('locked_by_user_id');
+            $lockedByUserId = $this->CaCallGroup->field('id_locked_by_user');
             $lockedBy = ClassRegistry::init('User')->getUserFullName($lockedByUserId);
             $data = array(
                 'lock_error' => true,

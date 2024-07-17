@@ -54,4 +54,15 @@ class AppHelper extends Helper
         $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
         return $user->username;
     }
+
+    /**
+    * Return the first name from userId
+    */
+    public function getUserFirstName($userId = null){
+        if (!$userId) {
+            return null;
+        }
+        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+        return $user->first_name;
+    }
 }
