@@ -3,12 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\City[]|\Cake\Collection\CollectionInterface $cities
  */
-
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
 $queryParams = $this->request->getQueryParams();
 // Advanced search details
 $advancedSearchFields = [];

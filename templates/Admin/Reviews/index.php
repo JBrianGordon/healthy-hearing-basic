@@ -10,11 +10,6 @@ use App\Model\Entity\Location;
 use App\Model\Entity\Review;
 use Cake\Core\Configure;
 
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
 $queryParams = $this->request->getQueryParams();
 $filter ??= null;
 // Add additional search fields

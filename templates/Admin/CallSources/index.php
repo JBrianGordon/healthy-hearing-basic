@@ -4,11 +4,6 @@
  * @var \App\Model\Entity\CallSource[]|\Cake\Collection\CollectionInterface $callSources
  */
 use Cake\Routing\Router;
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details

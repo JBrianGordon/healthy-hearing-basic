@@ -5,16 +5,6 @@
  */
 use Cake\Routing\Router;
 use App\Model\Entity\Content;
-/* TODO - do I need this?
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'created_start_date',
-        'created_end_date',
-        'last_mod_start_date',
-        'last_mod_end_date',
-        'saved_search',
-    ],
-]);*/
 $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
