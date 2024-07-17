@@ -38,9 +38,8 @@ class ZipsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('zipcodes');
+        $this->setTable('zips');
         $this->setDisplayField('zip');
-        $this->setPrimaryKey('zip');
 
         $this->addBehaviors(['Search.Search']);
 
@@ -78,7 +77,7 @@ class ZipsTable extends Table
         $validator
             ->scalar('zip')
             ->maxLength('zip', 10)
-            ->allowEmptyString('zip', null, 'create');
+            ->notEmptyString('zip');
 
         $validator
             ->numeric('lat')
@@ -91,25 +90,22 @@ class ZipsTable extends Table
         $validator
             ->scalar('city')
             ->maxLength('city', 64)
-            ->requirePresence('city', 'create')
             ->notEmptyString('city');
 
         $validator
             ->scalar('state')
             ->maxLength('state', 2)
-            ->requirePresence('state', 'create')
             ->notEmptyString('state');
 
         $validator
             ->scalar('areacode')
             ->maxLength('areacode', 3)
-            ->requirePresence('areacode', 'create')
             ->notEmptyString('areacode');
 
         $validator
             ->scalar('country_code')
             ->maxLength('country_code', 2)
-            ->allowEmptyString('country_code');
+            ->notEmptyString('country_code');
 
         return $validator;
     }
@@ -123,7 +119,7 @@ class ZipsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['zip', 'lat', 'lon']), ['errorField' => 'zip']);
+        $rules->add($rules->isUnique(['zip']));
 
         return $rules;
     }

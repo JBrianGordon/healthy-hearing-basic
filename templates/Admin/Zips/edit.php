@@ -29,12 +29,12 @@
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
 			                <?php
-				                echo $this->Form->control('zip', ['label' => 'ZIP', 'type' => 'number']);
-			                    echo $this->Form->control('lat', ['required' => false]);
-			                    echo $this->Form->control('lon', ['required' => false]);
-			                    echo $this->Form->control('city', ['required' => false]);
-			                    echo $this->Form->control('state', ['required' => false]);
-			                    echo $this->Form->control('areacode', ['required' => false]);
+				                echo $this->Form->control('zip', ['label' => 'ZIP', 'type' => 'string']);
+			                    echo $this->Form->control('lat');
+			                    echo $this->Form->control('lon');
+			                    echo $this->Form->control('city');
+			                    echo $this->Form->control('state');
+			                    echo $this->Form->control('areacode');
 			                    echo $this->Form->control('country_code');
 			                ?>
 			            </fieldset>

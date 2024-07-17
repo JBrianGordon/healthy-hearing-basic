@@ -5216,7 +5216,6 @@ class InitialSchema extends AbstractMigration
                 'null' => false,
             ])
             ->addColumn('country_code', 'string', [
-                'default' => 'US',
                 'limit' => 2,
                 'null' => true,
             ])

@@ -59,8 +59,10 @@ class ZipsController extends BaseAdminController
     public function add()
     {
         $zip = $this->Zips->newEmptyEntity();
+
         if ($this->request->is('post')) {
             $zip = $this->Zips->patchEntity($zip, $this->request->getData());
+
             if ($this->Zips->save($zip)) {
                 $this->Flash->success(__('The zip has been saved.'));
 
@@ -85,6 +87,7 @@ class ZipsController extends BaseAdminController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $zip = $this->Zips->patchEntity($zip, $this->request->getData());
+
             if ($this->Zips->save($zip)) {
                 $this->Flash->success(__('The zip has been saved.'));
 

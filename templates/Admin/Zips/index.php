@@ -74,16 +74,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                <tr>
 				                    <td class="p5">
 					                    <span class="badge bg-light">
-					                        <?= $this->Html->link($zip->zip,
-					                            [
-					                                'prefix' => false,
-					                                'controller' => 'locations',
-					                                'action' => 'viewCityZip',
-					                                'zip' => $zip->zip,
-					                                'city' => $zip->city,
-					                                'region' =>  $zip->state
-					                            ])
-					                        ?>
+					                        <?= $zip->zip ?>
 					                    </span>
 				                    </td>
 				                    <td class="p5"><?= $this->Number->format($zip->lat) ?></td>
@@ -95,10 +86,10 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <td class="actions p5">
 				                        <div class="btn-group-vertical btn-group-sm">
 				                            <?= $this->Html->link(__(' Edit'),
-				                                ['action' => 'edit', $zip->zip],
+				                                ['action' => 'edit', $zip->id],
 				                                ['class' => 'btn btn-xs btn-default bi bi-pencil-fill']) ?>
 				                            <?= $this->Form->postLink(__(' Delete'),
-				                                ['action' => 'delete', $zip->zip],
+				                                ['action' => 'delete', $zip->id],
 				                                ['class' => 'btn btn-xs btn-danger bi bi-trash', 'confirm' => __('Are you sure you want to delete {0}?', $zip->zip)]) ?>
 				                        </div>
 				                    </td>

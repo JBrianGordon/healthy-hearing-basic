@@ -1,4 +1,6 @@
 <?php
+use Cake\Core\Configure;
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Zip $zip
@@ -25,7 +27,13 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 			        <div class="zips form content">
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
-			                <?= $this->Form->control('zip', ['type'=>'text']) ?>
+			                <?= $this->Form->control('zip', ['type'=>'string']) ?>
+							<?= $this->Form->control('lat') ?>
+							<?= $this->Form->control('lon') ?>
+							<?= $this->Form->control('city') ?>
+							<?= $this->Form->control('state') ?>
+							<?= $this->Form->control('areacode') ?>
+							<?= $this->Form->control('country_code', ['default' => Configure::read('country')]) ?>
 			            </fieldset>
 			            <div class="form-actions tar">
 			            	<?= $this->Form->button(__('Add ZIP'), ['class' => 'btn btn-primary btn-lg']) ?>

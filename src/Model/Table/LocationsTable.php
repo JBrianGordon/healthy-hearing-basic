@@ -1575,7 +1575,7 @@ class LocationsTable extends Table
             $lat = $options['lat'];
             $lng = $options['lon'];
         } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
-            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            $zip = TableRegistry::get('Zips')->findByZip($options['zip'])->first();
             if (!empty($zip['lat']) && !empty($zip['lon'])) {
                 $lat = $zip['lat'];
                 $lng = $zip['lon'];
@@ -1646,7 +1646,7 @@ class LocationsTable extends Table
             $retval['city'] = slugifyCity($options['city']);
         }
         if (!empty($options['zip'])) {
-            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            $zip = TableRegistry::get('Zips')->findByZip($options['zip'])->first();
             $zip_city = $zip->city;
             if ($zip_city) {
                 $retval['city'] = slugifyCity($zip_city);

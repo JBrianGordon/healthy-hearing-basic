@@ -28,6 +28,7 @@ class Zip extends Entity
      * @var array
      */
     protected $_accessible = [
+        'zip' => true,
         'lat' => true,
         'lon' => true,
         'city' => true,
