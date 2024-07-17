@@ -62,7 +62,10 @@ class CallSourcesTable extends Table
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
-            ->value('customer_name')
+            ->like('customer_name', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('location_id')
             ->value('notes')
             ->value('phone_number')
