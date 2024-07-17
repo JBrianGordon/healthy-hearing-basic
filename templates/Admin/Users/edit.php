@@ -13,7 +13,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 ?>
 <header class="col-sm-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading"><?= 'Users Actions' ?></div>
+		<div class="panel-heading">Users Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -42,7 +42,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 									<tr>
 										<th class="col-md-3 tar">ID</th>
 										<td class="col-md-9">
-											<?php echo $user->id; ?>
+											<?= $user->id ?>
 										</td>
 									</tr>
 									<?php if (!empty($user->locations)): ?>
@@ -57,13 +57,13 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 									<tr>
 										<th class="col-md-3 tar">Created</th>
 										<td class="col-md-9">
-											<?php echo $user->created; ?>
+											<?= $user->created ?>
 										</td>
 									</tr>
 									<tr>
 										<th class="col-md-3 tar">Modified</th>
 										<td class="col-md-9">
-											<?php echo $user->modified; ?>
+											<?= $user->modified ?>
 										</td>
 									</tr>
 								</table>
@@ -84,13 +84,6 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 										<div class="row">
 											<div class="col-sm-6"><?= $this->Form->control('first_name', ['required' => true]) ?></div>
 											<div class="col-sm-6"><?= $this->Form->control('last_name', ['required' => true]) ?></div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6"><?= $this->Form->control('email') ?></div>
-											<div class="col-sm-6"><?= $this->Form->control('recovery_email') ?></div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6"><?= $this->Form->control('phone') ?></div>
 										</div>
 										<hr>
 										<div class="row">
@@ -116,6 +109,14 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 										?>
 										<hr>
 										<div class="row">
+											<div class="col-sm-6"><?= $this->Form->control('email') ?></div>
+											<div class="col-sm-6"><?= $this->Form->control('recovery_email') ?></div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6"><?= $this->Form->control('phone') ?></div>
+										</div>
+										<hr>
+										<div class="row">
 											<div class="col-sm-6"><?= $this->Form->control('address') ?></div>
 											<div class="col-sm-6"><?= $this->Form->control('state') ?></div>
 										</div>
@@ -129,7 +130,6 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 										</div>
 										<hr>
 										<?php
-											/*** TODO: replace bio with CKEditor instance when ready: ***/
 											echo $this->Form->control('bio', ['class' => 'editor']);
 											echo $this->Form->control('short_bio');
 										?>
@@ -148,7 +148,6 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 												<div class="col-sm-6"><?= $this->Form->control('is_csa', ['label' => 'Customer Support Assistant']) ?></div>
 												<div class="col-sm-6"><?= $this->Form->control('is_writer', ['label' => 'Content Writer']) ?></div>
 												<div class="col-sm-6"><?= $this->Form->control('is_author', ['label' => 'Author']) ?></div>
-												<!-- *** TODO: check why Reviewer isn't a boolean ***-->
 												<div class="col-sm-6"><?= $this->Form->control('is_reviewer', ['label' => 'Reviewer']) ?></div>
 											</div>
 										</div>
@@ -176,8 +175,8 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 
 												<?php foreach ($user->login_ips as $locationUserLogin): ?>
 													<tr>
-														<td><?php echo $locationUserLogin['login_date']; ?></td>
-														<td><?php echo $locationUserLogin['ip']; ?></td>
+														<td><?= $locationUserLogin['login_date'] ?></td>
+														<td><?= $locationUserLogin['ip'] ?></td>
 													</tr>
 												<?php endforeach; ?>
 											</table>

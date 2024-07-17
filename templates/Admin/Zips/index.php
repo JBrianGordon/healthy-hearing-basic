@@ -4,11 +4,6 @@
  * @var \App\Model\Entity\Zip[]|\Cake\Collection\CollectionInterface $zips
  */
 
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
 $queryParams = $this->request->getQueryParams();
 // Advanced search details
 $advancedSearchFields = [];

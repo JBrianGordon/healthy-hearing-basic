@@ -148,6 +148,12 @@ class LocationsController extends BaseAdminController
                     unset($data['location_emails'][$key]);
                 }
             }
+            // remove empty location notes
+            foreach ($data['location_notes'] as $key => $locationNote) {
+                if (empty($locationNote['body'])) {
+                    unset($data['location_notes'][$key]);
+                }
+            }
             $location = $this->Locations->patchEntity(
                 $location,
                 $data,

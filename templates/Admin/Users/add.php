@@ -1,3 +1,4 @@
+<?= $this->element('ckbox_script') ?>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -44,9 +45,8 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
                                 <div class="tab-content mt20">
                                     <div class="tab-pane show fade active" id="Basic" role="tabpanel">
                                         <div class="row m0">
-                                            <div class="col-sm-4"><?= $this->Form->control('first_name', ['required' => true]) ?></div>
-                                            <div class="col-sm-4"><?= $this->Form->control('middle_name', ['label' => 'Middle']) ?></div>
-                                            <div class="col-sm-4"><?= $this->Form->control('last_name', ['required' => true, 'label' => 'Last']) ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('first_name', ['required' => true]) ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('last_name', ['required' => true, 'label' => 'Last']) ?></div>
                                         </div>
                                         <hr>
                                         <div class="row m0">
@@ -93,8 +93,7 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
                                         </div>
                                         <hr>
                                         <?php
-                                            /*** TODO: replace bio with CKEditor instance when ready: ***/
-                                            echo $this->Form->control('bio');
+                                            echo $this->Form->control('bio', ['class' => 'editor']);
                                             echo $this->Form->control('short_bio');
                                         ?>
                                     </div>

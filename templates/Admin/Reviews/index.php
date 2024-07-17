@@ -10,11 +10,6 @@ use App\Model\Entity\Location;
 use App\Model\Entity\Review;
 use Cake\Core\Configure;
 
-$this->loadHelper('Search.Search', [
-    'additionalBlacklist' => [
-        'saved_search',
-    ],
-]);
 $queryParams = $this->request->getQueryParams();
 $filter ??= null;
 // Add additional search fields
@@ -102,6 +97,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                 <h2>Reviews</h2>
                 <div class="reviews index content">
                     <?= $this->element('pagination') ?>
+                    <?= $this->element('admin_filter', ['modelName' => 'review']) ?>
                     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                     <div class="table-responsive">

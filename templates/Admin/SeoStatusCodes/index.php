@@ -28,8 +28,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Seo Status Codes</h2>
-                <!-- ***TODO: add search feature*** -->
                 <div class="seoStatusCodes index content">
+                    <?= $this->element('pagination') ?>
+                    <?= $this->element('admin_filter', ['modelName' => 'seoStatusCode']) ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-condensed">
                             <thead>

@@ -37,8 +37,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?= $this->Form->create($seoStatusCode) ?>
                             <fieldset>
                                 <?php
-                                    /*** TODO: replace seo_uri_id with the uri value (e.g. /locations/cities) ***/
-                                    echo $this->Form->control('seo_uri_id', ['options' => $seoUris]);
+                                    echo $this->Form->control('seo_uri.uri');
                                     echo $this->Form->control('status_code');
                                     echo $this->Form->control('priority');
                                 ?>

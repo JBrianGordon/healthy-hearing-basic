@@ -45,12 +45,24 @@ class SeoStatusCodesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->belongsTo('SeoUris', [
             'foreignKey' => 'seo_uri_id',
             'joinType' => 'LEFT',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['SeoUris.uri'],
+            ]);
     }
 
     /**

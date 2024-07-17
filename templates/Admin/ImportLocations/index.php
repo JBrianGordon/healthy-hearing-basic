@@ -85,6 +85,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                                 
                                 <div class="importLocations index content">
                                     <?= $this->element('pagination') ?>
+                                    <?= $this->element('admin_filter', ['modelName' => 'import']) ?>
                                     <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
                                     <!-- Overwrite _searchParams here so it doesn't save the current import_id -->
                                     <?= $this->element('crm_search', ['crmSearches' => $crmSearches, '_searchParams' => $queryParams]) ?>

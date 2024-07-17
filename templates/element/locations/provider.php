@@ -129,7 +129,7 @@ use Cake\Core\Configure;
 			echo '<span id="provider' . $key . 'Photo" class="clinic-anchor"></span>';
 			if (!empty($provider->thumb_url)) {
 				echo $this->Form->control("providers." . $key . ".thumb_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->thumb_url ?? '']);
-				echo '<div class="btn btn-danger btn-xs provider-photo-delete pull-right m10" data-target="Provider' . $key . 'ThumbUrl">Delete Photo</div>';
+				echo '<div class="btn btn-danger btn-xs provider-photo-delete pull-right m10" data-target="providers-' . $key . '-thumb-url">Delete Photo</div>';
 			}
 			echo "<div class='form-group'><div class='col col-sm-9 col-md-offset-3'>" . $this->Clinic->providerImage($provider) . "</div></div>";
 		}

@@ -12,16 +12,30 @@ namespace App\Controller\Admin;
 class SeoStatusCodesController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['SeoUris'],
-        ];
-        $seoStatusCodes = $this->paginate($this->SeoStatusCodes);
+        $query = $this->SeoStatusCodes
+            ->find('search', ['search' => $this->request->getQueryParams()])
+            ->contain(['SeoUris']);
+
+        $seoStatusCodes = $this->paginate($query);
 
         $this->set(compact('seoStatusCodes'));
     }
@@ -34,6 +48,12 @@ class SeoStatusCodesController extends BaseAdminController
     public function add()
     {
         $seoStatusCode = $this->SeoStatusCodes->newEmptyEntity();
+
+        $seoUri = $this->SeoStatusCodes->SeoUris->newEmptyEntity();
+        $seoUri = $this->SeoStatusCodes->SeoUris->patchEntity($seoUri, $this->request->getData());
+
+        $seoStatusCode->seo_uri = $seoUri;
+
         if ($this->request->is('post')) {
             $seoStatusCode = $this->SeoStatusCodes->patchEntity($seoStatusCode, $this->request->getData());
             if ($this->SeoStatusCodes->save($seoStatusCode)) {
@@ -57,7 +77,7 @@ class SeoStatusCodesController extends BaseAdminController
     public function edit($id = null)
     {
         $seoStatusCode = $this->SeoStatusCodes->get($id, [
-            'contain' => [],
+            'contain' => ['SeoUris'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $seoStatusCode = $this->SeoStatusCodes->patchEntity($seoStatusCode, $this->request->getData());

@@ -618,6 +618,16 @@ providerCheckboxes.forEach((checkbox) => {
   insertAfter(checkbox.parentNode, "<span class='slider' style='margin-left:235px'></span>");
 });
 
+const deletePhotoButtons = document.querySelectorAll('.provider-photo-delete');
+deletePhotoButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const target = button.getAttribute('data-target');
+    const img = button.nextElementSibling.querySelector('img');
+    document.getElementById(target).value = '';
+    img.setAttribute('src', '');
+  });
+});
+
 //special announcement border selection
 const borderRadioElements = document.querySelectorAll(".border-radio");
 
