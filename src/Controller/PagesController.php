@@ -159,6 +159,7 @@ class PagesController extends AppController
     {
         $page = true;
         $this->set(compact('page'));
+        $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         
         if (!Configure::read('showNewsletter')) {
             throw new NotFoundException();
