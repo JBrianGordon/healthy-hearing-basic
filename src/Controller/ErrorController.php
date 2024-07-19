@@ -43,6 +43,7 @@ class ErrorController extends AppController
      */
     public function beforeFilter(EventInterface $event)
     {
+        parent::beforeFilter($event);
     }
 
     /**
@@ -66,5 +67,23 @@ class ErrorController extends AppController
      */
     public function afterFilter(EventInterface $event)
     {
+    }
+
+    public function error404()
+    {
+        $this->Content = $this->fetchTable('Content');
+        $articles = $this->Content->findLatest(4);
+
+        $this->render('error404');
+        $this->response = $this->response->withStatus(404);
+    }
+
+    public function error410()
+    {
+        $this->Content = $this->fetchTable('Content');
+        $articles = $this->Content->findLatest(4);
+        
+        $this->render('error410');
+        $this->response = $this->response->withStatus(410);
     }
 }

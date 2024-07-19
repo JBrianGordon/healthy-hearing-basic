@@ -239,4 +239,16 @@ class AppController extends Controller
     public function hasRecoveryEmail() {
         return (!empty($this->user->email));
     }
+
+    public function throw404NotFound()
+    {
+        $this->render('/Error/error404');
+        $this->response = $this->response->withStatus(404);
+    }
+
+    public function throw410Gone()
+    {
+        $this->render('/Error/error410');
+        $this->response = $this->response->withStatus(410);
+    }
 }

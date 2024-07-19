@@ -28,7 +28,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages')): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages' || isset($showTest))): ?>
 		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
