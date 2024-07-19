@@ -105,6 +105,11 @@ class PagesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function feeds() {
+        // 404 for Canada
+        if (!Configure::read('showReports')) {
+            return $this->throw404NotFound();
+        }
+
         $page = $this->Pages->findByTitle('feeds')->first();
 
         $this->set(compact('page'));
