@@ -19,6 +19,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -242,12 +243,20 @@ class AppController extends Controller
 
     public function throw404NotFound()
     {
+        $contentTable = TableRegistry::getTableLocator()->get('Content');
+        $articles = $contentTable->findLatest(4);
+        $this->set('articles', $articles);
+
         $this->render('/Error/error404');
         $this->response = $this->response->withStatus(404);
     }
 
     public function throw410Gone()
     {
+        $contentTable = TableRegistry::getTableLocator()->get('Content');
+        $articles = $contentTable->findLatest(4);
+        $this->set('articles', $articles);
+    
         $this->render('/Error/error410');
         $this->response = $this->response->withStatus(410);
     }

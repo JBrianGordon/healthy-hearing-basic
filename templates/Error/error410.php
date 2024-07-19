@@ -9,7 +9,7 @@
 $this->layout = 'default';
 $errorPage = true;
 
-$this->assign('title', '404 Not Found');
+$this->assign('title', '410 Gone');
 ?>
 <div class="container-fluid site-body blog">
   <div class="row">
