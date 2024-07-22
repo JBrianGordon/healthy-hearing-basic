@@ -8,6 +8,7 @@ use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewRating;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Enums\Model\Review\ReviewStatus;
+use Cake\Core\Configure;
 ?>
 <header class="col-sm-12 mt10">
     <div class="panel panel-light">
@@ -37,7 +38,7 @@ use App\Enums\Model\Review\ReviewStatus;
                                     echo $this->Form->control('character_count', ['required' => false, 'disabled' => true]);
                                     echo $this->Form->control('first_name');
                                     echo $this->Form->control('last_name', ['required' => true]);
-                                    echo $this->Form->control('zip', ['label' => 'ZIP code']);
+                                    echo $this->Form->control('zip', ['label' => Configure::read('zipLabel')]);
                                 ?>
                                 <?php
                                     echo $this->Form->control('origin', ['options' => ReviewOrigin::getOriginLabelArray()]);

@@ -10,7 +10,7 @@ return [
     'countryName' => 'Canada',
     'fullCountryName' => 'Canada',
     'stateLabel' => 'province',
-    'zipLabel' => 'postal code',
+    'zipLabel' => 'Postal code',
     'zipShort' => 'postal code',
     'phone' => '(888) 621-8058',
     'checkPayment' => 'Cheque',

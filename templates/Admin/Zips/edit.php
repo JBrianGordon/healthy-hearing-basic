@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Zip $zip
  */
+use Cake\Core\Configure;
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
@@ -29,7 +30,7 @@
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
 			                <?php
-				                echo $this->Form->control('zip', ['label' => 'ZIP', 'type' => 'string']);
+				                echo $this->Form->control('zip', ['label' => Configure::read('zipLabel'), 'type' => 'string']);
 			                    echo $this->Form->control('lat');
 			                    echo $this->Form->control('lon');
 			                    echo $this->Form->control('city');
@@ -39,7 +40,7 @@
 			                ?>
 			            </fieldset>
 			            <div class="form-actions tar">
-			            	<?= $this->Form->button(__('Save ZIP'), ['class' => 'btn btn-primary btn-lg']) ?>
+			            	<?= $this->Form->button(__('Add ' . Configure::read('zipLabel')), ['class' => 'btn btn-primary btn-lg']) ?>
 			            </div>
 			            <?= $this->Form->end() ?>
 			        </div>

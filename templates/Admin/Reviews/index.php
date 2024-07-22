@@ -110,7 +110,7 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                                         <th><?= $this->Paginator->sort('character_count', 'Characters') ?><br><?= $this->Paginator->sort('is_spam', 'Spam') ?></th>
                                         <th><?= $this->Paginator->sort('body', 'Review') ?></th>
                                         <th nowrap><?= $this->Paginator->sort('location_id', 'Clinic') ?><br><?= $this->Paginator->sort('Location.listing_type', 'Listing Type') ?><br>Reviews</th>
-                                        <th><?= $this->Paginator->sort('created') ?><br><?= $this->Paginator->sort('zip', ['label' => 'ZIP code']) ?></th>
+                                        <th><?= $this->Paginator->sort('created') ?><br><?= $this->Paginator->sort('zip', ['label' => Configure::read('zipLabel')]) ?></th>
                                         <th class="actions"><?= __('Actions') ?></th>
                                     </tr>
                                 </thead>

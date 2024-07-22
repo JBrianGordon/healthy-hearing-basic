@@ -8,6 +8,7 @@ use App\Enums\Model\Review\ReviewOrigin;
 use App\Enums\Model\Review\ReviewRating;
 use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Enums\Model\Review\ReviewStatus;
+use Cake\Core\Configure;
 
 $this->Html->script('dist/review_index.min', ['block' => true]);
 ?>
@@ -61,7 +62,7 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                     echo $this->Form->control('character_count', ['required' => false, 'disabled' => true]);
                                     echo $this->Form->control('first_name');
                                     echo $this->Form->control('last_name', ['required' => true]);
-                                    echo $this->Form->control('zip', ['label' => 'ZIP code']);
+                                    echo $this->Form->control('zip', ['label' => Configure::read('zipLabel')]);
                                     echo $this->Form->control('ip', ['disabled' => true]);
                                 ?>
                                 <div class="row">
