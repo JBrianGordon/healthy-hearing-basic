@@ -10,9 +10,11 @@ $this->Breadcrumbs->add([
     ['title' => $siteName . " " . $page->title, 'url' => ''],
 ]);
 
+$articles = null;
+
 $this->Html->script('dist/content.min.js', ['block' => true]);
 ?>
-<div class="container-fluid site-body blog">
+<div class="container-fluid site-body blog p-sm-0 overflow-hidden">
   <div class="row">
     <div class="backdrop backdrop-gradient backdrop-height"></div>
     <div class="container">
@@ -33,12 +35,12 @@ $this->Html->script('dist/content.min.js', ['block' => true]);
                         <h1>Healthy Hearing newsletter</h1>
                         <?php
                             echo $this->Form->create($newsletterForm);
-                            echo $this->Form->control('first_name', ['placeholder' => 'First name']);
-                            echo $this->Form->control('last_name', ['placeholder' => 'Last name']);
-                            echo $this->Form->control('email', [
-                                'label' => 'Email',
-                                'placeholder' => 'Email',
+                            $this->Form->setTemplates([
+                                'inputContainer' => '<div class="mb-3 form-group text flex-column">{{content}}</div>',
                             ]);
+                            echo $this->Form->control('first_name', ['label' => ['class' => 'tal pl0'], 'placeholder' => 'First name', 'class' => 'w-100']);
+                            echo $this->Form->control('last_name', ['label' => ['class' => 'tal pl0'], 'placeholder' => 'Last name', 'class' => 'w-100']);
+                            echo $this->Form->control('email', ['label' => ['text' => 'Email', 'class' => 'tal pl0'],'placeholder' => 'Email','class' => 'w-100' ]);
                             echo $this->Recaptcha->display();
                         ?>
                         <div class="form-actions tar">
@@ -52,6 +54,6 @@ $this->Html->script('dist/content.min.js', ['block' => true]);
                 </div>
             </article>
         </div>
-        <?= $this->element('side_panel') ?>
+        <?= $this->element('side_panel', ['articles' => $articles]) ?>
     </div>
 </div>
