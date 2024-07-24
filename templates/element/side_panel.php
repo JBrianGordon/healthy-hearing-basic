@@ -11,6 +11,9 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 //Set order on hearing test page
 $facOrder = $controller == 'QuizResults' ? ' style="order:1"' : ' style="order:9"';
 
+//Set order on recent articles
+$articleOrder = isset($errorPage) ? ' style="order:7"' : ' style="order:12"';
+
 //Set panel order depending on page, using flex
 //Hearing test panel
 if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
@@ -28,7 +31,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages')): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages' || isset($errorPage))): ?>
 		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
@@ -71,8 +74,8 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 			</div>
 		</section>
 	<?php endif; ?>
-	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if ((!empty($articles) && empty($wiki) && empty($page)) || isset($stateNice)): ?>
+	<?= (Configure::read('showAds') && $controller != 'Wikis' && !isset($errorPage)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if ((!empty($articles) && empty($wiki) && empty($page) && !isset($errorPage)) || isset($stateNice)): ?>
 		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
 	<section class="panel panel-secondary"<?= $facOrder ?>>
@@ -102,7 +105,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
 	<?php if (Configure::read('showReports') && ($controller != 'QuizResults') && !empty($articles)): ?>
-		<section class="panel panel-light blog-previews" style="order:12">
+		<section class="panel panel-light blog-previews"<?= $articleOrder ?>>
 		<header class="panel-heading text-center">
 		  <h2>The Healthy Hearing Report</h2>
 		</header>

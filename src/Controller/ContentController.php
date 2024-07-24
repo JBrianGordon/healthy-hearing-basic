@@ -117,7 +117,7 @@ class ContentController extends AppController
             }
         }
         if (empty($id) || !is_numeric($id)) {
-            return $this->executeStatusCode(410);
+            return $this->response = $this->response->withStatus(410);
         }
 
         $content = $this->Content->findByIdSlug($id, $_SERVER['REQUEST_URI']);
@@ -130,7 +130,7 @@ class ContentController extends AppController
             return $this->throw404NotFound();
         }
         if ($content->is_gone) {
-            return $this->executeStatusCode(410);
+            return $this->throw410Gone();
         }
 
         //set up and assign the meta tag info

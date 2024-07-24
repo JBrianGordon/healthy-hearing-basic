@@ -38,7 +38,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <?php
                                 echo $this->Form->control('address', ['label' => ['class' => 'col-md-4-override'], 'class' => 'col-md-8-override']);
                                 echo $this->Form->control('city', ['label' => ['class' => 'col-md-4-override'], 'class' => 'col-md-8-override']);
-                                echo $this->Form->control('zip', ['label' => ['class' => 'col-md-4-override'], 'class' => 'col-md-8-override']);
+                                echo $this->Form->control('zip', ['label' => ['class' => 'col-md-4-override', 'text' => Configure::read('zipLabel')], 'class' => 'col-md-8-override']);
                             ?>
                         </div>
                         <div class="col-md-6 row">

@@ -13,8 +13,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-heading">Zips Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+				<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 			</div>
 		</div>
 	</div>
@@ -27,7 +27,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 			        <div class="zips form content">
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
-			                <?= $this->Form->control('zip', ['type'=>'string']) ?>
+			                <?= $this->Form->control('zip', ['label' => Configure::read('zipLabel'), 'type'=>'string']) ?>
 							<?= $this->Form->control('lat') ?>
 							<?= $this->Form->control('lon') ?>
 							<?= $this->Form->control('city') ?>
@@ -36,7 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 							<?= $this->Form->control('country_code', ['default' => Configure::read('country')]) ?>
 			            </fieldset>
 			            <div class="form-actions tar">
-			            	<?= $this->Form->button(__('Add ZIP'), ['class' => 'btn btn-primary btn-lg']) ?>
+			            	<?= $this->Form->button(__('Add ' . Configure::read('zipLabel')), ['class' => 'btn btn-primary btn-lg']) ?>
 			            </div>
 			            <?= $this->Form->end() ?>
 			        </div>

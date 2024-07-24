@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Import $import
  */
+use Cake\Core\Configure;
 ?>
 <div class="row">
     <aside class="column">
@@ -19,57 +20,57 @@
             <h3><?= h($import->id) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Type') ?></th>
+                    <th>Type</th>
                     <td><?= h($import->type) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Id') ?></th>
+                    <th>Id</th>
                     <td><?= $this->Number->format($import->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Total Locations') ?></th>
+                    <th>Total Locations</th>
                     <td><?= $import->total_locations === null ? '' : $this->Number->format($import->total_locations) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('New Locations') ?></th>
+                    <th>New Locations</th>
                     <td><?= $import->new_locations === null ? '' : $this->Number->format($import->new_locations) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Updated Locations') ?></th>
+                    <th>Updated Locations</th>
                     <td><?= $import->updated_locations === null ? '' : $this->Number->format($import->updated_locations) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Total Providers') ?></th>
+                    <th>Total Providers</th>
                     <td><?= $import->total_providers === null ? '' : $this->Number->format($import->total_providers) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('New Providers') ?></th>
+                    <th>New Providers</th>
                     <td><?= $import->new_providers === null ? '' : $this->Number->format($import->new_providers) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Updated Providers') ?></th>
+                    <th>Updated Providers</th>
                     <td><?= $import->updated_providers === null ? '' : $this->Number->format($import->updated_providers) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Created') ?></th>
+                    <th>Created</th>
                     <td><?= h($import->created) ?></td>
                 </tr>
             </table>
             <div class="related">
-                <h4><?= __('Related Import Diffs') ?></h4>
+                <h4>Related Import Diffs</h4>
                 <?php if (!empty($import->import_diffs)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Import Id') ?></th>
-                            <th><?= __('Model') ?></th>
-                            <th><?= __('Id Model') ?></th>
-                            <th><?= __('Field') ?></th>
-                            <th><?= __('Value') ?></th>
-                            <th><?= __('Review Needed') ?></th>
-                            <th><?= __('Created') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
+                            <th>Id</th>
+                            <th>Import Id</th>
+                            <th>Model</th>
+                            <th>Id Model</th>
+                            <th>Field</th>
+                            <th>Value</th>
+                            <th>Review Needed</th>
+                            <th>Created</th>
+                            <th class="actions">Actions</th>
                         </tr>
                         <?php foreach ($import->import_diffs as $importDiffs) : ?>
                         <tr>
@@ -82,9 +83,9 @@
                             <td><?= h($importDiffs->review_needed) ?></td>
                             <td><?= h($importDiffs->created) ?></td>
                             <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'ImportDiffs', 'action' => 'view', $importDiffs->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'ImportDiffs', 'action' => 'edit', $importDiffs->id]) ?>
-                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'ImportDiffs', 'action' => 'delete', $importDiffs->id], ['confirm' => __('Are you sure you want to delete # {0}?', $importDiffs->id)]) ?>
+                                <?= $this->Html->link('View', ['controller' => 'ImportDiffs', 'action' => 'view', $importDiffs->id]) ?>
+                                <?= $this->Html->link('Edit', ['controller' => 'ImportDiffs', 'action' => 'edit', $importDiffs->id]) ?>
+                                <?= $this->Form->postLink('Delete', ['controller' => 'ImportDiffs', 'action' => 'delete', $importDiffs->id], ['confirm' => __('Are you sure you want to delete # {0}?', $importDiffs->id)]) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -98,11 +99,11 @@
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Import Id') ?></th>
-                            <th><?= __('Import Location Id') ?></th>
-                            <th><?= __('Import Provider Id') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
+                            <th>Id</th>
+                            <th>Import Id</th>
+                            <th>Import Location Id</th>
+                            <th>Import Provider Id</th>
+                            <th class="actions">Actions</th>
                         </tr>
                         <?php foreach ($import->import_location_providers as $importLocationProviders) : ?>
                         <tr>
@@ -122,32 +123,32 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Import Locations') ?></h4>
+                <h4>Related Import Locations</h4>
                 <?php if (!empty($import->import_locations)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Import Id') ?></th>
-                            <th><?= __('Id External') ?></th>
-                            <th><?= __('Location Id') ?></th>
-                            <th><?= __('Id Oticon') ?></th>
-                            <th><?= __('Cqp Practice Id') ?></th>
-                            <th><?= __('Cqp Office Id') ?></th>
-                            <th><?= __('Title') ?></th>
-                            <th><?= __('Subtitle') ?></th>
-                            <th><?= __('Email') ?></th>
-                            <th><?= __('Address') ?></th>
-                            <th><?= __('Address 2') ?></th>
-                            <th><?= __('City') ?></th>
-                            <th><?= __('State') ?></th>
-                            <th><?= __('Zip') ?></th>
-                            <th><?= __('Phone') ?></th>
-                            <th><?= __('Match Type') ?></th>
-                            <th><?= __('Is Retail') ?></th>
-                            <th><?= __('Is New') ?></th>
-                            <th><?= __('Notes') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
+                            <th>Id</th>
+                            <th>Import Id</th>
+                            <th>Id External</th>
+                            <th>Location Id</th>
+                            <th>Id Oticon</th>
+                            <th>Cqp Practice Id</th>
+                            <th>Cqp Office Id</th>
+                            <th>Title</th>
+                            <th>Subtitle</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Address 2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th><?= Configure::read('zipLabel') ?></th>
+                            <th>Phone</th>
+                            <th>Match Type</th>
+                            <th>Is Retail</th>
+                            <th>Is New</th>
+                            <th>Notes</th>
+                            <th class="actions">Actions</th>
                         </tr>
                         <?php foreach ($import->import_locations as $importLocations) : ?>
                         <tr>

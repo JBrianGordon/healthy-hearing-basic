@@ -359,7 +359,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                 'label' => ['class' => 'form-label col-md-4-override'],
                                                 'class' => 'form-control col-md-8-override']);
                                             echo $this->Form->control('zip', [
-                                                'label' => ['class' => 'form-label col-md-4-override'],
+                                                'label' => ['class' => 'form-label col-md-4-override', 'text' => Configure::read('zipLabel')],
                                                 'class' => 'form-control col-md-8-override']);
                                             echo $this->Form->control('radius', [
                                                 'label' => ['class' => 'form-label col-md-4-override', 'text' => 'Radius (miles)'],
