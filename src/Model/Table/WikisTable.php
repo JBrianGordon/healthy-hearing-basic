@@ -59,6 +59,16 @@ class WikisTable extends Table
                 'is_active' => 0,
             ],
         ]);
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+            ],
+            'order' => [
+                'priority' => 'ASC',
+                'name' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
 
         $this->belongsTo('Authors', [
             'className' => 'Users',

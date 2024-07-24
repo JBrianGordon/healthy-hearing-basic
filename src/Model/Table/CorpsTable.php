@@ -225,7 +225,6 @@ class CorpsTable extends Table
 
         $validator
             ->integer('priority')
-            ->requirePresence('priority', true, 'Priority is a required field')
             ->notEmptyString('priority', 'Priority cannot be left blank');
 
         return $validator;

@@ -44,6 +44,16 @@ class StatesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+            ],
+            'order' => [
+                'priority' => 'ASC',
+                'name' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
     }
 
     /**
