@@ -72,6 +72,25 @@ editorElements.forEach((element) => {
             shouldNotGroupWhenFull: true
         },
         language: 'en',
+        link: {
+            decorators: {
+                openInNewTab: {
+                    mode: 'manual',
+                    label: 'Open in a new tab',
+                    attributes: {
+                        target: '_blank',
+                        rel: 'noopener noreferrer'
+                    }
+                },        
+                addClass: {
+                    mode: 'manual',
+                    label: 'Add orange button classes',
+                    attributes: {
+                        class: 'text-link btn btn-secondary'
+                    }
+                }
+            }
+        },
         CloudServices: {
             tokenUrl: ckTokenUrl
         }
