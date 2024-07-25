@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Zip[]|\Cake\Collection\CollectionInterface $zips
  */
+use Cake\Core\Configure;
 
 $queryParams = $this->request->getQueryParams();
 // Advanced search details
@@ -17,6 +18,9 @@ foreach ($fields as $field => $type) {
         $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
+	if($field == 'zip' && Configure::read('zipLabel') == 'Postal code') {
+		$label = 'Postal code';
+	}
     $advancedSearchFields[] = [
         'field' => $field,
         'type' => $type,
@@ -35,8 +39,8 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 		<div class="panel-heading"><?= ucfirst($zipShort) ?>s Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-			    <?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+			    <?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 			</div>
 		</div>
 	</div>
@@ -48,7 +52,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<h2><?= ucfirst($zipLabel) ?>s</h2>
 				<div class="zips index content">
 				    <?= $this->element('pagination') ?>
-					<?= $this->element('admin_filter', ['modelName' => 'zips']) ?>
+					<?= $this->element('admin_filter', ['modelName' => __($zipLabel . 's')]) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm mb30">
