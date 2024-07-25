@@ -36,7 +36,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading"><?= ucfirst($zipShort) ?>s Actions</div>
+		<div class="panel-heading"><?= ucfirst($zipLabel) ?> Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>

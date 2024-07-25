@@ -10,7 +10,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading"><?= $zipShort ?> Actions</div>
+		<div class="panel-heading"><?= ucfirst($zipShort) ?> Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -27,7 +27,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 			        <div class="zips form content">
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
-			                <?= $this->Form->control('zip', ['label' => Configure::read('zipLabel'), 'type'=>'string']) ?>
+			                <?= $this->Form->control('zip', ['label' => ucfirst(Configure::read('zipLabel')), 'type'=>'string']) ?>
 							<?= $this->Form->control('lat') ?>
 							<?= $this->Form->control('lon') ?>
 							<?= $this->Form->control('city') ?>
