@@ -35,7 +35,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 							</div>
 						</div>
 					</section>
-					<?php if($totalClinics > 0) : ?>
+					<?php if($hasAtLeastOneClinic) : ?>
 						<section id="quickLinkBar">
 							<div class="container">
 								<div id="linkBlock">
@@ -107,14 +107,14 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 							</div>
 						</section>-->
 				    <?php //endif; ?>
-				    <?php if ($totalClinics > 0): ?> <!-- Don't show city section if there are no clinics in state/province -->
+				    <?php if ($hasAtLeastOneClinic): ?> <!-- Don't show city section if there are no clinics in state/province -->
 						<section id="cities" class="panel panel-primary">
 							<div class="panel-heading text-center panel-section-header">
 								<h2>Cities in <?= $stateNice ?></h2>
 							</div>
 							<div class="panel-body">
 								<p class="mt40 pl20 pr20">Select a city below for a listing of hearing <?= Configure::read('regionalSpelling.center') ?>s that offer in-person care provided by an audiologist or hearing aid specialist.</p>
-								<?php if ($totalClinics != 0): ?>
+								<?php if ($hasAtLeastOneClinic): ?>
 									<div class="panel-section expanded"> <!-- City listing -->
 										<div class="row">
 											<?php foreach ($chunkedData as $i => $chunkedElement): ?>

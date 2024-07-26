@@ -66,12 +66,6 @@ class LocationsController extends AppController
 
         $this->set('states', Configure::read('states'));
         $this->set('countries', Configure::read('countries'));
-        $this->set('cities', $this->fetchTable('Cities')->find('all', [
-            'conditions' => [
-                'is_featured' => 1
-            ],
-            'order' => 'city'
-        ])->all());
         $this->set('fapterm', $this->fapSearchTerm());
     }
 
@@ -96,7 +90,6 @@ class LocationsController extends AppController
         }
 
         $citiesTable = $this->fetchTable('Cities');
-        $countMetricsTable = $this->fetchTable('CountMetrics');
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
@@ -104,21 +97,6 @@ class LocationsController extends AppController
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 
-        $totalClinics = $countMetricsTable->getCount($stateAbbr, 'clinics', 'state');
-
-        $topCities = $citiesTable->find('all', [
-            'conditions' => [
-                'state' => $stateAbbr,
-                'is_near_location' => true,
-            ],
-            'order' => [
-                'population'=>'DESC'
-            ],
-            'limit' => $limit
-        ])->all();
-
-        $this->set('totalClinics', $totalClinics);
-        $this->set('topCities', $topCities);
         $this->set('show_ad', $show_ad);
 
         // Get state-specific resources
@@ -134,6 +112,17 @@ class LocationsController extends AppController
         }
 
         $statePageFields = ['id','title','listing_type','address','address_2','city','state','zip','is_mobile','is_call_assist','direct_book_type','direct_book_iframe','average_rating','reviews_approved'];
+
+        // Does state have at least one clinic?
+        $hasAtLeastOneClinicQuery = $this->Locations->find('all', [
+            'conditions' => [
+                'Locations.state' => $stateAbbr,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+            ]
+        ])->first();
+
+        $this->set('hasAtLeastOneClinic', $hasAtLeastOneClinicQuery !== null);
 
         // Get mobile clinics in a state
         $mobileClinicsInState = $this->Locations->find('all', [
@@ -190,16 +179,6 @@ class LocationsController extends AppController
         $customVars['category|2'] = $stateAbbr . '-' . $this->Locations->googleRegion($state);
         $this->set('customVars',$customVars);
 
-        // Get the total number of reviews for the country rounded to nearest hundred
-        $reviews = $countMetricsTable->find('all', [
-            'conditions' => [
-                'metric' => 'reviews',
-                'type' => 'state'
-            ]
-        ])->toArray();
-        $reviewCounts = array_column($reviews, 'count');
-        $roundedReviews = round(array_sum($reviewCounts), -2);
-        $this->set('roundedReviews', number_format($roundedReviews));
         $this->set('preferredClinicsNearMe', $this->Locations->findClinicsNearMe(4, true));
         $this->set('fapterm', $this->fapSearchTerm());
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
