@@ -15,6 +15,7 @@ $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'login', 'url' => ''],
 ]);
+$this->set('title', 'Login');
 
 $this->Html->script('dist/common.min.js', ['block' => true]);
 ?>

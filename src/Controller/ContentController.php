@@ -84,10 +84,11 @@ class ContentController extends AppController
             $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
         }
         //Add Title
-        $title = "The Healthy Hearing Report";
         $pageDescription = !empty($page) ? "page " . $page . " of " : "";
         $this->meta['description'] = "Browse $pageDescription Healthy Hearing's latest news, articles, and information on hearing loss, hearing aids and hearing clinics from around the US.";
-        $this->add_title($title);
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : 'The ' . $this->siteName . ' Report');
+        }
         $this->socialOptions['og:updated_time'] = date('Y-m-d 06:00:00', strtotime('today'));
         $this->set('reports', $reports);
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
@@ -140,11 +141,10 @@ class ContentController extends AppController
         $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
         $this->set('seoMetaTags', $seoMetaTags);
 
-        $this->SeoTitles = $this->fetchTable('SeoTitles');
-        $seoTitle = $this->SeoTitles->findTitleByUri($request);
-        $this->set('seoTitle', $seoTitle);
+        if (empty($title)) {
+            $this->set('title', isset($content->title_head) ? $content->title_head : $this->siteName);
+        }
 
-        $this->add_title($content->title_head);
         $this->meta['description'] = (isset($this->meta['description']) ? $this->meta['description'] : null);
         $this->meta['description'] = (!empty($content['Content']['meta_description']) ? $content['Content']['meta_description'] : $this->meta['description']);
         $this->socialOptions['og:type'] = 'article';

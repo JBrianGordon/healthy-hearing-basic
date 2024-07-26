@@ -28,8 +28,9 @@ class WikisController extends AppController
         $this->layout = 'simple';
         $this->meta['description'] = "Read our most comprehensive articles on the topics of hearing loss, hearing aids and tinnitus. All reviewed by our staff editors and audiologists.";
         $this->setMeta('robots', 'INDEX, FOLLOW');
-        $title = Configure::read('siteName')." help: Hearing loss, hearing aids, tinnitus and more";
-        $this->add_title($title);
+        if (empty($title)) {
+            $this->set('title', $this->siteName . " help: Hearing loss, hearing aids, tinnitus and more");
+        }
         $this->backgroundHeight = '1200px';
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         $this->set('wikis', $this->Wikis->findForIndex());
@@ -86,12 +87,10 @@ class WikisController extends AppController
             $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
             $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
             $this->set('seoMetaTags', $seoMetaTags);
+            if (empty($title)) {
+                $this->set('title', isset($wiki->title_head) ? $wiki->title_head : $this->siteName);
+            }
 
-            $this->SeoTitles = $this->fetchTable('SeoTitles');
-            $seoTitle = $this->SeoTitles->findTitleByUri($request);
-            $this->set('seoTitle', $seoTitle);
-
-            $this->add_title($wiki->title_head);
             if (!empty($wiki->short)) {
                 $this->meta['description'] = $wiki->short;
             }
