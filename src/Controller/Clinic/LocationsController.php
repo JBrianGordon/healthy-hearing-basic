@@ -32,6 +32,7 @@ class LocationsController extends BaseClinicController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
+        $this->set('title', $location->id . ' | ' . $location->title);
         $this->set(compact('location'));
         $this->set('days', $this->Locations->LocationHours->days);
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));

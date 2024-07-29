@@ -62,6 +62,7 @@ class ImportsController extends BaseAdminController
             'contain' => []
         ]);
         $imports = $this->paginate($importsQuery);
+        $this->set('title', 'Imports');
         $this->set('imports', $imports);
         $this->set('fields', $this->Imports->getSchema()->typeMap());
         $this->set('count', $importsQuery->count());
@@ -100,6 +101,7 @@ class ImportsController extends BaseAdminController
             }
             $this->Flash->error(__('The import could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add Import');
         $this->set(compact('import'));
     }
 
@@ -124,6 +126,7 @@ class ImportsController extends BaseAdminController
             }
             $this->Flash->error(__('The import could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Import');
         $this->set(compact('import'));
     }
 

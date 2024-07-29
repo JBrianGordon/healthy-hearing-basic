@@ -69,6 +69,7 @@ class CsCallsController extends BaseAdminController
             'contain' => ['Locations'],
         ];
         $csCalls = $this->paginate($query);
+        $this->set('title', 'Call Tracking index');
         $this->set('csCalls', $csCalls);
         $this->set('fields', $this->CsCalls->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);

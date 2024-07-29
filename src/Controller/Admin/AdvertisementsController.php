@@ -29,6 +29,7 @@ class AdvertisementsController extends AppController
     {
         $advertisements = $this->paginate($this->Advertisements);
 
+        $this->set('title', 'Advertisements index');
         $this->set(compact('advertisements'));
     }
 
@@ -59,6 +60,7 @@ class AdvertisementsController extends AppController
             }
             $this->Flash->error(__('The advertisement could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add Advertisement');
         $this->set(compact('advertisement'));
     }
 
@@ -83,6 +85,7 @@ class AdvertisementsController extends AppController
             }
             $this->Flash->error(__('The advertisement could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Advertisement');
         $this->set(compact('advertisement'));
     }
 

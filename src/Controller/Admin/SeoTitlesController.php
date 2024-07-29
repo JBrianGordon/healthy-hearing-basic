@@ -38,6 +38,7 @@ class SeoTitlesController extends BaseAdminController
 
         $seoTitles = $this->paginate($query);
 
+        $this->set('title', 'SEO Titles');
         $this->set(compact('seoTitles'));
     }
 
@@ -65,6 +66,7 @@ class SeoTitlesController extends BaseAdminController
             $this->Flash->error(__('The seo title could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoTitles->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Title');
         $this->set(compact('seoTitle', 'seoUris'));
     }
 
@@ -90,6 +92,7 @@ class SeoTitlesController extends BaseAdminController
             $this->Flash->error(__('The seo title could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoTitles->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Title');
         $this->set(compact('seoTitle', 'seoUris'));
     }
 

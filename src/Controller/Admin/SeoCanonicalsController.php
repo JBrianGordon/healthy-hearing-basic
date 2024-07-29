@@ -25,6 +25,7 @@ class SeoCanonicalsController extends BaseAdminController
         ];
         $seoCanonicals = $this->paginate($this->SeoCanonicals);
 
+        $this->set('title', 'SEO Canonicals');
         $this->set(compact('seoCanonicals'));
     }
 
@@ -46,6 +47,7 @@ class SeoCanonicalsController extends BaseAdminController
             $this->Flash->error(__('The seo canonical could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoCanonicals->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Canonical');
         $this->set(compact('seoCanonical', 'seoUris'));
     }
 
@@ -71,6 +73,7 @@ class SeoCanonicalsController extends BaseAdminController
             $this->Flash->error(__('The seo canonical could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoCanonicals->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Canonical');
         $this->set(compact('seoCanonical', 'seoUris'));
     }
 

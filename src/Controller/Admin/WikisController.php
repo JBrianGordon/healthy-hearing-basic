@@ -44,6 +44,7 @@ class WikisController extends BaseAdminController
                 'search' => $requestParams,
             ]);
 
+        $this->set('title', 'Help index');
         $this->set('wikis', $this->paginate($wikiQuery));
         $this->set('count', $wikiQuery->count());
 
@@ -69,6 +70,7 @@ class WikisController extends BaseAdminController
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
         $authors = $this->Wikis->Authors->authorList();
+        $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
     }
@@ -95,6 +97,7 @@ class WikisController extends BaseAdminController
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
         $authors = $this->Wikis->Authors->authorList();
+        $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
     }

@@ -48,6 +48,7 @@ class CrmSearchesController extends BaseAdminController
             'contain' => ['Users']
         ]);
 
+        $this->set('title', 'Crm Searches index');
         $this->set('allCrmSearches', $this->paginate($crmSearchQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CrmSearches->getSchema()->typeMap());
@@ -86,6 +87,7 @@ class CrmSearchesController extends BaseAdminController
         }
 
         $users = $this->CrmSearches->Users->find('list', ['keyField' => 'id','valueField' => 'username', 'conditions' => ['is_admin' => 1]])->toArray();
+        $this->set('title', 'Edit Crm Search');
         $this->set(compact('crmSearch', 'users'));
     }
 

@@ -72,6 +72,7 @@ class CaCallsController extends BaseAdminController
         if ($caCalls->count() > 0) {
             $this->CaCalls->loadInto($caCalls, ['CaCallGroups', 'CaCallGroups.Locations', 'Users']);
         }
+        $this->set('title', 'Ca Calls index');
         $this->set('caCalls', $caCalls);
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCalls->getSchema()->typeMap());
@@ -153,6 +154,7 @@ class CaCallsController extends BaseAdminController
 
         // New inbound call
         $previousCalls = $this->CaCalls->CaCallGroups->getPreviousCalls($locationId, false);
+        $this->set('title', 'Edit Call');
         $this->set('previousCalls', $previousCalls);
         $this->set('caCall', $caCall);
     }
