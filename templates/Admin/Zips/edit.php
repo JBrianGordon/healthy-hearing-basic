@@ -34,7 +34,7 @@ use Cake\Core\Configure;
 			                    echo $this->Form->control('lat');
 			                    echo $this->Form->control('lon');
 			                    echo $this->Form->control('city');
-			                    echo $this->Form->control('state');
+			                    echo $this->Form->control('state', ['label' => ucfirst(Configure::read('stateLabel'))]);
 			                    echo $this->Form->control('areacode');
 			                    echo $this->Form->control('country_code');
 			                ?>

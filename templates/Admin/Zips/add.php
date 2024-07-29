@@ -31,7 +31,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 							<?= $this->Form->control('lat') ?>
 							<?= $this->Form->control('lon') ?>
 							<?= $this->Form->control('city') ?>
-							<?= $this->Form->control('state') ?>
+							<?= $this->Form->control('state', ['label' => ucfirst(Configure::read('stateLabel'))]) ?>
 							<?= $this->Form->control('areacode') ?>
 							<?= $this->Form->control('country_code', ['default' => Configure::read('country')]) ?>
 			            </fieldset>

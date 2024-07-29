@@ -62,7 +62,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <th class="p5"><?= $this->Paginator->sort('lat') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('lon') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('city') ?></th>
-				                    <th class="p5"><?= $this->Paginator->sort('state') ?></th>
+				                    <th class="p5"><?= $this->Paginator->sort('state', ['label' => ucfirst($stateLabel)]) ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('areacode') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('country_code') ?></th>
 				                    <th class="actions p5"><?= __('Actions') ?></th>
