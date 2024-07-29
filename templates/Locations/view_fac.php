@@ -63,10 +63,10 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 							$setCount = 1;
 							$sets = $this->App->splitBy($states, $setCount);
 							for($i = 0; $i < (count($states) / $setCount); $i++): ?>
-								<tr class="col-md-4">
+								<tr class="col-12 col-md-4 p0">
 									<?php for($j = 0; $j < $setCount; $j++): ?>
 										<?php if (!empty($sets[$j])): ?>
-											<td>
+											<td class="col-12 d-block">
 												<?php
 													$stateFull = reset($sets[$j]);
 													$stateAbbr = key($sets[$j]);
