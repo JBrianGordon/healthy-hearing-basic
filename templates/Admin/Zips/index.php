@@ -21,6 +21,9 @@ foreach ($fields as $field => $type) {
 	if($field == 'zip' && Configure::read('zipLabel') == 'Postal code') {
 		$label = 'Postal code';
 	}
+	if($field == 'state' && Configure::read('stateLabel') == 'province') {
+		$label = 'Province';
+	}
     $advancedSearchFields[] = [
         'field' => $field,
         'type' => $type,
