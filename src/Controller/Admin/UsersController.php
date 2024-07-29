@@ -56,6 +56,7 @@ class UsersController extends BaseAdminController
         }
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()->where(['model' => 'Users'])->toArray();
+        $this->set('title', 'Users index');
         $this->set('users', $this->paginate($usersQuery));
         $this->set('fields', $this->Users->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
@@ -81,6 +82,7 @@ class UsersController extends BaseAdminController
         $corps = $this->Users->Corps->find('list', ['limit' => 200])->all();
         $content = $this->Users->Content->find('list', ['limit' => 200])->all();
         $wikis = $this->Users->Wikis->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add User');
         $this->set(compact('user', 'corps', 'content', 'wikis'));
     }
 
@@ -108,6 +110,7 @@ class UsersController extends BaseAdminController
         $corps = $this->Users->Corps->find('list', ['limit' => 200])->all();
         $content = $this->Users->Content->find('list', ['limit' => 200])->all();
         $wikis = $this->Users->Wikis->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit User');
         $this->set(compact('user', 'corps', 'content', 'wikis'));
     }
 

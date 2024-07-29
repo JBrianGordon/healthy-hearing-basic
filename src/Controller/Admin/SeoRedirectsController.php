@@ -38,6 +38,7 @@ class SeoRedirectsController extends BaseAdminController
 
         $seoRedirects = $this->paginate($query);
 
+        $this->set('title', 'SEO Redirects');
         $this->set(compact('seoRedirects'));
     }
 
@@ -65,6 +66,7 @@ class SeoRedirectsController extends BaseAdminController
             $this->Flash->error(__('The seo redirect could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoRedirects->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Redirect');
         $this->set(compact('seoRedirect', 'seoUris'));
     }
 
@@ -90,6 +92,7 @@ class SeoRedirectsController extends BaseAdminController
             $this->Flash->error(__('The seo redirect could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoRedirects->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Redirect');
         $this->set(compact('seoRedirect', 'seoUris'));
     }
 

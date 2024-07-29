@@ -45,6 +45,7 @@ class ZipsController extends BaseAdminController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('title', Configure::read('zipLabel') . ' Index');
         $this->set('zips', $this->paginate($zipsQuery));
         $this->set('fields', $this->Zips->getSchema()->typeMap());
         $this->set('zipLabel', Configure::read('zipLabel'));
@@ -71,6 +72,7 @@ class ZipsController extends BaseAdminController
             }
             $this->Flash->error(__('The ' . $zipLabel . ' could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add ' . Configure::read('zipLabel'));
         $this->set(compact('zip'));
     }
 
@@ -96,6 +98,7 @@ class ZipsController extends BaseAdminController
             }
             $this->Flash->error(__('The zip could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit ' . Configure::read('zipLabel'));
         $this->set(compact('zip'));
     }
 

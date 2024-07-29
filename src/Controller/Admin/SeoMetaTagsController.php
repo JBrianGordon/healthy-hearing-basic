@@ -38,6 +38,7 @@ class SeoMetaTagsController extends BaseAdminController
 
         $seoMetaTags = $this->paginate($query);
 
+        $this->set('title', 'SEO Meta Tags');
         $this->set(compact('seoMetaTags'));
     }
 
@@ -65,6 +66,7 @@ class SeoMetaTagsController extends BaseAdminController
             $this->Flash->error(__('The seo meta tag could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoMetaTags->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Meta Tag');
         $this->set(compact('seoMetaTag', 'seoUris'));
     }
 
@@ -90,6 +92,7 @@ class SeoMetaTagsController extends BaseAdminController
             $this->Flash->error(__('The seo meta tag could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoMetaTags->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Meta Tag');
         $this->set(compact('seoMetaTag', 'seoUris'));
     }
 

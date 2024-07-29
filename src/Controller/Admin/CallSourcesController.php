@@ -63,6 +63,7 @@ class CallSourcesController extends BaseAdminController
                 'search' => $requestParams,
             ]);
 
+        $this->set('title', 'Call Sources Index');
         $this->set('callSources', $this->paginate($callSourcesQuery));
         $this->set('count', $callSourcesQuery->count());
         $this->set('fields', $this->CallSources->getSchema()->typeMap());

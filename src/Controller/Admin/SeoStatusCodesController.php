@@ -37,6 +37,7 @@ class SeoStatusCodesController extends BaseAdminController
 
         $seoStatusCodes = $this->paginate($query);
 
+        $this->set('title', 'SEO Status Codes');
         $this->set(compact('seoStatusCodes'));
     }
 
@@ -64,6 +65,7 @@ class SeoStatusCodesController extends BaseAdminController
             $this->Flash->error(__('The seo status code could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoStatusCodes->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Status Code');
         $this->set(compact('seoStatusCode', 'seoUris'));
     }
 
@@ -89,6 +91,7 @@ class SeoStatusCodesController extends BaseAdminController
             $this->Flash->error(__('The seo status code could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoStatusCodes->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Status Code');
         $this->set(compact('seoStatusCode', 'seoUris'));
     }
 

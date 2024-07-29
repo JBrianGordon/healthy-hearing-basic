@@ -20,6 +20,7 @@ class SeoBlacklistsController extends BaseAdminController
     {
         $seoBlacklists = $this->paginate($this->SeoBlacklists);
 
+        $this->set('title', 'SEO Blacklists');
         $this->set(compact('seoBlacklists'));
     }
 
@@ -40,6 +41,7 @@ class SeoBlacklistsController extends BaseAdminController
             }
             $this->Flash->error(__('The seo blacklist could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add SEO Blacklist');
         $this->set(compact('seoBlacklist'));
     }
 
@@ -64,6 +66,7 @@ class SeoBlacklistsController extends BaseAdminController
             }
             $this->Flash->error(__('The seo blacklist could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit SEO Blacklist');
         $this->set(compact('seoBlacklist'));
     }
 

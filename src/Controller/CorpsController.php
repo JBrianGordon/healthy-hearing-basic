@@ -27,7 +27,9 @@ class CorpsController extends AppController
             // Self-heal url
             return $this->redirect(['controller'=>'corps','action'=>'index'], 301);
         }
-        $this->pageTitle = 'Hearing aid and cochlear implant companies';
+        if ($title == $this->siteName) {
+            $this->set('title', 'Hearing aid and cochlear implant companies');
+        }
         $this->meta['description'] = "Before buying hearing aids or cochlear implants, it is wise to compare hearing aid manufacturers. Learn more about them here.";
         $this->Content = $this->fetchTable('Content');
         $exclusiveAd = $this->fetchTable('Advertisements')->findAdForCorps();
@@ -107,9 +109,9 @@ class CorpsController extends AppController
         $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
         $this->set('seoMetaTags', $seoMetaTags);
 
-        $this->SeoTitles = $this->fetchTable('SeoTitles');
-        $seoTitle = $this->SeoTitles->findTitleByUri($request);
-        $this->set('seoTitle', $seoTitle);
+        if (empty($title)) {
+            $this->set('title', isset($corp->title) ? $corp->title : $this->siteName);
+        }
 
         $articles = $this->Content->findLatest(4);
         $this->set('articles', $articles);

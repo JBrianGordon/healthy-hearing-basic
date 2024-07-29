@@ -53,6 +53,7 @@ class LocationsController extends BaseAdminController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('title', 'Locations index');
         $this->set('locations', $this->paginate($locationsQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->Locations->getSchema()->typeMap());
@@ -76,6 +77,7 @@ class LocationsController extends BaseAdminController
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add Location');
         $this->set(compact('location'));
     }
 
@@ -165,6 +167,7 @@ class LocationsController extends BaseAdminController
             }
             $this->Flash->error('The location could not be saved.<br>' . $this->displayErrors($location->getErrors()), ['escape' => false]);
         }
+        $this->set('title', 'Edit ' . $location->title);
         $this->set(compact('location', 'lastOticonImportDate', 'importLocations', 'oticonImportStatuses', 'reviews'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
         $this->set('days', $this->Locations->LocationHours->days);
