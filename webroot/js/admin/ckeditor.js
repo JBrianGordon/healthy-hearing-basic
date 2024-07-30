@@ -221,6 +221,36 @@ document.addEventListener('DOMContentLoaded', function() {
                         name: 'input',
                         attributes: true,
                         classes: true
+                    },
+                    {
+                        name: 'h1',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h2',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h3',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h4',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h5',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h6',
+                        attributes: true,
+                        classes: true
                     }
                 ]
             },
@@ -228,8 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
             link: {
                 decorators: {
                     openInNewTab: {
-                        mode: 'manual',
-                        label: 'Open in a new tab',
+                        mode: 'automatic',
+                        callback: url => !(/healthyhearing|hearingdirectory/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
                         attributes: {
                             target: '_blank',
                             rel: 'noopener noreferrer'

@@ -57,5 +57,16 @@ $(window).ready(function() {
     //Attach popovers to all elements that need it
     $('[data-toggle="popover"]').popover({html:true});
 
+	//Set default scroll position for hash links to clear navbar
+	window.addEventListener('hashchange', function() {
+		const element = document.getElementById(location.hash.substring(1));
+		if (element) {
+			window.setTimeout(function() {
+				const rect = element.getBoundingClientRect();
+				window.scrollTo(rect.left, rect.top - 70);
+			}, 0);
+		}
+	});
+
 
 });
