@@ -217,10 +217,9 @@ class CallSourcesTable extends Table
             }
             if (empty($callSourceEntity)) {
                 // Did not find an existing CallSource entry - create a new one
-                // Make it inactive until tested
-                // If call assist is disabled, no need to test
                 $callSourceEntity = $this->newEmptyEntity();
-                $callSourceEntity->is_active = $location->is_call_assist ? false : true;
+                // Make it active automatically. We no longer have an activation dashboard to test first.
+                $callSourceEntity->is_active = true;
                 $callSourceEntity->start_date = date('m/d/Y');
             }
             $zip = $location->zip;
@@ -248,8 +247,8 @@ class CallSourcesTable extends Table
                         // Found a valid Call Source number, but it is not saved correctly in our database.
                         $callSourceEntity->phone_number = $call_source['Customer']['Campaign']['DID']['@Number'];
                         $callSourceEntity->end_date = $call_source['Customer']['Campaign']['EndDate'];
-                        // Show location if number is active. No-show location if number needs to be tested.
-                        $this->Locations->setShow($locationId, $callSourceEntity->is_active);
+                        // Show location automatically
+                        $this->Locations->setShow($locationId, true);
                         $this->save($callSourceEntity);
                     }
                     // We have an existing campaign. Make sure it is updated with correct data.
@@ -269,8 +268,8 @@ class CallSourcesTable extends Table
                     if ($number = $this->createPhoneForCallSource($options, true)) {
                         $callSourceEntity->phone_number = $number;
                         $callSourceEntity->end_date = '01/01/2025';
-                        // Show location if number is active. No-show location if number needs to be tested.
-                        $this->Locations->setShow($locationId, $callSourceEntity->is_active);
+                        // Show location automatically
+                        $this->Locations->setShow($locationId, true);
                         return $this->save($callSourceEntity);
                     }
                     return false;
@@ -290,8 +289,8 @@ class CallSourcesTable extends Table
                 if ($number = $this->createPhoneForCallSource($options, true)) {
                     $callSourceEntity->phone_number = $number;
                     $callSourceEntity->end_date = '01/01/2025';
-                    // Show location if number is active. No-show location if number needs to be tested.
-                    $this->Locations->setShow($locationId, $callSourceEntity->is_active);
+                    // Show location automatically
+                    $this->Locations->setShow($locationId, true);
                     return $this->save($callSourceEntity);
                 }
                 return false;
