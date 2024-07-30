@@ -197,6 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         classes: true
                     },
                     {
+                        name: 'a',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
                         name: 'script',
                         attributes: {
                             type: 'application/ld+json'
@@ -228,13 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         attributes: {
                             target: '_blank',
                             rel: 'noopener noreferrer'
-                        }
-                    },
-                    addClass: {
-                        mode: 'manual',
-                        label: 'Add orange button classes',
-                        attributes: {
-                            class: 'text-link btn btn-secondary'
                         }
                     }
                 }
