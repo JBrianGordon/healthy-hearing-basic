@@ -37,8 +37,8 @@ $reportReadable = [
                             <?= $this->Form->create() ?>
                             <fieldset>
                                 <?php
-                                    echo $this->Form->control('start_date', ['type' => 'date']);
-                                    echo $this->Form->control('end_date', ['type' => 'date']);
+                                    echo $this->Form->control('start_date', ['type' => 'date', 'required' => true]);
+                                    echo $this->Form->control('end_date', ['type' => 'date', 'required' => true]);
                                 ?>
                             </fieldset>
                             <div class="form-actions tar">
