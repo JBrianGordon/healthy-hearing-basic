@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 decorators: {
                     openInNewTab: {
                         mode: 'automatic',
-                        callback: url => !(/healthyhearing|hearingdirectory/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
+                        callback: url => url && !(/healthyhearing|hearingdirectory|hhcake/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
                         attributes: {
                             target: '_blank',
                             rel: 'noopener noreferrer'

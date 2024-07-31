@@ -63,7 +63,7 @@ $(window).ready(function() {
 		if (element) {
 			window.setTimeout(function() {
 				const rect = element.getBoundingClientRect();
-				window.scrollTo(rect.left, rect.top - 70);
+				window.scrollTo(rect.left, window.scrollY + rect.top - 70);
 			}, 0);
 		}
 	});
