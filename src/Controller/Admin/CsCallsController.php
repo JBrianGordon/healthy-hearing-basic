@@ -79,15 +79,10 @@ class CsCallsController extends BaseAdminController
     * Display the report of Call Tracking Metrics based on call date
     */
     function metrics(){
-        //*** TODO: this action likely requires updates ***
-        //$this->dataToNamed('CsCall');
-        if (empty($this->request->data) && !empty($this->request->params['named'])) {
-            $this->request->data['CsCall']['start_date'] = $this->request->params['named']['start_date'];
-            $this->request->data['CsCall']['end_date'] = $this->request->params['named']['end_date'];
-        }
-        if (!empty($this->request->data)) {
-            $startDate = $this->request->data['CsCall']['start_date'];
-            $endDate = $this->request->data['CsCall']['end_date'];
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $startDate = $data['start_date'];
+            $endDate = $data['end_date'];
             $adEndDate = $endDate;
             if (strtotime($adEndDate.' - 12 months') < strtotime('2020-09-15')) {
                 // We don't have a full year of averaged data
@@ -99,7 +94,7 @@ class CsCallsController extends BaseAdminController
                 $adStartDate = date('Y-m-d', strtotime($adEndDate.' - 12 months'));
                 $adMonths = 12;
             }
-            $this->set('report', $this->CsCall->getAdminReport($startDate, $endDate, $adStartDate, $adEndDate));
+            $this->set('report', $this->CsCalls->getAdminReport($startDate, $endDate, $adStartDate, $adEndDate));
             $this->set(compact('startDate','endDate','adStartDate','adEndDate','adMonths'));
         }
     }

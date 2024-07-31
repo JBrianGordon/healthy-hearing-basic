@@ -5,6 +5,15 @@
  */
 
 $this->Html->script('dist/admin_common.min', ['block' => true]);
+
+$startDate = isset($startDate) ? $startDate : null;
+$endDate = isset($endDate) ? $endDate : null;
+// Readable report titles
+$reportReadable = [
+    'prospects_other' => 'Abandoned / Busy / No answer / Short',
+    'non_prospects' => 'Non-prospects',
+    'unknown' => 'Voicemails / Unknown'
+];
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
@@ -39,6 +48,15 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                         </div>
                     </div>
                 </div>
+                <?php if (isset($report)): ?>
+                    <hr>
+                    <h4>Report for <?php echo $startDate; ?> to <?php echo $endDate; ?></h4>
+                    <?php
+                    foreach ($report as $title => $data) {
+                        echo $this->element('call_metrics_report', ['title' => $title, 'data' => $data, 'reportReadable' => $reportReadable]);
+                    }
+                    ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
