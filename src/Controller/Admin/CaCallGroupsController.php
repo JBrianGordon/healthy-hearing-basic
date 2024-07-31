@@ -200,4 +200,17 @@ class CaCallGroupsController extends BaseAdminController
         $this->paginate['order'][] = "scheduled_call_date ASC";
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
     }
+
+    /**
+    * Display the report of Call Concierge Metrics based on initial call date
+    */
+    function metrics(){
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $startDate = $data['start_date'];
+            $endDate = $data['end_date'];
+            $this->set('report', $this->CaCallGroups->getAdminReport($startDate, $endDate));
+            $this->set(compact('startDate','endDate'));
+        }
+    }
 }
