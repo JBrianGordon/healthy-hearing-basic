@@ -58,14 +58,18 @@ $(window).ready(function() {
     $('[data-toggle="popover"]').popover({html:true});
 
 	//Set default scroll position for hash links to clear navbar
-	window.addEventListener('hashchange', function() {
-		const element = document.getElementById(location.hash.substring(1));
-		if (element) {
-			window.setTimeout(function() {
-				const rect = element.getBoundingClientRect();
-				window.scrollTo(rect.left, window.scrollY + rect.top - 70);
-			}, 0);
-		}
+	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+		anchor.addEventListener('click', function(e) {
+			const hash = this.getAttribute('href');
+			const target = document.querySelector(hash);
+			if (target) {
+				e.preventDefault();
+				window.setTimeout(function() {
+					const rect = target.getBoundingClientRect();
+					window.scrollTo(rect.left, window.scrollY + rect.top - 70);
+				}, 0);
+			}
+		});
 	});
 
 
