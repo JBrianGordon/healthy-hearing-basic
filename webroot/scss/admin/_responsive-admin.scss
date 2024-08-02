@@ -53,6 +53,8 @@
     font-size: larger;
 }
 
+.alert { margin-bottom: 0; }
+
 #flash-message .alert-danger { @include alert-styles(#ad0000); }
 
 // Other shared styles
