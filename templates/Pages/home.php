@@ -1,5 +1,6 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 $this->Html->script('dist/common.min', ['block' => true]);
 ?>
@@ -48,16 +49,16 @@ $this->Html->script('dist/common.min', ['block' => true]);
                     </header>
                     <div class="panel-body">
                         <div class="panel-section text-center">
-                            <?php /*echo $this->element('locations/search', array(
+                            <?= $this->element('locations/search', [
                                 'label' => 'City, '.$stateLabel.' or '.$zipShort,
                                 'form_id' => 'homeform2',
                                 'auto_id' => 'homeformsearchid2',
                                 'search_id' => 'homeSearch2',
                                 'btnId' => 'homeSearch2Btn'
-                              ));*/ ?>
+                              ]) ?>
                             <br>
                             <p class="btn-set text-center">
-                                <a href="/hearing-aids" class="btn btn-secondary">Browse by <?php echo $stateLabel; ?></a>
+                                <a href="/hearing-aids" class="btn btn-secondary">Browse by <?= $stateLabel ?></a>
                             </p>
                         </div>
                         <div class="panel-section d-none d-sm-block">
@@ -89,7 +90,70 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <?php if (Configure::read('showReports')): ?>
                 <div class="col-sm-7 col-lg-6 mobile-clear">
                     <div class="panel panel-light">
-                        <?php //echo $this->element('content/latest'); ?>
+	<?php if (Configure::read('showReports') && ($controller != 'QuizResults') && !empty($articles)): ?>
+		<header class="panel-heading text-center">
+		  <h2>The Healthy Hearing Report</h2>
+		</header>
+
+
+		<div class="panel-body">
+        <section class="panel-section hidden-xs hidden-sm">
+            <p class="lead">Our daily dose of original articles, news and interviews to keep you current about hearing health and hearing aids.</p>
+        </section>
+        <section class="panel-section">
+            <div class="row">
+                <div class="col-md-2 col-xs-3">
+                <?php //convert articles object to array for easier iteration
+                    $articlesArray = $articles->toArray();
+                ?>
+                <?= $this->Editorial->dateHome($articlesArray[0]) ?>
+                </div>
+                <div class="col-md-10 col-xs-9">
+                <div class="subtitle">Article</div>
+                <h3 class="mt0"><?= $this->Editorial->titleLink($articlesArray[0], false, ['class' => 'text-link']) ?></h3>
+                <p>
+                    <a href="<?= Router::url($this->Editorial->get('hh_url')) ?>" class="btn btn-light">Read Post</a>
+                </p>
+                <p class="blog-byline text-caption">
+                    <em>Contributed by <?= $this->Editorial->author() ?></em>
+                </p>
+                <p>
+                    <?= $this->Editorial->get('short') ?>
+                </p>
+                </div>
+            </div>
+        </section>
+        <section class="panel-section blog-previews hidden-xs hidden-sm">
+    	<?php for($i = 1; $i <= 3; $i+=2): ?>
+  		<div class="row preview-row">
+        <div class="col-md-6 blog-preview">
+          <div class="row">
+            <div class="col-md-3">
+              <?= $this->Editorial->dateHome($articlesArray[$i], ['large' => false]) ?>
+            </div>
+            <div class="col-md-9">
+              <div class="subtitle">Article</div>
+              <?= $this->Editorial->titleLink($articlesArray[$i], false, ['class' => 'text-link text-small']) ?>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 blog-preview">
+          <div class="row">
+            <div class="col-md-3">
+              <?= $this->Editorial->dateHome($articlesArray[$i + 1], ['large' => false]) ?>
+            </div>
+            <div class="col-md-9">
+              <div class="subtitle">Article</div>
+              <?= $this->Editorial->titleLink($articlesArray[$i + 1], false, ['class' => 'text-link text-small']) ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    	<?php endfor; ?>
+    </section>
+		</div>
+
+	<?php endif; ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -100,7 +164,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header p15">
-                        <h4>Pick a <?= Configure::read('stateLabel') ?></h4>
+                        <h4>Pick a <?= $stateLabel ?></h4>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">

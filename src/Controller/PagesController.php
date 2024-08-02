@@ -49,12 +49,18 @@ class PagesController extends AppController
      */
     public function home()
     {
+        // page content edited in misc pages
         $content = $this->Pages->findByTitle('home')->first()->content;
+        // Content from the Content table for recent articles
+        $this->Content = $this->fetchTable('Content');
+        $articles = $this->Content->findLatest(4);
         if (empty($title)) {
             $this->set('title', isset($content->title) ? $content->title : $this->siteName);
         }
+
         $this->set('show_organization_schema', true);
         $this->set('content', $content);
+        $this->set('articles', $articles);
     }
 
     /**
