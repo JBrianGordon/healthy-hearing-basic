@@ -581,6 +581,14 @@
 		    padding: 8px;
 		  }
 		}
+
+		.metric-reported{
+			color:red;font-weight:bold
+		}
+
+		.bl-dark{
+			border-left: 2px solid #888;
+		}
 	}
 
 	&:not(:first-child) {
