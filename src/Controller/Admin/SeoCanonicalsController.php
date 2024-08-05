@@ -14,6 +14,20 @@ use App\Controller\AppController;
 class SeoCanonicalsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -23,10 +37,15 @@ class SeoCanonicalsController extends BaseAdminController
         $this->paginate = [
             'contain' => ['SeoUris'],
         ];
-        $seoCanonicals = $this->paginate($this->SeoCanonicals);
+
+        $requestParams = $this->request->getQueryParams();
+        $SeoCanonicals = $this->SeoCanonicals
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
 
         $this->set('title', 'SEO Canonicals');
-        $this->set(compact('seoCanonicals'));
+        $this->set('seoCanonicals', $this->paginate('seoCanonicals'));
     }
 
     /**
