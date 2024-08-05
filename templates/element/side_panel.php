@@ -118,7 +118,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		        </div>
 		        <div class="col-sm-9">
 		          <div class="subtitle"><?= $this->Editorial->getType($content); ?></div>
-		          <?= $this->Editorial->titleLink($content, false, ['class' => 'text-link text-small']); ?>
+		          <?= $this->Editorial->titleLink($content, false, ['class' => 'text-link']); ?>
 		        </div>
 		      </div>
 		    </div>

@@ -14,6 +14,20 @@ use App\Controller\AppController;
 class SeoCanonicalsController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -23,9 +37,15 @@ class SeoCanonicalsController extends BaseAdminController
         $this->paginate = [
             'contain' => ['SeoUris'],
         ];
-        $seoCanonicals = $this->paginate($this->SeoCanonicals);
 
-        $this->set(compact('seoCanonicals'));
+        $requestParams = $this->request->getQueryParams();
+        $SeoCanonicals = $this->SeoCanonicals
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
+
+        $this->set('title', 'SEO Canonicals');
+        $this->set('seoCanonicals', $this->paginate('seoCanonicals'));
     }
 
     /**
@@ -46,6 +66,7 @@ class SeoCanonicalsController extends BaseAdminController
             $this->Flash->error(__('The seo canonical could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoCanonicals->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add SEO Canonical');
         $this->set(compact('seoCanonical', 'seoUris'));
     }
 
@@ -71,6 +92,7 @@ class SeoCanonicalsController extends BaseAdminController
             $this->Flash->error(__('The seo canonical could not be saved. Please, try again.'));
         }
         $seoUris = $this->SeoCanonicals->SeoUris->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit SEO Canonical');
         $this->set(compact('seoCanonical', 'seoUris'));
     }
 

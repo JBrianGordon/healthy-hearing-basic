@@ -31,36 +31,10 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 						<div class="panel-body">
 							<div class="panel-section">
 								<h1 class="text-primary">Hearing clinics in <?= $stateNice ?></h1>
-								<p>We found <?= $totalClinics ?> hearing aid <?= Configure::read('regionalSpelling.center') ?>s located <?= $totalClinics > 0 ? 'in or near ' . $cityCount . ' cities ' : ''; ?>in <?= $stateNice ?><?php if ($showMobileClinics): ?>, including <?= $mobileClinicsInStateCount ?> mobile clinic<? ($mobileClinicsInStateCount > 1) ? 's' : '' ?><?php endif; ?>.<?php if($totalClinics > 0) : ?> Please use the quick links to search for clinics in your <?= Configure::read('stateLabel') ?>.<?php endif; ?></p>
+								<p>Each <?= $stateLabel ?> has resources available for people with hearing loss. For your convenience, we've gathered together links to useful resources for residents of <?= $stateNice ?>.<?php if($hasAtLeastOneClinic) : ?> Looking for clinics in a specific city? Jump to <a href="#cities" class="quickLink">clinics by city</a><?= $showMobileClinics ? ' or <a href="#mobileClinics" class="quickLink">mobile clinics</a>' : '' ?>.<?php endif; ?></p>
 							</div>
 						</div>
 					</section>
-					<?php if($totalClinics > 0) : ?>
-						<section id="quickLinkBar">
-							<div class="container">
-								<div id="linkBlock">
-									<ul>
-										<li class="quick-links">Quick links: </li>
-										<li>
-											<a href="#cities" class="quickLink">Clinics by city</a>
-										</li>
-										<?php if ($showMobileClinics): // Mobile Clinics quick link ?>
-											<li>/</li>
-											<li>
-												<a href="#mobileClinics" class="quickLink">Mobile clinics</a>
-											</li>
-										<?php endif; ?>
-										<?php if ($showTelehealthClinics): // Telehealth Clinics quick link ?>
-											<!--<li>/</li>
-											<li>
-												<a href="#telehealthClinics" class="quickLink">Telehealth clinics</a>
-											</li>-->
-										<?php endif; ?>
-									</ul>
-								</div>
-							</div>
-						</section>
-					<?php endif; ?>
 					<?php if (!empty($stateInfo)): // State Resources card ?>
 						<section class="panel panel-primary">
 							<div class="panel-heading text-center panel-section-header">
@@ -107,14 +81,14 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 							</div>
 						</section>-->
 				    <?php //endif; ?>
-				    <?php if ($totalClinics > 0): ?> <!-- Don't show city section if there are no clinics in state/province -->
+				    <?php if ($hasAtLeastOneClinic): ?> <!-- Don't show city section if there are no clinics in state/province -->
 						<section id="cities" class="panel panel-primary">
 							<div class="panel-heading text-center panel-section-header">
 								<h2>Cities in <?= $stateNice ?></h2>
 							</div>
 							<div class="panel-body">
 								<p class="mt40 pl20 pr20">Select a city below for a listing of hearing <?= Configure::read('regionalSpelling.center') ?>s that offer in-person care provided by an audiologist or hearing aid specialist.</p>
-								<?php if ($totalClinics != 0): ?>
+								<?php if ($hasAtLeastOneClinic): ?>
 									<div class="panel-section expanded"> <!-- City listing -->
 										<div class="row">
 											<?php foreach ($chunkedData as $i => $chunkedElement): ?>

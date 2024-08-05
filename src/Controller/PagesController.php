@@ -50,6 +50,9 @@ class PagesController extends AppController
     public function home()
     {
         $content = $this->Pages->findByTitle('home')->first()->content;
+        if (empty($title)) {
+            $this->set('title', isset($content->title) ? $content->title : $this->siteName);
+        }
         $this->set('show_organization_schema', true);
         $this->set('content', $content);
     }
@@ -64,6 +67,9 @@ class PagesController extends AppController
     public function view($page = null)
     {
         $page = $this->Pages->findByTitle($page)->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
     }
 
@@ -76,6 +82,9 @@ class PagesController extends AppController
     {
         $contactUsForm = new ContactUsForm();
         $page = $this->Pages->findByTitle('contactUs')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('contactUsForm', 'page'));
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
 
@@ -111,7 +120,9 @@ class PagesController extends AppController
         }
 
         $page = $this->Pages->findByTitle('feeds')->first();
-
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
         $this->set('show_slider', false);
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
@@ -130,6 +141,9 @@ class PagesController extends AppController
 
         $newsletterForm = new newsletterForm();
         $page = $this->Pages->findByTitle('newsletter')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('newsletterForm', 'page'));
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
 
@@ -163,6 +177,9 @@ class PagesController extends AppController
     public function newsletterSuccess()
     {
         $page = true;
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         
@@ -181,6 +198,9 @@ class PagesController extends AppController
     public function clinicInfo()
     {
         $clinicPage = $this->Pages->findByTitle('clinicPage')->first()->content;
+        if (empty($title)) {
+            $this->set('title', isset($clinicPage->title) ? $clinicPage->title : $this->siteName);
+        }
         $basicFeatures = $this->Pages->findByTitle('basicFeatures')->first()->content;
         $enhancedFeatures = $this->Pages->findByTitle('enhancedFeatures')->first()->content;
         $premierFeatures = $this->Pages->findByTitle('premierFeatures')->first()->content;
@@ -212,6 +232,9 @@ class PagesController extends AppController
      */
     public function aboutIda() {
         $page = $this->Pages->findByTitle('aboutIda')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->viewBuilder()->setLayout('clinic_panel');
         $this->set(compact('page'));
         $this->set('show_slider', false);
@@ -224,6 +247,9 @@ class PagesController extends AppController
      */
     public function about() {
         $page = $this->Pages->findByTitle('about')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }
@@ -235,6 +261,9 @@ class PagesController extends AppController
      */
     public function privacyPolicy() {
         $page = $this->Pages->findByTitle('privacyPolicy')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }
@@ -254,6 +283,9 @@ class PagesController extends AppController
 
         $page = true;
         $this->set(compact('page'));
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
     
         // Pass data to the view
         $this->set('sitemapData', $sitemapData);
@@ -267,6 +299,9 @@ class PagesController extends AppController
      */
     public function termsOfUse() {
         $page = $this->Pages->findByTitle('termsOfUse')->first();
+        if (empty($title)) {
+            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        }
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }

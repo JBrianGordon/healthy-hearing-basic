@@ -85,6 +85,7 @@ class ImportLocationsController extends BaseAdminController
         $importLocations = $this->paginate($importLocationsQuery);
         // Set to current index page with any applied filters
         $this->request->getSession()->write('importIndexReferer', Router::url());
+        $this->set('title', 'Import Locations Index');
         $this->set('importLocations', $importLocations);
         $this->set('selectedImportType', $selectedImportType);
         $this->set('selectedFilter', $selectedFilter);

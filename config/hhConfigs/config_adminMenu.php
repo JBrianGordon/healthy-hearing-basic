@@ -139,10 +139,6 @@ if (Configure::read('isCallAssistEnabled')) {
         'url' => '/admin/ca-calls/clinic-lookup',
         'icon' => 'bi bi-telephone-inbound-fill',
     ];
-    $callAssistItems['Activation dashboard'] = [
-        'url' => '/admin/locations/activation-dashboard',
-        'icon' => 'bi bi-check2-square',
-    ];
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
         'url' => '/admin/ca-call-groups',
@@ -379,14 +375,6 @@ $returnCallFromClinic = [
     'icon' => 'bi bi-telephone-inbound-fill',
 ];
 
-/*******************************
-* CCA - Activation Dashboard
-********************************/
-$activationDashboard = [
-    'url' => '/admin/locations/activation-dashboard',
-    'icon' => 'bi bi-check2-square',
-];
-
 /***************************************************
 ********** Call Concierge Supervisor Menu **********
 ****************************************************/
@@ -469,7 +457,6 @@ if (Configure::read('isCallAssistEnabled')) {
     $adminMenu['adminMenu']['Call Concierge Agent']['Outbound Calls'] = $outboundCalls;
     $adminMenu['adminMenu']['Call Concierge Agent']['Add Inbound Call'] = $addInboundCall;
     $adminMenu['adminMenu']['Call Concierge Agent']['Return Call From Clinic'] = $returnCallFromClinic;
-    $adminMenu['adminMenu']['Call Concierge Agent']['Activation Dashboard'] = $activationDashboard;
 }
 
 //**** Call Concierge Supervisor ****//

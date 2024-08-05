@@ -4,13 +4,16 @@
  */
 
 use Cake\Core\Configure;
+if(empty($title)){
+    $title = $siteName;
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Healthy Hearing</title>
+    <title><?= empty($title) ? $siteName : $title ?></title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->element('google_tag_manager_head') ?>
 

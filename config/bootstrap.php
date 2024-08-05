@@ -569,3 +569,25 @@ function formatSearchQuery($searchQuery) {
     }
     return $searchQuery;
 }
+
+/**
+* String to datetime stamp
+* @param string that is parsable by str2time
+* @return date time string for MYSQL
+*/
+function str2datetime($str = 'now') {
+    if (is_array($str) && isset($str['month']) && isset($str['day']) && isset($str['year'])) {
+        $str = "{$str['month']}/{$str['day']}/{$str['year']}";
+    }
+    return date("Y-m-d H:i:s", strtotime($str));
+}
+
+/**
+* Divide two numbers, but avoids division by zero. Returns 0 if denom=0.
+* @param int numerator
+* @param int denominator
+* @return float result
+*/
+function divide($num, $denom) {
+    return (!$denom) ? 0 : $num / $denom;
+}

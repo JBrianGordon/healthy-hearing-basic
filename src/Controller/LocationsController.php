@@ -63,15 +63,12 @@ class LocationsController extends AppController
         $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
         $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
         $this->set('seoMetaTags', $seoMetaTags);
+        if (empty($title)) {
+            $this->set('title', 'Hearing aids, audiologists and tinnitus specialists near me');
+        }
 
         $this->set('states', Configure::read('states'));
         $this->set('countries', Configure::read('countries'));
-        $this->set('cities', $this->fetchTable('Cities')->find('all', [
-            'conditions' => [
-                'is_featured' => 1
-            ],
-            'order' => 'city'
-        ])->all());
         $this->set('fapterm', $this->fapSearchTerm());
     }
 
@@ -96,7 +93,6 @@ class LocationsController extends AppController
         }
 
         $citiesTable = $this->fetchTable('Cities');
-        $countMetricsTable = $this->fetchTable('CountMetrics');
         $state = $this->Locations->parseStateSlug($region);
         $stateNice = $this->Locations->stateFull($state);
         $stateAbbr = $this->Locations->stateAbbr($state);
@@ -104,21 +100,6 @@ class LocationsController extends AppController
 
         $limit = $stateAbbr == 'DC' ? 1 : 5;
 
-        $totalClinics = $countMetricsTable->getCount($stateAbbr, 'clinics', 'state');
-
-        $topCities = $citiesTable->find('all', [
-            'conditions' => [
-                'state' => $stateAbbr,
-                'is_near_location' => true,
-            ],
-            'order' => [
-                'population'=>'DESC'
-            ],
-            'limit' => $limit
-        ])->all();
-
-        $this->set('totalClinics', $totalClinics);
-        $this->set('topCities', $topCities);
         $this->set('show_ad', $show_ad);
 
         // Get state-specific resources
@@ -134,6 +115,17 @@ class LocationsController extends AppController
         }
 
         $statePageFields = ['id','title','listing_type','address','address_2','city','state','zip','is_mobile','is_call_assist','direct_book_type','direct_book_iframe','average_rating','reviews_approved'];
+
+        // Does state have at least one clinic?
+        $hasAtLeastOneClinicQuery = $this->Locations->find('all', [
+            'conditions' => [
+                'Locations.state' => $stateAbbr,
+                'Locations.is_active' => true,
+                'Locations.is_show' => true,
+            ]
+        ])->first();
+
+        $this->set('hasAtLeastOneClinic', $hasAtLeastOneClinicQuery !== null);
 
         // Get mobile clinics in a state
         $mobileClinicsInState = $this->Locations->find('all', [
@@ -152,6 +144,9 @@ class LocationsController extends AppController
             'contain' => ['CallSources'],
             'fields' => $statePageFields
         ])->all();
+        if (empty($title)) {
+            $this->set('title', 'Trusted hearing aid specialists & audiologists in ' . $stateNice);
+        }
         $this->set('mobileClinicsInState', $mobileClinicsInState ?: []);
         $mobileClinicsInStateCount = count($mobileClinicsInState);
         $this->set('mobileClinicsInStateCount', $mobileClinicsInStateCount);
@@ -182,7 +177,6 @@ class LocationsController extends AppController
 
         $cities = $citiesTable->findAllByState($state, true);
         $this->set('region', $this->Locations->stateRegion($state));
-        $this->add_title("Trusted hearing aid specialists & audiologists in $stateNice", true);
         $this->set(compact('cities','stateNice','stateAbbr'));
         $this->meta['description'] = 'Looking for a hearing clinic near you? '. $this->siteName .' has unbiased reviews from real patients for over '. $totalClinics .' hearing aid and audiology clinics in '. $stateNice .'. '. $this->siteName .'\'s clinic directory is the best way to find local hearing aid specialists and audiologists to schedule a hearing test at a center near you.';
         //Custom Variables
@@ -190,16 +184,6 @@ class LocationsController extends AppController
         $customVars['category|2'] = $stateAbbr . '-' . $this->Locations->googleRegion($state);
         $this->set('customVars',$customVars);
 
-        // Get the total number of reviews for the country rounded to nearest hundred
-        $reviews = $countMetricsTable->find('all', [
-            'conditions' => [
-                'metric' => 'reviews',
-                'type' => 'state'
-            ]
-        ])->toArray();
-        $reviewCounts = array_column($reviews, 'count');
-        $roundedReviews = round(array_sum($reviewCounts), -2);
-        $this->set('roundedReviews', number_format($roundedReviews));
         $this->set('preferredClinicsNearMe', $this->Locations->findClinicsNearMe(4, true));
         $this->set('fapterm', $this->fapSearchTerm());
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
@@ -287,15 +271,12 @@ class LocationsController extends AppController
         $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
         $this->set('seoMetaTags', $seoMetaTags);
 
-        $this->SeoTitles = $this->fetchTable('SeoTitles');
-        $seoTitle = $this->SeoTitles->findTitleByUri($request);
-        $this->set('seoTitle', $seoTitle);
-
         if (!$cityData->is_near_location) {
             $this->meta['robots'] = "NOINDEX, FOLLOW";
         }
-        $titleTag = 'Trusted hearing aid specialists & audiologists ' . Inflector::humanize($city) . ', ' . $stateAbbr;
-        $this->add_title($titleTag,true);
+        if (empty($title)) {
+            $this->set('title', 'Trusted hearing aid specialists & audiologists ' . Inflector::humanize($city) . ', ' . $stateAbbr);
+        }
 
         $this->meta['description'] = 'Find trusted hearing clinics, specialists and audiologists in ' . Inflector::humanize($city) . ', ' . $stateAbbr . '. '. $this->siteName .' has unbiased reviews for ' . count($locations) . ' audiology clinics near you.';
 
@@ -457,7 +438,7 @@ class LocationsController extends AppController
         $this->socialOptions['og:updated_time'] = $location->modified;
 
         // Title
-        $this->add_title($title, true);
+        $this->set('title', $title);
 
         // Look for exclusive ad for basic profiles
         if ($location->listing_type == Location::LISTING_TYPE_BASIC) {

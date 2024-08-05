@@ -22,6 +22,7 @@ class TagsController extends BaseAdminController
     {
         $tags = $this->paginate($this->Tags);
 
+        $this->set('title', 'Tags index');
         $this->set(compact('tags'));
     }
 
@@ -59,6 +60,7 @@ class TagsController extends BaseAdminController
             $this->Flash->error(__('The tag could not be saved. Please, try again.'));
         }
         $content = $this->Tags->Content->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Tag');
         $this->set(compact('tag', 'content'));
     }
 
@@ -84,6 +86,7 @@ class TagsController extends BaseAdminController
             $this->Flash->error(__('The tag could not be saved. Please, try again.'));
         }
         $content = $this->Tags->Content->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit Tag');
         $this->set(compact('tag', 'content'));
     }
 

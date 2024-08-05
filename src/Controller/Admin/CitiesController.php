@@ -45,6 +45,7 @@ class CitiesController extends BaseAdminController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('title', 'Cities Index');
         $this->set('cities', $this->paginate($citiesQuery));
         $this->set('fields', $this->Cities->getSchema()->typeMap());
     }
@@ -66,6 +67,7 @@ class CitiesController extends BaseAdminController
             }
             $this->Flash->error(__('The city could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add City');
         $this->set(compact('city'));
     }
 
@@ -90,6 +92,7 @@ class CitiesController extends BaseAdminController
             }
             $this->Flash->error(__('The city could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit City');
         $this->set(compact('city'));
     }
 

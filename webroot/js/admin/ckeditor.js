@@ -197,6 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         classes: true
                     },
                     {
+                        name: 'a',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
                         name: 'script',
                         attributes: {
                             type: 'application/ld+json'
@@ -216,10 +221,52 @@ document.addEventListener('DOMContentLoaded', function() {
                         name: 'input',
                         attributes: true,
                         classes: true
+                    },
+                    {
+                        name: 'h1',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h2',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h3',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h4',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h5',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h6',
+                        attributes: true,
+                        classes: true
                     }
                 ]
             },
             language: 'en',
+            link: {
+                decorators: {
+                    openInNewTab: {
+                        mode: 'automatic',
+                        callback: url => url && !(/healthyhearing|hearingdirectory|hhcake/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
+                        attributes: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }
+                    }
+                }
+            },
             image: {
                 toolbar: [
                     'imageTextAlternative',

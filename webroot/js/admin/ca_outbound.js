@@ -24,9 +24,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			$("#CaCallGroupStatus").val(STATUS_TENTATIVE_APPT);
 			$("#CaCallGroupScore").val("");
 			$("#CaCallGroupIsApptRequestForm").val("");
-		} else if (target.id === "surveyDirectBtn") {
-			$("#CaCallGroupStatus").val(STATUS_APPT_SET);
-				$("#CaCallGroupScore").val(SCORE_APPT_SET_DIRECT);
 		}
 	});
 

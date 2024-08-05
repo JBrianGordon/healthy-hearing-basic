@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Zip[]|\Cake\Collection\CollectionInterface $zips
  */
+use Cake\Core\Configure;
 
 $queryParams = $this->request->getQueryParams();
 // Advanced search details
@@ -17,6 +18,12 @@ foreach ($fields as $field => $type) {
         $value['start'] = isset($queryParams[$field.'_start']) ? $queryParams[$field.'_start'] : null;
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
+	if($field == 'zip' && Configure::read('zipLabel') == 'Postal code') {
+		$label = 'Postal code';
+	}
+	if($field == 'state' && Configure::read('stateLabel') == 'province') {
+		$label = 'Province';
+	}
     $advancedSearchFields[] = [
         'field' => $field,
         'type' => $type,
@@ -32,11 +39,11 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading"><?= ucfirst($zipShort) ?>s Actions</div>
+		<div class="panel-heading"><?= ucfirst($zipLabel) ?> Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
-				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-			    <?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+			    <?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 			</div>
 		</div>
 	</div>
@@ -48,7 +55,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				<h2><?= ucfirst($zipLabel) ?>s</h2>
 				<div class="zips index content">
 				    <?= $this->element('pagination') ?>
-					<?= $this->element('admin_filter', ['modelName' => 'zips']) ?>
+					<?= $this->element('admin_filter', ['modelName' => __($zipLabel . 's')]) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm mb30">
@@ -58,7 +65,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <th class="p5"><?= $this->Paginator->sort('lat') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('lon') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('city') ?></th>
-				                    <th class="p5"><?= $this->Paginator->sort('state') ?></th>
+				                    <th class="p5"><?= $this->Paginator->sort('state', ['label' => ucfirst($stateLabel)]) ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('areacode') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('country_code') ?></th>
 				                    <th class="actions p5"><?= __('Actions') ?></th>

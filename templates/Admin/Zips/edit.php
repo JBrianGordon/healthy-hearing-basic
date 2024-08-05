@@ -7,7 +7,7 @@ use Cake\Core\Configure;
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
-		<div class="panel-heading">Zips Actions</div>
+		<div class="panel-heading"><?= ucfirst($zipShort) ?> Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
@@ -30,11 +30,11 @@ use Cake\Core\Configure;
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
 			                <?php
-				                echo $this->Form->control('zip', ['label' => Configure::read('zipLabel'), 'type' => 'string']);
+				                echo $this->Form->control('zip', ['label' => ucfirst(Configure::read('zipLabel')), 'type' => 'string']);
 			                    echo $this->Form->control('lat');
 			                    echo $this->Form->control('lon');
 			                    echo $this->Form->control('city');
-			                    echo $this->Form->control('state');
+			                    echo $this->Form->control('state', ['label' => ucfirst(Configure::read('stateLabel'))]);
 			                    echo $this->Form->control('areacode');
 			                    echo $this->Form->control('country_code');
 			                ?>

@@ -32,6 +32,28 @@ use Cake\ORM\Entity;
 class CsCall extends Entity
 {
     /**
+    * Enum - is prospect
+    */
+    const PROSPECT_YES = 'prospect';
+    const PROSPECT_NO = 'non_prospect';
+    const PROSPECT_UNKNOWN = 'prospect_unknown';
+    static $prospectOptions = [
+        self::PROSPECT_YES => 'Prospect',
+        self::PROSPECT_NO => 'Non-prospect',
+        self::PROSPECT_UNKNOWN => 'Unknown'
+    ];
+
+    /**
+    * Enum - leadscore
+    */
+    const LEADSCORE_APPT_SET = 'Appointment Set';
+    const LEADSCORE_MISSED_OPPORTUNITY = 'Missed Opportunity';
+    static $leadscores = array(
+        self::LEADSCORE_APPT_SET => 'Appointment Set',
+        self::LEADSCORE_MISSED_OPPORTUNITY => 'Missed Opportunity',
+    );
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

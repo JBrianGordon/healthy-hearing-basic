@@ -67,6 +67,7 @@ class ProvidersController extends BaseAdminController
                 'search' => $requestParams,
             ])
             ->contain(['Locations']);
+        $this->set('title', 'Providers Index');
         $this->set('fields', $this->Providers->getSchema()->typeMap());
         $this->set('providers', $this->paginate($providerQuery));
     }
@@ -111,6 +112,7 @@ class ProvidersController extends BaseAdminController
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
         $locations = $this->Providers->Locations->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Provider');
         $this->set(compact('provider', 'locations'));
     }
 
@@ -135,6 +137,7 @@ class ProvidersController extends BaseAdminController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Provider');
         $this->set(compact('provider'));
     }
 

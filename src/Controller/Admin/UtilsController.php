@@ -52,6 +52,7 @@ class UtilsController extends BaseAdminController
     public function cacheView($key = null){
         $file = CACHE . $key;
         $contents = file_get_contents($file);
+        $this->set('title', 'View Cache');
         $this->set('key', $key);
         $this->set('cache_contents', $contents);
     }
@@ -88,6 +89,7 @@ class UtilsController extends BaseAdminController
             'contain' => []
         ]);
         $queuedJobs = $this->paginate($queuedJobsQuery);
+        $this->set('title', 'Queued Jobs');
         $this->set('queuedJobs', $queuedJobs);
         $this->set('count', $queuedJobsQuery->count());
         $this->set('archived', $archived);
@@ -112,6 +114,7 @@ class UtilsController extends BaseAdminController
             throw new NotFoundException(__('Invalid queue task'));
         }
         $queuedJob = $this->QueuedJobs->get($id);
+        $this->set('title', 'Queued Job');
         $this->set('queuedJob', $queuedJob);
     }
 

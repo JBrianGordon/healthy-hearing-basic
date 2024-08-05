@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * States Controller
@@ -29,6 +30,7 @@ class StatesController extends BaseAdminController
     {
         $states = $this->paginate($this->States);
 
+        $this->set('title', Configure::read('stateLabel') . ' Index');
         $this->set(compact('states'));
     }
 
@@ -53,6 +55,7 @@ class StatesController extends BaseAdminController
             }
             $this->Flash->error(__('The state could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit ' . Configure::read('stateLabel'));
         $this->set(compact('state'));
     }
 

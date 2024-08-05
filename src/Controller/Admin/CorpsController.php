@@ -29,6 +29,7 @@ class CorpsController extends BaseAdminController
     {
         $corps = $this->paginate($this->Corps);
 
+        $this->set('title', 'Corps index');
         $this->set(compact('corps'));
     }
 
@@ -65,6 +66,7 @@ class CorpsController extends BaseAdminController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add Corp');
         $this->set('authors', $this->Corps->Author->authorList());
         $this->set(compact('corp'));
     }
@@ -90,6 +92,7 @@ class CorpsController extends BaseAdminController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Corp');
         $this->set('authors', $this->Corps->Author->authorList());
         $this->set(compact('corp'));
     }

@@ -107,6 +107,7 @@ class ReviewsController extends BaseAdminController
                 'search' => formatSearchQuery($requestParams),
             ]);
 
+        $this->set('title', 'Reviews Index');
         $this->set('reviews', $this->paginate($reviewsQuery));
         $this->set('fields', $this->Reviews->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
@@ -130,6 +131,7 @@ class ReviewsController extends BaseAdminController
             $this->Flash->error(__('The review could not be saved. Please, try again.'));
         }
         $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Review');
         $this->set(compact('review', 'locations'));
     }
 
@@ -162,7 +164,7 @@ class ReviewsController extends BaseAdminController
         }
 
         $ipMatches = $this->Reviews->findIpMatches($review->id);
-
+        $this->set('title', 'Edit Review');
         $this->set(compact('review', 'ipMatches'));
     }
 

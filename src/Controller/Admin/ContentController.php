@@ -100,6 +100,7 @@ class ContentController extends BaseAdminController
             ])
             ->contain(['PrimaryAuthor']);
 
+        $this->set('title', 'Content index');
         $this->set('content', $this->paginate($contentQuery));
         $this->set('count', $contentQuery->count());
         $this->set('users', $users);
@@ -158,6 +159,7 @@ class ContentController extends BaseAdminController
             ])->first();
             $this->set('seoRedirect', $seoRedirect);
         }
+        $this->set('title', 'Edit Content');
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
         $this->set('authors', $this->Content->PrimaryAuthor->authorList());

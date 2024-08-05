@@ -10,9 +10,15 @@ $startDate = isset($startDate) ? $startDate : null;
 $endDate = isset($endDate) ? $endDate : null;
 // Readable report titles
 $reportReadable = [
-    'prospects_other' => 'Abandoned / Busy / No answer / Short',
+    'column_label' => '',
+    'all_inbound_calls' => 'Inbound Calls and VMs',
+    'prospects_other' => 'Disconnected / Wrong Number / Unknown',
     'non_prospects' => 'Non-prospects',
-    'unknown' => 'Voicemails / Unknown'
+    'by_clinic' => 'By Clinic (calls)',
+    'by_clinic_form' => 'By Clinic (forms)',
+    'by_direct' => 'Direct Book (calls)',
+    'by_direct_form' => 'Direct Book (forms)',
+    'by_direct_online' => 'Direct Book (online)'
 ];
 ?>
 <header class="col-md-12 mt10">
@@ -29,7 +35,7 @@ $reportReadable = [
     <section class="panel">
         <div class="panel-body">
             <div class="panel-section expanded">
-                <h2>Call Tracking Metrics <small>(from CallSource LeadScoring)</small></h2>
+                <h2>Call Concierge Metrics</h2>
                 <div class="row">
                     <div class="column-responsive column-80">
                         <div class="csCalls form content col col-md-6">
@@ -50,7 +56,8 @@ $reportReadable = [
                 </div>
                 <?php if (isset($report)): ?>
                     <hr>
-                    <h4>Report for <?php echo $startDate; ?> to <?php echo $endDate; ?></h4>
+                    <h4 class="mb0">Selected dates: <?php echo $startDate; ?> to <?php echo $endDate; ?></h4>
+                    <p><span class="metric-reported">Red</span> = reported data</p>
                     <?php
                     foreach ($report as $title => $data) {
                         echo $this->element('call_metrics_report', ['title' => $title, 'data' => $data, 'reportReadable' => $reportReadable]);

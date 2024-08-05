@@ -28,8 +28,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Seo Canonicals</h2>
-                <!-- ***TODO: add search feature*** -->
                 <div class="seoCanonicals index content">
+                    <?= $this->element('pagination') ?>
+                    <?= $this->element('admin_filter', ['modelName' => 'seoCanonicals']) ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-sm">
                             <thead>

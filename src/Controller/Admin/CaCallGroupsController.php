@@ -58,6 +58,7 @@ class CaCallGroupsController extends BaseAdminController
             'contain' => ['Locations', 'CaCalls'],
         ]);
         $spamCount = $this->CaCallGroups->find()->where(['is_spam' => true])->count();
+        $this->set('title', 'Outbound calls');
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
@@ -102,6 +103,7 @@ class CaCallGroupsController extends BaseAdminController
             }
             $this->Flash->error(__('The ca call group could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Call');
         $this->set(compact('caCallGroup'));
     }
 
@@ -197,5 +199,18 @@ class CaCallGroupsController extends BaseAdminController
             CaCallGroup::STATUS_TENTATIVE_APPT."')";
         $this->paginate['order'][] = "scheduled_call_date ASC";
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
+    }
+
+    /**
+    * Display the report of Call Concierge Metrics based on initial call date
+    */
+    function metrics(){
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $startDate = $data['start_date'];
+            $endDate = $data['end_date'];
+            $this->set('report', $this->CaCallGroups->getAdminReport($startDate, $endDate));
+            $this->set(compact('startDate','endDate'));
+        }
     }
 }
