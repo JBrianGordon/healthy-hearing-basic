@@ -73,7 +73,7 @@ class Application extends BaseApplication
             Configure::write('DebugKit.safeTld', ['loc']);
             Configure::write('DebugKit.variablesPanelMaxDepth', 8);
             $this->addPlugin('DebugKit');
-            $this->addPlugin('IdeHelper');
+          //  $this->addPlugin('IdeHelper'); TEMPORARILY DISABLE FOR DEBUGKIT TO WORK ON dev4
         }
         $this->addPlugin('BootstrapUI');
         $this->addPlugin('Cake/Localized');
