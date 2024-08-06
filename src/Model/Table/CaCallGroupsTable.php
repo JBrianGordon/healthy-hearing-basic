@@ -507,23 +507,28 @@ class CaCallGroupsTable extends Table
     * Lock the record to the current user
     */
     function lock($id = null, $userId = null) {
-        //TODO: handle call group locking
-        return true;
-        /*
-        if ($id) {
-            $this->id = $id;
-        }
+        $caCallGroup = $this->get($id);
         if ($this->isLocked($id, $userId)) {
             return false;
         }
-        if ($this->saveField('is_locked', true)) {
-            if ($this->saveField('id_locked_by_user', $userId)) {
-                $retval = $this->saveField('lock_time', str2datetime());
-                return $retval === false ? false : true;
-            }
+        $caCallGroup->is_locked = true;
+        $caCallGroup->id_locked_by_user = $userId;
+        $caCallGroup->lock_time = str2datetime();
+        if ($this->save($caCallGroup)) {
+            return true;
         }
         return false;
-        */
+    }
+
+    /**
+    * Is this Call Group locked by someone other than the current user
+    */
+    function isLocked($id = null, $userId = null) {
+        $caCallGroup = $this->get($id);
+        if ($caCallGroup->is_locked && ($caCallGroup->id_locked_by_user != $userId)) {
+            return true;
+        }
+        return false;
     }
 
     /**
