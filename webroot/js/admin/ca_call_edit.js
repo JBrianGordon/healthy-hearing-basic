@@ -122,7 +122,7 @@ const onPageLoad = () => {
       }
 
       // Trigger the change event for the age dialog, to make sure the correct (hidden) checkboxes are checked.
-      document.querySelector('#ca-call-group-hearing-aid-age').dispatchEvent(new Event('change', {bubbles: true}));
+      triggerChange('#ca-call-group-hearing-aid-age');
     }
 
     if (targetId === 'ca-call-group-hearing-aid-age') {
@@ -312,12 +312,16 @@ function triggerChangeEvents(skipElements = []) {
   const elements = ['#ca-call-group-location-id','#call-type','#ca-call-group-caller-first-name','#ca-call-group-caller-last-name','#ca-call-group-caller-phone','#ca-call-group-is-patient','#is-patient','#ca-call-group-patient-first-name','#ca-call-group-patient-last-name','#ca-call-group-prospect','#ca-call-group-front-desk-name','#ca-call-group-score','#ca-call-group-topic-warranty','#is-wrong-number','#ca-call-group-refused-name'];
   elements.forEach(element => {
     if (skipElements.indexOf(element) === -1) {
-      var selector = document.querySelector(element);
-      if (selector !== null) {
-        selector.dispatchEvent(new Event('change', {bubbles: true}));
-      }
+      triggerChange(element);
     }
   });
+}
+
+function triggerChange(element) {
+  var selector = document.querySelector(element);
+  if (selector !== null) {
+    selector.dispatchEvent(new Event('change', {bubbles: true}));
+  }
 }
 
 //Leaving this alone, since autocomplete is dependent on jQuery
@@ -706,7 +710,7 @@ function loadReturnVoicemailForm(type) {
         returnVmFromInvalid.style.display = 'none';
         locationAutocomplete();
         triggerChangeEvents(['#call-type']);
-        document.querySelector('#ca-call-group-did-they-answer-vm').dispatchEvent(new Event('change', {bubbles: true}));
+        triggerChange('#ca-call-group-did-they-answer-vm');
       })
       .catch(error => {
         console.log(error);
@@ -736,12 +740,14 @@ function onChangeProspect(selectedProspect) {
   var isOverride = 0;
   var calculatedProspect = PROSPECT_NO;
 
-  if (document.querySelector('#ca-call-group-topic-declined').checked) {
+  const topicDeclined = document.querySelector('#ca-call-group-topic-declined');
+  if (topicDeclined && topicDeclined.checked) {
     calculatedProspect = PROSPECT_UNKNOWN;
   }
 
   Object.keys(prospectTopics).forEach(key => {
-    if (document.querySelector(`#${prospectTopics[key]}`).checked) {
+    const topicElement = document.querySelector(`#${prospectTopics[key]}`);
+    if (topicElement && topicElement.checked) {
       calculatedProspect = PROSPECT_YES;
     }
   });
@@ -760,12 +766,22 @@ function onChangeProspect(selectedProspect) {
   }
 
   // Do not overwrite prospect and override flag if we are still loading the page
+  const prospectElement = document.querySelector('#ca-call-group-prospect');
+  const isOverrideElement = document.querySelector('#ca-call-group-is-prospect-override');
   if (pageLoadComplete === false) {
-    calculatedProspect = document.querySelector('#ca-call-group-prospect').value;
-    isOverride = document.querySelector('#ca-call-group-is-prospect-override').value;
+    if (prospectElement) {
+      calculatedProspect = prospectElement.value;
+    }
+    if (isOverrideElement) {
+      isOverride = isOverrideElement.value;
+    }
   }
-  document.querySelector('#ca-call-group-prospect').value = calculatedProspect;
-  document.querySelector('#ca-call-group-is-prospect-override').value = isOverride;
+  if (prospectElement) {
+    prospectElement.value = calculatedProspect;
+  }
+  if (isOverrideElement) {
+    isOverrideElement.value = isOverride;
+  }
 
   if (calculatedProspect === PROSPECT_YES) {
     document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
@@ -1433,13 +1449,17 @@ function onChangeDidTheyAnswerFollowup(answer) {
 
   if (answer === 'yes') {
     didTheyAnswerFollowupYes.style.display = 'block';
-    didTheyAnswerFollowupNo.style.display = 'none';
+    if (didTheyAnswerFollowupNo) {
+      didTheyAnswerFollowupNo.style.display = 'none';
+    }
     didTheyAnswerFollowupVm.style.display = 'none';
     scheduledCallDate.style.display = 'none';
   } else if (answer === 'vm') {
     const prospect = document.querySelector("#ca-call-group-prospect").value;
     didTheyAnswerFollowupYes.style.display = 'none';
-    didTheyAnswerFollowupNo.style.display = 'none';
+    if (didTheyAnswerFollowupNo) {
+      didTheyAnswerFollowupNo.style.display = 'none';
+    }
     didTheyAnswerFollowupVm.style.display = 'block';
     if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER || prospect === PROSPECT_NO) {
       followupForm.style.display = 'none';
@@ -1452,7 +1472,9 @@ function onChangeDidTheyAnswerFollowup(answer) {
   } else { // NO
     didTheyAnswerFollowupYes.style.display = 'none';
     didTheyAnswerFollowupVm.style.display = 'none';
-    didTheyAnswerFollowupNo.style.display = 'block';
+    if (didTheyAnswerFollowupNo) {
+      didTheyAnswerFollowupNo.style.display = 'block';
+    }
     followupForm.style.display = 'none';
     scheduledCallDate.style.display = 'block';
     const nextCallDate = new Date();
