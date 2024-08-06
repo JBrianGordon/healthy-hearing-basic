@@ -265,22 +265,22 @@ class CaCallsController extends BaseAdminController
             if (empty($this->request->data['CaCallGroup']['id']) && !empty($this->request->data['CaCallGroup']['original_group_id'])) {
                 // This was a voicemail call from clinic, but there are no related call groups to handle.
                 // Delete this VM call and group.
-                $this->CaCall->deleteAll(['CaCall.ca_call_group_id'=>$this->request->data['CaCallGroup']['original_group_id']], false);
+                $this->CaCalls->deleteAll(['CaCall.ca_call_group_id'=>$this->request->data['CaCallGroup']['original_group_id']], false);
                 $this->CaCallGroups->delete($this->request->data['CaCallGroup']['original_group_id'], false);
                 $this->Flash->success('The call has been saved');
                 return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
             }
             // Saving an outbound call
             $this->request->data['CaCall']['duration'] = strtotime(getCurrentEasternTime()) - strtotime($this->request->data['CaCall']['start_time']);
-            $this->CaCall->create();
+            $this->CaCalls->create();
             $validate = ($this->request->data['CaCallGroup']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
-            if ($this->CaCall->saveAll($this->request->data, ['validate' => $validate, 'deep' => true])) {
+            if ($this->CaCalls->saveAll($this->request->data, ['validate' => $validate, 'deep' => true])) {
                 $this->CaCallGroups->unlock();
                 $this->Flash->success(__('The call has been saved'));
                 if ($this->request->data['CaCallGroup']['original_group_id'] != $this->request->data['CaCallGroup']['id']) {
                     // This was a voicemail related to a previous call group.
                     // Reassign the VM calls to the new group id. Delete the VM group.
-                    $this->CaCall->updateAll(
+                    $this->CaCalls->updateAll(
                         ['CaCall.ca_call_group_id' => $this->request->data['CaCallGroup']['id']],
                         ['CaCall.ca_call_group_id' => $this->request->data['CaCallGroup']['original_group_id']]
                     );
@@ -293,7 +293,7 @@ class CaCallsController extends BaseAdminController
                     return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
                 }
             } else {
-                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($this->CaCall->validationErrors, true));
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($this->CaCalls->validationErrors, true));
             }
         } else {
             $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes']]);
