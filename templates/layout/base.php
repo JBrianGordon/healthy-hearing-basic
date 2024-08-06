@@ -15,7 +15,7 @@ if(empty($title)){
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= empty($title) ? $siteName : $title ?></title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->element('google_tag_manager_head') ?>
+    <?= $this->element('google_tag_manager') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
@@ -57,7 +57,6 @@ if(empty($title)){
     ?>
 </head>
 <body>
-    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>

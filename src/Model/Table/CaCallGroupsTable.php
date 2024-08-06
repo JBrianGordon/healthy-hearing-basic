@@ -8,6 +8,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\CaCallGroup;
+use App\Model\Entity\CaCall;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
@@ -506,22 +507,345 @@ class CaCallGroupsTable extends Table
     * Lock the record to the current user
     */
     function lock($id = null, $userId = null) {
-        //TODO: handle call group locking
-        return true;
-        /*
-        if ($id) {
-            $this->id = $id;
-        }
+        $caCallGroup = $this->get($id);
         if ($this->isLocked($id, $userId)) {
             return false;
         }
-        if ($this->saveField('is_locked', true)) {
-            if ($this->saveField('id_locked_by_user', $userId)) {
-                $retval = $this->saveField('lock_time', str2datetime());
-                return $retval === false ? false : true;
-            }
+        $caCallGroup->is_locked = true;
+        $caCallGroup->id_locked_by_user = $userId;
+        $caCallGroup->lock_time = str2datetime();
+        if ($this->save($caCallGroup)) {
+            return true;
         }
         return false;
-        */
+    }
+
+    /**
+    * Is this Call Group locked by someone other than the current user
+    */
+    function isLocked($id = null, $userId = null) {
+        $caCallGroup = $this->get($id);
+        if ($caCallGroup->is_locked && ($caCallGroup->id_locked_by_user != $userId)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+    * Find the admin report based on data passed in
+    *
+    * @param string start date
+    * @param string end date
+    * @return array of results formatted for easy viewing.
+    */
+    public function getAdminReport($startDate, $endDate) {
+        // Set selected start & end date, and dates for averaged data
+        $startDate      = str2datetime($startDate);
+        $endDate        = str2datetime($endDate . " 23:59:59");
+        $initialCallDates = [
+            'CaCallGroups.created >=' => $startDate,
+            'CaCallGroups.created <=' => $endDate,
+        ];
+        $finalScoreDates = [
+            'CaCallGroups.final_score_date >=' => $startDate,
+            'CaCallGroups.final_score_date <=' => $endDate,
+        ];
+
+        // Inbound Calls and VMs
+        $reportData['all_inbound_calls']['column_label'][0] = 'Created in selected dates';
+        $reportData['all_inbound_calls']['column_label'][1] = 'Finalized in selected dates';
+        $reportData['all_inbound_calls']['total']['init_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type IN' => [CaCall::CALL_TYPE_INBOUND, CaCall::CALL_TYPE_INBOUND_VM, CaCall::CALL_TYPE_APPT_REQUEST_FORM, CaCall::CALL_TYPE_ONLINE_BOOK]
+            ], $initialCallDates),
+        ])->count();
+        $reportData['all_inbound_calls']['total']['final_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type IN' => [CaCall::CALL_TYPE_INBOUND, CaCall::CALL_TYPE_INBOUND_VM, CaCall::CALL_TYPE_APPT_REQUEST_FORM, CaCall::CALL_TYPE_ONLINE_BOOK]
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_calls']['init_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_INBOUND
+            ], $initialCallDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_calls']['final_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_INBOUND
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_calls']['init_percent'] = divide($reportData['all_inbound_calls']['inbound_calls']['init_total'], $reportData['all_inbound_calls']['total']['init_total']);
+        $reportData['all_inbound_calls']['inbound_calls']['final_percent'] = divide($reportData['all_inbound_calls']['inbound_calls']['final_total'], $reportData['all_inbound_calls']['total']['final_total']);
+        $reportData['all_inbound_calls']['inbound_voicemails']['init_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_INBOUND_VM
+            ], $initialCallDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_voicemails']['final_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_INBOUND_VM
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_voicemails']['init_percent'] = divide($reportData['all_inbound_calls']['inbound_voicemails']['init_total'], $reportData['all_inbound_calls']['total']['init_total']);
+        $reportData['all_inbound_calls']['inbound_voicemails']['final_percent'] = divide($reportData['all_inbound_calls']['inbound_voicemails']['init_total'], $reportData['all_inbound_calls']['total']['init_total']);
+        $reportData['all_inbound_calls']['inbound_forms']['init_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_APPT_REQUEST_FORM
+            ], $initialCallDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_forms']['final_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_APPT_REQUEST_FORM
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['all_inbound_calls']['inbound_forms']['init_percent'] = divide($reportData['all_inbound_calls']['inbound_forms']['init_total'], $reportData['all_inbound_calls']['total']['init_total']);
+        $reportData['all_inbound_calls']['inbound_forms']['final_percent'] = divide($reportData['all_inbound_calls']['inbound_forms']['final_total'], $reportData['all_inbound_calls']['total']['final_total']);
+        $reportData['all_inbound_calls']['direct_book_online']['init_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_ONLINE_BOOK
+            ], $initialCallDates),
+        ])->count();
+        $reportData['all_inbound_calls']['direct_book_online']['final_total'] = $this->CaCalls->find('all', [
+            'contain' => ['CaCallGroups'],
+            'conditions' => array_merge([
+                'CaCalls.call_type' => CaCall::CALL_TYPE_ONLINE_BOOK
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['all_inbound_calls']['direct_book_online']['init_percent'] = divide($reportData['all_inbound_calls']['direct_book_online']['init_total'], $reportData['all_inbound_calls']['total']['init_total']);
+        $reportData['all_inbound_calls']['direct_book_online']['final_percent'] = divide($reportData['all_inbound_calls']['direct_book_online']['final_total'], $reportData['all_inbound_calls']['total']['final_total']);
+
+        // Call Groups
+        $reportData['call_groups']['total']['init_total'] = $this->find('all', [
+            'conditions' => $initialCallDates,
+        ])->count();
+        $reportData['call_groups']['total']['final_total'] = $this->find('all', [
+            'conditions' => $finalScoreDates,
+        ])->count();
+        $reportData['call_groups']['prospects_other']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'OR' => [
+                    'CaCallGroups.prospect IS NULL',
+                    'CaCallGroups.prospect IN' => [CaCallGroup::PROSPECT_DISCONNECTED, CaCallGroup::PROSPECT_UNKNOWN]
+                ]
+            ], $initialCallDates),
+        ])->count();
+        $reportData['call_groups']['prospects_other']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'OR' => [
+                    'CaCallGroups.prospect IS NULL',
+                    'CaCallGroups.prospect IN' => [CaCallGroup::PROSPECT_DISCONNECTED, CaCallGroup::PROSPECT_UNKNOWN]
+                ]
+            ], $finalScoreDates),
+        ])->count();
+        $reportData['call_groups']['prospects_other']['init_percent'] = divide($reportData['call_groups']['prospects_other']['init_total'], $reportData['call_groups']['total']['init_total']);
+        $reportData['call_groups']['prospects_other']['final_percent'] = divide($reportData['call_groups']['prospects_other']['final_total'], $reportData['call_groups']['total']['final_total']);
+        $reportData['call_groups']['adjusted_total']['init_total'] = 0;
+        $reportData['call_groups']['adjusted_total']['final_total'] = 0;
+        $reportData['call_groups']['non_prospects']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.prospect' => CaCallGroup::PROSPECT_NO,
+            ], $initialCallDates),
+        ])->count();
+        $reportData['call_groups']['non_prospects']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.prospect' => CaCallGroup::PROSPECT_NO,
+            ], $finalScoreDates),
+        ])->count();
+        $prospectInitConditions = array_merge([
+            'CaCallGroups.prospect' => CaCallGroup::PROSPECT_YES,
+        ], $initialCallDates);
+        $prospectFinalConditions = array_merge([
+            'CaCallGroups.prospect' => CaCallGroup::PROSPECT_YES,
+        ], $finalScoreDates);
+        $reportData['call_groups']['prospects']['init_total'] = $this->find('all', [
+            'conditions' => $prospectInitConditions,
+        ])->count();
+        $reportData['call_groups']['prospects']['final_total'] = $this->find('all', [
+            'conditions' => $prospectFinalConditions,
+        ])->count();
+        $reportData['call_groups']['adjusted_total']['init_total'] = $reportData['call_groups']['non_prospects']['init_total'] + $reportData['call_groups']['prospects']['init_total'];
+        $reportData['call_groups']['adjusted_total']['final_total'] = $reportData['call_groups']['non_prospects']['final_total'] + $reportData['call_groups']['prospects']['final_total'];
+        $reportData['call_groups']['non_prospects']['init_percent'] = divide($reportData['call_groups']['non_prospects']['init_total'], $reportData['call_groups']['adjusted_total']['init_total']);
+        $reportData['call_groups']['non_prospects']['final_percent'] = divide($reportData['call_groups']['non_prospects']['final_total'], $reportData['call_groups']['adjusted_total']['final_total']);
+        $reportData['call_groups']['prospects']['init_percent'] = divide($reportData['call_groups']['prospects']['init_total'], $reportData['call_groups']['adjusted_total']['init_total']);
+        $reportData['call_groups']['prospects']['final_percent'] = divide($reportData['call_groups']['prospects']['final_total'], $reportData['call_groups']['adjusted_total']['final_total']);
+
+        // Prospects
+        $reportData['prospects']['total']['init_total'] = $reportData['call_groups']['prospects']['init_total'];
+        $reportData['prospects']['total']['final_total'] = $reportData['call_groups']['prospects']['final_total'];
+        $reportData['prospects']['disconnected']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score IN' => [CaCallGroup::SCORE_DISCONNECTED, '']
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['prospects']['disconnected']['init_percent'] = divide($reportData['prospects']['disconnected']['init_total'], $reportData['prospects']['total']['init_total']);
+        $reportData['prospects']['disconnected']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score IN' => [CaCallGroup::SCORE_DISCONNECTED, '']
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['prospects']['disconnected']['final_percent'] = divide($reportData['prospects']['disconnected']['final_total'], $reportData['prospects']['total']['final_total']);
+        $reportData['prospects']['clinic_not_reached']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_NOT_REACHED,
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['prospects']['clinic_not_reached']['init_percent'] = divide($reportData['prospects']['clinic_not_reached']['init_total'], $reportData['prospects']['total']['init_total']);
+        $reportData['prospects']['clinic_not_reached']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_NOT_REACHED,
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['prospects']['clinic_not_reached']['final_percent'] = divide($reportData['prospects']['clinic_not_reached']['final_total'], $reportData['prospects']['total']['final_total']);
+        $reportData['prospects']['missed_opportunities']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_MISSED_OPPORTUNITY,
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['prospects']['missed_opportunities']['init_percent'] = divide($reportData['prospects']['missed_opportunities']['init_total'], $reportData['prospects']['total']['init_total']);
+        $reportData['prospects']['missed_opportunities']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_MISSED_OPPORTUNITY,
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['prospects']['missed_opportunities']['final_percent'] = divide($reportData['prospects']['missed_opportunities']['final_total'], $reportData['prospects']['total']['final_total']);
+        $reportData['prospects']['tentative_appointments']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_TENTATIVE_APPT,
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['prospects']['tentative_appointments']['init_percent'] = divide($reportData['prospects']['tentative_appointments']['init_total'], $reportData['prospects']['total']['init_total']);
+        $reportData['prospects']['tentative_appointments']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_TENTATIVE_APPT,
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['prospects']['tentative_appointments']['final_percent'] = divide($reportData['prospects']['tentative_appointments']['final_total'], $reportData['prospects']['total']['final_total']);
+        $reportData['prospects']['appointments_set']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score IN' => [CaCallGroup::SCORE_APPT_SET, CaCallGroup::SCORE_APPT_SET_DIRECT],
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['prospects']['appointments_set']['init_percent'] = divide($reportData['prospects']['appointments_set']['init_total'], $reportData['prospects']['total']['init_total']);
+        $reportData['prospects']['appointments_set']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score IN' => [CaCallGroup::SCORE_APPT_SET, CaCallGroup::SCORE_APPT_SET_DIRECT],
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['prospects']['appointments_set']['final_percent'] = divide($reportData['prospects']['appointments_set']['final_total'], $reportData['prospects']['total']['final_total']);
+
+        // Appointments Set
+        $reportData['appointments_set']['total']['init_total'] = $reportData['prospects']['appointments_set']['init_total'];
+        $reportData['appointments_set']['total']['final_total'] = $reportData['prospects']['appointments_set']['final_total'];
+        $byClinicCallGroupsInit = $this->find('all', [
+            'contain' => ['CaCalls'],
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET,
+            ], $prospectInitConditions),
+            'fields' => ['id', 'score', 'created', 'final_score_date']
+        ])->all();
+        $byClinicCallGroupsFinal = $this->find('all', [
+            'contain' => ['CaCalls'],
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET,
+            ], $prospectFinalConditions),
+            'fields' => ['id', 'score', 'created', 'final_score_date']
+        ])->all();
+        $reportData['appointments_set']['by_clinic']['init_total'] = 0;
+        $reportData['appointments_set']['by_clinic']['final_total'] = 0;
+        $reportData['appointments_set']['by_clinic_form']['init_total'] = 0;
+        $reportData['appointments_set']['by_clinic_form']['final_total'] = 0;
+        foreach ($byClinicCallGroupsInit as $group) {
+            if ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_APPT_REQUEST_FORM) {
+                $reportData['appointments_set']['by_clinic_form']['init_total']++;
+            } else { // inbound call or voicemail
+                $reportData['appointments_set']['by_clinic']['init_total']++;
+            }
+        }
+        foreach ($byClinicCallGroupsFinal as $group) {
+            if ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_APPT_REQUEST_FORM) {
+                $reportData['appointments_set']['by_clinic_form']['final_total']++;
+            } else { // inbound call or voicemail
+                $reportData['appointments_set']['by_clinic']['final_total']++;
+            }
+        }
+        $reportData['appointments_set']['by_clinic']['init_percent'] = divide($reportData['appointments_set']['by_clinic']['init_total'], $reportData['appointments_set']['total']['init_total']);
+        $reportData['appointments_set']['by_clinic']['final_percent'] = divide($reportData['appointments_set']['by_clinic']['final_total'], $reportData['appointments_set']['total']['final_total']);
+        $reportData['appointments_set']['by_clinic_form']['init_percent'] = divide($reportData['appointments_set']['by_clinic_form']['init_total'], $reportData['appointments_set']['total']['init_total']);
+        $reportData['appointments_set']['by_clinic_form']['final_percent'] = divide($reportData['appointments_set']['by_clinic_form']['final_total'], $reportData['appointments_set']['total']['final_total']);
+        $directBookCallGroupsInit = $this->find('all', [
+            'contain' => ['CaCalls'],
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET_DIRECT,
+            ], $prospectInitConditions),
+            'fields' => ['id', 'score', 'created', 'final_score_date']
+        ]);
+        $directBookCallGroupsFinal = $this->find('all', [
+            'contain' => ['CaCalls'],
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET_DIRECT,
+            ], $prospectFinalConditions),
+            'fields' => ['id', 'score', 'created', 'final_score_date']
+        ]);
+        $reportData['appointments_set']['by_direct']['init_total'] = 0;
+        $reportData['appointments_set']['by_direct']['final_total'] = 0;
+        $reportData['appointments_set']['by_direct_form']['init_total'] = 0;
+        $reportData['appointments_set']['by_direct_form']['final_total'] = 0;
+        $reportData['appointments_set']['by_direct_online']['init_total'] = 0;
+        $reportData['appointments_set']['by_direct_online']['final_total'] = 0;
+        foreach ($directBookCallGroupsInit as $group) {
+            if ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_APPT_REQUEST_FORM) {
+                $reportData['appointments_set']['by_direct_form']['init_total']++;
+            } elseif ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_ONLINE_BOOK) {
+                $reportData['appointments_set']['by_direct_online']['init_total']++;
+            } else { // inbound call or voicemail
+                $reportData['appointments_set']['by_direct']['init_total']++;
+            }
+        }
+        foreach ($directBookCallGroupsFinal as $group) {
+            if ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_APPT_REQUEST_FORM) {
+                $reportData['appointments_set']['by_direct_form']['final_total']++;
+            } elseif ($group['ca_calls'][0]['call_type'] == CaCall::CALL_TYPE_ONLINE_BOOK) {
+                $reportData['appointments_set']['by_direct_online']['final_total']++;
+            } else { // inbound call or voicemail
+                $reportData['appointments_set']['by_direct']['final_total']++;
+            }
+        }
+        $reportData['appointments_set']['by_direct']['init_percent'] = divide($reportData['appointments_set']['by_direct']['init_total'], $reportData['appointments_set']['total']['init_total']);
+        $reportData['appointments_set']['by_direct']['final_percent'] = divide($reportData['appointments_set']['by_direct']['final_total'], $reportData['appointments_set']['total']['final_total']);
+        $reportData['appointments_set']['by_direct_form']['init_percent'] = divide($reportData['appointments_set']['by_direct_form']['init_total'], $reportData['appointments_set']['total']['init_total']);
+        $reportData['appointments_set']['by_direct_form']['final_percent'] = divide($reportData['appointments_set']['by_direct_form']['final_total'], $reportData['appointments_set']['total']['final_total']);
+        $reportData['appointments_set']['by_direct_online']['init_percent'] = divide($reportData['appointments_set']['by_direct_online']['init_total'], $reportData['appointments_set']['total']['init_total']);
+        $reportData['appointments_set']['by_direct_online']['final_percent'] = divide($reportData['appointments_set']['by_direct_online']['final_total'], $reportData['appointments_set']['total']['final_total']);
+
+        // Direct Book
+        $reportData['direct_book']['total']['init_total'] = $reportData['appointments_set']['by_direct']['init_total'] + $reportData['appointments_set']['by_direct_form']['init_total'] + $reportData['appointments_set']['by_direct_online']['init_total'];
+        $reportData['direct_book']['total']['final_total'] = $reportData['appointments_set']['by_direct']['final_total'] + $reportData['appointments_set']['by_direct_form']['final_total'] + $reportData['appointments_set']['by_direct_online']['final_total'];
+        $reportData['direct_book']['third_party']['init_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET_DIRECT,
+                'CaCallGroups.is_bringing_third_party' => true,
+            ], $prospectInitConditions),
+        ])->count();
+        $reportData['direct_book']['third_party']['final_total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'CaCallGroups.score' => CaCallGroup::SCORE_APPT_SET_DIRECT,
+                'CaCallGroups.is_bringing_third_party' => true,
+            ], $prospectFinalConditions),
+        ])->count();
+        $reportData['direct_book']['third_party']['init_percent'] = divide($reportData['direct_book']['third_party']['init_total'], $reportData['direct_book']['total']['init_total']);
+        $reportData['direct_book']['third_party']['final_percent'] = divide($reportData['direct_book']['third_party']['final_total'], $reportData['direct_book']['total']['final_total']);
+
+        // Completed report data
+        return $reportData;
     }
 }
