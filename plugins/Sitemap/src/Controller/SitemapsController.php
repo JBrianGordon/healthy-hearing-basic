@@ -83,11 +83,11 @@ class SitemapsController extends AppController
     {
         $this->set(
             'wikis',
-            $this->getTableLocator()->get('wikis')->find()->all()
+            $this->getTableLocator()->get('Wikis')->find('forSitemap')
         );
         $this->set(
             'corps',
-            $this->getTableLocator()->get('corps')->find('forSitemap')
+            $this->getTableLocator()->get('Corps')->find('forSitemap')
         );
     }
 
