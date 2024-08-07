@@ -5,7 +5,9 @@
 
 use Cake\Core\Configure;
 
-$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Contact '.Configure::read('siteName')), 'url' => '/sitemap']]);
+// Update for sitemaps
+
+// $this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Contact '.Configure::read('siteName')), 'url' => '/sitemap']]);
 
 $this->Html->script('dist/common.min', ['block' => true]);
 ?>
@@ -26,12 +28,11 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         <div class="panel-body anchor-underline">
                             <div class="panel-section expanded">
                                 <h1 class="text-primary blog-title">Sitemap</h1>
-                                <!-- This will need to be updated -->
-                                <?php foreach ($sitemapData['sitemap'] as $sitemap): ?>
-                                    <li>
-                                        <a href="<?= h($sitemap['loc']) ?>"><?= h($sitemap['loc']) ?></a>
-                                    </li>
-                                <?php endforeach; ?>
+								<ul class="no-bullets mb60 ml20">
+									<?php foreach($wikis as $wiki): ?>
+										<li><?php echo $wiki['title_h1']; ?></li>
+									<?php endforeach; ?>
+								</ul>
                             </div>
                         </div>
                     </article>

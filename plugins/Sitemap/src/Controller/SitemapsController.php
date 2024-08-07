@@ -6,6 +6,7 @@ namespace Sitemap\Controller;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\XmlView;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Sitemaps Controller
@@ -14,8 +15,14 @@ use Cake\View\XmlView;
  */
 class SitemapsController extends AppController
 {
+    use LocatorAwareTrait;
+
     public function viewClasses(): array
     {
+        if (!$this->request->getParam('_ext')) {
+            return [];
+        }
+
         return [XmlView::class];
     }
 
@@ -25,6 +32,22 @@ class SitemapsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
+    {
+        if ($this->request->getParam('_ext') === 'xml') {
+            $this->xmlSitemap();
+        }
+
+        $this->htmlSitemap();
+
+    }
+
+    /**
+     * xmlSitemap method
+     * Generates XML index sitemap (available at /sitemap.xml)
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function xmlSitemap()
     {
         $tablesForSitemapIndex = [];
         $urls = [];
@@ -48,6 +71,24 @@ class SitemapsController extends AppController
             '@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
             'sitemap' => $urls,
         ]);
+    }
+
+    /**
+     * htmlSitemap method
+     * Generates human-readable index sitemap (available at /sitemap)
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function htmlSitemap()
+    {
+        $this->set(
+            'wikis',
+            $this->getTableLocator()->get('wikis')->find()->all()
+        );
+        $this->set(
+            'corps',
+            $this->getTableLocator()->get('corps')->find('forSitemap')
+        );
     }
 
     public function main()
