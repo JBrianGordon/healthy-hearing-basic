@@ -130,7 +130,10 @@ return [
     ],
     'Sitemap.tables' => [
         'Main',
-        'Corps',
+        'City',
+        'Help',
+        'Clinic',
+        'State',
     ],
     'states' => [
         'AB' => 'Alberta',

@@ -137,8 +137,20 @@ return [
     ],
     'Sitemap.tables' => [
         'Main',
+        'City',
+        'Help',
         'Content',
-        'Corps',
+        'Clinic',
+        'Corp',
+        'State',
+    ],
+    'Sitemap.tableAliases' => [
+        'City' => 'cities',
+        'Help' => 'wikis',
+        'Content' => 'content',
+        'Clinic' => 'locations',
+        'Corp' => 'corps',
+        'State' => 'states',
     ],
     'states' => [
         'AK' => 'Alaska',

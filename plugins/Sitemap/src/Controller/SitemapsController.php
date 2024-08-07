@@ -26,11 +26,18 @@ class SitemapsController extends AppController
      */
     public function index()
     {
-        // Load the Sitemaps table
-        $this->loadModel('Sitemaps');
+        $tablesForSitemapIndex = [];
+        $urls = [];
 
-        // Fetch sitemap data
-        $sitemap = $this->Sitemaps->fetchSitemapData();
+        if (Configure::check('Sitemap.tables')) {
+            $tablesForSitemapIndex = Configure::read('Sitemap.tables');
+        }
+
+        foreach ($tablesForSitemapIndex as $table) {
+            $urls[] = [
+                'loc' => Router::url('sitemap_' . $table . '.xml', true),
+            ];
+        }
 
         // Define a custom root node in the generated document.
         $this->viewBuilder()
@@ -39,7 +46,7 @@ class SitemapsController extends AppController
         $this->set([
             // Define an attribute on the root node.
             '@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'sitemap' => $sitemap,
+            'sitemap' => $urls,
         ]);
     }
 
@@ -73,7 +80,14 @@ class SitemapsController extends AppController
     public function view($table)
     {
         $tableSitemapUrls = [];
-        $tableToSitemap = $this->fetchTable($table);
+
+        $sitemapTableAliases = Configure::read('Sitemap.tableAliases');
+
+        if (array_key_exists($table, $sitemapTableAliases)) {
+            $tableToSitemap = $this->fetchTable($sitemapTableAliases[$table]);
+        } else {
+            $tableToSitemap = $this->fetchTable($table);
+        }
 
         $tableItemsForSitemap = $tableToSitemap->find('forSitemap');
 

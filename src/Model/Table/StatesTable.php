@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Core\Configure;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -46,10 +47,9 @@ class StatesTable extends Table
         $this->addBehavior('Timestamp');
         $this->addBehavior('Sitemap.Sitemap', [
             'conditions' => [
-                'is_active' => true,
+                'name !=' => 'Dist. of Columbia',
             ],
             'order' => [
-                'priority' => 'ASC',
                 'name' => 'ASC',
             ],
             'priority' => 0.8,
