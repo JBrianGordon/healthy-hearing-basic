@@ -136,10 +136,10 @@ return [
         'State',
     ],
     'Sitemap.tableAliases' => [
-        'City' => 'cities',
-        'Help' => 'wikis',
-        'Clinic' => 'locations',
-        'State' => 'states',
+        'City' => 'Cities',
+        'Help' => 'Wikis',
+        'Clinic' => 'Locations',
+        'State' => 'States',
     ],
     'states' => [
         'AB' => 'Alberta',

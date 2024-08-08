@@ -145,12 +145,12 @@ return [
         'State',
     ],
     'Sitemap.tableAliases' => [
-        'City' => 'cities',
-        'Help' => 'wikis',
-        'Content' => 'content',
-        'Clinic' => 'locations',
-        'Corp' => 'corps',
-        'State' => 'states',
+        'City' => 'Cities',
+        'Help' => 'Wikis',
+        'Content' => 'Content',
+        'Clinic' => 'Locations',
+        'Corp' => 'Corps',
+        'State' => 'States',
     ],
     'states' => [
         'AK' => 'Alaska',
