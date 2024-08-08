@@ -208,11 +208,6 @@ $seoItems['Status codes'] = [
 $seoItems['Titles'] = [
     'url' => '/admin/seo-titles',
 ];
-if (Configure::read('showImageSitemap')) {
-    $seoItems['Image sitemap'] = [
-        'url' => '/admin/sitemaps/image-sitemap',
-    ];
-}
 $seoToolsMenu = [
     'icon' => 'bi bi-briefcase-fill',
     'items' => $seoItems,
