@@ -135,6 +135,12 @@ return [
         'Clinic',
         'State',
     ],
+    'Sitemap.tableAliases' => [
+        'City' => 'cities',
+        'Help' => 'wikis',
+        'Clinic' => 'locations',
+        'State' => 'states',
+    ],
     'states' => [
         'AB' => 'Alberta',
         'BC' => 'British Columbia',
