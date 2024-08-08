@@ -81,9 +81,6 @@ return [
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',
     'isMetric' => false, // Displays distance in miles
-    'isSitemapPingEnabled' => true,
-    'allowCopySitemaps' => true,
-    'showImageSitemap' => true,
     'isCrmEmailEnabled' => true,
     'isVwoEnabled' => true,
     // Paid features
