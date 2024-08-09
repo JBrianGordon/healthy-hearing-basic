@@ -925,21 +925,6 @@ class ClinicHelper extends Helper
     }
 
     /**
-     * @description Returns the count from the count_metrics data set
-     *
-     * @param $name string Primary selector, usually a city name, state name or zip code
-     * @param string $metric Metric to check
-     * @param string $type Segmentation level
-     * @param string $subName Secondary selector, only used for city
-     *
-     * @return int count value
-     */
-    public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
-    {
-        return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
-    }
-
-    /**
     * Return near text of the closest locations
     * @param string region
     * @param string city
