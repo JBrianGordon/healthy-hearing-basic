@@ -31,7 +31,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 						<div class="panel-body">
 							<div class="panel-section">
 								<h1 class="text-primary">Hearing clinics in <?= $stateNice ?></h1>
-								<p>Each <?= $stateLabel ?> has resources available for people with hearing loss. For your convenience, we've gathered together links to useful resources for residents of <?= $stateNice ?>.<?php if($hasAtLeastOneClinic) : ?> Looking for clinics in a specific city? Jump to <a href="#cities" class="quickLink">clinics by city</a><?= $showMobileClinics ? ' or <a href="#mobileClinics" class="quickLink">mobile clinics</a>' : '' ?>.<?php endif; ?></p>
+								<p>Each <?= $stateLabel ?> has resources available for people with hearing loss. For your convenience, we've gathered together links to useful resources for residents of <?= $stateNice ?>.<?php if($hasAtLeastOneClinic) : ?> Looking for clinics in a specific city? Jump to <a href="#cities" class="quickLink text-link">clinics by city</a><?= $showMobileClinics ? ' or <a href="#mobileClinics" class="quickLink text-link">mobile clinics</a>' : '' ?>.<?php endif; ?></p>
 							</div>
 						</div>
 					</section>
