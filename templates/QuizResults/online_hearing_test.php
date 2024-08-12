@@ -34,7 +34,7 @@
 							srcset="/img/quiz/hh19-free-online-hearing-test.webp 1x, /img/quiz/hh19-free-online-hearing-test@2x.webp 2x" 
 							width="450" 
 							height="300" 
-							class="img-rounded img-responsive center-block mb30" 
+							class="img-rounded img-responsive center-block mb30 mw-100 h-auto" 
 							alt="A woman struggles to hear a friend talking">
 						<p class="lead text-primary">Hearing loss is a touchy subject that can bring out the procrastinator in even the best of us. If you think you have hearing loss, take our free online hearing test and then schedule an appointment for a complete hearing assessment at a hearing clinic near you.</p>
 						<p>The questions on this online hearing test can help you prepare for your first appointment with an audiologist or hearing aid specialist.</p>
