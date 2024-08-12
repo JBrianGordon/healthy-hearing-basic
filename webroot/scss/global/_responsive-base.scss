@@ -39,9 +39,9 @@ h6, .h6 {
   @include font($font-family-secondary, 'normal', "500");
 }
 
-// h1, .h1 {
-//   font-size: 47.5px;
-// }
+h1, .h1 {
+  font-size: 47.5px;
+}
 
 h2, .h2 {
   margin-top: 30px;
@@ -69,10 +69,6 @@ h4, .h4 {
 
 h6, .h6 {
   line-height: 1.5;
-}
-
-#start-h1 {
-  font-size: 47.5px;
 }
 
 hr {
