@@ -47,7 +47,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 					                echo $this->Form->control('title');
 					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
-					                echo $this->Form->control('last_modified', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
+					                echo $this->Form->control('last_modified', ['type' => 'datetime', 'dateFormat' => 'MDY']);
 					                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 					                echo $this->Form->control('is_active', ['label' => 'Active']);
 					                echo '</div>';

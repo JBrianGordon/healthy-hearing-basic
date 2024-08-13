@@ -36,7 +36,11 @@ $author_default = false;
 					                echo $this->Form->control('title');
                             		echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
-					                echo $this->Form->control('last_modified', ['empty' => true]);
+					                echo $this->Form->control(
+										'last_modified', [
+											'default' => date("Y-m-d H:i:s")
+										]
+					                );
 					                echo $this->Form->control('is_active', ['class' => 'col-sm-offset-3', 'style' => 'left:0', 'label' => ['class' => 'pl0']]);
 				                ?>
 								<ul class="nav nav-tabs clearfix">
