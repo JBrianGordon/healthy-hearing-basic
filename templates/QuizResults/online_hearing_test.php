@@ -31,7 +31,7 @@
 					<h2 id="result-h2" class="text-primary" style="display:none;">Your hearing test results</h2>
 					<div id="start-test" class="test-start clear">
 						<picture>
-							<source media="(max-width: 767px)" srcset="/img/quiz/hh19-free-online-hearing-test-mobile.webp">
+							<source media="(max-width: 767px)" srcset="/img/quiz/hh19-free-online-hearing-test.webp">
 							<source srcset="/img/quiz/hh19-free-online-hearing-test.webp 1x, /img/quiz/hh19-free-online-hearing-test@2x.webp 2x">
 							<img src="/img/quiz/hh19-free-online-hearing-test.webp" 
 								width="450" 
