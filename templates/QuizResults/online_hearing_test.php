@@ -11,7 +11,9 @@
 ?>
 <div class="container-fluid site-body blog">
   <div class="row">
-    <div class="backdrop backdrop-gradient backdrop-height"></div>
+  	<div class="backdrop-container noprint">
+    	<div class="backdrop backdrop-gradient backdrop-height"></div>
+	</div>
     <div class="container">
       <div class="row noprint">
         <div class="col-sm-9 inverse">
@@ -21,19 +23,22 @@
         </div>
 	  </div>
       <div class="row page-content">
-		<div class="col-lg-9">
+		<div class="col-lg-9 float-start">
 			<article class="panel hearing-test">
 			<div class="panel-body anchor-underline">
-				<div class="panel-section expanded p15">
+				<div class="panel-section expanded">
 					<h1 class="text-primary" id="start-h1">How's your hearing?</h1>
 					<h2 id="result-h2" class="text-primary" style="display:none;">Your hearing test results</h2>
 					<div id="start-test" class="test-start clear">
-						<img src="/img/quiz/hh19-free-online-hearing-test.jpg" 
-							srcset="/img/quiz/hh19-free-online-hearing-test.jpg 1x, /img/quiz/hh19-free-online-hearing-test@2x.jpg 2x" 
-							width="450" 
-							height="300" 
-							class="img-rounded img-responsive center-block mb30" 
-							alt="A woman struggles to hear a friend talking">
+						<picture>
+							<source media="(max-width: 767px)" srcset="/img/quiz/hh19-free-online-hearing-test.webp">
+							<source srcset="/img/quiz/hh19-free-online-hearing-test.webp 1x, /img/quiz/hh19-free-online-hearing-test@2x.webp 2x">
+							<img src="/img/quiz/hh19-free-online-hearing-test.webp" 
+								width="450" 
+								height="300" 
+								class="img-rounded img-responsive center-block mb30 mw-100 h-auto" 
+								alt="A woman struggles to hear a friend talking">
+						</picture>
 						<p class="lead text-primary">Hearing loss is a touchy subject that can bring out the procrastinator in even the best of us. If you think you have hearing loss, take our free online hearing test and then schedule an appointment for a complete hearing assessment at a hearing clinic near you.</p>
 						<p>The questions on this online hearing test can help you prepare for your first appointment with an audiologist or hearing aid specialist.</p>
 						<div class="mt5 mb20 text-center">
