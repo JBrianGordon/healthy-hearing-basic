@@ -63,7 +63,12 @@ $this->Html->script('dist/common.min', ['block' => true]);
 			</div>
 			<div class="row page-content">
 				<span style="display:none;" id="corp-id"><?= $corp->id; ?></span>
-				<span style="display:none;" id="is-preview"><?= $isPreview; ?></span>
+				<?php if ($isPreview): ?>
+					<div class="alert alert-warning" role="alert">
+						This is not the greatest Manufacturer page in the world, no. <br />
+						This is just a <strong><em>preview</em></strong>!
+					</div>
+				<?php endif; ?>
 				<div class="col-lg-9" style="min-height:100vh">
 					<div class="print-wrapper">
 						<div class="print-head">
@@ -85,9 +90,16 @@ $this->Html->script('dist/common.min', ['block' => true]);
 										<div class="col-md-4 manuf-logo">
 											<div style="display:none"><?= Router::url($corp->facebook_image, true); ?></div>
 											<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
-											<?php if ($isAdmin){
-												echo $this->Html->link('Edit', ['controller' => 'admin/corps', 'action' => 'edit', $corp->id], ['class' => 'btn btn-default']);
-											} ?>
+											<?=
+												$this->AuthLink->link('Edit', [
+													'prefix' => 'Admin',
+													'controller' => 'corps',
+													'action' => 'edit',
+													$corp->id
+												], [
+													'class' => 'btn btn-default'
+												])
+											?>
 										</div>
 										<div class="col-md-12 gutter-above">
 											<p>

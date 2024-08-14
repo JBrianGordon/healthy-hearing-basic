@@ -225,4 +225,11 @@ class EditorialHelper extends Helper
         ], (array) $options);
         return $this->Html->link($title, $content->hh_url, $options);
     }
+
+    public function adminIndexDraft($draft_parent_id) {
+        if ($draft_parent_id > 0) {
+            return '<strong class="text-secondary">REPUBLISH DRAFT: </strong>';
+        }
+        return;
+    }
 }

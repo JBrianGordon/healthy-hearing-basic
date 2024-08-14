@@ -42,7 +42,7 @@
 				                <tr>
 					                <td><?= $this->Number->format($corp->priority) ?></td>
 				                    <td><?= $corp->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?><br><span class="badge bg-light"><?= h($corp->id) ?></span></td>
-				                    <td><?= h($corp->title) ?><br><?= h($corp->slug) ?></td>
+				                    <td><?= $this->Editorial->adminIndexDraft($corp->id_draft_parent) . h($corp->title) ?><br><?= h($corp->slug) ?></td>
 				                    <td><?= h($corp->short) ?></td>
 				                    <td><?= date_format($corp->last_modified, 'M j, Y') ?><br><?= date_format($corp->modified, 'M j, Y') ?></td>
 				                    <td>
