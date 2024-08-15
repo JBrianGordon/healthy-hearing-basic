@@ -34,7 +34,12 @@ $author_default = false;
 					            <div class="clearfix"></div>
 				                <?php
 					                echo $this->Form->control('title');
-                            		echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+									echo $this->Form->control('user_id', [
+										'label' => 'Primary Author',
+										'options' => $authors,
+										'default' => $author_default,
+										'empty' => 'Select an author'
+									]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
 					                echo $this->Form->control(
 										'last_modified', [

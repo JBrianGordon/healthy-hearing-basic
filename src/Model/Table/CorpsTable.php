@@ -88,9 +88,9 @@ class CorpsTable extends Table
         //     ->integer('id')
         //     ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->dateTime('last_modified')
-            ->notEmptyDateTime('last_modified');
+        // $validator
+        //     ->dateTime('last_modified')
+        //     ->notEmptyDateTime('last_modified');
 
         // $validator
         //     ->integer('modified_by')
@@ -101,6 +101,10 @@ class CorpsTable extends Table
             ->maxLength('title', 128)
             ->requirePresence('title', true, 'Title is a required field')
             ->notEmptyString('title', 'Title cannot be left blank');
+
+        $validator
+            ->integer('user_id')
+            ->requirePresence('user_id', 'create');
 
         // $validator
         //     ->scalar('title_long')

@@ -70,7 +70,7 @@ return static function (RouteBuilder $routes) {
         // Corp/manufacturer pages
         $builder->connect('/{slug}', 'Corps::view')
             ->setPass(['slug'])
-            ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
+            ->setPatterns(['slug' => Configure::read('corpsRegex')]);
 
         // Online hearing test
         $builder->connect('/help/online-hearing-test', ['controller' => 'quizResults', 'action' => 'online_hearing_test']);
