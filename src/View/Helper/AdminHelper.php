@@ -112,9 +112,9 @@ class AdminHelper extends Helper
                 $formInput .= '<div class="input-group">';
                 $formInput .= '<label class="form-check-label col-md-5 tar" for="'.$fieldSlug.'">'.$label.'</label>';
                 $formInput .= '<div class="col-md-7 p0">';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
                 $formInput .= '<span>&nbsp; - &nbsp;</span>';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
                 $formInput .= '</div>';
                 $formInput .= '</div>';
                 break;

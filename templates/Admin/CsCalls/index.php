@@ -79,11 +79,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body">
             <div class="panel-section expanded">
                 <h2>Call Tracking Calls</h2>
-                <!--*** TODO: add Cs Call search, advanced search and save search ***-->
                 <div class="csCalls index content">
                     <?= $this->element('pagination') ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
-                    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-condensed">
                             <thead>
