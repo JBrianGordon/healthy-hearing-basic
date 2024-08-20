@@ -2,11 +2,6 @@ import 'jquery-ui/ui/widgets/autocomplete';
 
 $(window).ready(function() {
 
-	//Default scroll to top of page on refresh
-	window.onbeforeunload = function () {
-		window.scrollTo(0, 0);
-	}
-
 	$('input.autocomplete').autocomplete({
 		source: '/fapautocomplete',
 		minLength: 2,
