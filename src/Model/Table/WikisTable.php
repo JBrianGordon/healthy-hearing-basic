@@ -70,7 +70,7 @@ class WikisTable extends Table
             'priority' => 0.8,
         ]);
 
-        $this->belongsTo('Authors', [
+        $this->belongsTo('Author', [
             'className' => 'Users',
             'foreignKey' => 'user_id',
         ]);
@@ -165,9 +165,9 @@ class WikisTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('name')
@@ -190,9 +190,9 @@ class WikisTable extends Table
         //     ->scalar('short')
         //     ->allowEmptyString('short');
 
-        $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
+        // $validator
+        //     ->boolean('is_active')
+        //     ->notEmptyString('is_active');
 
         // $validator
         //     ->integer('id_draft_parent')
@@ -229,38 +229,39 @@ class WikisTable extends Table
         //     ->maxLength('facebook_title', 255)
         //     ->allowEmptyString('facebook_title');
 
-        $validator
-            ->scalar('facebook_image')
-            ->maxLength('facebook_image', 255)
-            ->notEmptyFile('facebook_image');
+        // $validator
+        //     ->scalar('facebook_image')
+        //     ->maxLength('facebook_image', 255)
+        //     ->notEmptyFile('facebook_image');
             // ADD MIME TYPE CHECKING
 
         // $validator
         //     ->boolean('facebook_image_bypass')
         //     ->allowEmptyFile('facebook_image_bypass');
 
-        $validator
-            ->integer('facebook_image_width')
-            ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
-                'rule' => function ($width) {
-                    if ($width >= 800) {
-                        return true;
-                    }
+        // $validator
+        //     ->integer('facebook_image_width')
+        //     ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
+        //         'rule' => function ($width) {
+        //             if ($width >= 800) {
+        //                 return true;
+        //             }
 
-                    return false;
-                },
-            ]);
+        //             return false;
+        //         },
+        //     ]);
+
             // ->minLength('facebook_image_width', 800, 'Facebook image must be at least 800 px wide');
 
         // $validator
         //     ->integer('facebook_image_height')
         //     ->notEmptyFile('facebook_image_height');
 
-        $validator
-            ->scalar('facebook_image_alt')
-            ->maxLength('facebook_image_alt', 255)
-            ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
-            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
+        // $validator
+        //     ->scalar('facebook_image_alt')
+        //     ->maxLength('facebook_image_alt', 255)
+        //     ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
+        //     ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
         // $validator
         //     ->scalar('facebook_description')
@@ -403,7 +404,7 @@ class WikisTable extends Table
         }
         $wiki = $this->find('all', [
             'conditions' => $conditions,
-            'contain' => ['Authors','Tags','Contributors','Reviewers']
+            'contain' => ['Author','Tags','Contributors','Reviewers']
         ])->first();
         if (!empty($wiki) && $uri == Router::url(['prefix'=>false, 'plugin'=>false, 'controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
             return $wiki;

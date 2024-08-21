@@ -366,6 +366,10 @@ class ContentTable extends Table
     function findByTags($tagIds=[], $limit=6){
         // TODO: We previously used find('similar')
         // Test to see how close this is
+        if (empty($tagIds)) {
+            return [];
+        }
+
         $contentTags = $this->ContentTags->find('all', [
             'contain' => ['Content'],
             'conditions' => [
@@ -374,6 +378,7 @@ class ContentTable extends Table
                 'Content.last_modified <= CURDATE()',
             ],
         ])->all();
+
         $contents = [];
         $contentIds = [];
         foreach ($contentTags as $contentTag) {

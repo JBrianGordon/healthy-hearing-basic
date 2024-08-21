@@ -73,6 +73,7 @@ class Wiki extends Entity
         'created' => true,
         'background_alt' => true,
         'users' => true,
+        'tags' => true,
         'tag_wikis' => true,
     ];
 

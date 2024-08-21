@@ -6,12 +6,6 @@
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
 
-$author_default = false;
-if (empty($content->id)) {
-	if (in_array($user->id, $authors)) {
-		$author_default = $user->id;
-	}
-}
 $isDraft = !empty($corp->id_draft_parent);
 
 $this->Html->script('dist/corp_edit.min', ['block' => true]);
@@ -53,7 +47,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 				            <fieldset>
 				                <?php
 					                echo $this->Form->control('title');
-					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
 					                echo $this->Form->control('last_modified', ['type' => 'datetime', 'dateFormat' => 'MDY']);
 					                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';

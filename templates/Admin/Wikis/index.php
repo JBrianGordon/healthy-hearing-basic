@@ -80,7 +80,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                <?php foreach ($wikis as $wiki): ?>
 					                <tr>
 						                <td><?= $wiki->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?></td>
-					                    <td><?= h($wiki->name) ?></td>
+					                    <td><?= $this->Editorial->adminIndexDraft($wiki->id_draft_parent) . h($wiki->name) ?></td>
 					                    <td><?= h($wiki->slug) ?></td>
 					                    <td><?= h($wiki->short) ?></td>
 					                    <td><?= date_format($wiki->last_modified, 'M j, o') ?><br><?= date_format($wiki->modified, 'M j, o') ?></td>

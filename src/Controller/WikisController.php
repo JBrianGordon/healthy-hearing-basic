@@ -67,7 +67,9 @@ class WikisController extends AppController
             $tagIds = array_column($wiki->tags, 'id');
             $this->set('tags', $tagIds);
             $this->Content = $this->fetchTable('Content');
+
             $contents = $this->Content->findByTags($tagIds, 6);
+
             $this->set('contents', $contents);
             $tagname = isset($wiki->tags[0]) ? $wiki->tags[0]->name : '';
             $this->set('tagname', $tagname);

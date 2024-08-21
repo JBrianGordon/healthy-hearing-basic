@@ -28,6 +28,12 @@ class WikisController extends BaseAdminController
             'actions' => ['index'],
         ]);
     }
+
+    public $paginate = [
+        'order' => [
+            'Wikis.priority' => 'ASC',
+        ],
+    ];
     
     /**
      * Index method
@@ -36,8 +42,6 @@ class WikisController extends BaseAdminController
      */
     public function index()
     {
-        //$wikis = $this->paginate($this->Wikis);
-
         $requestParams = $this->request->getQueryParams();
         $wikiQuery = $this->Wikis
             ->find('search', [
@@ -49,7 +53,6 @@ class WikisController extends BaseAdminController
         $this->set('count', $wikiQuery->count());
 
         $this->set('fields', $this->Wikis->getSchema()->typeMap());
-        //$this->set(compact('wikis'));
     }
 
     /**
@@ -69,7 +72,7 @@ class WikisController extends BaseAdminController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Authors->authorList();
+        $authors = $this->Wikis->Author->authorList();
         $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
@@ -85,7 +88,7 @@ class WikisController extends BaseAdminController
     public function edit($id = null)
     {
         $wiki = $this->Wikis->get($id, [
-            'contain' => ['Authors', 'Contributors', 'Reviewers', 'Tags'],
+            'contain' => ['Author', 'Contributors', 'Reviewers', 'Tags'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
@@ -96,10 +99,25 @@ class WikisController extends BaseAdminController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Authors->authorList();
+        $authors = $this->Wikis->Author->authorList();
         $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
+        $selectedTags = $wiki->tags ? array_column($wiki->tags, 'id') : [];
+        $this->set('selectedTags', $selectedTags);
+    }
+
+    public function preview($id = null)
+    {
+        $wiki = $this->Wikis->get($id, [
+            'contain' => ['Author'],
+        ]);
+        $this->set('wiki', $wiki);
+        $this->set('isPreview', true);
+
+        // Set the template path to the non-prefixed template
+        $this->viewBuilder()->setTemplatePath('Wikis');
+        $this->render('view');
     }
 
     /**
@@ -137,7 +155,7 @@ class WikisController extends BaseAdminController
         $draftId = $this->Wikis->checkForDraft($id);
 
         if ($draftId > 0) {
-            $this->Flash->success('This report has an existing draft below.');
+            $this->Flash->success('This Help page has an existing draft below.');
 
             return $this->redirect(['action' => 'edit', $draftId]);
         }

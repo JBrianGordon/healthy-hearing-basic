@@ -63,13 +63,13 @@ $this->Html->script('dist/common.min', ['block' => true]);
 			</div>
 			<div class="row page-content">
 				<span style="display:none;" id="corp-id"><?= $corp->id; ?></span>
-				<?php if ($isPreview): ?>
-					<div class="alert alert-warning" role="alert">
-						This is not the greatest Manufacturer page in the world, no. <br />
-						This is just a <strong><em>preview</em></strong>!
-					</div>
-				<?php endif; ?>
 				<div class="col-lg-9" style="min-height:100vh">
+					<?php if ($isPreview): ?>
+						<div class="alert alert-warning" role="alert">
+							This is not the greatest Manufacturer page in the world, no. <br />
+							This is just a <strong><em>preview</em></strong>!
+						</div>
+					<?php endif; ?>
 					<div class="print-wrapper">
 						<div class="print-head">
 							<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
