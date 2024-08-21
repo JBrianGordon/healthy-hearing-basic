@@ -164,7 +164,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 				}
 				?>
 				<h3 class="text-center text-primary"><em><?= $searchTitle ?></em></h3>
-				<div class="col-md-offset-3 col-md-6">
+				<div class="col-12 col-md-offset-3 col-md-6">
 					<?= $this->element('locations/search', ['label' => $searchPlaceholder]) ?>
 				</div>
 				<div class="clearfix"></div>

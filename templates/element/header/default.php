@@ -20,7 +20,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 <nav class="navbar navbar-default navbar-fixed-top has-shadow sticky-top navbar-expand-lg navbar-light">
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-12" id="navParent">
+			<div class="col-12" id="navParent">
 				<div class="navbar-header">
 					<a href="/" class="navbar-logo <?= Configure::read('country'); ?>" <?= $logoBorder ?>>
 						<img src="<?= $logo ?>" alt="<?= $siteName ?>" width="198" height="40" />
