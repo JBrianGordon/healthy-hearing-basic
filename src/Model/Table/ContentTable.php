@@ -282,11 +282,11 @@ class ContentTable extends Table
         //     ->integer('facebook_image_height')
         //     ->notEmptyFile('facebook_image_height');
 
-        $validator
-            ->scalar('facebook_image_alt')
-            // ->maxLength('facebook_image_alt', 255)
-            ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
-            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
+        // $validator
+        //     ->scalar('facebook_image_alt')
+        //     // ->maxLength('facebook_image_alt', 255)
+        //     ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
+        //     ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
         // $validator
         //     ->boolean('old_url')
