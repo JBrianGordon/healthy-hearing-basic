@@ -145,7 +145,7 @@ class LocationsController extends AppController
             'fields' => $statePageFields
         ])->all();
         if (empty($title)) {
-            $this->set('title', 'Trusted hearing aid specialists & audiologists in ' . $stateNice);
+            $this->set('title', 'Hearing centers in ' . $stateNice);
         }
         $this->set('mobileClinicsInState', $mobileClinicsInState ?: []);
         $mobileClinicsInStateCount = count($mobileClinicsInState);
@@ -275,7 +275,7 @@ class LocationsController extends AppController
             $this->meta['robots'] = "NOINDEX, FOLLOW";
         }
         if (empty($title)) {
-            $this->set('title', 'Trusted hearing aid specialists & audiologists ' . Inflector::humanize($city) . ', ' . $stateAbbr);
+            $this->set('title', 'Hearing centers in ' . Inflector::humanize($city) . ', ' . $stateAbbr);
         }
 
         $this->meta['description'] = 'Find trusted hearing clinics, specialists and audiologists in ' . Inflector::humanize($city) . ', ' . $stateAbbr . '. '. $this->siteName .' has unbiased reviews for ' . count($locations) . ' audiology clinics near you.';
