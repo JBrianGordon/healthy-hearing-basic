@@ -103,8 +103,7 @@ class CorpsTable extends Table
             ->notEmptyString('title', 'Title cannot be left blank');
 
         $validator
-            ->integer('user_id')
-            ->requirePresence('user_id', 'create');
+            ->integer('user_id');
 
         // $validator
         //     ->scalar('title_long')

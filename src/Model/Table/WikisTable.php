@@ -186,6 +186,9 @@ class WikisTable extends Table
             ->requirePresence('body', true, 'Main content section (body) is a required field')
             ->notEmptyString('body', 'Main content section (body) cannot be left blank');
 
+        $validator
+            ->integer('user_id');
+
         // $validator
         //     ->scalar('short')
         //     ->allowEmptyString('short');

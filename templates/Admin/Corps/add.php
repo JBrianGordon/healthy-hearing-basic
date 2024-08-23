@@ -38,7 +38,7 @@ $author_default = false;
 										'label' => 'Primary Author',
 										'options' => $authors,
 										'default' => $author_default,
-										'empty' => 'Select an author'
+										'empty' => 'Select an author',
 									]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
 					                echo $this->Form->control(

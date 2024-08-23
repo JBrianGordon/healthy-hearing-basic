@@ -42,7 +42,12 @@ if (empty($content->id)) {
                         <?php
                             echo $this->Form->control('name');
                             echo $this->Form->control('slug');
-                            echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+                            echo $this->Form->control('user_id', [
+                                'label' => 'Primary Author',
+                                'options' => $authors,
+                                'default' => $author_default,
+                                'empty' => 'Select an author'
+                            ]);
                             echo $this->Form->control('last_modified', ['empty' => true]);
                             echo '<div class="col-md-9 col-md-offset-3 pl0">';
                             echo $this->Form->control('is_active', ['label' => ' Active']);
