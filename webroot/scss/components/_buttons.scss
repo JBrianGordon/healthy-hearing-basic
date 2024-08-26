@@ -108,6 +108,12 @@ button.close {
     font-size: 12px;
     line-height: 1.5;
   }
+
+  &.btn-group-vertical {
+    > .btn:not(:first-child){
+      margin-left:0;
+    }
+  }
   
   > .btn:not(:first-child), > .btn-group:not(:first-child) {
     margin-left: 0;
