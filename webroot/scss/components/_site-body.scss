@@ -383,13 +383,9 @@
 			    width: auto;
 			    height: auto;
 
-			    @media ($screen-lg-max) {
+			    @media (max-width:1199px) {
 			      max-width: 120px;
-			      min-height: 60px;
-			    }
-
-			    @media ($screen-md-max) {
-			      max-width: 165px;
+				  min-height: 60px;
 			      margin: 0 auto;
 			    }
 			  }
