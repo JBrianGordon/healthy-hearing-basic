@@ -297,6 +297,11 @@ class WikisTable extends Table
     {
         // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
+        $rules->add($rules->isUnique(
+            ['slug'],
+            'This Help page slug is already being used.'
+        ));
+
         return $rules;
     }
 
