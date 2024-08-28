@@ -6,22 +6,44 @@ window.submitApptRequest = () => {
 
     const formData = new FormData(form);
     const serializedData = new URLSearchParams(formData).toString();
-
-    fetch("/ca_calls/ajax_appt_request", {
-      method: "POST",
-      body: serializedData,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      dataType: "json"
-    })
+    try {
+      fetch("/ca-calls/ajax-appt-request", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/x-www-form-urlencoded',
+        },
+        body: serializedData,
+      })
       .then(response => response.json())
       .then(data => {
         submitBtn.disabled = false;
         
         if (data.success === true) {
-          document.getElementById("apptRequestModal").style.display = "none";
-          document.getElementById("apptRequestThankYouModal").style.display = "block";
+          const apptRequestPanel = document.getElementById("apptRequestPanel");
+          const apptRequestModal = document.getElementById("apptRequestModal");
+          const modalThankYou = document.getElementById("apptRequestThankYouModal");
+          const pageBody = document.getElementsByTagName("body");
+          if (apptRequestPanel !== null) {
+            if (apptRequestPanel.classList.contains("fixed")) {
+              apptRequestPanel.classList.remove("fixed");
+            }
+            apptRequestPanel.style.display = "none";
+          }
+          if (apptRequestModal !== null) {
+            apptRequestModal.style.display = "none";
+          }
+          if (modalThankYou !== null) {
+            const closeModalButtons = modalThankYou.querySelectorAll("[data-dismiss='modal']");
+            modalThankYou.classList.remove("fade");
+            modalThankYou.style.display = "block";
+            closeModalButtons.forEach(button => {
+              button.addEventListener("click", () => {
+                modalThankYou.remove();
+                pageBody[0].classList.remove("modal-open");
+              });
+            });
+          }
         } else {
           let errorMessage = "Error";
           if (data.errorMessage) {
@@ -31,64 +53,34 @@ window.submitApptRequest = () => {
           document.getElementById("apptRequestSubmitError").style.display = "block";
         }
 
-        if (typeof grecaptcha !== "undefined" && typeof grecaptcha.reset === "function") {
-          grecaptcha.reset();
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        submitBtn.disabled = false;
+        //TODO: Recaptcha
+        //if (typeof grecaptcha !== "undefined" && typeof grecaptcha.reset === "function") {
+        //  grecaptcha.reset();
+        //}
       });
+    } catch (error) {
+      console.log('ajaxApptRequest error:');
+      console.error(error);
+      submitBtn.disabled = false;
+    }
   }
 };
-
-window.onSubmit = e => {
-  e.preventDefault();
-
-  const appReqPanel = document.getElementById("apptRequestPanel");
-  const modalThankYou = document.getElementById("apptRequestThankYouModal");
-  const closeModalButtons = modalThankYou.querySelectorAll("[data-dismiss='modal']");
-  const pageBody = document.getElementsByTagName("body");
-
-  if (!grecaptcha.getResponse()) {
-    grecaptcha.execute();
-  }
-
-  if (appReqPanel !== null && appReqPanel.classList.contains("fixed")) {
-    appReqPanel.classList.remove("fixed");
-  }
-
-  modalThankYou.classList.remove("fade");
-
-  closeModalButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      modalThankYou.remove();
-      pageBody[0].classList.remove("modal-open");
-    });
-  });
-};
-
-window.addSubmitListener = () => {
-	const form = document.getElementById('CaCallApptRequestForm');
-	form.addEventListener('submit', onSubmit);
-}
 
 //Highlight Appt req form on link click
-if(!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 	const formLink = document.querySelector(".requestFormHighlight");
-	const apptReqForm = document.querySelector("#apptRequestPanel");
-	const expandContract = () => {
-		  	apptReqForm.classList.toggle("contracted");
-			apptReqForm.classList.toggle("expanded");
-			setTimeout(() => {
-				apptReqForm.classList.toggle("contracted");
-				apptReqForm.classList.toggle("expanded");
-			}, 500);
-		  };
-		  
-	if(formLink != null) {
-		formLink.addEventListener("click", expandContract);
-	}
+  const apptRequestPanel = document.querySelector("#apptRequestPanel");
+  const expandContract = () => {
+    apptRequestPanel.classList.toggle("contracted");
+    apptRequestPanel.classList.toggle("expanded");
+    setTimeout(() => {
+      apptRequestPanel.classList.toggle("contracted");
+      apptRequestPanel.classList.toggle("expanded");
+    }, 500);
+  };
+  if (formLink != null) {
+    formLink.addEventListener("click", expandContract);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -98,7 +90,8 @@ document.addEventListener("DOMContentLoaded", function() {
   var apptRequestModal = document.getElementById("apptRequestModal");
 
   function addSubmitListener() {
-    // Add submit listener code here
+    const apptRequestSubmitBtn = document.getElementById("apptRequestSubmitBtn");
+    apptRequestSubmitBtn.addEventListener('click', submitApptRequest);
   }
 
   function scrollToApptRequestPanel() {
