@@ -54,9 +54,19 @@ class WikisTable extends Table
             'Search.Search',
             'Draft',
         ]);
+
+        // HACK for custom isUnique rule (see rule below).
+        // 'id_draft_parent' is temporarily set to 1 so that the draft can save
+        // w/o failing the unique slug rule, before being immediately overwritten
+        // by the actual draft parent ID in the DraftBehavior.
+        // It looks like the CakePHP 5.x - compatible version of Duplicatable
+        // can pass the $original item in the 'set' config:
+        // https://github.com/riesenia/cakephp-duplicatable
+        // Please update when we make it to 5.x :)
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
                 'is_active' => 0,
+                'id_draft_parent' => 1
             ],
         ]);
         $this->addBehavior('Sitemap.Sitemap', [
@@ -295,12 +305,30 @@ class WikisTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // Custom isUnique rule that skips uniqe check if id_draft_parent > 0
+        // An OOTB isUnique check causes draft creation to fail because drafts
+        // share slugs with their parents.
+        // HACK REQUIRED -- see Duplicatable config above
+        $rules->add(
+            function ($entity, $options) {
+                if ($entity->id_draft_parent > 0) {
+                    return true;
+                }
 
-        $rules->add($rules->isUnique(
-            ['slug'],
-            'This Help page slug is already being used.'
-        ));
+                // Perform the unique check
+                $existing = $this->find()
+                    ->where(['slug' => $entity->slug])
+                    ->where(['id !=' => $entity->id])
+                    ->where(['id_draft_parent !=' => $entity->id])
+                    ->first();
+
+                return $existing === null ? true : 'This Help page slug is already being used.';
+            },
+            'isUniqueSlug',
+            [
+                'errorField' => 'slug'
+            ]
+        );
 
         return $rules;
     }
