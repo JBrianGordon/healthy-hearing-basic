@@ -25,6 +25,10 @@ class ZipsController extends BaseAdminController
         $this->loadComponent('Search.Search', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
     }
 
     /**

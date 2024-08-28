@@ -37,6 +37,10 @@ class CaCallsController extends BaseAdminController
             'actions' => ['export']
         ]);
 
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+
         $this->paginate = [
             'order' => ['CaCalls.id' => 'DESC']
         ];
