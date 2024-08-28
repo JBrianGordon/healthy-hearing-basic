@@ -316,11 +316,17 @@ class WikisTable extends Table
                 }
 
                 // Perform the unique check
-                $existing = $this->find()
-                    ->where(['slug' => $entity->slug])
-                    ->where(['id !=' => $entity->id])
-                    ->where(['id_draft_parent !=' => $entity->id])
-                    ->first();
+                if ($entity->isNew()) {
+                    $existing = $this->find()
+                        ->where(['slug' => $entity->slug])
+                        ->first();
+                } else {
+                    $existing = $this->find()
+                        ->where(['slug' => $entity->slug])
+                        ->where(['id !=' => $entity->id])
+                        ->where(['id_draft_parent !=' => $entity->id])
+                        ->first();
+                }
 
                 return $existing === null ? true : 'This Help page slug is already being used.';
             },
