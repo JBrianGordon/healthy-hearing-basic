@@ -94,8 +94,12 @@ class WikisController extends BaseAdminController
         $wiki = $this->Wikis->get($id, [
             'contain' => ['Author', 'Contributors', 'Reviewers', 'Tags'],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData(), [
+                'associated' => ['Contributors', 'Tags'],
+            ]);
+
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
