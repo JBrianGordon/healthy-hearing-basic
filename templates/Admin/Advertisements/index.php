@@ -31,8 +31,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                 <div class="wikis index">
                                     <h2>Advertisements</h2>
                                     <?= $this->element('pagination') ?>
-                                    <!-- ***TODO*** : Populate fields for advanced search --> 
-                                    <?= $this->element('advanced_search') ?>
                                     <div class="advertisements index content">
                                         <div class="table-responsive">
                                             <table class="table table-striped table-bordered table-condensed mt20">
