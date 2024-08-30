@@ -3,6 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\SeoUri[]|\Cake\Collection\CollectionInterface $seoUris
  */
+$this->loadHelper('Search.Search', [
+    'additionalBlacklist' => $additionalBlacklist,
+]);
 
 $this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
@@ -31,6 +34,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                     <h2>Seo Uris</h2>
                     <?= $this->element('pagination') ?>
                     <?= $this->element('admin_filter', ['modelName' => 'seoUri']) ?>
+                    <?php if ($this->Search->isSearch()) : ?>
+                        <div class="tar position-relative mr10" style="bottom:35px">
+                            Showing search results.
+                            <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-condensed">
                             <thead>
