@@ -189,11 +189,6 @@ class UsersTable extends CakeDcUsersTable
         //     ->notEmptyString('first_name');
 
         // $validator
-        //     ->scalar('middle_name')
-        //     ->maxLength('middle_name', 128)
-        //     ->allowEmptyString('middle_name');
-
-        // $validator
         //     ->scalar('last_name')
         //     ->maxLength('last_name', 128)
         //     ->requirePresence('last_name', 'create')
