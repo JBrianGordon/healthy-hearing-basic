@@ -477,4 +477,22 @@ class UsersTable extends CakeDcUsersTable
         }
         return $authorList;
     }
+
+    /**
+     * Find a list of users that are reviewers
+     */
+    public function reviewerList()
+    {
+        $reviewers = $this->find('all', [
+            'conditions' => [
+                    'is_reviewer' => true
+            ],
+            'order' => ['first_name ASC']
+        ])->all();
+        $reviewerList = [];
+        foreach ($reviewers as $reviewer) {
+            $reviewerList[$reviewer->id] = $reviewer->first_name.' '.$reviewer->last_name.' ('.$reviewer->username.')';
+        }
+        return $reviewerList;
+    }
 }

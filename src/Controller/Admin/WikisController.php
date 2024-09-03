@@ -81,6 +81,7 @@ class WikisController extends BaseAdminController
         $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
     /**
@@ -110,8 +111,7 @@ class WikisController extends BaseAdminController
         $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set('tags', $this->Wikis->Tags->findTagList());
-        $selectedTags = $wiki->tags ? array_column($wiki->tags, 'id') : [];
-        $this->set('selectedTags', $selectedTags);
+        $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
     public function preview($id = null)

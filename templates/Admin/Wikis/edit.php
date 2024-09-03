@@ -80,7 +80,7 @@ $isDraft = !empty($wiki->id_draft_parent);
                                 <h3>Additional Authors</h3>
                                 <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
                                 <h3>Reviewers</h3>
-                                <!--*** TODO: add reviewers ***-->
+                                <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
 							</div>
 							<div class="tab-pane" id="display">
 								<?php
@@ -96,7 +96,6 @@ $isDraft = !empty($wiki->id_draft_parent);
 										'options' => $tags,
 										'multiple' => 'checkbox',
 										'escape' => false,
-										'value' => $selectedTags,
 									])
 								?>
 							</div>
