@@ -36,7 +36,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 						<div class="panel-section expanded">
 							<header class="row">
 								<div class="col-md-12">
-									<h1 class="text-primary">Hearing aids <?= (!empty($is_near)) ? 'near' : 'in' ?> <?= $this->Clinic->nearText($region,$city,$zip) ?></h1>
+									<h1 class="text-primary">Hearing <?= Configure::read('regionalSpelling.center')?>s <?= (!empty($is_near)) ? 'near' : 'in' ?> <?= $this->Clinic->nearText($region,$city,$zip) ?></h1>
 								</div>
 							</header>
 							<p class="lead text-primary mb20" id="filter-results">
