@@ -84,7 +84,7 @@ if (empty($content->id)) {
                                 ?>
                                 <hr>
                                 <h3>Additional Authors</h3>
-                                <?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+                                <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
                                 <h3>Reviewers</h3>
                                 <!--*** TODO: add reviewers ***-->
                             </div>

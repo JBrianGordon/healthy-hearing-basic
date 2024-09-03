@@ -69,6 +69,7 @@ class WikisController extends BaseAdminController
         $wiki = $this->Wikis->newEmptyEntity();
         if ($this->request->is('post')) {
             $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
@@ -96,9 +97,7 @@ class WikisController extends BaseAdminController
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData(), [
-                'associated' => ['Contributors', 'Tags'],
-            ]);
+            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
 
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
