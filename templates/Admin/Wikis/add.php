@@ -97,7 +97,13 @@ if (empty($content->id)) {
                             </div>
                             <div class="tab-pane" id="tags">
                                 <h3>Tags</h3>
-                                <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                <?= $this->Form->control('tags._ids', [
+                                        'label' => false,
+                                        'options' => $tags,
+                                        'multiple' => 'checkbox',
+                                        'escape' => false
+                                    ])
+                                ?>
                             </div>
                         </div>
                     </fieldset>
