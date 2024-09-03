@@ -42,7 +42,7 @@
 						<p class="lead text-primary">Hearing loss is a touchy subject that can bring out the procrastinator in even the best of us. If you think you have hearing loss, take our free online hearing test and then schedule an appointment for a complete hearing assessment at a hearing clinic near you.</p>
 						<p>The questions on this online hearing test can help you prepare for your first appointment with an audiologist or hearing aid specialist.</p>
 						<div class="mt5 mb20 text-center">
-							<a href="#HearingTest" role="button" onclick="HT.reset();" class="btn btn-light btn-large" data-bs-toggle="modal">Launch Online Hearing Test <span class="glyphicon glyphicon-play glyphicon-white"></span></a>
+							<a href="#HearingTest" role="button" onclick="HT.reset();" class="btn btn-light btn-large" data-bs-toggle="modal">Launch Online Hearing Test <span class="bi bi-caret-right-fill"></span></a>
 						</div>
 						<p>After you take the test, <a href="<?=$this->Clinic->nearMeLink() ?>" target="_blank">visit our directory</a> to find a hearing clinic near you. Take the first step to improve your quality of life through better hearing today!</p>
 					</div>
@@ -160,9 +160,17 @@
 						<?= $this->element('hearingtest/header_line', ['text' => 'Want to try again?']) ?>
 						<p>Surprised by your result? Feel free to retake the test!</p>
 						<div class="mt30 tac">
-							<a href="#HearingTest" role="button" onclick="HT.reset();" class="btn btn-light btn-lg mb10" data-bs-toggle="modal">Launch Online Hearing Test <span class="glyphicon glyphicon-play glyphicon-white"></span></a>
+							<a href="#HearingTest" role="button" onclick="HT.reset();" class="btn btn-light btn-lg mb10" data-bs-toggle="modal">Launch Online Hearing Test <span class="bi bi-caret-right-fill"></span></a>
 						</div>
-						<img src="/img/quiz/hh19-free-online-hearing-test.jpg" width="300" height="200" class="img-rounded img-responsive center-block mt30" alt="A woman struggles to hear a friend talking">
+						<picture>
+							<source media="(max-width: 767px)" srcset="/img/quiz/hh19-free-online-hearing-test.webp">
+							<source srcset="/img/quiz/hh19-free-online-hearing-test.webp 1x, /img/quiz/hh19-free-online-hearing-test@2x.webp 2x">
+							<img src="/img/quiz/hh19-free-online-hearing-test.webp" 
+								width="450" 
+								height="300" 
+								class="img-rounded img-responsive center-block mb30 mw-100 h-auto" 
+								alt="A woman struggles to hear a friend talking">
+						</picture>
 					</div>
 					<!-- End Results -->
 				</div>
