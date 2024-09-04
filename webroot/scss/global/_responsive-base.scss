@@ -10,7 +10,8 @@
 
 @font-face {
   font-family: "Lato";
-  src: url("/font/lato-regular.woff2") format("woff");
+  src: url("/font/lato-regular.woff2") format("woff2"),
+       url("/font/lato-v17-latin-regular.woff") format("woff");
   font-display: swap;
 }
 
