@@ -23,7 +23,6 @@ $this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 		            ['confirm' => 'Are you sure you want to delete # {0}?', $user->id, 'class' => 'btn btn-danger bi bi-trash']
 		        ) ?>
 				<?= $this->Html->link(' Send Default Email', ['action' => 'default_email/'.$user->id], ['class' => 'btn btn-default bi bi-envelope']) ?>
-				<?= $this->Html->link(' Send Password Reset', ['action' => 'change_password/'.$user->id], ['class' => 'btn btn-default bi bi-lock-fill']) ?>
 			</div>
 		</div>
 	</div>
