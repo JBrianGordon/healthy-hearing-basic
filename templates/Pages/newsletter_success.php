@@ -8,9 +8,11 @@ $this->Breadcrumbs->add([
     ['title' => $siteName . " newsletter", 'url' => ''],
 ]);
 
+$articles = false;
+
 $this->Html->script('dist/content.min.js', ['block' => true]);
 ?>
-<div class="container-fluid site-body blog p0">
+<div class="container-fluid site-body blog p-sm-0 overflow-hidden">
   <div class="row">
     <div class="backdrop backdrop-gradient backdrop-height"></div>
     <div class="container">
@@ -45,6 +47,6 @@ $this->Html->script('dist/content.min.js', ['block' => true]);
 				</div>
 			</article>
 		</div>
-		<?= $this->element('side_panel') ?>
+		<?= $this->element('side_panel', ['articles' => $articles]) ?>
 	</div>
 </div>

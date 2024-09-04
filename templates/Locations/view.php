@@ -22,12 +22,16 @@ $showSpecialAnnouncement = (
 );
 $isCallTrackingBypassed = TableRegistry::get('Configurations')->isCallTrackingBypassed();
 $this->Breadcrumbs->add([
-	['title' => 'Home', 'url' => '/'],
-    ['title' => 'Find a clinic', 'url' => '/hearing-aids'],
-    ['title' => $location->state_full, 'url' => ['controller' => 'locations', 'action' => 'viewState', 'region' => $region]],
-    ['title' => $location->city, 'url' => ['controller' => 'locations', 'action' => 'viewCityZip', 'region' => $region, 'city' => $city]],
-    ['title' => $location->title, 'url' => ''],
+	['title'=>'Home', 'url'=>'/'],
+    ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
+if ($region == 'DC-Dist-Of-Columbia') {
+	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
+} else {
+	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
+}
+$this->Breadcrumbs->add(cleanCityName($city), ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
+$this->Breadcrumbs->add($location->title, ['url' => '']);
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">
@@ -58,7 +62,7 @@ $this->Breadcrumbs->add([
 											<?php endif; ?>
 											<h1 class="text-primary name"><?= $location->title ?></h1>
 											<?php if(!empty($location->logo_url) && $location->listing_type == 'Premier'){
-												echo '<img class="clinic-logo" src="/cloudfiles/clinics/'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
+												echo '<img class="clinic-logo" src="'. $location->logo_url .'" alt="'. $location->title .' logo" width="400" height="80">';
 											}; ?>
 											<div class="geo" style="display:none;">
 												<span class="latitude">
@@ -85,7 +89,7 @@ $this->Breadcrumbs->add([
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight" href="#">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
 												<div class="telephone h2 bi bi-telephone-fill">
@@ -156,8 +160,9 @@ $this->Breadcrumbs->add([
 										        'action' => 'apptRequest'
 										    ],
 										    'class' => 'form-horizontal apptRequestForm',
-										    'id' => 'CaCallApptRequestForm'
-										]); ?>
+										    'id' => 'CaCallApptRequestForm',
+											'role' => false
+										]) ?>
 											<button type="button" class="close pt10" data-dismiss="modal" aria-hidden="true">X</button>
 											<div class="panel-heading text-center mb10">
 												<h2 class="modal-title">Request an appointment</h2>
@@ -171,56 +176,56 @@ $this->Breadcrumbs->add([
 											?>
 											<div class='form-fields col-xs-12'>
 												<div class="form-group required">
-													<label for="CaCallGroupCallerFirstName" class="col col-md-5 control-label">Patient first name:</label>
+													<label for="CaCallGroupCallerFirstName" class="col w-40 control-label">Patient first name:</label>
 													<div class="col col-md-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_first_name', [
 																'placeholder' => 'First name',
 																'required' => true,
 																'autocomplete' => 'given-name',
 																'maxlength' => 30,
-																'class' => 'form-group'
+																'class' => 'form-group mb0'
 															])
 														?>
 													</div>
 												</div>
 												<div class="form-group required">
-													<label for="CaCallGroupCallerLastName" class="col col-md-5 control-label">Patient last name:</label>
+													<label for="CaCallGroupCallerLastName" class="col w-40 control-label">Patient last name:</label>
 													<div class="col col-md-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_last_name', [
 															'placeholder' => 'Last name',
 															'required' => true,
 															'autocomplete' => 'family-name',
 															'maxlength' => 30,
-															'class' => 'form-group'
+															'class' => 'form-group mb0'
 														]) ?>
 													</div>
 												</div>
 												<div class="form-group required">
-													<label for="CaCallGroupCallerPhone" class="col col-md-5 control-label">Phone number:</label>
+													<label for="CaCallGroupCallerPhone" class="col w-40 control-label">Phone number:</label>
 													<div class="col col-md-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_phone', [
 																'placeholder' => 'Phone number',
 																'required' => true,
 																'autocomplete' => 'tel',
-																'class' => 'form-group'
+																'class' => 'form-group mb0'
 															])
 														?>
 													</div>
 												</div>
 												<div class="form-group">
-													<label for="CaCallGroupEmail" class="col col-md-5 control-label">Email:</label>
+													<label for="CaCallGroupEmail" class="col w-40 control-label">Email:</label>
 													<div class="col col-md-7">
 														<?= $this->Form->input('CaCallGroup.email', [
 																'type' => 'email',
 																'placeholder' => 'Email address',
 																'autocomplete' => 'email',
-																'class' => 'form-group'
+																'class' => 'form-group mb0'
 															])
 														?>
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col col-md-5 control-label pull-left">Reason for appointment<br><small class="help-block">(Check all that apply)</small></label>
+													<label class="col w-40 control-label pull-left">Reason for appointment<br><small class="help-block">(Check all that apply)</small></label>
 													<div class="col col-md-7">
 														<div class="checkbox">
 															<?php
@@ -233,7 +238,7 @@ $this->Breadcrumbs->add([
 																            'text' => $label,
 																            'escape' => false,
 																        ],
-																        'class' => 'form-check-input',
+																        'class' => 'form-check-input top-0 mb0',
 																        'id' => 'cacallgroup-' . $topicKey
 																    ]);
 																}
@@ -314,9 +319,9 @@ $this->Breadcrumbs->add([
 										echo $this->element('locations/profile/services');
 									}
 									echo $this->element('locations/profile/review_section');
-									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider, 'isEnhancedOrPremier' => $isEnhancedOrPremier]);
 								} else {
-									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider]);
+									echo $this->element('locations/profile/provider', ['hideProvider' => $hideProvider, 'isEnhancedOrPremier' => $isEnhancedOrPremier]);
 									if (Configure::read('country') != 'CA') {
 										echo "<span id='mapBuffer'></span>";
 										echo '<section id="mobileMap" class="panel panel-primary">';
@@ -442,7 +447,7 @@ $this->Breadcrumbs->add([
 									</header>
 									<div class="panel-body">
 										<div class="panel-section condensed">
-											<?php echo $hours; ?>
+											<?= $hours ?>
 										</div>
 									</div>
 								</div>

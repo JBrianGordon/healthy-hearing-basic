@@ -6,6 +6,12 @@
  * into source code version control.
  */
 return [
+    'env' => 'local', // change this on dev/qa servers
+    'host' => 'hh.loc', // change this on dev/qa servers
+    'localIp' => '_my_ip_',
+    'country' => 'US',
+    //'country' => 'CA',
+
     /*
      * Debug Level:
      *
@@ -76,10 +82,6 @@ return [
 
     /*
      * Email configuration.
-     *
-     * Host and credential configuration in case you are using SmtpTransport
-     *
-     * See app.php for more configuration options.
      */
     'EmailTransport' => [
         'default' => [
@@ -92,12 +94,46 @@ return [
         ],
     ],
 
+    /*
+     * Email configuration.
+     */
+    'EmailTransport' => [
+        'default' => [
+            'host' => '_mail_catcher_host_',
+            'port' => '_mail_catcher_port_',
+            'username' => '_mail_catcher_username_',
+            'password' => '_mail_catcher_password_',
+            'className' => 'Smtp',
+            'tls' => true
+        ]
+    ],
+    'Email' => [
+        'default' => [
+            'transport' => 'default',
+            'from' => 'it@healthyhearing.com',
+            'to' => '_to_email_'
+        ],
+    ],
+
+     // Azure FTP
+    'AzureFtp' => [
+        'accountName' => '_azure_storage_account_name_',
+        'containerName' => '_azure_storage_container_name_',
+        'accountKey' => '_azure_storage_account_key_',
+    ],
+
+    // CKEditor & CKBox
+    'CK' => [
+        'envId' => '_ck_env_id_',
+        'apiSecret' => '_ck_api_secret_',
+        'userId' => '_ck_user_id_',
+        'role' => '_ck_user_role_',
+        'categoryId' => '_ck_category_id_',
+        'categoryId-testing' => '_ck_category_id_',
+    ],
     'GoogleMap' => [
         'key' => '_google_map_key_',
     ],
-    'localIp' => '_my_ip_',
-    'country' => 'US',
-    //'country' => 'CA',
 
     // reCAPTCHA keys
     'recaptchaPublicKey' => '_recaptcha_public_key_',
@@ -107,4 +143,8 @@ return [
     'mailchimpApiKey' => '_mailchimp_api_key_',
     'mailchimpListIdNewsletter' => '_mailchimp_list_id_',
     'mailchimpServerPrefix' => '_mailchimp_server_prefix_', // e.g. 'us10'
+
+    // CallSource API
+    //'callSourceUsername' => '_example_', //prod only
+    //'callSourcePassword' => '_example_', //prod only
 ];

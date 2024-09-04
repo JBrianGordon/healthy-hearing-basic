@@ -65,10 +65,8 @@ class SitemapUrlsTable extends Table
 
         $validator
             ->scalar('url')
-            ->maxLength('url', 255)
             ->requirePresence('url', 'create')
-            ->notEmptyString('url')
-            ->add('url', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->notEmptyString('url');
 
         $validator
             ->numeric('priority')

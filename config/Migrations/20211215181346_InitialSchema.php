@@ -1975,21 +1975,6 @@ class InitialSchema extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('caqh_number', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('npi_number', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('licenses', 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addIndex(
                 [
                     'id_external',
@@ -3595,33 +3580,8 @@ class InitialSchema extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
-            ->addColumn('caqh_number', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('npi_number', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('show_npi', 'boolean', [
-                'default' => true,
-                'limit' => null,
-                'null' => false,
-            ])
             ->addColumn('is_ida_verified', 'boolean', [
                 'default' => false,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addColumn('licenses', 'text', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-            ])
-            ->addColumn('show_license', 'boolean', [
-                'default' => true,
                 'limit' => null,
                 'null' => false,
             ])
@@ -5256,7 +5216,6 @@ class InitialSchema extends AbstractMigration
                 'null' => false,
             ])
             ->addColumn('country_code', 'string', [
-                'default' => 'US',
                 'limit' => 2,
                 'null' => true,
             ])

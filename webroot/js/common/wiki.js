@@ -1,5 +1,6 @@
 import './common';
 import './responsive_slider';
+import '../modules/pinterest';
 /*** TODO: most or all of this file can likely be deleted ***/
 
 // Add "mobile_table" class to each table
@@ -10,13 +11,15 @@ document.querySelectorAll('table').forEach(table => {
   });
 });
 
-// Open social media links in a new window
-document.querySelectorAll('.btn-share').forEach(btn => {
-  btn.addEventListener('click', function(event) {
-    event.preventDefault();
+// Open twitter share links in a small window
+const twitterButton = document.querySelector('.twitter-share-button');
+
+if(twitterButton) {
+  twitterButton.addEventListener('click', function(e) {
+    e.preventDefault();
     window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
   });
-});
+};
 
 // Add "noprint" class to all wistia videos in help pages
 const wistiaEmbeds = document.querySelectorAll('.wistia_embed');

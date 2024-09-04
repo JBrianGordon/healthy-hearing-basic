@@ -8,6 +8,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Search\Model\Filter\Base;
 
 /**
  * Wikis Model
@@ -50,15 +51,36 @@ class WikisTable extends Table
 
         $this->addBehaviors([
             'Timestamp',
+            'Search.Search',
             'Draft',
         ]);
+
+        // HACK for custom isUnique rule (see rule below).
+        // 'id_draft_parent' is temporarily set to 1 so that the draft can save
+        // w/o failing the unique slug rule, before being immediately overwritten
+        // by the actual draft parent ID in the DraftBehavior.
+        // It looks like the CakePHP 5.x - compatible version of Duplicatable
+        // can pass the $original item in the 'set' config:
+        // https://github.com/riesenia/cakephp-duplicatable
+        // Please update when we make it to 5.x :)
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
                 'is_active' => 0,
+                'id_draft_parent' => 1
             ],
         ]);
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+            ],
+            'order' => [
+                'priority' => 'ASC',
+                'name' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
 
-        $this->belongsTo('Authors', [
+        $this->belongsTo('Author', [
             'className' => 'Users',
             'foreignKey' => 'user_id',
         ]);
@@ -75,6 +97,74 @@ class WikisTable extends Table
             'joinTable' => 'reviewers_wikis',
             'targetForeignKey' => 'user_id'
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->value('id')
+            ->value('name')
+            ->value('slug')
+            ->value('user_id')
+            ->like('body', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('short', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->boolean('is_active')
+            ->exists('id_draft_parent', [
+                'nullValue' => '0',
+            ])
+            ->value('priority')
+            ->like('title_head', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('title_h1', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('background_file', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('meta_description', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('facebook_title', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->boolean('facebook_image')
+            ->boolean('facebook_image_bypass')
+            ->value('facebook_image_width')
+            ->boolean('facebook_image_height')
+            ->like('facebook_image_alt', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('facebook_description', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->value('last_modified')
+            ->value('modified')
+            ->value('created')
+            ->like('background_alt', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['name', 'slug', 'short'],
+            ]);
     }
 
     /**
@@ -85,9 +175,9 @@ class WikisTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('name')
@@ -106,13 +196,16 @@ class WikisTable extends Table
             ->requirePresence('body', true, 'Main content section (body) is a required field')
             ->notEmptyString('body', 'Main content section (body) cannot be left blank');
 
+        $validator
+            ->integer('user_id');
+
         // $validator
         //     ->scalar('short')
         //     ->allowEmptyString('short');
 
-        $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
+        // $validator
+        //     ->boolean('is_active')
+        //     ->notEmptyString('is_active');
 
         // $validator
         //     ->integer('id_draft_parent')
@@ -149,38 +242,39 @@ class WikisTable extends Table
         //     ->maxLength('facebook_title', 255)
         //     ->allowEmptyString('facebook_title');
 
-        $validator
-            ->scalar('facebook_image')
-            ->maxLength('facebook_image', 255)
-            ->notEmptyFile('facebook_image');
+        // $validator
+        //     ->scalar('facebook_image')
+        //     ->maxLength('facebook_image', 255)
+        //     ->notEmptyFile('facebook_image');
             // ADD MIME TYPE CHECKING
 
         // $validator
         //     ->boolean('facebook_image_bypass')
         //     ->allowEmptyFile('facebook_image_bypass');
 
-        $validator
-            ->integer('facebook_image_width')
-            ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
-                'rule' => function ($width) {
-                    if ($width >= 800) {
-                        return true;
-                    }
+        // $validator
+        //     ->integer('facebook_image_width')
+        //     ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
+        //         'rule' => function ($width) {
+        //             if ($width >= 800) {
+        //                 return true;
+        //             }
 
-                    return false;
-                },
-            ]);
+        //             return false;
+        //         },
+        //     ]);
+
             // ->minLength('facebook_image_width', 800, 'Facebook image must be at least 800 px wide');
 
         // $validator
         //     ->integer('facebook_image_height')
         //     ->notEmptyFile('facebook_image_height');
 
-        $validator
-            ->scalar('facebook_image_alt')
-            ->maxLength('facebook_image_alt', 255)
-            ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
-            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
+        // $validator
+        //     ->scalar('facebook_image_alt')
+        //     ->maxLength('facebook_image_alt', 255)
+        //     ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
+        //     ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
         // $validator
         //     ->scalar('facebook_description')
@@ -211,7 +305,36 @@ class WikisTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        // $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // Custom isUnique rule that skips uniqe check if id_draft_parent > 0
+        // An OOTB isUnique check causes draft creation to fail because drafts
+        // share slugs with their parents.
+        // HACK REQUIRED -- see Duplicatable config above
+        $rules->add(
+            function ($entity, $options) {
+                if ($entity->id_draft_parent > 0) {
+                    return true;
+                }
+
+                // Perform the unique check
+                if ($entity->isNew()) {
+                    $existing = $this->find()
+                        ->where(['slug' => $entity->slug])
+                        ->first();
+                } else {
+                    $existing = $this->find()
+                        ->where(['slug' => $entity->slug])
+                        ->where(['id !=' => $entity->id])
+                        ->where(['id_draft_parent !=' => $entity->id])
+                        ->first();
+                }
+
+                return $existing === null ? true : 'This Help page slug is already being used.';
+            },
+            'isUniqueSlug',
+            [
+                'errorField' => 'slug'
+            ]
+        );
 
         return $rules;
     }
@@ -323,7 +446,7 @@ class WikisTable extends Table
         }
         $wiki = $this->find('all', [
             'conditions' => $conditions,
-            'contain' => ['Authors','Tags','Contributors','Reviewers']
+            'contain' => ['Author','Tags','Contributors','Reviewers']
         ])->first();
         if (!empty($wiki) && $uri == Router::url(['prefix'=>false, 'plugin'=>false, 'controller' => 'wikis', 'action' => 'view', 'slug' => $wiki->slug])) {
             return $wiki;

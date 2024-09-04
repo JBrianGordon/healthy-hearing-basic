@@ -13,10 +13,10 @@
         color: #ebebeb;
       }
     }
-    
-    +.breadcrumb-item:before {
-	    padding: 0 5px;
-	    color: #ccc;
+
+    + .breadcrumb-item:before {
+      padding: 0 5px;
+      color: #ccc;
     }
   }
 
@@ -31,7 +31,7 @@
 }
 
 ol.breadcrumb {
-  padding: 0;
+  padding: 8px 15px 8px 0;
 }
 
 .inverse .breadcrumb {
@@ -50,8 +50,8 @@ ol.breadcrumb {
 #ellipses {
   display: none;
   margin-top: 15px;
-  
+
   @media only screen and (max-width: $screen-xs-max) {
-	  position: absolute;
+    position: absolute;
   }
 }

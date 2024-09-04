@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\PagesTable $Pages
  * @method \App\Model\Entity\Page[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class PagesController extends AppController
+class PagesController extends BaseAdminController
 {
     /**
      * Index method
@@ -22,6 +22,7 @@ class PagesController extends AppController
     {
         $pages = $this->paginate($this->Pages);
 
+        $this->set('title', 'Pages index');
         $this->set(compact('pages'));
     }
 
@@ -43,6 +44,7 @@ class PagesController extends AppController
             $this->Flash->error(__('The page could not be saved. Please, try again.'));
         }
         $users = $this->Pages->Users->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Page');
         $this->set(compact('page', 'users'));
     }
 
@@ -67,6 +69,7 @@ class PagesController extends AppController
             }
             $this->Flash->error(__('The page could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Page');
         $this->set(compact('page'));
     }
 

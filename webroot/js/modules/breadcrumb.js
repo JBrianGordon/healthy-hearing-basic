@@ -7,10 +7,14 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 		    
 		    if(breadCrumbWidth > (window.innerWidth * 0.85)){
 			    breadCrumb.setAttribute("style", "max-width:85vw");
-			    ellipses.setAttribute("style", "display:inline-block");
+				if(ellipses) {
+			    	ellipses.setAttribute("style", "display:inline-block");
+				}
 		    } else {
 			    breadCrumb.removeAttribute("style");
-			    ellipses.removeAttribute("style");
+				if(ellipses) {
+			    	ellipses.removeAttribute("style");
+				}
 		    }
 	};
 	

@@ -62,11 +62,11 @@ class OnlineHearingTest {
 		this.start();
 	}
 
-	modalHide() {
+	modalHide(e) {
 		if (!this.completed()) {
 			const result = confirm('You have not completed the online hearing test, are you sure?');
 			if (!result) {
-				return false;
+				e.preventDefault();
 			}
 		}
 		return true;
@@ -124,6 +124,7 @@ class OnlineHearingTest {
 					element.style.transitionDuration = "0ms";
 					element.style.display = "none";
 				});
+				document.querySelector(testpage).style.display = "block";
 				document.querySelector(testpage).style.transitionDuration = `${fade_duration}ms`;
 				document.querySelector(testpage).style.opacity = 1;
 			}, fade_duration + 50);
@@ -140,6 +141,8 @@ class OnlineHearingTest {
 	}
 
 	reset() {
+		const firstPage = document.querySelector('#test-page-0');
+		firstPage.style.opacity = 1;
 		this.log('reset');
 		this.results = {
 			answers: [],
@@ -221,11 +224,14 @@ class OnlineHearingTest {
 
 		} else { // Quiz questions
 			retval = true;
-			switch (document.querySelector('input[name=quizAnswers' + page + ']:checked').value) {
-				case 'sometimes': this.results.answers[answerIndex] = 1; break;
-				case 'yes': this.results.answers[answerIndex] = 2; break;
-				case 'no': this.results.answers[answerIndex] = 0; break;
-				default: retval = false;
+			if(document.querySelector(`input[name=quizAnswers${page}]:checked`) !== null){
+				switch (document.querySelector(`input[name=quizAnswers${page}]:checked`).value) {
+					case 'sometimes': this.results.answers[answerIndex] = 1; break;
+					case 'yes': this.results.answers[answerIndex] = 2; break;
+					case 'no': this.results.answers[answerIndex] = 0; break;
+				}
+			} else {
+				retval = false;
 			}
 
 			if (page === 9) { // Last quiz question
@@ -250,7 +256,11 @@ class OnlineHearingTest {
 	}
 
 	completed() {
-		return this.results.answers.length === this.numberOfQuestions && this.contactInfoFilled();
+		if(this.results !== null){
+			return this.results.answers.length === this.numberOfQuestions && this.contactInfoFilled();
+		} else {
+			return false;
+		}
 	}
 
 	contactInfoFilled() {
@@ -286,7 +296,7 @@ class OnlineHearingTest {
 		this.addRecaptcha();
 		// Show the results
 		$(this.resultsDiv).slideDown();
-		this.scrollTo(this.resultsDiv);
+		window.scrollTo(0,0);
 	}
 
 	updateHeader() {
@@ -362,15 +372,10 @@ class OnlineHearingTest {
 	}
 }
 
-let answers;
-// 'online_answers' defined in online_hearing_test.ctp
-if (typeof online_answers !== 'undefined') {
-  answers = online_answers; // previous test results
-} else {
-  answers = null;
-}
+// 'online_answers' defined in online_hearing_test.ctp, true indicates previous test results
+let answers = online_answers ?? null;
 
-const HT = new OnlineHearingTest(answers, false, true);
+window.HT = new OnlineHearingTest(answers, false, true);
 
 function onSubmit(e) {
   e.preventDefault();

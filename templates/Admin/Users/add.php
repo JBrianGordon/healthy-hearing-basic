@@ -1,3 +1,4 @@
+<?= $this->element('ckbox_script') ?>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -6,79 +7,138 @@
  * @var \Cake\Collection\CollectionInterface|string[] $content
  * @var \Cake\Collection\CollectionInterface|string[] $wikis
  */
+use App\Model\Entity\User;
+
+$this->Html->script('dist/admin_edit_user.min', ['block' => true]);
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="users form content">
-            <?= $this->Form->create($user) ?>
-            <fieldset>
-                <legend><?= __('Add User') ?></legend>
-                <?php
-                    echo $this->Form->control('username');
-                    echo $this->Form->control('password');
-                    echo $this->Form->control('level');
-                    echo $this->Form->control('first_name');
-                    echo $this->Form->control('middle_name');
-                    echo $this->Form->control('last_name');
-                    echo $this->Form->control('degrees');
-                    echo $this->Form->control('credentials');
-                    echo $this->Form->control('title_dept_company');
-                    echo $this->Form->control('company');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('phone');
-                    echo $this->Form->control('address');
-                    echo $this->Form->control('address_2');
-                    echo $this->Form->control('city');
-                    echo $this->Form->control('state');
-                    echo $this->Form->control('zip');
-                    echo $this->Form->control('country');
-                    echo $this->Form->control('url');
-                    echo $this->Form->control('bio');
-                    echo $this->Form->control('image_url');
-                    echo $this->Form->control('thumb_url');
-                    echo $this->Form->control('square_url');
-                    echo $this->Form->control('micro_url');
-                    echo $this->Form->control('modified_by');
-                    echo $this->Form->control('last_login', ['empty' => true]);
-                    echo $this->Form->control('active');
-                    echo $this->Form->control('is_hardened_password');
-                    echo $this->Form->control('is_admin');
-                    echo $this->Form->control('is_it_admin');
-                    echo $this->Form->control('is_agent');
-                    echo $this->Form->control('is_call_supervisor');
-                    echo $this->Form->control('is_author');
-                    echo $this->Form->control('notes');
-                    echo $this->Form->control('corp_id');
-                    echo $this->Form->control('is_deleted');
-                    echo $this->Form->control('is_csa');
-                    echo $this->Form->control('is_writer');
-                    echo $this->Form->control('recovery_email');
-                    echo $this->Form->control('clinic_password');
-                    echo $this->Form->control('timezone_offset');
-                    echo $this->Form->control('timezone');
-                    echo $this->Form->control('token');
-                    echo $this->Form->control('token_expires', ['empty' => true]);
-                    echo $this->Form->control('api_token');
-                    echo $this->Form->control('activation_date', ['empty' => true]);
-                    echo $this->Form->control('secret');
-                    echo $this->Form->control('secret_verified');
-                    echo $this->Form->control('tos_date', ['empty' => true]);
-                    echo $this->Form->control('is_superuser');
-                    echo $this->Form->control('role');
-                    echo $this->Form->control('additional_data');
-                    echo $this->Form->control('corps._ids', ['options' => $corps]);
-                    echo $this->Form->control('content._ids', ['options' => $content]);
-                    echo $this->Form->control('wikis._ids', ['options' => $wikis]);
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
+<header class="col-sm-12 mt10">
+    <div class="panel panel-light">
+        <div class="panel-heading"><?= 'Users Actions' ?></div>
+        <div class="panel-body p10">
+            <div class="btn-group">
+                <?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+                <?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+            </div>
         </div>
     </div>
+</header>                       
+<div class="col-sm-12">
+    <section class="panel">
+        <div class="panel-body">
+            <div class="panel-section expanded">
+                <div class="column-responsive column-80">
+                    <div class="users form content">
+                        <?= $this->Form->create($user) ?>
+                        <fieldset>
+                            <h2>Add User</h2>
+                            <div class="table-responsive">
+                            <?= $this->Form->control('username', ['class'=>'form-group required', 'required' => true]) ?>
+                            <div class="col-sm-offset-3 col-sm-9 mb20">
+                                <?= $this->Form->control('active') ?>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs flex">
+                                    <li class="nav-item"><button type="button" class="nav-link active" data-bs-target="#Basic" data-bs-toggle="tab" aria-controls="Basic" aria-expanded="true" role="tab">Basic</button></li>
+                                    <li class="nav-item"><button type="button" class="nav-link" data-bs-target="#Admin" data-bs-toggle="tab" aria-controls="Admin" aria-expanded="false" role="tab">Admin</button></li>
+                                </ul>
+                                <div class="tab-content mt20">
+                                    <div class="tab-pane show fade active" id="Basic" role="tabpanel">
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('first_name', ['required' => true]) ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('last_name', ['required' => true, 'label' => 'Last']) ?></div>
+                                        </div>
+                                        <hr>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('degrees') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('honorific_prefix') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('title_dept_company', ['type' => 'text']) ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('credentials') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('company') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('alumni_of_1') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('alumni_of_2') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('alumni_of_3') ?></div>
+                                        </div>
+                                        <hr>
+                                        <?php
+                                            echo $this->Form->control('url');
+                                            echo $this->Form->control('image_url');
+                                        ?>
+                                        <hr>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('email') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('recovery_email') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('phone') ?></div>
+                                        </div>
+                                        <hr>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('address') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('state') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('address_2') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('zip') ?></div>
+                                        </div>
+                                        <div class="row m0">
+                                            <div class="col-sm-6"><?= $this->Form->control('city') ?></div>
+                                            <div class="col-sm-6"><?= $this->Form->control('country') ?></div>
+                                        </div>
+                                        <hr>
+                                        <?php
+                                            echo $this->Form->control('bio', ['class' => 'editor']);
+                                            echo $this->Form->control('short_bio');
+                                        ?>
+                                    </div>
+                                    <div class="tab-pane fade" aria-expanded="false" id="Admin" role="tabpanel">
+                                        <div class="row m0">
+                                            <?= $this->Form->control('role', ['type' => 'select', 'options' => User::$roles]) ?>
+                                        </div>
+                                        <div class="row m0">
+                                            <label class="col col-sm-3 control-label">User Types<span class="red">*</span></label>
+                                            <div class="col-sm-9">
+                                                <div class="col-sm-6"><?= $this->Form->control('is_admin', ['label' => 'Admin']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_it_admin', ['label' => 'IT Admin']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_agent', ['label' => 'Call Assist Agent']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_call_supervisor', ['label' => 'Call Assist Supervisor']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_csa', ['label' => 'Customer Support Assistant']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_writer', ['label' => 'Content Writer']) ?></div>
+                                                <div class="col-sm-6"><?= $this->Form->control('is_author', ['label' => 'Author']) ?></div>
+                                                <!-- *** TODO: check why Reviewer isn't a boolean ***-->
+                                                <div class="col-sm-6"><?= $this->Form->control('is_reviewer', ['label' => 'Reviewer']) ?></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row m0">
+                                            <?= $this->Form->control('notes') ?>
+                                        </div>
+                                        <div class="row m0">
+                                            <?= $this->Form->control('corp_id', ['empty' => true]) ?>
+                                        </div>
+                                        <div class="row m0">
+                                            <?= $this->Form->control('timezone_offset') ?>
+                                        </div>
+                                        <div class="row m0">
+                                            <?= $this->Form->control('timezone') ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-actions tar">
+                            <?= $this->Form->button('Save User', ['class' => 'btn btn-primary btn-lg']) ?>
+                        </div>
+                        <?= $this->Form->end() ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

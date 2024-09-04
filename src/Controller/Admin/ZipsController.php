@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Zips Controller
  *
  * @method \App\Model\Entity\Zip[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ZipsController extends AppController
+class ZipsController extends BaseAdminController
 {
     /**
      * Initialize
@@ -22,6 +23,10 @@ class ZipsController extends AppController
         parent::initialize();
 
         $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
     }
@@ -44,8 +49,11 @@ class ZipsController extends AppController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('title', Configure::read('zipLabel') . ' Index');
         $this->set('zips', $this->paginate($zipsQuery));
         $this->set('fields', $this->Zips->getSchema()->typeMap());
+        $this->set('zipLabel', Configure::read('zipLabel'));
+        $this->set('zipShort', Configure::read('zipShort'));
     }
 
     /**
@@ -56,15 +64,19 @@ class ZipsController extends AppController
     public function add()
     {
         $zip = $this->Zips->newEmptyEntity();
+
         if ($this->request->is('post')) {
             $zip = $this->Zips->patchEntity($zip, $this->request->getData());
+            $zipLabel = Configure::read('zipLabel');
+
             if ($this->Zips->save($zip)) {
-                $this->Flash->success(__('The zip has been saved.'));
+                $this->Flash->success(__('The ' . $zipLabel . ' has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The zip could not be saved. Please, try again.'));
+            $this->Flash->error(__('The ' . $zipLabel . ' could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add ' . Configure::read('zipLabel'));
         $this->set(compact('zip'));
     }
 
@@ -82,6 +94,7 @@ class ZipsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $zip = $this->Zips->patchEntity($zip, $this->request->getData());
+
             if ($this->Zips->save($zip)) {
                 $this->Flash->success(__('The zip has been saved.'));
 
@@ -89,6 +102,7 @@ class ZipsController extends AppController
             }
             $this->Flash->error(__('The zip could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit ' . Configure::read('zipLabel'));
         $this->set(compact('zip'));
     }
 

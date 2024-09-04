@@ -221,35 +221,20 @@ class ProvidersTable extends Table
             ->allowEmptyString('aud_or_his');
 
         $validator
-            ->scalar('caqh_number')
-            ->maxLength('caqh_number', 255)
-            ->allowEmptyString('caqh_number');
-
-        $validator
-            ->scalar('npi_number')
-            ->maxLength('npi_number', 255)
-            ->allowEmptyString('npi_number');
-
-        $validator
-            ->boolean('show_npi')
-            ->notEmptyString('show_npi');
-
-        $validator
             ->boolean('is_ida_verified')
             ->notEmptyString('is_ida_verified');
-
-        $validator
-            ->scalar('licenses')
-            ->allowEmptyString('licenses');
-
-        $validator
-            ->boolean('show_license')
-            ->notEmptyString('show_license');
 
         $validator
             ->integer('id_yhn_provider')
             ->allowEmptyString('id_yhn_provider');
 
         return $validator;
+    }
+
+    function findByLocationId($locationId) {
+        return $this->find('all')
+            ->innerJoinWith('Locations')
+            ->where(['LocationsProviders.location_id' => $locationId])
+            ->all();
     }
 }

@@ -19,8 +19,6 @@ const exportBtnClick = () => {
 document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
 
 document.addEventListener("DOMContentLoaded", function() {
-  console.debug('ready');
-  
   // Delete Button
   document.body.addEventListener("click", function(event) {
     if (event.target.matches("#deleteBtn")) {
@@ -33,3 +31,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+
+const searchButton = document.querySelector(".me-3.btn-primary.btn");
+const advSearchForm = document.querySelector("#advanced_search form");
+
+advSearchForm.appendChild(searchButton);

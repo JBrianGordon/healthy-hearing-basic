@@ -1,6 +1,6 @@
 import './admin_common';
 import './nav_tabs';
-/*** TODO: check this when admin edit view is available ***/
+import './ckpackage';
 //Leaving this largely alone due to use of datepicker
 $(document).ready(function() {
 

@@ -29,7 +29,7 @@ return [
     'ogLocale' => 'en_US',
     'sameAsSocialLinks' => [
         'facebook' => 'https://www.facebook.com/healthyhearing',
-        'twitter' => 'https://twitter.com/HearingAids',
+        'twitter' => 'https://x.com/HearingAids',
         'youtube' => 'https://www.youtube.com/user/HealthyHearing',
         'linkedIn' => 'https://www.linkedin.com/company/9426778',
     ],
@@ -47,9 +47,7 @@ return [
     'showAds' => true,
     'showReviewsByCity' => true,
     // Provider Variables
-    'showProviderLicenses' => false, // Hide provider licenses
     'showProviderCredentialButtons' => true,
-    'showProviderNpi' => true,
     'showProviderAudOrHis' => true,
     // Call Tracking
     'isCallSourceGenerationEnabled' => true,
@@ -83,9 +81,6 @@ return [
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',
     'isMetric' => false, // Displays distance in miles
-    'isSitemapPingEnabled' => true,
-    'allowCopySitemaps' => true,
-    'showImageSitemap' => true,
     'isCrmEmailEnabled' => true,
     'isVwoEnabled' => true,
     // Paid features
@@ -139,8 +134,20 @@ return [
     ],
     'Sitemap.tables' => [
         'Main',
+        'City',
+        'Help',
         'Content',
-        'Corps',
+        'Clinic',
+        'Corp',
+        'State',
+    ],
+    'Sitemap.tableAliases' => [
+        'City' => 'Cities',
+        'Help' => 'Wikis',
+        'Content' => 'Content',
+        'Clinic' => 'Locations',
+        'Corp' => 'Corps',
+        'State' => 'States',
     ],
     'states' => [
         'AK' => 'Alaska',

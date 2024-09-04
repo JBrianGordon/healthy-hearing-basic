@@ -10,11 +10,13 @@ use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
+use App\Model\Entity\ImportStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use DateTime;
 use DateTimeZone;
 
@@ -71,6 +73,21 @@ class LocationsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
+
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+                'is_show' => true,
+                'state !=' => '',
+                'listing_type !=' => Location::LISTING_TYPE_NONE
+            ],
+            'order' => [
+                'state' => 'ASC',
+                'city' => 'ASC',
+                'title' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
 
         // The 'lng' field is named 'lon' in our Locations table
         $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
@@ -183,7 +200,6 @@ class LocationsTable extends Table
             ->boolean('is_cqp')
             ->boolean('is_cq_premier')
             ->boolean('is_iris_plus')
-            ->boolean('is_bypassed')
             ->boolean('is_call_assist')
             ->boolean('is_service_agreement_signed')
             ->boolean('is_last_edit_by_owner')
@@ -228,7 +244,7 @@ class LocationsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'city', 'state', 'zip'],
+                'fields' => ['title', 'city', 'address', 'address_2', 'zip'],
             ])
             // frozen_expiration
             ->add('frozen_expiration_start', 'Search.Callback', [
@@ -467,7 +483,7 @@ class LocationsTable extends Table
             4 => ['name' => 'MasterCard', 'icon' => 'card1.gif'],
             8 => ['name' => 'American Express', 'icon' => 'card4.gif'],
             16 => ['name' => 'Discover', 'icon' => 'card6.gif'],
-            //32 => array('name' => 'Diners Club', 'icon' => ''),
+            //32 => ['name' => 'Diners Club', 'icon' => ''],
             64 => ['name' => 'Cash', 'icon' => ''],
             128 => ['name' => Configure::read('checkPayment'), 'icon' => ''],
             256 => ['name' => 'Debit', 'icon' => 'card3.gif'],
@@ -475,6 +491,11 @@ class LocationsTable extends Table
             1024 => ['name' => 'Financing available for those who qualify', 'icon' => ''],
             2048 => ['name' => 'Insurance accepted, please call for details', 'icon' => ''],
         ];
+
+        if (!Configure::read('isTieringEnabled')) {
+            unset(Location::$listingTypes[Location::LISTING_TYPE_BASIC]);
+            unset(Location::$listingTypes[Location::LISTING_TYPE_PREMIER]);
+        }
     }
 
     /**
@@ -491,14 +512,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('id_oticon')
             ->maxLength('id_oticon', 50)
-            ->requirePresence('id_oticon', 'create')
-            ->notEmptyString('id_oticon');
+            ->allowEmptyString('id_oticon');
 
         $validator
             ->scalar('id_parent')
             ->maxLength('id_parent', 50)
-            ->requirePresence('id_parent', 'create')
-            ->notEmptyString('id_parent');
+            ->allowEmptyString('id_parent');
 
         $validator
             ->scalar('id_sf')
@@ -558,8 +577,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('mobile_text')
             ->maxLength('mobile_text', 400)
-            ->requirePresence('mobile_text', 'create')
-            ->notEmptyString('mobile_text');
+            ->allowEmptyString('mobile_text');
 
         $validator
             ->integer('radius')
@@ -927,14 +945,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_url')
             ->maxLength('direct_book_url', 300)
-            ->requirePresence('direct_book_url', 'create')
-            ->notEmptyString('direct_book_url');
+            ->allowEmptyString('direct_book_url');
 
         $validator
             ->scalar('direct_book_iframe')
             ->maxLength('direct_book_iframe', 400)
-            ->requirePresence('direct_book_iframe', 'create')
-            ->notEmptyString('direct_book_iframe');
+            ->allowEmptyString('direct_book_iframe');
 
         $validator
             ->boolean('is_yhn')
@@ -957,10 +973,6 @@ class LocationsTable extends Table
             ->notEmptyString('is_iris_plus');
 
         $validator
-            ->boolean('is_bypassed')
-            ->notEmptyString('is_bypassed');
-
-        $validator
             ->boolean('is_call_assist')
             ->notEmptyString('is_call_assist');
 
@@ -973,8 +985,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('optional_message')
             ->maxLength('optional_message', 400)
-            ->requirePresence('optional_message', 'create')
-            ->notEmptyString('optional_message');
+            ->allowEmptyString('optional_message');
 
         $validator
             ->boolean('is_service_agreement_signed')
@@ -999,20 +1010,17 @@ class LocationsTable extends Table
     * Calculate the listing types for all location ids
     */
     public function calculateListingTypes(ConsoleIo $io) {
-        $io->hr();
-        $io->out('Calculate listing types for all locations');
-        $io->hr();
+        $io->helper('BaseShell')->title('Calculate listing types for all locations');
         $locations = $this->find('all', [
             'contain' => [],
             'fields' => ['id', 'yhn_tier', 'oticon_tier', 'cqp_tier', 'is_grace_period', 'listing_type', 'is_listing_type_frozen', 'is_show']
         ])->all();
+        $progress = $io->helper('Progress')->init(['total'=> count($locations)]);
         foreach ($locations as $location) {
             $this->calculateListingType($location);
-            echo '.';
+            $progress->increment()->draw();
         }
-
         $io->out();
-        $io->out('Done.');
     }
 
     /**
@@ -1068,7 +1076,7 @@ class LocationsTable extends Table
             if ($locationEntity->is_show == true) {
                 $locationEntity->is_show = false;
                 $this->save($locationEntity);
-                $this->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
+                $io->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
             }
         }
         $locationIds = $this->find('list', [
@@ -1109,7 +1117,7 @@ class LocationsTable extends Table
             $locationEntity->is_show = true;
             $this->save($locationEntity);
         }
-        $io->out("Done. Found ".count($callSources)." locations to mark is_show.");
+        $io->out("Found ".count($callSources)." locations to mark is_show.");
     }
 
     public function updateAllFilters(ConsoleIo $io) {
@@ -1121,7 +1129,6 @@ class LocationsTable extends Table
             $progress->increment()->draw();
         }
         $io->out();
-        $io->out('Done.');
     }
 
     /**
@@ -1134,7 +1141,7 @@ class LocationsTable extends Table
         $locationEntity = $this->get($locationId, [
             'contain' => [
                 'LocationHours',
-                'LocationProviders.Providers'
+                'Providers'
             ]
         ]);
         if (empty($locationEntity)) {
@@ -1150,8 +1157,8 @@ class LocationsTable extends Table
         $locationEntity->filter_hearing_aid_fitting = false;
 
         //Check photo
-        foreach ($locationEntity->location_providers as $locationProvider) {
-            if (!empty($locationProvider->provider->thumb_url)) {
+        foreach ($locationEntity->providers as $provider) {
+            if (!empty($provider->thumb_url)) {
                 $locationEntity->filter_has_photo = true;
             }
         }
@@ -1287,7 +1294,7 @@ class LocationsTable extends Table
         if ($uri === Router::url($this->findForRedirectById($id))) {
             return $this->findByIdForView($id);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -1535,9 +1542,8 @@ class LocationsTable extends Table
 
         $sort = $preferredOnly ? 'preferred' : 'distance';
         $cacheKey = 'top_nav_' . implode('_', $geoLocData) . '_' . $sort . '_' . $limit;
-        if (false/*$TODO: cache = Cache::read($cacheKey)*/) {
-            return $cache;
-        } else {
+        $clinicsNearMe = Cache::read($cacheKey);
+        if ($clinicsNearMe === null) {
             $options['zip'] = $geoLocData['zip'];
             $options['region'] = $geoLocData['region'];
             $options['city'] = $geoLocData['city'];
@@ -1546,10 +1552,11 @@ class LocationsTable extends Table
             if ($preferredOnly) {
                 $conditions['Locations.listing_type !='] = Location::LISTING_TYPE_BASIC;
             }
-            $cache = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
-            Cache::write($cacheKey, $cache);
-            return $cache;
+            $clinicsNearMe = $this->findAllByGeoLoc($options, $limit, $conditions, [], $fields);
+            Cache::write($cacheKey, $clinicsNearMe);
         }
+
+        return $clinicsNearMe;
     }
 
     /**
@@ -1583,7 +1590,7 @@ class LocationsTable extends Table
             $lat = $options['lat'];
             $lng = $options['lon'];
         } else if (!empty($options['zip']) && $this->isValidZip($options['zip'])) {
-            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            $zip = TableRegistry::get('Zips')->findByZip($options['zip'])->first();
             if (!empty($zip['lat']) && !empty($zip['lon'])) {
                 $lat = $zip['lat'];
                 $lng = $zip['lon'];
@@ -1623,9 +1630,10 @@ class LocationsTable extends Table
     * @return bool
     */
     public function isValidZip($input) {
-        if (Configure::read('country') == 'US') {
+        $country = Configure::read('country');
+        if ($country == 'US') {
             $regex = '/^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/';
-        } elseif ($settings['country'] == 'CA') {
+        } elseif ($country == 'CA') {
             $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
         }
         return (preg_match($regex,$input));
@@ -1636,13 +1644,13 @@ class LocationsTable extends Table
     * @param array of options
     * @return array of slugged zip, region, and city
     */
-    public function findRedirectByRegionCityZip($options = array(), $url=null) {
+    public function findRedirectByRegionCityZip($options = [], $url=null) {
         $options = array_merge(
-            array(
+            [
                 'zip' => null,
                 'region' => null,
                 'city' => null
-            ),
+            ],
             $options
         );
         $retval = $options;
@@ -1653,7 +1661,7 @@ class LocationsTable extends Table
             $retval['city'] = slugifyCity($options['city']);
         }
         if (!empty($options['zip'])) {
-            $zip = TableRegistry::get('Zips')->get($options['zip']);
+            $zip = TableRegistry::get('Zips')->findByZip($options['zip'])->first();
             $zip_city = $zip->city;
             if ($zip_city) {
                 $retval['city'] = slugifyCity($zip_city);
@@ -1681,7 +1689,7 @@ class LocationsTable extends Table
             list($region_st, $region_state) = explode("-", $retval['region']);
             if (strtolower($st) == strtolower($region_st) || strtolower($st) == strtolower($region_state)) {
                 $city = array_pop($title);
-                if (!TableRegistry::get('Cities')->hasAny(array('City.city' => $city, 'City.state' => $region_st))) {
+                if (!TableRegistry::get('Cities')->hasAny(['City.city' => $city, 'City.state' => $region_st])) {
                     $retval['city'] = array_pop($title) . "-" . $city;
                 } else {
                     $retval['city'] = $city;
@@ -1813,5 +1821,459 @@ class LocationsTable extends Table
             }
         }
         return $data;
+    }
+
+    /**
+    * Get the timezone conditions based on tzFilter
+    * @param array tzFilter
+    */
+    public function getTimezoneConditions($tzFilter) {
+        $timezone = [];
+        $isDST = date('I');
+        if (!empty($tzFilter['Eastern'])) {
+            $timezone[] = 'America/New_York';
+            $timezone[] = 'America/Indiana/Indianapolis';
+        }
+        if (!empty($tzFilter['Central'])) {
+            $timezone[] = 'America/Chicago';
+        }
+        if (!empty($tzFilter['Mountain'])) {
+            $timezone[] = 'America/Denver';
+            if (!$isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Pacific'])) {
+            $timezone[] = 'America/Los_Angeles';
+            if ($isDST) {
+                $timezone[] = 'America/Phoenix';
+            }
+        }
+        if (!empty($tzFilter['Alaska'])) {
+            $timezone[] = 'America/Anchorage';
+        }
+        if (!empty($tzFilter['Hawaii'])) {
+            $timezone[] = 'Pacific/Honolulu';
+        }
+        return $timezone;
+    }
+
+    /**
+    * Get the datetime for display in the clinic's timezone
+    */
+    public function getClinicDateTime($locationId, $datetime, $format='m/d/Y g:i a T') {
+        $timezone = $this->getClinicTimezone($locationId);
+        $date = new DateTime($datetime, new DateTimeZone($timezone));
+        return $date->format($format);
+    }
+
+    /**
+    * Gets a string of clinic hours for display
+    * @param integer $locationId
+    * @return string hours
+    */
+    public function getHours($locationId) {
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        // Get the string to display
+        $result = '';
+        if (!empty($locationHour)) {
+            $dayMap = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            foreach ($dayMap as $day) {
+                $time = '';
+                if ($locationHour->{$day.'_is_closed'} == true) {
+                    $time = 'Closed';
+                } else if ($locationHour->{$day.'_is_byappt'} == true) {
+                    $time = 'Open by appointment.';
+                }
+                if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                    $time = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+                }
+                if (!empty($time)) {
+                    $result .= ucfirst($day).': '.$time.'<br>';
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+    * Gets a string of today's clinic hours for display
+    * @param integer $locationId
+    * @return string today's hours
+    */
+    public function getHoursToday($locationId) {
+        $day = strtolower(date('D'));
+        $locationHour = $this->LocationHours->find('all', [
+            'contain' => [],
+            'conditions' => [
+                'location_id' => $locationId
+            ]
+        ])->first();
+        $hoursToday = '';
+        if (!empty($locationHour)) {
+            if ($locationHour->{$day.'_is_closed'} == true) {
+                $hoursToday = 'closed';
+            }
+            if (!empty($locationHour->{$day.'_open'}) && !empty($locationHour->{$day.'_close'}) && $locationHour->{$day.'_is_closed'} == false) {
+                $hoursToday = $locationHour->{$day.'_open'}.' - '.$locationHour->{$day.'_close'};
+            }
+        }
+        return $hoursToday;
+    }
+
+    /**
+    * Set a location as show or no-show
+    * @param integer $locationId
+    * @param bool $isShow
+    * @return bool success
+    */
+    public function setShow($locationId, $isShow) {
+        $location = $this->get($locationId);
+        $location->is_show = $isShow;
+        $this->save($location);
+    }
+
+    /**
+    * Get a list of emails to send clinic notifications to.
+    * sends to all LocationEmails.
+    * @param integer $locationId
+    * @return array of email addresses
+    */
+    public function getEmailList($locationId)
+    {
+        $location = $this->get($locationId, [
+            'contain' => ['LocationEmails', 'Users']
+        ]);
+
+        $emails = [];
+
+        // Location Email
+        if ($location->hasValue('email')) {
+            $emails[] = $location->email;
+        }
+
+        // Extra 'Location Emails' for notifications
+        if ($location->has('location_emails')) {
+            foreach ($location->location_emails as $locationEmail) {
+                if ($locationEmail->hasValue('email')) { // Not NULL by default
+                    $emails[] = $locationEmail->email;
+                }
+            }
+        }
+
+        // Location User Emails
+        if ($location->has('users')) {
+            foreach ($location->users as $user) {
+                if ($user->hasValue('email')) { // Not NULL by default
+                    $emails[] = $user->email;
+                }
+            }
+        }
+
+        return $emails;
+    }
+
+    /**
+    * Parses the last_xml field of a location (saved in json format)
+    * @param json string
+    * @return array parsed of Location fields to save. false if unable to parse.
+    */
+    public function parseOticonXml($data) {
+        $is_last_xml = false;
+        if (is_string($data)) {
+            // If data is a json, we're reading the last_xml data already stored
+            // Convert it to an object
+            $data = json_decode($data);
+            $is_last_xml = true;
+        }
+
+        if (!$data) {
+            return false;
+        }
+        $save_data = (object)[];
+        $save_data->last_xml = json_encode($data);
+
+        foreach ($data as $locKey => $locValue) {
+            //Organize Location data
+            switch($locKey) {
+                case 'Id':
+                    $locKey = 'id_oticon';
+                    break;
+                case 'SFID':
+                    $locKey = 'id_sf';
+                    break;
+                case 'ParentAccountId':
+                    $locKey = 'id_parent';
+                    break;
+                default:
+                    $locKey = Inflector::underscore($locKey);
+            }
+            $save_data->{$locKey} = $this->parseXmlField($locValue, $is_last_xml);
+        }
+
+        //If we have this location, update it.
+        if ($locationId = $this->findIdByOticonId($save_data->id_oticon)) {
+            $save_data->id = $locationId;
+            $location = $this->get($locationId);
+            $save_data->is_active = $location->is_active;
+        } else {
+            $save_data->is_active = true;
+        }
+
+        // Calculate oticon tier based on segment
+        $save_data->location_segment ?? null;
+        if (in_array($save_data->location_segment, ['A1', 'B1', 'C1', 'D1', 'A2'])) {
+            $oticonTier = 1;
+        } elseif (in_array($save_data->location_segment, ['B2', 'C2', 'D2', 'A3', 'B3', 'C3', 'D3'])) {
+            $oticonTier = 2;
+        } elseif (in_array($save_data->location_segment, ['A4', 'B4', 'C4', 'D4'])) {
+            $oticonTier = 3;
+        } else {
+            $oticonTier = 0;
+            $locationId ?? $save_data->id_oticon;
+            pr('Warning. Unknown segment ('.$save_data->location_segment.') for location '.$locationId);
+        }
+        $save_data->oticon_tier = $oticonTier;
+
+        //Find their phone number
+        if (!empty($save_data->cs_phone_mapped_to)) {
+            $save_data->phone = $save_data->cs_phone_mapped_to;
+        }
+        unset($save_data->cs_phone_mapped_to);
+        $save_data->phone = trim(str_replace(['(', ')','-', ' '], '', $save_data->phone));
+
+        //Address fix if we have an address_2 but no address
+        $save_data->address_2 ?? '';
+        if (!empty($save_data->address_2) && empty($save_data->address)) {
+            $save_data->address = $save_data->address_2;
+            $save_data->address_2 = "";
+        }
+
+        $save_data->id_parent ?? null;
+        $save_data->title = empty($save_data->title) ? $save_data->subtitle : $save_data->title;
+        $save_data->city = cleanCityName($save_data->city);
+        $save_data->state = $this->stateAbbr($save_data->state);
+        $save_data->country = Configure::read('country');
+        $save_data->zip = (strlen($save_data->zip) == 10 && strpos($save_data->zip,'-') > 0 ? substr($save_data->zip,0,5) : $save_data->zip);//99576-0130
+
+        unset($save_data->created,
+            $save_data->modified,
+            $save_data->tier);
+        return $save_data;
+    }
+
+    /**
+    * Parse the actual field out,
+    * this depends on the is_last_xml
+    * @param mixed field (could be a stdObject, could be an array, could be a string
+    * @param boolean is_last_xml we know could be a special case becasue we parsed it out again instead of original xml.
+    * @return string return value of whatever we're passing in.
+    */
+    private function parseXmlField($mixed_field, $is_last_xml = false) {
+        if ($is_last_xml) {
+            $array_val = (array) $mixed_field;
+            if (!empty($array_val) && isset($array_val[0])) {
+                return trim( (string) $array_val[0]);
+            } else {
+                return '';
+            }
+        }
+        return trim( (string) $mixed_field);
+    }
+
+    public function findIdByOticonId($idOticon = '') {
+        if (trim($idOticon)) {
+            $location = $this->find('all', [
+                'conditions' => ['id_oticon' => $idOticon],
+                'order' => ['created DESC', 'is_active DESC', 'id DESC'],
+            ])->first();
+            if (isset($location->id)) {
+                return $location->id;
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Generate a CallSource number for all locations that need one
+    */
+    function addCallSourceNumbers(ConsoleIo $io) {
+        $io->helper('BaseShell')->title("Generate CallSource numbers");
+        $locationIds = $this->findForCallSource();
+        $count = 0;
+        if (!empty($locationIds)) {
+            $io->out(count($locationIds) . " locations need a new CallSource number.");
+            foreach ($locationIds as $locationId) {
+                $io->out("Generate for {$locationId}: ");
+                if (Configure::read('env') == 'prod')  {
+                    $result = $this->CallSources->saveCallSource($locationId);
+                    if ($result == false) {
+                        $io->error("f:{$locationId}");
+                        pr($this->CallSources->errors);
+                    } else {
+                        $count++;
+                    }
+                } else {
+                    $io->error(" Skipping. Dev environment.");
+                }
+            }
+            $io->out($count." CS numbers created");
+        } else {
+            $io->out("There are no locations that need CallSource numbers.");
+        }
+    }
+
+    /**
+    * Find all locations that need a new call source number created
+    */
+    public function findForCallSource() {
+        $locations = $this->find('all', [
+            'conditions' => [
+                'Locations.listing_type !=' => Location::LISTING_TYPE_NONE,
+                'Locations.is_active' => true,
+            ],
+            'contain' => ['CallSources']
+        ])->all();
+        $locationIdsNeedCs = [];
+        foreach ($locations as $location) {
+            if (empty($location->call_sources)) {
+                // Did not find a Call Assist CS number for this location. Need to add one.
+                $locationIdsNeedCs[] = $location->id;
+            }
+        }
+        return $locationIdsNeedCs;
+    }
+
+    /**
+    * Decides the completeness of the locationId
+    * Returns the completeness back for saving.
+    * @param locationId
+    * @return string 'Complete', 'BasicInfo', 'ProfilePic', 'Incomplete'
+    */
+    public function completeness($locationId) {
+        if (!$this->exists($locationId)) {
+            return false;
+        }
+
+        // Retrieve our location info
+        $location = $this->find('all', [
+            'conditions' => [
+                'Locations.id' => $locationId
+            ],
+            'contain' => [
+                'LocationsProviders',
+                'Providers',
+                'LocationHours'
+            ]
+        ])->first();
+
+        // Set our bools to false
+        $completeProvider = false;
+        $completeLocation = false;
+
+        // Check to see if we have a "complete" provider
+        foreach ($location->providers as $provider) {
+            // If there's a thumb_url and description, we have a complete provider!
+            if (!empty($provider->thumb_url) && !empty($provider->description)) {
+                $completeProvider = true;
+                break;
+            }
+        }
+
+        // If we have an about us, and services, and hours, we've got a complete location!
+        if (!empty($location->about_us) && !empty($location->services)) {
+            if (!empty($location->location_hour)) {
+                foreach ($this->LocationHours->days as $day) {
+                    if (!empty($location->location_hour->{$day.'_open'}) || !empty($location->location_hour->{$day.'_close'}) || !empty($location->location_hour->{$day.'_is_byappt'}) || !empty($location->location_hour->{$day.'_is_closed'})) {
+                        $completeLocation = true;
+                        break;
+                    }
+                }
+            }
+        }
+        // Set 'completeness' based on what elements are complete
+        if ($completeLocation && $completeProvider) {
+            $completeness = Location::COMPLETENESS_COMPLETE;
+        } else if ($completeLocation) {
+            $completeness = Location::COMPLETENESS_BASIC_INFO;
+        } else if ($completeProvider) {
+            $completeness = Location::COMPLETENESS_PROFILE_PIC;
+        } else {
+            $completeness = Location::COMPLETENESS_INCOMPLETE;
+        }
+
+        // Save our completeness
+        if ($completeness != $location->completeness) {
+            $location->completeness = $completeness;
+            $this->save($location, ['associated' => false]);
+        }
+        // Return our completeness
+        return $completeness;
+    }
+
+    public function tierChangeStats($id = null, $startDate=null, $endDate=null) {
+        $location = $this->get($id);
+        if (empty($location)) {
+            return false;
+        }
+        // If no dates specified, get all
+        $startDate = isset($startDate) ? $startDate : '2013-01-01';
+        $endDate = isset($endDate) ? $endDate : 'today';
+        $startDate = date('Y-m-d', strtotime($startDate));
+        $endDate = date('Y-m-d', strtotime($endDate));
+        $retval = array(
+            'current_tier' => $location->oticon_tier,
+            'total_updates' => 0,
+            'tier_1' => 0,
+            'tier_2' => 0,
+            'tier_3' => 0,
+            'tier_0' => 0,
+            'times_changed' => 0,
+        );
+        $importStatuses = TableRegistry::get('ImportStatus')->find('all', [
+            'conditions' => [
+                'location_id' => $id,
+                'AND' => [
+                    'created >=' => $startDate,
+                    'created <=' => $endDate
+                ]
+            ]
+        ])->all();
+        $retval['total_updates'] = count($importStatuses);
+        foreach ($importStatuses as $importStatus) {
+            $retval['tier_' . $importStatus->oticon_tier]++;
+            if ($importStatus->status == ImportStatus::IMPORT_STATUS_TIER_CHANGED) {
+                $retval['times_changed']++;
+            }
+        }
+        return $retval;
+    }
+
+    /**
+    * Find all states for sitemap
+    */
+    public function allStatesForSiteMap() {
+        $retval = [];
+
+        foreach (Configure::read('states') as $abbr => $full) {
+            if ($abbr != 'DC') {
+                $retval[] = [
+                    'hh_url' => [
+                        'admin' => false,
+                        'plugin' => false,
+                        'controller' => 'locations',
+                        'action' => 'viewState',
+                        'region' => $this->stateSlug($abbr)
+                    ]
+                ];
+            }
+        }
+
+        return $retval;
     }
 }

@@ -55,11 +55,11 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/', 'Pages::home');
 
         // Misc pages with simple, content-only templates
-        $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'view', 'aboutIda']);
-        $builder->connect('/clinic/pages/faq', ['controller' => 'Pages', 'action' => 'view', 'clinicFaq']);
-        $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'view', 'feeds']);
-        $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'view', 'privacyPolicy']);
-        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'view', 'termsOfUse']);
+        $builder->connect('/about', ['controller' => 'Pages', 'action' => 'about', 'about']);
+        $builder->connect('/clinic/pages/about-ida', ['controller' => 'Pages', 'action' => 'aboutIda', 'aboutIda']);
+        $builder->connect('/feeds', ['controller' => 'Pages', 'action' => 'feeds', 'feeds']);
+        $builder->connect('/privacy-policy', ['controller' => 'Pages', 'action' => 'privacyPolicy', 'privacyPolicy']);
+        $builder->connect('/terms-of-use', ['controller' => 'Pages', 'action' => 'termsOfUse', 'termsOfUse']);
 
         // Misc pages with more complicated actions, integrations, etc.
         $builder->connect('/contact-us', 'Pages::contactUs');
@@ -70,7 +70,10 @@ return static function (RouteBuilder $routes) {
         // Corp/manufacturer pages
         $builder->connect('/{slug}', 'Corps::view')
             ->setPass(['slug'])
-            ->setPatterns(['slug' => Configure::read('corpsRegex') . '.*']);
+            ->setPatterns(['slug' => Configure::read('corpsRegex')]);
+
+        // Online hearing test
+        $builder->connect('/help/online-hearing-test', ['controller' => 'quizResults', 'action' => 'online_hearing_test']);
 
         /*
          * Connect catchall routes for all controllers.
@@ -104,6 +107,24 @@ return static function (RouteBuilder $routes) {
             ->setPass(['id', 'title'])
             ->setPatterns(['id' => '[0-9]+']);
     });
+
+    // Redirect from /hearing-aids/DC-Dist--Of-Columbia to /hearing-aids/DC-Dist--Of-Columbia/Washington
+    $routes->redirect('/hearing-aids/DC-Dist--Of-Columbia', '/hearing-aids/DC-Dist--Of-Columbia/Washington', ['status' => 301]);
+
+    // Ads routes
+    $routes->scope('/ads', function (RouteBuilder $builder) {
+        $builder->connect(
+            '/', [
+                'controller' => 'Advertisements'
+            ]
+        );
+        $builder->connect(
+            '/{action}/*', [
+                'controller' => 'Advertisements'
+            ]
+        );
+    });
+
     // Content routes
     $routes->scope('/report', function (RouteBuilder $builder) {
         $builder->setExtensions(['rss']);
@@ -129,6 +150,17 @@ return static function (RouteBuilder $routes) {
     $routes->prefix('Admin', function (RouteBuilder $adminBuilder) {
         $adminBuilder->connect('/', 'Utils::panel');
 
+        $adminBuilder->connect(
+            '/ads', [
+                'controller' => 'Advertisements'
+            ]
+        );
+        $adminBuilder->connect(
+            '/ads/{action}/*', [
+                'controller' => 'Advertisements'
+            ]
+        );
+
         // All routes here will be prefixed with `/admin`, and
         // have the `'prefix' => 'Admin'` route element added that
         // will be required when generating URLs for these routes
@@ -145,6 +177,16 @@ return static function (RouteBuilder $routes) {
         ->setPatterns([
             'location_id' => '^81190\d{5}$',
         ]);
+
+        $clinicBuilder->connect(
+            '/library',
+            'LibraryItems::index'
+        );
+
+        $clinicBuilder->connect(
+            '/pages/faq',
+            'Pages::clinicFaq'
+        );
 
         // All routes here will be prefixed with `/clinic`, and
         // have the `'prefix' => 'Clinic'` route element added that

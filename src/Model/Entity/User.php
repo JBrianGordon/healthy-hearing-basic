@@ -14,7 +14,6 @@ use CakeDC\Users\Model\Entity\User as CakeDcUser;
  * @property string $password
  * @property int $level
  * @property string $first_name
- * @property string|null $middle_name
  * @property string $last_name
  * @property string|null $degrees
  * @property string|null $credentials
@@ -93,6 +92,9 @@ class User extends CakeDcUser
         self::ROLE_CLINIC => 'Clinic',
     ];
 
+    /* User ID for Automated User */
+    const USER_ID_AUTOMATED_USER = 999999999;
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -107,7 +109,6 @@ class User extends CakeDcUser
         'password' => true,
         'level' => true,
         'first_name' => true,
-        'middle_name' => true,
         'last_name' => true,
         'degrees' => true,
         'credentials' => true,
@@ -156,6 +157,7 @@ class User extends CakeDcUser
         'secret_verified' => true,
         'tos_date' => true,
         'is_superuser' => true,
+        'workspace_id' => true,
         'role' => true,
         'additional_data' => true,
         'social_accounts' => true,

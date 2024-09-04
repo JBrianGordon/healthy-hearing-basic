@@ -21,6 +21,15 @@ if (!empty($parts[1])) {
 
 $isPreview = isset($isPreview) ? $isPreview : false;
 
+$meta = '<!--Facebook meta tags-->
+    <meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'].'" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="'.$wiki->facebook_title.'" />
+    <meta property="og:description" content="'.$wiki->facebook_description.'" />
+    <meta property="og:image" content="'.$wiki->facebook_image.'" />';
+
+$this->assign('meta', $meta);
+
 $wikiSchema = '<script type="application/ld+json">{';
 $wikiSchema .= '"@context": "https://schema.org", "@type": "Article", ';
 $wikiSchema .= '"mainEntityOfPage": {"@type": "MedicalWebPage", "@id": "' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"';
@@ -113,7 +122,6 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 	<div class="row pt0 pb0">
 		<a name="top"></a>
 		<span style="display:none;" id="wiki-id"><?= $wiki->id ?></span>
-		<span style="display:none;" id="is-preview"><? $isPreview ?></span>
 		<article class="container">
 			<div class="backdrop-container noprint">
 				<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -123,16 +131,30 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
 					<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
 				</div>
-				<header class="col-sm-12 inverse">
+				<header class="col-sm-12 inverse noprint">
 					<div class="col-sm-12 col-xs-9">
 						<?= $this->Breadcrumbs->render() ?>
 						<?= $this->element('breadcrumb_schema') ?>
 						<div id="ellipses">...</div>
 					</div>
 					<div class="row header-content col-sm-8">
-						<?php if ($isAdmin): ?>
-							<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right', 'style' => 'width:66px']) ?>
+						<?php if ($isPreview): ?>
+							<div class="alert alert-warning" role="alert">
+								This is not the greatest Help page in the world, no. <br />
+								This is just a <strong><em>preview</em></strong>!
+							</div>
 						<?php endif; ?>
+						<?=
+							$this->AuthLink->link('Edit', [
+								'prefix' => 'Admin',
+								'controller' => 'wikis',
+								'action' => 'edit',
+								$wiki->id
+							], [
+								'class' => 'btn btn-primary pull-right',
+								'style' => 'width:66px',
+							])
+						?>
 						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
 						<p class="text-caption p0">
 							<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>
@@ -147,7 +169,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 				</header>
 				<div class="row">
-					<div class="col-sm-9 float-start mb70">
+					<div class="col-lg-9 float-start mb70">
 						<div class="panel panel-section expanded mb0">
 							<div id="wiki-body">
 								<?= $wiki->body ?>
@@ -158,6 +180,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 						</div>
 						<?= $this->element('content/share') ?>
 					</div>
+					<?= $this->element('responsive_slider') ?>
 					<?= $this->element('side_panel') ?>
 				</div>
 			</div>

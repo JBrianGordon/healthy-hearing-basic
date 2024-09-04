@@ -1,48 +1,49 @@
+// Variables
 $blog-border-color: lighten($brand-light, 30%);
 
+// Content Body Styles
 .content-body {
   a {
     border-bottom: dotted 1px $link-color;
     text-decoration: none;
-    
-	&.btn{
-		border-bottom: none;
-	}
+
+    &.btn {
+      border-bottom: none;
+    }
 
     &:hover {
       border-bottom-color: $link-hover-color;
       text-decoration: none;
     }
-    
-    &.anchor {
-		padding-top: 90px;
-		margin-top: -50px;
-		border-bottom: 0; 
-		color: #2B2C2D;
-    }
-    
-  }
-  
-  img {
-	@media only screen and (max-width: $screen-xs-max) and (orientation: portrait) {
-		max-width: 300px;
-		height: auto;
-	}
-	@media only screen and (max-width: $screen-sm-max) and (orientation: landscape) {
-		max-width: 100%;
-		height: auto;
-	}
 
+    &.anchor {
+      padding-top: 90px;
+      margin-top: -50px;
+      border-bottom: 0;
+      color: #2B2C2D;
+    }
+  }
+
+  img {
+    @media only screen and (max-width: $screen-xs-max) and (orientation: portrait) {
+      max-width: 300px;
+      height: auto;
+    }
+
+    @media only screen and (max-width: $screen-sm-max) and (orientation: landscape) {
+      max-width: 100%;
+      height: auto;
+    }
   }
 }
 
+// Blog Styles
 .blog {
-	
   h4 {
-  	font-size: 18px;
+    font-size: 18px;
     line-height: 1.5;
   }
-  
+
   .blog-categories {
     color: tint($text-color, 45%);
     line-height: 2;
@@ -61,62 +62,60 @@ $blog-border-color: lighten($brand-light, 30%);
   .blog-posts {
     border-bottom: solid 1px $blog-border-color;
   }
-  
+
   .blog-title {
-	
-	&h2 {
-	    font-size: 2.4rem;
-	    line-height: 1.5;
-	    font-weight: 500;
-	    margin-top: 0;
-	    margin-bottom: 25px;
-	}
-    
-	a {
-	    color: $text-color;
-	
-	    &:hover {
-	      color: $link-color;
-	      text-decoration: none;
-	    }
-	}
+    & h2 {
+      font-size: 24px;
+      line-height: 1.5;
+      font-weight: 500;
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+
+    a {
+      color: $text-color;
+
+      &:hover {
+        color: $link-color;
+        text-decoration: none;
+      }
+    }
   }
-  
+
   .lead {
-	  font-size: 20px;
+    font-size: 20px;
   }
 
   .left-posts {
-
     .blog-post {
       border-bottom: solid 1px $blog-border-color;
       float: left;
       width: 100%;
-      
+
       .right-content {
-            display: none;
+        display: none;
       }
 
       .blog-image {
-	    display: block;
-	    float: none;
+        display: block;
+        float: none;
       }
-      
+
       @media only screen and (min-width: $screen-md-min) {
-            .right-content {
-	           width:50%;
-	           display:inline-block;
-	           float:right
-            }
+        .right-content {
+          width: 50%;
+          display: inline-block;
+          float: right;
+        }
 
-            .mobile {
-	           display: none;
-            }
+        .mobile {
+          display: none;
+        }
 
-            .blog-image {
-	           display: inline-block;
-	           float: left;
-            }
+        .blog-image {
+          display: inline-block;
+          float: left;
+        }
       }
     }
 
@@ -157,63 +156,78 @@ $blog-border-color: lighten($brand-light, 30%);
   }
 }
 
+// Image Styles
 .caption, figure.image {
   padding: 20px 0px 20px 30px;
+
+  &.image_resized {
+    img {
+      width: 100%;
+    }
+  }
+
+  &.image-style-side {
+    float: right;
+  }
 
   figcaption {
     font-style: italic;
   }
-  
-  @media only screen and (max-width: $screen-xs-max) and (orientation: portrait){
-	  float: none!important;
-	  padding: 20px 0px;
-	  
-	  img, figcaption {
-	  	  display: block;
-		  margin: 0 auto;
-		  max-width: 300px;
-		  height: auto;
-		  text-align: center;
-	  }
-	  
-	  figcaption {
-		  br {
-			  display: none;
-		  }
-	  }
+
+  @media only screen and (max-width: $screen-xs-max) and (orientation: portrait) {
+    float: none !important;
+    padding: 20px 0px;
+
+    img, figcaption {
+      display: block;
+      margin: 0 auto;
+      max-width: 300px;
+      height: auto;
+      text-align: center;
+    }
+
+    figcaption {
+      br {
+        display: none;
+      }
+    }
   }
 }
 
-/** Author Bios **/
+// Author Bios
 .about-author {
-
   margin-top: 30px;
 
   a.anchor {
-	padding-top: 0;
-	margin-top: 0;
-	display: block;
-	position: relative;
-	top: -75px;
-	visibility: hidden;
+    padding-top: 0;
+    margin-top: 0;
+    display: block;
+    position: relative;
+    top: -75px;
+    visibility: hidden;
   }
+
   h3 {
-	margin: 0;
-	font-size: 2.2rem;
-	line-height: 1.5;
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.5;
   }
+
   h5 {
     margin: 0;
   }
+
   img.about-team {
     width: 80px;
     min-height: 100px;
     margin: 7px 13px 0 0;
     float: left;
   }
+
   p.bio {
     margin: 10px 0;
   }
+
   div.about-author-bio {
     padding: 20px;
     background: $brand-light;
@@ -228,5 +242,4 @@ $blog-border-color: lighten($brand-light, 30%);
       color: #ffffff;
     }
   }
-} 
-
+}

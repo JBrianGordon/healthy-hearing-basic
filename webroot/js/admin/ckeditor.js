@@ -12,7 +12,6 @@ import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
 import CKBox from '@ckeditor/ckeditor5-ckbox/src/ckbox.js';
 import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices.js';
-import Code from '@ckeditor/ckeditor5-basic-styles/src/code.js';
 import DataFilter from '@ckeditor/ckeditor5-html-support/src/datafilter.js';
 import DataSchema from '@ckeditor/ckeditor5-html-support/src/dataschema.js';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
@@ -25,35 +24,28 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight.js';
 import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline.js';
 import HtmlComment from '@ckeditor/ckeditor5-html-support/src/htmlcomment.js';
-import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed.js';
 import Image from '@ckeditor/ckeditor5-image/src/image.js';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption.js';
-import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert.js';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize.js';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle.js';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
-import Indent from '@ckeditor/ckeditor5-indent/src/indent.js';
-import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock.js';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
 import Link from '@ckeditor/ckeditor5-link/src/link.js';
 import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage.js';
 import List from '@ckeditor/ckeditor5-list/src/list.js';
 import ListProperties from '@ckeditor/ckeditor5-list/src/listproperties.js';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed.js';
-import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice.js';
 import PictureEditing from '@ckeditor/ckeditor5-image/src/pictureediting.js';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat.js';
-import SelectAll from '@ckeditor/ckeditor5-select-all/src/selectall.js';
 import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting.js';
 import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters.js';
 import SpecialCharactersArrows from '@ckeditor/ckeditor5-special-characters/src/specialcharactersarrows.js';
 import SpecialCharactersCurrency from '@ckeditor/ckeditor5-special-characters/src/specialcharacterscurrency.js';
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials.js';
 import StandardEditingMode from '@ckeditor/ckeditor5-restricted-editing/src/standardeditingmode.js';
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough.js';
 import Style from '@ckeditor/ckeditor5-style/src/style.js';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript.js';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
@@ -66,10 +58,11 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
+import WProofreader from'@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
 //Importing custom CSS
-import '../../scss/utilities/ckeditor.css';
+import '../../css/ckeditor/ckeditor.css';
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 
@@ -86,7 +79,6 @@ Editor.builtinPlugins = [
     Bold,
     CKBox,
     CloudServices,
-    Code,
     DataFilter,
     DataSchema,
     Essentials,
@@ -99,35 +91,28 @@ Editor.builtinPlugins = [
     Highlight,
     HorizontalLine,
     HtmlComment,
-    HtmlEmbed,
     Image,
     ImageCaption,
-    ImageInsert,
     ImageResize,
     ImageStyle,
     ImageToolbar,
     ImageUpload,
-    Indent,
-    IndentBlock,
     Italic,
     Link,
     LinkImage,
     List,
     ListProperties,
     MediaEmbed,
-    PageBreak,
     Paragraph,
     PasteFromOffice,
     PictureEditing,
     RemoveFormat,
-    SelectAll,
     SourceEditing,
     SpecialCharacters,
     SpecialCharactersArrows,
     SpecialCharactersCurrency,
     SpecialCharactersEssentials,
     StandardEditingMode,
-    Strikethrough,
     Style,
     Subscript,
     Superscript,
@@ -139,92 +124,200 @@ Editor.builtinPlugins = [
     TableToolbar,
     TextTransformation,
     Underline,
-    WordCount
+    WordCount,
+    WProofreader
 ];
 
-Editor.create(document.querySelector(".editor"), {
-    toolbar: {
-        items: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'ckbox',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo',
-            'alignment',
-            'code',
-            'findAndReplace',
-            'fontColor',
-            'fontSize',
-            'fontFamily',
-            'highlight',
-            'horizontalLine',
-            'htmlEmbed',
-            'imageInsert',
-            'pageBreak',
-            'removeFormat',
-            'selectAll',
-            'sourceEditing',
-            'specialCharacters',
-            'strikethrough',
-            'restrictedEditingException',
-            'style',
-            'subscript',
-            'superscript',
-            'underline'
-        ],
-        shouldNotGroupWhenFull: true
-    },
-    language: 'en',
-    image: {
-        toolbar: [
-            'imageTextAlternative',
-            'toggleImageCaption',
-            'imageStyle:inline',
-            'imageStyle:block',
-            'imageStyle:side',
-            'linkImage'
-        ]
-    },
-    table: {
-        contentToolbar: [
-            'tableColumn',
-            'tableRow',
-            'mergeTableCells',
-            'tableCellProperties',
-            'tableProperties'
-        ]
-    },
-    heading: {
-        options: [
-            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-            { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-            { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-            { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-        ]
-    },
-    placeholder: 'Welcome to CKEditor 5 + CKBox!',
-    CloudServices: {
-        tokenUrl: ckTokenUrl
-    },
-    ckbox: {
-        tokenUrl: ckTokenUrl
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all elements with the "editor" class
+    const editorElements = document.querySelectorAll(".editor");
+
+    //Set serviceId and site language depending on site
+    let servId, siteLang;
+
+    if(document.documentElement.lang === 'en-CA'){
+        servId = 'fu3PtF9xYtAkFgt';
+        siteLang = 'en_CA';
+    } else {
+        servId = 'S4GVljxeHzqGrTO';
+        siteLang = 'en_US';
     }
-	}).catch( error => {
-	    console.error( error );
+
+    // Iterate over each element and create the editor
+    editorElements.forEach((element) => {
+
+        Editor.create(element, {
+            toolbar: {
+                items: [
+                    'sourceEditing',
+                    '|',
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'link',
+                    'bulletedList',
+                    'numberedList',
+                    'subscript',
+                    'superscript',
+                    'underline',
+                    '|',
+                    'ckbox',
+                    'blockQuote',
+                    'insertTable',
+                    'mediaEmbed',
+                    'alignment',
+                    'findAndReplace',
+                    '|',
+                    'removeFormat',
+                    'specialCharacters',
+                    '|',
+                    'fontColor',
+                    'fontSize',
+                    'fontFamily',
+                    '|',
+                    'horizontalLine',
+                    'highlight',
+                    'style',
+                    'restrictedEditingException',
+                    'wproofreader'
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            htmlSupport: {
+                allow: [
+                    {
+                        name: 'div',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'span',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'a',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'script',
+                        attributes: {
+                            type: 'application/ld+json'
+                        }
+                    },
+                    {
+                        name: 'img',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'figure',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'input',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h1',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h2',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h3',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h4',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h5',
+                        attributes: true,
+                        classes: true
+                    },
+                    {
+                        name: 'h6',
+                        attributes: true,
+                        classes: true
+                    }
+                ]
+            },
+            language: 'en',
+            link: {
+                decorators: {
+                    openInNewTab: {
+                        mode: 'automatic',
+                        callback: url => url && !(/healthyhearing|hearingdirectory|hhcake/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
+                        attributes: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }
+                    }
+                }
+            },
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'toggleImageCaption',
+                    'imageStyle:inline',
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    'linkImage'
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells',
+                    'tableCellProperties',
+                    'tableProperties'
+                ]
+            },
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                    { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                    { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                ]
+            },
+            CloudServices: {
+                tokenUrl: ckTokenUrl
+            },
+            ckbox: {
+                tokenUrl: ckTokenUrl
+            },
+            wproofreader: {
+                lang: siteLang,
+                serviceId: servId,
+                srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
+            }
+        	}).then(editor => {
+                const editorElements = document.querySelectorAll(".editor");
+              
+                editorElements.forEach(element => {
+                    element.style.display = "block";
+                    element.style.position = "absolute";
+                    element.style.zIndex = "-1";
+                });
+            }).catch( error => {
+    	    console.error( error );
+        });
+    });
 });

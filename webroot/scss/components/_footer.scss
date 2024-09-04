@@ -1,8 +1,9 @@
-.site-footer {
+.row.site-footer {
 	background: $white;
-	padding: 40px inherit;
+	padding: 50px 0;
 	position: relative;
 	max-width: 100%;
+	z-index: 1;
 
 	&.row {
 		@media (max-width: $screen-xs-max){
@@ -189,6 +190,7 @@
 #footerContainer {
     position: fixed;
     bottom: 0;
+    left:0;
     z-index: 2;
     background: #fff;
     width: 100%;
@@ -267,7 +269,7 @@
 	}
 	
 	.telephone {
-		.glyphicon-earphone{
+		.bi-telephone-fill{
 		    top: 3px;
 		    font-size: 14px;
 		}

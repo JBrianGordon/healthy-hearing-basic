@@ -1,4 +1,5 @@
 import './admin_common';
+import './ckpackage';
 
 document.addEventListener('DOMContentLoaded', () => {
     const queryInput = document.getElementById('locations-query');

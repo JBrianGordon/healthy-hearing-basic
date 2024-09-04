@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\UsersTable $Users
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UsersController extends AppController
+class UsersController extends BaseAdminController
 {
     /**
      * Initialize
@@ -23,6 +23,10 @@ class UsersController extends AppController
         parent::initialize();
 
         $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
     }
@@ -56,6 +60,7 @@ class UsersController extends AppController
         }
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()->where(['model' => 'Users'])->toArray();
+        $this->set('title', 'Users index');
         $this->set('users', $this->paginate($usersQuery));
         $this->set('fields', $this->Users->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
@@ -81,6 +86,7 @@ class UsersController extends AppController
         $corps = $this->Users->Corps->find('list', ['limit' => 200])->all();
         $content = $this->Users->Content->find('list', ['limit' => 200])->all();
         $wikis = $this->Users->Wikis->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add User');
         $this->set(compact('user', 'corps', 'content', 'wikis'));
     }
 
@@ -108,6 +114,7 @@ class UsersController extends AppController
         $corps = $this->Users->Corps->find('list', ['limit' => 200])->all();
         $content = $this->Users->Content->find('list', ['limit' => 200])->all();
         $wikis = $this->Users->Wikis->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit User');
         $this->set(compact('user', 'corps', 'content', 'wikis'));
     }
 

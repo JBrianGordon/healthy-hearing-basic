@@ -35,8 +35,8 @@ class ClinicHelper extends Helper
 
     public function initialize(array $config): void
     {
-        $this->Locations = TableRegistry::getTableLocator()->get('Locations');
-        $this->LocationHours = TableRegistry::getTableLocator()->get('LocationHours');
+        $this->Locations = TableRegistry::get('Locations');
+        $this->LocationHours = TableRegistry::get('LocationHours');
         $this->lettersSeen = [];
     }
 
@@ -412,14 +412,14 @@ class ClinicHelper extends Helper
     * - link 'tel' | 'skype' | false (default false)
     * @return string phone number
     */
-    public function phone($location = null, $options = array(), $isCallTrackingBypassed = null) {
+    public function phone($location = null, $options = [], $isCallTrackingBypassed = null) {
         if (!is_object($location)) {
             $location = $this->Locations->get($location);
         }
 
-        $options = array_merge(array(
+        $options = array_merge([
             'link' => false
-        ),(array)$options);
+        ],(array)$options);
 
         $retval = $location->phone;
 
@@ -497,7 +497,7 @@ class ClinicHelper extends Helper
     * @param boolean full link (default false)
     * @return HtmlLink
     */
-    public function link($location = null, $full = false, $options = array()) {
+    public function link($location = null, $full = false, $options = []) {
         if (!is_object($location)) {
            $location = $this->Locations->get($location);
         }
@@ -537,8 +537,11 @@ class ClinicHelper extends Helper
                     $time = 'Open by appointment';
                 }
                 if ($hours[$day.'_open'] != "" && $hours[$day.'_close'] != "" && $hours[$day.'_is_closed']==false) {
-                    $open = str_replace(":00", "", $hours[$day.'_open']);
-                    $close = str_replace(":00", "", $hours[$day.'_close']);
+                    $open = date("g:i a", strtotime($hours[$day.'_open']));
+                    $close = date("g:i a", strtotime($hours[$day.'_close']));
+                    // Remove :00 if the time is on the hour
+                    $open = preg_replace("/:00(?= [ap]m)/", "", $open);
+                    $close = preg_replace("/:00(?= [ap]m)/", "", $close);
                     $time = $open.' - '.$close;
                     if ($hours['is_closed_lunch']) {
                         $lunchStart = str_replace(":00", "", $hours['lunch_start']);
@@ -613,26 +616,25 @@ class ClinicHelper extends Helper
     * @param provider
     * @return string HTML image or empty
     */
-    public function providerImage($provider, $options = array()) {
+    public function providerImage($provider, $options = []) {
         if (is_numeric($provider)) {
             $provider = $this->Locations->Providers->get($provider);
         }
         //Changing
         if (is_bool($options)) {
             $url_only = $options;
-            $options = array();
+            $options = [];
             $options['url_only'] = $url_only;
         }
-        $options = array_merge(array(
+        $options = array_merge([
             'url_only' => false
-        ),(array) $options);
+        ], (array)$options);
 
         if (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name)) {
-            return $this->Html->image('/tmp/' . $provider->file->name, array('width' => 150));
+            return $this->Html->image('/tmp/' . $provider->file->name, ['width' => 150]);
         }
         if (!empty($provider->thumb_url)) {
-            $filename = basename($provider->thumb_url);
-            $url = "/cloudfiles/clinicians/" . rawurlencode($filename);
+            $url = $provider->thumb_url;
             $classLead = ' class="';
             $classClose = '"';
             if ($options['url_only']) {
@@ -655,11 +657,12 @@ class ClinicHelper extends Helper
             unset($options['url_only']);
             return '<div class="profile-pic-container"><img src="'.$url.'" loading="lazy"' . $classLead . $options['class'] . $classClose . ' alt="'.$options['alt'].'" width="'.$options['width'].'" height="'.$options['height'].'"></div>';
         }
-        /*
-        $image_path = WWW_ROOT . $provider->thumb_url;
-        if(!empty($provider->thumb_url) && file_exists($image_path)){
-        return $this->Html->image($provider->thumb_url);
-        }*/
+        if (!empty($provider->thumb_url)) {
+            $image_path = WWW_ROOT . $provider->thumb_url;
+            if (file_exists($image_path)) {
+                return $this->Html->image($provider->thumb_url);
+            }
+        }
         return "";
     }
 
@@ -703,24 +706,24 @@ class ClinicHelper extends Helper
         //Show list of payment types accepted
         if (!empty($location->payment)) {
             $payment_array = json_decode($location->payment, true);
-            $rows = array();
-            $cards_to_show = array();
+            $rows = [];
+            $cards_to_show = [];
             $payments = $this->Locations->payments;
             foreach ($payment_array as $methodindex => $methodvalue) {
                 if ($methodvalue == 1) {
-                    @$rows[] = $this->Html->tag('li', $payments[$methodindex]['name'], array('escape' => false));
+                    @$rows[] = $this->Html->tag('li', $payments[$methodindex]['name'], ['escape' => false]);
                     if (!empty($payments[$methodindex]['icon'])) {
                         //$cards_to_show[] = $methodindex; //dont show icons
                     }
                 }
             }
 
-            $retval = $this->Html->tag('ul', implode('', $rows), array('class' => 'no-bullets'));
+            $retval = $this->Html->tag('ul', implode('', $rows), ['class' => 'no-bullets']);
 
             //Show list of cards
             $cards = '<p class="text-center">';
             foreach ($cards_to_show as $card_index){
-                $cards .= ' ' . $this->Html->image("/images/{$payments[$card_index]['icon']}", array('alt' => $payments[$card_index]['name'], 'title' => $payments[$card_index]['name'], 'class' => 'pr10'));
+                $cards .= ' ' . $this->Html->image("/images/{$payments[$card_index]['icon']}", ['alt' => $payments[$card_index]['name'], 'title' => $payments[$card_index]['name'], 'class' => 'pr10']);
             }
             $cards .= "</p>";
 
@@ -833,17 +836,10 @@ class ClinicHelper extends Helper
         //Not empty, continue.
         switch ($key) {
             case 'facebook':
-                $text = str_replace(array('https://','http://','www.facebook.com/','facebook.com/'), '', $social);
+                $text = str_replace(['https://','http://','www.facebook.com/','facebook.com/'], '', $social);
                 return '<span class="facebook"><span class="hh-icon-facebook clinic-share"></span> ' . $this->Html->link(
                     'Facebook',
                     'https://www.facebook.com/' . $text,
-                    ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
-                ) . '</span>';
-            case 'twitter':
-                $text = str_replace(array('https://twitter.com/','https://www.twitter.com/'), '', $social);
-                return '<span class="twitter"><span class="hh-icon-twitter clinic-share"></span> ' . $this->Html->link(
-                    'Twitter',
-                    'https://twitter.com/' . $text,
                     ['class' => 'text-link', 'escape' => false, 'target' => '_blank', 'rel' => 'noopener']
                 ) . '</span>';
             case 'youtube':
@@ -926,21 +922,6 @@ class ClinicHelper extends Helper
     */
     public function stateSlug($state) {
         return $this->Locations->stateSlug($state);
-    }
-
-    /**
-     * @description Returns the count from the count_metrics data set
-     *
-     * @param $name string Primary selector, usually a city name, state name or zip code
-     * @param string $metric Metric to check
-     * @param string $type Segmentation level
-     * @param string $subName Secondary selector, only used for city
-     *
-     * @return int count value
-     */
-    public function getCount($name, $metric = 'clinics', $type = 'state', $subName = '')
-    {
-        return TableRegistry::get('CountMetrics')->getCount($name, $metric, $type, $subName);
     }
 
     /**
@@ -1030,30 +1011,30 @@ class ClinicHelper extends Helper
 
         //Any changes made here should also be reflected in app/View/Locations/view.ctp
         $badgeArray = [
-            ['isOn' => $location->badge_coffee, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Free Coffee" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Free coffee" width="28" height="28" src="/img/coffee.png"></a>'],
-            ['isOn' => $location->badge_wifi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Free WiFi" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Free wifi" width="28" height="28" src="/img/wifi.png"></a>'],
-            ['isOn' => $location->badge_parking, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Convenient parking" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Convenient parking" width="28" height="28" src="/img/parking-square-sign.png"></a>'],
-            ['isOn' => $location->badge_curbside, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Curbside service" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Curbside service" width="28" height="28" src="/img/car.png"></a>'],
-            ['isOn' => $location->badge_wheelchair, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Wheelchair-accessible" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Wheelchair accessible" width="28" height="28" src="/img/disabled.png"></a>'],
-            ['isOn' => $location->badge_service_pets, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Service pets welcome" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Service pets welcome" width="28" height="28" src="/img/pet.png"></a>'],
-            ['isOn' => $location->badge_cochlear_implants, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Hearing implants" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Hearing implants" width="28" height="28" src="/img/hearing.png"></a>'],
-            ['isOn' => $location->badge_ald, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Assistive listening devices" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Assistive listening devices" width="28" height="28" src="/img/deafness.png"></a>'],
-            ['isOn' => $location->badge_pediatrics, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Pediatrics" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Pediatrics" width="28" height="28" src="/img/man-with-child.png"></a>'],
-            ['isOn' => $location->badge_mobile_clinic, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Mobile clinic" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Mobile clinic" width="32" height="28" src="/img/ear-van.png"></a>'],
-            ['isOn' => $location->badge_financing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Financing available" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Financing available" width="28" height="28" src="/img/credit-card.png"></a>'],
-            ['isOn' => $location->badge_telehearing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Telehealth services" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Telehealth services" width="28" height="28" src="/img/monitor.png"></a>'],
-            ['isOn' => $location->badge_asl, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="American Sign Language" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="American sign language" width="28" height="28" src="/img/sign-language.png"></a>'],
-            ['isOn' => $location->badge_tinnitus, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Tinnitus" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Tinnitus" width="28" height="28" src="/img/ear.png"></a>'],
-            ['isOn' => $location->badge_balance, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Balance testing" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Balance testing" width="28" height="28" src="/img/dizziness.png"></a>'],
-            ['isOn' => $location->badge_home, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Screen/test at home" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Screen at home" width="28" height="28" src="/img/home.png"></a>'],
-            ['isOn' => $location->badge_remote, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Remote hearing aid programming" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Remote hearing aid programming" width="28" height="28" src="/img/laptop.png"></a>'],
-            ['isOn' => $location->badge_mask, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Masks worn here" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Masks worn here" width="28" height="28" src="/img/mask.png"></a>'],
-            ['isOn' => $location->badge_ear_cleaning, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Ear cleaning" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Ear cleaning" width="28" height="28" src="/img/ear-cleaning.png"></a>'],
-            ['isOn' => $location->badge_spanish, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Habla Español" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Spanish" width="28" height="28" src="/img/mexico.png"></a>'],
-            ['isOn' => $location->badge_french, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Parle Français" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="French" width="28" height="28" src="/img/france.png"></a>'],
-            ['isOn' => $location->badge_russian, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="мы говорим по-русски" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Russian" width="28" height="28" src="/img/russia.png"></a>'],
-            ['isOn' => $location->badge_chinese, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="我们说中文" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Chinese" width="28" height="28" src="/img/china.png"></a>'],
-            ['isOn' => $location->badge_punjabi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="ਅਸੀਂ ਪੰਜਾਬੀ ਬੋਲਦੇ ਹਾਂ" data-html="true" data-bs-placement="top"><img loading="lazy" class="badge-img" alt="Indian-Punjabi" width="28" height="28" src="/img/india.png"></a>']
+            ['isOn' => $location->badge_coffee, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Free Coffee" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Free coffee" width="28" height="28" src="/img/coffee.png"></a>'],
+            ['isOn' => $location->badge_wifi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Free WiFi" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Free wifi" width="28" height="28" src="/img/wifi.png"></a>'],
+            ['isOn' => $location->badge_parking, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Convenient parking" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Convenient parking" width="28" height="28" src="/img/parking-square-sign.png"></a>'],
+            ['isOn' => $location->badge_curbside, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Curbside service" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Curbside service" width="28" height="28" src="/img/car.png"></a>'],
+            ['isOn' => $location->badge_wheelchair, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Wheelchair-accessible" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Wheelchair accessible" width="28" height="28" src="/img/disabled.png"></a>'],
+            ['isOn' => $location->badge_service_pets, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Service pets welcome" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Service pets welcome" width="28" height="28" src="/img/pet.png"></a>'],
+            ['isOn' => $location->badge_cochlear_implants, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Hearing implants" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Hearing implants" width="28" height="28" src="/img/hearing.png"></a>'],
+            ['isOn' => $location->badge_ald, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Assistive listening devices" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Assistive listening devices" width="28" height="28" src="/img/deafness.png"></a>'],
+            ['isOn' => $location->badge_pediatrics, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Pediatrics" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Pediatrics" width="28" height="28" src="/img/man-with-child.png"></a>'],
+            ['isOn' => $location->badge_mobile_clinic, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Mobile clinic" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Mobile clinic" width="32" height="28" src="/img/ear-van.png"></a>'],
+            ['isOn' => $location->badge_financing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Financing available" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Financing available" width="28" height="28" src="/img/credit-card.png"></a>'],
+            ['isOn' => $location->badge_telehearing, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Telehealth services" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Telehealth services" width="28" height="28" src="/img/monitor.png"></a>'],
+            ['isOn' => $location->badge_asl, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="American Sign Language" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="American sign language" width="28" height="28" src="/img/sign-language.png"></a>'],
+            ['isOn' => $location->badge_tinnitus, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Tinnitus" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Tinnitus" width="28" height="28" src="/img/ear.png"></a>'],
+            ['isOn' => $location->badge_balance, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Balance testing" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Balance testing" width="28" height="28" src="/img/dizziness.png"></a>'],
+            ['isOn' => $location->badge_home, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Screen/test at home" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Screen at home" width="28" height="28" src="/img/home.png"></a>'],
+            ['isOn' => $location->badge_remote, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Remote hearing aid programming" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Remote hearing aid programming" width="28" height="28" src="/img/laptop.png"></a>'],
+            ['isOn' => $location->badge_mask, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Masks worn here" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Masks worn here" width="28" height="28" src="/img/mask.png"></a>'],
+            ['isOn' => $location->badge_ear_cleaning, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Ear cleaning" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Ear cleaning" width="28" height="28" src="/img/ear-cleaning.png"></a>'],
+            ['isOn' => $location->badge_spanish, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Habla Español" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Spanish" width="28" height="28" src="/img/mexico.png"></a>'],
+            ['isOn' => $location->badge_french, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="Parle Français" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="French" width="28" height="28" src="/img/france.png"></a>'],
+            ['isOn' => $location->badge_russian, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="мы говорим по-русски" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Russian" width="28" height="28" src="/img/russia.png"></a>'],
+            ['isOn' => $location->badge_chinese, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="我们说中文" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Chinese" width="28" height="28" src="/img/china.png"></a>'],
+            ['isOn' => $location->badge_punjabi, 'fontIcon' => '<a class="amenity-popover" data-toggle="popover" data-bs-trigger="hover click" data-bs-content="ਅਸੀਂ ਪੰਜਾਬੀ ਬੋਲਦੇ ਹਾਂ" data-html="true" data-bs-placement="top" href=""><img loading="lazy" class="badge-img" alt="Indian-Punjabi" width="28" height="28" src="/img/india.png"></a>']
 
         ];
 
@@ -1140,21 +1121,21 @@ class ClinicHelper extends Helper
         if (is_array($paymentJson)) {
             $paymentArray = $paymentJson;
         } else {
-            $paymentArray = json_decode($paymentJson, true);
+            $paymentArray = empty($paymentJson) ? [] : json_decode($paymentJson, true);
         }
         $payments = $this->Locations->payments;
         $defaultChecked = ['Cash', Configure::read('checkPayment')];
         foreach ($payments as $keyIndex => $nameIcon) {
             $checked = (!empty($paymentArray[$keyIndex]) && $paymentArray[$keyIndex] == '1');
-            $retval .= '<div class="form-group col-md-6 flex mb20"><label class="control-label p0" for="Payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
+            $retval .= '<div class="col-md-6 flex mb20"><label class="form-label p0 tal fg-1" for="payment'.$keyIndex.'">'.$nameIcon['name'].'</label>';
             $formOptions = array_merge([
                 'type' => 'checkbox',
                 'checked' => $checked,
                 'default' => in_array($nameIcon['name'], $defaultChecked),
-                'id' => 'Payment'.$keyIndex,
+                'id' => 'payment'.$keyIndex,
                 'class' => 'checkbox-left mr5'
             ], $options);
-            $retval .= $this->Form->input("Payment.$keyIndex", $formOptions).'</div>';
+            $retval .= $this->Form->input("payment.$keyIndex", $formOptions).'</div>';
         }
         return $retval;
     }
@@ -1183,5 +1164,57 @@ class ClinicHelper extends Helper
             $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>';
         }
         return $retval;
+    }
+
+    // Takes the json encoded notes from CQP import and displays them in a nice table format
+    public function cqpImportNotes($notes) {
+        $contacts = json_decode($notes, true);
+        $retval = '';
+        if (!empty($contacts)) {
+            $retval = '<div class="panel panel-default">';
+                $retval .= '<div class="panel-heading">CQP contacts</div>';
+                $retval .= '<div class="panel-body m10">';
+                    $retval .= '<p>We do not automatically import providers from CQP. Here is a list of contacts associated with the practice (not necessarily this location). </p>';
+                    $retval .= '<table class="table table-striped table-bordered table-condensed">';
+                        $retval .= '<tr>';
+                            $retval .= '<th>First</th>';
+                            $retval .= '<th>Last</th>';
+                            $retval .= '<th>Title</th>';
+                            $retval .= '<th>Email</th>';
+                            $retval .= '<th>Office ID?</th>';
+                        $retval .= '</tr>';
+                        foreach ($contacts as $contact) {
+                            $first = empty($contact['ContactFName']) ? '' : $contact['ContactFName'];
+                            $retval .= '<tr>';
+                                foreach (['ContactFName', 'ContactLName', 'ContactTitle', 'ContactEmail', 'ContactOfficeID'] as $fieldName) {
+                                    $field = empty($contact[$fieldName]) ? '' : $contact[$fieldName];
+                                    $retval .= '<td>'.$field.'</td>';
+                                }
+                            $retval .= '</tr>';
+                        }
+                    $retval .= '</table>';
+                $retval .= '</div>';
+            $retval .= '</div>';
+        }
+        return $retval;
+    }
+
+    /**
+    * Get oticon field
+    */
+    public function getOticonField($last_xml, $field) {
+        $parsedXml = $this->Locations->parseOticonXml($last_xml);
+        if (!isset($parsedXml->{$field})) {
+            return null;
+        }
+        return $parsedXml->{$field};
+    }
+
+    public function printLastXml($lastXml) {
+        $debug = Configure::read('debug');
+        Configure::write('debug', 1);
+        $xml = empty($lastXml) ? null : json_decode($lastXml, true);
+        debug($xml, true, false);
+        Configure::write('debug', $debug);
     }
 }

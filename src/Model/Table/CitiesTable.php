@@ -46,6 +46,16 @@ class CitiesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_near_location' => true,
+                'state !=' => '',
+            ],
+            'order' => [
+                'city' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -67,7 +77,7 @@ class CitiesTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'short', 'body'],
+                'fields' => ['city', 'state'],
             ]);
     }
 

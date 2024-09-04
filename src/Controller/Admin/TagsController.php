@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\TagsTable $Tags
  * @method \App\Model\Entity\Tag[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class TagsController extends AppController
+class TagsController extends BaseAdminController
 {
     /**
      * Index method
@@ -22,6 +22,7 @@ class TagsController extends AppController
     {
         $tags = $this->paginate($this->Tags);
 
+        $this->set('title', 'Tags index');
         $this->set(compact('tags'));
     }
 
@@ -59,6 +60,7 @@ class TagsController extends AppController
             $this->Flash->error(__('The tag could not be saved. Please, try again.'));
         }
         $content = $this->Tags->Content->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Tag');
         $this->set(compact('tag', 'content'));
     }
 
@@ -84,6 +86,7 @@ class TagsController extends AppController
             $this->Flash->error(__('The tag could not be saved. Please, try again.'));
         }
         $content = $this->Tags->Content->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Edit Tag');
         $this->set(compact('tag', 'content'));
     }
 

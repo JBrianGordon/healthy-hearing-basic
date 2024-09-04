@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * ImportLocations Controller
@@ -12,7 +13,7 @@ use Cake\Core\Configure;
  * @property \App\Model\Table\ImportLocationsTable $ImportLocations
  * @method \App\Model\Entity\ImportLocation[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ImportLocationsController extends AppController
+class ImportLocationsController extends BaseAdminController
 {
     /**
      * Initialize
@@ -27,12 +28,16 @@ class ImportLocationsController extends AppController
             'actions' => ['index'],
         ]);
 
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+
         $this->paginate = [
             'order' => ['ImportLocations.id' => 'DESC']
         ];
     }
     /**
-     * Index method
+     * Index method - Dashboard
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
@@ -82,6 +87,9 @@ class ImportLocationsController extends AppController
             ]
         ]);
         $importLocations = $this->paginate($importLocationsQuery);
+        // Set to current index page with any applied filters
+        $this->request->getSession()->write('importIndexReferer', Router::url());
+        $this->set('title', 'Import Locations Index');
         $this->set('importLocations', $importLocations);
         $this->set('selectedImportType', $selectedImportType);
         $this->set('selectedFilter', $selectedFilter);

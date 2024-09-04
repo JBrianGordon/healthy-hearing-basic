@@ -8,14 +8,9 @@
   right: -360px;
   top: 113px;
   z-index: 800;
-  /*@include transform(translate3d(calc(100% - 40px),0,0));
-  @include transition(all 0.3s ease-in);*/
 
   &.open {
-    right: 0px;
-    /*@include box-shadow(0px 4px 12px rgba(0,0,0,0.15));
-    @include transform(translate3d(0,0,0));
-    @include transition(all 0.3s ease-out);*/
+    right: 0;
   }
 
   .sticky-panel-body {
@@ -25,24 +20,20 @@
 
   .sticky-panel-handle {
     background: $brand-secondary;
-    @include box-shadow(-2px 0px 6px rgba(0,0,0,0.2));
+    @include box-shadow(-2px 0 6px rgba(0, 0, 0, 0.2));
     color: $white;
     cursor: pointer;
     display: flex;
     flex: 0 0 40px;
-    flex-direction: column; /* IE11 fix */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-width: 0;
   }
 
-  /*&.open .sticky-panel-handle {
-    cursor: default;
-  }*/
-
   .handle-text {
     white-space: nowrap;
-    transform:rotate(-90deg);
+    transform: rotate(-90deg);
     font-weight: bold;
   }
 
@@ -52,21 +43,18 @@
     font-size: 20px;
     left: 0;
     line-height: 40px;
-    opacity:0;
+    opacity: 0;
     position: absolute;
     text-align: center;
     top: 0;
-    /*@include transition(opacity 0.2s ease-in-out);*/
     width: 40px;
   }
 
   &.open .close-icon {
-    opacity:1;
+    opacity: 1;
   }
 
   @media only screen and (min-width: $screen-sm-min) {
     display: flex;
   }
 }
-
-

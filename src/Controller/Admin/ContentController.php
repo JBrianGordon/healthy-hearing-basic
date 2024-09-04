@@ -13,7 +13,7 @@ use Cake\Routing\Router;
  * @property \App\Model\Table\ContentTable $Content
  * @method \App\Model\Entity\Content[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ContentController extends AppController
+class ContentController extends BaseAdminController
 {
     public $paginate = [
         'order' => [
@@ -36,6 +36,10 @@ class ContentController extends AppController
 
         $this->loadComponent('Export', [
             'actions' => ['export']
+        ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
         ]);
     }
 
@@ -100,6 +104,7 @@ class ContentController extends AppController
             ])
             ->contain(['PrimaryAuthor']);
 
+        $this->set('title', 'Content index');
         $this->set('content', $this->paginate($contentQuery));
         $this->set('count', $contentQuery->count());
         $this->set('users', $users);
@@ -158,6 +163,7 @@ class ContentController extends AppController
             ])->first();
             $this->set('seoRedirect', $seoRedirect);
         }
+        $this->set('title', 'Edit Content');
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
         $this->set('authors', $this->Content->PrimaryAuthor->authorList());

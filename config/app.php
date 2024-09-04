@@ -181,12 +181,13 @@ return [
      *   your application that still emit deprecations.
      */
     'Error' => [
-        'errorLevel' => E_ALL,
+        'errorLevel' => E_ERROR,
         'exceptionRenderer' => ExceptionRenderer::class,
         'skipLog' => [],
         'log' => true,
         'trace' => true,
         'ignoredDeprecationPaths' => [],
+        'handler' => 'Cake\Error\Middleware\ErrorHandlerMiddleware::handle',
     ],
 
     /*

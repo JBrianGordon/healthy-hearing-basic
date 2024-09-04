@@ -5,8 +5,11 @@ $this->Breadcrumbs->add([
 	['title'=>'Home', 'url'=>'/'],
     ['title'=>'Find a clinic', 'url'=>['controller'=>'locations', 'action'=>'viewFac']],
 ]);
-if (!empty($region)) {
+if (!empty($region) && $region != 'DC-Dist-Of-Columbia') {
 	$this->Breadcrumbs->add($state, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
+} else if($region == 'DC-Dist-Of-Columbia'){
+	$url = ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city];
+	$this->Breadcrumbs->add($state, $url);
 }
 if (!empty($city)) {
 	$url = empty($zip) ? '' : ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city];
@@ -33,10 +36,10 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 						<div class="panel-section expanded">
 							<header class="row">
 								<div class="col-md-12">
-									<h1 class="text-primary">Hearing aids <?= (!empty($is_near)) ? 'near' : 'in' ?> <?= $this->Clinic->nearText($region,$city,$zip) ?></h1>
+									<h1 class="text-primary">Hearing <?= Configure::read('regionalSpelling.center')?>s <?= (!empty($is_near)) ? 'near' : 'in' ?> <?= $this->Clinic->nearText($region,$city,$zip) ?></h1>
 								</div>
 							</header>
-							<p class="lead text-primary" id="filter-results">
+							<p class="lead text-primary mb20" id="filter-results">
 								<?php if($state == "Quebec") : ?>
 								<p>If you are looking for a clinic in Quebec, please visit the <a href="https://www.ordreaudio.qc.ca/chercher-un-audioprothesiste/" rel="noopener" target="_blank">Ordre des Audioprothésistes du Québec</a> website.</p>
 								<?php elseif (empty($locations)): ?>
@@ -65,8 +68,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 										<?php endif; ?>
 									</i>
 									<br>
-									<p><?= $siteName ?> provides listings from audiologists, hearing instrument specialists and hearing aid <?= Configure::read('regionalSpelling.center') ?>s near you. If you need hearing aids or a hearing test, choose a clinic from the list below to schedule an appointment in your area.
-									</p>
+									<p class="mb15"><?= $siteName ?> provides listings from audiologists, hearing instrument specialists and hearing aid <?= Configure::read('regionalSpelling.center') ?>s near you. If you need hearing aids or a hearing test, choose a clinic from the list below to schedule an appointment in your area.</p>
 									<?php if ($isAdmin): ?>
 										<?php
 										$exportLink = "/admin/locations/export";
@@ -78,7 +80,6 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 										<a href=<?= $exportLink ?> class="btn btn-default btn-xs">Export clinics for this area</a>
 									<?php endif; ?>
 								<?php endif; ?>
-							</p>
 						</div>
 					</div>
 				</section>
@@ -89,7 +90,9 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 		</div>
 	</div>
 </div>
-
+<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm" href="#top">
+	<p>Back to top</p>
+</a>
 <?php if (isFeatureOn('quick_pick')): ?>
 	<?= $this->element('responsive_slider'); ?>
 <?php endif; ?>

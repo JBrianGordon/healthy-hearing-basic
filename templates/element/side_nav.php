@@ -7,8 +7,7 @@ use Cake\Core\Configure;
 		<div class="col-sm-12">
 			<ul class="side-nav-links">
 				<li><span><strong class="invisible">Menu</strong></span></li>
-				<?php //TODO: review this logic. It matches existing code, but doesn't quite seem right. ?>
-				<?php if ($adminAccessAllowed/* && ($this->layout == 'admin' || $this->layout == 'clinic' || $this->layout == 'upgrade')*/): ?>
+				<?php if ($isClinic || isset($clinicPage)): ?>
 					<li><a href="/clinic/locations/edit" class="bi bi-globe2"> My Profile</a></li>
 					<li><a href="/clinic/ca_call_groups/report" class="bi bi-list-task"> Reporting</a></li>
 					<li><a href="/clinic/reviews" class="bi bi-star-fill"> Reviews</a></li>
@@ -16,7 +15,9 @@ use Cake\Core\Configure;
 					<li><a href="/clinic/pages/faq" class="bi bi-question-circle-fill"> Help</a></li>
 					<li><a href="/clinic/pages/about-ida" class="bi bi-award-fill"> Inspired by Ida</a></li>
 					<li><a href="/clinic/users/account" class="bi bi-person-fill"> My Account</a></li>
-					<li><a href="/logout" class="bi bi-power"> Logout</a></li>
+					<?php if ($isClinic || $adminAccessAllowed) : ?>
+						<li><a href="/logout" class="bi bi-power"> Logout</a></li>
+					<?php endif; ?>
 				<?php else: ?>
 					<li><a href="/hearing-aids" tabindex="-1">Find a clinic</a></li>
 					<li>
@@ -72,7 +73,7 @@ use Cake\Core\Configure;
 						<li><a href="/login">Login</a></li>
 					<?php endif; ?>
 					<?php if ($adminAccessAllowed): ?>
-						<li><a href="/admin-panel"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Admin</a></li>
+						<li><a href="/admin"><span class="bi bi-gear-fill" aria-hidden="true"></span> Admin</a></li>
 					<?php endif; ?>
 				<?php endif; ?>
 			</ul>

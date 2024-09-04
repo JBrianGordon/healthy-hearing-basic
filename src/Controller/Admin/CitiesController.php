@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CitiesTable $Cities
  * @method \App\Model\Entity\City[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CitiesController extends AppController
+class CitiesController extends BaseAdminController
 {
     /**
      * Initialize
@@ -23,6 +23,10 @@ class CitiesController extends AppController
         parent::initialize();
 
         $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
     }
@@ -45,6 +49,7 @@ class CitiesController extends AppController
             ->find('search', [
                 'search' => $requestParams,
             ]);
+        $this->set('title', 'Cities Index');
         $this->set('cities', $this->paginate($citiesQuery));
         $this->set('fields', $this->Cities->getSchema()->typeMap());
     }
@@ -66,6 +71,7 @@ class CitiesController extends AppController
             }
             $this->Flash->error(__('The city could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Add City');
         $this->set(compact('city'));
     }
 
@@ -90,6 +96,7 @@ class CitiesController extends AppController
             }
             $this->Flash->error(__('The city could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit City');
         $this->set(compact('city'));
     }
 

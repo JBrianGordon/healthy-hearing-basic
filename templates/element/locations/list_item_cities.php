@@ -38,7 +38,7 @@ $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationI
 			</div>
 			<div class="col-lg-6">
 				<div class="clinicPhone mb5" data-id="<?= $locationId ?>">
-					<div class="telephone h2"><span class="glyphicon glyphicon-earphone"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
+					<div class="telephone h2"><span class="bi bi-telephone-fill"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
 					<!-- Appointment request -->
 					<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 						<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>

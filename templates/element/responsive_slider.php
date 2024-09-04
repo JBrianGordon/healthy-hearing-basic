@@ -16,22 +16,22 @@ if ($this->Clinic->isDifferentCountry()) {
     <?php $this->append('bs-modals'); ?>
     <div data-hh-sticky-panel id="hh-sticky-panel">
         <div class="sticky-panel-handle">
-            <span class="handle-text"><?php echo $handleText; ?></span>
+            <span class="handle-text"><?= $handleText ?></span>
             <span class="close-icon"></span>
         </div>
         <div class="sticky-panel-body">
             <?php if (!$locationsPage): ?>
-                <p class="text-large">Find a trusted clinic near me:</p>
-                <?php echo $this->element('locations/search', [
+                <p class="text-large mb15">Find a trusted clinic near me:</p>
+                <?= $this->element('locations/search', [
                     'label' => 'Enter city',
                     'form_id' => 'sliderform',
                     'auto_id' => 'SliderSearchId',
                     'search_id' => 'SliderSearch',
                     'btnId' => 'SliderSearchBtn',
                     'autocomplete' => true
-                ]); ?>
+                ]) ?>
             <?php endif; ?>
-            <?php echo $this->element('fac_config_text', ["locationsPage" => $locationsPage]); ?>
+            <?= $this->element('fac_config_text', ["locationsPage" => $locationsPage]) ?>
         </div>
     </div>
     <?php $this->end(); ?>

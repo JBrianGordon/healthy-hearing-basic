@@ -21,10 +21,9 @@ class ShareHelper extends Helper
     * Map of social services to links
     */
     public $baseUrls = array(
-        'twitter' => 'https://twitter.com/intent/tweet?',
+        'twitter' => 'https://x.com/intent/tweet?',
         'googleplus' => 'https://plus.google.com/share?',
         'facebook' => 'https://www.facebook.com/sharer/sharer.php?',
-        'linkedin' => 'https://www.linkedin.com/shareArticle?mini=true&',
         'pinterest' => 'https://www.pinterest.com/pin/create/button/?',
     );
     
@@ -64,7 +63,7 @@ class ShareHelper extends Helper
                 'escape' => false,
                 'rel' => 'nofollow',
                 ),
-            'url' => $this->defaultUrl(),
+            'url' =>'https://x.com/intent/tweet',
             'text' => '',
         ), (array) $options);
 
@@ -104,58 +103,6 @@ class ShareHelper extends Helper
     }
 
     /**
-    * Facebook share link generator
-    *
-    * @param array of options
-    * - label: string label of the link (default to facebook image 32x32)
-    * - linkOptions: array of options to pass into the link (default 'target' => '_blank', 'escape' => false)
-    * - url: string of url to share (default to $this->here)
-    * @return string link
-    */
-    public function facebook($options = array()) {
-        $options = array_merge(array(
-            'label' => $this->Html->image('Icing.facebook.png'),
-            'linkOptions' => array(
-                'target' => '_blank',
-                'escape' => false,
-                'rel' => 'nofollow',
-            ),
-            'url' => $this->defaultUrl(),
-        ), (array) $options);
-
-        $data = array(
-            'u' => $options['url'],
-        );
-        $url = $this->buildShareUrl('facebook', $data);
-        return $this->shareLink($options['label'], $url, $options['linkOptions']);
-    }
-    
-    /**
-    * LinkedIn share link generator
-    *
-    * @param array of options
-    * - linkOptions: array of options to pass into the link (default 'target' => '_blank', 'escape' => false)
-    * - url: string of url to share (default to $this->here)
-    * @return string link
-    */
-    public function linkedin($options = array()) {
-        $options = array_merge(array(
-            'linkOptions' => array(
-                'target' => '_blank',
-                'escape' => false,
-                'rel' => 'nofollow',
-            ),
-            'url' => $this->defaultUrl(),
-        ), (array) $options);
-
-        $data = array(
-            'url' => $options['url'],
-        );
-        $url = $this->buildShareUrl('linkedin', $data);
-        return $this->shareLink($options['label'], $url, $options['linkOptions']);
-    }
-
-    /**
     * Pinterest share link generator
     *
     * @param array of options
@@ -175,7 +122,7 @@ class ShareHelper extends Helper
                 'escape' => false,
                 'rel' => 'nofollow',
             ),
-            'url' => $this->defaultUrl(),
+            'url' => 'https://www.pinterest.com/pin/create/button/',
             'image' => '',
             'text' => '',
         ), (array) $options);

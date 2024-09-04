@@ -38,9 +38,13 @@ class CaCall extends Entity
     const CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT = 'followup_appt_request_direct';
     const CALL_TYPE_FOLLOWUP_NO_ANSWER = 'followup_no_answer';
     const CALL_TYPE_FOLLOWUP_TENTATIVE_APPT = 'followup_tentative_appt';
+    // ***
+    // These call types are related to the old surveys.
+    // They are no longer used for new calls, but we have calls in the database with these types
     const CALL_TYPE_OUTBOUND_CLINIC = 'outbound_clinic';
     const CALL_TYPE_OUTBOUND_CALLER = 'outbound_caller';
     const CALL_TYPE_SURVEY_DIRECT = 'survey_direct';
+    // ***
     static $callTypes = [
         self::CALL_TYPE_INBOUND => 'Inbound call',
         self::CALL_TYPE_INBOUND_QUICK_PICK => 'Inbound quick-pick call',
@@ -55,9 +59,11 @@ class CaCall extends Entity
         self::CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT => 'Followup - appt request form - direct book',
         self::CALL_TYPE_FOLLOWUP_NO_ANSWER => 'Followup with consumer - clinic did not answer',
         self::CALL_TYPE_FOLLOWUP_TENTATIVE_APPT => 'Followup with clinic - verify tentative appt',
+        //**
         self::CALL_TYPE_OUTBOUND_CLINIC => 'Survey call to clinic',
         self::CALL_TYPE_OUTBOUND_CALLER => 'Survey call to consumer',
         self::CALL_TYPE_SURVEY_DIRECT => 'Survey via direct booking system'
+        //**
     ];
 
     /**

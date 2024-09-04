@@ -31,17 +31,17 @@ $this->Breadcrumbs->add([
 				        <?php foreach ($corps as $corp): ?>
 					        <div class="well manufacturer" id="manufacturer-<?= $corp->id ?>">
 					          <div class="row">
-					            <div class="col-lg-3 gutter-below">
+					            <div class="col-xl-3 gutter-below">
 						            <div class="logo-container">
 					            		<img src="<?= $corp->thumb_url ?>" loading="lazy" alt="<?= $corp->title ?>" class="img-responsive align-center" width="150px">
 						            </div>
 					            </div>
-					            <div class="col-lg-9">
+					            <div class="col-xl-9">
 					              <p>
 					                <?= $corp->short ?>
 					              </p>
 					              <p>
-					              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more</a>
+					              	<a href="<?= $corp->hh_url['slug'] ?>" class="text-link">Read more about <?= $corp->title ?></a>
 					              </p>
 					            </div>
 					          </div>

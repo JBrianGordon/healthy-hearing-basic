@@ -12,7 +12,7 @@ use Cake\View\JsonView;
  * @property \App\Model\Table\ProvidersTable $Providers
  * @method \App\Model\Entity\Provider[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ProvidersController extends AppController
+class ProvidersController extends BaseAdminController
 {
     /**
      * Initialize
@@ -24,6 +24,10 @@ class ProvidersController extends AppController
         parent::initialize();
 
         $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
     }
@@ -67,6 +71,7 @@ class ProvidersController extends AppController
                 'search' => $requestParams,
             ])
             ->contain(['Locations']);
+        $this->set('title', 'Providers Index');
         $this->set('fields', $this->Providers->getSchema()->typeMap());
         $this->set('providers', $this->paginate($providerQuery));
     }
@@ -111,6 +116,7 @@ class ProvidersController extends AppController
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
         $locations = $this->Providers->Locations->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Provider');
         $this->set(compact('provider', 'locations'));
     }
 
@@ -135,6 +141,7 @@ class ProvidersController extends AppController
             }
             $this->Flash->error(__('The provider could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit Provider');
         $this->set(compact('provider'));
     }
 

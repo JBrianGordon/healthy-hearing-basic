@@ -8,6 +8,7 @@ Configure::load('hhConfigs/config_adminMenu', 'default');
 $adminMenu = Configure::read('adminMenu');
 $userRole = isset($user->role) ? $user->role : '';
 
+$this->set('title', 'Admin');
 $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer', 'block' => true]);
 ?>
 <div class="container-fluid site-body fap-cities">
@@ -37,8 +38,8 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                           <div class="clearfix"></div>
                           <?php foreach ($adminMenu as $menuHeader => $menuContents): ?>
                             <?php
-                            $allowedRoles = $menuContents['permissions'];
-                            unset($menuContents['permissions']);
+                              $allowedRoles = $menuContents['permissions'];
+                              unset($menuContents['permissions']);
                             ?>
                             <?php if (in_array($user->role, $allowedRoles)): ?>
                               <div class="col panel panel-primary">
@@ -46,8 +47,8 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                   <h5 class="card-header bg-primary text-white panel-heading"><?= $menuHeader ?></h5>
                                   <div class="card-body">
                                     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-2 w-100 mx-auto">
-                                    <?php foreach ($menuContents as $itemTitle => $itemContents) : ?>
-                                        <?php if (array_key_exists('items', $itemContents)) : ?>
+                                      <?php foreach ($menuContents as $itemTitle => $itemContents) : ?>
+                                        <?php if (array_key_exists('items', $itemContents)): ?>
                                           <div class="col dropdown">
                                             <button class="btn btn-default dropdown-toggle w-100 rounded-pill"
                                               type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -61,9 +62,10 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                             <?php if (!empty($itemContents['items'])) : ?>
                                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <?php foreach ($itemContents['items'] as $subItemTitle => $subItem) : ?>
-                                                    <?php if ($subItemTitle == 'divider' && $subItem === true) : ?>
-                                                      <li><hr class="dropdown-divider"></li>
-                                                    <?php else : ?>
+                                                  <?php if ($subItemTitle == 'divider' && $subItem === true) : ?>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                  <?php else : ?>
+                                                    <?php if ($this->AuthLink->isAuthorized($subItem['url'])): ?>
                                                       <li>
                                                         <a class="dropdown-item" href="<?= $subItem['url'] ?>">
                                                           <?php if (!empty($subItem['icon'])) : ?>
@@ -73,24 +75,27 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                                                         </a>
                                                       </li>
                                                     <?php endif; ?>
+                                                  <?php endif; ?>
                                                 <?php endforeach; ?>
                                               </ul>
                                             <?php endif; ?>
                                           </div>
                                         <?php else : ?>
-                                          <div class="col">
-                                            <a class="btn btn-default w-100 rounded-pill"
-                                              href="<?= $itemContents['url'] ?>"
-                                              role="button"
-                                            >
-                                              <?php if (!empty($itemContents['icon'])) : ?>
-                                                    <?= '<i class="' . $itemContents['icon'] . '"></i> ' ?>
-                                              <?php endif; ?>
-                                              <?= $itemTitle ?>
-                                            </a>
-                                          </div>
+                                          <?php if ($this->AuthLink->isAuthorized($itemContents['url'])): ?>
+                                            <div class="col">
+                                              <a class="btn btn-default w-100 rounded-pill"
+                                                href="<?= $itemContents['url'] ?>"
+                                                role="button"
+                                              >
+                                                <?php if (!empty($itemContents['icon'])) : ?>
+                                                      <?= '<i class="' . $itemContents['icon'] . '"></i> ' ?>
+                                                <?php endif; ?>
+                                                <?= $itemTitle ?>
+                                              </a>
+                                            </div>
+                                          <?php endif; ?>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
+                                      <?php endforeach; ?>
                                     </div>
                                   </div>
                                 </div>

@@ -1,81 +1,86 @@
-# PHP
-# Test and package your PHP project.
-# Add steps that run tests, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+# # PHP
+# # Test and package your PHP project.
+# # Add steps that run tests, save build artifacts, deploy, and more:
+# # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
-trigger:
-- main
+# trigger:
+# - main
 
-pool:
-  vmImage: ubuntu-latest
+# pool:
+#   vmImage: ubuntu-latest
 
-variables:
-  phpVersion: 8.1
+# variables:
+#   phpVersion: 8.1
 
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    steps:
-    - script: |
-        sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-        sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-        sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-        sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-        sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-        php -version
-      displayName: 'Use PHP version $(phpVersion)'
-    - script: composer install --no-interaction --prefer-dist
-      displayName: 'composer install'
-    - script: |
-        bin/cake bootstrap install
-      displayName: 'bin/cake bootstrap install'
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '16.x'
-      displayName: 'Install Node.js'
-    - script: |
-        npm install
-      displayName: 'npm install'
-    - script: |
-        npm run build
-      displayName: 'npm run build'
-    - script: |
-        npm run compile-sass
-      displayName: 'npm run compile-sass'     
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(build.sourcesDirectory)'
-        includeRootFolder: false
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: drop1
-  - deployment: VMDeploy
-    displayName: Web deploy
-    dependsOn: Build
-    environment:
-      name: HH Dev
-      resourceType: VirtualMachine
-      tags: dev
-    strategy:
-      runOnce:
-       deploy:
-         steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop1'
-              downloadPath: '$(System.ArtifactsDirectory)'
-          - task: ExtractFiles@1
-            inputs: 
-              archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
-              destinationFolder: '/home/hhadmin/hh'
-          - script: |
-              sudo rm -r /var/www/hh/ &&
-              sudo cp -r /home/hhadmin/hh/ /var/www/hh/ &&
-              sudo cp /home/hhweb/app_local.php /var/www/hh/config/ &&
-              sudo chown -R hhweb:hhweb /var/www/hh
+# stages:
+# - stage: Build
+#   displayName: Build stage
+#   jobs:
+#   - job: Build
+#     displayName: Build
+#     steps:
+#     - script: |
+#         sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+#         sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+#         sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+#         sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+#         sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+#         php -version
+#       displayName: 'Use PHP version $(phpVersion)'
+#     - script: composer install --no-interaction --prefer-dist
+#       displayName: 'composer install'
+#     - script: |
+#         bin/cake bootstrap install
+#       displayName: 'bin/cake bootstrap install'
+#     - task: NodeTool@0
+#       inputs:
+#         versionSpec: '16.x'
+#       displayName: 'Install Node.js'
+#     - script: |
+#         npm install
+#       displayName: 'npm install'
+#     - script: |
+#         npm run build
+#       displayName: 'npm run build'
+#     - script: |
+#         npm run compile-sass
+#       displayName: 'npm run compile-sass'
+#     - task: ArchiveFiles@2
+#       inputs:
+#         rootFolderOrFile: '$(build.sourcesDirectory)'
+#         includeRootFolder: false
+#     - task: PublishBuildArtifacts@1
+#       inputs:
+#         pathToPublish: '$(Build.ArtifactStagingDirectory)'
+#         artifactName: drop1
+#   - deployment: VMDeploy
+#     displayName: Web deploy
+#     dependsOn: Build
+#     environment:
+#       name: HH Dev
+#       resourceType: VirtualMachine
+#       tags: dev
+#     strategy:
+#       runOnce:
+#        deploy:
+#          steps:
+#           - download: none
+#           - task: DownloadBuildArtifacts@0
+#             inputs:
+#               buildType: 'current'
+#               downloadType: 'single'
+#               artifactName: 'drop1'
+#               downloadPath: '$(System.ArtifactsDirectory)'
+#           - task: ExtractFiles@1
+#             inputs:
+#               archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.zip'
+#               destinationFolder: '/home/hhadmin/hh'
+#           - script: |
+#               sudo rm -r /var/www/dev/ &&
+#               sudo cp -r /home/hhadmin/hh/ /var/www/dev/ &&
+#               sudo cp /home/hhweb/dev/app_local.php /var/www/dev/config/ &&
+#               sudo chown -R hhweb:hhweb /var/www/dev &&
+#               sudo rm -r /var/www/ca-dev/ &&
+#               sudo cp -r /home/hhadmin/hh/ /var/www/ca-dev/ &&
+#               sudo cp /home/hhweb/ca-dev/app_local.php /var/www/ca-dev/config/ &&
+#               sudo chown -R hhweb:hhweb /var/www/ca-dev

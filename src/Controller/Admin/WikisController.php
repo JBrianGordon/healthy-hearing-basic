@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\Wikis;
 
 /**
  * Wikis Controller
@@ -11,8 +12,33 @@ use App\Controller\AppController;
  * @property \App\Model\Table\WikisTable $Wikis
  * @method \App\Model\Entity\Wiki[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class WikisController extends AppController
+class WikisController extends BaseAdminController
 {
+
+    /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+    }
+
+    public $paginate = [
+        'order' => [
+            'Wikis.priority' => 'ASC',
+        ],
+    ];
+    
     /**
      * Index method
      *
@@ -20,9 +46,17 @@ class WikisController extends AppController
      */
     public function index()
     {
-        $wikis = $this->paginate($this->Wikis);
+        $requestParams = $this->request->getQueryParams();
+        $wikiQuery = $this->Wikis
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
 
-        $this->set(compact('wikis'));
+        $this->set('title', 'Help index');
+        $this->set('wikis', $this->paginate($wikiQuery));
+        $this->set('count', $wikiQuery->count());
+
+        $this->set('fields', $this->Wikis->getSchema()->typeMap());
     }
 
     /**
@@ -35,6 +69,7 @@ class WikisController extends AppController
         $wiki = $this->Wikis->newEmptyEntity();
         if ($this->request->is('post')) {
             $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
@@ -42,8 +77,11 @@ class WikisController extends AppController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $users = $this->Wikis->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('wiki', 'users'));
+        $authors = $this->Wikis->Author->authorList();
+        $this->set('title', 'Add Help Page');
+        $this->set(compact('wiki', 'authors'));
+        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
     /**
@@ -56,10 +94,12 @@ class WikisController extends AppController
     public function edit($id = null)
     {
         $wiki = $this->Wikis->get($id, [
-            'contain' => ['Authors', 'Contributors', 'Reviewers', 'Tags'],
+            'contain' => ['Author', 'Contributors', 'Reviewers', 'Tags'],
         ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
@@ -67,8 +107,24 @@ class WikisController extends AppController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Authors->find('all', ['limit' => 200]);
+        $authors = $this->Wikis->Author->authorList();
+        $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
+        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set('reviewers', $this->Wikis->Author->reviewerList());
+    }
+
+    public function preview($id = null)
+    {
+        $wiki = $this->Wikis->get($id, [
+            'contain' => ['Author'],
+        ]);
+        $this->set('wiki', $wiki);
+        $this->set('isPreview', true);
+
+        // Set the template path to the non-prefixed template
+        $this->viewBuilder()->setTemplatePath('Wikis');
+        $this->render('view');
     }
 
     /**
@@ -106,7 +162,7 @@ class WikisController extends AppController
         $draftId = $this->Wikis->checkForDraft($id);
 
         if ($draftId > 0) {
-            $this->Flash->success('This report has an existing draft below.');
+            $this->Flash->success('This Help page has an existing draft below.');
 
             return $this->redirect(['action' => 'edit', $draftId]);
         }

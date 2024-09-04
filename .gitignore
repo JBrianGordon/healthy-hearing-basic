@@ -9,6 +9,8 @@ webpack_cache
 /vendor/*
 webroot/css/*
 !webroot/css/atf
+!webroot/css/ckeditor
+webroot/csvs/*
 webroot/js/dist/*.min.js*
 webroot/debug_kit
 webroot/coverage
@@ -50,3 +52,5 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
+# Deployer config
+deploy.php

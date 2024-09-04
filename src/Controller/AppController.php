@@ -19,6 +19,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -57,6 +58,19 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+    }
+
+    public function beforeRender(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeRender($event);
+
+        $SeoTitles = $this->getTableLocator()->get('SeoTitles');
+        $request = $this->request->getRequestTarget();
+        $seoTitle = $SeoTitles->findTitleByUri($request);
+
+        if ($seoTitle !== null) {
+            $this->set('title', $seoTitle['title']);
+        }
     }
 
     public function beforeFilter(EventInterface $event)
@@ -137,37 +151,6 @@ class AppController extends Controller
     }
 
     /**
-    * convenience method for adding to or replacing the HTML title of the page.
-    * @param string $title_text
-    * @param bool $overwrite (if true, replace)
-    * @param string $title_text
-    */
-    public function add_title($title_text=null,$overwrite=false) {
-        if (is_array($title_text)) {
-            $found_title = pluckValid($title_text,array('headtitle','title_head','title','slug','domain','id',));
-            if (empty($found_title)) {
-                foreach ( $title_text as $m => $data ) {
-                    if (empty($found_title)) {
-                        $found_title = pluckValid($data,array('headtitle','title_head','title','slug','domain','id',));
-                    }
-                }
-            }
-            $title_text = $found_title;
-        }
-        if (!empty($title_text)) {
-            if ($this->pageTitle == 'Healthy Hearing') {
-                $this->pageTitle = ''; //remove the generic Healthy Hearing from all page titles
-            }
-            if (empty($this->pageTitle) || $overwrite) {
-                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text)));
-            } else {
-                $this->pageTitle = str_replace('_',' ',trim(strip_tags($title_text))).' | '.$this->pageTitle;
-            }
-        }
-        return $title_text;
-    }
-
-    /**
     * checks if host is the host we're on
     * www1.healthyhearing.com is false
     * www.healthyhearing.com is true (in production)
@@ -238,5 +221,25 @@ class AppController extends Controller
 
     public function hasRecoveryEmail() {
         return (!empty($this->user->email));
+    }
+
+    public function throw404NotFound()
+    {
+        $contentTable = TableRegistry::getTableLocator()->get('Content');
+        $articles = $contentTable->findLatest(4);
+        $this->set('articles', $articles);
+
+        $this->render('/Error/error404');
+        $this->response = $this->response->withStatus(404);
+    }
+
+    public function throw410Gone()
+    {
+        $contentTable = TableRegistry::getTableLocator()->get('Content');
+        $articles = $contentTable->findLatest(4);
+        $this->set('articles', $articles);
+    
+        $this->render('/Error/error410');
+        $this->response = $this->response->withStatus(410);
     }
 }

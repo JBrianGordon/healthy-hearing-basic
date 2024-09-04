@@ -67,7 +67,7 @@ class AdminHelper extends Helper
     * @param string 'field'
     * @param string 'type'
     */
-    public function formInput($field, $type, $label=null, $options=false, $empty=false, $value=null) {
+    public function formInput($field, $type, $label=null, $options=false, $empty=false, $value=null, $placeholder=null) {
         $fieldSlug = mb_strtolower(Text::slug($field, '-'));
         $labelClass = isset($label['class']) ? $label['class'] : "";
         $label = isset($label['text']) ? $label['text'] : $label;
@@ -101,7 +101,7 @@ class AdminHelper extends Helper
                     'type' => 'checkbox',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label, 'class' => 'float-end'],
+                    'label' => ['text' => $label, 'class' => 'float-end', 'escape' => false],
                     'multiple' => null,
                 ]);
                 break;
@@ -112,9 +112,9 @@ class AdminHelper extends Helper
                 $formInput .= '<div class="input-group">';
                 $formInput .= '<label class="form-check-label col-md-5 tar" for="'.$fieldSlug.'">'.$label.'</label>';
                 $formInput .= '<div class="col-md-7 p0">';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
                 $formInput .= '<span>&nbsp; - &nbsp;</span>';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
                 $formInput .= '</div>';
                 $formInput .= '</div>';
                 break;
@@ -122,6 +122,7 @@ class AdminHelper extends Helper
                 $formInput = $this->Form->control($field, [
                     'type' => 'text',
                     'label' => ['text' => $label],
+                    'placeholder' => $placeholder
                 ]);
                 break;
         }

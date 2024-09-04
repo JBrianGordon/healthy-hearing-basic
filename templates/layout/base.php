@@ -4,18 +4,24 @@
  */
 
 use Cake\Core\Configure;
+if(empty($title)){
+    $title = $siteName;
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Healthy Hearing</title>
+    <title><?= empty($title) ? $siteName : $title ?></title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->element('google_tag_manager_head') ?>
+    <?= $this->element('google_tag_manager') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/roboto-v20-latin-regular.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/lato-regular.woff2" as="font" type="font/woff" crossorigin>
+
 
     <?= $this->fetch('meta') ?>
     <!-- Above the fold CSS -->
@@ -42,7 +48,7 @@ use Cake\Core\Configure;
             echo $this->Html->css('/css/atf/state-page.css');
         } elseif ($_SERVER['REQUEST_URI'] == '/about') {
             echo $this->Html->css('/css/atf/about.css');
-        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers') {
+        } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aid-manufacturers' || preg_match('/\/locations\/edit\//', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturers.css');
         } elseif (preg_match('/[A-Za-z]*-hearing-aids/', $_SERVER['REQUEST_URI']) || preg_match('/[A-Za-z]*-implants/', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/manufacturer.css');
@@ -54,7 +60,6 @@ use Cake\Core\Configure;
     ?>
 </head>
 <body>
-    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
@@ -65,7 +70,11 @@ use Cake\Core\Configure;
     <noscript><link rel="stylesheet" href="/css/responsive.css"></noscript>
     <?= $this->Html->css(['/bootstrap-icons-1.8.2/bootstrap-icons', 'BootstrapUI./font/bootstrap-icon-sizes']); ?>
     <?= $this->Html->script(['BootstrapUI.popper.min', 'BootstrapUI.bootstrap.min']); ?>
-    <?= $this->element('cookie_footer') ?>
+    <div id="footerContainer">
+        <?= $this->element('cookie_footer') ?>
+        <!-- Regex check to show sticky footer on city or clinic pages only-->
+        <?= preg_match('/\/hearing-aids\/([0-9]{5}\-[A-Za-z\-]+|[A-Z]{2}\-[A-Za-z\-]+\/[A-Za-z\-]+)/', $_SERVER['REQUEST_URI']) ? $this->element('sticky_footer') : '' ?>
+    </div>
 </body>
 <?= $this->fetch('script') ?>
 </html>

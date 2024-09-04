@@ -7,7 +7,7 @@ use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
 
 /**
- * ContactUs mailer.
+ * Admin mailer.
  */
 class AdminMailer extends Mailer
 {
@@ -19,12 +19,11 @@ class AdminMailer extends Mailer
     public static $name = 'Admin';
 
     /**
-     * Notify admins that a ContactUs form was submitted
-     * from either a hearing care professional or consumer
+     * Send a basic email to admin user. Use default template.
      *
-     * @param array $requestData ContactUs form data.
+     * @param array $email
      */
-    public function importComplete($email)
+    public function default($email)
     {
         $to = isset($email['to']) ? $email['to'] : Configure::read('customer-support-email');
         $subject = isset($email['subject']) ? $email['subject'] : "";

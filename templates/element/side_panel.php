@@ -8,6 +8,12 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 	$display = 'differentCountry';
 }
 
+//Set order on hearing test page
+$facOrder = $controller == 'QuizResults' ? ' style="order:1"' : ' style="order:9"';
+
+//Set order on recent articles
+$articleOrder = isset($errorPage) ? ' style="order:7"' : ' style="order:12"';
+
 //Set panel order depending on page, using flex
 //Hearing test panel
 if (Configure::read('showHearingTest') && ($controller == 'Locations')) {
@@ -25,7 +31,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages')): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages' || $controller == 'Sitemaps' || isset($errorPage))): ?>
 		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
@@ -35,24 +41,24 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php if(!empty($locations)): ?>
 		<section class="panel panel-secondary"<?= $preferredDisplay ?>>
 			<header class="panel-heading text-center">
-				<h3>Featured clinics near me</h3>
+				<h2 class="h3">Featured clinics near me</h2>
 			</header>
 			<div class="panel-body">
 				<?php if ($display === 'sameCountry'): ?>
 					<?php foreach($locations as $location): ?>
 						<div class="panel-section condensed">
 							<p class="text-small mb0">
-								<?php echo $this->Clinic->addressLink($location); ?>
+								<?= $this->Clinic->addressLink($location) ?>
 							</p>
 						</div>
 					<?php endforeach; ?>
 					<div class="tac">
 						<?php $nearMeLink = $this->Clinic->nearMeLink(); ?>
-						<a href="<?php echo $nearMeLink; ?>" class="btn btn-primary btn-xs m10 pl10 pr10">See more clinics</a>
+						<a href="<?= $nearMeLink ?>" class="btn btn-primary btn-xs m10 pl10 pr10">See more clinics</a>
 					</div>
 				<?php elseif ($display === 'differentCountry'): ?>
 					<div class="panel-section condensed">
-						<?php echo $this->element('locations/near_me/different_country'); ?>
+						<?= $this->element('locations/near_me/different_country') ?>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -68,13 +74,13 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 			</div>
 		</section>
 	<?php endif; ?>
-	<?= (Configure::read('showAds') && $controller != 'Wikis') ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if ((!empty($articles) && empty($wiki)) || isset($stateNice)): ?>
+	<?= (Configure::read('showAds') && $controller != 'Wikis' && !isset($errorPage)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
+	<?php if ((!empty($articles) && empty($wiki) && empty($page) && !isset($errorPage)) || isset($stateNice)): ?>
 		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
-	<section class="panel panel-secondary" style="order:9">
+	<section class="panel panel-secondary"<?= $facOrder ?>>
 		<header class="panel-heading text-center">
-			<h4>Find a clinic</h4>
+			<h2 class="h4">Find a clinic</h2>
 		</header>
 		<div class="panel-body pt20 pl20 pr20">
 			<?= $this->element('locations/search', ['label' => 'Enter city']) ?>
@@ -84,7 +90,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 	<?php if (!empty($contents)): ?>
 		<section class="panel panel-light related-reports" style="order:10">
 			<header class="panel-heading text-center">
-				<h4>Related content</h4>
+				<h2 class="h4">Related content</h2>
 			</header>
 			<table class="table table-bordered mb0">
 				<?php foreach ($contents as $content): ?>
@@ -98,26 +104,25 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && !empty($wiki)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if (Configure::read('showReports') && ($controller != 'quiz_results')): ?>
-		<section class="panel panel-light blog-previews" style="order:12">
+	<?php if (Configure::read('showReports') && ($controller != 'QuizResults') && !empty($articles)): ?>
+		<section class="panel panel-light blog-previews"<?= $articleOrder ?>>
 		<header class="panel-heading text-center">
 		  <h2>The Healthy Hearing Report</h2>
 		</header>
 		<div class="panel-body">
-		  <!--?php *** TODO: uncomment when recent articles logic built: $articles = ClassRegistry::init('Content')->findLatest(4);) ?-->
-		  <!--?php foreach ($articles as $content): ?-->
+		  <?php foreach ($articles as $content): ?>
 		    <div class="panel-section condensed blog-preview">
 		      <div class="row">
 		        <div class="col-sm-3">
-		          <!--?= $this->Content->dateHome($content, ['large' => false]); ?-->
+		          <?= $this->Editorial->dateHome($content, ['large' => false]); ?>
 		        </div>
 		        <div class="col-sm-9">
-		          <div class="subtitle"><!--?= $this->Content->getType(); ?--></div>
-		          <!--?= $this->Content->titleLink($content, ['class' => 'text-link text-small']); ?-->
+		          <div class="subtitle"><?= $this->Editorial->getType($content); ?></div>
+		          <?= $this->Editorial->titleLink($content, false, ['class' => 'text-link']); ?>
 		        </div>
 		      </div>
 		    </div>
-		  <!--?php endforeach; ?-->
+		  <?php endforeach; ?>
 		</div>
 		</section>
 	<?php endif; ?>

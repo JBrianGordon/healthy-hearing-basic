@@ -28,8 +28,9 @@ class WikisController extends AppController
         $this->layout = 'simple';
         $this->meta['description'] = "Read our most comprehensive articles on the topics of hearing loss, hearing aids and tinnitus. All reviewed by our staff editors and audiologists.";
         $this->setMeta('robots', 'INDEX, FOLLOW');
-        $title = Configure::read('siteName')." help: Hearing loss, hearing aids, tinnitus and more";
-        $this->add_title($title);
+        if (empty($title)) {
+            $this->set('title', $this->siteName . " help: Hearing loss, hearing aids, tinnitus and more");
+        }
         $this->backgroundHeight = '1200px';
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         $this->set('wikis', $this->Wikis->findForIndex());
@@ -61,12 +62,18 @@ class WikisController extends AppController
             return $this->redirect(array('action' => 'index'), 301);
         }
 
+        // TO-DO/REFACTOR LATER? If correct, findRedirectBySlug() above checks for
+        // is_active === 1/true.
+        // If false, it redirects to the "parent" wiki, which should mean that the
+        // admin-bypass in findBySlug() can't/won't be evaluated.
         if ($wiki = $this->Wikis->findBySlug($slug, $_SERVER['REQUEST_URI'], $this->isAdmin)) {
             //set up contents for sidebar
             $tagIds = array_column($wiki->tags, 'id');
             $this->set('tags', $tagIds);
             $this->Content = $this->fetchTable('Content');
+
             $contents = $this->Content->findByTags($tagIds, 6);
+
             $this->set('contents', $contents);
             $tagname = isset($wiki->tags[0]) ? $wiki->tags[0]->name : '';
             $this->set('tagname', $tagname);
@@ -86,12 +93,10 @@ class WikisController extends AppController
             $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
             $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
             $this->set('seoMetaTags', $seoMetaTags);
+            if (empty($title)) {
+                $this->set('title', isset($wiki->title_head) ? $wiki->title_head : $this->siteName);
+            }
 
-            $this->SeoTitles = $this->fetchTable('SeoTitles');
-            $seoTitle = $this->SeoTitles->findTitleByUri($request);
-            $this->set('seoTitle', $seoTitle);
-
-            $this->add_title($wiki->title_head);
             if (!empty($wiki->short)) {
                 $this->meta['description'] = $wiki->short;
             }

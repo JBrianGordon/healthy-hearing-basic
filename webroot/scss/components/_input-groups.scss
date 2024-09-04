@@ -10,6 +10,15 @@
     white-space: nowrap;
     display: table-cell;
     vertical-align: top;
+
+    &:last-child > .btn {
+      border-top-right-radius: $border-radius-base;
+      border-bottom-right-radius: $border-radius-base;
+      font-size: $font-size-base * 0.857;
+      font-weight: bold;
+      height: 48px;
+      margin-left: -1px;
+    }
   }
 
   > .form-control:focus {
@@ -17,13 +26,4 @@
     border-color: #03a9f4;
     box-shadow: none;
   }
-}
-
-.input-group-btn:last-child > .btn {
-  border-top-right-radius: $border-radius-base;
-  border-bottom-right-radius: $border-radius-base;
-  font-size: $font-size-base * 0.857;
-  font-weight: bold;
-  height: 46px;
-  margin-left: -1px;
 }

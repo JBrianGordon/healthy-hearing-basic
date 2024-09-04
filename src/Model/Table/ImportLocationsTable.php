@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
 /**
@@ -31,6 +32,8 @@ use Cake\Validation\Validator;
  */
 class ImportLocationsTable extends Table
 {
+    public $fields = [];
+
     /**
      * Initialize method
      *
@@ -46,6 +49,66 @@ class ImportLocationsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Search.Search');
+
+        $titleLabel = Configure::read('isYhnImportEnabled') ? 'Practice Name' : 'Title';
+        $subtitleLabel = Configure::read('isYhnImportEnabled') ? 'Location Name<br><small>not shown</small>' : 'Subtitle <small>not shown</small>';
+        $this->fields = [
+            [
+                'label' => $titleLabel,
+                'hh'    => 'title',
+            ],
+            [
+                'label' => $subtitleLabel,
+                'hh'    => 'subtitle',
+            ],
+            [
+                'label' => 'Phone',
+                'hh'    => 'phone',
+            ],
+            [
+                'label' => 'Email',
+                'hh'    => 'email',
+            ],
+            [
+                'label' => 'Address 1',
+                'hh'    => 'address',
+            ],
+            [
+                'label' => 'Address 2',
+                'hh'    => 'address_2',
+            ],
+            [
+                'label' => 'City',
+                'hh'    => 'city',
+            ],
+            [
+                'label' => Configure::read('stateLabel'),
+                'hh'    => 'state',
+            ],
+            [
+                'label' => ucwords(Configure::read('zipShort')),
+                'hh'    => 'zip',
+            ],
+            [
+                'label' => 'Is Retail',
+                'hh'    => 'is_retail',
+                'boolean' => true,
+            ],
+            [
+                'label' => 'Oticon ID<br><small>not shown</small>',
+                'hh'    => 'id_oticon',
+            ],
+        ];
+        if (Configure::read('isCqpImportEnabled')) {
+            $this->fields[] = [
+                'label' => 'CQP Practice ID<br><small>not shown</small>',
+                'hh'    => 'id_cqp_practice',
+            ];
+            $this->fields[] = [
+                'label' => 'CQP Office ID<br><small>not shown</small>',
+                'hh'    => 'id_cqp_office',
+            ];
+        }
 
         $this->belongsTo('Imports', [
             'foreignKey' => 'import_id',
@@ -82,7 +145,16 @@ class ImportLocationsTable extends Table
             ->value('Imports.type')
             ->exists('location_exists', ['fields' => 'location_id'])
             ->value('Locations.is_junk')
-            ->value('Locations.review_needed');
+            ->value('Locations.review_needed')
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['Locations.title', 'Locations.subtitle'],
+            ]);
     }
 
     /**
@@ -100,13 +172,22 @@ class ImportLocationsTable extends Table
         $validator
             ->scalar('id_external')
             ->maxLength('id_external', 50)
-            ->requirePresence('id_external', 'create')
-            ->notEmptyString('id_external');
+            ->allowEmptyString('id_external');
 
         $validator
             ->scalar('id_oticon')
             ->maxLength('id_oticon', 255)
             ->allowEmptyString('id_oticon');
+
+        $validator
+            ->scalar('id_cqp_practice')
+            ->maxLength('id_cqp_practice', 255)
+            ->allowEmptyString('id_cqp_practice');
+
+        $validator
+            ->scalar('id_cqp_office')
+            ->maxLength('id_cqp_office', 255)
+            ->allowEmptyString('id_cqp_office');
 
         $validator
             ->scalar('title')

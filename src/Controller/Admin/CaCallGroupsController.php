@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\CaCallGroup;
 
 /**
  * CaCallGroups Controller
@@ -11,7 +12,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CaCallGroupsTable $CaCallGroups
  * @method \App\Model\Entity\CaCallGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CaCallGroupsController extends AppController
+class CaCallGroupsController extends BaseAdminController
 {
     /**
      * Initialize
@@ -30,7 +31,12 @@ class CaCallGroupsController extends AppController
             'actions' => ['export']
         ]);
 
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+
         $this->paginate = [
+            'limit' => 30,
             'order' => ['CaCallGroups.id' => 'DESC']
         ];
     }
@@ -56,6 +62,7 @@ class CaCallGroupsController extends AppController
             'contain' => ['Locations', 'CaCalls'],
         ]);
         $spamCount = $this->CaCallGroups->find()->where(['is_spam' => true])->count();
+        $this->set('title', 'Outbound calls');
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
@@ -89,7 +96,7 @@ class CaCallGroupsController extends AppController
     public function edit($id = null)
     {
         $caCallGroup = $this->CaCallGroups->get($id, [
-            'contain' => [],
+            'contain' => ['Locations', 'CaCalls', 'CaCallGroupNotes'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $caCallGroup = $this->CaCallGroups->patchEntity($caCallGroup, $this->request->getData());
@@ -100,8 +107,8 @@ class CaCallGroupsController extends AppController
             }
             $this->Flash->error(__('The ca call group could not be saved. Please, try again.'));
         }
-        $locations = $this->CaCallGroups->Locations->find('list', ['limit' => 200])->all();
-        $this->set(compact('caCallGroup', 'locations'));
+        $this->set('title', 'Edit Call');
+        $this->set(compact('caCallGroup'));
     }
 
     /**
@@ -131,5 +138,99 @@ class CaCallGroupsController extends AppController
         $this->autoRender = false;
         $this->Export->exportCsv('export_call_groups.csv');
         die();
+    }
+
+    /**
+     * Outbound calls page
+     */
+    public function outbound()
+    {
+        $requestParams = $this->request->getData();
+        // Hide outbound calls that are scheduled for more than 1 month ago
+        $oneMonthAgo = getDateTime('-1 month', 'GMT', 'Y-m-d H:i:s');
+        $now = getDateTime('now', 'GMT', 'Y-m-d H:i:s');
+        $defaultStatus = [
+            CaCallGroup::STATUS_VM_NEEDS_CALLBACK,
+            CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED,
+            CaCallGroup::STATUS_FOLLOWUP_SET_APPT,
+            CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM,
+            CaCallGroup::STATUS_TENTATIVE_APPT,
+            CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER,
+        ];
+        $conditions = [
+            'ca_call_count >' => 0,
+            'status IN' => $defaultStatus,
+            'AND' => [
+                'scheduled_call_date >=' => $oneMonthAgo,
+                'scheduled_call_date <=' => $now,
+            ],
+            'is_spam' => false,
+        ];
+        if (!empty($requestParams['status'])) {
+            $status = $requestParams['status'];
+            if (str_contains($status, '!')) {
+                $status = array_diff($defaultStatus, [str_replace('!', '', $status)]);
+                $conditions['status IN'] = $status;
+            } elseif (str_contains($requestParams['status'], '[or]')) {
+                $conditions['status IN'] = explode('[or]', $requestParams['status']);
+            } else {
+                $conditions['status IN'] = [$status];
+            }
+        }
+        if (!empty($requestParams['score'])) {
+            $conditions['score'] = $requestParams['score'];
+        }
+        if (!empty($requestParams['is_appt_request_form'])) {
+            $conditions['is_appt_request_form'] = true;
+        }
+        if (!empty($requestParams['tzFilter'])) {
+            $timezoneConditions = $this->CaCallGroups->Locations->getTimezoneConditions($requestParams['tzFilter']);
+            if (!empty($timezoneConditions)) {
+                $conditions['Locations.timezone IN'] = $timezoneConditions;
+            }
+        }
+        $caCallGroupsQuery = $this->CaCallGroups->find('all', [
+            'conditions' => $conditions,
+            'contain' => ['Locations', 'CaCalls'],
+        ]);
+        $this->paginate['order'] = [];
+        $this->paginate['order'][] = "FIELD(status, '".
+            CaCallGroup::STATUS_VM_NEEDS_CALLBACK."', '".
+            CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED."', '".
+            CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER."', '".
+            CaCallGroup::STATUS_FOLLOWUP_SET_APPT."', '".
+            CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM."', '".
+            CaCallGroup::STATUS_TENTATIVE_APPT."')";
+        $this->paginate['order'][] = "scheduled_call_date ASC";
+        $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
+    }
+
+    /**
+    * Unlock a call group and redirect back to Outbound Calls page.
+    */
+    function unlock($id = null) {
+        if (!$id) {
+            $this->Flash->error('No ID given.');
+        } else {
+            if ($this->CaCallGroups->unlock($id)) {
+                $this->Flash->success("Cancelled and Unlocked");
+            } else {
+                $this->Flash->error("Unable to unlock $id");
+            }
+        }
+        $this->redirect(['action' => 'outbound']);
+    }
+
+    /**
+    * Display the report of Call Concierge Metrics based on initial call date
+    */
+    function metrics(){
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $startDate = $data['start_date'];
+            $endDate = $data['end_date'];
+            $this->set('report', $this->CaCallGroups->getAdminReport($startDate, $endDate));
+            $this->set(compact('startDate','endDate'));
+        }
     }
 }

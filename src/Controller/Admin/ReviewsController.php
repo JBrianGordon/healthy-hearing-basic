@@ -7,6 +7,9 @@ use App\Controller\AppController;
 use Cake\Log\LogTrait;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\View\JsonView;
+use Cake\Utility\Inflector;
+use Cake\View\ViewBuilder;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Reviews Controller
@@ -14,9 +17,10 @@ use Cake\View\JsonView;
  * @property \App\Model\Table\ReviewsTable $Reviews
  * @method \App\Model\Entity\Review[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ReviewsController extends AppController
+class ReviewsController extends BaseAdminController
 {
     use LogTrait;
+    use LocatorAwareTrait;
 
     public $paginate = [
         'limit' => 50,
@@ -34,6 +38,10 @@ class ReviewsController extends AppController
         parent::initialize();
 
         $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
     }
@@ -97,9 +105,10 @@ class ReviewsController extends AppController
 
         $reviewsQuery = $this->Reviews
             ->find('search', [
-                'search' => $requestParams,
+                'search' => formatSearchQuery($requestParams),
             ]);
 
+        $this->set('title', 'Reviews Index');
         $this->set('reviews', $this->paginate($reviewsQuery));
         $this->set('fields', $this->Reviews->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
@@ -123,6 +132,7 @@ class ReviewsController extends AppController
             $this->Flash->error(__('The review could not be saved. Please, try again.'));
         }
         $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
+        $this->set('title', 'Add Review');
         $this->set(compact('review', 'locations'));
     }
 
@@ -155,7 +165,7 @@ class ReviewsController extends AppController
         }
 
         $ipMatches = $this->Reviews->findIpMatches($review->id);
-
+        $this->set('title', 'Edit Review');
         $this->set(compact('review', 'ipMatches'));
     }
 
@@ -328,5 +338,84 @@ class ReviewsController extends AppController
         $this->viewBuilder()->setOption('serialize', 'data');
 
         return;
+    }
+
+    /**
+     * Export
+     */
+    public function export()
+    {
+        $extract = [
+            'id',
+            'location_id',
+            'body',
+            'first_name',
+            'last_name',
+            'zip',
+            'rating',
+            'is_spam',
+            'status',
+            'origin',
+            'response',
+            'created',
+            'denied_date',
+            'ip',
+            'character_count',
+            'location.listing_type',
+            'location.id_oticon',
+            'location.title',
+            'location.is_yhn',
+            'location.is_retail',
+            'location.email',
+            'location.hh_url'
+        ];
+        $locationFields = ['Locations.id', 'Locations.listing_type', 'Locations.id_oticon', 'Locations.title', 'Locations.is_yhn', 'Locations.is_retail', 'Locations.email'];
+        $containedTables = ['Locations' => ['fields' => $locationFields]];
+
+        $header = array_map(
+            function($item) {
+                return str_replace('location.', '', $item);
+            },
+            $extract
+        );
+        $header = array_map([new Inflector(), 'humanize'], $header);
+        $reviews = $this->Reviews
+            ->find('search', [
+                'search' => $this->request->getQueryParams(),
+            ])
+            ->contain($containedTables);
+
+        if ($reviews->count() < 2000) { // Immediately download small exports
+
+            $this->setResponse($this->getResponse()->withDownload('reviewsExport.csv'));
+            $this->set(compact('reviews'));
+            $this->viewBuilder()
+                ->setClassName('CsvView.Csv')
+                ->setOptions([
+                    'serialize' => 'reviews',
+                    'header' => $header,
+                    'extract' => $extract,
+                ]);
+
+        } else { // Email large exports
+
+            $data = [
+                'vars' => [
+                    'table' => 'Reviews',
+                    'queryParams' => $this->request->getQueryParams(),
+                    'containedTables' => $containedTables,
+                    'extract' => $extract,
+                    'header' => $header,
+                    'csvExportFile' => '/tmp/reviewsExport.csv',
+                    'to' => $this->user->email
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+
+            $this->Flash->success(__('Large file export. Results will be emailed.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }

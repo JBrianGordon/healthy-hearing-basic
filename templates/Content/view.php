@@ -28,6 +28,15 @@ $this->Breadcrumbs->add([
 ]);
 $isPreview = isset($isPreview) ? $isPreview : false;
 
+$meta = '<!--Facebook meta tags-->
+    <meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'].'" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="'.$content->facebook_title.'" />
+    <meta property="og:description" content="'.$content->facebook_description.'" />
+    <meta property="og:image" content="'.$content->facebook_image.'" />';
+
+$this->assign('meta', $meta);
+
 $contentSchema = '<script type="application/ld+json">{
 	"@context": "https://schema.org",
 	"@type": "NewsArticle",';
@@ -122,17 +131,17 @@ $this->Html->script('dist/content.min', ['block' => true]);
 			</div>
 		</div>
 		<div class="row page-content">
-			<span style="display:none;" id="is-preview"><?php echo $isPreview; ?></span>
-			<div class="col-lg-9 float-start" style="min-height:100vh">
+			<span style="display:none;" id="is-preview"><?= $isPreview ?></span>
+			<div class="col-lg-9 float-start">
 				<article class="panel">
 					<div class="print-wrapper">
 						<div class="print-head">
-							<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName'); ?>" class="print-logo" width="200" height="40">
-							<p class="print-link"><?= "www.".Configure::read('siteUrl'); ?></p>
+							<img src="<?= Configure::read('logo'); ?>" alt="<?= Configure::read('siteName');?>" class="print-logo" width="200" height="40">
+							<p class="print-link"><?= "www.".Configure::read('siteUrl') ?></p>
 						</div>
 						<div class="panel-body">
 							<div class="panel-section expanded">
-								<?php echo $this->Editorial->adminLink($content->id, $isAdmin);	?>
+								<?= $this->Editorial->adminLink($content->id, $isAdmin);	?>
 								<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>">
 									<?= $title ?>
 								</h1>
@@ -156,7 +165,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 								<div class="blog-categories noprint mt30">
 									Related Help Pages:
 									<?php foreach ($wikis as $wiki): ?>
-									    <?php echo $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'btn btn-default btn-xs']); ?>
+									    <?= $this->Html->link($wiki->name, $wiki->hh_url, ['class' => 'btn btn-default btn-xs']) ?>
 									<?php endforeach; ?>
 								</div>
 							</div>
@@ -165,6 +174,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 					<?php echo $this->element('content/share'); ?>
 				</article>
 			</div>
+			<?= $this->element('responsive_slider') ?>
 			<?= $this->element('side_panel') ?>
 		</div>
 	</div>

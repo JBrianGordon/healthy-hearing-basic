@@ -29,7 +29,7 @@ if (Configure::read('showManufacturers')) {
 }
 if (Configure::read('showAds')) {
     $editorialItems['Browse ads'] = [
-        'url' => '/admin/ad',
+        'url' => '/admin/ads',
         'icon' => 'bi bi-card-image',
     ];
 }
@@ -58,9 +58,6 @@ $locationsItems = [];
 $locationsItems['CRM'] = [
     'url' => '/admin/locations/index',
 ];
-$locationsItems['CRM searches'] = [
-    'url' => '/admin/crm-searches',
-];
 $locationsItems['Providers'] = [
     'url' => '/admin/providers',
     'icon' => 'bi bi-people-fill',
@@ -82,10 +79,10 @@ $locationsItems['Clinic portal'] = [
 $locationsItems['Cities'] = [
     'url' => '/admin/cities',
 ];
-$locationsItems[Inflector::pluralize(ucfirst('state'))] = [
+$locationsItems[Inflector::pluralize(ucfirst(Configure::read('stateLabel')))] = [
     'url' => '/admin/states',
 ];
-$zipCodes = Inflector::pluralize(ucfirst('zip code'));
+$zipCodes = Inflector::pluralize(ucfirst(Configure::read('zipLabel')));
 $locationsItems[$zipCodes] = [
     'url' => '/admin/zips',
 ];
@@ -142,10 +139,6 @@ if (Configure::read('isCallAssistEnabled')) {
         'url' => '/admin/ca-calls/clinic-lookup',
         'icon' => 'bi bi-telephone-inbound-fill',
     ];
-    $callAssistItems['Activation dashboard'] = [
-        'url' => '/admin/locations/activation-dashboard',
-        'icon' => 'bi bi-check2-square',
-    ];
     $callAssistItems['divider'] = true;
     $callAssistItems['Browse call groups'] = [
         'url' => '/admin/ca-call-groups',
@@ -201,25 +194,20 @@ $callTrackingMenu = [
 ********************************/
 $seoItems = [];
 $seoItems['Canonicals'] = [
-    'url' => '/admin/seo/seo-canonicals',
+    'url' => '/admin/seo-canonicals',
 ];
 $seoItems['Meta tags'] = [
-    'url' => '/admin/seo/seo-meta-tags',
+    'url' => '/admin/seo-meta-tags',
 ];
 $seoItems['Redirects'] = [
-    'url' => '/admin/seo/seo-redirects',
+    'url' => '/admin/seo-redirects',
 ];
 $seoItems['Status codes'] = [
-    'url' => '/admin/seo/seo-status-codes',
+    'url' => '/admin/seo-status-codes',
 ];
 $seoItems['Titles'] = [
-    'url' => '/admin/seo/seo-titles',
+    'url' => '/admin/seo-titles',
 ];
-if (Configure::read('showImageSitemap')) {
-    $seoItems['Image sitemap'] = [
-        'url' => '/admin/sitemaps/image-sitemap',
-    ];
-}
 $seoToolsMenu = [
     'icon' => 'bi bi-briefcase-fill',
     'items' => $seoItems,
@@ -242,8 +230,11 @@ $utilitiesItems['Clear cache'] = [
 $utilitiesItems['Clear session'] = [
     'url' => '/admin/utils/clear-session',
 ];
-$utilitiesItems['Queues'] = [
-    'url' => '/admin/queue/queue-tasks',
+$utilitiesItems['Queued Jobs'] = [
+    'url' => '/admin/utils/queued-jobs',
+];
+$utilitiesItems['CRM searches'] = [
+    'url' => '/admin/crm-searches',
 ];
 /*
 TODO: Hopefully Rsync will not be needed in Cake4
@@ -291,20 +282,34 @@ $itUtilitiesMenu = [
     'items' => $itUtilitiesItems,
 ];
 
-/*******************************
-* IT - Call Concierge (Legacy)
-********************************/
-$itConciergeLegacyItems = [];
-$itConciergeLegacyItems['Survey Calls'] = [
-    'url' => '/admin/ca-call-groups/surveys',
-    'icon' => 'bi bi-bullhorn',
+
+// Items for SEPARATE EDITORIAL MENU -- TESTING FOR NOW
+$browseReports = [
+    'url' => '/admin/content',
+    'icon' => 'bi bi-file-richtext',
 ];
-$itConciergeLegacyItems['Survey Metrics'] = [
-    'url' => '/admin/ca-call-groups/survey-metrics',
-    'icon' => 'bi bi-bar-chart-fill',
+$browseHelpPages = [
+    'url' => '/admin/wikis',
+    'icon' => 'bi bi-file-medical',
 ];
-$itConciergeLegacyMenu = [
-    'items' => $itConciergeLegacyItems,
+$browseCompanies = [
+    'url' => '/admin/corps',
+    'icon' => 'bi bi-building',
+];
+$browseAds = [
+    'url' => '/admin/ad',
+    'icon' => 'bi bi-card-image',
+];
+$addArticle = [
+    'url' => '/admin/content/edit',
+    'icon' => 'bi bi-plus-lg',
+];
+$miscPages = [
+    'url' => '/admin/pages',
+    'icon' => 'bi bi-book-fill',
+];
+$tags = [
+    'url' => '/admin/tags',
 ];
 
 /********************************
@@ -365,14 +370,6 @@ $returnCallFromClinic = [
     'icon' => 'bi bi-telephone-inbound-fill',
 ];
 
-/*******************************
-* CCA - Activation Dashboard
-********************************/
-$activationDashboard = [
-    'url' => '/admin/locations/activation-dashboard',
-    'icon' => 'bi bi-check2-square',
-];
-
 /***************************************************
 ********** Call Concierge Supervisor Menu **********
 ****************************************************/
@@ -413,47 +410,57 @@ $metricsRequestForm = [
 ********** Complete Admin Panel **********
 ******************************************/
 
-return [
-    'adminMenu' => [
-        'Admin' => [
-            'permissions' => ['admin', 'it_admin'],
-            'Editorial' => $editorialMenu,
-            'Locations - FAC' => $locationsMenu,
-            'Imports' => $importsMenu,
-            'Reviews' => $reviewsMenu,
-            'Call Concierge' => $callAssistMenu,
-            'Call Tracking' => $callTrackingMenu,
-            'SEO Tools' => $seoToolsMenu,
-            'Utilities' => $utilitiesMenu,
-        ],
-        'IT Admin' => [
-            'permissions' => ['it_admin'],
-            'IT - Utilities' => $itUtilitiesMenu,
-            'IT - Call Concierge' => $itConciergeLegacyMenu,
-        ],
-        'Writer' => [
-            'permissions' => ['writer', 'it_admin', 'admin'],
-            'Editorial' => $writerEditorialMenu,
-        ],
-        'Customer Support Assistant' => [
-            'permissions' => ['csa', 'it_admin', 'admin'],
-            'Locations - FAC' => $csaLocationsMenu,
-            'Imports' => $csaImportsMenu,
-            'Reviews' => $csaReviewsMenu,
-        ],
-        'Call Concierge Agent' => [
-            'permissions' => ['agent', 'call_supervisor', 'it_admin', 'admin'],
-            'Outbound Calls' => $outboundCalls,
-            'Add Inbound Call' => $addInboundCall,
-            'Return Call From Clinic' => $returnCallFromClinic,
-            'Activation Dashboard' => $activationDashboard,
-        ],
-        'Call Concierge Supervisor' => [
-            'permissions' => ['call_supervisor', 'it_admin', 'admin'],
-            'Browse Call Groups' => $browseCallGroups,
-            'Browse Calls' => $browseCalls,
-            'Metrics (Calls)' => $callMetrics,
-            'Metrics (Forms)' => $metricsRequestForm,
-        ],
-    ],
-];
+//**** Admin ****//
+$adminMenu['adminMenu']['Admin']['permissions'] = ['admin', 'it_admin'];
+$adminMenu['adminMenu']['Admin']['Editorial'] = $editorialMenu;
+$adminMenu['adminMenu']['Admin']['Locations - FAC'] = $locationsMenu;
+$adminMenu['adminMenu']['Admin']['Imports'] = $importsMenu;
+$adminMenu['adminMenu']['Admin']['Reviews'] = $reviewsMenu;
+if (Configure::read('isCallAssistEnabled')) {
+    $adminMenu['adminMenu']['Admin']['Call Concierge'] = $callAssistMenu;
+}
+$adminMenu['adminMenu']['Admin']['Call Tracking'] = $callTrackingMenu;
+$adminMenu['adminMenu']['Admin']['SEO Tools'] = $seoToolsMenu;
+$adminMenu['adminMenu']['Admin']['Utilities'] = $utilitiesMenu;
+
+//**** IT Admin ****//
+$adminMenu['adminMenu']['IT Admin']['permissions'] = ['admin', 'itadmin'];
+$adminMenu['adminMenu']['IT Admin']['IT - Utilities'] = $itUtilitiesMenu;
+
+//**** Editorial ****//
+$adminMenu['adminMenu']['Editorial']['permissions'] = ['admin', 'itadmin', 'editor'];
+$adminMenu['adminMenu']['Editorial']['Browse Reports'] = $browseReports;
+$adminMenu['adminMenu']['Editorial']['Browse help pages'] = $browseHelpPages;
+$adminMenu['adminMenu']['Editorial']['Browse ads'] = $browseAds;
+$adminMenu['adminMenu']['Editorial']['Add article'] = $addArticle;
+$adminMenu['adminMenu']['Editorial']['Misc. pages'] = $miscPages;
+$adminMenu['adminMenu']['Editorial']['Tags'] = $tags;
+
+//**** Writer ****//
+$adminMenu['adminMenu']['Writer']['permissions'] = ['writer', 'itadmin', 'admin'];
+$adminMenu['adminMenu']['Writer']['Editorial'] = $writerEditorialMenu;
+
+//**** Customer Support Assistant ****//
+$adminMenu['adminMenu']['Customer Support Assistant']['permissions'] = ['admin', 'itadmin', 'csa'];
+$adminMenu['adminMenu']['Customer Support Assistant']['Locations - FAC'] = $csaLocationsMenu;
+$adminMenu['adminMenu']['Customer Support Assistant']['Imports'] = $csaImportsMenu;
+$adminMenu['adminMenu']['Customer Support Assistant']['Reviews'] = $csaReviewsMenu;
+
+//**** Call Concierge Agent ****//
+if (Configure::read('isCallAssistEnabled')) {
+    $adminMenu['adminMenu']['Call Concierge Agent']['permissions'] = ['admin', 'itadmin', 'agent', 'call_supervisor'];
+    $adminMenu['adminMenu']['Call Concierge Agent']['Outbound Calls'] = $outboundCalls;
+    $adminMenu['adminMenu']['Call Concierge Agent']['Add Inbound Call'] = $addInboundCall;
+    $adminMenu['adminMenu']['Call Concierge Agent']['Return Call From Clinic'] = $returnCallFromClinic;
+}
+
+//**** Call Concierge Supervisor ****//
+if (Configure::read('isCallAssistEnabled')) {
+    $adminMenu['adminMenu']['Call Concierge Supervisor']['permissions'] = ['admin', 'itadmin', 'call_supervisor'];
+    $adminMenu['adminMenu']['Call Concierge Supervisor']['Browse Call Groups'] = $browseCallGroups;
+    $adminMenu['adminMenu']['Call Concierge Supervisor']['Browse Calls'] = $browseCalls;
+    $adminMenu['adminMenu']['Call Concierge Supervisor']['Metrics (Calls)'] = $callMetrics;
+    $adminMenu['adminMenu']['Call Concierge Supervisor']['Metrics (Forms)'] = $metricsRequestForm;
+}
+
+return $adminMenu;

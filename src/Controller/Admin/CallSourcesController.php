@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CallSourcesTable $CallSources
  * @method \App\Model\Entity\CallSource[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CallSourcesController extends AppController
+class CallSourcesController extends BaseAdminController
 {
     /**
      * Initialize
@@ -29,6 +29,10 @@ class CallSourcesController extends AppController
         $this->loadComponent('Export', [
             'actions' => ['export']
         ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
     }
     
     /**
@@ -42,16 +46,28 @@ class CallSourcesController extends AppController
             'contain' => ['Locations'],
         ];
         $requestParams = $this->request->getQueryParams();
+
         if (array_key_exists('saved_search', $requestParams)) {
             $this->set('savedSearch', true);
         } else {
             $this->set('savedSearch', false);
             $this->set('currentModel', 'CallSources');
         }
+
+        $fieldsToCheck = ['q', 'phone_number', 'target_number', 'clinic_number'];
+
+        foreach ($fieldsToCheck as $field) {
+            if (isset($requestParams[$field])) {
+                $requestParams[$field] = preg_replace('/\D/', '', $requestParams[$field]); // Remove non-numeric characters
+            }
+        }
+
         $callSourcesQuery = $this->CallSources
             ->find('search', [
                 'search' => $requestParams,
             ]);
+
+        $this->set('title', 'Call Sources Index');
         $this->set('callSources', $this->paginate($callSourcesQuery));
         $this->set('count', $callSourcesQuery->count());
         $this->set('fields', $this->CallSources->getSchema()->typeMap());

@@ -12,7 +12,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 			<div class="row pt20">
 				<div class="col-md-12">
 					<section class="panel">
-						<div class="panel-body clinicLayout">
+						<div class="panel-body clinicLayout anchor-underline">
 							<div class="panel-section expanded">
 								<h1 class="tac">Information for clinics</h1>
 								<div class="col-md-12"><?= $clinicPage ?></div>

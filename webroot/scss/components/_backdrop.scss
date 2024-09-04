@@ -22,6 +22,7 @@
 }
 .backdrop-height {
 	height: 1520px;
+  z-index: -1;
 	
 	&.backdrop-home-gradient {
 		height: 520px;
@@ -32,6 +33,7 @@
 	height: 520px;
 	position: absolute;
 	right: calc(50vw - 760px);
+  z-index: -1;
 	
 	@media only screen and (max-width: $screen-sm-max) {
 		height: auto;

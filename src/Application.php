@@ -30,6 +30,9 @@ use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Middlewares\TrailingSlash;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Event\EventInterface;
+use Muffin\Footprint\Middleware\FootprintMiddleware;
 
 /**
  * Application setup class.
@@ -57,6 +60,7 @@ class Application extends BaseApplication
                 (new TableLocator())->allowFallbackClass(false)
             );
         }
+        $this->addPlugin('Muffin/Footprint');
 
         $this->addPlugin(\CakeDC\Users\Plugin::class, ['routes' => true, 'bootstrap' => true]);
         Configure::write('Users.config', ['users']);
@@ -69,7 +73,7 @@ class Application extends BaseApplication
             Configure::write('DebugKit.safeTld', ['loc']);
             Configure::write('DebugKit.variablesPanelMaxDepth', 8);
             $this->addPlugin('DebugKit');
-            $this->addPlugin('IdeHelper');
+          //  $this->addPlugin('IdeHelper'); TEMPORARILY DISABLE FOR DEBUGKIT TO WORK ON dev4
         }
         $this->addPlugin('BootstrapUI');
         $this->addPlugin('Cake/Localized');
@@ -77,9 +81,17 @@ class Application extends BaseApplication
         $this->addPlugin('Sitemap', ['routes' => true]);
         $this->addPlugin('Recaptcha');
         $this->addPlugin('CsvView');
+        $this->addPlugin('Queue', ['routes' => false]);
 
         // Listener for CakeDC/users plugin Events
         $this->getEventManager()->on(new \App\Event\UsersListener());
+
+        $this->getEventManager()->on(
+            'Server.buildMiddleware',
+            function (EventInterface $event, MiddlewareQueue $middleware) {
+                $middleware->insertAfter(AuthenticationMiddleware::class, FootprintMiddleware::class);
+            }
+        );
     }
 
     /**
@@ -178,6 +190,6 @@ class Application extends BaseApplication
         $this->addOptionalPlugin('Bake');
 
         $this->addPlugin('Migrations');
-        $this->addPlugin('IdeHelper');
+        //$this->addPlugin('IdeHelper'); //Commented out for testing Deployer
     }
 }

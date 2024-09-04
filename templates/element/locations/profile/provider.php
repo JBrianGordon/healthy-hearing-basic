@@ -2,6 +2,7 @@
 use Cake\Core\Configure;
 
 $this->set('hideProvider', $hideProvider);
+$this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 ?>
 <!-- Provider -->
 <?php if(!$hideProvider): ?>
@@ -13,7 +14,7 @@ $this->set('hideProvider', $hideProvider);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<?php foreach($location->providers as $providerKey => $provider): ?>
-					<?php if(!empty($provider->title) || !empty($provider->credentials) || !empty($provider->thumb_url) || !empty($provider->description)) : ?>
+					<?php if((Configure::read('country') == 'CA' || $isEnhancedOrPremier || $providerKey < 1) && (!empty($provider['title']) || !empty($provider['credentials']) || !empty($provider['thumb_url']) || !empty($provider['description']))) : ?>
 						<div class="row provider-bio">
 							<?php if(!empty($provider->thumb_url) || (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name))): ?>
 								<div class="col-md-4">
@@ -26,8 +27,6 @@ $this->set('hideProvider', $hideProvider);
 									echo $this->Clinic->providerImage($provider, [
 										'class' => 'img-responsive',
 										'alt' => $alt,
-										'width' => 150,
-										'height' => 200
 									]);
 									?>
 									<?php if($provider->is_ida_verified): ?>
@@ -58,8 +57,8 @@ $this->set('hideProvider', $hideProvider);
 										<br class="br-mobile">
 										<span class="provider-qualifications"><?= $provider->credentials ?></span>
 										<?php if (Configure::read('showProviderCredentialButtons')): ?>
-											<a data-toggle='popover' data-trigger='hover click' data-bs-content='' data-html='true' data-bs-placement='bottom' class='cred-popover-<?= $providerKey; ?>'>
-												<span class='glyphicon glyphicon-question-sign'></span>
+											<a data-toggle="popover" data-bs-trigger="hover click" data-bs-placement="bottom" aria-label="popover icon" class="cred-popover-<?= $providerKey; ?>" href="">
+												<span class="bi bi-question-circle-fill"></span>
 											</a>
 										<?php endif; ?>
 									<?php endif; ?>

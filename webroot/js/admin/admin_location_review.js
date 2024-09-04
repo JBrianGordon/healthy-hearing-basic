@@ -1,50 +1,51 @@
 import '../common/common';
 
 
-function init() {
-  const reviewObj = this;
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.js-copy-left').forEach(element => {
     element.addEventListener('click', function() {
-      reviewObj.copyLeft(this);
+      copyLeft(this);
       return false;
     });
   });
 
   document.querySelectorAll('.js-link').forEach(element => {
     element.addEventListener('click', function() {
-      reviewObj.link(this);
+      link(this);
       return false;
     });
   });
 
-  document.querySelector('.js-add-all').addEventListener('click', function() {
-    reviewObj.addAll();
-    return false;
+  document.querySelectorAll('.js-add-all').forEach(element => {
+    element.addEventListener('click', function() {
+      addAll();
+      return false;
+    });
   });
 
   document.querySelectorAll('.js-add-provider').forEach(element => {
     element.addEventListener('click', function() {
-      reviewObj.addProvider(this);
+      addProvider(this);
       return false;
     });
   });
 
   document.querySelectorAll('.js-link-delete').forEach(element => {
     element.addEventListener('click', function() {
-      reviewObj.deleteProvider(this);
+      deleteProvider(this);
       return false;
     });
   });
 
   document.querySelectorAll('.js-link-cancel').forEach(element => {
     element.addEventListener('click', function() {
-      reviewObj.linkCancel(this);
+      linkCancel(this);
       return false;
     });
   });
 
-  reviewObj.highlightDifferences();
-}
+  highlightDifferences();
+});
 
 function copyLeft(obj) {
   const hhInput = obj.parentNode.previousElementSibling.querySelector('input, textarea');
@@ -155,5 +156,3 @@ function addProvider(obj) {
   }
 }
 
-
-init();

@@ -1,21 +1,60 @@
+// Close button styles
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .2;
+}
+
+// Common button styles
 .btn {
-	padding: 6px 17px;
-	font-size: 85%;
-	border-radius: 3em;
-	box-shadow:rgba(0,0,0,0.15) 0px 1px 2px;
-	text-transform: uppercase;
-	font-weight: bold;
-	line-height: 1.4;
-	
-	&.rounded-start {
-		border-bottom-left-radius: 3rem !important;
-		border-top-left-radius: 3rem !important;
-	}
+  padding: 6px 17px;
+  font-size: 85%;
+  border-radius: 3em;
+  box-shadow: rgba(0,0,0,0.15) 0px 1px 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 1.4;
+
+  &.rounded-start {
+    border-bottom-left-radius: 3rem !important;
+    border-top-left-radius: 3rem !important;
+  }
 
   &.btn-block {
     width: 100%;
     display: block;
   }
+
+  &.group-toggle {
+    float: right;
+  }
+
+  &.show {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+  }
+
+  &.btn-xs, .btn-group-xs > .btn {
+    padding: 3px 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 30px;
+  }
+}
+
+// Button variants
+.btn-primary {
+  @include button-variant($btn-primary-border, $btn-primary-bg, $btn-primary-color);
 }
 
 .btn-secondary {
@@ -25,9 +64,8 @@
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
 
-  &:hover {
-    background-color: #5499ba;
-    color: #fff;
+  &:hover{
+    color:#fff;
   }
 }
 
@@ -35,77 +73,61 @@
   @include button-variant($btn-neutral-color, $btn-neutral-bg, $btn-neutral-border);
 }
 
-.btn-default {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+.btn-info {
+  @include button-variant($btn-neutral-border, $btn-neutral-bg, $white);
 }
 
-.btn-lg {
-  // line-height: ensure even-numbered height of button next to large input
-  @include button-size(10px, 22px, 1.4, $btn-border-radius-large);
-}
-.btn-sm {
-  // line-height: ensure proper height of button next to small input
-  padding: 5px 12px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 3em;
-  
-  &.group-toggle {
-	  float: right;
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+
+  &:active, &:first-child:active, &:hover, &:target, &:focus, &:focus-within {
+    background-color: #e6e6e6;
+    border-color: #adadad;
   }
 }
-.btn-xs {
-  @include button-size(3px, 6px, 12px, $btn-border-radius);
+
+.btn-lg, .btn-group-lg > .btn {
+  padding: 10px 22px;
+  font-size: 15px;
+  line-height: 1.4;
+  border-radius: 3em;
 }
 
-.btn-print{
-	margin:10px 0;
-	text-transform: none;
-	
-	.hh-icon-printer{
-		font-size: 16px;
-	}
-	
-	&:focus{
-		outline: 0;
-	}
-}
-
-.btn-lg, .btn-group-lg>.btn {
-    padding: 10px 22px;
-    font-size: 15px;
-    line-height: 1.4;
-    border-radius: 3em;
-}
-
-.btn-group.show{
-	display: inline-block!important;
-	
-	ul.dropdown-menu.show {
-	    transform: none!important;
-	    top:100%!important;
-	}
+.btn-group.show {
+  display: inline-block!important;
+  
+  ul.dropdown-menu.show {
+    transform: none!important;
+    top:100%!important;
+  }
 }
 
 .btn-group {
   flex-wrap: wrap;
+
+  &.btn-group-xs > .btn {
+    padding: 3px 6px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  &.btn-group-vertical {
+    > .btn:not(:first-child){
+      margin-left:0;
+    }
+  }
   
-	>.btn:not(:first-child), >.btn-group:not(:first-child) {
-		margin-left: 0;
-	}
+  > .btn:not(:first-child), > .btn-group:not(:first-child) {
+    margin-left: 0;
+  }
 }
 
 .btn-group-vertical {
-  & > .btn:first-child:not(:last-child) {
-    border-top-left-radius: $border-radius-base;
-    border-top-right-radius: $border-radius-base;
-  }
-
+  & > .btn:first-child:not(:last-child),
   & > .btn:last-child:not(:first-child) {
-    border-bottom-left-radius: $border-radius-base;
-    border-bottom-right-radius: $border-radius-base;
+    border-radius: $border-radius-base;
   }
 }
 
@@ -114,38 +136,39 @@
     display: block;
     margin: 1em 0;
     width: 100%;
-  }
 
-  @media only screen and (min-width: $screen-sm-min) {
-
-    .btn {
+    @media only screen and (min-width: $screen-sm-min) {
       display: inline-block;
       width: auto;
     }
-  }
 
-  @media only screen and (min-width: $screen-lg-min) {
-    & > .btn + .btn {
-      margin-left: 1em;
+    @media only screen and (min-width: $screen-lg-min) {
+      & + .btn {
+        margin-left: 1em;
+      }
     }
   }
 }
 
-.btn-share {
+// Share button styles
+.btn-share, .IN-widget {
   background: $brand-primary;
   border-radius: 18px;
   color: $body-bg;
   height: 35px;
-  line-height: 30px;
-  padding: 3px 1.5em;
+  line-height: 30px!important;
+  padding: 3px 1.5em!important;
   text-transform: none;
 
   &:hover, &:focus, &:active {
     color: $white;
+    background-color: $btn-primary-bg;
   }
 
   [class*="hh-icon-"] {
     font-size: 16px;
+    position: relative;
+    top: 1px;
   }
 
   .badge {
@@ -159,79 +182,101 @@
   }
 }
 
+.btn-print {
+  &:hover, &:focus, &:active {
+    color: $white;
+    @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+  }
+}
+
+// Badge button styles
 .btn-badge {
   padding: 3px 3px 3px 1em;
 }
 
+// Social media buttons
 .btn-facebook {
   background: $color-facebook;
-}
 
-.btn-twitter {
-  background: $color-twitter;
+  .fb-xfbml-parse-ignore {
+    color: $white;
+  }
 }
-
-.btn-linkedin {
+.btn-twitter { background: $color-twitter; }
+.IN-widget { 
   background: $color-linkedin;
-}
+  margin: 13.6px 0 13.6px 13.6px!important;
 
-.btn-pinterest {
-  background: $color-pinterest;
-}
+  &:hover {
+    background: #006097;
 
-.btn-google-plus {
-  background: $color-google-plus;
-}
+    > span > button {
+      background-color: #006097!important;
+    }
+  }
 
+  button {
+    font-size: 14px!important;
+  }
+}
+.btn-pinterest { 
+  background: $color-pinterest; 
+  margin-left: 13.6px!important;
+}
+.btn-google-plus { background: $color-google-plus; }
+
+// Cookie button styles
 .btn-cookie {
-  @media(max-width: $screen-sm-max){
+  @media (max-width: $screen-sm-max) {
     display: block;
     margin: 0 auto;
   }
 }
 
-.directions-link{
-    margin: 10px auto 0;
-    display: block;
-    max-width: 220px;
+// Directions link styles
+.directions-link {
+  margin: 10px auto 0;
+  display: block;
+  max-width: 220px;
 }
 
-#more-reviews-button {
-  margin: 0 auto;
-}
-
+// More and fewer reviews buttons
+#more-reviews-button,
 #fewer-reviews-button {
-	display: none;
   margin: 0 auto;
+  display: none;
 }
 
+// Export button styles
 span#exportClose {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-weight: bold;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 #exportSubmit {
-	display: block;
-	clear: both;
-	margin: 0 auto;	
+  display: block;
+  clear: both;
+  margin: 0 auto;
 }
 
+// Floating save button
 #floatingSave {
-    position: fixed;
-    right: 20px;
-    bottom: 0px;
-    padding: 10px 20px;
-    border-radius: 20px 20px 0 0;
-    border: 5px solid $btn-secondary-border;
-    background: #fff;
-    color: $text-color;
-    z-index: 2;
+  position: fixed;
+  right: 20px;
+  bottom: 0px;
+  padding: 10px 20px;
+  border-radius: 20px 20px 0 0;
+  border: 5px solid $btn-secondary-border;
+  background: #fff;
+  color: $text-color;
+  z-index: 2;
 }
 
+// Unlock title button
 #titleUnlock {
-    position: absolute;
-    left: 75%;
+  position: absolute;
+  left: 75%;
 }

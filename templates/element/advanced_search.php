@@ -8,7 +8,9 @@ $fields = [
         'type',
         'label',
         'options',
-        'empty'
+        'empty',
+        'value',
+        'placeholder'
     ],
     '1' => [
         'checkboxGroupName',
@@ -18,7 +20,9 @@ $fields = [
                 'type',
                 'label',
                 'options',
-                'empty'
+                'empty',
+                'value',
+                'placeholder'
             ],
         ]
     ]
@@ -31,7 +35,9 @@ $groupedFields = [
             'type',
             'label',
             'options',
-            'empty'
+            'empty',
+            'value',
+            'placeholder'
         ],
         ...
     ]
@@ -48,11 +54,11 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php if (!empty($this->request->getQueryParams())) : ?>
-        <div class="col col-md-auto p-0">
-            Showing search results.
-            <?= $this->Html->link('Reset', ['?'=>''], ['class' => 'btn btn-info btn-sm', 'role' => 'button']) ?>
-        </div>
+    <?php if ($this->Search->isSearch()) : ?>
+            <div class="col col-md-auto p-0">
+                Showing search results.
+                <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
+            </div>
     <?php endif; ?>
     <div class="col col-md-auto mb20">
         <span class="btn btn-primary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#advanced_search" aria-expanded="false" aria-controls="advanced_search">
@@ -61,12 +67,7 @@ $this->loadHelper('Search.Search', [
     </div>
 </div>
 <div class="collapse well blue-well" id="advanced_search">
-    <?php
-    echo $this->Form->create(null, [
-        'class' => 'mb-2',
-        'valueSources' => 'query',
-    ]);
-    ?>
+    <?= $this->Form->create(null, ['class' => 'mb-2','valueSources' => 'query']) ?>
     <!-- GROUPED FIELDS -->
     <?php if (!empty($groupedFields)): ?>
         <?php foreach ($groupedFields as $groupName => $groupFields): ?>
@@ -79,7 +80,7 @@ $this->loadHelper('Search.Search', [
                 <div class="mb-3 filter-group<?= $groupName == "generalDemographics" ? "" : " hidden"?>" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
                     <?php $column = 1; ?>
                     <?php foreach ($groupFields as $field): ?>
-                        <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
+                        <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value'], $field['placeholder']); ?>
                         <?php if ($column == 1): ?>
                             <div class="row" style="min-height: 74px;">
                                 <div class="col-md-6">
@@ -119,7 +120,7 @@ $this->loadHelper('Search.Search', [
 	                    </div> <!-- end col -->
 	                </div> <!-- end row -->
 	            <?php else: ?>
-	                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value']); ?>
+	                <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value'], $field['placeholder']); ?>
 	                <?php if ($column == 1): ?>
 	                    <div class="row" style="min-height: 74px;">
 	                        <div class="col-md-6">

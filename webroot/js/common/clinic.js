@@ -26,11 +26,18 @@ const clinic = new Clinic();
 document.addEventListener('DOMContentLoaded', () => {
 
 	window.addEventListener('hashchange', () => {
-	  const offset = window.pageYOffset;
-	  window.scrollTo({
-	    top: offset - 70,
-	    behavior: 'smooth'
-	  });
+    const targetElementId = window.location.hash.substring(1);
+    const targetElement = document.getElementById(targetElementId);
+
+    if (targetElement) {
+        const offset = 70;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
 	});
 
 	// Rearrange clinic elements on mobile
@@ -282,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  }
 	  if (popoverData !== "") {
 	    const popoverElement = document.querySelector(".cred-popover-" + i);
-	    popoverElement.setAttribute("data-content", popoverData);
+	    popoverElement.setAttribute("data-bs-content", popoverData);
 	  } else {
 	    const emptyPopoverElement = document.querySelector(".cred-popover-" + i);
 	    if (emptyPopoverElement) {

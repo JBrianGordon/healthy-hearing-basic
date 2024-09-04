@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * States Controller
@@ -11,7 +12,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\StatesTable $States
  * @method \App\Model\Entity\State[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class StatesController extends AppController
+class StatesController extends BaseAdminController
 {
 	
 	public $paginate = [
@@ -29,27 +30,8 @@ class StatesController extends AppController
     {
         $states = $this->paginate($this->States);
 
+        $this->set('title', Configure::read('stateLabel') . ' Index');
         $this->set(compact('states'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $state = $this->States->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $state = $this->States->patchEntity($state, $this->request->getData());
-            if ($this->States->save($state)) {
-                $this->Flash->success(__('The state has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The state could not be saved. Please, try again.'));
-        }
-        $this->set(compact('state'));
     }
 
     /**
@@ -73,6 +55,7 @@ class StatesController extends AppController
             }
             $this->Flash->error(__('The state could not be saved. Please, try again.'));
         }
+        $this->set('title', 'Edit ' . Configure::read('stateLabel'));
         $this->set(compact('state'));
     }
 

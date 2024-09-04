@@ -94,24 +94,24 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
                                             <button id="copyLink" class="btn btn-light mb20" value="<?= Router::url($location->hh_url, true) ?>">Copy link</button>
                                         <?php endif; ?>
                                             <tr>
-                                                <th style="min-width:115px"><?php echo $this->Paginator->sort('created', 'Date') ?></th>
-                                                <th><?php echo $this->Paginator->sort('first_name', 'Name') ?></th>
-                                                <th><?php echo $this->Paginator->sort('body', 'Review') ?></th>
-                                                <th><?php echo $this->Paginator->sort('origin', 'Origin') ?></th>
-                                                <th><?php echo $this->Paginator->sort('status', 'Status') ?></th>
+                                                <th style="min-width:115px"><?= $this->Paginator->sort('created', 'Date') ?></th>
+                                                <th><?= $this->Paginator->sort('first_name', 'Name') ?></th>
+                                                <th><?= $this->Paginator->sort('body', 'Review') ?></th>
+                                                <th><?= $this->Paginator->sort('origin', 'Origin') ?></th>
+                                                <th><?= $this->Paginator->sort('status', 'Status') ?></th>
                                                 <th style="min-width:175px"><a href="#">Respond</a></th>
                                             </tr>
                                             <?php   foreach($reviews as $review):   ?>
                                                 <tr>
-                                                    <td class="center"><?php echo dateTimeCentralToEastern($review->created); ?></td>
+                                                    <td class="center"><?= dateTimeCentralToEastern($review->created) ?></td>
                                                     <td>
                                                         <?= $this->Clinic->formatReviewSignature($review, ['name' => 'full']); ?><br />
                                                         <?= $review->zip;?>
                                                     </td>
                                                     <td class="center">
-                                                        <?php echo $this->element('locations/review_body', ['review' => $review, 'hideName' => true, 'clinicName' => $location->title]); ?>
+                                                        <?= $this->element('locations/review_body', ['review' => $review, 'hideName' => true, 'clinicName' => $location->title]) ?>
                                                     </td>
-                                                    <td class="center"><?php echo ReviewOrigin::from($review->origin)->getOriginLabel(); ?></td>
+                                                    <td class="center"><?= ReviewOrigin::from($review->origin)->getOriginLabel() ?></td>
                                                     <td class="center">
                                                         <?php
                                                         $status = ReviewStatus::from($review->status)->getStatusLabel();
@@ -141,13 +141,13 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
                                                 <tr><td colspan="6" class="center">No reviews found.</td></tr>
                                             <?php endif; ?>
                                         </table>
-                                        <p>Please contact <?php echo $this->Html->link(Configure::read('siteName'), Router::url('/contact-us', true), ['target' => '_blank']); ?> at 
+                                        <p>Please contact <?= $this->Html->link(Configure::read('siteName'), Router::url('/contact-us', true), ['target' => '_blank']) ?> at 
                                         <?php
                                             $email = Configure::read('customer-support-email');
                                             $emailLink = str_replace('/clinic/reviews/', '', 'mailto:' . $email);
                                             echo $this->Html->link($email, $emailLink);
                                             ?> if you'd like some tips on how to respond to reviews.</p>
-                                        <?php echo $this->element('pagination', ['options' => $options]); ?>
+                                        <?= $this->element('pagination', ['options' => $options]) ?>
                                     <?php endif; ?>
                                 </div>
                             </div>

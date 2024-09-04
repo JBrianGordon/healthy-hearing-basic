@@ -1,9 +1,9 @@
 #Results {
-	@media (max-width: 768px) {
+	@media (max-width: $screen-sm-max) {
 		margin-left: 5%;
 		margin-right: 5%;
 	}
-	
+
 	#test-result {
 		> div {
 			img {
@@ -16,27 +16,46 @@
 		}
 	}
 }
+
 #near-me-results {
-	margin-bottom: 2em;
-	margin-left: 1em;
+	margin-bottom: 60px;
+	margin-left: 30px;
 }
+
+.modal-lg {
+	width: auto;
+	max-width: none;
+
+	@media (min-width: 768px) {
+		width: 600px;
+	}
+
+	@media (min-width: 992px) {
+		width: 900px;
+	}
+}
+
 .test-overlay {
 	.test-page {
 		margin: 10% 10% 0px;
 	}
+
 	.hearing-test-icon {
 		float: left;
 		position: absolute;
 		bottom: 32px;
 		left: 48px;
 		width: 175px;
+
 		@media (max-width: 480px) {
 			display: none;
 		}
+
 		@media (max-width: 700px) {
 			width: auto;
 		}
 	}
+
 	.next-btn, .prev-btn {
 		float: right;
 	}
@@ -56,49 +75,57 @@
 		bottom: 15px;
 		right: 130px;
 	}
+
 	.modal-body {
 		max-height: 700px;
 		min-height: 400px;
 		padding: 0;
 		margin: 0 auto;
-		text-align:center;
+		text-align: center;
 	}
+
 	.questions-container {
 		max-width: 680px;
-		margin-top:32px;
-		margin-bottom:16px;
+		margin-top: 32px;
+		margin-bottom: 16px;
 	}
+
 	.questions {
 		text-align: center;
 		font-size: 24px;
 		line-height: 27px;
 		font-weight: bold;
+
 		@media (max-width: 480px) {
 			font-size: 20px;
 			line-height: 24px;
 		}
 	}
+
 	.answers {
 		text-align: center;
-		font-size:20px;
+		font-size: 20px;
 		margin: auto;
 		width: 200px;
 	}
+
 	input[type="radio"] {
-		display:none;
+		display: none;
 	}
+
 	input[type="radio"] + label {
 		margin: 17px 3px 20px 38px;
 		padding: 0;
 		font-size: 20px;
 	}
+
 	input[type="radio"]:checked + label {
-		//.sprite-test-check-mark
 		background-position: -10px -10px;
 		width: 32px;
 		height: 32px;
 	}
 }
+
 .sprite-label {
 	margin-top: -52px;
 	float: left;
@@ -107,19 +134,14 @@
 	text-align: left;
 	margin-left: 85px;
 }
+
 .tweet-button {
 	width: 75px;
 	float: left;
 }
+
 /* Sprites */
-.sprite-test{ background: url('/img/quiz/hearing-test-sprite.png') no-repeat top left; }
-.sprite-test-check-mark{ background-position: -10px -10px; width: 32px; height: 32px; }
-.sprite-test-answer-box:hover{ background-position: -10px -62px; width: 32px; height: 32px; }
-.sprite-test-answer-box{ background-position: -10px -114px; width: 32px; height: 32px; }
-.sprite-test-close:hover{ background-position: 0 -263px; width: 98px; height: 34px; }
-.sprite-test-close{ background-position: 0 -347px; width: 98px; height: 34px; }
-.sprite-test-hearing-title{ background-position: 0 -431px; width: 202px; height: 25px; }
-.sprite-test-next:hover{ background-position: 0 -506px; width: 100px; height: 138px; }
-.sprite-test-next{ background-position: 0 -694px; width: 100px; height: 138px; }
-.sprite-test-previous:hover{ background-position: 0 -882px; width: 100px; height: 138px; }
-.sprite-test-previous{ background-position: 0 -1070px; width: 100px; height: 138px; }
+.sprite-test { background: url('/img/quiz/hearing-test-sprite.png') no-repeat top left; }
+.sprite-test-check-mark { background-position: -10px -10px; width: 32px; height: 32px; }
+.sprite-test-answer-box:hover { background-position: -10px -62px; width: 32px!important; height: 32px; }
+.sprite-test-answer-box { background-position: -10px -114px; width: 32px!important; height: 32px;}

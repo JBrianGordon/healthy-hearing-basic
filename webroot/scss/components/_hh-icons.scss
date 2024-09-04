@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'hh-icons';
-  src:url('/font/hh-icons.eot?j17ed6');
-  src:url('/font/hh-icons.eot?#iefixj17ed6') format('embedded-opentype'),
-    url('/font/hh-icons.woff?j17ed6') format('woff'),
-    url('/font/hh-icons.ttf?j17ed6') format('truetype'),
-    url('/font/hh-icons.svg?j17ed6#hh-icons') format('svg');
+  src: url('/font/hh-icons.eot?j17ed6');
+  src: url('/font/hh-icons.eot?#iefixj17ed6') format('embedded-opentype'),
+       url('/font/hh-icons.woff?j17ed6') format('woff'),
+       url('/font/hh-icons.ttf?j17ed6') format('truetype'),
+       url('/font/hh-icons.svg?j17ed6#hh-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,16 +14,8 @@
   @include hh-icon();
 }
 
-.hh-icon-social-07:before {
-  content: "\e610";
-}
-
 .hh-icon-address:before {
   content: "\e60f";
-}
-
-.hh-icon-link:before {
-  content: "\e616";
 }
 
 .hh-icon-full-star:before {
@@ -36,14 +28,6 @@
 
 .hh-icon-outline-star:before {
   content: "\e613";
-}
-
-.hh-icon-phone:before {
-  content: "\e614";
-}
-
-.hh-icon-website:before {
-  content: "\e615";
 }
 
 .hh-icon-printer:before {
@@ -62,25 +46,7 @@
   content: "\e603";
 }
 
-.hh-icon-arrow:before {
-  content: "\e604";
-}
-
-.hh-icon-caret:before {
-  content: "\e605";
-}
-
-.hh-icon-caret-right {
-  display: inline-block;
-  transform: rotate(90deg);
-  vertical-align: middle;
-
-  &:before {
-    content: "\e605";
-  }
-}
-
-.hh-icon-facebook.clinic-share, .hh-icon-twitter.clinic-share, .hh-icon-youtube.clinic-share {
+.hh-icon-facebook.clinic-share, .hh-icon-x.clinic-share, .hh-icon-youtube.clinic-share {
   color: $share-icon-gray;
   margin: 5px 2px 5px 5px;
 }
@@ -89,19 +55,19 @@
   content: "\e606";
 }
 
-.hh-icon-twitter:before {
-  content: "\e607";
-}
-
-.hh-icon-google:before {
-  content: "\e608";
+.hh-icon-x {
+  background-image: url("../img/x-logo-white.png");
+  background-size: contain;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
 }
 
 .hh-icon-youtube:before {
   content: "\e617";
 }
 
-.hh-icon-linkedin{
+.hh-icon-linkedin {
   background-image: url("../img/linkedin-bug.png");
   background-size: contain;
   width: 16px;
@@ -110,90 +76,41 @@
   display: inline-block;
 }
 
-.hh-icon-pinterest:before {
-  content: "\e609";
+.hh-icon-pinterest {
+  background-image: url("../img/pinterest.svg");
+  background-size: contain;
+  width: 16px;
+  height: 16px;
+  margin-bottom: -2px;
+  display: inline-block;
 }
 
 .hh-icon-circle-facebook:before {
   content: "\e60a";
 }
 
-.hh-icon-circle-twitter:before {
-  content: "\e60b";
+.hh-icon-circle-x {
+  display: inline-block;
+  background: url("../img/x-logo-white.png");
+  width: 40px;
+  height: 40px;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-color: #78afc9;
+  background-position: 11px;
+  border-radius: 21px;
+  position: relative;
+  top: 3px;
 }
 
 .hh-icon-circle-youtube:before {
   content: "\e60c";
 }
 
-.hh-icon-circle-google:before {
-  content: "\e60d";
-}
-
-.hh-icon-circle-pinterest:before {
-  content: "\e60e";
-}
-
-.hh-icon-circle-plus:before {
-  content: "\e040";
-}
-
-.hh-icon-circle-minus:before {
-  content: "\e041";
-}
-
-.hh-icon-circle-check:before {
-  content: "\e042";
-}
-
-.hh-icon-circle-cross:before {
-  content: "\e043";
-}
-
-.hh-icon-square-plus:before {
-  content: "\e044";
-}
-
-.hh-icon-square-minus:before {
-  content: "\e045";
-}
-
 .hh-icon-plus:before {
   content: "\e114";
 }
 
-.hh-icon-minus:before {
-  content: "\e115";
-}
-
-.hh-icon-check:before {
-  content: "\e116";
-}
-
 .hh-icon-cross:before {
   content: "\e117";
-}
-
-.hh-icon-play {
-  background: rgba(0,0,0,.4);
-  border: 3px solid #fff;
-  border-radius: 70px;
-  height: 70px;
-  left: 50%;
-  margin-left: -35px;
-  position: absolute;
-  top: 23%;
-  width: 70px;
-}
-
-.hh-icon-play:before {
-  border-top: 17px solid transparent;
-  border-bottom: 17px solid transparent;
-  border-left: 28px solid #fff;
-  content: "";
-  height: 0;
-  left: 22px;
-  position: absolute;
-  top: 15px;
-  width: 0;
 }

@@ -11,7 +11,7 @@ use App\Controller\AppController;
  * @property \App\Model\Table\CorpsTable $Corps
  * @method \App\Model\Entity\Corp[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CorpsController extends AppController
+class CorpsController extends BaseAdminController
 {
 	
 	public $paginate = [
@@ -29,23 +29,8 @@ class CorpsController extends AppController
     {
         $corps = $this->paginate($this->Corps);
 
+        $this->set('title', 'Corps index');
         $this->set(compact('corps'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Corp id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $corp = $this->Corps->get($id, [
-            'contain' => ['Users', 'Advertisements'],
-        ]);
-
-        $this->set(compact('corp'));
     }
 
     /**
@@ -65,8 +50,9 @@ class CorpsController extends AppController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
-        $users = $this->Corps->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('corp', 'users'));
+        $this->set('title', 'Add Corp');
+        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set(compact('corp'));
     }
 
     /**
@@ -79,7 +65,7 @@ class CorpsController extends AppController
     public function edit($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Users'],
+            'contain' => ['Author'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
@@ -90,8 +76,22 @@ class CorpsController extends AppController
             }
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
-        $users = $this->Corps->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('corp', 'users'));
+        $this->set('title', 'Edit Corp');
+        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set(compact('corp'));
+    }
+
+    public function preview($id = null)
+    {
+        $corp = $this->Corps->get($id, [
+            'contain' => ['Author'],
+        ]);
+        $this->set('corp', $corp);
+        $this->set('isPreview', true);
+
+        // Set the template path to the non-prefixed template
+        $this->viewBuilder()->setTemplatePath('Corps');
+        $this->render('view');
     }
 
     /**
@@ -129,7 +129,7 @@ class CorpsController extends AppController
         $draftId = $this->Corps->checkForDraft($id);
 
         if ($draftId > 0) {
-            $this->Flash->success('This report has an existing draft below.');
+            $this->Flash->success('This manufacturer has an existing draft below.');
 
             return $this->redirect(['action' => 'edit', $draftId]);
         }
