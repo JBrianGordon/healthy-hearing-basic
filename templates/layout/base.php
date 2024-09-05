@@ -20,7 +20,7 @@ if(empty($title)){
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
     <link rel="preload" href="/font/roboto-v20-latin-regular.woff" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="/font/lato-regular.woff2" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/lato-v17-latin-regular.woff" as="font" type="font/woff" crossorigin>
 
 
     <?= $this->fetch('meta') ?>
