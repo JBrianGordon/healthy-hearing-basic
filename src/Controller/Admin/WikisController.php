@@ -56,7 +56,8 @@ class WikisController extends BaseAdminController
         $this->set('wikis', $this->paginate($wikiQuery));
         $this->set('count', $wikiQuery->count());
 
-        $this->set('fields', $this->Wikis->getSchema()->typeMap());
+        $this->set('fields', $this->Wikis->getAdvSearchFields());
+        $this->set('authors', $this->Wikis->Author->authorList());
     }
 
     /**

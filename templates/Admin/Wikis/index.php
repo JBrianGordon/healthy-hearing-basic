@@ -23,12 +23,18 @@ foreach ($fields as $field => $type) {
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
     switch ($field) {
-		case 'priority':
-			$label = 'Order';
-			break;
         case 'facebook_image':
             $type = 'boolean';
             break;
+		case 'priority':
+			$label = 'Order';
+			break;
+		case 'user_id':
+			$label = 'Author';
+			$type = 'select';
+			$options = $authors;
+			$empty = '(select one)';
+			break;
     }
     $advancedSearchFields[] = [
         'field' => $field,
