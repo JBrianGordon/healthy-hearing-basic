@@ -104,7 +104,7 @@ class WikisController extends BaseAdminController
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit', $wiki->id]);
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
