@@ -1,21 +1,11 @@
-<?php
-
-/**
- * @var \App\View\AppView $this
- */
-
-use Cake\Core\Configure;
-
-?>
-
-<?php echo Configure::read('siteName') . ','; ?><br /><br />
+<?= $siteName . ',' ?><br /><br />
 
 <b>Message From Website</b><br />
 
-<p><?php echo $contactInfo['message']; ?></p><br /><br />
+<p><?= $message ?></p><br /><br />
 
 <p><b>Contact Details:</p></p>
-<!-- TO-DO: Contact Details -->
+<?= $this->element('email/contact', ['contact' => $contact]) ?><br /><br />
 
 Thanks,<br />
-<?php echo $contactInfo['first_name']; ?> <?php echo $contactInfo['last_name']; ?>
+<?= $contact['Contact']['first_name'] ?> <?= $contact['Contact']['last_name'] ?>
