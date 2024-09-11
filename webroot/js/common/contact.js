@@ -26,22 +26,26 @@ contactHearingCareProfessional.addEventListener('click', function() {
 // Add reCAPTCHA script on form click
 const pageContactUsForm = document.getElementById('PageContactUsForm');
 const pageContactUsFormInputs = document.querySelectorAll('#PageContactUsForm input');
+let isFocused = false;
+
 pageContactUsFormInputs.forEach(input => {
   input.addEventListener('focus', function() {
-    if (!pageContactUsForm.classList.contains('focused')) {
-      pageContactUsForm.classList.add('focused');
-      const recaptchaScript = document.createElement('script');
-      recaptchaScript.src = 'https://www.google.com/recaptcha/api.js';
-      document.head.appendChild(recaptchaScript);
-      pageContactUsFormInputs.forEach(input => input.removeEventListener('focus'));
-      const recaptchaCheck = setInterval(function() {
-        if (document.querySelector('.grecaptcha-badge')) {
-          const grecaptchaBadge = document.querySelector('.grecaptcha-badge');
-          const submitInput = document.querySelector('input[data-callback="onSubmit"]');
-          submitInput.parentNode.insertBefore(grecaptchaBadge, submitInput.nextSibling);
-          clearInterval(recaptchaCheck);
-        }
-      }, 250);
+    if (!isFocused) {
+      isFocused = true;
+      if (!pageContactUsForm.classList.contains('focused')) {
+        pageContactUsForm.classList.add('focused');
+        const recaptchaScript = document.createElement('script');
+        recaptchaScript.src = 'https://www.google.com/recaptcha/api.js';
+        document.head.appendChild(recaptchaScript);
+        const recaptchaCheck = setInterval(function() {
+          if (document.querySelector('.grecaptcha-badge')) {
+            const grecaptchaBadge = document.querySelector('.grecaptcha-badge');
+            const submitInput = document.querySelector('input[data-callback="onSubmit"]');
+            submitInput.parentNode.insertBefore(grecaptchaBadge, submitInput.nextSibling);
+            clearInterval(recaptchaCheck);
+          }
+        }, 250);
+      }
     }
   });
 });
