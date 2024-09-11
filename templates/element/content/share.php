@@ -42,7 +42,8 @@ $image = Router::url($image, true);
 				'escape' => false,
 				'onclick' => false,
 				'data-pin-do' => 'buttonPin',
-				'media' => $image
+				'media' => $image,
+				'href' => '#'
 			],
 			'label' => '<span class="hh-icon-pinterest"></span> Pin',
 			'text' => $description,

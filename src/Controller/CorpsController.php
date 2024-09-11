@@ -23,10 +23,10 @@ class CorpsController extends AppController
         if (!Configure::read('showManufacturers')) {
             return $this->throw404NotFound();
         }
-        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'corps','action'=>'index'])) {
-            // Self-heal url
-            return $this->redirect(['controller'=>'corps','action'=>'index'], 301);
-        }
+        // if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'corps','action'=>'index'])) {
+        //     // Self-heal url
+        //     return $this->redirect(['controller'=>'corps','action'=>'index'], 301);
+        // }
         if ($title == $this->siteName) {
             $this->set('title', 'Hearing aid and cochlear implant companies');
         }
@@ -65,35 +65,35 @@ class CorpsController extends AppController
         $this->Content = $this->fetchTable('Content');
         $this->set('corp', $corp);
 
-        if (empty($corp)) {
-            // This slug did not match an existing corp. Try finding something similar.
-            $similarCorp = $this->Corps->find('all', [
-                'conditions' => [
-                    'is_active' => true,
-                    'slug LIKE' => '%'.$slug.'%'
-                ],
-                'order' => ['priority' => 'ASC']
-            ])->first();
-            $similarSlug = $similarCorp->slug;
-            if (!empty($similarSlug) && $similarSlug != $slug) {
-                return $this->redirect("/$similarSlug", 301);
-            } else {
-                // No similar slug found
-                $this->catch404();
-                if (http_response_code() != '200') {
-                    // A redirect or status code was found
-                    return;
-                }
-                // This was an old corp that is no longer active, and has no specific redirect defined.
-                // Redirect to the main Hearing Aid Manufacturers page with no errors displayed.
-                return $this->redirect(['action' => 'index'], 301);
-            }
-        }
+        // if (empty($corp)) {
+        //     // This slug did not match an existing corp. Try finding something similar.
+        //     $similarCorp = $this->Corps->find('all', [
+        //         'conditions' => [
+        //             'is_active' => true,
+        //             'slug LIKE' => '%'.$slug.'%'
+        //         ],
+        //         'order' => ['priority' => 'ASC']
+        //     ])->first();
+        //     $similarSlug = $similarCorp->slug;
+        //     if (!empty($similarSlug) && $similarSlug != $slug) {
+        //         return $this->redirect("/$similarSlug", 301);
+        //     } else {
+        //         // No similar slug found
+        //         $this->catch404();
+        //         if (http_response_code() != '200') {
+        //             // A redirect or status code was found
+        //             return;
+        //         }
+        //         // This was an old corp that is no longer active, and has no specific redirect defined.
+        //         // Redirect to the main Hearing Aid Manufacturers page with no errors displayed.
+        //         return $this->redirect(['action' => 'index'], 301);
+        //     }
+        // }
 
-        if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'corps','action'=>'view','slug'=>$slug])) {
-            // Self heal url. Redirect to proper url format.
-            return $this->redirect(['controller'=>'corps','action'=>'view','slug'=>$slug], 301);
-        }
+        // if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'corps','action'=>'view','slug'=>$slug])) {
+        //     // Self heal url. Redirect to proper url format.
+        //     return $this->redirect(['controller'=>'corps','action'=>'view','slug'=>$slug], 301);
+        // }
 
         // Is there an exclusive advertisement for corp pages?
         $exclusiveAd = $this->fetchTable('Advertisements')->findAdForCorps();

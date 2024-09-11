@@ -532,6 +532,20 @@ class CaCallGroupsTable extends Table
     }
 
     /**
+    * Unlock the record
+    */
+    function unlock($id = null) {
+        $caCallGroup = $this->get($id);
+        $caCallGroup->is_locked = false;
+        $caCallGroup->id_locked_by_user = 0;
+        $caCallGroup->lock_time = null;
+        if ($this->save($caCallGroup)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
     * Find the admin report based on data passed in
     *
     * @param string start date

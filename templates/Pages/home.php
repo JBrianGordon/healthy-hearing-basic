@@ -9,8 +9,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <div class="backdrop backdrop-home-gradient backdrop-height"></div>
             <picture class="backdrop-home">
                 <source media="(max-width: 991px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
-                <source media="(min-width:992px)" srcset="/img/home-hero.webp">
-                <img src="/img/home-hero.webp" alt="smiling doctor giving a consultation">
+                <source media="(min-width:992px)" srcset="/img/home-hero.webp 1x, /img/home-hero-2x.webp 2x">
+                <img class="h-100" src="/img/home-hero.webp" alt="smiling doctor giving a consultation">
             </picture>
             <div class="backdrop backdrop-home-gradient backdrop-opacity backdrop-height"></div>
         </div>

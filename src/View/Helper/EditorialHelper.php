@@ -80,7 +80,7 @@ class EditorialHelper extends Helper
         if (empty($reviewerBylines)) {
             return '';
         }
-        return '<br><span><img src="/img/checked.png" alt="check mark" class="mr5" style="width:12px;position:relative;bottom:1px;"> Reviewed by '.implode(' and ', $reviewerBylines).'</span>';
+        return '<br><span><img src="/img/checked.png" alt="check mark" class="mr5" style="height:12px;width:12px;position:relative;bottom:1px;"> Reviewed by '.implode(' and ', $reviewerBylines).'</span>';
     }
 
     /**
@@ -224,5 +224,12 @@ class EditorialHelper extends Helper
             'class' => 'text-link'
         ], (array) $options);
         return $this->Html->link($title, $content->hh_url, $options);
+    }
+
+    public function adminIndexDraft($draft_parent_id) {
+        if ($draft_parent_id > 0) {
+            return '<strong class="text-secondary">REPUBLISH DRAFT: </strong>';
+        }
+        return;
     }
 }

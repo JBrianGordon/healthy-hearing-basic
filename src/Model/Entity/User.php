@@ -14,7 +14,6 @@ use CakeDC\Users\Model\Entity\User as CakeDcUser;
  * @property string $password
  * @property int $level
  * @property string $first_name
- * @property string|null $middle_name
  * @property string $last_name
  * @property string|null $degrees
  * @property string|null $credentials
@@ -110,7 +109,6 @@ class User extends CakeDcUser
         'password' => true,
         'level' => true,
         'first_name' => true,
-        'middle_name' => true,
         'last_name' => true,
         'degrees' => true,
         'credentials' => true,

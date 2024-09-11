@@ -89,7 +89,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 											</div>
 											<div class="clearfix"></div>
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
-												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight">appointment request form</a> for a call back.</strong></p>
+												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight" href="#">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $location->id ?>">
 												<div class="telephone h2 bi bi-telephone-fill">

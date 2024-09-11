@@ -1,4 +1,1 @@
-<?php
-// TODO:
-pr($data);
-?>
+<?= $data; ?>

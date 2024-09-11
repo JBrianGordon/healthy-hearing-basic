@@ -31,6 +31,10 @@ class CaCallGroupsController extends BaseAdminController
             'actions' => ['export']
         ]);
 
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+
         $this->paginate = [
             'limit' => 30,
             'order' => ['CaCallGroups.id' => 'DESC']
@@ -199,6 +203,22 @@ class CaCallGroupsController extends BaseAdminController
             CaCallGroup::STATUS_TENTATIVE_APPT."')";
         $this->paginate['order'][] = "scheduled_call_date ASC";
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
+    }
+
+    /**
+    * Unlock a call group and redirect back to Outbound Calls page.
+    */
+    function unlock($id = null) {
+        if (!$id) {
+            $this->Flash->error('No ID given.');
+        } else {
+            if ($this->CaCallGroups->unlock($id)) {
+                $this->Flash->success("Cancelled and Unlocked");
+            } else {
+                $this->Flash->error("Unable to unlock $id");
+            }
+        }
+        $this->redirect(['action' => 'outbound']);
     }
 
     /**

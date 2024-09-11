@@ -73,7 +73,9 @@ class Wiki extends Entity
         'created' => true,
         'background_alt' => true,
         'users' => true,
-        'tag_wikis' => true,
+        'tags' => true,
+        'contributors' => true,
+        'reviewers' => true,
     ];
 
     protected $_virtual = ['hh_url'];

@@ -50,7 +50,7 @@ class SeoUrisTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehaviors(['Timestamp', 'Search.Search']);
 
         $this->hasMany('SeoCanonicals', [
             'foreignKey' => 'seo_uri_id',
@@ -67,6 +67,18 @@ class SeoUrisTable extends Table
         $this->hasMany('SeoTitles', [
             'foreignKey' => 'seo_uri_id',
         ]);
+
+        // Setup search filter using search manager
+        $this->searchManager()
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'fieldMode' => 'OR',
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'fields' => ['uri'],
+            ]);
     }
 
     /**

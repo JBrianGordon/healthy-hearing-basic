@@ -54,9 +54,7 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php 
-        $queryParams = $this->request->getQueryParams();
-        if (count($queryParams) > 1 || (count($queryParams) === 1 && (!isset($queryParams['q']) && !isset($queryParams['preserve'])))) : ?>
+    <?php if ($this->Search->isSearch()) : ?>
             <div class="col col-md-auto p-0">
                 Showing search results.
                 <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>

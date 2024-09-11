@@ -37,6 +37,10 @@ class ContentController extends BaseAdminController
         $this->loadComponent('Export', [
             'actions' => ['export']
         ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
     }
 
     /**

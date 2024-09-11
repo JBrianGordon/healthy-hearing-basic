@@ -189,11 +189,6 @@ class UsersTable extends CakeDcUsersTable
         //     ->notEmptyString('first_name');
 
         // $validator
-        //     ->scalar('middle_name')
-        //     ->maxLength('middle_name', 128)
-        //     ->allowEmptyString('middle_name');
-
-        // $validator
         //     ->scalar('last_name')
         //     ->maxLength('last_name', 128)
         //     ->requirePresence('last_name', 'create')
@@ -481,5 +476,23 @@ class UsersTable extends CakeDcUsersTable
             $authorList[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
         }
         return $authorList;
+    }
+
+    /**
+     * Find a list of users that are reviewers
+     */
+    public function reviewerList()
+    {
+        $reviewers = $this->find('all', [
+            'conditions' => [
+                    'is_reviewer' => true
+            ],
+            'order' => ['first_name ASC']
+        ])->all();
+        $reviewerList = [];
+        foreach ($reviewers as $reviewer) {
+            $reviewerList[$reviewer->id] = $reviewer->first_name.' '.$reviewer->last_name.' ('.$reviewer->username.')';
+        }
+        return $reviewerList;
     }
 }

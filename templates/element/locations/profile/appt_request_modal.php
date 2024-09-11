@@ -14,13 +14,7 @@ $topicOptions = [
 	<span id="apptRequestModalAnchor"></span>
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<?= $this->Form->create(null, [
-				'url' => [
-					'controller' => 'CaCalls',
-					'action' => 'ajaxApptRequest'
-				],
-				'class' => 'form-horizontal apptRequestForm',
-			]) ?>
+			<?= $this->Form->create(null, ['id' => 'CaCallApptRequestForm']) ?>
 				<div class="modal-header">
 					<h4 class="modal-title">Request an appointment at <?= $location->title ?>:</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -99,7 +93,7 @@ $topicOptions = [
 							</div>
 						</div>
 						<div class="col col-12 col-sm-4 col-sm-offset-4 mx-auto">
-							<button id="apptRequestSubmitBtn" type="submit" class="btn btn-secondary btn-block btn-lg">Submit</button>
+							<button id="apptRequestSubmitBtn" type="button" class="btn btn-secondary btn-block btn-lg">Submit</button>
 						</div>
 						<div class="g-recaptcha"
 							 data-sitekey="<?= Configure::read('recaptchaPublicKey') ?>"

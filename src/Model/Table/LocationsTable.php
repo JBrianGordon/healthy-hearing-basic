@@ -74,6 +74,21 @@ class LocationsTable extends Table
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
 
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+                'is_show' => true,
+                'state !=' => '',
+                'listing_type !=' => Location::LISTING_TYPE_NONE
+            ],
+            'order' => [
+                'state' => 'ASC',
+                'city' => 'ASC',
+                'title' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
+
         // The 'lng' field is named 'lon' in our Locations table
         $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
         $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
@@ -2236,6 +2251,29 @@ class LocationsTable extends Table
                 $retval['times_changed']++;
             }
         }
+        return $retval;
+    }
+
+    /**
+    * Find all states for sitemap
+    */
+    public function allStatesForSiteMap() {
+        $retval = [];
+
+        foreach (Configure::read('states') as $abbr => $full) {
+            if ($abbr != 'DC') {
+                $retval[] = [
+                    'hh_url' => [
+                        'admin' => false,
+                        'plugin' => false,
+                        'controller' => 'locations',
+                        'action' => 'viewState',
+                        'region' => $this->stateSlug($abbr)
+                    ]
+                ];
+            }
+        }
+
         return $retval;
     }
 }

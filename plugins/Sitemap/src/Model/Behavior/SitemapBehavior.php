@@ -31,15 +31,19 @@ class SitemapBehavior extends Behavior
             ->where($this->_config['conditions'])
             ->select($this->_config['fields'])
             ->order($this->_config['order'])
-            ->cache('sitemap_' . $this->_table->getAlias(), $this->_config['cacheConfigKey'])
             ->formatResults(function ($results) {
                 return $results->map(function ($row) {
-                    $row['loc'] = Router::url(
-                        array_merge(
-                            ['plugin' => null, '_full' => true],
-                            $row->hh_url
-                        )
-                    );
+                    if (is_array($row->hh_url)) {
+                        $row['loc'] = Router::url(
+                            array_merge(
+                                ['plugin' => null, '_full' => true],
+                                $row->hh_url
+                            )
+                        );
+                     } else {
+                        $row['loc'] = $row->hh_url;
+                     }
+
                     $row['priority'] = $this->_config['priority'];
 
                     return $row;

@@ -8,14 +8,7 @@
  
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
-$author_default = false;
-$isFrozen = !empty($content->is_frozen);
-$isDraft = !empty($content->id_draft_parent);
-if (empty($content->id)) {
-    if (in_array($user->id, $authors)) {
-        $author_default = $user->id;
-    }
-}
+$isDraft = !empty($wiki->id_draft_parent);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
@@ -26,7 +19,9 @@ if (empty($content->id)) {
 				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 				<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $wiki->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-				<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi bi-clipboard-check']) ?>
+				<?php if(!$isDraft): ?>
+					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi bi-clipboard-check']) ?>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -34,17 +29,22 @@ if (empty($content->id)) {
 <div class="col-md-12">
 	<section class="panel">
 		<div class="panel-body">
-			<div class="panel-section expanded">									
+			<div class="panel-section expanded">
+				<?php if($isDraft): ?>
+					<div class="alert alert-warning" role="alert">
+						This Help page is a draft copy of an existing one. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $wiki->id_draft_parent], ['target' => '_blank']) ?>.
+					</div>
+				<?php endif; ?>
 		        <div class="wikis form content">
 		            <?= $this->Form->create($wiki, ['id' => 'wikisForm']) ?>
 		            <fieldset>
 		                <?php
 		                    echo $this->Form->control('name');
 		                    echo $this->Form->control('slug');
-		                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+		                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 		                    echo $this->Form->control('last_modified', ['empty' => true]);
 		                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-		                    echo $this->Form->control('is_active', ['label' => ' Active', 'required' => true]);
+		                    echo $this->Form->control('is_active', ['label' => ' Active']);
 		                    echo '</div>';
 		                ?>
 						<ul class="nav nav-tabs clearfix" role="tablist">
@@ -78,9 +78,9 @@ if (empty($content->id)) {
 				                ?>
                                 <hr>
                                 <h3>Additional Authors</h3>
-                                <?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+                                <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
                                 <h3>Reviewers</h3>
-                                <!--*** TODO: add reviewers ***-->
+                                <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
 							</div>
 							<div class="tab-pane" id="display">
 								<?php
@@ -91,7 +91,13 @@ if (empty($content->id)) {
 							</div>
 							<div class="tab-pane" id="tags">
                                 <h3>Tags</h3>
-                                <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                <?= $this->Form->control('tags._ids', [
+										'label' => false,
+										'options' => $tags,
+										'multiple' => 'checkbox',
+										'escape' => false,
+									])
+								?>
 							</div>
 						</div>
 		            </fieldset>

@@ -62,12 +62,18 @@ class WikisController extends AppController
             return $this->redirect(array('action' => 'index'), 301);
         }
 
+        // TO-DO/REFACTOR LATER? If correct, findRedirectBySlug() above checks for
+        // is_active === 1/true.
+        // If false, it redirects to the "parent" wiki, which should mean that the
+        // admin-bypass in findBySlug() can't/won't be evaluated.
         if ($wiki = $this->Wikis->findBySlug($slug, $_SERVER['REQUEST_URI'], $this->isAdmin)) {
             //set up contents for sidebar
             $tagIds = array_column($wiki->tags, 'id');
             $this->set('tags', $tagIds);
             $this->Content = $this->fetchTable('Content');
+
             $contents = $this->Content->findByTags($tagIds, 6);
+
             $this->set('contents', $contents);
             $tagname = isset($wiki->tags[0]) ? $wiki->tags[0]->name : '';
             $this->set('tagname', $tagname);

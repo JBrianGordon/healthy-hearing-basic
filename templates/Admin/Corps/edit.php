@@ -6,12 +6,7 @@
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
 
-$author_default = false;
-if (empty($content->id)) {
-	if (in_array($user->id, $authors)) {
-		$author_default = $user->id;
-	}
-}
+$isDraft = !empty($corp->id_draft_parent);
 
 $this->Html->script('dist/corp_edit.min', ['block' => true]);
 ?>
@@ -23,9 +18,11 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 				<?= $this->Form->postLink(__(' Delete'),['action' => 'delete', $corp->id],['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'btn btn-danger bi bi-trash-fill', 'id' => 'deleteBtn']) ?>
-				<?= /*** TODO: add preview to controller ***/ $this->Html->link(__(' Preview'), ['action' => 'preview'], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+				<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $corp->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-				<?= $this->Html->link(__(' Update and republish'), ['action' => 'draft'], ['class' => 'btn btn-default']) ?>
+				<?php if(!$isDraft): ?>
+					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $corp->id], ['class' => 'btn btn-default']) ?>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -34,6 +31,11 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 	<section class="panel">
 		<div class="panel-body">
 			<div class="panel-section expanded">
+				<?php if($isDraft): ?>
+					<div class="alert alert-warning" role="alert">
+						This manufacturer is a draft copy of an existing one. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $corp->id_draft_parent], ['target' => '_blank']) ?>.
+					</div>
+				<?php endif; ?>
 				<div class="row">
 				    <div class="column-responsive column-80">
 				        <div class="corps form content">
@@ -45,9 +47,9 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 				            <fieldset>
 				                <?php
 					                echo $this->Form->control('title');
-					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
-					                echo $this->Form->control('last_modified', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
+					                echo $this->Form->control('last_modified', ['type' => 'datetime', 'dateFormat' => 'MDY']);
 					                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 					                echo $this->Form->control('is_active', ['label' => 'Active']);
 					                echo '</div>';

@@ -42,10 +42,15 @@ if (empty($content->id)) {
                         <?php
                             echo $this->Form->control('name');
                             echo $this->Form->control('slug');
-                            echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+                            echo $this->Form->control('user_id', [
+                                'label' => 'Primary Author',
+                                'options' => $authors,
+                                'default' => $author_default,
+                                'empty' => 'Select an author'
+                            ]);
                             echo $this->Form->control('last_modified', ['empty' => true]);
                             echo '<div class="col-md-9 col-md-offset-3 pl0">';
-                            echo $this->Form->control('is_active', ['label' => ' Active', 'required' => true]);
+                            echo $this->Form->control('is_active', ['label' => ' Active']);
                             echo '</div>';
                         ?>
                         <ul class="nav nav-tabs clearfix" role="tablist">
@@ -79,9 +84,9 @@ if (empty($content->id)) {
                                 ?>
                                 <hr>
                                 <h3>Additional Authors</h3>
-                                <?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+                                <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
                                 <h3>Reviewers</h3>
-                                <!--*** TODO: add reviewers ***-->
+                                <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
                             </div>
                             <div class="tab-pane" id="display">
                                 <?php
@@ -92,7 +97,13 @@ if (empty($content->id)) {
                             </div>
                             <div class="tab-pane" id="tags">
                                 <h3>Tags</h3>
-                                <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                <?= $this->Form->control('tags._ids', [
+                                        'label' => false,
+                                        'options' => $tags,
+                                        'multiple' => 'checkbox',
+                                        'escape' => false
+                                    ])
+                                ?>
                             </div>
                         </div>
                     </fieldset>
