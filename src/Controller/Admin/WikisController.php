@@ -69,7 +69,16 @@ class WikisController extends BaseAdminController
     {
         $wiki = $this->Wikis->newEmptyEntity();
         if ($this->request->is('post')) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+            $requestData = $this->request->getData();
+
+            // HACK: See note in edit()
+            $requestData['tags'] = [
+                '_ids' => [
+                    $requestData['tags']['_ids']
+                ]
+            ];
+
+            $wiki = $this->Wikis->patchEntity($wiki, $requestData);
 
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
@@ -81,7 +90,13 @@ class WikisController extends BaseAdminController
         $authors = $this->Wikis->Author->authorList();
         $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
-        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set(
+            'tags',
+            $this->Wikis->Tags->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'display_header',
+            ])->toArray()
+        );
         $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 

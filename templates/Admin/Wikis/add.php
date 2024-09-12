@@ -6,6 +6,7 @@
  * @var \Cake\Collection\CollectionInterface|string[] $users
  */
 
+use Cake\I18n\FrozenTime;
 
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
@@ -48,7 +49,9 @@ if (empty($content->id)) {
                                 'default' => $author_default,
                                 'empty' => 'Select an author'
                             ]);
-                            echo $this->Form->control('last_modified', ['empty' => true]);
+                            echo $this->Form->control('last_modified', [
+                                'default' => FrozenTime::now()
+                            ]);
                             echo '<div class="col-md-9 col-md-offset-3 pl0">';
                             echo $this->Form->control('is_active', ['label' => ' Active']);
                             echo '</div>';
@@ -96,14 +99,10 @@ if (empty($content->id)) {
                                 ?>
                             </div>
                             <div class="tab-pane" id="tags">
-                                <h3>Tags</h3>
-                                <?= $this->Form->control('tags._ids', [
-                                        'label' => false,
-                                        'options' => $tags,
-                                        'multiple' => 'checkbox',
-                                        'escape' => false
-                                    ])
-                                ?>
+                                <strong>A help/wiki page should only be associated with one tag. For now, repeated use of a tag is possible, so be aware of any conflicts. Before a tag can appear in the list below, it must be created in the <?= $this->Html->link('Tag admin panel', ['controller' => 'tags', 'action' => 'index'], ['target' => '_blank']) ?>.</strong>
+                                <br>
+                                <em>Select one tag</em>
+                                <?= $this->Form->select('tags._ids', $tags) ?>
                             </div>
                         </div>
                     </fieldset>
