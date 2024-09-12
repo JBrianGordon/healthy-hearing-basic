@@ -1624,6 +1624,43 @@ class LocationsTable extends Table
         return $locations;
     }
 
+	/**
+	* Find the URL by zipcode
+	* @Param string zip code
+	* @return HH url for the zipcode
+	*/
+    public function findUrlByZip($zip = null) {
+        if ($this->isValidZip($zip)) {
+            $zip = preg_replace('/[^a-zA-Z0-9]/', '', $zip);
+
+            // Force CA zip code into A1A 1A1 format
+            $settings = Configure::read('International');
+            if ($settings['country'] == 'CA') {
+                $zip = substr($zip, 0, 3) . ' ' . substr($zip, 3, 3);
+            }
+
+            //what type of zip code do we have?
+            switch(strlen($zip)) {
+                case '9':
+                    //US Zip+4
+                    $zip = substr($zip, 0, 5);
+                    break;
+            }
+            $zipTable = TableRegistry::getTableLocator()->get('Zips');
+            $found = $zipTable->get($zip);
+            return array(
+                'admin' => false,
+                'plugin' => false,
+                'action' => 'index',
+                'controller' => 'locations',
+                'region' => $this->stateSlug($found['state']),
+                'city' => slugifyCity($found['city']),
+                'zip' => $found['zip'],
+            );
+        }
+        return null;
+    }
+
     /**
     * tests a string to see if it is a valid zip code
     * @param string $input - (query)string which will be tested
