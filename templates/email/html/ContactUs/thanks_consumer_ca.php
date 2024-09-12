@@ -6,9 +6,11 @@
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 
+$locations = TableRegistry::getTableLocator()->get('Location');
+$zipUrl = Router::url($locations->findUrlByZip($contact['zip']), true); 
 ?>
-<?php $zipUrl = Router::url(ClassRegistry::init('Location')->findUrlByZip($contact['Contact']['zip']), true) ?>
 <?= $this->element('email/header') ?>
 Thank you for contacting <?= $siteName ?>. We are a website that provides information about hearing loss and hearing aids. Our customer support team works Monday - Friday, 9am to 5pm Eastern time. You will be contacted by phone or email in response to your question as soon as we are available to respond.
 <br /><br />

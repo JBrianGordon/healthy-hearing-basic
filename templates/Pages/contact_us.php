@@ -49,6 +49,7 @@ $this->Html->script('dist/contact.min', ['block' => true]);
                                             echo $this->Form->control('Robot.check', ['label' => ['text' => 'Leave blank', 'class' => 'hidden'], 'class' => 'hidden']);
                                             echo $this->Form->control('message', ['type' => 'textarea', 'class' => 'col-sm-9', 'label' => ['text' => 'Message', 'class' => 'col-sm-3 tar pl0'], 'maxlength' => '1000', 'style' => 'min-height:172px']);
                                             echo $this->Form->hidden('g-recaptcha-response', ['id' => 'g-recaptcha-response']); ?>
+                                        <?= $this->Recaptcha->display() ?>
                                         <div class="form-actions tar">
                                             <input class="btn btn-primary btn-lg g-recaptcha mt20" data-sitekey="<?= Configure::read('recaptchaPublicKey') ?>" data-callback="onSubmit" type="submit" value="Send Message">
                                         </div>
