@@ -99,7 +99,26 @@ class WikisController extends BaseAdminController
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+            $requestData = $this->request->getData();
+
+            // HACK: Currently, Wikis and Tags have a belongs-to-many
+            // relationship. Wikis should only have one tag (Content
+            // can have many). Instead of making their relationship
+            // hasOne for now, I just modified the requestData to look as
+            // if it's "many" structured. The Tag data here comes from
+            // a select, but this makes it look like it comes from a
+            // multiple => true control. *I don't think* we can (easily)
+            // make an isUnique rule for this since it's technically a many
+            // relationship, so we're probably stuck with the status quo
+            // (keeping an eye on duplicate Wiki-Tag relationships) for now.
+            // LATER: Make relationship one-to-one
+            $requestData['tags'] = [
+                '_ids' => [
+                    $requestData['tags']['_ids']
+                ]
+            ];
+
+            $wiki = $this->Wikis->patchEntity($wiki, $requestData);
 
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
@@ -111,7 +130,13 @@ class WikisController extends BaseAdminController
         $authors = $this->Wikis->Author->authorList();
         $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
-        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set(
+            'tags',
+            $this->Wikis->Tags->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'display_header',
+            ])->toArray()
+        );
         $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
