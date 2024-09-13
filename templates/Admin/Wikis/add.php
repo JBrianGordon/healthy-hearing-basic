@@ -59,7 +59,6 @@ if (empty($content->id)) {
                         <ul class="nav nav-tabs clearfix" role="tablist">
                             <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-target="#details" data-bs-toggle="tab" type="button">Help</button></li>
                             <li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#admin" data-bs-toggle="tab" type="button">Admin</button></li>
-                            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#display" data-bs-toggle="tab" type="button">Display</button></li>
                             <li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#tags" data-bs-toggle="tab" type="button">Tags</button></li>
                         </ul>
                         <div class="tab-content mt20">
@@ -90,13 +89,6 @@ if (empty($content->id)) {
                                 <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
                                 <h3>Reviewers</h3>
                                 <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
-                            </div>
-                            <div class="tab-pane" id="display">
-                                <?php
-                                    //*** TODO: may want to have this upload to CKBox: ***/
-                                    echo $this->Form->control('background_file');
-                                    echo $this->Form->control('background_alt');
-                                ?>
                             </div>
                             <div class="tab-pane" id="tags">
                                 <strong>A help/wiki page should only be associated with one tag. For now, repeated use of a tag is possible, so be aware of any conflicts. Before a tag can appear in the list below, it must be created in the <?= $this->Html->link('Tag admin panel', ['controller' => 'tags', 'action' => 'index'], ['target' => '_blank']) ?>.</strong>

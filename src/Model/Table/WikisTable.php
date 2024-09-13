@@ -209,11 +209,6 @@ class WikisTable extends Table
             ->notEmptyString('title_h1', 'Title H1 cannot be left blank');
 
         // $validator
-        //     ->scalar('background_file')
-        //     ->maxLength('background_file', 255)
-        //     ->allowEmptyFile('background_file');
-
-        // $validator
         //     ->scalar('meta_description')
         //     ->maxLength('meta_description', 255)
         //     ->allowEmptyString('meta_description');
@@ -267,12 +262,6 @@ class WikisTable extends Table
             ->allowEmptyDateTime('last_modified')
             ->requirePresence('last_modified', true, 'Last modified is a required field')
             ->notEmptyString('last_modified', 'Last modified cannot be left blank');
-
-        // $validator
-        //     ->scalar('background_alt')
-        //     ->maxLength('background_alt', 150)
-        //     ->requirePresence('background_alt', 'create')
-        //     ->notEmptyString('background_alt');
 
         return $validator;
     }
