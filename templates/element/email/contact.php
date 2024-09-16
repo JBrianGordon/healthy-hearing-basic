@@ -1,17 +1,19 @@
 <?php 
 use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 
-if(isset($contact)){
+if(isset($requestData)){
     foreach(['company','first_name','last_name','zip','phone','email'] as $field){
-        if(isset($contact[$field]) && !empty($contact[$field])){
+        if(isset($requestData[$field]) && !empty($requestData[$field])){
             if($field == 'zip'){
-                echo ucfirst(Configure::read('zipLabel')) . ": " . $contact[$field] . '<br>';
+                echo ucfirst(Configure::read('zipLabel')) . ": " . $requestData[$field] . '<br>';
                 $locations = TableRegistry::getTableLocator()->get('Location');
-                $zipUrl = Router::url($locations->findUrlByZip($contact[$field]), true);
+                $zipUrl = Router::url($locations->findUrlByZip($requestData[$field]), true);
                 echo ucfirst(Configure::read('zipLabel')) . " URL: " .
                     '<a href="' . $zipUrl . '">' . $zipUrl . '</a><br>';
             } else {
-                echo humanize($field) . ": " . $contact[$field] . '<br>';
+                echo humanize($field) . ": " . $requestData[$field] . '<br>';
             }
         }
     }

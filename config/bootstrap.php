@@ -525,6 +525,15 @@ function r_implode($glue, $pieces) {
 }
 
 /**
+* Convert a slug to human readable form
+*/
+function humanize($input){
+	$input = str_replace("-","_", $input);
+	$input = strtolower($input);
+	return Inflector::humanize($input);
+}
+
+/**
 * Returns a datetime formatted to display in the specified timezone
 */
 function getDateTime($datetime, $timezone='America/New_York', $format='m/d/Y g:i a T') {
