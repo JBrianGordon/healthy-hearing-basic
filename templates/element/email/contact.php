@@ -8,7 +8,7 @@ if(isset($requestData)){
         if(isset($requestData[$field]) && !empty($requestData[$field])){
             if($field == 'zip'){
                 echo ucfirst(Configure::read('zipLabel')) . ": " . $requestData[$field] . '<br>';
-                $locations = TableRegistry::getTableLocator()->get('Location');
+                $locations = TableRegistry::getTableLocator()->get('Locations');
                 $zipUrl = Router::url($locations->findUrlByZip($requestData[$field]), true);
                 echo ucfirst(Configure::read('zipLabel')) . " URL: " .
                     '<a href="' . $zipUrl . '">' . $zipUrl . '</a><br>';
