@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Database\Expression\QueryExpression;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -118,7 +121,16 @@ class WikisTable extends Table
             ])
             ->boolean('facebook_image')
             ->boolean('facebook_image_bypass')
-            ->value('created')
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Wikis.created', $startDate, $endDate, 'date');
+                    });
+                },
+            ])
             ->add('q', 'Search.Like', [
                 'before' => true,
                 'after' => true,
@@ -132,16 +144,26 @@ class WikisTable extends Table
 
     public function getAdvSearchFields()
     {
+        // Get search fields from Search behavior config
         $advSearchFields = $this->searchManager()
             ->getFilters()
             ->getIterator();
 
-        $advSearchFields->offsetUnset('q'); // Remove multi-field query
+        // Remove multi-field query
+        $advSearchFields->offsetUnset('q');
 
+        // Retrieve array from Iterator
         $advSearchFields = array_keys($advSearchFields->getArrayCopy());
+
+        // Remove '_date_range' from any datetime range
+        // search filters
+        $advSearchFields = array_map(function($value) {
+            return str_replace('_date_range', '', $value);
+        }, $advSearchFields);
 
         $tableSchema = $this->getSchema()->typeMap();
 
+        // Return advanced search fields w/data types
         return array_intersect_key(
             $tableSchema,
             array_flip($advSearchFields)

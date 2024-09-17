@@ -47,6 +47,17 @@ class WikisController extends BaseAdminController
     public function index()
     {
         $requestParams = $this->request->getQueryParams();
+
+        // Created date range
+        $hasCreatedDateRange =
+            array_key_exists('created_start', $requestParams) &&
+            array_key_exists('created_end', $requestParams);
+
+        if ($hasCreatedDateRange) {
+            $requestParams['created_date_range'] =
+                $requestParams['created_start'] . ',' . $requestParams['created_end'];
+        }
+
         $wikiQuery = $this->Wikis
             ->find('search', [
                 'search' => $requestParams,

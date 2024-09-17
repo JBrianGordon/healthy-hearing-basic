@@ -11,7 +11,6 @@ $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
 $advancedSearchFields = [];
-// Add additional fields
 foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
