@@ -7,6 +7,7 @@ use App\Model\Entity\Location;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Enums\Model\Review\ReviewOrigin;
 use App\Form\NewsletterForm;
+use App\Form\ReviewForm;
 use Cake\View\JsonView;
 use Cake\Routing\Router;
 use Cake\Core\Configure;
@@ -454,6 +455,46 @@ class LocationsController extends AppController
             $newsletterForm = new newsletterForm();
             $this->set(compact('newsletterForm'));
         }
+
+        // Review form
+        $reviewForm = new ReviewForm();
+
+        //Check form posts
+        if ($this->request->is('post')) {
+            $requestData = $this->request->getData();
+
+            // Check if the review form was submitted
+            if (isset($requestData['reviews']['location_id'])) {
+                if (!$this->Recaptcha->verify()) {
+                    $this->Flash->error('reCAPTCHA test failed ("I\'m not a robot"). Please try again!');
+                    return;
+                }
+
+                if ($reviewForm->execute($requestData)) {
+                    $this->Flash->success('Thank you for your review.');
+                } else {
+                    $this->Flash->error('There was a problem submitting your review.');
+                }
+                return;
+            }
+
+            // Check if the newsletter form was submitted
+            if (isset($requestData['newsletter_form']) && $requestData['newsletter_form'] === true) {
+                if (!$this->Recaptcha->verify()) {
+                    $this->Flash->error('reCAPTCHA test failed ("I\'m not a robot"). Please try again!');
+                    return;
+                }
+
+                if ($newsletterForm->execute($requestData)) {
+                    $this->Flash->success('Thank you for signing up to our newsletter');
+                } else {
+                    $this->Flash->error('There was a problem signing up for the newsletter.');
+                }
+                return;
+            }
+        }
+
+        $this->set(compact('reviewForm'));
 
         // Setting Variables
         $this->set('ratings', $this->Locations->Reviews->ratings);

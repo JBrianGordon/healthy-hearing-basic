@@ -93,7 +93,7 @@ class ReviewMailer extends Mailer
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($toEmail)
+            ->setTo(Configure::read('customer-support-email'))
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review email not sent')
             ->viewBuilder()
                 ->setTemplate('Review/review_no_email')

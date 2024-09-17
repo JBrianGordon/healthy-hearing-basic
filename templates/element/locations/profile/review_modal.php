@@ -166,6 +166,7 @@ $zipLabel = Configure::read('zipLabel');
           ])
         ?>
         <?php
+            echo $this->Form->hidden('newsletter_form', ['value' => true]);
             echo $this->Form->control(
                 'first_name', [
                   'placeholder' => 'First name',
