@@ -104,7 +104,10 @@ class WikisTable extends Table
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
-            ->value('name')
+            ->like('name', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('user_id')
             ->like('body', [
                 'before' => true,
