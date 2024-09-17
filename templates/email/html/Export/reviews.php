@@ -8,7 +8,7 @@ use Cake\Core\Configure;
 
 ?>
 
-<?php echo Configure::read('siteName') . ','; ?><br /><br />
+<?= Configure::read('siteName') . ',' ?><br /><br />
 
 <b>Hi! Your reviews export is attached!</b><br />
 

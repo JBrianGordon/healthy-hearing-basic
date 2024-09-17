@@ -323,12 +323,14 @@ class OnlineHearingTest {
 	async saveTest(results) {
 		this.log('Saving Test');
 		try {
-			await fetch("/quiz_results/email_results", {
+			const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrfToken')).split('=')[1];
+			await fetch("/QuizResults/emailResults", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+					"X-CSRF-Token": csrfToken
 				},
-				body: JSON.stringify({ results })
+				body: JSON.stringify({ results, _csrfToken: csrfToken })
 			});
 		} catch (error) {
 			console.error("Error saving test:", error);
