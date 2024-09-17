@@ -33,7 +33,7 @@ class ContactUsMailer extends Mailer
                 ->setSubject(Configure::read('siteNameAbbr') . ' Clinic Inquiry - ' . $requestData['email'])
                 ->viewBuilder()
                     ->setTemplate('ContactUs/from_website')
-                    ->setVar('contactInfo', $requestData);
+                    ->setVar('requestData', $requestData);
         } else {
             $this
                 ->setEmailFormat('html')
@@ -41,7 +41,7 @@ class ContactUsMailer extends Mailer
                 ->setSubject('Message From Website: ' . $requestData['email'])
                 ->viewBuilder()
                     ->setTemplate('ContactUs/from_website')
-                    ->setVar('contactInfo', $requestData);
+                    ->setVar('requestData', $requestData);
         }
     }
 
