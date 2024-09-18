@@ -59,11 +59,13 @@ editorElements.forEach((element) => {
     Editor.create(element, {
         toolbar: {
             items: [
+                'undo',
+                'redo',
                 'bold',
                 'italic',
+                'underline',
                 'bulletedList',
                 'numberedList',
-                'underline',
                 '|',
                 'alignment',
                 'findAndReplace',
