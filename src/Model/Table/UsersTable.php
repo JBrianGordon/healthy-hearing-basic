@@ -458,7 +458,7 @@ class UsersTable extends CakeDcUsersTable
         return $agentsQuery->toArray();
     }
 
-    public function authorList($modelName) {
+    public function authorList($modelName, $aliasName) {
         $authors = $this->find('all', [
             'conditions' => [
                 'OR' => [
@@ -528,8 +528,8 @@ class UsersTable extends CakeDcUsersTable
         // dd($onlyInactiveItemAuthors);
 
         return [
-            'Active Item Authors' => $activeItemAuthors,
-            'Inactive Item Authors' => $onlyInactiveItemAuthors,
+            'Active ' . $aliasName . ' Authors' => $activeItemAuthors,
+            'Inactive ' . $aliasName . ' Authors' => $onlyInactiveItemAuthors,
             'Itemless Authors' => array_diff_key($allAuthors, $activeItemAuthors, $onlyInactiveItemAuthors),
         ];
     }
