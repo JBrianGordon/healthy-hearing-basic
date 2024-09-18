@@ -17,4 +17,4 @@
 <p>Hearing health is important, so be sure to share this <?= $this->Html->link('online hearing test', $this->Html->url('/help/online-hearing-test', true)) ?> with friends and family.</p>
 
 <p>Sincerely,</p>
-<p>The <?= $siteName ?> Team</p>
+<p>The <?= Configure::read('siteName') ?> Team</p>

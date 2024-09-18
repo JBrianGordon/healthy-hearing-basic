@@ -5,7 +5,7 @@
 
 <b>Message From Website</b><br />
 
-<p><?= $message ?></p><br /><br />
+<p><?= $requestData['message'] ?></p><br /><br />
 
 <p><b>Contact Details:</p></p>
 <?= $this->element('email/contact', ['requestData' => $requestData]) ?><br /><br />

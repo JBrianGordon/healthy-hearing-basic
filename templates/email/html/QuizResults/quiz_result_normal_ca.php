@@ -9,4 +9,4 @@
 <p>Hearing health is important, so go ahead and share this <?= $this->Html->link('online hearing test', $this->Html->url('/help/online-hearing-test', true)) ?> with friends and family. Untreated <?= $this->Html->link('hearing loss', $this->Html->url('/help/hearing-loss', true)) ?> is linked to many negative health impacts, including anxiety, depression and cognitive decline. The good news? <?= $this->Html->link('Hearing aids', $this->Html->url('/help/hearing-aids', true)) ?> can provide many <?= $this->Html->link('health benefits', $this->Html->url('/help/hearing-loss/treatment', true)) ?> and improve overall quality of life.</p>
 
 <p>Sincerely,</p>
-<p>The <?= $siteName ?> Team</p>
+<p>The <?= Configure::read('siteName') ?> Team</p>
