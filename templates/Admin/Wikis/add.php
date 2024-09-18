@@ -86,8 +86,20 @@ if (empty($content->id)) {
                                 ?>
                                 <hr>
                                 <h3>Additional Authors</h3>
-                                <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
-                                <h3>Reviewers</h3>
+                                <strong>
+                                    <em class="text-secondary">Select multiple with the control key (PC) or command key (Mac)</em>
+                                </strong>
+                                <?=
+                                    $this->Form->select('contributors._ids',
+                                        $authors,
+                                        [
+                                            'empty' => "NO additional contributors",
+                                            'multiple' => true,
+                                            'size' => 14
+                                        ]
+                                    )
+                                ?>
+                                <h3 class="mt-5">Reviewers</h3>
                                 <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
                             </div>
                             <div class="tab-pane" id="tags">

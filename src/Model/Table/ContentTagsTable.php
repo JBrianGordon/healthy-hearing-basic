@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
 /**
  * ContentTags Model
  *
- * @property \App\Model\Table\ContentsTable&\Cake\ORM\Association\BelongsTo $Contents
+ * @property \App\Model\Table\ContentTable&\Cake\ORM\Association\BelongsTo $Content
  * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsTo $Tags
  *
  * @method \App\Model\Entity\ContentTag newEmptyEntity()
@@ -72,7 +72,7 @@ class ContentTagsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('content_id', 'Contents'), ['errorField' => 'content_id']);
+        $rules->add($rules->existsIn('content_id', 'Content'), ['errorField' => 'content_id']);
         $rules->add($rules->existsIn('tag_id', 'Tags'), ['errorField' => 'tag_id']);
 
         return $rules;

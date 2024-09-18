@@ -50,19 +50,6 @@ class ContentController extends BaseAdminController
      */
     public function index()
     {
-        $users = $this->fetchTable('Users')
-            ->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'full_name',
-            ])
-            ->where([
-                'OR' => [
-                    'is_author' => 1,
-                    'is_writer' => 1,
-                ],
-            ])
-            ->toArray();
-
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()
             ->where([
@@ -107,7 +94,7 @@ class ContentController extends BaseAdminController
         $this->set('title', 'Content index');
         $this->set('content', $this->paginate($contentQuery));
         $this->set('count', $contentQuery->count());
-        $this->set('users', $users);
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content'));
         $this->set('fields', $this->Content->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
     }
@@ -166,7 +153,7 @@ class ContentController extends BaseAdminController
         $this->set('title', 'Edit Content');
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
-        $this->set('authors', $this->Content->PrimaryAuthor->authorList());
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content'));
     }
 
     /**

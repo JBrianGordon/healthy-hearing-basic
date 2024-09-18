@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
 /**
  * ContentUsers Model
  *
- * @property \App\Model\Table\ContentsTable&\Cake\ORM\Association\BelongsTo $Contents
+ * @property \App\Model\Table\ContentTable&\Cake\ORM\Association\BelongsTo $Content
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\ContentUser newEmptyEntity()
@@ -44,7 +44,7 @@ class ContentUsersTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Contents', [
+        $this->belongsTo('Content', [
             'foreignKey' => 'content_id',
             'joinType' => 'LEFT',
         ]);
@@ -78,7 +78,7 @@ class ContentUsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('content_id', 'Contents'), ['errorField' => 'content_id']);
+        $rules->add($rules->existsIn('content_id', 'Content'), ['errorField' => 'content_id']);
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;

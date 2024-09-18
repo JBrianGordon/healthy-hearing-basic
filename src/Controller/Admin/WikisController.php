@@ -66,9 +66,8 @@ class WikisController extends BaseAdminController
         $this->set('title', 'Help index');
         $this->set('wikis', $this->paginate($wikiQuery));
         $this->set('count', $wikiQuery->count());
-
         $this->set('fields', $this->Wikis->getAdvSearchFields());
-        $this->set('authors', $this->Wikis->Author->authorList());
+        $this->set('authors', $this->Wikis->Author->authorList('Wikis'));
     }
 
     /**
@@ -98,7 +97,7 @@ class WikisController extends BaseAdminController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Author->authorList();
+        $authors = $this->Wikis->Author->authorList('Wikis');
         $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set(
@@ -153,7 +152,7 @@ class WikisController extends BaseAdminController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Author->authorList();
+        $authors = $this->Wikis->Author->authorList('Wikis');
         $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
         $this->set(
