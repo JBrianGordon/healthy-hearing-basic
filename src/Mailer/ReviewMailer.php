@@ -30,15 +30,15 @@ class ReviewMailer extends Mailer
      * @param string $toEmail Recipient email address
      * @return $this
      */
-    public function emailPositiveReviewReceived($requestData)
+    public function emailPositiveReviewReceived($review, $toEmail)
     {
         $this
             ->setEmailFormat('html')
             ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Positive Review Received')
             ->viewBuilder()
-                ->setTemplate('Review/review_received')
-                ->setVar('requestData', $requestData);
+                ->setTemplate('Review/positiveReviewReceived')
+                ->setVar('reviewData', $review);
 
         return $this;
     }
@@ -57,8 +57,8 @@ class ReviewMailer extends Mailer
             ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Negative Review Received')
             ->viewBuilder()
-                ->setTemplate('Review/review_received_negative')
-                ->setVar('requestData', $requestData);
+                ->setTemplate('Review/negativeReviewReceived')
+                ->setVar('reviewData', $review);
 
         return $this;
     }
@@ -77,8 +77,8 @@ class ReviewMailer extends Mailer
             ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review Response Posted')
             ->viewBuilder()
-                ->setTemplate('Review/review_response_posted')
-                ->setVar('requestData', $requestData);
+                ->setTemplate('Review/reviewResponsePosted')
+                ->setVar('reviewData', $review);
 
         return $this;
     }
@@ -93,11 +93,11 @@ class ReviewMailer extends Mailer
     {
         $this
             ->setEmailFormat('html')
-            ->setTo(Configure::read('customer-support-email'))
+            ->setTo($toEmail)
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review email not sent')
             ->viewBuilder()
-                ->setTemplate('Review/review_no_email')
-                ->setVar('requestData', $requestData);
+                ->setTemplate('Review/reviewNoEmail')
+                ->setVar('reviewData', $review);
 
         return $this;
     }
