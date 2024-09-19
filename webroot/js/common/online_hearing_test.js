@@ -323,7 +323,7 @@ class OnlineHearingTest {
 	async saveTest(results) {
 		this.log('Saving Test');
 		try {
-			const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrfToken')).split('=')[1];
+			const csrfToken = document.getElementsByName("_csrfToken")[0].value;
 			await fetch("/QuizResults/emailResults", {
 				method: "POST",
 				headers: {

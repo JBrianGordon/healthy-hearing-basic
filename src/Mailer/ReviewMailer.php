@@ -30,7 +30,7 @@ class ReviewMailer extends Mailer
      * @param string $toEmail Recipient email address
      * @return $this
      */
-    public function emailPositiveReviewReceived($review, $toEmail)
+    public function emailPositiveReviewReceived($requestData)
     {
         $this
             ->setEmailFormat('html')
@@ -38,7 +38,7 @@ class ReviewMailer extends Mailer
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Positive Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/review_received')
-                ->setVar('reviewData', $review);
+                ->setVar('requestData', $requestData);
 
         return $this;
     }
@@ -58,7 +58,7 @@ class ReviewMailer extends Mailer
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Negative Review Received')
             ->viewBuilder()
                 ->setTemplate('Review/review_received_negative')
-                ->setVar('reviewData', $review);
+                ->setVar('requestData', $requestData);
 
         return $this;
     }
@@ -78,7 +78,7 @@ class ReviewMailer extends Mailer
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review Response Posted')
             ->viewBuilder()
                 ->setTemplate('Review/review_response_posted')
-                ->setVar('reviewData', $review);
+                ->setVar('requestData', $requestData);
 
         return $this;
     }
@@ -97,7 +97,7 @@ class ReviewMailer extends Mailer
             ->setSubject(Configure::read('siteNameAbbr') . ' -- Review email not sent')
             ->viewBuilder()
                 ->setTemplate('Review/review_no_email')
-                ->setVar('reviewData', $review);
+                ->setVar('requestData', $requestData);
 
         return $this;
     }
