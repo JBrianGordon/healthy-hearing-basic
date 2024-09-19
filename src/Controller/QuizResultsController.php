@@ -55,17 +55,23 @@ class QuizResultsController extends AppController
         $this->request = $this->request->withParsedBody($this->request->getParsedBody());
 
         if ($this->request->is('ajax')) {
+            $data = $this->request->getData();
+
             // Save results
-            if ($this->QuizResults->saveResult($this->request->getData())) {
-                $this->getRequest()->getSession()->write('OnlineTest', $this->request->getData('results'));
+            if ($this->QuizResults->saveResult($data)) {
+                $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
             }
+
             // Email results
-            if ($this->QuizResults->emailResults($this->request->getData())) {
+            $quizResult = $data['results']; // replace this with the actual quiz result
+            $toEmail = $data['email'];
+            if ($this->getMailer('QuizResult')->send('sendQuizResult', [$quizResult, $toEmail])) {
                 return $this->response->withStringBody('true');
             } else {
                 $this->Flash->error('Unable to email results, please try another email address.');
             }
         }
+
         return $this->redirect('/help/online-hearing-test');
     }
 
