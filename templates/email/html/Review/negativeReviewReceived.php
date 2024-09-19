@@ -5,6 +5,7 @@
  */
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 ?>
 <p>Dear <?= $clinicTitle ?> team,</p>
