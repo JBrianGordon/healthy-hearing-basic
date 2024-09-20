@@ -58,6 +58,10 @@ class ContactUsMailer extends Mailer
                 ->setEmailFormat('html')
                 ->setTo($requestData['email'])
                 ->setSubject('Thanks for contacting ' . Configure::read('siteName'))
+                ->setViewVars([
+                    'name' => $requestData['first_name'],
+                    'email' => $requestData['email']
+                ])
                 ->viewBuilder()
                     ->setTemplate('ContactUs/thanks_clinic');
         } else {
@@ -65,6 +69,10 @@ class ContactUsMailer extends Mailer
                 ->setEmailFormat('html')
                 ->setTo($requestData['email'])
                 ->setSubject('Thanks for contacting ' . Configure::read('siteName'))
+                ->setViewVars([
+                    'name' => $requestData['first_name'],
+                    'email' => $requestData['email']
+                ])
                 ->viewBuilder()
                     ->setTemplate('ContactUs/thanks_consumer');
         }

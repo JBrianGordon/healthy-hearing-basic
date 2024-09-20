@@ -63,9 +63,10 @@ class QuizResultsController extends AppController
             }
 
             // Email results
-            $quizResult = $data['results']; // replace this with the actual quiz result
-            $toEmail = $data['email'];
-            if ($this->getMailer('QuizResult')->send('sendQuizResult', [$quizResult, $toEmail])) {
+            $results = json_decode($data['results'], true);
+            $quizResult = $results;
+
+            if ($this->getMailer('QuizResult')->send('sendQuizResult', [$quizResult])) {
                 return $this->response->withStringBody('true');
             } else {
                 $this->Flash->error('Unable to email results, please try another email address.');
