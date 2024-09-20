@@ -1988,6 +1988,7 @@ class LocationsTable extends Table
         ]);
 
         $emails = [];
+        $clinicTitle = $location->title;
 
         // Location Email
         if ($location->hasValue('email')) {
