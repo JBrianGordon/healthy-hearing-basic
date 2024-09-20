@@ -334,18 +334,18 @@ class ReviewsTable extends Table
                     ReviewResponseStatus::from($entity->get('response_status')) === ReviewResponseStatus::RESPONSE_STATUS_PUBLISHED
                    ) {
                     // A clinic response was approved -> Send response-posted email
-                    $entity->set('sendReviewEmail', 'emailReviewResponsePosted');
+                    //$entity->set('sendReviewEmail', 'emailReviewResponsePosted');
                 // Another 'response_status' change that doesn't trigger an email will return true
                 } elseif ($entity->getOriginal('response_status') !== $entity->get('response_status')) {
                     return true;
                 // Status changed to Approved - Send positive review email
                 } else {
-                    $entity->set('sendReviewEmail', 'emailPositiveReviewReceived');
+                    //$entity->set('sendReviewEmail', 'emailPositiveReviewReceived');
                 }
             // Is status 'Denied' (Publish negative review)?
             } elseif (ReviewStatus::DENIED === ReviewStatus::from($entity->get('status'))) {
                 // Status changed to 'Denied' (Published Negative) - Send negative review email
-                $entity->set('sendReviewEmail', 'emailNegativeReviewReceived');
+                //$entity->set('sendReviewEmail', 'emailNegativeReviewReceived');
                 $entity->set('denied_date', FrozenTime::now()->format('Y-m-d H:i:s'));
                 $entity->set('status', ReviewStatus::APPROVED->value);
             }

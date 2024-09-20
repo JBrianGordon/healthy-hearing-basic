@@ -31,30 +31,6 @@ class QuizResult extends Entity
     ];
 
 	/**
-	* Email the results to specified email
-	* @param array of data
-	* @return boolean success
-	*/
-	public function emailResults($data) {
-		if (!isset($data['results'])) {
-			return false;
-		}
-		$results = json_decode($data['results'], true);
-
-		return $this->sendEmail(
-			$results['email'], //to
-			Configure::read('email'), //from
-			'quiz_result_' . $results['hearingResult'] . '_' . strtolower(Configure::read('country')), //template
-			'Your ' . Configure::read('siteName') . ' Test Results', //subject
-			[ //viewvars
-				'url' => $this->resultUrl($data['results'], true),
-				'name' => $results['firstName'] . ' ' . $results['lastName'],
-				'symptoms' => $results['emailSymptoms']
-			]
-		);
-	}
-
-	/**
 	* string URL of results
 	* @param string of results
 	* @return string url to online test
