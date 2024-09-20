@@ -65,7 +65,7 @@ class CorpsController extends BaseAdminController
     public function edit($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
@@ -84,7 +84,7 @@ class CorpsController extends BaseAdminController
     public function preview($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors'],
         ]);
         $this->set('corp', $corp);
         $this->set('isPreview', true);

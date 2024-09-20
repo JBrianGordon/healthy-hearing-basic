@@ -168,7 +168,7 @@ class WikisController extends BaseAdminController
     public function preview($id = null)
     {
         $wiki = $this->Wikis->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors', 'Reviewers', 'Tags'],
         ]);
         $this->set('wiki', $wiki);
         $this->set('isPreview', true);

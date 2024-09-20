@@ -473,13 +473,13 @@ class UsersTable extends CakeDcUsersTable
             $allAuthors[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
         }
 
-        // Subquery to get user_ids from Wikis
+        // Subquery to get user_ids from Model/Table
         $activeItemAuthorSubquery = $this->$modelName->find()
             ->select(['user_id'])
             ->distinct(['user_id'])
             ->where(['is_active' => true]);
 
-        // Fetch authors or writers who are in Wikis
+        // Fetch authors or writers who are in Model/Table
         $activeItemAuthors = $this->find('list', [
             'keyField' => 'id',
             'valueField' => function ($row) {
@@ -524,8 +524,6 @@ class UsersTable extends CakeDcUsersTable
         // want authors that are *only* on inactive items here. There is probably a
         // way to do this in the $inactiveItemAuthors query, but this works as well.
         $onlyInactiveItemAuthors = array_diff_key($inactiveItemAuthors, $activeItemAuthors);
-        // dd($activeItemAuthors);
-        // dd($onlyInactiveItemAuthors);
 
         return [
             'Active ' . $aliasName . ' Authors' => $activeItemAuthors,

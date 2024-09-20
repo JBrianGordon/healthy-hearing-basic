@@ -64,6 +64,7 @@ class Corp extends Entity
         'priority' => true,
         'users' => true,
         'advertisements' => true,
+        'contributors' => true,
     ];
 
     protected $_virtual = ['hh_url'];

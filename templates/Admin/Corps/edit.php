@@ -80,8 +80,20 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 											?>
 											<hr>
 											<h3>Contributors</h3>
-											<?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
-											</div>
+			                                <strong>
+												<em class="text-secondary">Select multiple with the control key (PC) or command key (Mac)</em>
+			                                </strong>
+			                                <?=
+												$this->Form->select('contributors._ids',
+													$authors,
+													[
+														'empty' => "NO additional contributors",
+														'multiple' => true,
+														'size' => 14
+													]
+												)
+											?>
+										</div>
 									</div>
 								</div>
 				            </fieldset>
