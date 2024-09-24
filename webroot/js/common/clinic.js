@@ -1,5 +1,4 @@
 import './appt_request';
-// import './location_review';
 import {directBookBtn} from './direct_book_btn';
 import './common';
 
