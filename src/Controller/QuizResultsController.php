@@ -52,21 +52,19 @@ class QuizResultsController extends AppController
     public function emailResults()
     {
         $this->viewBuilder()->disableAutoLayout();
-        $this->request = $this->request->withParsedBody($this->request->getParsedBody());
 
         if ($this->request->is('ajax')) {
             $data = $this->request->getData();
 
+            //***TODO: Save method is breaking this code, will need to be fixed */
             // Save results
-            if ($this->QuizResults->saveResult($data)) {
-                $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
-            }
+            // if ($this->QuizResults->saveResult($data)) {
+            //     $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
+            // }
 
             // Email results
-            $results = json_decode($data['results'], true);
-            $quizResult = $results;
 
-            if ($this->getMailer('QuizResult')->send('sendQuizResult', [$quizResult])) {
+            if ($this->getMailer('QuizResults')->send('sendQuizResult', [$data['results']])) {
                 return $this->response->withStringBody('true');
             } else {
                 $this->Flash->error('Unable to email results, please try another email address.');
