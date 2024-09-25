@@ -50,8 +50,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 						<ul class="nav nav-tabs clearfix" role="tablist">
 							<li class="nav-item" role="presentation"><button class="nav-link active" data-bs-target="#details" data-bs-toggle="tab" type="button">Help</button></li>
 							<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#admin" data-bs-toggle="tab" type="button">Admin</button></li>
-							<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#display" data-bs-toggle="tab" type="button">Display</button></li>
-							<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#tags" data-bs-toggle="tab" type="button">Tags</button></li>
+							<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#tags" data-bs-toggle="tab" type="button">Tag</button></li>
 						</ul>
 						<div class="tab-content mt20">
 							<div class="tab-pane active" id="details">
@@ -78,26 +77,28 @@ $isDraft = !empty($wiki->id_draft_parent);
 				                ?>
                                 <hr>
                                 <h3>Additional Authors</h3>
-                                <?= $this->Form->control('contributors._ids', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
-                                <h3>Reviewers</h3>
+                                <strong>
+									<em class="text-secondary">Select multiple with the control key (PC) or command key (Mac)</em>
+                                </strong>
+                                <?=
+									$this->Form->select('contributors._ids',
+										$authors,
+										[
+											'empty' => "NO additional contributors",
+											'multiple' => true,
+											'size' => 14
+										]
+									)
+								?>
+
+                                <h3 class="mt-5">Reviewers</h3>
                                 <?= $this->Form->control('reviewers._ids', ['label' => false,'options' => $reviewers,'multiple' => 'checkbox']) ?>
 							</div>
-							<div class="tab-pane" id="display">
-								<?php
-									//*** TODO: may want to have this upload to CKBox: ***/
-				                    echo $this->Form->control('background_file');
-				                    echo $this->Form->control('background_alt');
-								?>
-							</div>
 							<div class="tab-pane" id="tags">
-                                <h3>Tags</h3>
-                                <?= $this->Form->control('tags._ids', [
-										'label' => false,
-										'options' => $tags,
-										'multiple' => 'checkbox',
-										'escape' => false,
-									])
-								?>
+								<strong>A help/wiki page should only be associated with one tag. For now, repeated use of a tag is possible, so be aware of any conflicts. Before a tag can appear in the list below, it must be created in the <?= $this->Html->link('Tag admin panel', ['controller' => 'tags', 'action' => 'index'], ['target' => '_blank']) ?>.</strong>
+								<br>
+                                <em>Select one tag</em>
+                                <?= $this->Form->select('tags._ids', $tags) ?>
 							</div>
 						</div>
 		            </fieldset>

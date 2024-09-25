@@ -10,9 +10,9 @@ use Cake\Routing\Router;
 ?>
 <p>Dear <?= $clinicTitle ?> team,</p>
 
-<p>The <?= Configure::read('sieName') ?> profile for <?= $clinicTitle ?> at <?= $clinicAddress ?> just received a new review.</p>
+<p>The <?= Configure::read('siteName') ?> profile for <?= $clinicTitle ?> at <?= $clinicAddress ?> just received a new review.</p>
 
-<p>At <?= Configure::read('sieName') ?>, we get many consumer reviews of clinics and the vast majority of them are very positive. As we all know, though, it's not possible to please everyone and sometimes consumers submit reviews that are less than positive or express mixed feelings.</p>
+<p>At <?= Configure::read('siteName') ?>, we get many consumer reviews of clinics and the vast majority of them are very positive. As we all know, though, it's not possible to please everyone and sometimes consumers submit reviews that are less than positive or express mixed feelings.</p>
 
 <p>To read this review, please visit the profile at:</p>
 
@@ -20,7 +20,7 @@ use Cake\Routing\Router;
 
 <p>We strongly encourage you to respond to a negative review. A recent survey by BrightLocal found that 89% of consumers read local businesses’ responses to reviews. In fact, even our own user testing has told us that how the clinic responded to a negative review was more important than the negative review itself.</p>
 
-<p>To write a response to this review, please <?= $this->Html->link('click here', $this->Html->url('/clinic', true)) ?>. Your <?= Configure::read('sieName') ?> account number is <strong><?= $clinicUsername ?></strong>. After you are logged in, click on the Reviews tab to see and respond to this review.</p>
+<p>To write a response to this review, please <?= $this->Html->link('click here', $this->Html->url('/clinic', true)) ?>. Your <?= Configure::read('siteName') ?> account number is <strong><?= $clinicUsername ?></strong>. After you are logged in, click on the Reviews tab to see and respond to this review.</p>
 
 <p>Here are some suggestions for responding to a negative review:</p>
 <ul>
@@ -33,6 +33,6 @@ use Cake\Routing\Router;
 
 <p>Please remember that the original reviewer is not notified directly if and when you submit a response. Responding to a review is a way to demonstrate to future profile visitors that your office team cares about customer satisfaction.</p>
 
-<p>If you have any questions, please contact the <?= Configure::read('sieName') ?> team at <?= Configure::read('phone') ?> or <?= Configure::read('customer-support-email') ?>. We would be happy to give you one on one help with this.</p>
+<p>If you have any questions, please contact the <?= Configure::read('siteName') ?> team at <?= Configure::read('phone') ?> or <?= Configure::read('customer-support-email') ?>. We would be happy to give you one on one help with this.</p>
 
 <?= $this->element('email/footer') ?>

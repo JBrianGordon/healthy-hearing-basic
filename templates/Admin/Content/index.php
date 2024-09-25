@@ -22,12 +22,12 @@ foreach ($fields as $field => $type) {
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
     switch ($field) {
-        case 'user_id':
-            $label = 'Primary Author';
-            $type = 'select';
-            $options = $users;
-            $empty = '(select one)';
-            break;
+		case 'user_id':
+			$label = 'Author';
+			$type = 'select';
+			$options = $authors;
+			$empty = '(select one)';
+			break;
         case 'type':
             $type = 'select';
             $options = Content::$typeOptions;

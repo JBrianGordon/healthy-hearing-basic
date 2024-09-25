@@ -152,9 +152,6 @@ class ReviewsController extends BaseAdminController
             $review = $this->Reviews->patchEntity(
                 $review,
                 $this->request->getData(),
-                // [
-                //     'fields' => ['body', 'first_name'] // TO-DO: UPDATE 'FIELDS'
-                // ]
             );
             if ($this->Reviews->save($review)) {
                 $this->Flash->success(__('The review has been saved.'));

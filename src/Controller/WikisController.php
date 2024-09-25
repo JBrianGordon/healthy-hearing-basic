@@ -31,7 +31,7 @@ class WikisController extends AppController
         if (empty($title)) {
             $this->set('title', $this->siteName . " help: Hearing loss, hearing aids, tinnitus and more");
         }
-        $this->backgroundHeight = '1200px';
+
         $this->set('articles', $this->fetchTable('Content')->findLatest(4));
         $this->set('wikis', $this->Wikis->findForIndex());
     }
@@ -103,7 +103,6 @@ class WikisController extends AppController
             $customVars['type'] = 'wiki';
             $customVars['category|2'] = $this->Wikis->tagsForCustomVar($wiki);
             $customVars['level|3'] = getWordCount($wiki->body);
-            $this->set('background', $wiki->background_file);
             $this->set('customVars', $customVars);
             $this->set('isPreview', false);
             $this->set('wiki', $wiki);

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Database\Expression\QueryExpression;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -101,8 +104,10 @@ class WikisTable extends Table
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
-            ->value('name')
-            ->value('slug')
+            ->like('name', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('user_id')
             ->like('body', [
                 'before' => true,
@@ -113,48 +118,21 @@ class WikisTable extends Table
                 'after' => true,
             ])
             ->boolean('is_active')
-            ->exists('id_draft_parent', [
-                'nullValue' => '0',
-            ])
-            ->value('priority')
             ->like('title_head', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->like('title_h1', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->like('background_file', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->like('meta_description', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->like('facebook_title', [
                 'before' => true,
                 'after' => true,
             ])
             ->boolean('facebook_image')
             ->boolean('facebook_image_bypass')
-            ->value('facebook_image_width')
-            ->boolean('facebook_image_height')
-            ->like('facebook_image_alt', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->like('facebook_description', [
-                'before' => true,
-                'after' => true,
-            ])
-            ->value('last_modified')
-            ->value('modified')
-            ->value('created')
-            ->like('background_alt', [
-                'before' => true,
-                'after' => true,
+            ->add('created_date_range', 'Search.Callback', [
+                'callback' => function (Query $query, array $args, Base $filter) {
+                    [$start, $end] = explode(',', $args['created_date_range']);
+                    $startDate = (new FrozenTime($start));
+                    $endDate = (new FrozenTime($end));
+                    $query->where(function (QueryExpression $exp, Query $q) use ($startDate, $endDate) {
+                        return $exp->between('Wikis.created', $startDate, $endDate, 'date');
+                    });
+                },
             ])
             ->add('q', 'Search.Like', [
                 'before' => true,
@@ -165,6 +143,34 @@ class WikisTable extends Table
                 'wildcardOne' => '?',
                 'fields' => ['name', 'slug', 'short'],
             ]);
+    }
+
+    public function getAdvSearchFields()
+    {
+        // Get search fields from Search behavior config
+        $advSearchFields = $this->searchManager()
+            ->getFilters()
+            ->getIterator();
+
+        // Remove multi-field query
+        $advSearchFields->offsetUnset('q');
+
+        // Retrieve array from Iterator
+        $advSearchFields = array_keys($advSearchFields->getArrayCopy());
+
+        // Remove '_date_range' from any datetime range
+        // search filters
+        $advSearchFields = array_map(function($value) {
+            return str_replace('_date_range', '', $value);
+        }, $advSearchFields);
+
+        $tableSchema = $this->getSchema()->typeMap();
+
+        // Return advanced search fields w/data types
+        return array_intersect_key(
+            $tableSchema,
+            array_flip($advSearchFields)
+        );
     }
 
     /**
@@ -228,11 +234,6 @@ class WikisTable extends Table
             ->notEmptyString('title_h1', 'Title H1 cannot be left blank');
 
         // $validator
-        //     ->scalar('background_file')
-        //     ->maxLength('background_file', 255)
-        //     ->allowEmptyFile('background_file');
-
-        // $validator
         //     ->scalar('meta_description')
         //     ->maxLength('meta_description', 255)
         //     ->allowEmptyString('meta_description');
@@ -286,12 +287,6 @@ class WikisTable extends Table
             ->allowEmptyDateTime('last_modified')
             ->requirePresence('last_modified', true, 'Last modified is a required field')
             ->notEmptyString('last_modified', 'Last modified cannot be left blank');
-
-        // $validator
-        //     ->scalar('background_alt')
-        //     ->maxLength('background_alt', 150)
-        //     ->requirePresence('background_alt', 'create')
-        //     ->notEmptyString('background_alt');
 
         return $validator;
     }

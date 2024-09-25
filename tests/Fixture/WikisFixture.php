@@ -30,7 +30,6 @@ class WikisFixture extends TestFixture
                 'priority' => 1,
                 'title_head' => 'Lorem ipsum dolor sit amet',
                 'title_h1' => 'Lorem ipsum dolor sit amet',
-                'background_file' => 'Lorem ipsum dolor sit amet',
                 'meta_description' => 'Lorem ipsum dolor sit amet',
                 'facebook_title' => 'Lorem ipsum dolor sit amet',
                 'facebook_image' => 'Lorem ipsum dolor sit amet',
@@ -42,7 +41,6 @@ class WikisFixture extends TestFixture
                 'last_modified' => '2021-12-10 21:24:20',
                 'modified' => '2021-12-10 21:24:20',
                 'created' => '2021-12-10 21:24:20',
-                'background_alt' => 'Lorem ipsum dolor sit amet',
             ],
             [
                 'id' => 2,
@@ -56,7 +54,6 @@ class WikisFixture extends TestFixture
                 'priority' => 2,
                 'title_head' => 'Lorem ipsum dolor sit amet',
                 'title_h1' => 'Lorem ipsum dolor sit amet',
-                'background_file' => 'Lorem ipsum dolor sit amet',
                 'meta_description' => 'Lorem ipsum dolor sit amet',
                 'facebook_title' => 'Lorem ipsum dolor sit amet',
                 'facebook_image' => 'Lorem ipsum dolor sit amet',
@@ -68,7 +65,6 @@ class WikisFixture extends TestFixture
                 'last_modified' => '2021-12-10 21:24:20',
                 'modified' => '2021-12-10 21:24:20',
                 'created' => '2021-12-10 21:24:20',
-                'background_alt' => 'Lorem ipsum dolor sit amet',
             ],
             [
                 'id' => 3,
@@ -82,7 +78,6 @@ class WikisFixture extends TestFixture
                 'priority' => 3,
                 'title_head' => 'Lorem ipsum dolor sit amet',
                 'title_h1' => 'Lorem ipsum dolor sit amet',
-                'background_file' => 'Lorem ipsum dolor sit amet',
                 'meta_description' => 'Lorem ipsum dolor sit amet',
                 'facebook_title' => 'Lorem ipsum dolor sit amet',
                 'facebook_image' => 'Lorem ipsum dolor sit amet',
@@ -94,7 +89,6 @@ class WikisFixture extends TestFixture
                 'last_modified' => '2021-12-10 21:24:20',
                 'modified' => '2021-12-10 21:24:20',
                 'created' => '2021-12-10 21:24:20',
-                'background_alt' => 'Lorem ipsum dolor sit amet',
             ],
             [ // Draft item - publishable
                 'id' => 4,
@@ -108,7 +102,6 @@ class WikisFixture extends TestFixture
                 'priority' => 1,
                 'title_head' => 'This is the draft wiki',
                 'title_h1' => 'Lorem ipsum dolor sit amet',
-                'background_file' => 'Lorem ipsum dolor sit amet',
                 'meta_description' => 'Lorem ipsum dolor sit amet',
                 'facebook_title' => 'Lorem ipsum dolor sit amet',
                 'facebook_image' => 'Lorem ipsum dolor sit amet',
@@ -120,7 +113,6 @@ class WikisFixture extends TestFixture
                 'last_modified' => '2022-03-03 13:14:14',
                 'modified' => '2021-12-10 21:24:20',
                 'created' => '2021-12-10 21:24:20',
-                'background_alt' => 'Lorem ipsum dolor sit amet',
             ],
            [ // Draft item - non-validating
                 'id' => 5,
@@ -134,7 +126,6 @@ class WikisFixture extends TestFixture
                 'priority' => 2,
                 'title_head' => 'This is the draft wiki',
                 'title_h1' => 'Lorem ipsum dolor sit amet',
-                'background_file' => 'Lorem ipsum dolor sit amet',
                 'meta_description' => 'Lorem ipsum dolor sit amet',
                 'facebook_title' => 'Lorem ipsum dolor sit amet',
                 'facebook_image' => 'Lorem ipsum dolor sit amet',
@@ -146,7 +137,6 @@ class WikisFixture extends TestFixture
                 'last_modified' => '2021-12-10 21:24:20',
                 'modified' => '2021-12-10 21:24:20',
                 'created' => '2021-12-10 21:24:20',
-                'background_alt' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

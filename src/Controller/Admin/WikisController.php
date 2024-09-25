@@ -47,6 +47,17 @@ class WikisController extends BaseAdminController
     public function index()
     {
         $requestParams = $this->request->getQueryParams();
+
+        // Created date range
+        $hasCreatedDateRange =
+            array_key_exists('created_start', $requestParams) &&
+            array_key_exists('created_end', $requestParams);
+
+        if ($hasCreatedDateRange) {
+            $requestParams['created_date_range'] =
+                $requestParams['created_start'] . ',' . $requestParams['created_end'];
+        }
+
         $wikiQuery = $this->Wikis
             ->find('search', [
                 'search' => $requestParams,
@@ -55,8 +66,8 @@ class WikisController extends BaseAdminController
         $this->set('title', 'Help index');
         $this->set('wikis', $this->paginate($wikiQuery));
         $this->set('count', $wikiQuery->count());
-
-        $this->set('fields', $this->Wikis->getSchema()->typeMap());
+        $this->set('fields', $this->Wikis->getAdvSearchFields());
+        $this->set('authors', $this->Wikis->Author->authorList('Wikis', 'Help'));
     }
 
     /**
@@ -68,7 +79,16 @@ class WikisController extends BaseAdminController
     {
         $wiki = $this->Wikis->newEmptyEntity();
         if ($this->request->is('post')) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+            $requestData = $this->request->getData();
+
+            // HACK: See note in edit()
+            $requestData['tags'] = [
+                '_ids' => [
+                    $requestData['tags']['_ids']
+                ]
+            ];
+
+            $wiki = $this->Wikis->patchEntity($wiki, $requestData);
 
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
@@ -77,10 +97,16 @@ class WikisController extends BaseAdminController
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Author->authorList();
+        $authors = $this->Wikis->Author->authorList('Wikis', 'Help');
         $this->set('title', 'Add Help Page');
         $this->set(compact('wiki', 'authors'));
-        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set(
+            'tags',
+            $this->Wikis->Tags->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'display_header',
+            ])->toArray()
+        );
         $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
@@ -98,26 +124,51 @@ class WikisController extends BaseAdminController
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $wiki = $this->Wikis->patchEntity($wiki, $this->request->getData());
+            $requestData = $this->request->getData();
+
+            // HACK: Currently, Wikis and Tags have a belongs-to-many
+            // relationship. Wikis should only have one tag (Content
+            // can have many). Instead of making their relationship
+            // hasOne for now, I just modified the requestData to look as
+            // if it's "many" structured. The Tag data here comes from
+            // a select, but this makes it look like it comes from a
+            // multiple => true control. *I don't think* we can (easily)
+            // make an isUnique rule for this since it's technically a many
+            // relationship, so we're probably stuck with the status quo
+            // (keeping an eye on duplicate Wiki-Tag relationships) for now.
+            // LATER: Make relationship one-to-one
+            $requestData['tags'] = [
+                '_ids' => [
+                    $requestData['tags']['_ids']
+                ]
+            ];
+
+            $wiki = $this->Wikis->patchEntity($wiki, $requestData);
 
             if ($this->Wikis->save($wiki)) {
                 $this->Flash->success(__('The wiki has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit', $wiki->id]);
             }
             $this->Flash->error(__('The wiki could not be saved. Please, try again.'));
         }
-        $authors = $this->Wikis->Author->authorList();
+        $authors = $this->Wikis->Author->authorList('Wikis', 'Help');
         $this->set('title', 'Edit Help Page');
         $this->set(compact('wiki', 'authors'));
-        $this->set('tags', $this->Wikis->Tags->findTagList());
+        $this->set(
+            'tags',
+            $this->Wikis->Tags->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'display_header',
+            ])->toArray()
+        );
         $this->set('reviewers', $this->Wikis->Author->reviewerList());
     }
 
     public function preview($id = null)
     {
         $wiki = $this->Wikis->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors', 'Reviewers', 'Tags'],
         ]);
         $this->set('wiki', $wiki);
         $this->set('isPreview', true);

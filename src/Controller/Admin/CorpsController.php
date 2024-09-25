@@ -51,7 +51,7 @@ class CorpsController extends BaseAdminController
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
         $this->set('title', 'Add Corp');
-        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set('authors', $this->Corps->Author->authorList('Corps', 'Manufacturer'));
         $this->set(compact('corp'));
     }
 
@@ -65,7 +65,7 @@ class CorpsController extends BaseAdminController
     public function edit($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
@@ -77,14 +77,14 @@ class CorpsController extends BaseAdminController
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
         $this->set('title', 'Edit Corp');
-        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set('authors', $this->Corps->Author->authorList('Corps', 'Manufacturer'));
         $this->set(compact('corp'));
     }
 
     public function preview($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors'],
         ]);
         $this->set('corp', $corp);
         $this->set('isPreview', true);
