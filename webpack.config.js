@@ -20,7 +20,7 @@ const folderMinify = (folder, files) => {
 	})
 }
 
-folderMinify(adminFolder, adminFiles);
+// folderMinify(adminFolder, adminFiles);
 folderMinify(commonFolder, commonFiles);
 
 module.exports = {
