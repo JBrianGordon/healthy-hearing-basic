@@ -8,19 +8,16 @@ class QuizResultsMailer extends Mailer
 {
     public function sendQuizResult($data)
     {
-        debug("aaaaa");
         $results = json_decode($data, true);
         $name = $results['firstName'] . ' ' . $results['lastName'];
         $hearingResult = $results['hearingResult'];
         $toEmail = $results['email'];
 
-        $template = 'quiz_result_normal';
+        $template = 'quizResultNormal';
         if ($hearingResult == 'possible') {
-            debug("bbbbb");
-            $template = 'quiz_result_possible';
+            $template = 'quizResultPossible';
         } else if ($hearingResult == 'significant') {
-            debug("ccccc");
-            $template = 'quiz_result_significant';
+            $template = 'quizResultSignificant';
         }
 
         $this
@@ -33,7 +30,6 @@ class QuizResultsMailer extends Mailer
                 'name' => $name
             ]);
 
-        debug("ddddd");
         return $this;
     }
 }
