@@ -8,15 +8,15 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 ?>
-<p>Dear <?= $clinicTitle ?> team,</p>
+<p>Dear <?= $clinic->title ?> team,</p>
 
 <p>Congratulations!</p>
 
 <p>The <?= Configure::read('siteName') ?> profile for your clinic has just received a new review. You can view the profile and see the review here:</p>
 
-<p><?= $this->Html->link(Router::url($url, true)) ?></p>
+<p><?= $this->Html->link(Router::url($clinic->hh_url, true)) ?></p>
 
-<?php if ($isUS): ?>
+<?php if (Configure::read('country') === 'US'): ?>
 	<p>Reviews are an effective way to build your clinic’s online reputation and help this profile stand out amongst the competition; <?= Configure::read('siteName') ?> profiles with reviews get three times more calls and appointments than those without reviews. Don’t be shy about requesting reviews from your patients.</p>
 	<p>You can respond to reviews by logging into your Healthy Hearing profile and clicking the Reviews button.</p>
 <?php else: ?>
