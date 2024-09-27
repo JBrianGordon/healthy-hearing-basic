@@ -199,12 +199,12 @@ class CaCallGroupsTable extends Table
         $validator
             ->scalar('patient_first_name')
             ->maxLength('patient_first_name', 255)
-            ->notEmptyString('patient_first_name');
+            ->allowEmptyString('patient_first_name');
 
         $validator
             ->scalar('patient_last_name')
             ->maxLength('patient_last_name', 255)
-            ->notEmptyString('patient_last_name');
+            ->allowEmptyString('patient_last_name');
 
         $validator
             ->boolean('refused_name')
@@ -428,7 +428,8 @@ class CaCallGroupsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
+        // TODO: We want to allow location_id = 0 also
+        //$rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id', 'allowNullableNulls' => true]);
 
         return $rules;
     }
@@ -446,7 +447,135 @@ class CaCallGroupsTable extends Table
                 $entity->traffic_medium = '';
             }
         }
+        if (!$entity->isNew() && !empty($entity->topic_cancel_appt) && empty($entity->topic_wants_appt)) {
+            if (!empty($entity->getOriginal('topic_wants_appt'))) {
+                // Patient called to cancel an existing appt
+                // Leave as prospect/wants appt/appt set
+                $entity->prospect = CaCallGroup::PROSPECT_YES;
+                $entity->topic_wants_appt = true;
+                $entity->status = CaCallGroup::STATUS_APPT_SET;
+            }
+        }
+        if ($entity->isDirty('prospect')) {
+            // Prospect value has changed
+            if (in_array($entity->prospect, [CaCallGroup::PROSPECT_NO, CaCallGroup::PROSPECT_DISCONNECTED])) {
+                $entity->final_score_date = gmdate('Y-m-d H:i:s');
+            }
+        }
+        if ($entity->isDirty('score')) {
+            // Score value has changed
+            if (in_array($entity->score, [CaCallGroup::SCORE_DISCONNECTED, CaCallGroup::SCORE_MISSED_OPPORTUNITY, CaCallGroup::SCORE_APPT_SET, CaCallGroup::SCORE_APPT_SET_DIRECT])) {
+                $entity->final_score_date = gmdate('Y-m-d H:i:s');
+            } elseif (in_array($entity->score, [CaCallGroup::SCORE_TENTATIVE_APPT, CaCallGroup::SCORE_NOT_REACHED])) {
+                $entity->final_score_date = null;
+            }
+        }
+        if (isset($entity->status)) {
+            $priority = null;
+            switch ($entity->status) {
+                case CaCallGroup::STATUS_VM_NEEDS_CALLBACK:
+                case CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED:
+                case CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER:
+                    $priority = 1;
+                    break;
+                case CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM:
+                case CaCallGroup::STATUS_FOLLOWUP_SET_APPT:
+                case CaCallGroup::STATUS_TENTATIVE_APPT: // should be 2.5?
+                    $priority = 2;
+                    break;
+                case CaCallGroup::STATUS_APPT_SET:
+                    if (isset($entity->score)) {
+                        $score = $entity->score;
+                    } else {
+                        $score = $entity->getOriginal('score');
+                    }
+                    if ($score == CaCallGroup::SCORE_APPT_SET_DIRECT) {
+                        $priority = 3.5;
+                    } else {
+                        $priority = 3.0;
+                    }
+                    break;
+            }
+            $entity->outbound_priority = $priority;
+            if ($entity->isDirty('status')) {
+                // Status has changed
+                if (in_array($entity->status, [CaCallGroup::STATUS_WRONG_NUMBER, CaCallGroup::STATUS_INCOMPLETE])) {
+                    $entity->final_score_date = gmdate('Y-m-d H:i:s');
+                }
+            }
+        }
+        // Save scheduled call date and appt date in UTC/GMT
+        if (isset($entity->scheduled_call_date)) {
+            // Scheduled call date/time is currently in eastern timezone. Save in UTC/GMT.
+            // TODO: I think this is already formatted as UTC so this can be removed. Need to test and verify.
+            //$entity->scheduled_call_date = $entity->scheduled_call_date->i18nFormat('yyyy-MMM-dd HH:mm:ss', 'UTC');
+        }
+        if (isset($entity->appt_date)) {
+            // Appointment date/time is currently in clinic's timezone. Save in UTC/GMT.
+            if (!empty($entity->location_id)) {
+                $clinicTimezoneOffset = $this->Location->getClinicTimezoneOffset($entity->location_id);
+            } else {
+                $clinicTimezoneOffset = getEasternTimezoneOffset();
+            }
+            $utc_date = strtotime($entity->appt_date.'+'.$clinicTimezoneOffset.'hours');
+            $entity->appt_date = date('Y-m-d H:i:s', $utc_date);
+        }
+        if (isset($entity->is_patient) && ($entity->is_patient == 1)) {
+            $entity->patient_first_name = '';
+            $entity->patient_last_name = '';
+        }
+
         return true;
+    }
+
+    /**
+     * afterSave() for CaCallGroupsTable
+     *
+     * @param \Cake\Event\EventInterface $event
+     * @param \Cake\Datasource\EntityInterface $entity
+     * @param \ArrayObject $options
+     *
+     */
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isDirty('status')) {
+            $location = empty($entity->location) ? $this->Locations->get($entity->location_id) : $entity->location;
+            // Status has changed. Save an automated note.
+            $this->CaCallGroupNotes->addStatusChangeNote($entity->id, $entity->getOriginal('status'), $entity->status);
+            // If status changed to Followup No Answer, send an automated email
+            if ($entity->status == CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER) {
+                $url = router::url('/admin/ca_call_groups/view/'.$this->id, true);
+                $this->sendEmail(
+                    Configure::read('ca-supervisor-email'), //to
+                    Configure::read('email'), //from
+                    'ca_clinic_no_answer', //template
+                    'Location did not answer followup call attempts', //subject
+                    [
+                        'locationId' => $entity->location_id,
+                        'locationTitle' => $location->title,
+                        'caCallGroupId' => $entity->id,
+                        'url' => $url
+                    ]
+                );
+            }
+
+            // If status changed to New, send an automated email to Becky to investigate
+            if ($entity->status == CaCallGroup::STATUS_NEW) {
+                $message = 'Becky,<br>'.
+                    '<strong>Please investigate.</strong> CA Call Group '.$entity->id.
+                    ' was saved with "New" status.<br>'.
+                    '<pre>'.json_encode($entity, JSON_PRETTY_PRINT).'</pre>';
+                $this->sendEmail(
+                    'blemons@healthyhearing.com', //to
+                    Configure::read('email'), //from
+                    'generic', //template
+                    "'New' status found in call group", //subject
+                    [
+                        'message' => $message,
+                    ]
+                );
+            }
+        }
     }
 
     /**

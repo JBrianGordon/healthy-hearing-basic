@@ -95,11 +95,29 @@ class CaCallGroupsController extends BaseAdminController
      */
     public function edit($id = null)
     {
+        $associations = [
+            'Locations',
+            'CaCalls',
+            'CaCallGroupNotes' => [
+                'sort' => ['CaCallGroupNotes.created' => 'DESC']
+            ],
+        ];
         $caCallGroup = $this->CaCallGroups->get($id, [
-            'contain' => ['Locations', 'CaCalls', 'CaCallGroupNotes'],
+            'contain' => $associations,
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $caCallGroup = $this->CaCallGroups->patchEntity($caCallGroup, $this->request->getData());
+            $data = $this->request->getData();
+            // remove empty notes
+            foreach ($data['ca_call_group_notes'] as $key => $caCallGroupNote) {
+                if (empty($caCallGroupNote['body'])) {
+                    unset($data['ca_call_group_notes'][$key]);
+                }
+            }
+            $caCallGroup = $this->CaCallGroups->patchEntity(
+                $caCallGroup,
+                $data,
+                ['associated' => $associations]
+            );
             if ($this->CaCallGroups->save($caCallGroup)) {
                 $this->Flash->success(__('The ca call group has been saved.'));
 

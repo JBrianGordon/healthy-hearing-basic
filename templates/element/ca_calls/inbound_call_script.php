@@ -568,7 +568,7 @@ if ($copyPage) {
 </div>
 
 <?php
-echo $this->Form->control("ca_call_group.ca_call_group_note.$noteCount.body", [
+echo $this->Form->control("ca_call_group.ca_call_group_notes.$noteCount.body", [
 	'label' => [
 		'class' => 'col col-md-3 control-label ml10',
 		'text' => 'Add a note'],

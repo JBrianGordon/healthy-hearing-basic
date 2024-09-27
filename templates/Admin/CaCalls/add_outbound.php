@@ -34,8 +34,7 @@ if (!empty($caCallGroup->is_patient)) {
 	$isPatient = false;
 	$patientName = trim($caCallGroup->patient_first_name).' '.trim($caCallGroup->patient_last_name);
 }
-$noteCount = isset($caCallGroup->CaCallGroupNote) ? count($caCallGroup->CaCallGroupNote) : 0;
-$calls = isset($calls) ? $calls : [];
+$noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_call_group_notes) : 0;
 ?>
 
 <h2>New Outbound Call</h2>
@@ -53,8 +52,6 @@ $calls = isset($calls) ? $calls : [];
 	echo $this->Form->hidden('ca_call_group.status', ['id' => true]);
 	echo $this->Form->hidden('ca_call_group.clinic_followup_count', ['id' => true]);
 	echo $this->Form->hidden('ca_call_group.patient_followup_count', ['id' => true]);
-	echo $this->Form->hidden('ca_call_group.clinic_outbound_count', ['id' => true]);
-	echo $this->Form->hidden('ca_call_group.patient_outbound_count', ['id' => true]);
 	echo $this->Form->hidden('ca_call_group.vm_outbound_count', ['id' => true]);
 	echo $this->Form->hidden('ca_call_group.original_group_id', ['value'=>$groupId]);
 	echo $this->Form->hidden('ca_call_group.directBookType', ['value'=>$directBookType]);
@@ -138,7 +135,7 @@ $calls = isset($calls) ? $calls : [];
 				<div class="notes">
 					<?php
 					for ($i = 0; $i < $noteCount; $i++) {
-						echo $this->element('ca_calls/note', ['note' => $caCallGroup->ca_call_group_note[$i]]);
+						echo $this->element('ca_calls/note', ['note' => $caCallGroup->ca_call_group_notes[$i]]);
 					}
 					?>
 				</div>
@@ -200,7 +197,7 @@ $calls = isset($calls) ? $calls : [];
 				CaCall::CALL_TYPE_VM_CALLBACK_CLINIC   => 'Clinic',
 				CaCall::CALL_TYPE_VM_CALLBACK_INVALID  => 'N/A'
 			);
-			echo $this->Form->control('voicemailFrom', array(
+			echo $this->Form->control('ca_call_group.voicemail_from', array(
 				'label' => 'Call is from?',
 				'type' => 'select',
 				'options' => $vmFromOptions,
@@ -895,370 +892,12 @@ $calls = isset($calls) ? $calls : [];
 				));
 				?>
 			</div>
+			<!--TODO: Does this id need to be renamed now that we don't do surveys? -->
 			<div id="surveyComplete" style="display:none;">
 				<div class="row">
 					<div class="col-md-offset-3 col-md-9">
 						<div class="well blue-well">
 							Thank you very much. Have a great day.
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-		<?php if ($callType == CaCall::CALL_TYPE_OUTBOUND_CLINIC): ?>
-			<div class="row">
-				<div class="col-md-offset-3 col-md-9">
-					<div class="well blue-well">
-						<i class="text-muted bold-number">[Call clinic: <span class="locationPhone"></span>]</i><br>
-					</div>
-				</div>
-			</div>
-			<?php echo $this->Form->control('ca_call_group.did_they_answer_outbound', array(
-				'options' => array('1'=>'Yes', '0'=>'No'),
-				'empty' => 'Select One',
-				'label' => 'Did clinic answer?',
-				'required' => true
-			)); ?>
-			<div id="questionVisitClinic">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Hello, this is <?php echo $user['first_name']; ?> from Healthy Hearing. I'm calling to follow up about <strong><?php echo $patientName; ?></strong>. They found your clinic through the Healthy Hearing website. We sent them over to you on <strong><?php echo date('M d', strtotime($caCallGroup->created)); ?></strong> and they set an appointment with you for <strong><?php echo date('M d', strtotime($caCallGroup->appt_date)); ?></strong>.<br><br>
-							Let me just confirm: Did <strong><?php echo $patientName; ?></strong> make it to that appointment?<br><br>
-							<strong>Patient phone number: </strong><?php echo formatPhoneNumber($caCallGroup->caller_phone); ?>
-						</div>
-						<?php echo $this->element('ca_calls/covered_entity_popover'); ?>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_visit_clinic', array(
-					'options' => CaCallGroup::$questionVisitClinicAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div class="appt_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.appt_date', array(
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+1 year')),
-				));
-				?>
-			</div>
-			<div class="scheduled_call_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.scheduled_call_date', array(
-					'label' => 'Next attempt to reach clinic ('.getEasternTimezone().')',
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+2 years')),
-				));
-				?>
-			</div>
-			<div id="questionWhatFor" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							What did they have done at that appointment?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_what_for', array(
-					'options' => CaCallGroup::$questionWhatForAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionPurchase" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Did they purchase a hearing aid as a result of that visit?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_purchase', array(
-					'options' => CaCallGroup::$questionPurchaseAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrand" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							What brand of hearing aid did they purchase?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_brand', array(
-					'options' => CaCallGroup::$questionBrandAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrandOther" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_brand_other', array(
-					'label' => '',
-					'required' => true,
-					'placeholder' => '(fill in brand)'
-				)); ?>
-			</div>
-			<div class="notes">
-				<?php
-				echo $this->Form->control("ca_call_group.ca_call_group_notes.$noteCount.body", [
-					'label' => 'Add a note',
-					'rows' => 3,
-					'required' => false,
-				]);
-				?>
-			</div>
-
-			<div id="surveyComplete" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Thank you very much. Have a great day.
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-		<?php if ($callType == CaCall::CALL_TYPE_OUTBOUND_CALLER): ?>
-			<?php $name = $isPatient ? 'you' : $caCallGroup->patient_first_name; ?>
-			<div class="row">
-				<div class="col-md-offset-3 col-md-9">
-					<div class="well blue-well">
-						<i class="text-muted bold-number">[Call patient: <?php echo $caCallGroup->caller_phone; ?>]</i><br>
-					</div>
-				</div>
-			</div>
-			<?php echo $this->Form->control('ca_call_group.did_they_answer_outbound', array(
-				'options' => array('1'=>'Yes', '0'=>'No'),
-				'empty' => 'Select One',
-				'label' => 'Did patient answer?',
-				'required' => true
-			)); ?>
-			<div id="questionVisitClinic">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Hello, may I please speak with <strong><?php echo $callerName; ?></strong>?<br>
-							Hello, this is <?php echo $user['first_name']; ?> from Healthy Hearing.
-							You recently called to set an appointment
-							<?php if (!$isPatient): ?>
-								for <strong><?php echo $patientName; ?></strong>
-							<?php endif; ?>
-							at <strong><span class="locationTitle"></span></strong>
-							on <strong><?php echo date('l, F jS, Y \a\t g:i A.', strtotime($caCallGroup->appt_date)); ?></strong>
-							I'm calling to follow up so that we can get better at helping people find hearing clinics. May I ask you for one minute of your time to answer a few questions about that appointment?<br><br>
-
-							<i class="text-muted">[If Yes:]</i>
-							Great! Let me just confirm: Did <strong><?php echo $name; ?></strong> make it to that appointment?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_visit_clinic', array(
-					'options' => CaCallGroup::$questionVisitClinicAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div class="appt_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.appt_date', array(
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+1 year')),
-				));
-				?>
-			</div>
-			<div class="scheduled_call_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.scheduled_call_date', array(
-					'label' => 'Next attempt to reach consumer ('.getEasternTimezone().')',
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+2 years')),
-				));
-				?>
-			</div>
-			<div id="questionWhatFor" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							What did <?php echo $name; ?> have done at that appointment?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_what_for', array(
-					'options' => CaCallGroup::$questionWhatForAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionPurchase" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Did <?php echo $name; ?> purchase a hearing aid as a result of that visit?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_purchase', array(
-					'options' => CaCallGroup::$questionPurchaseAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrand" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							What brand of hearing aid did <?php echo $name; ?> purchase?
-						</div>
-					</div>
-				</div>
-				<?php echo $this->Form->control('ca_call_group.question_brand', array(
-					'options' => CaCallGroup::$questionBrandAnswers,
-					'empty' => 'Select One',
-					'label' => '',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrandOther" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_brand_other', array(
-					'label' => '',
-					'required' => true,
-					'placeholder' => '(fill in brand)'
-				)); ?>
-			</div>
-			<div class="notes">
-				<?php
-				echo $this->Form->control("ca_call_group.ca_call_group_notes.$noteCount.body", [
-					'label' => 'Add a note',
-					'rows' => 3,
-					'required' => false,
-				]);
-				?>
-			</div>
-
-			<div id="surveyComplete" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Thank you very much. Have a great day.
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-		<?php if ($callType == CaCall::CALL_TYPE_SURVEY_DIRECT): ?>
-			<div class="row">
-				<div class="col-md-offset-3 col-md-9">
-					<div class="well blue-well">
-						<i class="text-muted">Login to direct booking system to find appointment information.<br>
-						Patient name: <strong><?php echo $patientName; ?></strong><br>
-						Phone: <strong><?php echo formatPhoneNumber($caCallGroup->caller_phone); ?></strong><br>
-						Appt date: <strong><?php echo date('m/d/Y H:i A', strtotime($caCallGroup->appt_date)); ?></strong><br>
-						<br>
-						<a href="http://dm.us.atlas.demant.com/usretail/contact" target="_blank" rel="noopener">http://dm.us.atlas.demant.com/usretail/contact</a>
-						</i>
-					</div>
-				</div>
-			</div>
-			<?php echo $this->Form->control('ca_call_group.dm_has_appt_info', [
-				'options' => ['1'=>'Yes', '0'=>'No'],
-				'empty' => 'Select One',
-				'label' => 'Does DM have appt info?',
-				'required' => true
-			]); ?>
-			<div id="questionVisitClinic">
-				<?php echo $this->Form->control('ca_call_group.question_visit_clinic', array(
-					'options' => CaCallGroup::$questionVisitClinicAnswers,
-					'empty' => 'Select One',
-					'label' => 'Did patient attend appt?',
-					'required' => true
-				)); ?>
-			</div>
-			<div class="appt_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.appt_date', array(
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+1 year')),
-				));
-				?>
-			</div>
-			<div class="scheduled_call_date" style="display:none;">
-				<?php
-				echo $this->Form->control('ca_call_group.scheduled_call_date', array(
-					'label' => 'Next attempt to reach clinic ('.getEasternTimezone().')',
-					'class' => 'form-control datepicker inline-date',
-					'interval' => 15,
-					'minYear' => '2016',
-					'maxYear' => date("Y", strtotime('+2 years')),
-				));
-				?>
-			</div>
-			<div id="questionWhatFor" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_what_for', array(
-					'options' => CaCallGroup::$questionWhatForAnswers,
-					'empty' => 'Select One',
-					'label' => 'What did they have done?',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionPurchase" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_purchase', array(
-					'options' => CaCallGroup::$questionPurchaseAnswers,
-					'empty' => 'Select One',
-					'label' => 'Did they purchase a hearing aid?',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrand" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_brand', array(
-					'options' => CaCallGroup::$questionBrandAnswers,
-					'empty' => 'Select One',
-					'label' => 'What brand?',
-					'required' => true
-				)); ?>
-			</div>
-			<div id="questionBrandOther" style="display:none;">
-				<?php echo $this->Form->control('ca_call_group.question_brand_other', array(
-					'label' => '',
-					'required' => true,
-					'placeholder' => '(fill in brand)'
-				)); ?>
-			</div>
-			<div class="notes">
-				<?php
-				echo $this->Form->control("ca_call_group.ca_call_group_notes.$noteCount.body", [
-					'label' => 'Add a note',
-					'rows' => 3,
-					'required' => false,
-				]);
-				?>
-			</div>
-
-			<div id="surveyComplete" style="display:none;">
-				<div class="row">
-					<div class="col-md-offset-3 col-md-9">
-						<div class="well blue-well">
-							Survey complete.
 						</div>
 					</div>
 				</div>

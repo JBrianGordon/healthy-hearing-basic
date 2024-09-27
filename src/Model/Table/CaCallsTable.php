@@ -246,7 +246,7 @@ class CaCallsTable extends Table
             $data['address'] = $address;
             $data['link'] = $link;
             $data['landmarks'] = $location->landmarks;
-            $data['timezone'] = $this->Locations->getClinicTimezone($locationId);
+            $data['timezone'] = $this->Locations->getClinicTimezoneAbbr($locationId);
             $data['timezoneOffset'] = $this->Locations->getClinicTimezoneOffset($locationId);
             $data['currentTime'] = $this->Locations->getClinicDateTime($locationId, 'now', 'h:i A');
             $data['searchTitle'] = $searchTitle;

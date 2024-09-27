@@ -231,7 +231,7 @@ const onPageLoad = () => {
       case 'ca-call-group-did-clinic-refuse':
         onChangeDidClinicRefuse();
         break;
-      case 'CaCallVoicemailFrom':
+      case 'ca-call-group-voicemail-from':
         document.querySelector('#call-type').value = targetValue;
         document.querySelector('#call-type').dispatchEvent(new Event('change', {bubbles: true}));
         break;
@@ -251,10 +251,6 @@ const onPageLoad = () => {
   document.querySelector('body').addEventListener('keyup', e => {
     const targetId = e.target.id;
     const targetValue = e.target.value;
-
-    if (targetId === 'ca-call-group-front-desk-name') {
-      onChangeFrontDeskName(targetValue);
-    }
 
     if (targetId === 'ca-call-group-front-desk-name') {
       onChangeFrontDeskName(targetValue);
@@ -724,13 +720,10 @@ function loadReturnVoicemailForm(type) {
 }
 
 function onChangeIsPatient(isPatient) {
-  const patientDataElements = document.querySelectorAll('.patient-data');
   if (isPatient) {
     setElementDisplay('.patient-data', 'none');
   } else {
-    patientDataElements.forEach(element => {
-      setElementDisplay('.patient-data', 'block');
-    });
+    setElementDisplay('.patient-data', 'block');
   }
   updateVisibility();
   onChangePatientInfo();
@@ -1054,17 +1047,12 @@ function clearAllFields() {
 
 function doWeHaveLocationAndFrontDesk() {
   const locationId = document.querySelector("#ca-call-group-location-id").value;
-  const frontDeskName = document.querySelector("#ca-call-group-front-desk-name").value;
-  const locationAndFrontDeskElements = document.querySelectorAll(".have-location-and-front-desk");
+  const frontDeskName = document.querySelector("#ca-call-group-front-desk-name");
   
   if (locationId && frontDeskName) {
-    locationAndFrontDeskElements.forEach((element) => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('.have-location-and-front-desk', 'block');
   } else {
-    locationAndFrontDeskElements.forEach((element) => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('.have-location-and-front-desk', 'none');
   }
   
   updateVisibility();

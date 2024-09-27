@@ -7,6 +7,12 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\CaCallGroup;
+use App\Model\Entity\User;
+use Cake\Routing\Router;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 
 /**
  * CaCallGroupNotes Model
@@ -95,5 +101,62 @@ class CaCallGroupNotesTable extends Table
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    /**
+    * Add an automated note for the selected call group and currently logged in user
+    * @param int caCallGroupId
+    * @param string noteBody
+    * @param int status
+    * @return void
+    */
+    public function add($caCallGroupId, $noteBody, $status=null) {
+        if (!isset($status)) {
+            // Get status from the call group
+            $caCallGroup = $this->CaCallGroups->get($caCallGroupId);
+            $status = $caCallGroup->status;
+        }
+
+        $userId = Router::getRequest()->getAttribute('identity')->id;
+        $userId = empty($userId) ? User::USER_ID_AUTOMATED_USER : $userId;
+
+        $caCallGroupNote = $this->newEntity([
+            'ca_call_group_id' => $caCallGroupId,
+            'body' => $noteBody,
+            'status' => $status,
+            'user_id' => $userId,
+        ]);
+        $this->save($caCallGroupNote);
+    }
+
+    /**
+    * Add an automated note for call group status change
+    * @param int caCallGroupId
+    * @return void
+    */
+    public function addStatusChangeNote($caCallGroupId, $oldStatus, $newStatus) {
+        if (!empty($oldStatus)) {
+            $noteBody = 'Status changed from \''.CaCallGroup::$statuses[$oldStatus].'\' to \''.CaCallGroup::$statuses[$newStatus].'\'.';
+        } else {
+            $noteBody = 'Status is \''.CaCallGroup::$statuses[$newStatus].'\'.';
+        }
+        $this->add($caCallGroupId, $noteBody, $newStatus);
+    }
+
+    /**
+    * beforeSave
+    */
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options) {
+        // If we don't have a user_id, save it using session identity
+        if (!isset($entity->user_id)) {
+            $userId = Router::getRequest()->getAttribute('identity')->id;
+            $entity->user_id = empty($userId) ? User::USER_ID_AUTOMATED_USER : $userId;
+        }
+        // If we don't have a status, get it from the call group
+        if (!isset($entity->status) && isset($entity->ca_call_group_id)) {
+            $caCallGroup = $this->CaCallGroups->get($entity->ca_call_group_id);
+            $entity->status = $caCallGroup->status;
+        }
+        return true;
     }
 }
