@@ -5,11 +5,12 @@
  */
 
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 ?>
-Dear <?= $clinicTitle ?> team, <br /><br />
+Dear <?= $clinic->title ?> team, <br /><br />
 
-Thank you for submitting a response to a review of your clinic <?= $clinicTitle ?>. Your response has been posted on your profile. You can view it here: <?= $this->Html->link(Router::url($url, true)) ?>.<br /><br />
+Thank you for submitting a response to a review of your clinic <?= $clinic->title ?>. Your response has been posted on your profile. You can view it here: <?= $this->Html->link(Router::url($clinic->hh_url, true)) ?>.<br /><br />
 
 When a clinic receives a review that is less than positive, a sincere reply from the clinic can help build a positive reputation. The original reviewer is not notified if and when you submit a response. However, responding to a review is a great way to demonstrate to future profile visitors that your clinic team takes customer satisfaction seriously.<br /><br />
 

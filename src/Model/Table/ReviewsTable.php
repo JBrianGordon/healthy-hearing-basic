@@ -385,10 +385,12 @@ class ReviewsTable extends Table
                     break;
             }
 
-            $locationEmails = $this
-                ->getTableLocator()
-                ->get('Locations')
-                ->getEmailList($entity->location_id);
+            $locationTable = $this->getTableLocator()->get('Locations');
+
+            $locationEmails = $locationTable->getEmailList($entity->location_id);
+            $locationEntity = $locationTable->get($entity->location_id, [
+                'contain' => 'Users'
+            ]);
 
             // If there are no location emails, alert site admin(s).
             if ($locationEmails === []) {
@@ -400,13 +402,28 @@ class ReviewsTable extends Table
             } else {
                 switch ($sendReviewEmail) {
                     case 'emailPositiveReviewReceived':
-                        $this->sendReviewEmail('emailPositiveReviewReceived', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailPositiveReviewReceived',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                     case 'emailNegativeReviewReceived':
-                        $this->sendReviewEmail('emailNegativeReviewReceived', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailNegativeReviewReceived',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                     case 'emailReviewResponsePosted':
-                        $this->sendReviewEmail('emailReviewResponsePosted', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailReviewResponsePosted',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                 }
             }
@@ -550,11 +567,15 @@ class ReviewsTable extends Table
      * @param \Cake\Datasource\EntityInterface $entity Review entity
      * @param array $reviewEmailAddresses Array of location's emails
      */
-    public function sendReviewEmail(string $reviewEmailType, EntityInterface $reviewEntity, array $reviewEmailAddresses)
+    public function sendReviewEmail(
+        string $reviewEmailType,
+        EntityInterface $reviewEntity,
+        array $reviewEmailAddresses,
+        EntityInterface $clinic)
     {
         $mailer = $this->getMailer('Review');
         foreach ($reviewEmailAddresses as $toEmail) {
-           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail]);
+           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail, $clinic]);
         }
     }
 }
