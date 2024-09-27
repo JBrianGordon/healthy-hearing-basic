@@ -392,12 +392,14 @@ class ReviewsTable extends Table
                 'contain' => 'Users'
             ]);
 
-            // If there are no location emails, alert site admin(s).
-            if ($locationEmails === []) {
+            // If there are no location emails or if the clinic
+            // is not is_active or is_show, alert site admin(s).
+            if ($locationEmails === [] || ($locationEntity->is_active === false || $locationEntity->is_show === false)) {
                 $this->sendReviewEmail(
                     'noEmailSentToClinic',
                     $entity,
-                    [Configure::read('customer-support-email')]
+                    [Configure::read('customer-support-email')],
+                    $locationEntity
                 );
             } else {
                 switch ($sendReviewEmail) {
