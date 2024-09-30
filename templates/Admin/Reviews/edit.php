@@ -18,7 +18,6 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
         <div class="panel-body p10">
             <div class="btn-group">
                 <?= $this->Html->link( ' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi-search'])?>
-                <?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
                 <?= $this->Form->postLink(' Delete', ['action' => 'delete', $review->id], ['confirm' => __('Are you sure you want to delete # {0}?', $review->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']
                 ) ?>
                 <?= $this->Html->link( ' Edit Location', ['controller' => 'locations', 'action' => 'edit', $review->location_id], ['class' => 'btn btn-default bi-geo-alt-fill'])?>
@@ -55,8 +54,6 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                             <?= $this->Form->create($review) ?>
                             <fieldset>
                                 <?php
-                                    //*** TODO: add location search functionality: ***/
-                                    echo $this->Form->control('location_search');
                                     echo $this->Form->control('location_id', ['label' => 'Location Id', 'required' => true, 'type' => 'text']);
                                     echo $this->Form->control('body');
                                     echo $this->Form->control('character_count', ['required' => false, 'disabled' => true]);
