@@ -1,6 +1,12 @@
-<?php $approvedDenied = $isDenied ? 'denied' : 'approved'; ?>
+<?php
+	$approvedDenied = match ($reviewData->sendReviewEmail) {
+		'emailPositiveReviewReceived' => 'approved',
+		'emailNegativeReviewReceived' => 'denied',
+		default => 'processed'
+	}
+?>
 
-You <?= $isDenied ? 'denied' : 'approved' ?> a review for <?= $clinic->title ?> (<?= $clinic->id ?>).
+You <?= $approvedDenied ?> a review for <?= $clinic->title ?> (<?= $clinic->id ?>).
 <br><br>
 <?php if ($clinic->is_active === false || $clinic->is_show === false): ?>
 	They do not currently have a public profile. They were not sent an email regarding this new review.
