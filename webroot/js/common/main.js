@@ -58,6 +58,14 @@ $(window).ready(function() {
     //Attach popovers to all elements that need it
     $('[data-toggle="popover"]').popover({html:true});
 
+	//Add protocol to href value if missing
+	document.querySelectorAll('.external-link').forEach(link => {
+		let url = link.getAttribute('href');
+		if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+			link.setAttribute('href', 'https://' + url);
+		}
+	});
+
 	//Set default scroll position for hash links to clear navbar
 	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 		anchor.addEventListener('click', function(e) {

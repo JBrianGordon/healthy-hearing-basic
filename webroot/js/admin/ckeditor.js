@@ -263,7 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         callback: url => url && !(/healthyhearing|hearingdirectory|hhcake/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
                         attributes: {
                             target: '_blank',
-                            rel: 'noopener noreferrer'
+                            rel: 'noopener noreferrer',
+                            class: 'external-link'
                         }
                     }
                 }
