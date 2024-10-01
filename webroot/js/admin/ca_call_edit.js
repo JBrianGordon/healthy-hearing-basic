@@ -584,10 +584,10 @@ function handleLocationChange(data) {
 
   if (IS_CLINIC_LOOKUP_PAGE) {
     if (locationId) {
-      fetch(`/ca-calls/get_previous_calls/${locationId}/1`, {
-        method: "POST",
+      fetch(`/admin/ca-calls/get-previous-calls/${locationId}/1`, {
+        method: "GET",
         headers: {
-          "Content-Type": "application/json"
+          "Accept": "application/json"
         }
       })
       .then(response => response.json())
@@ -1046,10 +1046,16 @@ function clearAllFields() {
 }
 
 function doWeHaveLocationAndFrontDesk() {
-  const locationId = document.querySelector("#ca-call-group-location-id").value;
+  var doWeHaveLocationAndFrontDesk = false;
+  const locationId = document.querySelector("#ca-call-group-location-id");
   const frontDeskName = document.querySelector("#ca-call-group-front-desk-name");
   
   if (locationId && frontDeskName) {
+    if ((locationId.value > 0) && frontDeskName.value) {
+      doWeHaveLocationAndFrontDesk = true;
+    }
+  }
+  if (doWeHaveLocationAndFrontDesk) {
     setElementDisplay('.have-location-and-front-desk', 'block');
   } else {
     setElementDisplay('.have-location-and-front-desk', 'none');
@@ -1059,26 +1065,14 @@ function doWeHaveLocationAndFrontDesk() {
 }
 
 function doWeHaveLocationInitially() {
-  const locationId = document.querySelector("#ca-call-group-location-id").value;
-  const initHaveLocationElements = document.querySelectorAll(".init_have_location");
-  const initNoLocationElements = document.querySelectorAll(".init_no_location");
+  const locationId = document.querySelector("#ca-call-group-location-id");
 
-  if (locationId && (parseInt(locationId) > 8119000000)) {
-    initHaveLocationElements.forEach((element) => {
-      element.style.display = 'block';
-    });
-
-    initNoLocationElements.forEach((element) => {
-      element.style.display = 'none';
-    });
+  if (locationId && (parseInt(locationId.value) > 0)) {
+    setElementDisplay('.init_have_location', 'block');
+    setElementDisplay('.init_no_location', 'none');
   } else {
-    initHaveLocationElements.forEach((element) => {
-      element.style.display = 'none';
-    });
-
-    initNoLocationElements.forEach((element) => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('.init_have_location', 'none');
+    setElementDisplay('.init_no_location', 'block');
   }
 
   updateVisibility();

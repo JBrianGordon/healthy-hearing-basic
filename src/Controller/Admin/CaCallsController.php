@@ -367,4 +367,30 @@ class CaCallsController extends BaseAdminController
 //        $this->request->data['CaCall']['start_time'] = getCurrentEasternTime();
 //        $this->request->data['CaCall']['user_id'] = $this->Auth->user('id');
     }
+
+    // Return call from clinic
+    public function clinicLookup() {
+        if (!empty($this->request->data)) {
+            if (empty($this->request->data['CaCall']['id'])) {
+                // Saving a new call
+                $this->request->data['CaCall']['duration'] = strtotime(getCurrentEasternTime()) - strtotime($this->request->data['CaCall']['start_time']);
+            }
+            $this->CaCall->create();
+            $validate = ($this->request->data['CaCallGroup']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            if ($this->CaCall->saveAll($this->request->data, ['validate' => $validate, 'deep' => true])) {
+                $this->goodFlash(__('The call has been saved'));
+                return $this->redirect('/admin-panel');
+            } else {
+                $this->badFlash('The call could not be saved. Please, try again.<br><br>'.print_r($this->CaCall->validationErrors, true));
+            }
+        }
+
+        // New followup call
+        $caCall = $this->CaCalls->newEmptyEntity();
+        $caCall->start_time = getCurrentEasternTime();
+        $caCall->user_id = $this->user->id;
+        // Call type may be changed by js (followup, tentative, or survey)
+        $caCall->call_type = CaCall::CALL_TYPE_FOLLOWUP_APPT;
+        $this->set('caCall', $caCall);
+    }
 }
