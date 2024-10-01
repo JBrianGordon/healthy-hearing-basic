@@ -257,14 +257,14 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             language: 'en',
             link: {
+                defaultProtocol: 'https://',
                 decorators: {
                     openInNewTab: {
                         mode: 'automatic',
                         callback: url => url && !(/healthyhearing|hearingdirectory|hhcake/.test(url)) && !url.startsWith('#') && !url.startsWith('/'),
                         attributes: {
                             target: '_blank',
-                            rel: 'noopener noreferrer',
-                            class: 'external-link'
+                            rel: 'noopener noreferrer'
                         }
                     }
                 }
