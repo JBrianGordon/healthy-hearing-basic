@@ -196,6 +196,8 @@ return [
             'controller' => 'Sitemaps',
             'action' => [
                 'index',
+                'main',
+                'view',
             ],
             'bypassAuth' => true,
         ],
