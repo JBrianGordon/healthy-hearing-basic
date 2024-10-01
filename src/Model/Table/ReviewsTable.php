@@ -114,6 +114,14 @@ class ReviewsTable extends Table
                         return LocationReviewStatus::REVIEW_STATUS_4_LESS->value;
                     }
                 },
+                // Last review date
+                'last_review_date' => function ($event, $entity, $table, $original) {
+                    $lastApproved = $this->find()
+                        ->where(['status' => ReviewStatus::APPROVED->value])
+                        ->order(['created' => 'DESC'])
+                        ->first();
+                    return $lastApproved->created;
+                },
             ]
         ]);
 
