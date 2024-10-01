@@ -75,6 +75,7 @@ editorElements.forEach((element) => {
         },
         language: 'en',
         link: {
+            defaultProtocol: 'https://',
             decorators: {
                 openInNewTab: {
                     mode: 'manual',
