@@ -5,6 +5,7 @@
   min-height: 290px;
   width: 400px;
   position: fixed;
+  transition: right 0.5s ease-in-out;
   right: -360px;
   top: 113px;
   z-index: 800;
