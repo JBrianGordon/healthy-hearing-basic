@@ -276,12 +276,12 @@ class CaCallsController extends BaseAdminController
             }
             // Saving an outbound call
             $requestData['duration'] = strtotime(getCurrentEasternTime()) - strtotime($requestData['start_time']);
-            $validate = ($requestData['ca_call_group']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            $checkRules = ($requestData['ca_call_group']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
             $caCall = $this->CaCalls->newEmptyEntity();
             $this->CaCalls->patchEntity($caCall, $requestData, [
                 'associated' => ['CaCallGroups']
             ]);
-            if ($this->CaCalls->save($caCall, ['validate' => $validate])) {
+            if ($this->CaCalls->save($caCall, ['checkRules' => $checkRules])) {
                 $this->CaCallGroups->unlock();
                 $this->Flash->success(__('The call has been saved'));
                 if ($requestData['ca_call_group']['original_group_id'] != $requestData['ca_call_group']['id']) {
@@ -370,18 +370,21 @@ class CaCallsController extends BaseAdminController
 
     // Return call from clinic
     public function clinicLookup() {
-        if (!empty($this->request->data)) {
+        if ($this->request->is('post')) {
             if (empty($this->request->data['CaCall']['id'])) {
                 // Saving a new call
-                $this->request->data['CaCall']['duration'] = strtotime(getCurrentEasternTime()) - strtotime($this->request->data['CaCall']['start_time']);
+                $caCall = $this->CaCalls->newEmptyEntity();
+                $this->CaCalls->patchEntity($caCall, $requestData, [
+                    'associated' => ['CaCallGroups']
+                ]);
+                $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
             }
-            $this->CaCall->create();
-            $validate = ($this->request->data['CaCallGroup']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
-            if ($this->CaCall->saveAll($this->request->data, ['validate' => $validate, 'deep' => true])) {
-                $this->goodFlash(__('The call has been saved'));
+            $checkRules = ($caCall->ca_call_group->status == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            if ($this->CaCall->save($this->request->data, ['checkRules' => $checkRules])) {
+                $this->Flash->success('The call has been saved');
                 return $this->redirect('/admin-panel');
             } else {
-                $this->badFlash('The call could not be saved. Please, try again.<br><br>'.print_r($this->CaCall->validationErrors, true));
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
             }
         }
 
@@ -392,5 +395,72 @@ class CaCallsController extends BaseAdminController
         // Call type may be changed by js (followup, tentative, or survey)
         $caCall->call_type = CaCall::CALL_TYPE_FOLLOWUP_APPT;
         $this->set('caCall', $caCall);
+    }
+
+    /**
+    * New 'Clinic Quick Pick' Call
+    *
+    * @return void
+    */
+    public function quickPick() {
+        $requestData = $this->request->getData();
+        if ($this->request->is('post')) {
+            if (empty($requestData['id'])) {
+                // Saving a new call
+                $caCall = $this->CaCalls->newEmptyEntity();
+                $this->CaCalls->patchEntity($caCall, $requestData, [
+                    'associated' => ['CaCallGroups']
+                ]);
+                $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
+            } else {
+                $caCall = $this->CaCalls->get($requestData['id']);
+            }
+            $quickPickStatus = $caCall->ca_call_group->status;
+            $isIncompleteRefused = in_array( // Is call INCOMPLETE or REFUSED NAME/ADDRESS CALLS?
+                $quickPickStatus, [
+                    CaCallGroup::STATUS_INCOMPLETE,
+                    CaCallGroup::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS,
+                    CaCallGroup::STATUS_QUICK_PICK_CALLER_REFUSED_HELP
+                ]
+            );
+            if ($isIncompleteRefused) { // Remove location_id and set PROSPECT_DISCONNECTED
+                $caCall->ca_call_group->location_id = '';
+                $caCall->ca_call_group->prospect = CaCallGroup::PROSPECT_DISCONNECTED;
+            }
+            if ($quickPickStatus == CaCallGroup::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS) {
+                $caCall->ca_call_group->refused_name = true;
+            }
+            $caCall->ca_call_group->topic_wants_appt = '1';
+            $checkRules = !$isIncompleteRefused; // Only validate calls that are not INCOMPLETE or REFUSED NAME/ADDRESS
+            if ($this->CaCall->save($caCall, ['checkRules' => $checkRules])) {
+                $this->Flash->success('The call has been saved');
+                return $this->redirect('/admin-panel');
+            } else {
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
+            }
+        }
+
+        if (empty($caCall)) {
+            // New quick-pick call
+            $caCall = $this->CaCalls->newEmptyEntity();
+            $caCall->start_time = getCurrentEasternTime();
+            $caCall->call_type = CaCall::CALL_TYPE_INBOUND_QUICK_PICK;
+            $caCall->user_id = $this->user->id;
+        }
+        $this->set('previousCalls', []);
+        $this->set('caCall', $caCall);
+    }
+
+    /**
+    * Finds closest clinics to an originAddress (e.g. customer address)
+    * via ajax.
+    */
+    public function getClosestClinics($originAddress) {
+        $this->viewBuilder()->setLayout('ajax');
+        $this->meta['robots'] = "NOINDEX, FOLLOW";
+        $data = $this->CaCalls->getClosestClinics($originAddress);
+        $this->set('data', $data);
+        $this->viewBuilder()->setOption('serialize', 'data');
+        return;
     }
 }

@@ -26,6 +26,7 @@ const onPageLoad = () => {
           }
         })
         .catch(error => {
+          console.log('unlockCallGroup() error:');
           console.error('An error occurred:', error);
         });
     }
@@ -71,7 +72,8 @@ const onPageLoad = () => {
           onChangeGroupSearch(caCallGroupId);
         }
       } catch (error) {
-        console.error('An error occurred while unlocking the call group:', error);
+        console.log('unlockCallGroup() error:');
+        console.error(error);
       }
     }
 
@@ -626,7 +628,8 @@ function handleLocationChange(data) {
         }
       })
       .catch(error => {
-        // Handle the error
+        console.log('getPreviousCalls() error:');
+        console.error(error);
       });
     } else {
       // No location selected
@@ -709,7 +712,8 @@ function loadReturnVoicemailForm(type) {
         triggerChange('#ca-call-group-did-they-answer-vm');
       })
       .catch(error => {
-        console.log(error);
+        console.log('Error in '+ajaxUrl);
+        console.error(error);
       });
   } else {
     const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');

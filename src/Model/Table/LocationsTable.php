@@ -12,6 +12,7 @@ use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
 use App\Model\Entity\ImportStatus;
 use App\Enums\Model\Review\ReviewStatus;
+use App\Utility\GeoLocAddressUtility;
 use Cake\Core\Configure;
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
@@ -2364,5 +2365,16 @@ class LocationsTable extends Table
         }
 
         return $retval;
+    }
+
+    /**
+    * Geoloc an address for me.
+    * @param string address fragment
+    * @return mixed result of geocode lookup
+    */
+    public function geoLocAddress($address) {
+        $addressGeocoder = new GeoLocAddressUtility();
+        $addressGeocoderResult = $addressGeocoder->byAddress($address);
+        return $addressGeocoderResult;
     }
 }
