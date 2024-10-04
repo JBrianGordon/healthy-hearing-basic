@@ -352,7 +352,7 @@ class CaCallsController extends BaseAdminController
     }
 
     public function ajaxConsumerForm($caCallGroupId = null) {
-        $this->layout = 'ajax';
+        $this->viewBuilder()->setLayout('ajax');
         $caCallGroup = $this->CaCallGroups->find('all', [
             'contain' => ['Locations','CaCalls','CaCallGroupNotes'],
             'conditions' => ['CaCallGroups.id' => $caCallGroupId],

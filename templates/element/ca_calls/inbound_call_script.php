@@ -11,7 +11,8 @@ if ($copyPage) {
 ?>
 <?= $this->Form->control('ca_call_group.refused_name', [
 	'type' => 'checkbox',
-	'label' => 'Refused to give name?',
+	'label' => ' Refused to give name?',
+	'style' => 'margin-left:23%;',
 ]) ?>
 <div class="refusedNameNo">
 	<?= $this->Form->control('ca_call_group.caller_first_name', ['label' => ['class' => 'ml10']]) ?>
@@ -49,6 +50,7 @@ if ($copyPage) {
 		'type' => 'checkbox',
 		'label' => ['class' => 'ml10', 'text' => ' Self'],
 		'default' => true,
+		'style' => 'margin-left:23%;',
 	])?>
 	<div class="patient-data" style="display:none;">
 		<?= $this->Form->control('ca_call_group.patient_first_name', ['label' => ['class' => 'ml10']]) ?>
