@@ -1434,11 +1434,15 @@ function onChangeDidTheyAnswerFollowup(answer) {
     if (didTheyAnswerFollowupNo) {
       didTheyAnswerFollowupNo.style.display = 'none';
     }
-    didTheyAnswerFollowupVm.style.display = 'none';
+    if (didTheyAnswerFollowupVm) {
+      didTheyAnswerFollowupVm.style.display = 'none';
+    }
     scheduledCallDate.style.display = 'none';
   } else if (answer === 'vm') {
     const prospect = document.querySelector("#ca-call-group-prospect").value;
-    didTheyAnswerFollowupYes.style.display = 'none';
+    if (didTheyAnswerFollowupYes) {
+      didTheyAnswerFollowupYes.style.display = 'none';
+    }
     if (didTheyAnswerFollowupNo) {
       didTheyAnswerFollowupNo.style.display = 'none';
     }
@@ -1452,8 +1456,12 @@ function onChangeDidTheyAnswerFollowup(answer) {
       callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     }
   } else { // NO
-    didTheyAnswerFollowupYes.style.display = 'none';
-    didTheyAnswerFollowupVm.style.display = 'none';
+    if (didTheyAnswerFollowupYes) {
+      didTheyAnswerFollowupYes.style.display = 'none';
+    }
+    if (didTheyAnswerFollowupVm) {
+      didTheyAnswerFollowupVm.style.display = 'none';
+    }
     if (didTheyAnswerFollowupNo) {
       didTheyAnswerFollowupNo.style.display = 'block';
     }
