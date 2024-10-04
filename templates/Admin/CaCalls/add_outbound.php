@@ -355,9 +355,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											<?= $this->Form->control('ca_call_group.didClinicRefuse', [
 												'type' => 'checkbox',
 												'label' => 'Clinic refused to take patient data',
-												//'wrapInput' => 'col col-md-9 col-md-offset-3 pt0',
-												//'div' => 'form-group pt0',
-												//'class' => false,
+												'style' => 'margin-left:23%;'
 											]) ?>
 											<div class="didClinicRefuseYes" style="display:none;">
 												<div class="row">
@@ -423,7 +421,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => [
 											'class' => 'control-label',
 											'text' => 'Needs supervisor review'],
-										'wrapInput' => 'col col-md-9 col-md-offset-3 pt0',
+											'style' => 'margin-left:23%;'
 									]);
 									?>
 								<?php endif; ?>
@@ -691,9 +689,9 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => [
 											'class' => 'control-label',
 											'text' => 'Needs supervisor review'],
-										'wrapInput' => 'col col-md-9 col-md-offset-3 pt0',
-										'div' => 'form-group pt0',
-										'class' => false,
+											'style' => 'margin-left:23%;',
+											'div' => 'form-group pt0',
+											'class' => false,
 									]);
 									?>
 								<?php endif; ?>
@@ -778,8 +776,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => [
 											'class' => 'control-label',
 											'text' => 'Needs supervisor review'],
-										'wrapInput' => 'col col-md-9 col-md-offset-3 pt0',
-										'div' => 'form-group pt0'
+											'style' => 'margin-left:23%;'
 									]);
 									?>
 									<!-- If clinic already contacted caller and an appointment was set: -->
@@ -907,9 +904,8 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'label' => [
 												'class' => 'control-label',
 												'text' => 'Needs supervisor review'],
-											'wrapInput' => 'col col-md-9 col-md-offset-3 pt0',
-											'div' => 'form-group pt0',
-											'class' => false,
+												'style' => 'margin-left:23%;',
+												'class' => false,
 										]);
 										?>
 									</div>
