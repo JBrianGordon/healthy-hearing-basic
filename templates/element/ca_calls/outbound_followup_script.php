@@ -9,8 +9,9 @@ echo $this->Form->control('ca_call_group.caller_first_name');
 echo $this->Form->control('ca_call_group.caller_last_name');
 echo $this->Form->control('ca_call_group.caller_phone');
 echo $this->Form->control('ca_call_group.is_patient', [
-	'label' => 'Self',
+	'label' => ' Self',
 	'default' => true,
+	'style' => 'margin-left:24%;'
 ]);
 ?>
 <div class="patient-data" style="display:none;">
