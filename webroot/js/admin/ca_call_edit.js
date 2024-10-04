@@ -16,7 +16,7 @@ const onPageLoad = () => {
 
     if (targetId === 'cancelBtn') {
       const caCallGroupId = document.querySelector('#ca-call-group-id').value;
-      const url = `/ca-calls/unlock_call_group/${caCallGroupId}`;
+      const url = `/ca-calls/unlock-call-group/${caCallGroupId}`;
 
       fetch(url)
         .then(response => response.json())
@@ -60,7 +60,7 @@ const onPageLoad = () => {
     if (targetId === 'unlockBtn') {
       const caCallGroupId = document.querySelector('#ca-call-group-id').value;
       try {
-        const response = fetch(`/ca-calls/unlock_call_group/${caCallGroupId}`, {
+        const response = fetch(`/ca-calls/unlock-call-group/${caCallGroupId}`, {
           method: 'post',
           headers: {
             'Content-Type': 'application/json'
@@ -693,9 +693,9 @@ function loadReturnVoicemailForm(type) {
   const caCallGroupId = document.querySelector('#ca-call-group-id').value;
   let ajaxUrl = null;
   if (type === 'clinic') {
-    ajaxUrl = '/admin/ca-calls/ajax_clinic_form/' + caCallGroupId;
+    ajaxUrl = '/admin/ca-calls/ajax-clinic-form/' + caCallGroupId;
   } else if (type === 'consumer') {
-    ajaxUrl = '/admin/ca-calls/ajax_consumer_form/' + caCallGroupId;
+    ajaxUrl = '/admin/ca-calls/ajax-consumer-form/' + caCallGroupId;
   }
 
   if (ajaxUrl) {
@@ -1093,7 +1093,7 @@ function showGroupFound() {
 
     if (groupNotLoaded && !isGroupLocked) {
       groupFoundElement.dataset.groupId = groupId;
-      fetch(`/admin/ca-calls/ajax_outbound_followup_form/${groupId}`)
+      fetch(`/admin/ca-calls/ajax-outbound-followup-form/${groupId}`)
         .then((response) => response.text())
         .then((data) => {
           const status = document.querySelector("#ca-call-group-status").value;
