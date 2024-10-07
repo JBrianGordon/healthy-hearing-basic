@@ -3,13 +3,12 @@ function onPageLoadQuickPick() {
   document.querySelector('body').addEventListener('change', e => {
     const targetId = e.target.id;
     const targetValue = e.target.value;
-    const targetChecked = e.target.checked;
 
     if (targetId === 'ca-call-group-refused-name-quick-pick') {
       onChangeRefusedNameQuickPick();
     }
 
-    if (targetId === 'ca-call-group-refused-name-againquick-pick') {
+    if (targetId === 'ca-call-group-refused-name-again-quick-pick') {
       onChangeRefusedNameAgainQuickPick();
     }
 
@@ -21,7 +20,6 @@ function onPageLoadQuickPick() {
   // Listen for clicks
   document.querySelector('body').addEventListener('click', e => {
     const targetId = e.target.id;
-    const targetValue = e.target.value;
     const targetChecked = e.target.checked;
 
     // Find closest clinics button
@@ -32,6 +30,10 @@ function onPageLoadQuickPick() {
     // Load more clinics button
     if (targetId === 'loadMoreClinics') {
       loadMoreClinics();
+    }
+
+    if (targetId === 'ca-call-group-is-patient') {
+      onChangePatientInfo(targetChecked);
     }
   });
 
@@ -77,6 +79,42 @@ function onChangeRefusedNameAgainQuickPick() {
     element.classList.toggle('hidden');
   });
   updateVisibility();
+}
+
+function onChangePatientInfo(isPatient) {
+  if (isPatient) {
+    document.querySelectorAll('span.not-self').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+    document.querySelectorAll('span.self').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+    document.querySelectorAll('span.isNotPatient').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+    const patientNameElement = document.querySelector('span.patientName');
+    if (patientNameElement) {
+      const callerFirstName = document.querySelector('#ca-call-group-caller-first-name').value;
+      const callerLastName = document.querySelector('#ca-call-group-caller-last-name').value;
+      patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
+    }
+  } else {
+    document.querySelectorAll('span.isNotPatient').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+    const patientNameElement = document.querySelector('span.patientName');
+    if (patientNameElement) {
+      const patientFirstName = document.querySelector('#ca-call-group-patient-first-name').value;
+      const patientLastName = document.querySelector('#ca-call-group-patient-last-name').value;
+      patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
+    }
+    document.querySelectorAll('span.self').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+    document.querySelectorAll('span.not-self').forEach(element => {
+      element.classList.toggle('hidden');
+    });
+  }
 }
 
 function isHidden(el) {
