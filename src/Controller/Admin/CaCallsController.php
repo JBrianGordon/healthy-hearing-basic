@@ -264,43 +264,46 @@ class CaCallsController extends BaseAdminController
             $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
 
-        $requestData = $this->request->getData();
-        if (!empty($requestData)) {
-            if (empty($this->request->data['CaCallGroup']['id']) && !empty($this->request->data['CaCallGroup']['original_group_id'])) {
+        if ($this->request->is('post')) {
+            $requestData = $this->request->getData();
+            if (empty($requestData['ca_call_group']['id']) && !empty($requestData['ca_call_group']['original_group_id'])) {
                 // This was a voicemail call from clinic, but there are no related call groups to handle.
                 // Delete this VM call and group.
-                $this->CaCalls->deleteAll(['CaCall.ca_call_group_id'=>$this->request->data['CaCallGroup']['original_group_id']], false);
-                $this->CaCallGroups->delete($this->request->data['CaCallGroup']['original_group_id'], false);
+                $this->CaCalls->deleteAll(['CaCall.ca_call_group_id'=>$requestData['ca_call_group']['original_group_id']], false);
+                $this->CaCallGroups->delete($requestData['ca_call_group']['original_group_id'], false);
                 $this->Flash->success('The call has been saved');
                 return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
             }
             // Saving an outbound call
-            $this->request->data['CaCall']['duration'] = strtotime(getCurrentEasternTime()) - strtotime($this->request->data['CaCall']['start_time']);
-            $this->CaCalls->create();
-            $validate = ($this->request->data['CaCallGroup']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
-            if ($this->CaCalls->saveAll($this->request->data, ['validate' => $validate, 'deep' => true])) {
+            $requestData['duration'] = strtotime(getCurrentEasternTime()) - strtotime($requestData['start_time']);
+            $checkRules = ($requestData['ca_call_group']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            $caCall = $this->CaCalls->newEmptyEntity();
+            $this->CaCalls->patchEntity($caCall, $requestData, [
+                'associated' => ['CaCallGroups']
+            ]);
+            if ($this->CaCalls->save($caCall, ['checkRules' => $checkRules])) {
                 $this->CaCallGroups->unlock();
                 $this->Flash->success(__('The call has been saved'));
-                if ($this->request->data['CaCallGroup']['original_group_id'] != $this->request->data['CaCallGroup']['id']) {
+                if ($requestData['ca_call_group']['original_group_id'] != $requestData['ca_call_group']['id']) {
                     // This was a voicemail related to a previous call group.
                     // Reassign the VM calls to the new group id. Delete the VM group.
                     $this->CaCalls->updateAll(
-                        ['CaCall.ca_call_group_id' => $this->request->data['CaCallGroup']['id']],
-                        ['CaCall.ca_call_group_id' => $this->request->data['CaCallGroup']['original_group_id']]
+                        ['CaCall.ca_call_group_id' => $requestData['ca_call_group']['id']],
+                        ['CaCall.ca_call_group_id' => $requestData['ca_call_group']['original_group_id']]
                     );
-                    $this->CaCallGroups->delete($this->request->data['CaCallGroup']['original_group_id'], false);
+                    $this->CaCallGroups->delete($requestData['ca_call_group']['original_group_id'], false);
                 }
-                if (($this->request->data['CaCall']['call_type'] == CaCall::CALL_TYPE_FOLLOWUP_NO_ANSWER) &&
-                    ($this->request->data['CaCallGroup']['did_they_want_help'] == 1)) {
+                if (($requestData['call_type'] == CaCall::CALL_TYPE_FOLLOWUP_NO_ANSWER) &&
+                    ($requestData['ca_call_group']['did_they_want_help'] == 1)) {
                     return $this->redirect(array('controller' => 'ca_calls', 'action' => 'copy', $caCallGroupId));
                 } else {
                     return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
                 }
             } else {
-                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($this->CaCalls->validationErrors, true));
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
             }
         } else {
-            $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes']]);
+            $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
             $previousCalls = $this->CaCalls->find('all', [
                 'conditions' => ['ca_call_group_id' => $caCallGroupId]
             ])->all();
@@ -328,8 +331,9 @@ class CaCallsController extends BaseAdminController
                     $this->set('recordingUrl', $caCallGroup->ca_calls[0]['recording_url']);
                     $this->set('recordingDuration', $caCallGroup->ca_calls[0]['duration']);
                     $this->set('voicemailTime', $caCallGroup->ca_calls[0]['start_time']);
-                    $this->set('voicemailFrom', $caCallGroup->caller_phone);
-                    $this->request->data['CaCallGroup']['vm_outbound_count']++;
+                    //todo: can this be removed? I don't think it is used
+                    //$this->set('voicemailFrom', $caCallGroup->caller_phone);
+                    $caCallGroup->vm_outbound_count++;
                     break;
                 case CaCallGroup::STATUS_FOLLOWUP_APPT_REQUEST_FORM:
                 case CaCallGroup::STATUS_FOLLOWUP_SET_APPT:
@@ -339,20 +343,124 @@ class CaCallsController extends BaseAdminController
                 case CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER:
                     $caCallGroup->patient_followup_count++;
                     break;
-                case CaCallGroup::STATUS_APPT_SET:
-                case CaCallGroup::STATUS_OUTBOUND_CLINIC_ATTEMPTED:
-                    $caCallGroup->clinic_outbound_count++;
-                    break;
-                case CaCallGroup::STATUS_OUTBOUND_CLINIC_DECLINED:
-                case CaCallGroup::STATUS_OUTBOUND_CLINIC_TOO_MANY_ATTEMPTS:
-                case CaCallGroup::STATUS_OUTBOUND_CUST_ATTEMPTED:
-                    $caCallGroup->patient_outbound_count++;
-                    break;
             }
             $caCall->call_type = $callType;
             $this->set('caCall', $caCall);
             $this->set('previousCalls', $previousCalls);
             $this->CaCallGroups->lock($caCallGroupId, $this->user->id);
         }
+    }
+
+    public function ajaxConsumerForm($caCallGroupId = null) {
+        $this->viewBuilder()->setLayout('ajax');
+        $caCallGroup = $this->CaCallGroups->find('all', [
+            'contain' => ['Locations','CaCalls','CaCallGroupNotes'],
+            'conditions' => ['CaCallGroups.id' => $caCallGroupId],
+        ])->first();
+        $this->set('recordingUrl', $caCallGroup->ca_calls[0]->recording_url);
+        $this->set('recordingDuration', $caCallGroup->ca_calls[0]->duration);
+        $this->set('voicemailTime', $caCallGroup->ca_calls[0]->start_time);
+        $this->set('voicemailFrom', $caCallGroup->caller_phone);
+        $this->set('noteCount', count($caCallGroup->ca_call_group_notes));
+//        $this->request->data['CaCallGroup'] = $caCallGroup;
+//        $this->request->data['CaCall']['ca_call_group_id'] = $caCallGroupId;
+//        $this->request->data['CaCall']['start_time'] = getCurrentEasternTime();
+//        $this->request->data['CaCall']['user_id'] = $this->Auth->user('id');
+    }
+
+    // Return call from clinic
+    public function clinicLookup() {
+        if ($this->request->is('post')) {
+            if (empty($this->request->data['CaCall']['id'])) {
+                // Saving a new call
+                $caCall = $this->CaCalls->newEmptyEntity();
+                $this->CaCalls->patchEntity($caCall, $requestData, [
+                    'associated' => ['CaCallGroups']
+                ]);
+                $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
+            }
+            $checkRules = ($caCall->ca_call_group->status == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
+            if ($this->CaCall->save($this->request->data, ['checkRules' => $checkRules])) {
+                $this->Flash->success('The call has been saved');
+                return $this->redirect('/admin-panel');
+            } else {
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
+            }
+        }
+
+        // New followup call
+        $caCall = $this->CaCalls->newEmptyEntity();
+        $caCall->start_time = getCurrentEasternTime();
+        $caCall->user_id = $this->user->id;
+        // Call type may be changed by js (followup, tentative, or survey)
+        $caCall->call_type = CaCall::CALL_TYPE_FOLLOWUP_APPT;
+        $this->set('caCall', $caCall);
+    }
+
+    /**
+    * New 'Clinic Quick Pick' Call
+    *
+    * @return void
+    */
+    public function quickPick() {
+        $requestData = $this->request->getData();
+        if ($this->request->is('post')) {
+            if (empty($requestData['id'])) {
+                // Saving a new call
+                $caCall = $this->CaCalls->newEmptyEntity();
+                $this->CaCalls->patchEntity($caCall, $requestData, [
+                    'associated' => ['CaCallGroups']
+                ]);
+                $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
+            } else {
+                $caCall = $this->CaCalls->get($requestData['id']);
+            }
+            $quickPickStatus = $caCall->ca_call_group->status;
+            $isIncompleteRefused = in_array( // Is call INCOMPLETE or REFUSED NAME/ADDRESS CALLS?
+                $quickPickStatus, [
+                    CaCallGroup::STATUS_INCOMPLETE,
+                    CaCallGroup::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS,
+                    CaCallGroup::STATUS_QUICK_PICK_CALLER_REFUSED_HELP
+                ]
+            );
+            if ($isIncompleteRefused) { // Remove location_id and set PROSPECT_DISCONNECTED
+                $caCall->ca_call_group->location_id = '';
+                $caCall->ca_call_group->prospect = CaCallGroup::PROSPECT_DISCONNECTED;
+            }
+            if ($quickPickStatus == CaCallGroup::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS) {
+                $caCall->ca_call_group->refused_name = true;
+            }
+            $caCall->ca_call_group->topic_wants_appt = '1';
+            $checkRules = !$isIncompleteRefused; // Only validate calls that are not INCOMPLETE or REFUSED NAME/ADDRESS
+            if ($this->CaCall->save($caCall, ['checkRules' => $checkRules])) {
+                $this->Flash->success('The call has been saved');
+                return $this->redirect('/admin-panel');
+            } else {
+                $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
+            }
+        }
+
+        if (empty($caCall)) {
+            // New quick-pick call
+            $caCall = $this->CaCalls->newEmptyEntity();
+            $caCall->start_time = getCurrentEasternTime();
+            $caCall->call_type = CaCall::CALL_TYPE_INBOUND_QUICK_PICK;
+            $caCall->user_id = $this->user->id;
+        }
+        $this->set('previousCalls', []);
+        $this->set('caCall', $caCall);
+    }
+
+    /**
+    * Finds closest clinics to an originAddress (e.g. customer address)
+    * via ajax.
+    */
+    public function getClosestClinics($originAddress) {
+        $this->viewBuilder()->setLayout('ajax');
+        $this->meta['robots'] = "NOINDEX, FOLLOW";
+        $data = $this->CaCalls->getClosestClinics($originAddress);
+        $this->set('data', $data);
+        $this->viewBuilder()->setOption('serialize', 'data');
+        return;
     }
 }

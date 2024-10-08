@@ -114,6 +114,14 @@ class ReviewsTable extends Table
                         return LocationReviewStatus::REVIEW_STATUS_4_LESS->value;
                     }
                 },
+                // Last review date
+                'last_review_date' => function ($event, $entity, $table, $original) {
+                    $lastApproved = $this->find()
+                        ->where(['status' => ReviewStatus::APPROVED->value])
+                        ->order(['created' => 'DESC'])
+                        ->first();
+                    return $lastApproved->created;
+                },
             ]
         ]);
 
@@ -385,28 +393,47 @@ class ReviewsTable extends Table
                     break;
             }
 
-            $locationEmails = $this
-                ->getTableLocator()
-                ->get('Locations')
-                ->getEmailList($entity->location_id);
+            $locationTable = $this->getTableLocator()->get('Locations');
 
-            // If there are no location emails, alert site admin(s).
-            if ($locationEmails === []) {
+            $locationEmails = $locationTable->getEmailList($entity->location_id);
+            $locationEntity = $locationTable->get($entity->location_id, [
+                'contain' => 'Users'
+            ]);
+
+            // If there are no location emails or if the clinic
+            // is not is_active or is_show, alert site admin(s).
+            if ($locationEmails === [] || ($locationEntity->is_active === false || $locationEntity->is_show === false)) {
                 $this->sendReviewEmail(
                     'noEmailSentToClinic',
                     $entity,
-                    [Configure::read('customer-support-email')]
+                    [Configure::read('customer-support-email')],
+                    $locationEntity
                 );
             } else {
                 switch ($sendReviewEmail) {
                     case 'emailPositiveReviewReceived':
-                        $this->sendReviewEmail('emailPositiveReviewReceived', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailPositiveReviewReceived',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                     case 'emailNegativeReviewReceived':
-                        $this->sendReviewEmail('emailNegativeReviewReceived', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailNegativeReviewReceived',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                     case 'emailReviewResponsePosted':
-                        $this->sendReviewEmail('emailReviewResponsePosted', $entity, $locationEmails);
+                        $this->sendReviewEmail(
+                            'emailReviewResponsePosted',
+                            $entity,
+                            $locationEmails,
+                            $locationEntity
+                        );
                         break;
                 }
             }
@@ -550,11 +577,15 @@ class ReviewsTable extends Table
      * @param \Cake\Datasource\EntityInterface $entity Review entity
      * @param array $reviewEmailAddresses Array of location's emails
      */
-    public function sendReviewEmail(string $reviewEmailType, EntityInterface $reviewEntity, array $reviewEmailAddresses)
+    public function sendReviewEmail(
+        string $reviewEmailType,
+        EntityInterface $reviewEntity,
+        array $reviewEmailAddresses,
+        EntityInterface $clinic)
     {
         $mailer = $this->getMailer('Review');
         foreach ($reviewEmailAddresses as $toEmail) {
-           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail]);
+           $mailer->send($reviewEmailType, [$reviewEntity , $toEmail, $clinic]);
         }
     }
 }

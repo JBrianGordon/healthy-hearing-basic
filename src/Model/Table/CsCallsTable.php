@@ -14,7 +14,7 @@ use App\Model\Entity\CsCall;
 /**
  * CsCalls Model
  *
- * @property \App\Model\Table\CallsTable&\Cake\ORM\Association\BelongsTo $Calls
+ * //@property \App\Model\Table\CallsTable&\Cake\ORM\Association\BelongsTo $Calls
  * @property \App\Model\Table\LocationsTable&\Cake\ORM\Association\BelongsTo $Locations
  *
  * @method \App\Model\Entity\CsCall newEmptyEntity()
@@ -48,6 +48,7 @@ class CsCallsTable extends Table
         $this->setPrimaryKey('id');
         $this->addBehavior('Search.Search');
 
+        //TODO: Rename call_id field to id_callsource_call (this is a call ID that callsource sends us in leadscore report)
         $this->belongsTo('Calls', [
             'foreignKey' => 'call_id',
             'joinType' => 'LEFT',

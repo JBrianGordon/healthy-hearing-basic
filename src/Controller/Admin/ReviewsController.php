@@ -115,28 +115,6 @@ class ReviewsController extends BaseAdminController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $review = $this->Reviews->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $review = $this->Reviews->patchEntity($review, $this->request->getData());
-            if ($this->Reviews->save($review)) {
-                $this->Flash->success(__('The review has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The review could not be saved. Please, try again.'));
-        }
-        $locations = $this->Reviews->Locations->find('list', ['limit' => 200])->all();
-        $this->set('title', 'Add Review');
-        $this->set(compact('review', 'locations'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Review id.

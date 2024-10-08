@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	
 	// Add Google Maps link to Get Directions button
-	const clinicAddr = document.querySelector(".address").textContent.trim().replace(/ /g, "+").replace("#", "");
+	const clinicAddr = document.querySelector("#mapsAddress").textContent.trim().replace(/ /g, "+").replace("#", "");
 	const directionsLink = document.querySelector(".directions-link");
 	if(directionsLink){
 		directionsLink.href = `https://www.google.com/maps/dir//${clinicAddr}`;

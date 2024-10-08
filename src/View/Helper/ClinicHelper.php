@@ -267,7 +267,7 @@ class ClinicHelper extends Helper
                 if (!empty($hours) && !$hours->{$dayOfWeek.'_is_closed'}) {
                     // Clinic is open today
                     if (!empty($hours->{$dayOfWeek.'_open'}) && !empty($hours->{$dayOfWeek.'_close'})) {
-                        $clinicTimezone = $this->getClinicTimezone($locationId);
+                        $clinicTimezone = $this->getClinicTimezoneAbbr($locationId);
                         $currentDateTime = new DateTime('now', new DateTimeZone($clinicTimezone));
                         $currentTime = $currentDateTime->getTimestamp();
                         $openTime = strtotime($hours->{$dayOfWeek.'_open'}.' '.$clinicTimezone);
@@ -296,7 +296,7 @@ class ClinicHelper extends Helper
                         }
                     } else if ($hours->{$dayOfWeek.'_is_byappt'}) {
                         // Show "Open by appt" during 9am-4pm clinic timezone
-                        $clinicTimezone = $this->getClinicTimezone($locationId);
+                        $clinicTimezone = $this->getClinicTimezoneAbbr($locationId);
                         $currentDateTime = new DateTime('now', new DateTimeZone($clinicTimezone));
                         $currentTime = $currentDateTime->getTimestamp();
                         $openTime = strtotime('9:00 am '.$clinicTimezone);
@@ -321,8 +321,8 @@ class ClinicHelper extends Helper
         return $this->Locations->getClinicDateTime($id, $datetime, $format);
     }
 
-    public function getClinicTimezone($id) {
-        return $this->Locations->getClinicTimezone($id);
+    public function getClinicTimezoneAbbr($id) {
+        return $this->Locations->getClinicTimezoneAbbr($id);
     }
 
     public function adminLink($locationId = null, $isAdmin = false) {

@@ -79,6 +79,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 												<a href="#mapBuffer" style="text-decoration:underline;cursor:pointer">
 											<?php endif; ?>
 												<div class="address mb5">
+													<span id="mapsAddress" class="hidden"><?= "$location->address $location->city $location->state $location->zip" ?></span>
 													<span class="hh-icon-address"></span> <?= $this->Clinic->address($location); ?>
 												</div>
 											<?php if(Configure::read('isCallAssistEnabled')) : ?>

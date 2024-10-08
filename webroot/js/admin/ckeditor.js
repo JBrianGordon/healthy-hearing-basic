@@ -257,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             language: 'en',
             link: {
+                defaultProtocol: 'https://',
                 decorators: {
                     openInNewTab: {
                         mode: 'automatic',
