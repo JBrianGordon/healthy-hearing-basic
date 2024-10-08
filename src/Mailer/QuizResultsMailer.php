@@ -24,7 +24,7 @@ class QuizResultsMailer extends Mailer
             ->setEmailFormat('html')
             ->setTo($toEmail)
             ->setSubject('Quiz Result')
-            ->setTemplate($template)
+            ->setTemplate("QuizResults/$template")
             ->setViewVars([
                 'results' => $results,
                 'name' => $name
