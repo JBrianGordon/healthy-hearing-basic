@@ -19,11 +19,11 @@ use Cake\Core\Configure;
 	<?php endforeach ?>
 </ul>
 
-<p>Don’t make the same mistake so many people with hearing loss do! Stop procrastinating - now is the best time to get help for your hearing loss. Schedule a hearing test today, get answers and get help. <?= $this->Html->link('Find a clinic near you', $this->Html->url($this->Clinic->nearMeLink(),true)) ?>.</p>
+<p>Don’t make the same mistake so many people with hearing loss do! Stop procrastinating - now is the best time to get help for your hearing loss. Schedule a hearing test today, get answers and get help. <?= $this->Html->link('Find a clinic near you', $this->Html->url($this->Clinic->nearMeLink(),['fullBase' => true])) ?>.</p>
 
-<p>Untreated hearing loss is linked to many negative health impacts, including <?= $this->Html->link('cognitive decline', $this->Html->url('/report/52904-The-connection-between-hearing-loss-and-cognitive-decline', true)) ?>. The good news? <?= $this->Html->link('Hearing aids', $this->Html->url('/help/hearing-aids', true)) ?> can delay the onset of dementia and provide many other <?= $this->Html->link('health benefits', $this->Html->url('/help/hearing-aids/health-benefits', true)) ?>.</p>
+<p>Untreated hearing loss is linked to many negative health impacts, including <?= $this->Html->link('cognitive decline', $this->Html->url('/report/52904-The-connection-between-hearing-loss-and-cognitive-decline', ['fullBase' => true])) ?>. The good news? <?= $this->Html->link('Hearing aids', $this->Html->url('/help/hearing-aids', ['fullBase' => true])) ?> can delay the onset of dementia and provide many other <?= $this->Html->link('health benefits', $this->Html->url('/help/hearing-aids/health-benefits', ['fullBase' => true])) ?>.</p>
 
-<p>Hearing health is important, so please share this <?= $this->Html->link('online hearing test', $this->Html->url('/help/online-hearing-test', true)) ?> with friends and family.</p>
+<p>Hearing health is important, so please share this <?= $this->Html->link('online hearing test', $this->Html->url('/help/online-hearing-test', ['fullBase' => true])) ?> with friends and family.</p>
 
 <p>Sincerely,</p>
-<p>Your friends at Healthy Hearing</p>
+<p>Your friends at <?= Configure::read('siteName') ?></p>
