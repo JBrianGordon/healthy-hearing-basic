@@ -17,6 +17,6 @@ Thank you for contacting <?= Configure::read('siteName') ?>. We are a website th
 <br /><br />
 Please note -- your message has gone to <?= Configure::read('siteName') ?>, not a hearing clinic. If you're trying to reach a hearing clinic, please use the find a clinic feature on our website to find the phone number for a local hearing clinic in your area and call them to ask your questions. Here is what we found based on the <?= strtolower(Configure::read('zipLabel')) ?> you provided: 
 <!-- *** TODO: Fix the link below to generate the correct URL *** -->
-<?= $this->Html->link($zipUrl, $zipUrl) ?><br />
+<?= $this->Html->link($zipUrl, $zipUrl) ?><br /><br />
 <br /><br />
 <?= $this->element('email/footer-no-ps', ['requestData' => $requestData]) ?>
