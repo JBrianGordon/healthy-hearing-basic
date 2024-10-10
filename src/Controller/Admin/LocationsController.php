@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Locations Controller
@@ -15,6 +16,7 @@ use Cake\ORM\TableRegistry;
  */
 class LocationsController extends BaseAdminController
 {
+    use MailerAwareTrait;
     /**
      * Initialize
      *
@@ -75,6 +77,8 @@ class LocationsController extends BaseAdminController
         if ($this->request->is('post')) {
             $location = $this->Locations->patchEntity($location, $this->request->getData());
             if ($this->Locations->save($location)) {
+                $mailer = $this->Locations->getMailer('ProfileMailer');
+                $mailer->send('clinicDefaultEmail', [$location]);
                 $this->Flash->success(__('The location has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -166,6 +170,12 @@ class LocationsController extends BaseAdminController
                 ['associated' => $associations]
             );
             if ($this->Locations->save($location)) {
+                $mailer = $this->Locations->getMailer('ProfileMailer');
+                if($location['listing_type'] === "Basic" && $location['is_retail'] === false) {
+                    $mailer->send('upgradeProfile', [$location]);
+                } else {
+                    $mailer->send('profileUpdate', [$location]);
+                }
                 $this->Flash->success(__('The location has been saved.'));
                 return $this->redirect($this->request->referer());
             }

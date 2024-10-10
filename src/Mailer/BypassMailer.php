@@ -58,4 +58,18 @@ class BypassMailer extends Mailer
             ->viewBuilder()
                 ->setTemplate('Bypass/call_tracking_basic_bypass');
     }
+
+    public function outOfOffice($requestData)
+    {
+        $this
+            ->setEmailFormat('html')
+            ->setTo($requestData['email'])
+            ->setSubject('Out of Office')
+            ->setViewVars([
+                'name' => $requestData['first_name'],
+                'email' => $requestData['email']
+            ])
+            ->viewBuilder()
+                ->setTemplate('Bypass/out_of_office');
+    }
 }
