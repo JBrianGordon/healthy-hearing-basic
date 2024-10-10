@@ -50,7 +50,7 @@ class AdminHelper extends Helper
     */
     public function checkboxGroup($checkboxGroupName, $checkboxFields=[]) {
         $formInput = '<div class="border mb-3 p-2">';
-        $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
+        $formInput .= '<label class="mb-2" style="width:20%;"><strong>'.$checkboxGroupName.'</strong></label>';
         $formInput .= '<div class="row">';
         foreach ($checkboxFields as $field) {
             $formInput .= '<div class="mb-1 col-md-6">';
