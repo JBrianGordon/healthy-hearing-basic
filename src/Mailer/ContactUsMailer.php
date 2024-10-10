@@ -43,7 +43,7 @@ class ContactUsMailer extends Mailer
      *
      * @param array $requestData ContactUs form data.
      */
-    public function thanksVisitor($requestData)
+    public function thanksVisitor($requestData, $zipUrl = false)
     {
         $this
             ->setEmailFormat('html')
@@ -52,8 +52,13 @@ class ContactUsMailer extends Mailer
             ->setViewVars([
                 'name' => $requestData['first_name'],
                 'email' => $requestData['email']
-            ])
-            ->viewBuilder()
+            ]);
+
+            if ($zipUrl) {
+                $this->setViewVars(['zipUrl' => $zipUrl]);
+            }
+            
+            $this->viewBuilder()
                 ->setTemplate($requestData['hearing_care_professional'] === '1' ? 
                     'ContactUs/thanks_clinic' : 
                     'ContactUs/thanks_consumer');
