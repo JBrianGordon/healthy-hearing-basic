@@ -139,7 +139,8 @@ class ContentController extends BaseAdminController
                 /*** TODO: possibly add notify field for this condition ***/
 				//if (!empty($this->request->data['Content']['notify'])) {
                     // Send the email
-                    $this->getMailer('ContentReadyApprove')->contentReadyApprove($content);
+                    $mailer = $this->getMailer('ContentReadyApprove');
+                    $mailer->send('contentReadyApprove', [$content]);
 				//}
                 $this->Flash->success(__('The content has been saved.'));
 

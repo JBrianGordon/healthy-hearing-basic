@@ -17,48 +17,35 @@ class ProfileMailer extends Mailer
      */
     public static $name = 'Profile';
 
-    public function clinicDefaultEmail($requestData)
+    public function clinicDefaultEmail($location)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($requestData['email'])
-            ->setSubject('Clinic Default Email')
+            ->setTo($location['email'])
+            ->setSubject('Profile Created')
             ->setViewVars([
-                'name' => $requestData['first_name'],
-                'email' => $requestData['email']
+                'clinicTitle' => $location['title'],
+                'clinicAddress' => $location['address'],
             ])
             ->viewBuilder()
                 ->setTemplate('Profile/clinic_default_email');
     }
 
-    public function outOfOffice($requestData)
+    public function profileUpdate($location)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($requestData['email'])
-            ->setSubject('Out of Office')
+            ->setTo($location['email'])
+            ->setSubject('Profile Updated')
             ->setViewVars([
-                'name' => $requestData['first_name'],
-                'email' => $requestData['email']
-            ])
-            ->viewBuilder()
-                ->setTemplate('Profile/out_of_office');
-    }
-
-    public function profileUpdate($requestData)
-    {
-        $this
-            ->setEmailFormat('html')
-            ->setTo($requestData['email'])
-            ->setSubject('Profile Update')
-            ->setViewVars([
-                'name' => $requestData['first_name'],
-                'email' => $requestData['email']
+                'clinicTitle' => $location['title'],
+                'url' => $location['url']
             ])
             ->viewBuilder()
                 ->setTemplate('Profile/profile_update');
     }
 
+    /*** TODO: I think LocationUsers controller needs to be built out for this action */
     public function resetPasswordEmail($requestData)
     {
         $this
@@ -73,15 +60,15 @@ class ProfileMailer extends Mailer
                 ->setTemplate('Profile/reset_password_email');
     }
 
-    public function upgradeProfile($requestData)
+    public function upgradeProfile($location)
     {
         $this
             ->setEmailFormat('html')
-            ->setTo($requestData['email'])
+            ->setTo($location['email'])
             ->setSubject('Upgrade Profile')
             ->setViewVars([
-                'name' => $requestData['first_name'],
-                'email' => $requestData['email']
+                'clinicTitle' => $location['title'],
+                'url' => $location['url']
             ])
             ->viewBuilder()
                 ->setTemplate('Profile/upgrade_profile');

@@ -20,7 +20,7 @@ use Cake\Routing\Router;
 		$listingAndSite .= $siteName;
 		echo 'The ' . $listingAndSite . ' profile for ' . $clinicTitle . ' at ' . $clinicAddress . ' is here:</p>';
 	} else {
-		echo "Your clinic has a profile in the Find a Clinic directory on " . Configure::read('siteUrl') . ", as a complimentary perk for loyal Oticon customers. The " . $siteName . " profile for " . $clinicTitle . " at " . $clinicAddress . " is here:</p>";
+		echo "Your clinic has a profile in the Find a Clinic directory on " . Configure::read('siteUrl') . ", as a complimentary perk for loyal Oticon customers. The " . Configure::read('siteName') . " profile for " . $clinicTitle . " at " . $clinicAddress . " is here:</p>";
 	}
  ?>
 
