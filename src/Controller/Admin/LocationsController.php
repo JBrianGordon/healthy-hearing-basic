@@ -170,7 +170,7 @@ class LocationsController extends BaseAdminController
                 ['associated' => $associations]
             );
             if ($this->Locations->save($location)) {
-                $mailer = $this->Locations->getMailer('ProfileMailer');
+                $mailer = $this->getMailer('ProfileMailer');
                 if($location['listing_type'] === "Basic" && $location['is_retail'] === false) {
                     $mailer->send('upgradeProfile', [$location]);
                 } else {
