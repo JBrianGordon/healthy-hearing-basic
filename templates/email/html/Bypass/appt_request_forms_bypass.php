@@ -8,7 +8,7 @@ use Cake\Core\Configure;
 
 ?>
 <?php $env = Configure::read('env'); ?>
-<? $siteName ?> Team,<br>
+<?= Configure::read('siteName') ?> Team,<br>
 
 <?php if ($isApptRequestBypassed): ?>
 	<p>

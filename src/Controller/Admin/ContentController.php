@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Content Controller
@@ -15,6 +16,8 @@ use Cake\Routing\Router;
  */
 class ContentController extends BaseAdminController
 {
+    use MailerAwareTrait;
+    
     public $paginate = [
         'order' => [
             'Content.last_modified' => 'desc',
@@ -133,6 +136,11 @@ class ContentController extends BaseAdminController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $content = $this->Content->patchEntity($content, $this->request->getData());
             if ($this->Content->save($content)) {
+                /*** TODO: possibly add notify field for this condition ***/
+				//if (!empty($this->request->data['Content']['notify'])) {
+                    // Send the email
+                    $this->getMailer('ContentReadyApprove')->contentReadyApprove($content);
+				//}
                 $this->Flash->success(__('The content has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
