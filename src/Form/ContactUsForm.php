@@ -8,6 +8,8 @@ use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * ContactUs Form.
@@ -69,9 +71,11 @@ class ContactUsForm extends Form
             $mailchimp = new MailchimpUtility();
             $mailchimp->subscribeMember($userData);
         }
+        $locations = TableRegistry::getTableLocator()->get('Locations');
+        $zipUrl = Router::url($locations->findUrlByZip($requestData['zip']));
 
         $this->getMailer('ContactUs')->send('notifyAdmin', [$requestData]);
-        $this->getMailer('ContactUs')->send('thanksVisitor', [$requestData]);
+        $this->getMailer('ContactUs')->send('thanksVisitor', [$requestData, $zipUrl]);
 
         return true;
     }

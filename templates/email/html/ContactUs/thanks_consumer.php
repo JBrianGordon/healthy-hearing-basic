@@ -5,12 +5,6 @@
  */
 
 use Cake\Core\Configure;
-use Cake\Routing\Router;
-use Cake\ORM\TableRegistry;
-
-$locations = TableRegistry::getTableLocator()->get('Locations');
-$requestData = $this->request->getData();
-$zipUrl = Router::url($locations->findUrlByZip($requestData['zip']));
 ?>
 <?= $this->element('email/header', ['requestData' => $requestData]) ?>
 Thank you for contacting <?= Configure::read('siteName') ?>. We are a website that provides information about hearing loss and hearing aids. Our customer support team works Monday - Friday, 8am to 5pm Eastern time. You will be contacted by phone or email in response to your question as soon as we are available to respond.
