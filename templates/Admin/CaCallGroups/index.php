@@ -52,23 +52,29 @@ foreach ($fields as $field => $type) {
         ];
     }
 }
-// Add 'Topics' as a group of checkboxes
+
+// Add 'Topics' in separate group
 $topicFields = [];
 foreach ($topics as $field => $label) {
-    $value = isset($queryParams[$field]) ? $queryParams[$field] : null;
-    $topicFields[] = [
-        'field' => $field,
-        'type' => 'checkbox',
-        'label' => $label,
-        'options' => false,
-        'empty' => false,
-        'value' => $value,
-        'placeholder' => $placeholder
-    ];
+	if ($field !== null) {
+		$value = isset($queryParams[$field]) ? $queryParams[$field] : null;
+		$topicFields[] = [
+			'field' => $field,
+			'type' => 'text',
+			'label' => $label,
+			'options' => false,
+			'empty' => false,
+			'value' => $value,
+			'placeholder' => '0 [or] 1'
+		];
+	}
 }
-$advancedSearchFields[] = [
-    'checkboxGroupName' => 'Topics',
-    'checkboxFields' => $topicFields
+
+$allFields = array_merge($advancedSearchFields, $topicFields);
+
+$groupedFields = [
+    'appointmentDetails' => $advancedSearchFields,
+    'topics' => $topicFields
 ];
 
 $this->Html->script('dist/ca_call_index.min', ['block' => true]);
@@ -91,7 +97,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				<div class="caCallGroups index content">
 				    <?= $this->element('pagination') ?>
 					<?= $this->element('admin_filter', ['modelName' => 'caCallGroups']) ?>
-				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
+				    <?= $this->element('advanced_search', ['fields' => null, 'groupedFields' => $groupedFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm">

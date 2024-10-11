@@ -79,7 +79,7 @@ class AdminHelper extends Helper
                     'type' => 'select',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label],
+                    'label' => ['text' => $label, 'escape' => false],
                     'multiple' => null,
                 ]);
                 break;
@@ -121,7 +121,7 @@ class AdminHelper extends Helper
             default: //string, integer, biginteger
                 $formInput = $this->Form->control($field, [
                     'type' => 'text',
-                    'label' => ['text' => $label],
+                    'label' => ['text' => $label, 'escape' => false],
                     'placeholder' => $placeholder
                 ]);
                 break;
