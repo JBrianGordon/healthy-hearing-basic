@@ -78,7 +78,7 @@ class CaCallsController extends BaseAdminController
         if ($caCalls->count() > 0) {
             $this->CaCalls->loadInto($caCalls, ['CaCallGroups', 'CaCallGroups.Locations', 'Users']);
         }
-        $this->set('title', 'Ca Calls index');
+        $this->set('title', 'Calls');
         $this->set('caCalls', $caCalls);
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCalls->getSchema()->typeMap());
@@ -113,6 +113,7 @@ class CaCallsController extends BaseAdminController
             ]);
         }
         // else, this is probably an internal call for the agent's direct extension
+        $this->set('title', 'Inbound Call');
     }
 
     /**
@@ -347,6 +348,7 @@ class CaCallsController extends BaseAdminController
             $caCall->call_type = $callType;
             $this->set('caCall', $caCall);
             $this->set('previousCalls', $previousCalls);
+            $this->set('title', 'New Outbound Call');
             $this->CaCallGroups->lock($caCallGroupId, $this->user->id);
         }
     }

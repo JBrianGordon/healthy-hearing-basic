@@ -4,9 +4,6 @@
  */
 
 use Cake\Core\Configure;
-if(empty($title)){
-    $title = $siteName;
-}
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">

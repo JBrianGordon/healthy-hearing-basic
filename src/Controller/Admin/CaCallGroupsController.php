@@ -63,7 +63,7 @@ class CaCallGroupsController extends BaseAdminController
             'contain' => ['Locations', 'CaCalls'],
         ]);
         $spamCount = $this->CaCallGroups->find()->where(['is_spam' => true])->count();
-        $this->set('title', 'Outbound calls');
+        $this->set('title', 'Call Groups');
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
         $this->set('crmSearches', $crmSearches);
         $this->set('fields', $this->CaCallGroups->getSchema()->typeMap());
@@ -126,7 +126,7 @@ class CaCallGroupsController extends BaseAdminController
             }
             $this->Flash->error(__('The ca call group could not be saved. Please, try again.'));
         }
-        $this->set('title', 'Edit Call');
+        $this->set('title', 'Edit Call Group');
         $this->set(compact('caCallGroup'));
     }
 
@@ -222,6 +222,7 @@ class CaCallGroupsController extends BaseAdminController
             CaCallGroup::STATUS_TENTATIVE_APPT."')";
         $this->paginate['order'][] = "scheduled_call_date ASC";
         $this->set('caCallGroups', $this->paginate($caCallGroupsQuery));
+        $this->set('title', 'Outbound calls');
     }
 
     /**
