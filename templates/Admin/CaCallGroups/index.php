@@ -60,8 +60,11 @@ foreach ($topics as $field => $label) {
 		$value = isset($queryParams[$field]) ? $queryParams[$field] : null;
 		$topicFields[] = [
 			'field' => $field,
-			'type' => 'text',
-			'label' => $label,
+			'type' => 'boolean',
+			'label' => [
+				'text' => $label,
+				'class' => 'wide-label',
+			],
 			'options' => false,
 			'empty' => false,
 			'value' => $value,

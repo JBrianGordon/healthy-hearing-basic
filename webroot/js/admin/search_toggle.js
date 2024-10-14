@@ -156,6 +156,9 @@ if (document.querySelector("form").action.includes("/admin/locations") ||
 	inputElements.forEach((input) => {
 	  const label = document.createElement("label");
 	  label.classList.add("switch");
+		if (input.style.width) {
+			label.style.width = input.style.width;
+		}
 
 	  const slider = document.createElement("span");
 	  slider.classList.add("slider");
