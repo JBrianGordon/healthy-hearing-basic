@@ -313,12 +313,12 @@ class CaCallGroupsController extends BaseAdminController
                     }
                     $total++;
                     if (isset($callGroup->ca_calls[1])) {
-                        $initTimeDiff = strtotime($callGroup->ca_calls[1]->start_time) - strtotime($callGroup->ca_calls[0]->start_time);
+                        $initTimeDiff = $callGroup->ca_calls[1]->start_time->toUnixString() - $callGroup->ca_calls[0]->start_time->toUnixString();
                         $totalInitTimeDiff += $initTimeDiff;
                         $initCallCount++;
                         if (($initTimeDiff/3600) <= 1) {
                             $callback1Hour++;
-                        } elseif (date('Y-m-d', strtotime($callGroup->ca_calls[1]->start_time)) === date('Y-m-d', strtotime($callGroup->ca_calls[0]->start_time))) {
+                        } elseif ($callGroup->ca_calls[1]->start_time->format('Y-m-d') === $callGroup->ca_calls[0]->start_time->format('Y-m-d')) {
                             $callbackSameDay++;
                         } else {
                             $callbackAfter1Day++;
@@ -375,5 +375,94 @@ class CaCallGroupsController extends BaseAdminController
             }
         }
         $this->set(compact('startDate', 'endDate', 'results', 'filters'));
+    }
+
+    /**
+    * Export a list of appt request forms with callback time info
+    */
+    function formsExport() {
+        $this->response = $this->response->withDownload('export_forms.csv');
+        $this->layout = 'csv';
+        $startDate = $this->request->getQuery('startDate');
+        $endDate = $this->request->getQuery('endDate').' 23:59:59';
+
+        $data = [];
+        $_header = [
+            'CallGroup ID',
+            'Submission date (EST)',
+            'Init callback date (EST)',
+            'Time until init callback',
+            'prospect',
+            'score',
+            'final score date',
+            '# followup calls',
+            'Calls until completion',
+            'Time until completion'
+        ];
+        $callGroups = $this->CaCallGroups->find('all', [
+            'contain' => ['CaCalls'],
+            'conditions' => [
+                'is_appt_request_form' => true,
+                'AND' => [
+                    'CaCallGroups.created >=' => $startDate,
+                    'CaCallGroups.created <=' => $endDate,
+                ],
+            ],
+            'order' => 'CaCallGroups.id ASC'
+        ])->all();
+        foreach ($callGroups as $callGroup) {
+            // Filter out groups that started on a weekend or evening
+            $dayOfWeek = $callGroup->ca_calls[0]->start_time->format('D');
+            $hourMinute = $callGroup->ca_calls[0]->start_time->format('Hi');
+            if (in_array($dayOfWeek, ['Sat', 'Sun'])) {
+                continue;
+            }
+            if ($hourMinute < '0830') {
+                continue;
+            }
+            if ($hourMinute > '1700') {
+                continue;
+            }
+            if (isset($callGroup->ca_calls[1])) {
+                $initCallbackDate = $callGroup->ca_calls[1]->start_time;
+                $initTimeDiff = $callGroup->ca_calls[1]->start_time->toUnixString() - $callGroup->ca_calls[0]->start_time->toUnixString();
+                $totalMinutes = round($initTimeDiff/60);
+                $hours = floor($initTimeDiff/3600);
+                $minutes = $totalMinutes - ($hours * 60);
+                $displayInitTimeDiff = $totalMinutes.' minutes';
+                $displayInitTimeDiff .= $hours > 0 ? ' ('.$hours.' hours, '.$minutes.' minutes)' : '';
+            } else {
+                $initCallbackDate = null;
+                $displayInitTimeDiff = null;
+            }
+            if (!empty($callGroup->final_score_date)) {
+                $finalScoreDate = $callGroup->final_score_date->format('Y-m-d H:i');
+                $callsUntilComplete = $callGroup->clinic_followup_count;
+                $finalTimeDiff = $callGroup->final_score_date->toUnixString() - $callGroup->ca_calls[0]->start_time->toUnixString();
+                $days =  floor($finalTimeDiff/86400);
+                $hours = round(($finalTimeDiff - ($days * 86400))/3600, 1);
+                $displayFinalTimeDiff = empty($days) ? '' : $days.' days, ';
+                $displayFinalTimeDiff .= $hours.' hours';
+            } else {
+                $callsUntilComplete = null;
+                $displayFinalTimeDiff = null;
+                $finalScoreDate = null;
+            }
+            $data[] = [
+                $callGroup->id,
+                $callGroup->ca_calls[1]->start_time,
+                $initCallbackDate,
+                $displayInitTimeDiff,
+                $callGroup->prospect,
+                $callGroup->score,
+                $finalScoreDate,
+                $callGroup->clinic_followup_count,
+                $callsUntilComplete,
+                $displayFinalTimeDiff
+            ];
+        }
+        $_serialize = 'data';
+        $this->viewBuilder()->setClassName('CsvView.Csv');
+        $this->set(compact('data', '_serialize', '_header'));
     }
 }

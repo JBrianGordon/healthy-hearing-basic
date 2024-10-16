@@ -44,7 +44,7 @@ $endDate = isset($endDate) ? date('Y-m-d', strtotime($endDate)) : null;
 												<?php
 												if ($key == 'businessHours') {
 													echo $this->Html->link(' Export',
-														['action' => 'forms_export', 'ext' => 'csv', 'startDate' => $startDate, 'endDate' => $endDate],
+														['action' => 'forms_export', '?' => ['startDate' => $startDate, 'endDate' => $endDate]],
 														['escape' => false, 'class' => 'btn btn-default btn-sm pull-right bi bi-download mb20']);
 												}
 												?>
