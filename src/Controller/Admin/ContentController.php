@@ -137,11 +137,11 @@ class ContentController extends BaseAdminController
             $content = $this->Content->patchEntity($content, $this->request->getData());
             if ($this->Content->save($content)) {
                 /*** TODO: possibly add notify field for this condition ***/
-				//if (!empty($this->request->data['Content']['notify'])) {
+				if (!empty($this->request->getData('saveForApproval'))/* && !empty($this->request->data['Content']['notify'])*/) {
                     // Send the email
                     $mailer = $this->getMailer('ContentReadyApprove');
                     $mailer->send('contentReadyApprove', [$content]);
-				//}
+				}
                 $this->Flash->success(__('The content has been saved.'));
 
                 return $this->redirect(['action' => 'index']);

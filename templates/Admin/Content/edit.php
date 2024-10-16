@@ -179,7 +179,7 @@ if (empty($content->id)) {
 				
 				            </fieldset>
 				            <div class="form-actions tar">
-				            <?= $this->Form->button('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info']) ?>
+				            <?= $this->Form->button('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info', 'name' => 'saveForApproval']) ?>
 				            <?= $this->Form->button('Save Content', ['class' => 'btn btn-primary btn-lg']) ?>
 				            </div>
 				            <?= $this->Form->end() ?>
