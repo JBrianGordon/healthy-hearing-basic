@@ -50,7 +50,7 @@ $zipLabel = Configure::read('zipLabel');
                 'class' => 'text-end',
                 'text' => 'My first name:',
               ]
-            ],
+            ]
           );
           echo $this->Form->control(
             'reviews.last_name', [
@@ -59,7 +59,7 @@ $zipLabel = Configure::read('zipLabel');
                 'class' => 'text-end',
                 'text' => 'My last name:',
               ]
-            ],
+            ]
           );
         ?>
         <p class="col-md-9 offset-md-3 small text-muted">Please provide your real name. We will only show your first name and last initial. We do not publish anonymous reviews.</p>
@@ -71,7 +71,7 @@ $zipLabel = Configure::read('zipLabel');
                 'class' => 'text-end',
                 'text' => 'My ' . $zipLabel . ':',
               ]
-            ],
+            ]
           );
         ?>
         <?php if ($zipLabel === 'postal code'): ?>
@@ -87,10 +87,10 @@ $zipLabel = Configure::read('zipLabel');
               'type' => 'select',
               'options' => array_combine(
                 ReviewRating::getRatingValueArray(),
-                ReviewRating::getRatingLabelArray(),
+                ReviewRating::getRatingLabelArray()
               ),
               'empty' => 'Select rating',
-            ],
+            ]
           );
           echo $this->Form->control(
             'reviews.body', [
@@ -100,31 +100,29 @@ $zipLabel = Configure::read('zipLabel');
               ],
               'type' => 'textarea',
               'rows' => 3,
-            ],
+            ]
           );
         ?>
         <p class="col-md-9 offset-md-3 small text-muted">Describe your experience for other readers on <?= Configure::read('siteUrl') ?></p>
-        <?php
-          echo $this->Form->control(
+        <?= $this->Form->control(
             'reviews.verify', [
+              'class' => 'float-start',
               'label' => [
                 'text' => 'By checking this box, I certify that I am not an owner or employee of this clinic or a competitor and that this review is my genuine opinion of this clinic based on my experience as a customer.',
+                'class' => 'w-75',
               ],
               'required' => false, // Removes HTML 5 required message
               'type' => 'checkbox',
-            ],
-          );
+            ]
+          )
         ?>
         <div class="col-md-9 offset-md-3">
-            <?php
-                echo $this->Recaptcha->display();
-            ?>
+            <?= $this->Recaptcha->display() ?>
         </div>
       </div>
       <div class="modal-footer">
         <div id="review-error" class="text-white pt-4 px-4 my-2"></div>
-        <?php
-          echo $this->Form->button(
+        <?= $this->Form->button(
             'Submit review', [
               'type' => 'submit',
               'id' => 'submitReview',
@@ -133,7 +131,7 @@ $zipLabel = Configure::read('zipLabel');
                 'btn-primary',
               ],
             ]
-          );
+          )
         ?>
       </div>
       <?= $this->Form->end() ?>
@@ -168,6 +166,7 @@ $zipLabel = Configure::read('zipLabel');
           ])
         ?>
         <?php
+            echo $this->Form->hidden('newsletter_form', ['value' => true]);
             echo $this->Form->control(
                 'first_name', [
                   'placeholder' => 'First name',
@@ -175,7 +174,7 @@ $zipLabel = Configure::read('zipLabel');
                     'class' => 'text-end',
                     'text' => 'First name:',
                   ]
-                ],
+                ]
             );
             echo $this->Form->control(
                 'last_name', [
@@ -184,7 +183,7 @@ $zipLabel = Configure::read('zipLabel');
                     'class' => 'text-end',
                     'text' => 'Last name:',
                   ]
-                ],
+                ]
             );
             echo $this->Form->control(
                 'email', [
@@ -193,7 +192,7 @@ $zipLabel = Configure::read('zipLabel');
                     'class' => 'text-end',
                     'text' => 'Email:',
                   ]
-                ],
+                ]
             );
         ?>
         <div class="col-md-9 offset-md-3">

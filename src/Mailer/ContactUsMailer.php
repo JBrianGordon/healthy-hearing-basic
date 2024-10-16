@@ -26,23 +26,15 @@ class ContactUsMailer extends Mailer
      */
     public function notifyAdmin($requestData)
     {
-        if ($requestData['hearing_care_professional'] === '1') {
-            $this
-                ->setEmailFormat('html')
-                ->setTo(Configure::read('customer-support-email'))
-                ->setSubject(Configure::read('siteNameAbbr') . ' Clinic Inquiry - ' . $requestData['email'])
-                ->viewBuilder()
-                    ->setTemplate('ContactUs/from_website')
-                    ->setVar('contactInfo', $requestData);
-        } else {
-            $this
-                ->setEmailFormat('html')
-                ->setTo(Configure::read('customer-support-email'))
-                ->setSubject('Message From Website: ' . $requestData['email'])
-                ->viewBuilder()
-                    ->setTemplate('ContactUs/from_website')
-                    ->setVar('contactInfo', $requestData);
-        }
+        $this
+            ->setEmailFormat('html')
+            ->setTo(Configure::read('customer-support-email'))
+            ->setSubject($requestData['hearing_care_professional'] === '1' ? 
+                Configure::read('siteNameAbbr') . ' Clinic Inquiry - ' . $requestData['email'] : 
+                'Message From Website: ' . $requestData['email'])
+            ->viewBuilder()
+                ->setTemplate('ContactUs/from_website')
+                ->setVar('requestData', $requestData);
     }
 
     /**
@@ -51,22 +43,24 @@ class ContactUsMailer extends Mailer
      *
      * @param array $requestData ContactUs form data.
      */
-    public function thanksVisitor($requestData)
+    public function thanksVisitor($requestData, $zipUrl = false)
     {
-        if ($requestData['hearing_care_professional'] === '1') {
-            $this
-                ->setEmailFormat('html')
-                ->setTo($requestData['email'])
-                ->setSubject('Thanks for contacting ' . Configure::read('siteName'))
-                ->viewBuilder()
-                    ->setTemplate('ContactUs/thanks_clinic');
-        } else {
-            $this
-                ->setEmailFormat('html')
-                ->setTo($requestData['email'])
-                ->setSubject('Thanks for contacting ' . Configure::read('siteName'))
-                ->viewBuilder()
-                    ->setTemplate('ContactUs/thanks_consumer');
-        }
+        $this
+            ->setEmailFormat('html')
+            ->setTo($requestData['email'])
+            ->setSubject('Thanks for contacting ' . Configure::read('siteName'))
+            ->setViewVars([
+                'name' => $requestData['first_name'],
+                'email' => $requestData['email']
+            ]);
+
+            if ($zipUrl) {
+                $this->setViewVars(['zipUrl' => $zipUrl]);
+            }
+            
+            $this->viewBuilder()
+                ->setTemplate($requestData['hearing_care_professional'] === '1' ? 
+                    'ContactUs/thanks_clinic' : 
+                    'ContactUs/thanks_consumer');
     }
 }

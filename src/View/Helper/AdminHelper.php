@@ -50,7 +50,7 @@ class AdminHelper extends Helper
     */
     public function checkboxGroup($checkboxGroupName, $checkboxFields=[]) {
         $formInput = '<div class="border mb-3 p-2">';
-        $formInput .= '<label class="mb-2"><strong>'.$checkboxGroupName.'</strong></label>';
+        $formInput .= '<label class="mb-2" style="width:20%;"><strong>'.$checkboxGroupName.'</strong></label>';
         $formInput .= '<div class="row">';
         foreach ($checkboxFields as $field) {
             $formInput .= '<div class="mb-1 col-md-6">';
@@ -79,7 +79,7 @@ class AdminHelper extends Helper
                     'type' => 'select',
                     'options' => $options,
                     'empty' => $empty,
-                    'label' => ['text' => $label],
+                    'label' => ['text' => $label, 'escape' => false],
                     'multiple' => null,
                 ]);
                 break;
@@ -93,8 +93,14 @@ class AdminHelper extends Helper
                 ]);
                 break;
             case 'boolean':
-                $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
-                $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$label.'">';
+                if ($labelClass == 'wide-label') {
+                    // We want this input to have a wider label, smaller checkox/switch
+                    $formInput .= '<label class="float-start col-md-5 tar" style="width:70%;">'.$label.'</label>';
+                    $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$fieldSlug.'" style="width:30%;">';
+                } else {
+                    $formInput .= '<label class="float-start col-md-5 tar '.$labelClass.'" style="max-width:75%;">'.$label.'</label>';
+                    $formInput .= '<input name="'.$field.'" class="form-control" placeholder="0 [or] 1" type="text" id="'.$fieldSlug.'">';
+                }
                 break;
 			case 'checkbox':
                 $formInput = $this->Form->control($field, [
@@ -112,16 +118,16 @@ class AdminHelper extends Helper
                 $formInput .= '<div class="input-group">';
                 $formInput .= '<label class="form-check-label col-md-5 tar" for="'.$fieldSlug.'">'.$label.'</label>';
                 $formInput .= '<div class="col-md-7 p0">';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-start" name="'.$field.'_start" value='.$startValue.'>';
                 $formInput .= '<span>&nbsp; - &nbsp;</span>';
-                $formInput .= '<input class="form-control inline-date" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
+                $formInput .= '<input class="form-control inline-date pl5 pr5" type="date" id="'.$fieldSlug.'-end" name="'.$field.'_end" value='.$endValue.'>';
                 $formInput .= '</div>';
                 $formInput .= '</div>';
                 break;
             default: //string, integer, biginteger
                 $formInput = $this->Form->control($field, [
                     'type' => 'text',
-                    'label' => ['text' => $label],
+                    'label' => ['text' => $label, 'escape' => false],
                     'placeholder' => $placeholder
                 ]);
                 break;

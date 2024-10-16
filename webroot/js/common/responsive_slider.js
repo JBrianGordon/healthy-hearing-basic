@@ -1,48 +1,35 @@
-import 'jquery-ui/ui/effects/effect-slide';
-import '../jquery/jquery.cookie';
+import 'jquery-ui/ui/effects/effect-slide';var hhstickypanel = document.getElementById('hh-sticky-panel');
 
-/*** TODO: check when slider built into views ***/
+var scrollHandler = function() {
+    var isOpen = hhstickypanel.classList.contains("open");
+    var threshold = window.innerHeight / 2;
 
-    var hhstickypanel = jQuery("#hh-sticky-panel");
-
-    jQuery(".sticky-panel-handle").on("click", function(e) {
-      e.preventDefault();
-      var ga_code_additions = true;
-      if (typeof dataLayer === "undefined") {
-        ga_code_additions = false;
-      }
-
-      if (hhstickypanel.hasClass("open")) {
-        hhstickypanel.switchClass("open", ""); //Close it
-
-        if (ga_code_additions) {
-          dataLayer.hhTrackEvent("fap_search_pop_up","click_hide");
-        }
-
-        jQuery(window).off("scroll"); //Unbind scroll
-        jQuery.cookie("overlay_FAP",1,{expires: 30, path: "/"}); //Add the cookie to set as closed.
-      } else {
-        hhstickypanel.switchClass("", "open"); //Open it
-
-        if (ga_code_additions) {
-          dataLayer.hhTrackEvent("fap_search_pop_up", "click_show");
-        }
-      }
-      return false;
-    });
-
-    //Add the sliding. Only slide if we havent set the cookie.
-    if (!jQuery.cookie("overlay_FAP")) {
-      var thewindow = jQuery(window);
-      thewindow.on("scroll", function() {
-        var isOpen = hhstickypanel.hasClass("open");
-        var threshold = thewindow.height() / 2;
-
-        if (!isOpen && (thewindow.scrollTop() > threshold)) {
-          hhstickypanel.switchClass("","open"); //Open it
-        } else if(isOpen && (thewindow.scrollTop() < threshold)) {
-          hhstickypanel.switchClass("open",""); //Close it
-          $("#ui-id-A").hide();
-        }
-      });
+    if (!isOpen && (window.pageYOffset > threshold)) {
+        hhstickypanel.classList.add("open"); //Open it
+    } else if(isOpen && (window.pageYOffset < threshold)) {
+        hhstickypanel.classList.remove("open"); //Close it
+        document.getElementById("ui-id-A").style.display = 'none';
     }
+};
+
+document.querySelector(".sticky-panel-handle").addEventListener("click", function(e) {
+  e.preventDefault();
+
+  if (hhstickypanel.classList.contains("open")) {
+    hhstickypanel.classList.remove("open"); //Close it
+
+    window.removeEventListener("scroll", scrollHandler); //Unbind scroll
+    document.cookie = "overlay_FAP=1; expires=" + new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString() + "; path=/"; //Add the cookie to set as closed.
+  } else {
+    hhstickypanel.classList.add("open"); //Open it
+
+  return false;
+}});
+
+//Add the sliding. Only slide if we havent set the cookie.
+if (!document.cookie.split('; ').find(row => row.startsWith('overlay_FAP'))) {
+  window.addEventListener("scroll", scrollHandler);
+} else {
+  // If the cookie is set, remove the 'open' class to ensure the panel is closed
+  hhstickypanel.classList.remove("open");
+}

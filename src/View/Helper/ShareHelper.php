@@ -122,7 +122,7 @@ class ShareHelper extends Helper
                 'escape' => false,
                 'rel' => 'nofollow',
             ),
-            'url' => 'https://www.pinterest.com/pin/create/button/',
+            'url' => $this->here,
             'image' => '',
             'text' => '',
         ), (array) $options);

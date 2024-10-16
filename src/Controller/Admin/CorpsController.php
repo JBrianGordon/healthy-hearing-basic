@@ -34,22 +34,6 @@ class CorpsController extends BaseAdminController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Corp id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $corp = $this->Corps->get($id, [
-            'contain' => ['Users', 'Advertisements'],
-        ]);
-
-        $this->set(compact('corp'));
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
@@ -67,7 +51,7 @@ class CorpsController extends BaseAdminController
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
         $this->set('title', 'Add Corp');
-        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set('authors', $this->Corps->Author->authorList('Corps', 'Manufacturer'));
         $this->set(compact('corp'));
     }
 
@@ -81,7 +65,7 @@ class CorpsController extends BaseAdminController
     public function edit($id = null)
     {
         $corp = $this->Corps->get($id, [
-            'contain' => ['Author'],
+            'contain' => ['Author', 'Contributors'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
@@ -93,8 +77,21 @@ class CorpsController extends BaseAdminController
             $this->Flash->error(__('The corp could not be saved. Please, try again.'));
         }
         $this->set('title', 'Edit Corp');
-        $this->set('authors', $this->Corps->Author->authorList());
+        $this->set('authors', $this->Corps->Author->authorList('Corps', 'Manufacturer'));
         $this->set(compact('corp'));
+    }
+
+    public function preview($id = null)
+    {
+        $corp = $this->Corps->get($id, [
+            'contain' => ['Author', 'Contributors'],
+        ]);
+        $this->set('corp', $corp);
+        $this->set('isPreview', true);
+
+        // Set the template path to the non-prefixed template
+        $this->viewBuilder()->setTemplatePath('Corps');
+        $this->render('view');
     }
 
     /**
@@ -132,7 +129,7 @@ class CorpsController extends BaseAdminController
         $draftId = $this->Corps->checkForDraft($id);
 
         if ($draftId > 0) {
-            $this->Flash->success('This report has an existing draft below.');
+            $this->Flash->success('This manufacturer has an existing draft below.');
 
             return $this->redirect(['action' => 'edit', $draftId]);
         }

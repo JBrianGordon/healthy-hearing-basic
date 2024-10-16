@@ -33,7 +33,6 @@
 				                    <th><?= $this->Paginator->sort('is_active', __('Active')) ?><br><?= $this->Paginator->sort('id') ?></th>
 				                    <th><?= $this->Paginator->sort('title') ?><br><?= $this->Paginator->sort('slug') ?></th>
 				                    <th><?= $this->Paginator->sort('short') ?></th>
-				                    <th><?= $this->Paginator->sort('website_url') ?></th>
 				                    <th width="120"><?= $this->Paginator->sort('last_modified', __('Last Mod')) ?><br><?= $this->Paginator->sort('modified', __('Last Saved')) ?></th>
 				                    <th class="actions"><?= __('Actions') ?></th>
 				                </tr>
@@ -43,9 +42,8 @@
 				                <tr>
 					                <td><?= $this->Number->format($corp->priority) ?></td>
 				                    <td><?= $corp->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?><br><span class="badge bg-light"><?= h($corp->id) ?></span></td>
-				                    <td><?= h($corp->title) ?><br><?= h($corp->slug) ?></td>
+				                    <td><?= $this->Editorial->adminIndexDraft($corp->id_draft_parent) . h($corp->title) ?><br><?= h($corp->slug) ?></td>
 				                    <td><?= h($corp->short) ?></td>
-				                    <td><?= h($corp->website_url) ?></td>
 				                    <td><?= date_format($corp->last_modified, 'M j, Y') ?><br><?= date_format($corp->modified, 'M j, Y') ?></td>
 				                    <td>
 					                    <div class="btn-group btn-group-vertical">

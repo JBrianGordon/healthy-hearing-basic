@@ -13,15 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
       tab.click();
     }
   }
-
+  
   // When a tab is clicked, change the URL to our new hash
   document.querySelectorAll('button.nav-link').forEach(tabButton => {
     tabButton.addEventListener('click', function() {
       const hash = this.getAttribute('data-bs-target');
       if (hash) {
-        //var scrollmem = $('body').scrollTop() || $('html').scrollTop();
-        window.location.hash = hash;
-        //$('html,body').scrollTop(scrollmem);
+        // Add a history entry and change the URL without causing the browser to navigate to the new URL
+        history.pushState(null, null, hash);
       }
     });
   });

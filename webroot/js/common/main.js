@@ -1,6 +1,7 @@
 import 'jquery-ui/ui/widgets/autocomplete';
 
 $(window).ready(function() {
+
 	$('input.autocomplete').autocomplete({
 		source: '/fapautocomplete',
 		minLength: 2,

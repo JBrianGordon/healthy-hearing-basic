@@ -4,9 +4,6 @@
  */
 
 use Cake\Core\Configure;
-if(empty($title)){
-    $title = $siteName;
-}
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">
@@ -15,10 +12,13 @@ if(empty($title)){
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= empty($title) ? $siteName : $title ?></title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->element('google_tag_manager_head') ?>
+    <?= $this->element('google_tag_manager') ?>
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/roboto-v20-latin-regular.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/lato-v17-latin-regular.woff" as="font" type="font/woff" crossorigin>
+
 
     <?= $this->fetch('meta') ?>
     <!-- Above the fold CSS -->
@@ -57,7 +57,6 @@ if(empty($title)){
     ?>
 </head>
 <body>
-    <?= $this->element('google_tag_manager') ?>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>

@@ -12,6 +12,8 @@ $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'Healthy Hearing help: Hearing loss, hearing aids, tinnitus and more', 'url' => ''],
 ]);
+
+$hideLearnMore = true;
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row pt0 pb0">
@@ -28,7 +30,7 @@ $this->Breadcrumbs->add([
 				<div class="col-md-9 panel-parent float-start">
 					<section class="panel panel-section expanded">
 						<div class="p20 headline">
-							<h1 class="text-primary"><?php echo Configure::read('siteName'); ?> Help</h1>
+							<h1 class="text-primary"><?= Configure::read('siteName');?> Help</h1>
 							<p class="lead text-primary"><em>
 								Welcome to our library of original reference materials to help you learn more about hearing health and hearing aids.
 								<?php if (Configure::read('country') != 'CA'): ?>
@@ -41,19 +43,19 @@ $this->Breadcrumbs->add([
 							<ul id="accordion" class="nav nav-tabs nav-stacked">
 								<?php foreach ($wikis as $wiki): ?>
 									<li class="parent" style="border-bottom: 1px solid #ddd;">
-										<?php echo $this->Wiki->getNavText($wiki['parent']); ?>
+										<?= $this->Wiki->getNavText($wiki['parent']) ?>
 									</li>
 								<?php endforeach; ?>
 								<?php if (Configure::read('showManufacturers')): ?>
 									<li class="parent">
-										<?php echo $this->Wiki->getNavManufText(); ?>
+										<?= $this->Wiki->getNavManufText() ?>
 									</li>
 								<?php endif; ?>
 							</ul>
 						</div>
 					</section>
 				</div>
-				<?= $this->element('side_panel') ?>
+				<?= $this->element('side_panel', ['hideLearnMore' => $hideLearnMore]) ?>
 			</div>
 		</div>
 	</div>

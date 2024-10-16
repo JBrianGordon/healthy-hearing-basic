@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * State Entity
@@ -17,6 +18,8 @@ use Cake\ORM\Entity;
  */
 class State extends Entity
 {
+    use LocatorAwareTrait;
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -33,4 +36,22 @@ class State extends Entity
         'created' => true,
         'modified' => true,
     ];
+
+    protected $_virtual = ['hh_url'];
+
+    /**
+     * Generate routing array for 'HH URL'
+     *
+     * @return array CakePHP routing array
+     */
+    protected function _getHhUrl()
+    {
+        return [
+            'controller' => 'Locations',
+            'action' => 'viewState',
+            'region' => $this->fetchTable('Locations')->stateSlug($this->name),
+            'plugin' => false,
+            'prefix' => false,
+        ];
+    }
 }

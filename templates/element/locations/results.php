@@ -80,9 +80,9 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 												<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 													<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
 														<!-- *** TODO: appointment request modal not functioning properly, I think some backend work may be needed: ***-->
-														<a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>" data-bs-toggle="modal">
+														<button type="button" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>" data-bs-toggle="modal">
 															Request my appointment
-														</a>
+														</button>
 													<?php endif; ?>
 												<?php endif; ?>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
@@ -164,7 +164,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 				}
 				?>
 				<h3 class="text-center text-primary"><em><?= $searchTitle ?></em></h3>
-				<div class="col-md-offset-3 col-md-6">
+				<div class="col-12 col-md-offset-3 col-md-6">
 					<?= $this->element('locations/search', ['label' => $searchPlaceholder]) ?>
 				</div>
 				<div class="clearfix"></div>

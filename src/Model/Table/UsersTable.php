@@ -189,11 +189,6 @@ class UsersTable extends CakeDcUsersTable
         //     ->notEmptyString('first_name');
 
         // $validator
-        //     ->scalar('middle_name')
-        //     ->maxLength('middle_name', 128)
-        //     ->allowEmptyString('middle_name');
-
-        // $validator
         //     ->scalar('last_name')
         //     ->maxLength('last_name', 128)
         //     ->requirePresence('last_name', 'create')
@@ -463,10 +458,7 @@ class UsersTable extends CakeDcUsersTable
         return $agentsQuery->toArray();
     }
 
-    /**
-     * Find a list of users that are authors or writers
-     */
-    public function authorList() {
+    public function authorList($modelName, $aliasName) {
         $authors = $this->find('all', [
             'conditions' => [
                 'OR' => [
@@ -476,10 +468,85 @@ class UsersTable extends CakeDcUsersTable
             ],
             'order' => ['first_name ASC']
         ])->all();
-        $authorList = [];
+        $allAuthors = [];
         foreach ($authors as $author) {
-            $authorList[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
+            $allAuthors[$author->id] = $author->first_name.' '.$author->last_name.' ('.$author->username.')';
         }
-        return $authorList;
+
+        // Subquery to get user_ids from Model/Table
+        $activeItemAuthorSubquery = $this->$modelName->find()
+            ->select(['user_id'])
+            ->distinct(['user_id'])
+            ->where(['is_active' => true]);
+
+        // Fetch authors or writers who are in Model/Table
+        $activeItemAuthors = $this->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row->first_name . ' ' . $row->last_name . ' (' . $row->username . ')';
+            }
+        ])
+        ->where([
+            'OR' => [
+                'is_writer' => true,
+                'is_author' => true
+            ],
+            'id IN' => $activeItemAuthorSubquery
+        ])
+        ->order(['first_name' => 'ASC'])
+        ->toArray();
+
+        // Subquery to get user_ids from Wikis
+        $inactiveItemAuthorSubquery = $this->$modelName->find()
+            ->select(['user_id'])
+            ->distinct(['user_id'])
+            ->where(['is_active' => false]);
+
+        // Fetch authors or writers who are not in Wikis
+        $inactiveItemAuthors = $this->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row->first_name . ' ' . $row->last_name . ' (' . $row->username . ')';
+            }
+        ])
+        ->where([
+            'OR' => [
+                'is_writer' => true,
+                'is_author' => true
+            ],
+            'id IN' => $inactiveItemAuthorSubquery,
+        ])
+        ->order(['first_name' => 'ASC'])
+        ->toArray();
+
+        // Difference between inactiveItemAuthors and activeItemAuthors is required
+        // because activeItemAuthors can also be authors on inactive items. We only
+        // want authors that are *only* on inactive items here. There is probably a
+        // way to do this in the $inactiveItemAuthors query, but this works as well.
+        $onlyInactiveItemAuthors = array_diff_key($inactiveItemAuthors, $activeItemAuthors);
+
+        return [
+            'Active ' . $aliasName . ' Authors' => $activeItemAuthors,
+            'Inactive ' . $aliasName . ' Authors' => $onlyInactiveItemAuthors,
+            'Itemless Authors' => array_diff_key($allAuthors, $activeItemAuthors, $onlyInactiveItemAuthors),
+        ];
+    }
+
+    /**
+     * Find a list of users that are reviewers
+     */
+    public function reviewerList()
+    {
+        $reviewers = $this->find('all', [
+            'conditions' => [
+                    'is_reviewer' => true
+            ],
+            'order' => ['first_name ASC']
+        ])->all();
+        $reviewerList = [];
+        foreach ($reviewers as $reviewer) {
+            $reviewerList[$reviewer->id] = $reviewer->first_name.' '.$reviewer->last_name.' ('.$reviewer->username.')';
+        }
+        return $reviewerList;
     }
 }

@@ -62,11 +62,11 @@ class OnlineHearingTest {
 		this.start();
 	}
 
-	modalHide() {
+	modalHide(e) {
 		if (!this.completed()) {
 			const result = confirm('You have not completed the online hearing test, are you sure?');
 			if (!result) {
-				return false;
+				e.preventDefault();
 			}
 		}
 		return true;
@@ -141,6 +141,8 @@ class OnlineHearingTest {
 	}
 
 	reset() {
+		const firstPage = document.querySelector('#test-page-0');
+		firstPage.style.opacity = 1;
 		this.log('reset');
 		this.results = {
 			answers: [],
@@ -294,7 +296,7 @@ class OnlineHearingTest {
 		this.addRecaptcha();
 		// Show the results
 		$(this.resultsDiv).slideDown();
-		this.scrollTo(this.resultsDiv);
+		window.scrollTo(0,0);
 	}
 
 	updateHeader() {
@@ -321,12 +323,15 @@ class OnlineHearingTest {
 	async saveTest(results) {
 		this.log('Saving Test');
 		try {
-			await fetch("/quiz_results/email_results", {
+			const csrfToken = document.getElementsByName("_csrfToken")[0].value;
+			await fetch("/QuizResults/emailResults", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+					'X-Requested-With': 'XMLHttpRequest',
+					"X-CSRF-Token": csrfToken
 				},
-				body: JSON.stringify({ results })
+				body: JSON.stringify({ results, _csrfToken: csrfToken })
 			});
 		} catch (error) {
 			console.error("Error saving test:", error);

@@ -29,7 +29,7 @@ $this->Html->script('dist/contact.min', ['block' => true]);
                             <div class="panel-section expanded">
                                 <h1 class="text-primary blog-title">Contact <?= $siteName ?></h1>
 
-                                    <?= $this->Form->create($contactUsForm, ['class' => 'form-horizontal', 'role' => false]) ?>
+                                    <?= $this->Form->create($contactUsForm, ['class' => 'form-horizontal', 'role' => false, 'id' => 'PageContactUsForm']) ?>
                                         <p><strong>If you are trying to reach a specific clinic, please click on the "Find a clinic" menu above and enter your <?= strtolower(Configure::read('zipLabel')) ?>.</strong></p>
                                         <?php 
                                             echo $this->Form->control('first_name', ['placeholder' => 'First name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0']]);
@@ -49,6 +49,9 @@ $this->Html->script('dist/contact.min', ['block' => true]);
                                             echo $this->Form->control('Robot.check', ['label' => ['text' => 'Leave blank', 'class' => 'hidden'], 'class' => 'hidden']);
                                             echo $this->Form->control('message', ['type' => 'textarea', 'class' => 'col-sm-9', 'label' => ['text' => 'Message', 'class' => 'col-sm-3 tar pl0'], 'maxlength' => '1000', 'style' => 'min-height:172px']);
                                             echo $this->Form->hidden('g-recaptcha-response', ['id' => 'g-recaptcha-response']); ?>
+                                        <div class="w-100 d-flex flex-row-reverse">
+                                            <?= $this->Recaptcha->display() ?>
+                                        </div>
                                         <div class="form-actions tar">
                                             <input class="btn btn-primary btn-lg g-recaptcha mt20" data-sitekey="<?= Configure::read('recaptchaPublicKey') ?>" data-callback="onSubmit" type="submit" value="Send Message">
                                         </div>

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\CaCall;
 use App\Model\Entity\User;
+use Cake\Core\Configure;
+use Cake\View\JsonView;
 
 /**
  * CaCalls Controller
@@ -14,29 +16,47 @@ use App\Model\Entity\User;
  */
 class CaCallsController extends AppController
 {
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
+    }
+
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent(
+            'Recaptcha.Recaptcha',
+            [
+                'enable' => true,
+                'sitekey' => Configure::read('recaptchaPublicKey'),
+                'secret' => Configure::read('recaptchaPrivateKey'),
+                'type' => 'image',
+                'theme' => 'light',
+                'lang' => 'en',
+                'size' => 'normal',
+            ]
+        );
+    }
+
 	/**
 	* Online appointment request form - accessed by clicking 'submit'
 	*/
 	public function ajaxApptRequest() {
 		$this->viewBuilder()->setLayout('ajax');
 		$this->meta['robots'] = "NOINDEX, FOLLOW";
-		// TODO:
-		//$this->Recaptcha = $this->Components->load('Recaptcha');
 		$data = [];
 		$requestData = $this->request->getData();
 		if (!empty($requestData)) {
 			// Verify reCAPTCHA response
-			// TODO
-			/*
-			if (!$this->Recaptcha->verifyScore($requestData['g-recaptcha-response'])) {
+			/* TODO
+			if (!$this->Recaptcha->verify()) {
 				$data['success'] = false;
-				$data['errorMessage'] = "Your appointment request was not submitted. Please try again.";
-				$this->set('data', $data);
-				$this->render('ajax');
-				return;
-			}
-			*/
-
+				$data['errorMessage'] = 'reCAPTCHA test failed ("I\'m not a robot"). Please try again!';
+	            $this->set(compact('data'));
+	            $this->viewBuilder()->setOption('serialize', 'data');
+	            return;
+			}*/
 			// New inbound call
 			$caCall = $this->fetchTable('CaCalls')->newEntity([
 				'start_time' => getCurrentEasternTime(),

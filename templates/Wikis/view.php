@@ -122,7 +122,6 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 	<div class="row pt0 pb0">
 		<a name="top"></a>
 		<span style="display:none;" id="wiki-id"><?= $wiki->id ?></span>
-		<span style="display:none;" id="is-preview"><? $isPreview ?></span>
 		<article class="container">
 			<div class="backdrop-container noprint">
 				<div class="backdrop backdrop-gradient backdrop-height"></div>
@@ -139,9 +138,23 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 						<div id="ellipses">...</div>
 					</div>
 					<div class="row header-content col-sm-8">
-						<?php if ($isAdmin): ?>
-							<?= $this->Html->link('Edit', ['prefix'=>'Admin', 'controller'=>'wikis', 'action'=>'edit', $wiki->id], ['class' => 'btn btn-primary pull-right', 'style' => 'width:66px']) ?>
+						<?php if ($isPreview): ?>
+							<div class="alert alert-warning" role="alert">
+								This is not the greatest Help page in the world, no. <br />
+								This is just a <strong><em>preview</em></strong>!
+							</div>
 						<?php endif; ?>
+						<?=
+							$this->AuthLink->link('Edit', [
+								'prefix' => 'Admin',
+								'controller' => 'wikis',
+								'action' => 'edit',
+								$wiki->id
+							], [
+								'class' => 'btn btn-primary pull-right',
+								'style' => 'width:66px',
+							])
+						?>
 						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
 						<p class="text-caption p0">
 							<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>

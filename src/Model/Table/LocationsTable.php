@@ -12,6 +12,7 @@ use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
 use App\Model\Entity\ImportStatus;
 use App\Enums\Model\Review\ReviewStatus;
+use App\Utility\GeoLocAddressUtility;
 use Cake\Core\Configure;
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleIo;
@@ -73,6 +74,21 @@ class LocationsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors(['Timestamp', 'Search.Search']);
+
+        $this->addBehavior('Sitemap.Sitemap', [
+            'conditions' => [
+                'is_active' => true,
+                'is_show' => true,
+                'state !=' => '',
+                'listing_type !=' => Location::LISTING_TYPE_NONE
+            ],
+            'order' => [
+                'state' => 'ASC',
+                'city' => 'ASC',
+                'title' => 'ASC',
+            ],
+            'priority' => 0.8,
+        ]);
 
         // The 'lng' field is named 'lon' in our Locations table
         $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
@@ -1445,8 +1461,12 @@ class LocationsTable extends Table
     * Get the timezone abbreviation of this clinic (America/New_York, America/Los_Angeles, etc..))
     * @return string timezone for display
     */
-    public function getClinicTimezone($id) {
-        $locationEntity = $this->get($id);
+    public function getClinicTimezoneFull($locationId) {
+        if (!$this->exists(['id'=>$locationId])) {
+            return 'America/New_York';
+        }
+
+        $locationEntity = $this->get($locationId);
         $timezone = $locationEntity->timezone;
 
         if (empty($timezone)) {
@@ -1470,8 +1490,43 @@ class LocationsTable extends Table
             $timezone = 'America/New_York';
         }
 
+        // Make sure this is a full timezone name, rather than abbr
+        $timezone = $this->fullTimezoneFromAbbr($timezone);
+
+        return $timezone;
+    }
+
+    /**
+    * Get the timezone abbreviation of this clinic ('EDT', 'EST', etc..))
+    * @return string timezone for display
+    */
+    public function getClinicTimezoneAbbr($locationId) {
+        $timezone = $this->getClinicTimezoneFull($locationId);
         $date = new DateTime('now', new DateTimeZone($timezone));
         return $date->format('T');
+    }
+
+    private function fullTimezoneFromAbbr($timezone) {
+        // If timezone is an abbreviation, convert it to the full timezone name
+        switch($timezone) {
+            case 'EDT':
+            case 'EST':
+                $timezone = 'America/New_York';
+                break;
+            case 'CDT':
+            case 'CST':
+                $timezone = 'America/Chicago';
+                break;
+            case 'MDT':
+            case 'MST':
+                $timezone = 'America/Denver';
+                break;
+            case 'PDT':
+            case 'PST':
+                $timezone = 'America/Los_Angeles';
+                break;
+        }
+        return $timezone;
     }
 
     /**
@@ -1480,7 +1535,7 @@ class LocationsTable extends Table
     public function getTimezoneByState($state) {
         // TODO: This function can be deleted. Leaving here temporarily to catch any calls to this function as we pull code over.
         // Previously we used geoip_time_zone_by_country_and_region() to find the timezone for this state. This isn't accurate or recommended anymore because some states have 2 timezones.
-        // Going forward, let's use getClinicTimezone() which I am updating to call the Google Timestamp API.
+        // Going forward, let's use getClinicTimezoneFull() or getClinicTimezoneAbbr() which I am updating to call the Google Timestamp API.
         die('die: getTimezoneByState() should not be used anymore');
     }
 
@@ -1490,7 +1545,7 @@ class LocationsTable extends Table
     */
     public function getClinicTimezoneOffset($id) {
         $offset = null;
-        $timezone = $this->getClinicTimezone($id);
+        $timezone = $this->getClinicTimezoneFull($id);
         $dateTimeZone = new DateTimeZone($timezone);
         $offset = $dateTimeZone->getOffset(new DateTime);
         $offset = abs($offset/60/60);
@@ -1607,6 +1662,43 @@ class LocationsTable extends Table
         $query = $this->find('distance', $options)->orderAsc('distance')->limit($limit);
         $locations = $query->all()->toArray();
         return $locations;
+    }
+
+	/**
+	* Find the URL by zipcode
+	* @Param string zip code
+	* @return HH url for the zipcode
+	*/
+    public function findUrlByZip($zip = null) {
+        if ($this->isValidZip($zip)) {
+            $zip = preg_replace('/[^a-zA-Z0-9]/', '', $zip);
+
+            // Force CA zip code into A1A 1A1 format
+            $settings = Configure::read('International');
+            if ($settings['country'] == 'CA') {
+                $zip = substr($zip, 0, 3) . ' ' . substr($zip, 3, 3);
+            }
+
+            //what type of zip code do we have?
+            switch(strlen($zip)) {
+                case '9':
+                    //US Zip+4
+                    $zip = substr($zip, 0, 5);
+                    break;
+            }
+            $zipTable = TableRegistry::getTableLocator()->get('Zips');
+            $found = $zipTable->get($zip);
+            return array(
+                'admin' => false,
+                'plugin' => false,
+                'action' => 'index',
+                'controller' => 'locations',
+                'region' => $this->stateSlug($found['state']),
+                'city' => slugifyCity($found['city']),
+                'zip' => $found['zip'],
+            );
+        }
+        return null;
     }
 
     /**
@@ -1847,9 +1939,21 @@ class LocationsTable extends Table
     * Get the datetime for display in the clinic's timezone
     */
     public function getClinicDateTime($locationId, $datetime, $format='m/d/Y g:i a T') {
-        $timezone = $this->getClinicTimezone($locationId);
-        $date = new DateTime($datetime, new DateTimeZone($timezone));
-        return $date->format($format);
+        $timezone = $this->getClinicTimezoneFull($locationId);
+
+        if (is_a($datetime, 'Cake\I18n\FrozenTime')){
+            // FrozenTime passed in
+            // Get the readable timezone
+            $tzDateTime = new DateTime();
+            $tzDateTime->setTimeZone(new DateTimeZone($timezone));
+            $readableTimezone = $tzDateTime->format('T');
+            $clinicDateTime = $datetime->i18nFormat("yyyy-MM-dd HH:mm a ", $timezone) . $readableTimezone;
+            return $clinicDateTime;
+        } else {
+            // DateTime or string passed in
+            $date = new DateTime($datetime, new DateTimeZone($timezone));
+            return $date->format($format);
+        }
     }
 
     /**
@@ -1936,6 +2040,7 @@ class LocationsTable extends Table
         ]);
 
         $emails = [];
+        $clinicTitle = $location->title;
 
         // Location Email
         if ($location->hasValue('email')) {
@@ -2141,7 +2246,7 @@ class LocationsTable extends Table
     * @return string 'Complete', 'BasicInfo', 'ProfilePic', 'Incomplete'
     */
     public function completeness($locationId) {
-        if (!$this->exists($locationId)) {
+        if (!$this->exists(['id'=>$locationId])) {
             return false;
         }
 
@@ -2237,5 +2342,39 @@ class LocationsTable extends Table
             }
         }
         return $retval;
+    }
+
+    /**
+    * Find all states for sitemap
+    */
+    public function allStatesForSiteMap() {
+        $retval = [];
+
+        foreach (Configure::read('states') as $abbr => $full) {
+            if ($abbr != 'DC') {
+                $retval[] = [
+                    'hh_url' => [
+                        'admin' => false,
+                        'plugin' => false,
+                        'controller' => 'locations',
+                        'action' => 'viewState',
+                        'region' => $this->stateSlug($abbr)
+                    ]
+                ];
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
+    * Geoloc an address for me.
+    * @param string address fragment
+    * @return mixed result of geocode lookup
+    */
+    public function geoLocAddress($address) {
+        $addressGeocoder = new GeoLocAddressUtility();
+        $addressGeocoderResult = $addressGeocoder->byAddress($address);
+        return $addressGeocoderResult;
     }
 }

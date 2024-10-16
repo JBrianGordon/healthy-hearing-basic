@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * City Entity
@@ -20,9 +21,12 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property bool $is_near_location
  * @property bool $is_featured
+ * @property-read array $hh_url
  */
 class City extends Entity
 {
+    use LocatorAwareTrait;
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -45,4 +49,23 @@ class City extends Entity
         'is_near_location' => true,
         'is_featured' => true,
     ];
+
+    protected $_virtual = ['hh_url'];
+
+    /**
+     * Generate routing array for 'HH URL'
+     *
+     * @return array CakePHP routing array
+     */
+    protected function _getHhUrl()
+    {
+        return [
+            'controller' => 'Locations',
+            'action' => 'viewCityZip',
+            'region' => $this->fetchTable('Locations')->stateSlug($this->state),
+            'city' => slugifyCity($this->city),
+            'plugin' => false,
+            'prefix' => false,
+        ];
+    }
 }

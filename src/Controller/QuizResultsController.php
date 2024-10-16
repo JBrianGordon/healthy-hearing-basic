@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Mailer\MailerAwareTrait;
+
 /**
  * QuizResults Controller
  *
@@ -11,6 +13,8 @@ namespace App\Controller;
  */
 class QuizResultsController extends AppController
 {
+    use MailerAwareTrait;
+
     /**
      * Index method
      *
@@ -47,6 +51,35 @@ class QuizResultsController extends AppController
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
         $this->set('show_ad', false);
         $this->set('show_slider', false);
+    }
+
+    public function emailResults()
+    {
+        $this->viewBuilder()->disableAutoLayout();
+
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $results = json_decode($data['results'], true);
+            $name = $results['firstName'] . ' ' . $results['lastName'];
+            $hearingResult = $results['hearingResult'];
+            $toEmail = $results['email'];
+            $symptoms = $results['emailSymptoms'];
+
+            //***TODO: Save method is breaking this code, will need to be fixed */
+            // Save results
+            // if ($this->QuizResults->saveResult($data)) {
+            //     $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
+            // }
+
+            // Email results
+            $mailer = $this->getMailer('QuizResults');
+            if ($mailer->send('sendQuizResult', [$name, $hearingResult, $toEmail, $symptoms])) {
+                return $this->response->withStringBody('true');
+            } else {
+                $this->Flash->error('Unable to email results, please try another email address.');
+            }
+        }
+        return $this->redirect('/help/online-hearing-test');
     }
 
     /**

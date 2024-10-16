@@ -28,6 +28,10 @@ class ImportLocationsController extends BaseAdminController
             'actions' => ['index'],
         ]);
 
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+
         $this->paginate = [
             'order' => ['ImportLocations.id' => 'DESC']
         ];

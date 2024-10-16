@@ -54,9 +54,7 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php 
-        $queryParams = $this->request->getQueryParams();
-        if (count($queryParams) > 1 || (count($queryParams) === 1 && (!isset($queryParams['q']) && !isset($queryParams['preserve'])))) : ?>
+    <?php if ($this->Search->isSearch()) : ?>
             <div class="col col-md-auto p-0">
                 Showing search results.
                 <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>
@@ -79,7 +77,7 @@ $this->loadHelper('Search.Search', [
 	                <h3 class="crm-group-header"><?= $groupNameReadable ?></h3>
                     <button class="btn btn-sm btn-primary mb20 group-toggle" type="button" style="min-width:178px;"><span class="bi-plus-lg"> Expand section</span></button>
                 </div>
-                <div class="mb-3 filter-group<?= $groupName == "generalDemographics" ? "" : " hidden"?>" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
+                <div class="mb-3 filter-group<?= ($groupName == "generalDemographics" || $groupName == "appointmentDetails") ? "" : " hidden"?>" id="<?= $groupName ?>" style="border:2px solid #a3a3a3;padding:20px;">
                     <?php $column = 1; ?>
                     <?php foreach ($groupFields as $field): ?>
                         <?php $formInput = $this->Admin->formInput($field['field'], $field['type'], $field['label'], $field['options'], $field['empty'], $field['value'], $field['placeholder']); ?>
@@ -109,7 +107,7 @@ $this->loadHelper('Search.Search', [
 	    <div class="filter-group">
 	        <?php $column = 1; ?>
 	        <?php foreach ($fields as $field): ?>
-	            <?php if (!empty($field['checkboxGroupName'])): ?>
+	            <?php if (isset($field['checkboxGroupName'], $field['checkboxFields'])): ?>
 	                <!-- Checkbox groups will span whole row, so always start on column 1 -->
 	                <?php if ($column==2): ?>
 	                    </div> <!-- end row -->

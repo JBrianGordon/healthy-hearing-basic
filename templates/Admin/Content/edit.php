@@ -146,7 +146,19 @@ if (empty($content->id)) {
 			                        	?>
 										<hr>
 										<h3>Additional Authors</h3>
-										<?= $this->Form->control('Contributor', ['label' => false,'options' => $authors,'multiple' => 'checkbox']) ?>
+										<strong>
+											<em class="text-secondary">Select multiple with the control key (PC) or command key (Mac)</em>
+										</strong>
+										<?=
+											$this->Form->select('contributors._ids',
+												$authors,
+												[
+													'empty' => "NO additional contributors",
+													'multiple' => true,
+													'size' => 14
+												]
+											)
+										?>
 										<hr>
 										<h3>Help Page Tags</h3>
 										<?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
@@ -167,8 +179,8 @@ if (empty($content->id)) {
 				
 				            </fieldset>
 				            <div class="form-actions tar">
-				            <?= $this->Form->button('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info']) ?>
-				            <?= $this->Form->button('Save Content', ['class' => 'btn btn-primary btn-lg']) ?>
+				            <?= $this->Form->submit('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info', 'name' => 'saveForApproval']) ?>
+				            <?= $this->Form->submit('Save Content', ['class' => 'btn btn-primary btn-lg']) ?>
 				            </div>
 				            <?= $this->Form->end() ?>
 				        </div>

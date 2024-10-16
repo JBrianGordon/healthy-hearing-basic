@@ -8,9 +8,11 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
 use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\CaCall;
@@ -246,7 +248,7 @@ class CaCallsTable extends Table
             $data['address'] = $address;
             $data['link'] = $link;
             $data['landmarks'] = $location->landmarks;
-            $data['timezone'] = $this->Locations->getClinicTimezone($locationId);
+            $data['timezone'] = $this->Locations->getClinicTimezoneAbbr($locationId);
             $data['timezoneOffset'] = $this->Locations->getClinicTimezoneOffset($locationId);
             $data['currentTime'] = $this->Locations->getClinicDateTime($locationId, 'now', 'h:i A');
             $data['searchTitle'] = $searchTitle;
@@ -259,5 +261,74 @@ class CaCallsTable extends Table
             $data['message'] = trim($location->optional_message);
         }
         return $data;
+    }
+
+    /**
+    * Finds closest clinics to an originAddress (e.g. customer/patient address)
+    * and returns them, ordered by *travel time by car* (Google DistanceMatrix API)
+    */
+    public function getClosestClinics($originAddress = null) {
+        $this->Locations = TableRegistry::get('Locations');
+        $originGeocode = $this->Locations->geoLocAddress($originAddress);
+        $originLatLon = [
+            'lat' => $originGeocode[0],
+            'lon' => $originGeocode[1]
+        ];
+
+        if (empty($originLatLon['lat']) || empty($originLatLon['lon'])) {
+            return [];
+        }
+        $fields = [
+            'Locations.id',
+            'Locations.title',
+            'Locations.address',
+            'Locations.city',
+            'Locations.state',
+            'Locations.average_rating',
+            'Locations.reviews_approved',
+            'Locations.lat',
+            'Locations.lon',
+            'Locations.direct_book_type',
+            'Locations.direct_book_url',
+        ];
+
+        $closestClinics = [];
+        $clinicRange = $clinicRangeDefault = intval(Configure::read('clinicMaxRange'));
+        $numZipSearches = 0;
+        while (count($closestClinics) < 1) {
+            $numZipSearches++;
+            $closestClinics = $this->Locations->findAllByGeoLoc($originLatLon, 20, [], [], $fields, $clinicRange);
+            $clinicRange += $clinicRangeDefault;
+        }
+        $closestClinics = array_values($closestClinics);
+
+        $clinicLatLons = [];
+        foreach ($closestClinics as $location) {
+            $clinicLatLons[] = $location['Location']['lat'].','.$location['Location']['lon'];
+        }
+
+        //TODO: SORT THIS LIST OF CLINICS BY DRIVING DISTANCE FROM THE PATIENT
+        // Google Distance Matrix API
+        /*
+        $geoLoc = ConnectionManager::getDataSource('geoloc');
+        $distMatrixResponse = $geoLoc->byDistance(
+            implode(',', $originLatLon),
+            implode('|', $clinicLatLons)
+        );
+        $distMatrixDestinations = $distMatrixResponse['google']['rows'][0]['elements'];
+
+        foreach ($closestClinics as $key => $clinic) {
+            if (isset($distMatrixDestinations[$key])) {
+                $closestClinics[$key] = array_merge(
+                    $clinic,
+                    $distMatrixDestinations[$key]
+                );
+            }
+        }
+
+        $closestClinics = Hash::sort($closestClinics, '{n}.duration.value'); // sort by travel time
+        */
+        $closestClinics[] = ['numZipSearches' => $numZipSearches, 'searchRadius' => ($clinicRangeDefault * $numZipSearches)];
+        return $closestClinics;
     }
 }

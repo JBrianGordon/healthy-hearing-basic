@@ -102,6 +102,7 @@ class PagesController extends AppController
             }
 
             $requestData = $this->request->getData();
+            $this->set('requestData', $requestData);
             if ($contactUsForm->execute($requestData)) {
                 $this->Flash->success('We will get back to you soon.');
 

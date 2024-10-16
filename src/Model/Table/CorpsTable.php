@@ -89,14 +89,8 @@ class CorpsTable extends Table
         //     ->allowEmptyString('id', null, 'create');
 
         // $validator
-        //     ->scalar('type')
-        //     ->maxLength('type', 16)
-        //     ->requirePresence('type', 'create')
-        //     ->notEmptyString('type');
-
-        // $validator
         //     ->dateTime('last_modified')
-        //     ->allowEmptyDateTime('last_modified');
+        //     ->notEmptyDateTime('last_modified');
 
         // $validator
         //     ->integer('modified_by')
@@ -107,6 +101,9 @@ class CorpsTable extends Table
             ->maxLength('title', 128)
             ->requirePresence('title', true, 'Title is a required field')
             ->notEmptyString('title', 'Title cannot be left blank');
+
+        $validator
+            ->integer('user_id');
 
         // $validator
         //     ->scalar('title_long')
@@ -121,59 +118,12 @@ class CorpsTable extends Table
         //     ->notEmptyString('slug');
 
         // $validator
-        //     ->scalar('abbr')
-        //     ->maxLength('abbr', 3)
-        //     ->requirePresence('abbr', 'create')
-        //     ->notEmptyString('abbr');
-
-        // $validator
         //     ->scalar('short')
         //     ->allowEmptyString('short');
 
         // $validator
         //     ->scalar('description')
         //     ->allowEmptyString('description');
-
-        // $validator
-        //     ->scalar('notify_email')
-        //     ->maxLength('notify_email', 128)
-        //     ->allowEmptyString('notify_email');
-
-        // $validator
-        //     ->scalar('approval_email')
-        //     ->maxLength('approval_email', 128)
-        //     ->allowEmptyString('approval_email');
-
-        // $validator
-        //     ->scalar('phone')
-        //     ->maxLength('phone', 64)
-        //     ->allowEmptyString('phone');
-
-        // $validator
-        //     ->scalar('website_url')
-        //     ->maxLength('website_url', 255)
-        //     ->requirePresence('website_url', 'create')
-        //     ->notEmptyString('website_url');
-
-        // $validator
-        //     ->scalar('website_url_description')
-        //     ->maxLength('website_url_description', 255)
-        //     ->allowEmptyString('website_url_description');
-
-        // $validator
-        //     ->scalar('pdf_all_url')
-        //     ->maxLength('pdf_all_url', 128)
-        //     ->allowEmptyString('pdf_all_url');
-
-        // $validator
-        //     ->scalar('favicon')
-        //     ->maxLength('favicon', 128)
-        //     ->allowEmptyString('favicon');
-
-        // $validator
-        //     ->scalar('address')
-        //     ->maxLength('address', 255)
-        //     ->allowEmptyString('address');
 
         // $validator
         //     ->scalar('thumb_url')
@@ -200,32 +150,15 @@ class CorpsTable extends Table
         //     ->allowEmptyDateTime('date_approved');
 
         // $validator
-        //     ->integer('id_old')
-        //     ->notEmptyString('id_old');
-
-        // $validator
-        //     ->integer('is_approvalrequired')
-        //     ->notEmptyString('is_approvalrequired');
-
-        // $validator
         //     ->boolean('is_active')
         //     ->notEmptyString('is_active');
-
-        // $validator
-        //     ->boolean('is_featured')
-        //     ->notEmptyString('is_featured');
 
         // $validator
         //     ->integer('id_draft_parent')
         //     ->notEmptyString('id_draft_parent');
 
-        // $validator
-        //     ->scalar('wbc_config')
-        //     ->allowEmptyString('wbc_config');
-
         $validator
             ->integer('priority')
-            ->requirePresence('priority', true, 'Priority is a required field')
             ->notEmptyString('priority', 'Priority cannot be left blank');
 
         return $validator;

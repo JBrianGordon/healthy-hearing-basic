@@ -96,6 +96,7 @@ class Content extends Entity
         'is_frozen' => true,
         'users' => true,
         'tags' => true,
+        'contributors' => true,
     ];
 
     protected $_virtual = ['hh_url'];

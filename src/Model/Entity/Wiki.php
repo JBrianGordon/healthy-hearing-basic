@@ -19,7 +19,6 @@ use Cake\ORM\Entity;
  * @property int $priority
  * @property string $title_head
  * @property string $title_h1
- * @property string|null $background_file
  * @property string|null $meta_description
  * @property string|null $facebook_title
  * @property string|null $facebook_image
@@ -31,7 +30,6 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $last_modified
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property \Cake\I18n\FrozenTime|null $created
- * @property string $background_alt
  *
  * @property \App\Model\Entity\User[] $users
  * @property \App\Model\Entity\TagWiki[] $tag_wikis
@@ -59,7 +57,6 @@ class Wiki extends Entity
         'priority' => true,
         'title_head' => true,
         'title_h1' => true,
-        'background_file' => true,
         'meta_description' => true,
         'facebook_title' => true,
         'facebook_image' => true,
@@ -71,9 +68,10 @@ class Wiki extends Entity
         'last_modified' => true,
         'modified' => true,
         'created' => true,
-        'background_alt' => true,
         'users' => true,
-        'tag_wikis' => true,
+        'tags' => true,
+        'contributors' => true,
+        'reviewers' => true,
     ];
 
     protected $_virtual = ['hh_url'];

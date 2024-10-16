@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * QuizResult Entity
@@ -27,4 +29,16 @@ class QuizResult extends Entity
         'results' => true,
         'created' => true,
     ];
+
+	/**
+	* string URL of results
+	* @param string of results
+	* @return string url to online test
+	*/
+	public function resultUrl($results, $encoded = false) {
+		if ($encoded) {
+			$results = base64_encode($results);
+		}
+		return Router::url(['admin' => false, 'controller' => 'quiz_results', 'action' => 'online_hearing_test']) . '?r=' . $results;
+	}
 }

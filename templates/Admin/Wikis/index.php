@@ -11,7 +11,6 @@ $queryParams = $this->request->getQueryParams();
 $exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
 $advancedSearchFields = [];
-// Add additional fields
 foreach ($fields as $field => $type) {
     $label = '';
     $options = false;
@@ -23,12 +22,18 @@ foreach ($fields as $field => $type) {
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
     switch ($field) {
-		case 'priority':
-			$label = 'Order';
-			break;
         case 'facebook_image':
             $type = 'boolean';
             break;
+		case 'priority':
+			$label = 'Order';
+			break;
+		case 'user_id':
+			$label = 'Author';
+			$type = 'select';
+			$options = $authors;
+			$empty = '(select one)';
+			break;
     }
     $advancedSearchFields[] = [
         'field' => $field,
@@ -80,7 +85,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                <?php foreach ($wikis as $wiki): ?>
 					                <tr>
 						                <td><?= $wiki->is_active ? '<span class="badge bg-success bi bi-check-lg"> Yes</span>' : '<span class="badge bg-danger bi bi-x-lg"> No</span>' ?></td>
-					                    <td><?= h($wiki->name) ?></td>
+					                    <td><?= $this->Editorial->adminIndexDraft($wiki->id_draft_parent) . h($wiki->name) ?></td>
 					                    <td><?= h($wiki->slug) ?></td>
 					                    <td><?= h($wiki->short) ?></td>
 					                    <td><?= date_format($wiki->last_modified, 'M j, o') ?><br><?= date_format($wiki->modified, 'M j, o') ?></td>

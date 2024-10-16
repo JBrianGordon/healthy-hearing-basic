@@ -78,9 +78,6 @@ return [
     'clinicMaxRange' => '40',
     'htmlLanguage' => 'en-CA',
     'isMetric' => true, // Displays distance in km
-    'isSitemapPingEnabled' => true,
-    'allowCopySitemaps' => false,
-    'showImageSitemap' => false,
     'isCrmEmailEnabled' => false,
     'isVwoEnabled' => false,
     // Paid features
@@ -130,7 +127,16 @@ return [
     ],
     'Sitemap.tables' => [
         'Main',
-        'Corps',
+        'City',
+        'Help',
+        'Clinic',
+        'State',
+    ],
+    'Sitemap.tableAliases' => [
+        'City' => 'Cities',
+        'Help' => 'Wikis',
+        'Clinic' => 'Locations',
+        'State' => 'States',
     ],
     'states' => [
         'AB' => 'Alberta',

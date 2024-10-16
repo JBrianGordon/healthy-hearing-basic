@@ -1,5 +1,11 @@
 <?php
 use Cake\Core\Configure;
+
+/***TODO: the conditonal code in here for how the side panel should display has grown incredibly convoluted.
+This should be rewritten so each element checks for a variable, e.g. $showHearingTest, and then displays itself if that variable is true.
+The variables should be set in the controller, in each templates corresponding action.
+This should also apply to element order.
+***/
 $controller = $this->getRequest()->getParam('controller');
 
 $locations = !empty($preferredClinicsNearMe) ? $preferredClinicsNearMe : [];
@@ -12,7 +18,7 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 $facOrder = $controller == 'QuizResults' ? ' style="order:1"' : ' style="order:9"';
 
 //Set order on recent articles
-$articleOrder = isset($errorPage) ? ' style="order:7"' : ' style="order:12"';
+$articleOrder = (isset($errorPage) || isset($hideLearnMore)) ? ' style="order:7"' : ' style="order:12"';
 
 //Set panel order depending on page, using flex
 //Hearing test panel
@@ -31,7 +37,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 ?>
 <div id="sidePanel" class="col-lg-3 float-end noprint flex">
 	<!-- Right content -->
-	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages' || isset($errorPage))): ?>
+	<?php if (Configure::read('showHearingTest') && ($controller == 'Locations' || $controller == 'Pages' || $controller == 'Sitemaps' || isset($errorPage) || isset($hideLearnMore))): ?>
 		<section<?= $hearingTestDisplay ?> class="mb20">
 			<a href="/help/online-hearing-test">
 			    <img src="/img/hh-hearing-check.svg" width="262" height="100" style="margin:0 auto" alt="Take our online Hearing Check" loading="lazy" class="img-responsive bg-white w-100">
@@ -75,7 +81,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		</section>
 	<?php endif; ?>
 	<?= (Configure::read('showAds') && $controller != 'Wikis' && !isset($errorPage)) ? $this->element('render_ad', ['ad' => $ad]) : null ?>
-	<?php if ((!empty($articles) && empty($wiki) && empty($page) && !isset($errorPage)) || isset($stateNice)): ?>
+	<?php if ((!empty($articles) && empty($wiki) && empty($page) && !isset($errorPage) && !isset($hideLearnMore)) || isset($stateNice)): ?>
 		<?= $this->element('learn_more') ?>
 	<?php endif; ?>
 	<section class="panel panel-secondary"<?= $facOrder ?>>

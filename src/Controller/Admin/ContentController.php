@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Content Controller
@@ -15,6 +16,8 @@ use Cake\Routing\Router;
  */
 class ContentController extends BaseAdminController
 {
+    use MailerAwareTrait;
+    
     public $paginate = [
         'order' => [
             'Content.last_modified' => 'desc',
@@ -37,6 +40,10 @@ class ContentController extends BaseAdminController
         $this->loadComponent('Export', [
             'actions' => ['export']
         ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
     }
 
     /**
@@ -46,19 +53,6 @@ class ContentController extends BaseAdminController
      */
     public function index()
     {
-        $users = $this->fetchTable('Users')
-            ->find('list', [
-                'keyField' => 'id',
-                'valueField' => 'full_name',
-            ])
-            ->where([
-                'OR' => [
-                    'is_author' => 1,
-                    'is_writer' => 1,
-                ],
-            ])
-            ->toArray();
-
         $crmSearches = $this->fetchTable('CrmSearches')
             ->find()
             ->where([
@@ -103,7 +97,7 @@ class ContentController extends BaseAdminController
         $this->set('title', 'Content index');
         $this->set('content', $this->paginate($contentQuery));
         $this->set('count', $contentQuery->count());
-        $this->set('users', $users);
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content', 'Report'));
         $this->set('fields', $this->Content->getSchema()->typeMap());
         $this->set('crmSearches', $crmSearches);
     }
@@ -142,6 +136,12 @@ class ContentController extends BaseAdminController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $content = $this->Content->patchEntity($content, $this->request->getData());
             if ($this->Content->save($content)) {
+                /*** TODO: possibly add notify field for this condition ***/
+				if (!empty($this->request->getData('saveForApproval'))/* && !empty($this->request->data['Content']['notify'])*/) {
+                    // Send the email
+                    $mailer = $this->getMailer('ContentReadyApprove');
+                    $mailer->send('contentReadyApprove', [$content]);
+				}
                 $this->Flash->success(__('The content has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -162,7 +162,7 @@ class ContentController extends BaseAdminController
         $this->set('title', 'Edit Content');
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
-        $this->set('authors', $this->Content->PrimaryAuthor->authorList());
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content', 'Report'));
     }
 
     /**

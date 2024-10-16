@@ -190,14 +190,14 @@ class ContentFixture extends TestFixture
                 'is_frozen' => 1,
             ],
             [
-                'id' => 6,
+                'id' => 6, // missing 'last_modified' value
                 'id_brafton' => 6,
                 'user_id' => 1,
                 'type' => 'Lorem ipsum do',
                 'date' => '2021-12-11',
                 'created' => '2021-12-11 21:25:57',
                 'modified' => '2021-12-11 21:25:57',
-                'last_modified' => '2021-12-11 21:25:57',
+                'last_modified' => NULL,
                 'title' => 'Lorem ipsum dolor sit amet',
                 'alt_title' => 'Lorem ipsum dolor sit amet',
                 'subtitle' => 'Lorem ipsum dolor sit amet',

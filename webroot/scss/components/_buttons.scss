@@ -63,6 +63,10 @@ button.close {
 
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
+
+  &:hover{
+    color:#fff;
+  }
 }
 
 .btn-neutral {
@@ -107,6 +111,12 @@ button.close {
     padding: 3px 6px;
     font-size: 12px;
     line-height: 1.5;
+  }
+
+  &.btn-group-vertical {
+    > .btn:not(:first-child){
+      margin-left:0;
+    }
   }
   
   > .btn:not(:first-child), > .btn-group:not(:first-child) {
@@ -175,7 +185,7 @@ button.close {
 .btn-print {
   &:hover, &:focus, &:active {
     color: $white;
-    background-color: $btn-primary-bg;
+    @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
   }
 }
 

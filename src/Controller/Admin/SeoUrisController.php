@@ -12,15 +12,38 @@ namespace App\Controller\Admin;
 class SeoUrisController extends BaseAdminController
 {
     /**
+     * Initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('Search.Search', [
+            'actions' => ['index'],
+        ]);
+
+        $this->loadComponent('PersistQueries', [
+            'actions' => ['index'],
+        ]);
+    }
+
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $seoUris = $this->paginate($this->SeoUris);
-
-        $this->set(compact('seoUris'));
+        $requestParams = $this->request->getQueryParams();
+        $seoUriQuery = $this->SeoUris
+            ->find('search', [
+                'search' => $requestParams,
+            ]);
+        
+        $this->set('seoUris', $this->paginate($seoUriQuery));
     }
 
     /**

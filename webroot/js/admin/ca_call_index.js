@@ -1,5 +1,4 @@
-import '../common/common';
-import './search_toggle';
+import './admin_common';
 
 const exportBtnClick = () => {
   const count = document.querySelector('#hiddenCount').value;

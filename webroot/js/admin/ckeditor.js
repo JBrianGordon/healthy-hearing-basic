@@ -153,14 +153,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     '|',
                     'heading',
                     '|',
+                    'undo',
+                    'redo',
                     'bold',
                     'italic',
+                    'underline',
                     'link',
                     'bulletedList',
                     'numberedList',
                     'subscript',
                     'superscript',
-                    'underline',
                     '|',
                     'ckbox',
                     'blockQuote',
@@ -178,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     '|',
                     'horizontalLine',
                     'highlight',
-                    'style',
                     'restrictedEditingException',
                     'wproofreader'
                 ],
@@ -256,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             language: 'en',
             link: {
+                defaultProtocol: 'https://',
                 decorators: {
                     openInNewTab: {
                         mode: 'automatic',

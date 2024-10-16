@@ -31,7 +31,6 @@ use Cake\ORM\TableRegistry;
  */
 class AppController extends Controller
 {
-    public $pageTitle = 'Healthy Hearing';
     public $prefetches = [];
     public $meta = [];
     public $socialOptions = [];
@@ -64,13 +63,21 @@ class AppController extends Controller
     {
         parent::beforeRender($event);
 
+        $title = $this->viewBuilder()->getVars()['title'];
         $SeoTitles = $this->getTableLocator()->get('SeoTitles');
         $request = $this->request->getRequestTarget();
         $seoTitle = $SeoTitles->findTitleByUri($request);
 
         if ($seoTitle !== null) {
-            $this->set('title', $seoTitle['title']);
+            $title = $seoTitle['title'];
+        } elseif (empty($title)) {
+            $title = $this->request->getParam('controller').' '.$this->request->getParam('action');
         }
+        $env = Configure::read('env');
+        if ($env != 'prod') {
+            $title = $env.': '.$title;
+        }
+        $this->set('title', $title);
     }
 
     public function beforeFilter(EventInterface $event)

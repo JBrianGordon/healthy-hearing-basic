@@ -43,10 +43,10 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 									<?php endif; ?>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-lg-12 d-none d-md-block">
+							<div class="row d-md-block" style="display:none">
+								<div class="col-lg-12">
 									<br />
-									<h2 class="h4">It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the lists below.</h2>
+									<h2 class="h4">It's easy to get started. Select a <?= Configure::read('stateLabel') ?> from the map or the list below.</h2>
 								</div>
 							</div>
 							<div data-hh-map class="d-none d-md-block"></div>
@@ -103,6 +103,4 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 		</div>
 	</div>
 </div>
-<?php if (isFeatureOn('quick_pick')): ?>
-	<?= $this->element('responsive_slider') ?>
-<?php endif; ?>
+<?= /* Hide this for now : isFeatureOn('quick_pick') ?  $this->element('responsive_slider') : */ null ?>

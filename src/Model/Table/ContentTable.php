@@ -282,11 +282,11 @@ class ContentTable extends Table
         //     ->integer('facebook_image_height')
         //     ->notEmptyFile('facebook_image_height');
 
-        $validator
-            ->scalar('facebook_image_alt')
-            // ->maxLength('facebook_image_alt', 255)
-            ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
-            ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
+        // $validator
+        //     ->scalar('facebook_image_alt')
+        //     // ->maxLength('facebook_image_alt', 255)
+        //     ->requirePresence('facebook_image_alt', true, 'Facebook image alt is a required field')
+        //     ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
 
         // $validator
         //     ->boolean('old_url')
@@ -366,6 +366,10 @@ class ContentTable extends Table
     function findByTags($tagIds=[], $limit=6){
         // TODO: We previously used find('similar')
         // Test to see how close this is
+        if (empty($tagIds)) {
+            return [];
+        }
+
         $contentTags = $this->ContentTags->find('all', [
             'contain' => ['Content'],
             'conditions' => [
@@ -374,6 +378,7 @@ class ContentTable extends Table
                 'Content.last_modified <= CURDATE()',
             ],
         ])->all();
+
         $contents = [];
         $contentIds = [];
         foreach ($contentTags as $contentTag) {
