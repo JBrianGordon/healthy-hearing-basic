@@ -53,7 +53,7 @@ class PagesController extends AppController
         $content = $this->Pages->findByTitle('home')->first()->content;
         // Content from the Content table for recent articles
         $this->Content = $this->fetchTable('Content');
-        $articles = $this->Content->findLatest(4);
+        $articles = $this->Content->findLatest(5);
         if (empty($title)) {
             $this->set('title', isset($content->title) ? $content->title : $this->siteName);
         }
