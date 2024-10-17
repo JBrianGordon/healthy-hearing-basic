@@ -11,5 +11,5 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
-    // TODO: login(), logout()
+    // TODO: login(), logout(), resetPassword() using resetPasswordEmail() from ProfileMailer
 }
