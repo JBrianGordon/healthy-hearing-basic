@@ -133,13 +133,25 @@ class ReviewsTable extends Table
         // Setup search filter using search manager
         $this->searchManager()
             ->value('id')
-            ->value('location_id')
+            ->like('location_id', [
+                'before' => true,
+                'after' => true,
+                'colType' => [
+                    'location_id' => 'string'
+                ],
+            ])
             ->like('body', [
                 'before' => true,
                 'after' => true,
             ])
-            ->value('first_name')
-            ->value('last_name')
+            ->like('first_name', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('last_name', [
+                'before' => true,
+                'after' => true,
+            ])
             ->value('zip')
             ->value('rating', [
                 'multiValue' => true
