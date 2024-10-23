@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Log\Log;
 
 /**
  * QuizResults Controller
@@ -65,11 +66,15 @@ class QuizResultsController extends AppController
             $toEmail = $results['email'];
             $symptoms = $results['emailSymptoms'];
 
-            //***TODO: Save method is breaking this code, will need to be fixed */
             // Save results
-            // if ($this->QuizResults->saveResult($data)) {
-            //     $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
-            // }
+            $quizResult = $this->QuizResults->newEmptyEntity();
+            $entityData = [];
+            $entityData['results'] = $data['results'];
+            $quizResult = $this->QuizResults->patchEntity($quizResult, $entityData);
+
+            if ($this->QuizResults->save($quizResult)) {
+                $this->getRequest()->getSession()->write('OnlineTest', $data['results']);
+            } // TO-DO: Some sort of log/alert to admins for QuizResult save failures?
 
             // Email results
             $mailer = $this->getMailer('QuizResults');
