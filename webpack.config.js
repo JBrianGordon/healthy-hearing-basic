@@ -20,13 +20,8 @@ const folderMinify = (folder, files) => {
 	})
 }
 
-const processFoldersSequentially = async () => {
-  folderMinify(commonFolder, commonFiles);
-  await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay
-  folderMinify(adminFolder, adminFiles);
-};
-
-processFoldersSequentially();
+folderMinify(adminFolder, adminFiles);
+// folderMinify(commonFolder, commonFiles);
 
 module.exports = {
 	mode: 'production',
