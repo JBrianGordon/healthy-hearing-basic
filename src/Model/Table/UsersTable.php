@@ -496,13 +496,13 @@ class UsersTable extends CakeDcUsersTable
         ->order(['first_name' => 'ASC'])
         ->toArray();
 
-        // Subquery to get user_ids from Wikis
+        // Subquery to get user_ids from Model
         $inactiveItemAuthorSubquery = $this->$modelName->find()
             ->select(['user_id'])
             ->distinct(['user_id'])
             ->where(['is_active' => false]);
 
-        // Fetch authors or writers who are not in Wikis
+        // Fetch authors or writers who are not in Model
         $inactiveItemAuthors = $this->find('list', [
             'keyField' => 'id',
             'valueField' => function ($row) {
