@@ -192,12 +192,50 @@ class CaCallsController extends BaseAdminController
     function export() {
         $this->autoRender = false;
         $requestParams = $this->request->getQueryParams();
-
-        $this->Export->setIgnoreFields(['user_id']);
-        $this->Export->setAdditionalFields(['Users.username', 'CaCallGroups.location_id', 'CaCallGroups.caller_first_name', 'CaCallGroups.caller_last_name', 'CaCallGroups.patient_first_name', 'CaCallGroups.patient_last_name', 'CaCallGroups.prospect', 'CaCallGroups.score', 'CaCallGroups.status']);
-        $this->Export->setOverwriteLabels(['Users.username' => 'Agent']);
-        $this->Export->exportCsv('export_calls.csv');
-        die();
+        $count = $this->CaCalls->find('search', [
+            'search' => $requestParams,
+            'contain' => ['CaCallGroups', 'Users']
+        ])->count();
+        if ($count < 10000) { // Immediately download small exports
+            $this->Export->setIgnoreFields(['user_id']);
+            $this->Export->setAdditionalFields(['Users.username', 'CaCallGroups.location_id', 'CaCallGroups.caller_first_name', 'CaCallGroups.caller_last_name', 'CaCallGroups.patient_first_name', 'CaCallGroups.patient_last_name', 'CaCallGroups.prospect', 'CaCallGroups.score', 'CaCallGroups.status']);
+            $this->Export->setOverwriteLabels(['Users.username' => 'agent']);
+            $this->Export->exportCsv('export_calls.csv');
+            return;
+        } else {
+            $extract = $this->CaCalls->getSchema()->columns();
+            $extract = array_merge($extract, ['user.username', 'ca_call_group.location_id', 'ca_call_group.caller_first_name', 'ca_call_group.caller_last_name', 'ca_call_group.patient_first_name', 'ca_call_group.patient_last_name', 'ca_call_group.prospect', 'ca_call_group.score', 'ca_call_group.status']);
+            $usersFields = ['Users.username'];
+            $callGroupsFields = ['CaCallGroups.location_id', 'CaCallGroups.caller_first_name', 'CaCallGroups.caller_last_name', 'CaCallGroups.patient_first_name', 'CaCallGroups.patient_last_name', 'CaCallGroups.prospect', 'CaCallGroups.score', 'CaCallGroups.status'];
+            $containedTables = ['Users' => ['fields' => $usersFields], 'CaCallGroups' => ['fields' => $callGroupsFields]];
+            $header = array_map(
+                function($item) {
+                    return str_replace(['user.', 'ca_call_group.'], '', $item);
+                },
+                $extract
+            );
+            $header = str_replace('username', 'agent', $header);
+            $caCalls = $this->CaCalls
+                ->find('search', [
+                    'search' => $this->request->getQueryParams(),
+                ]);
+            $data = [
+                'vars' => [
+                    'table' => 'CaCalls',
+                    'username' => $this->user->first_name,
+                    'queryParams' => $this->request->getQueryParams(),
+                    'containedTables' => $containedTables,
+                    'extract' => $extract,
+                    'header' => $header,
+                    'csvExportFile' => '/tmp/export_calls.csv',
+                    'to' => $this->user->email
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+            $this->Flash->success('Large file export. Results will be emailed.');
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     /**

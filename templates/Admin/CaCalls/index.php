@@ -8,7 +8,6 @@ use App\Model\Entity\CaCallGroup;
 use Cake\Routing\Router;
 
 $queryParams = $this->request->getQueryParams();
-$exportUrl = Router::url(['action' => 'export', '?' => $queryParams]);
 // Advanced search details
 $advancedSearchFields = [];
 $ignoreFields = [];
@@ -94,8 +93,6 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 					<?= $this->element('admin_filter', ['modelName' => 'caCall']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields, 'additionalBlacklist' => $additionalBlacklist]) ?>
 				    <?= $this->element('crm_search', ['crmSearches' => $crmSearches]) ?>
-				    <?= $this->Form->input('hiddenCount', ['id' => 'hiddenCount', 'type' => 'hidden', 'value' => $count]) ?>
-				    <?= $this->Form->input('hiddenExport', ['id' => 'hiddenExport', 'type' => 'hidden', 'value' => $exportUrl]) ?>
 				    <div class="table-responsive mt30">
 				        <table class="table table-striped table-bordered table-sm">
 				            <thead>

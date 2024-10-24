@@ -48,10 +48,9 @@ if (document.querySelector("#advanced_search_toggle")) {
 }
 
 // Export button modal and functionality
-const exportBtn = document.getElementById("exportBtn");
-const exportModal = document.getElementById("exportModal");
-
-if(exportBtn !== null){
+const exportBtn = document.querySelector("#exportBtn");
+const exportModal = document.querySelector("#exportModal");
+if (exportBtn && exportModal) {
 	exportBtn.addEventListener("click", (e) => {
 	  e.preventDefault();
 	  exportModal.style.display = "block";
@@ -59,8 +58,8 @@ if(exportBtn !== null){
 	});
 }
 
-const exportClose = document.getElementById("exportClose");
-if(exportClose !== null){
+const exportClose = document.querySelector("#exportClose");
+if (exportClose) {
 	exportClose.addEventListener("click", () => {
 	  exportModal.style.display = "none";
 	  exportModal.classList.remove("show", "in");
@@ -80,7 +79,7 @@ formControls.forEach((control) => {
 });
 
 // Toggle classes and values for all switches, based on #allFieldsInput active class
-const allFieldsInput = document.getElementById("allFieldsInput");
+const allFieldsInput = document.querySelector("#allFieldsInput");
 if(allFieldsInput !== null){
 	allFieldsInput.addEventListener("click", () => {
 	  setTimeout(() => {
@@ -103,7 +102,7 @@ if(allFieldsInput !== null){
 }
 
 // Handle export submit
-const exportSubmit = document.getElementById("exportSubmit");
+const exportSubmit = document.querySelector("#exportSubmit");
 if(exportSubmit !== null){
 	exportSubmit.addEventListener("click", () => {
     // Read CSRF Token
@@ -273,7 +272,7 @@ if(exportModal !== null) {
 	});
 
 // Toggle classes and values for all switches, based on #allFieldsInput active class
-	const allFieldsInput = document.getElementById("allFieldsInput");
+	const allFieldsInput = document.querySelector("#allFieldsInput");
 	allFieldsInput.addEventListener("click", function() {
 	  setTimeout(function() {
 	    const exportLabelInputs = document.querySelectorAll(".export-label input");

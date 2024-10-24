@@ -42,7 +42,7 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-				<?= $this->Form->button(' Export', ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+				<?= $this->Html->link(' Export', ['action' => 'export', '?' => $queryParams], ['class' => 'btn btn-default bi bi-download', 'escape' => false]) ?>
 			</div>
 		</div>
 	</div>
@@ -56,8 +56,6 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				    <?= $this->element('pagination') ?>
 					<?= $this->element('admin_filter', ['modelName' => 'callSource']) ?>
 				    <?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
-				    <?= $this->Form->input('hiddenCount', ['id' => 'hiddenCount', 'type' => 'hidden', 'value' => $count]) ?>
-				    <?= $this->Form->input('hiddenExport', ['id' => 'hiddenExport', 'type' => 'hidden', 'value' => $exportUrl]) ?>
 				    <div class="table-responsive">
 				        <table class="table table-striped table-bordered table-sm">
 				            <thead>

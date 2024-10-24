@@ -377,6 +377,7 @@ class ReviewsController extends BaseAdminController
             $data = [
                 'vars' => [
                     'table' => 'Reviews',
+                    'username' => $this->user->first_name,
                     'queryParams' => $this->request->getQueryParams(),
                     'containedTables' => $containedTables,
                     'extract' => $extract,

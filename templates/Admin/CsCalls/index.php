@@ -68,8 +68,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         <div class="panel-body p10">
             <div class="btn-group">
                 <?= $this->Html->link(' Browse', ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-                <!--*** TODO: export function will need to be built out in controller ***-->
-                <?= $this->Form->button(' Export', ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+                <?= $this->Html->link(' Export', ['action' => 'export', '?' => $queryParams], ['class' => 'btn btn-default bi bi-download', 'escape' => false]) ?>
             </div>
         </div>
     </div>

@@ -27,6 +27,10 @@ class CsCallsController extends BaseAdminController
         $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
+
+        $this->loadComponent('Export', [
+            'actions' => ['export']
+        ]);
     }
 
     /**
@@ -100,6 +104,42 @@ class CsCallsController extends BaseAdminController
             }
             $this->set('report', $this->CsCalls->getAdminReport($startDate, $endDate, $adStartDate, $adEndDate));
             $this->set(compact('startDate','endDate','adStartDate','adEndDate','adMonths'));
+        }
+    }
+
+    /**
+    * Export a list of calls to CSV
+    */
+    function export() {
+        $this->autoRender = false;
+        $requestParams = $this->request->getQueryParams();
+        $count = $this->CsCalls->find('search', [
+            'search' => $requestParams,
+        ])->count();
+        if ($count < 10000) { // Immediately download small exports
+            $this->Export->exportCsv('export_tracking_calls.csv');
+            return;
+        } else {
+            $columns = $this->CsCalls->getSchema()->columns();
+            $csCalls = $this->CsCalls
+                ->find('search', [
+                    'search' => $this->request->getQueryParams(),
+                ]);
+            $data = [
+                'vars' => [
+                    'table' => 'CsCalls',
+                    'username' => $this->user->first_name,
+                    'queryParams' => $this->request->getQueryParams(),
+                    'extract' => $columns,
+                    'header' => $columns,
+                    'csvExportFile' => '/tmp/export_tracking_calls.csv',
+                    'to' => $this->user->email
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+            $this->Flash->success('Large file export. Results will be emailed.');
+            return $this->redirect(['action' => 'index']);
         }
     }
 }

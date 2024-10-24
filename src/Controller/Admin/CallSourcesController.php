@@ -74,16 +74,12 @@ class CallSourcesController extends BaseAdminController
     }
 
     /**
-    * Export a list of calls to CSV
+    * Export a list of Call Source numbers to CSV
     */
     function export() {
         $this->autoRender = false;
         $requestParams = $this->request->getQueryParams();
-
-        //$this->Export->setIgnoreFields();
-        //$this->Export->setAdditionalFields();
-        //$this->Export->setOverwriteLabels();
         $this->Export->exportCsv('export_call_sources.csv');
-        die();
+        return;
     }
 }

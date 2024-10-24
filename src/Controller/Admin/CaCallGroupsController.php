@@ -154,9 +154,32 @@ class CaCallGroupsController extends BaseAdminController
     * Export a list of call groups to CSV
     */
     function export() {
-        $this->autoRender = false;
-        $this->Export->exportCsv('export_call_groups.csv');
-        die();
+        $count = $this->CaCallGroups
+            ->find('search', [
+                'search' => $this->request->getQueryParams(),
+            ])->count();
+        if ($count < 10000) { // Immediately download small exports
+            $this->autoRender = false;
+            $this->Export->exportCsv('export_call_groups.csv');
+            return;
+        } else { // Email large exports
+            $columns = $this->CaCallGroups->getSchema()->columns();
+            $data = [
+                'vars' => [
+                    'table' => 'CaCallGroups',
+                    'username' => $this->user->first_name,
+                    'queryParams' => $this->request->getQueryParams(),
+                    'extract' => $columns,
+                    'header' => $columns,
+                    'csvExportFile' => '/tmp/export_call_groups.csv',
+                    'to' => $this->user->email
+                ],
+            ];
+            $queuedJobs = $this->getTableLocator()->get('Queue.QueuedJobs');
+            $queuedJobs->createJob('ExportCsv', $data);
+            $this->Flash->success('Large file export. Results will be emailed.');
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     /**

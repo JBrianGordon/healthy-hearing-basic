@@ -8,6 +8,7 @@ $spamCount = isset($spamCount) ? $spamCount : 0;
 // TODO: some features only for call supervisor or admin. Is there a better way to check this?
 $user = $this->Identity->get();
 $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
+$queryParams = $this->request->getQueryParams();
 ?>
 <?= $this->Html->link(" Inbound call", ['controller' => 'ca_calls', 'action' => 'edit'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
 <?= $this->Html->link(" Call from clinic", ['controller' => 'ca_calls', 'action' => 'clinic_lookup'], ['class' => 'btn btn-success bi bi-plus-lg', 'escape' => false]) ?>
@@ -21,6 +22,6 @@ $isCallSupervisor = $user['is_call_supervisor'] || $user['is_admin'];
 	<?= $this->Html->link("Calls", ['controller' => 'ca_calls', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?= $this->Html->link("Call groups", ['controller' => 'ca_call_groups', 'action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
 	<?php if ($action == 'index'): ?>
-		<?= $this->Form->button(" Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default bi bi-download', 'escapeTitle' => false]) ?>
+		<?= $this->Html->link(" Export", ['action' => 'export', '?' => $queryParams], ['class' => 'btn btn-default bi bi-download', 'escape' => false]) ?>
 	<?php endif; ?>
 <?php endif; ?>
