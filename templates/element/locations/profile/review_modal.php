@@ -151,68 +151,73 @@ $zipLabel = Configure::read('zipLabel');
         <p>
           <strong>All submissions are moderated.</strong> Reviews are typically published on clinic profiles within <strong>one to three business days.</strong>
         </p>
-
-        <h4>Subscribe to the <?= Configure::read('siteName'); ?> newsletter</h4>
-        <?=
-          $this->Form->create($newsletterForm, [
-            'id' => 'newsletterSignupForm',
-            'url' => [
-              'action' => 'newsletterSignup'
-            ],
-            'align' => [
-                FormHelper::GRID_COLUMN_ONE => 3, // first column (span over 4 columns)
-                FormHelper::GRID_COLUMN_TWO => 9, // second column (span over 8 columns)
-            ],
-          ])
-        ?>
-        <?php
-            echo $this->Form->hidden('newsletter_form', ['value' => true]);
-            echo $this->Form->control(
-                'first_name', [
-                  'placeholder' => 'First name',
-                  'label' => [
-                    'class' => 'text-end',
-                    'text' => 'First name:',
+        <?php if (Configure::read('showNewsletter')): ?>
+          <h4>Subscribe to the <?= Configure::read('siteName'); ?> newsletter</h4>
+          <?=
+            $this->Form->create($newsletterForm, [
+              'id' => 'newsletterSignupForm',
+              'url' => [
+                'action' => 'newsletterSignup'
+              ],
+              'align' => [
+                  FormHelper::GRID_COLUMN_ONE => 3, // first column (span over 4 columns)
+                  FormHelper::GRID_COLUMN_TWO => 9, // second column (span over 8 columns)
+              ],
+            ])
+          ?>
+          <?php
+              echo $this->Form->hidden('newsletter_form', ['value' => true]);
+              echo $this->Form->control(
+                  'first_name', [
+                    'placeholder' => 'First name',
+                    'label' => [
+                      'class' => 'text-end',
+                      'text' => 'First name:',
+                    ]
                   ]
-                ]
-            );
-            echo $this->Form->control(
-                'last_name', [
-                  'placeholder' => 'Last name',
-                  'label' => [
-                    'class' => 'text-end',
-                    'text' => 'Last name:',
+              );
+              echo $this->Form->control(
+                  'last_name', [
+                    'placeholder' => 'Last name',
+                    'label' => [
+                      'class' => 'text-end',
+                      'text' => 'Last name:',
+                    ]
                   ]
-                ]
-            );
-            echo $this->Form->control(
-                'email', [
-                  'placeholder' => 'Email',
-                  'label' => [
-                    'class' => 'text-end',
-                    'text' => 'Email:',
+              );
+              echo $this->Form->control(
+                  'email', [
+                    'placeholder' => 'Email',
+                    'label' => [
+                      'class' => 'text-end',
+                      'text' => 'Email:',
+                    ]
                   ]
-                ]
-            );
-        ?>
-        <div class="col-md-9 offset-md-3">
-            <?= $this->Recaptcha->display(); ?>
-        </div>
+              );
+          ?>
+          <div class="col-md-9 offset-md-3">
+              <?= $this->Recaptcha->display(); ?>
+          </div>
+        <?php endif; ?>
       </div>
       <div class="modal-footer">
-        <div id="newsletter-error" class="text-white py-4 px-4 my-4"></div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No Thanks</button>
-        <?php
-          echo $this->Form->button(
-            'Sign up', [
-              'type' => 'submit',
-              'class' => [
-                'btn',
-                'btn-primary',
-              ],
-            ]
-          );
-        ?>
+        <?php if (Configure::read('showNewsletter')): ?>
+          <div id="newsletter-error" class="text-white py-4 px-4 my-4"></div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No Thanks</button>
+          <?php
+            echo $this->Form->button(
+              'Sign up', [
+                'type' => 'submit',
+                'class' => [
+                  'btn',
+                  'btn-primary',
+                ],
+              ]
+            );
+          ?>
+        <?php else: ?>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+        <?php endif; ?>
       </div>
       <?= $this->Form->end() ?>
     </div>
@@ -298,60 +303,62 @@ $zipLabel = Configure::read('zipLabel');
         }
     });
 
-    newsletterSignupForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const newsletterSubscribeUrl = event.target.action;
-        const newsletterSubscribeFormData = new URLSearchParams(new FormData(newsletterSignupForm)).toString();
+    if (newsletterSignupForm) {
+      newsletterSignupForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const newsletterSubscribeUrl = event.target.action;
+          const newsletterSubscribeFormData = new URLSearchParams(new FormData(newsletterSignupForm)).toString();
 
-        try {
-            const response = await fetch(newsletterSubscribeUrl, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/x-www-form-urlencoded'
-                },
-                method: 'POST',
-                body: newsletterSubscribeFormData
-            });
+          try {
+              const response = await fetch(newsletterSubscribeUrl, {
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-type': 'application/x-www-form-urlencoded'
+                  },
+                  method: 'POST',
+                  body: newsletterSubscribeFormData
+              });
 
-            if (!response.ok) {
-                throw new Error();
-            }
+              if (!response.ok) {
+                  throw new Error();
+              }
 
-            let jsonResponse = await response.json();
+              let jsonResponse = await response.json();
 
-            if (!jsonResponse.success && jsonResponse.errors) {
-                let newsletterErrorDiv = document.getElementById('newsletter-error');
-                newsletterErrorDiv.replaceChildren(); // Clear any previous content
+              if (!jsonResponse.success && jsonResponse.errors) {
+                  let newsletterErrorDiv = document.getElementById('newsletter-error');
+                  newsletterErrorDiv.replaceChildren(); // Clear any previous content
 
-                for (let key in jsonResponse.errors) {
-                    if (jsonResponse.errors.hasOwnProperty(key)) {
-                      let errorMessage = jsonResponse.errors[key];
+                  for (let key in jsonResponse.errors) {
+                      if (jsonResponse.errors.hasOwnProperty(key)) {
+                        let errorMessage = jsonResponse.errors[key];
 
-                      // Create a <p> element for the error message
-                      let errorParagraph = document.createElement('p');
-                      errorParagraph.textContent = errorMessage;
+                        // Create a <p> element for the error message
+                        let errorParagraph = document.createElement('p');
+                        errorParagraph.textContent = errorMessage;
 
-                      // Append the <p> element to the newsletterErrorDiv
-                      newsletterErrorDiv.appendChild(errorParagraph);
-                    }
-                }
-                newsletterErrorDiv.classList.add('bg-danger', 'w-100');
-            } else {
-                newsletterSignupForm.reset();
+                        // Append the <p> element to the newsletterErrorDiv
+                        newsletterErrorDiv.appendChild(errorParagraph);
+                      }
+                  }
+                  newsletterErrorDiv.classList.add('bg-danger', 'w-100');
+              } else {
+                  newsletterSignupForm.reset();
 
-                let newsletterErrorDiv = document.getElementById('newsletter-error');
-                newsletterErrorDiv.replaceChildren(); // Clear any previous content
-                newsletterErrorDiv.classList.remove('bg-danger', 'w-100');
+                  let newsletterErrorDiv = document.getElementById('newsletter-error');
+                  newsletterErrorDiv.replaceChildren(); // Clear any previous content
+                  newsletterErrorDiv.classList.remove('bg-danger', 'w-100');
 
-                const thankYouModalElement = document.getElementById('reviewThankYouModal')
-                const bootstrapReviewThankYouModal = bootstrap.Modal.getInstance(thankYouModalElement)
-                bootstrapReviewThankYouModal.hide();
+                  const thankYouModalElement = document.getElementById('reviewThankYouModal')
+                  const bootstrapReviewThankYouModal = bootstrap.Modal.getInstance(thankYouModalElement)
+                  bootstrapReviewThankYouModal.hide();
 
-                // This is the second (index 1) reCAPTCHA on page
-                grecaptcha.reset(1);
-            }
-        } catch {
-            alert("We're sorry, but an error occured while signing you up for our newsletter. Thank you and sorry for the inconvenience.");
-        }
-    });
+                  // This is the second (index 1) reCAPTCHA on page
+                  grecaptcha.reset(1);
+              }
+          } catch {
+              alert("We're sorry, but an error occured while signing you up for our newsletter. Thank you and sorry for the inconvenience.");
+          }
+      });
+    }
 </script>
