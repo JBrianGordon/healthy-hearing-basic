@@ -939,7 +939,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											Please fill in "Notes" field.
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Okay</button>
+											<button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-hidden="true">Okay</button>
 										</div>
 									</div>
 								</div>
