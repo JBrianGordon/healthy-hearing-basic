@@ -100,8 +100,12 @@ class UtilsController extends BaseAdminController
      */
     public function runQueuedJobs() {
         $this->QueuedJobs = TableRegistry::get('Queue.QueuedJobs');
-        exec('cd /shared/httpd/hh/HH-CakePHP-4x && bin/cake queue run');
-        $this->Flash->success('Queued jobs ran');
+        // This runs from /webroot. CD back to main directory.
+        exec('cd .. && bin/cake queue run', $output);
+        $output = r_implode('<br>', $output);
+        $output = 'Queued jobs ran<br><br>'.$output;
+        $options['escape'] = false;
+        $this->Flash->success($output, $options);
         return $this->redirect(['admin' => true, 'action' => 'queuedJobs']);
     }
 
