@@ -21,8 +21,12 @@
 	        <p>
 	          <?= $this->Clinic->reviewText($location) ?>
 	        </p>
-	        <p<?= $location->state == 'ON'? ' style="height:20px"' : null ?>>
-	          <button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
+		<?php if ($location->state === 'ON'): ?>
+			<p style="height:20px">
+		<?php else: ?>
+			<p>
+				<button type="button" class="btn btn-secondary show_clinic" data-bs-toggle="modal" data-bs-target="#reviewSubmitModal">Write a review</button>
+		<?php endif; ?>
 	          <?php if (isset($location->reviews) && count($location->reviews)): ?>
 	          	<span id="sortSpan"><label for="sortSelect" class="w-auto pt0">Sort by: </label><select id="sortSelect">
                     <option value="newestArr">Newest</option><option value="highestRating">Highest Rating</option><option value="lowestRating">Lowest Rating</option>
