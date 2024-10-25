@@ -25,6 +25,9 @@ $fields = array_diff_key($fields, array_flip($ignoreFields));
         $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
     }
     switch ($field) {
+        case 'id_callsource_call':
+            $label = 'CallSource call ID';
+            break;
         case 'caller_firstname':
             $label = 'Caller first name';
             break;
@@ -85,7 +88,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                         <table class="table table-striped table-bordered table-condensed">
                             <thead>
                                 <tr>
-                                    <th><?= $this->Paginator->sort('id') ?><br><?= $this->Paginator->sort('call_id', ['label' => 'CS Call ID']) ?></th>
+                                    <th><?= $this->Paginator->sort('id') ?><br><?= $this->Paginator->sort('id_callsource_call', ['label' => 'CS Call ID']) ?></th>
                                     <!--*** TODO: pull in clinic names instead of clinic id's ***-->
                                     <th><?= $this->Paginator->sort('location_id', ['text' => 'Clinic']) ?></th>
                                     <th><?= $this->Paginator->sort('caller_lastname', ['text' => 'Caller Name']) ?></th>
@@ -97,28 +100,19 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <tbody>
                                 <?php foreach ($csCalls as $csCall): ?>
                                 <tr>
-                                    <td><?= $csCall->id ?><br><?= $csCall->call_id ?></td>
+                                    <td><?= $csCall->id ?><br><?= $csCall->id_callsource_call ?></td>
                                     <td><?= isset($csCall->location) ? $this->Html->link($csCall->location->title, $csCall->location->hh_url) . '<br>' . $csCall->location->city . ', ' . $csCall->location->state . '<br><a href="/admin/cs-calls/index?location_id=' . $csCall->location->id . '" class="btn btn-default btn-xs">All Calls</a>' : '' ?></td>
                                     <td><?= h($csCall->caller_firstname) ?> <?= h($csCall->caller_lastname) ?></td>
-                                    <td><?= h($csCall->start_time) ?><br><?= gmdate("H:i:s", $csCall->duration) ?></td>
+                                    <td nowrap><?= h($csCall->start_time) ?><br><?= gmdate("H:i:s", $csCall->duration) ?></td>
                                     <td><?= ucwords(str_replace('prospect-', '', str_replace('_', '-', strtolower(h($csCall->prospect))))) ?></td>
-                                    <td><?= h($csCall->leadscore) ?></td>
+                                    <td nowrap><?= h($csCall->leadscore) ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="paginator">
-                        <ul class="pagination">
-                            <?= $this->Paginator->first('<< ' . __('first')) ?>
-                            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                            <?= $this->Paginator->numbers() ?>
-                            <?= $this->Paginator->next(__('next') . ' >') ?>
-                            <?= $this->Paginator->last(__('last') . ' >>') ?>
-                        </ul>
-                        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-                    </div>
                 </div>
+                <?= $this->element('pagination') ?>
             </div>
         </div>
     </section>

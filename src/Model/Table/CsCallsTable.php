@@ -48,11 +48,6 @@ class CsCallsTable extends Table
         $this->setPrimaryKey('id');
         $this->addBehavior('Search.Search');
 
-        //TODO: Rename call_id field to id_callsource_call (this is a call ID that callsource sends us in leadscore report)
-        $this->belongsTo('Calls', [
-            'foreignKey' => 'call_id',
-            'joinType' => 'LEFT',
-        ]);
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
@@ -60,9 +55,21 @@ class CsCallsTable extends Table
 
         // Setup search filter using search manager
         $this->searchManager()
-            ->value('id')
-            ->value('call_id')
-            ->value('location_id')
+            ->like('id', [
+                'colType' => [
+                    'id' => 'string' // This allows wildcard
+                ],
+            ])
+            ->like('id_callsource_call', [
+                'colType' => [
+                    'id_callsource_call' => 'string'
+                ],
+            ])
+            ->like('location_id', [
+                'colType' => [
+                    'location_id' => 'string'
+                ],
+            ])
             ->like('leadscore')
             ->like('caller_firstname')
             ->like('caller_lastname')
@@ -176,7 +183,6 @@ class CsCallsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('call_id', 'Calls'), ['errorField' => 'call_id']);
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;

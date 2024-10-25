@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * CsCall Entity
  *
  * @property int $id
- * @property int $call_id
+ * @property int $id_callsource_call
  * @property int $location_id
  * @property string|null $ad_source
  * @property \Cake\I18n\FrozenTime|null $start_time
@@ -63,7 +63,7 @@ class CsCall extends Entity
      * @var array<bool>
      */
     protected $_accessible = [
-        'call_id' => true,
+        'id_callsource_call' => true,
         'location_id' => true,
         'ad_source' => true,
         'start_time' => true,

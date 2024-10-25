@@ -20,7 +20,7 @@ class CsCallsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'call_id' => 1,
+                'id_callsource_call' => 1,
                 'location_id' => 1,
                 'ad_source' => 'Lorem ipsum dolor sit amet',
                 'start_time' => '2021-12-10 21:24:00',
