@@ -33,7 +33,7 @@
 	<div class="clear"></div>
 		<button type="button" onclick="HT.nextButton(<?= $page ?>);" class="next-btn btn btn-light btn-lg">Next</button>
 	<?php if ($page == 0): ?>
-		<button type="button" data-dismiss="modal" class="prev-btn btn btn-default btn-lg">Cancel</button>
+		<button type="button" data-bs-dismiss="modal" class="prev-btn btn btn-default btn-lg">Cancel</button>
 	<?php else: ?>
 		<button type="button" onclick="HT.prevButton(<?= $page ?>);" class="prev-btn btn btn-default btn-lg">Previous</button>
 	<?php endif; ?>

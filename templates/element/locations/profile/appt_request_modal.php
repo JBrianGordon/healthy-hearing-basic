@@ -17,7 +17,7 @@ $topicOptions = [
 			<?= $this->Form->create(null, ['id' => 'CaCallApptRequestForm']) ?>
 				<div class="modal-header">
 					<h4 class="modal-title">Request an appointment at <?= $location->title ?>:</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
 					<?php
@@ -111,7 +111,7 @@ $topicOptions = [
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close pt10 pr10" data-dismiss="modal" aria-hidden="true">X</button>
+				<button type="button" class="close pt10 pr10" data-bs-dismiss="modal" aria-hidden="true">X</button>
 				<h4 class="mt10 mb10">Thank you for requesting an appointment at <?= $location->title ?></h4>
 			</div>
 			<div class="modal-body">
@@ -121,7 +121,7 @@ $topicOptions = [
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button id="renew-dismiss" class="btn btn-default btn-lg" data-dismiss="modal">Okay</button>
+				<button id="renew-dismiss" class="btn btn-default btn-lg" data-bs-dismiss="modal">Okay</button>
 			</div>
 		</div>
 	</div>

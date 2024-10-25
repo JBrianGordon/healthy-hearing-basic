@@ -186,11 +186,11 @@
 		<div id="HearingTest" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content test-overlay">
-					<div class="modal-header flex-row-reverse">
-						<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<div class="modal-header d-block">
+						<div id="test-counter" class="modal-title d-inline"></div>
+						<button type="button" class="close pull-right" data-bs-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<div id="test-counter" class="modal-title"></div>
 					</div>
 					<div class="modal-body m0">
 						<!-- Pages -->

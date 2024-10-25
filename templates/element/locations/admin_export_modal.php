@@ -61,7 +61,7 @@ use Cake\Core\Configure;
           echo '<label class="switch export-label mb10"><p>' . $spacedField . '</p><input class="form-control switch-positive hidden" type="text" value="1" name="' . $searchField . '"><span class="slider"><span class="switch-negative"></span><span class="switch-positive"></span></span></label></div>';
         }
       ?>
-      <button type="button" class="close-modal btn btn-lg btn-light" data-dismiss="modal" aria-hidden="true" id="exportSubmit">Ok</button>
+      <button type="button" class="close-modal btn btn-lg btn-light" data-bs-dismiss="modal" aria-hidden="true" id="exportSubmit">Ok</button>
     </div>
   </div>
 </div>
