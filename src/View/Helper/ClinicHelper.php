@@ -484,7 +484,15 @@ class ClinicHelper extends Helper
         } else {
             //Don't show this link for Ontario, ticket #16912
             if ($options['showEmpty'] && $location->state != 'ON') {
-                return $this->Html->link('Be the first to review', $location->hh_url, ['class' => 'btn-link show_clinic', 'escape' => false]);
+                return $this->Html->link(
+                    'Be the first to review',
+                    $location->hh_url, [
+                        'class' => 'btn-link show_clinic',
+                        'escape' => false,
+                        'data-bs-toggle' => 'modal',
+                        'data-bs-target' => '#reviewSubmitModal',
+                    ]
+                );
             } else {
                 return null;
             }
