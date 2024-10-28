@@ -233,21 +233,6 @@ class PagesController extends AppController
     }
 
     /**
-     * About IDA page
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function aboutIda() {
-        $page = $this->Pages->findByTitle('aboutIda')->first();
-        if (empty($title)) {
-            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
-        }
-        $this->viewBuilder()->setLayout('clinic_panel');
-        $this->set(compact('page'));
-        $this->set('show_slider', false);
-    }
-
-    /**
      * About us page
      *
      * @return \Cake\Http\Response|null|void Renders view
