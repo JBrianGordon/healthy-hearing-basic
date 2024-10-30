@@ -33,7 +33,6 @@
                     echo $this->Form->control('phone');
                     echo $this->Form->control('priority');
                     echo $this->Form->control('aud_or_his');
-                    echo $this->Form->control('is_ida_verified');
                     echo $this->Form->control('id_yhn_provider');
                     echo $this->Form->control('locations._ids', ['options' => $locations]);
                 ?>

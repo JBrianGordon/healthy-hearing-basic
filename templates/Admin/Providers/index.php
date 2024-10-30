@@ -18,7 +18,6 @@ $ignoreFields = [
     'priority',
     'location_count',
     'id_yhn_provider',
-    'is_ida_verified',
     'q',
 ];
 

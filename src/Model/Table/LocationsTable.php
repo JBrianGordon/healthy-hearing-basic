@@ -190,7 +190,6 @@ class LocationsTable extends Table
             ->value('title_status', $defaultOptions)
             ->boolean('is_mobile')
             ->boolean('is_listing_type_frozen')
-            ->boolean('is_ida_verified')
             ->boolean('is_active')
             ->boolean('is_show')
             ->boolean('filter_has_photo')
@@ -652,10 +651,6 @@ class LocationsTable extends Table
             ->maxLength('listing_type', 20)
             ->requirePresence('listing_type', 'create')
             ->notEmptyString('listing_type');
-
-        $validator
-            ->boolean('is_ida_verified')
-            ->notEmptyString('is_ida_verified');
 
         $validator
             ->scalar('location_segment')

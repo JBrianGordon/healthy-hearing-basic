@@ -11,13 +11,6 @@
 		</header>
 		<div class="panel-body">
 			<div class="panel-section">
-				<?php if($location->is_ida_verified): ?>
-					<div class="ida-container tac">
-						<a href="#idaAnchor" class="ida-link">
-							<img loading="lazy" class="ida-badge" alt="Clinic badge from Ida Institute" src="/img/ida_badge.png"width="120" height="120">
-						</a>
-					</div>
-				<?php endif; ?>
 				<?php if ($about): ?>
 						<div class="about-container">
 						<?php if ($slogan): ?>

@@ -51,7 +51,6 @@ class LocationsFixture extends TestFixture
                 'yhn_tier' => 1,
                 'cqp_tier' => 1,
                 'listing_type' => 'Lorem ipsum dolor ',
-                'is_ida_verified' => 1,
                 'location_segment' => 'Lorem ipsum dolor sit amet',
                 'entity_segment' => 'Lorem ipsum dolor sit amet',
                 'title_status' => 1,

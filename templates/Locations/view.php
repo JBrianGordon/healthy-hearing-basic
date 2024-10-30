@@ -605,29 +605,6 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 								echo $this->element('layouts/call_clinic', ['isEnhancedOrPremier'=>$isEnhancedOrPremier, 'displayOpenClosed',$displayOpenClosed, 'isCallTrackingBypassed'=>$isCallTrackingBypassed]);
 							}
 							?>
-							
-							<!-- Ida Explanation -->
-							<?php
-							$idaProvider = false;
-							foreach ($location->providers as $locationProvider) {
-								if ($locationProvider->is_ida_verified) {
-									$idaProvider = true;
-									break;
-								}
-							}
-							?>
-							<?php if ($location->is_ida_verified || !empty($idaProvider)): ?>
-								<div id="idaAnchor"></div>
-								<div id="idaExplained" class="panel panel-light">
-									<div class="panel-body">
-										<div class="panel-section condensed">
-											<img loading="lazy" class="ida-badge block" alt="Clinic badge from Ida Institute" src="/img/ida_badge.png" width="80" height="80">
-											<small>Providers who have earned the Inspired by Ida label have taken courses online at the Ida Institute. To earn the label, a provider must take two specific courses that outline best practices for putting the patient first. Clinics may display the Inspired by Ida label if the majority of their providers have earned the provider label. The Ida Institute is a non-profit organization that develops resources to help hearing care professionals around the world strengthen their counseling process.
-											</small>
-										</div>
-									</div>
-								</div>
-							<?php endif; ?>
 				
 							<!-- Disclaimer -->
 							<div id="disclaimer" class="panel panel-light">

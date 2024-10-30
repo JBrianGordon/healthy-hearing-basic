@@ -29,19 +29,9 @@ $this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 										'alt' => $alt,
 									]);
 									?>
-									<?php if($provider->is_ida_verified): ?>
-										<a href="#idaAnchor" class="ida-link">
-											<img loading="lazy" class="ida-badge" alt="Provider badge from Ida Institute" src="/img/ida_pro.png" width="80" height="80">
-										</a>
-									<?php endif; ?> 
 								</div>
 							<?php else: ?>
 								<div class="col-md-4 gutter-below hidden-sm hidden-xs">
-								<?php if($provider->is_ida_verified): ?>
-									<a href="#idaAnchor" class="ida-link">
-										<img loading="lazy" class="ida-badge" alt="Provider badge from Ida Institute" src="/img/ida_pro.png" width="80" height="80">
-									</a>
-								<?php endif; ?> 
 								</div>
 							<?php endif; ?>
 							<div class="col-md-8 gutter-below">

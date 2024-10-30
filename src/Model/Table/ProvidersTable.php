@@ -221,10 +221,6 @@ class ProvidersTable extends Table
             ->allowEmptyString('aud_or_his');
 
         $validator
-            ->boolean('is_ida_verified')
-            ->notEmptyString('is_ida_verified');
-
-        $validator
             ->integer('id_yhn_provider')
             ->allowEmptyString('id_yhn_provider');
 

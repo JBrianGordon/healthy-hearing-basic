@@ -43,7 +43,6 @@ use Cake\Utility\Text;
  * @property int $yhn_tier
  * @property int $cqp_tier
  * @property string $listing_type
- * @property bool $is_ida_verified
  * @property string $location_segment
  * @property string $entity_segment
  * @property int $title_status
@@ -338,7 +337,6 @@ class Location extends Entity
         'yhn_tier' => true,
         'cqp_tier' => true,
         'listing_type' => true,
-        'is_ida_verified' => true,
         'location_segment' => true,
         'entity_segment' => true,
         'title_status' => true,

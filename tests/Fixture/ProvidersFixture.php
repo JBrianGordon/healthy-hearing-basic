@@ -37,7 +37,6 @@ class ProvidersFixture extends TestFixture
                 'phone' => 'Lorem ipsum do',
                 'priority' => 1,
                 'aud_or_his' => 'Lorem ipsum dolor sit amet',
-                'is_ida_verified' => 1,
                 'id_yhn_provider' => 1,
             ],
         ];

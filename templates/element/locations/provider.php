@@ -96,14 +96,6 @@ use Cake\Core\Configure;
 	}
 	?>
 
-	<div class="col-md-12 mb20 form-group pl0">
-		<div class="checkbox form-check form-switch pl0 w-100">
-				<?= $this->Form->label('providers.' . $key . '.is_ida_verified', 'IDA verified provider', ['class' => 'fw-bold form-check-label pl15 pr15 tar float-left w-25']) ?>
-				<?= $this->Form->checkbox('providers.' . $key . '.is_ida_verified', [
-					'class' => 'form-check-input ml0'
-				]) ?>
-		</div>
-	</div>
 	<div class="form-group clearfix">
 		<div class="col-sm-4 col-sm-offset-2">
 			<?= $this->Form->control("providers." . $key . ".priority", [

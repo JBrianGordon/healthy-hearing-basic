@@ -44,9 +44,6 @@ $this->Html->script('dist/admin_providers.min', ['block' => true]);
                             echo $this->Form->control('phone');
                             echo $this->Form->control('priority');
                             echo $this->Form->control('aud_or_his');
-                            echo '<div class="col-md-3 col-md-offset-3 pl0 mb-3">';
-                            echo $this->Form->control('is_ida_verified');
-                            echo '</div>';
                             echo $this->Form->control('id_yhn_provider');
                             echo '<div class="mb-3 form-group text"><label class="form-label col-sm-3" for="location-association-list">Associated Locations</label><div id="location-association-list" class="col-xs-12 p0">';
                             foreach ($provider->locations as $key => $location) {
