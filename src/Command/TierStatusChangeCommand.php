@@ -9,24 +9,14 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
-use Cake\Filesystem\File;
-use Cake\Mailer\MailerAwareTrait;
-use Cake\Validation\Validation;
+use Cake\Mailer\Mailer;
 use Cake\Routing\Router;
-use SoapClient;
-use SoapHeader;
-use DOMDocument;
 
 /**
- * Import command.
+ * Tier Status Change command.
  */
 class TierStatusChangeCommand extends Command
 {
-    use MailerAwareTrait;
-
-    protected $defaultTable = 'Imports';
-
-
     /**
      * Hook method for defining this command's option parser.
      *
@@ -38,10 +28,14 @@ class TierStatusChangeCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
         $parser
-            ->setDescription('Import clinic data from specified group')
+            ->setDescription('Generate a report of Oticon import tier changes over time')
             ->addOption('to', [
                 'short' => 't',
                 'help' => 'to: email address'
+            ])
+            ->addOption('username', [
+                'short' => 'u',
+                'help' => 'username'
             ])
             ->addOption('start', [
                 'short' => 's',
@@ -64,7 +58,8 @@ class TierStatusChangeCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $to = $args->getOption('to') ?? null;
+        $to = $args->getOption('to') ?? Configure::read('adminEmails');
+        $username = $args->getOption('username') ?? '';
         $startDate = $args->getOption('start') ?? null;
         $endDate = $args->getOption('end') ?? null;
         $this->Locations = $this->fetchTable('Locations');
@@ -86,7 +81,6 @@ class TierStatusChangeCommand extends Command
         $progress = $io->helper('Progress');
         $progress->init([
             'total' => count($locations),
-            //'width' => 20,
         ]);
         $file_data = "\"Clinic Title\",\"ID\",\"Oticon ID\",\"Url\",\"Active Now\",\"Show Now\",\"Current Tier\",\"Total Imports\",\"Tier 1\",\"Tier 2\",\"Tier 3\",\"Tier 0\",\"Total Changes\"\n";
         foreach ($locations as $location) {
@@ -110,20 +104,39 @@ class TierStatusChangeCommand extends Command
             $progress->draw();
         }
         $io->helper('BaseShell')->writeFile($file_data, $filePath, true);
-        if (isset($to)) {
-            $email = [];
-            $email['to'] = $to;
-            $email['subject'] = 'Tier Status Change Report';
-            $email['body'] = "Tier Status Change Report for dates: ";
-            if (empty($startDate) && empty($endDate)) {
-                $email['body'] .= "all<br>";
-            } else {
-                $email['body'] .= "$startDate to $endDate<br>";
-            }
-            $email['body'] .= "Click to download the report: <a href='$sitePath'>$filename</a>";
-            // Send email
-            $this->getMailer('Admin')->send('default', [$email]);
-            $io->out('Report emailed to: ' . $to);
+        $filesize = filesize($filePath);
+        $body = "Tier Status Change Report for dates: ";
+        if (empty($startDate) && empty($endDate)) {
+            $body .= "all<br>";
+        } else {
+            $body.= "$startDate to $endDate<br>";
         }
+        $subject = 'Tier Status Change Report';
+        if (Configure::read('env') != 'prod') {
+            $subject = '('.Configure::read('env').') '.$subject;
+        }
+        // Send email
+        $this->Mailer = new Mailer('default');
+        $this->Mailer
+            ->setEmailFormat('html')
+            ->setTo($to)
+            ->setSubject($subject)
+            ->viewBuilder()
+                ->setTemplate('admin')
+                ->setVar('username', $username)
+                ->setVar('content', $body)
+                ->setVar('filesize', $filesize);
+
+        if (!empty($filesize)) {
+            // Do not attach files larger than 5MB
+            if ($filesize <= 5000000) {
+                $this->Mailer->setAttachments([
+                    $filePath
+                ]);
+            }
+        }
+        $this->Mailer->deliver();
+        $io->out('Report emailed to: ' . $to);
+        $io->out();
     }
 }

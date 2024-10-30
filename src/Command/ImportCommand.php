@@ -894,9 +894,6 @@ class ImportCommand extends Command
             $email['to'] = Configure::read('developerEmails');
         }
         $email['subject'] = strtoupper($importData->type) . ' Import - ' . date('F d, Y');
-        if (Configure::read('env') != 'prod') {
-            $email['subject'] = '('.Configure::read('env').') '.$email['subject'];
-        }
         // Send email
         $this->getMailer('Admin')->send('default', [$email]);
         $io->out('Import report email sent to '.implode(', ', $email['to']));

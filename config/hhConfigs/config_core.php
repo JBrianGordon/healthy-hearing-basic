@@ -22,6 +22,7 @@ return [
     'developerEmails' => ['blemons@healthyhearing.com', 'btalkington@healthyhearing.com'],
     'itEmails' => ['it@healthyhearing.com'],
     'editorEmails' => ['editor@healthyhearing.com'],
+    'adminEmails' => ['hhteam@healthyhearing.com'],
     // CallSource API
     'callSourceUsername' => 'xmluser_hh', // dev/test account
     'callSourcePassword' => 'xmlapihh1' // dev/test account

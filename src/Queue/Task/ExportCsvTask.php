@@ -70,6 +70,7 @@ class ExportCsvTask extends Task {
 
         if (!empty($data['vars']['csvExportFile'])) {
             // Do not attach files larger than 5MB
+            // TODO: Can we zip these?
             if ($filesize <= 5000000) {
                 $this->Mailer->setAttachments([
                     $data['vars']['csvExportFile']

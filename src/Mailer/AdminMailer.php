@@ -25,9 +25,14 @@ class AdminMailer extends Mailer
      */
     public function default($email)
     {
+        $env = Configure::read('env');
         $to = isset($email['to']) ? $email['to'] : Configure::read('customer-support-email');
-        $subject = isset($email['subject']) ? $email['subject'] : "";
+        $subject = isset($email['subject']) ? $email['subject'] : "<subject>";
+        if ($env != 'prod') {
+            $subject = '('.$env.') '.$subject;
+        }
         $body = isset($email['body']) ? $email['body'] : "";
+
         $this
             ->setEmailFormat('html')
             ->setTo($to)
