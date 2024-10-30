@@ -16,7 +16,10 @@ class ShellTask extends Task {
      */
     public function run(array $data, int $jobId): void {
         $command = $data['vars']['command'];
-        $output = shell_exec('cd /shared/httpd/hh/HH-CakePHP-4x && bin/cake '.$command);
+        $shellResult = shell_exec('cd '.ROOT.' && bin/cake '.$command);
+        $output = 'Completed running shell command: '.$command;
+        // Uncomment this to debug a failing shell
+        //$output .= '<br>'.$shellResult;
         echo $output;
     }
 }
