@@ -13,7 +13,7 @@ use Cake\Routing\Router;
 
 <p>Did you know you can prevent <?= $this->Html->link('hearing loss', Router::url('/help/hearing-loss/prevention', true)) ?>? A healthy lifestyle and reducing your <?= $this->Html->link('noise exposure', Router::url('/help/hearing-loss/noise-induced-hearing-loss', true)) ?> can go a long way.</p>
 
-<p>Hearing health is important, so please share this <?= $this->Html->link('online hearing test', Router::url('/help/online-hearing-test', true)) ?> with friends and family. Untreated hearing loss is linked to many negative health impacts, including <?= $this->Html->link('cognitive decline', Router::url('/report/52904-The-connection-between-hearing-loss-and-cognitive-decline', true)) ?>. The good news? <?= $this->Html->link('Hearing aids', Router::url('/help/hearing-aids', true)); ?> can delay the onset of dementia and provide many other <?= $this->Html->link('health benefits', Router::url('/help/hearing-aids/health-benefits', true)); ?>.</p>
+<p>Hearing health is important, so please share this <?= $this->Html->link('online hearing test', Router::url('/help/online-hearing-test', true)) ?> with friends and family. Untreated hearing loss is linked to many negative health impacts, including <?= $isUS ? $this->Html->link('cognitive decline', Router::url('/report/52904-The-connection-between-hearing-loss-and-cognitive-decline', true)) : 'cognitive decline' ?>. The good news? <?= $this->Html->link('Hearing aids', Router::url('/help/hearing-aids', true)); ?> can delay the onset of dementia and provide many other <?= $this->Html->link('health benefits', Router::url('/help/hearing-aids/health-benefits', true)); ?>.</p>
 
 <p>Sincerely,</p>
 <p>Your friends at <?= Configure::read('siteName') ?></p>

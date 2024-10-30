@@ -17,7 +17,7 @@ use Cake\Routing\Router;
 	<?php endforeach ?>
 </ul>
 
-<p>Did you know even slight <?= $this->Html->link('hearing loss', Router::url('/report/53057-Very-mild-forms-of-hearing-loss-linked-to-cognitive-decline-in-new-study', true)) ?> is linked to cognitive decline? Now is the best time to get screened. Schedule a hearing test today, get answers and get help. <?= $this->Html->link('Find a clinic near you', Router::url($this->Clinic->nearMeLink(),true)) ?>.</p>
+<p>Did you know even slight <?= $isUS ? $this->Html->link('hearing loss', Router::url('/report/53057-Very-mild-forms-of-hearing-loss-linked-to-cognitive-decline-in-new-study', true)) : 'hearing loss' ?> is linked to cognitive decline? Now is the best time to get screened. Schedule a hearing test today, get answers and get help. <?= $this->Html->link('Find a clinic near you', Router::url($this->Clinic->nearMeLink(),true)) ?>.</p>
 
 <p>The good news? <?= $this->Html->link('Hearing aids', Router::url('/help/hearing-aids', true)) ?> can delay the onset of dementia and provide many other <?= $this->Html->link('health benefits', Router::url('/help/hearing-aids/health-benefits', true)) ?>.
 Hearing health is important, so please share this <?= $this->Html->link('online hearing test', Router::url('/help/online-hearing-test', true)) ?> with friends and family.</p>
