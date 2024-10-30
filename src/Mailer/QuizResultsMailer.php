@@ -9,6 +9,7 @@ class QuizResultsMailer extends Mailer
 
     public function sendQuizResult($name, $hearingResult, $toEmail, $symptoms)
     {
+        $isUS = Configure::read('country') == 'US';
         $template = 'quiz_result_normal';
         if ($hearingResult == 'possible') {
             $template = 'quiz_result_possible';
@@ -21,7 +22,8 @@ class QuizResultsMailer extends Mailer
             ->setSubject('Quiz Result')
             ->setViewVars([
                 'symptoms' => $symptoms,
-                'name' => $name
+                'name' => $name,
+                'isUS' => $isUS
             ])
             ->viewBuilder()
                 ->setTemplate("QuizResults/$template");
