@@ -9,11 +9,10 @@ use Cake\Core\Configure;
 				<li><span><strong class="invisible">Menu</strong></span></li>
 				<?php if ($isClinic || isset($clinicPage)): ?>
 					<li><a href="/clinic/locations/edit" class="bi bi-globe2"> My Profile</a></li>
-					<li><a href="/clinic/ca_call_groups/report" class="bi bi-list-task"> Reporting</a></li>
+					<li><a href="/clinic/ca-call-groups/report" class="bi bi-list-task"> Reporting</a></li>
 					<li><a href="/clinic/reviews" class="bi bi-star-fill"> Reviews</a></li>
 					<li><a href="/clinic/library" class="bi bi-book-fill"> Library</a></li>
 					<li><a href="/clinic/pages/faq" class="bi bi-question-circle-fill"> Help</a></li>
-					<li><a href="/clinic/pages/about-ida" class="bi bi-award-fill"> Inspired by Ida</a></li>
 					<li><a href="/clinic/users/account" class="bi bi-person-fill"> My Account</a></li>
 					<?php if ($isClinic || $adminAccessAllowed) : ?>
 						<li><a href="/logout" class="bi bi-power"> Logout</a></li>

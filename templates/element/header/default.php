@@ -72,13 +72,12 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 								<a href="#" id="myAccountDropdown" class="dropdown-toggle bi bi-person-fill" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> My Account <span class="caret"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="myAccountDropdown">
 									<li><?= $this->Html->link(' My Profile', '/clinic/locations/edit', ['escape' => false, 'class' => 'bi bi-globe2']); ?></li>
-									<li><?= $this->Html->link(' Reporting', '/clinic/ca_call_groups/report', ['escape' => false, 'class' => 'bi bi-list-task']); ?></li>
+									<li><?= $this->Html->link(' Reporting', '/clinic/ca-call-groups/report', ['escape' => false, 'class' => 'bi bi-list-task']); ?></li>
 									<li><?= $this->Html->link(' Reviews', '/clinic/reviews', ['escape' => false, 'class' => 'bi bi-star-fill']); ?></li>
 									<?php if ($showLibraryLink): ?>
 										<li><?= $this->Html->link(' Library', '/clinic/library', ['escape' => false, 'class' => 'bi bi-book-fill']); ?></li>
 									<?php endif; ?>
 									<li><?= $this->Html->link(' Help', '/clinic/pages/faq', ['escape' => false, 'class' => 'bi bi-question-circle-fill']); ?></li>
-									<li><?= $this->Html->link(' Inspired by Ida', '/clinic/pages/about-ida', ['escape' => false, 'class' => 'bi bi-award-fill']); ?></li>
 									<hr class="mt10 mb10">
 									<li><?= $this->Html->link(' My Account', '/clinic/users/account', ['escape' => false, 'class' => 'bi bi-person-fill']); ?></li>
 									<li><?= $this->Html->link(' Logout', '/logout', ['escape' => false, 'class' => 'bi bi-power']); ?></li>

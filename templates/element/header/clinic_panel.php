@@ -65,12 +65,11 @@ $logo = Configure::read('logo');
                                 ?>
                         </li>
                         <!-- <li><a href="/clinic/locations/edit" class="dropdown-item"><span class="bi bi-globe2"></span> My Profile</a></li> -->
-                        <li><a href="/clinic/ca_call_groups/report" class="dropdown-item"><span class="bi bi-list-task"></span> Reporting</a></li>
+                        <li><a href="/clinic/ca-call-groups/report" class="dropdown-item"><span class="bi bi-list-task"></span> Reporting</a></li>
                         <li><a href="/clinic/reviews" class="dropdown-item"><span class="bi bi-star-fill"></span> Reviews</a></li>
                         <!-- TODO: ADD PERMISSION FOR LIBRARY -->
                         <li><a href="/clinic/library" class="dropdown-item"><span class="bi bi-book-fill"></span> Library</a></li>
                         <li><a href="/clinic/pages/faq" class="dropdown-item"><span class="bi bi-question-circle-fill"></span> Help</a></li>
-                        <li><a href="/clinic/pages/about-ida" class="dropdown-item"><span class="bi bi-award-fill"></span> Inspired by Ida</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a href="/clinic/users/account" class="dropdown-item"><span class="bi bi-person-fill"></span> My Account</a></li>
                         <li>
