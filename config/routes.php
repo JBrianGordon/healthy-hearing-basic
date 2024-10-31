@@ -187,11 +187,6 @@ return static function (RouteBuilder $routes) {
             'Pages::clinicFaq'
         );
 
-        $clinicBuilder->connect(
-            '/ca-call-groups/report',
-            ['controller' => 'CaCallGroups', 'action' => 'report', 'prefix' => false]
-        );
-
         // All routes here will be prefixed with `/clinic`, and
         // have the `'prefix' => 'Clinic'` route element added that
         // will be required when generating URLs for these routes
