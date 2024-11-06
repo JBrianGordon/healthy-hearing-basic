@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Model\Entity\Location;
+use App\Model\Entity\CaCallGroup;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -13,9 +13,9 @@ use Cake\Mailer\Mailer;
 use Cake\Routing\Router;
 
 /**
- * Tier Status Change command.
+ * Report calls by state command.
  */
-class TierStatusChangeCommand extends Command
+class CallReportByStateCommand extends Command
 {
     /**
      * Hook method for defining this command's option parser.
@@ -62,58 +62,80 @@ class TierStatusChangeCommand extends Command
         $username = $args->getOption('username') ?? '';
         $startDate = $args->getOption('start') ?? null;
         $endDate = $args->getOption('end') ?? null;
-        $this->Locations = $this->fetchTable('Locations');
+        $this->CaCallGroups = $this->fetchTable('CaCallGroups');
 
-        $io->out("Generating Tier Status Change report.");
-        $io->out("startDate = {$startDate}");
-        $io->out("endDate = {$endDate}");
-        $io->out("email = {$to}");
+        if (empty($startDate) || empty($endDate)) {
+            $io->out("Must specify a start and end date.");
+            return false;
+        }
+        // Convert to timestamps
+        $startDate = strtotime($startDate);
+        $endDate = strtotime($endDate);
+        $fileName = 'callReportByState_'.date('mdY', $startDate).'_'.date('mdY', $endDate).'.csv';
+        $filePath = WWW_ROOT . 'csvs' . DS . $fileName;
+        $startTime = date('Y-m-d 00:00:00', $startDate);
+        $endTime = date('Y-m-d 23:59:59', $endDate);
+        $startDate = date('M d', $startDate);
+        $endDate = date('M d', $endDate);
 
-        $filename = 'tier_status_changes.csv';
-        $filePath = WWW_ROOT . 'csvs' . DS . $filename;
-        $locations = $this->Locations->find('all', [
-            'fields' => ['id','title','city','state','zip','id_oticon','is_active','is_show'],
-            'contain' => [],
-        ])->all();
+        $io->helper('BaseShell')->title("Report call data by state: $startDate to $endDate");
 
-        // Get and use the Progress Helper.
+        $file_data = "\"State\",\"# Prospect calls ({$startDate}-{$endDate})\",\"# Appts ({$startDate}-{$endDate})\",\"Avg wait time in days ({$startDate}-{$endDate})\"\n";
+
+        $states = Configure::read('states');
         $progress = $io->helper('Progress');
         $progress->init([
-            'total' => count($locations),
+            'total' => count($states),
         ]);
-        $file_data = "\"Clinic Title\",\"ID\",\"Oticon ID\",\"Url\",\"Active Now\",\"Show Now\",\"Current Tier\",\"Total Imports\",\"Tier 1\",\"Tier 2\",\"Tier 3\",\"Tier 0\",\"Total Changes\"\n";
-        foreach ($locations as $location) {
-            $tierStats = $this->Locations->tierChangeStats($location->id, $startDate, $endDate);
-            $isActive = empty($location->is_active) ? '0' : '1';
-            $isShow = empty($location->is_show) ? '0' : '1';
-            $file_data .= "\"{$location->title}\",";
-            $file_data .= "\"{$location->id}\",";
-            $file_data .= "\"{$location->id_oticon}\",";
-            $file_data .= "\"https://www.healthyhearing.com" . Router::url($location->hh_url) ."\",";
-            $file_data .= "\"{$isActive}\",";
-            $file_data .= "\"{$isShow}\",";
-            $file_data .= "\"{$tierStats['current_tier']}\",";
-            $file_data .= "\"{$tierStats['total_updates']}\",";
-            $file_data .= "\"{$tierStats['tier_1']}\",";
-            $file_data .= "\"{$tierStats['tier_2']}\",";
-            $file_data .= "\"{$tierStats['tier_3']}\",";
-            $file_data .= "\"{$tierStats['tier_0']}\",";
-            $file_data .= "\"{$tierStats['times_changed']}\"\n";
+        foreach ($states as $abbr => $state) {
+            $prospects = $this->CaCallGroups->find('all', [
+                'contain' => ['Locations'],
+                'conditions' => [
+                    'Locations.state' => $abbr,
+                    'CaCallGroups.prospect' => CaCallGroup::PROSPECT_YES,
+                    'AND' => [
+                        'CaCallGroups.created >=' => $startTime,
+                        'CaCallGroups.created <=' => $endTime,
+                    ]
+                ]
+            ])->count();
+            $appts = $this->CaCallGroups->find('all', [
+                'contain' => 'Locations',
+                'conditions' => [
+                    'Locations.state' => $abbr,
+                    'CaCallGroups.score IN' => [CaCallGroup::SCORE_APPT_SET, CaCallGroup::SCORE_APPT_SET_DIRECT],
+                    'AND' => [
+                        'CaCallGroups.created >=' => $startTime,
+                        'CaCallGroups.created <=' => $endTime,
+                    ]
+                ]
+            ])->all();
+            $totalWaitTime = 0;
+            foreach ($appts as $appt) {
+                // Find the difference between appt date and call created date
+                $totalWaitTime += $appt->appt_date->diffInDays($appt->created);
+            }
+            $apptsCount = count($appts);
+            $avgWaitTime = '';
+            if ($apptsCount > 0) {
+                $avgWaitTime = round(($totalWaitTime / $apptsCount), 0);
+            }
+
+            // Add the data for this state
+            $file_data .= "\"{$abbr}\","; // State
+            $file_data .= "\"{$prospects}\","; // # Prospect calls
+            $file_data .= "\"{$apptsCount}\","; // # Appts
+            $file_data .= "\"{$avgWaitTime}\"\n"; // Avg wait time
             $progress->increment(1);
             $progress->draw();
         }
         $io->helper('BaseShell')->writeFile($file_data, $filePath, true);
         $filesize = filesize($filePath);
-        $body = "Tier Status Change Report for dates: ";
-        if (empty($startDate) && empty($endDate)) {
-            $body .= "all<br>";
-        } else {
-            $body.= "$startDate to $endDate<br>";
-        }
-        $subject = 'Tier Status Change Report';
+        $subject = "Call report by state ({$startDate} to {$endDate})";
         if (Configure::read('env') != 'prod') {
             $subject = '('.Configure::read('env').') '.$subject;
         }
+        $body = "Report of call data by state.<br>Date range: {$startDate} to {$endDate}.";
         // Send email
         $this->Mailer = new Mailer('default');
         $this->Mailer

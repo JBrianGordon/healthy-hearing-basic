@@ -273,7 +273,6 @@ class LocationsController extends BaseAdminController
             } else {
                 $this->Flash->error('Unable to add to queue: '.$cmd);
             }
-            return $this->redirect(['action' => 'tier-status-report']);
         }
     }
 

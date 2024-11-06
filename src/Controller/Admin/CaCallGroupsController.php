@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use App\Model\Entity\CaCallGroup;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
 
 /**
  * CaCallGroups Controller
@@ -487,5 +488,38 @@ class CaCallGroupsController extends BaseAdminController
         $_serialize = 'data';
         $this->viewBuilder()->setClassName('CsvView.Csv');
         $this->set(compact('data', '_serialize', '_header'));
+    }
+
+    /**
+    * Send email with appt-by-state metrics
+    */
+    public function apptsByStateMetrics() {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $requestData = $this->request->getData();
+            $startDate = $requestData['start_date'];
+            $endDate = $requestData['end_date'];
+            $to = $requestData['email'] ?? $this->user->email;
+
+            $queuedJobs = TableRegistry::get('Queue.QueuedJobs');
+            $cmd = "call_report_by_state";
+            if (!empty($startDate)) {
+                $cmd .= ' -s '.$startDate;
+            }
+            if (!empty($endDate)) {
+                $cmd .= ' -e '.$endDate;
+            }
+            if (!empty($to)) {
+                $cmd .= ' -t '.$to;
+            }
+            if (!empty($this->user->first_name)) {
+                $cmd .= ' -u '.$this->user->first_name;
+            }
+            $data = ['vars' => ['command' => $cmd]];
+            if ($queuedJobs->createJob('Shell', $data)) {
+                $this->Flash->success('Appts-by-state data will be emailed to you.');
+            } else {
+                $this->Flash->error('Unable to add to queue: '.$cmd);
+            }
+        }
     }
 }

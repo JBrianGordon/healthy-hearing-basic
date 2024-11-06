@@ -86,7 +86,8 @@ class UtilsController extends BaseAdminController
         }
         $queuedJobsQuery = $this->QueuedJobs->find('all', [
             'conditions' => $conditions,
-            'contain' => []
+            'contain' => [],
+            'order' => 'id DESC'
         ]);
         $queuedJobs = $this->paginate($queuedJobsQuery);
         $this->set('title', 'Queued Jobs');
