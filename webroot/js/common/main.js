@@ -58,20 +58,25 @@ $(window).ready(function() {
     //Attach popovers to all elements that need it
     $('[data-toggle="popover"]').popover({html:true});
 
-	//Set default scroll position for hash links to clear navbar
-	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-		anchor.addEventListener('click', function(e) {
-			const hash = this.getAttribute('href');
-			const target = document.querySelector(hash);
-			if (target) {
-				e.preventDefault();
-				window.setTimeout(function() {
-					const rect = target.getBoundingClientRect();
-					window.scrollTo(rect.left, window.scrollY + rect.top - 70);
-				}, 0);
-			}
-		});
-	});
+// Set default scroll position for hash links to clear navbar
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const hash = this.getAttribute('href');
+        if (hash === '#') {
+            e.preventDefault();
+            window.scrollTo({top: 0, left: 0});
+        } else {
+            const target = document.querySelector(hash);
+            if (target) {
+                e.preventDefault();
+                window.setTimeout(function() {
+                    const rect = target.getBoundingClientRect();
+                    window.scrollTo({top: window.scrollY + rect.top - 70, left: rect.left});
+                }, 0);
+            }
+        }
+    });
+});
 
 
 });

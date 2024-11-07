@@ -10,7 +10,7 @@ $topicOptions = [
 ];
 ?>
 <!-- Modal for online appointment request form -->
-<div class="modal fade" id="apptRequestModal">
+<div class="modal fade" id="apptRequestModal" aria-modal>
 	<span id="apptRequestModalAnchor"></span>
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
