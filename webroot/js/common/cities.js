@@ -1,7 +1,8 @@
 import './common';
 import './appt_request';
 import {directBookBtn} from './direct_book_btn';
-import './responsive_slider';
+//not importing until we decide to use it again
+//import './responsive_slider';
 
 directBookBtn();
 
