@@ -120,6 +120,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 								<?php endif; ?>
 							</div>
 						</section>
+						<div id="ajaxModals"></div>
 					<?php endif; ?>
 				</div>
 				<?= $this->element('side_panel') ?>
@@ -127,7 +128,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 		</div>
 	</div>
 </div>
-<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm" href="#top">
+<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm pt5" href="#top">
 	<p>Back to top</p>
 </a>
 <?php if (isFeatureOn('quick_pick')): ?>

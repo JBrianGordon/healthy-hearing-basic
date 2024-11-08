@@ -219,8 +219,9 @@ document.addEventListener("DOMContentLoaded", function() {
     incompleteArray.push("<li><a href='#services'>- Services</a></li>");
     document.querySelector("#servicesLabel").classList.add("red");
   }
+  const providerDescription = document.querySelector("#providers-0-description");
   providerArray.forEach(function(input) {
-    if ((document.querySelector("#provider-0-description").length === 0 && input.value === "") || (document.querySelector("#provider-0-description").length > 0 && document.querySelector("#provider-0-description").nextSibling.querySelector(".ck-content").innerHTML === "")) {
+    if ((!providerDescription && input.value === "") || (providerDescription?.nextSibling.querySelector(".ck-content").innerHTML === "")) {
       input.closest(".form-group").classList.add("has-error");
       input.closest(".form-group").previousElementSibling.classList.add("red");
     }
@@ -245,9 +246,9 @@ if (document.querySelector("#Provider0ThumbUrl").value !== "" || document.queryS
 }*/
 
 // Provider first name
-if (document.querySelector("#provider-0-first-name").value === "") {
+if (document.querySelector("#providers-0-first-name").value === "") {
   completionPercentage -= 5;
-  incompleteArray.push("<li><a href='#provider-0-first-name'>- Provider first name</a></li>");
+  incompleteArray.push("<li><a href='#providers-0-first-name'>- Provider first name</a></li>");
 }
 
 // Provider last name
@@ -258,9 +259,9 @@ if (document.querySelector("#providers-0-last-name").value === "") {
 
 // Provider description
 document.addEventListener("DOMContentLoaded", function() {
-  if (document.querySelector("#provider-0-description").nextSibling.querySelector(".ck-content").innerHTML === "") {
+  if (document.querySelector("#providers-0-description").nextSibling.querySelector(".ck-content").innerHTML === "") {
     completionPercentage -= 5;
-    incompleteArray.push("<li><a href='#provider-0-description'>- Provider description</a></li>");
+    incompleteArray.push("<li><a href='#providers-0-description'>- Provider description</a></li>");
   }
 })
 
@@ -291,7 +292,7 @@ days.forEach((day) => {
 });
 
 // Payment section check
-const paymentOptions = ["#Payment2", "#Payment4", "#Payment8", "#Payment16", "#Payment64", "#Payment128", "#Payment256", "#Payment512", "#Payment1024", "#Payment2048"];
+const paymentOptions = ["#payment2", "#payment4", "#payment8", "#payment16", "#payment64", "#payment128", "#payment256", "#payment512", "#payment1024", "#payment2048"];
 
 const isPaymentIncomplete = paymentOptions.every(option => !document.querySelector(option).checked);
 

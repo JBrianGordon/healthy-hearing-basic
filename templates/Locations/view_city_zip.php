@@ -90,7 +90,7 @@ $this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersio
 		</div>
 	</div>
 </div>
-<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm" href="#top">
+<a id="backToTop" class="row noprint quickLink back-to-top-link btn btn-light btn-sm pt5" href="#top">
 	<p>Back to top</p>
 </a>
 <?php if (isFeatureOn('quick_pick')): ?>
