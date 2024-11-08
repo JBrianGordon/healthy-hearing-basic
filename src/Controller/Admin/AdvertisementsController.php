@@ -43,15 +43,10 @@ class AdvertisementsController extends AppController
         $advertisement = $this->Advertisements->newEmptyEntity();
 
         if ($this->request->is('post')) {
-            $uploadedImage = $this->request->getUploadedFile('image');
-
-            $ckBoxApi = new CKBoxUtility();
-            $response = $ckBoxApi->uploadImage($uploadedImage);
 
             $requestData = $this->request->getData();
 
             $advertisement = $this->Advertisements->patchEntity($advertisement, $this->request->getData());
-            $advertisement->src = $response['imageUrls']['default'];
 
             if ($this->Advertisements->save($advertisement)) {
                 $this->Flash->success(__('The advertisement has been saved.'));

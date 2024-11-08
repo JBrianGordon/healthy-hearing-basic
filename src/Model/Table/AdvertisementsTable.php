@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Utility\Adapter\CKBoxAdapter;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use Cake\Cache\Cache;
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Advertisements Model
@@ -43,12 +48,44 @@ class AdvertisementsTable extends Table
         $this->setTable('advertisements');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
-
         $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'src' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->public_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
 
         $this->hasMany('TagAds', [
             'foreignKey' => 'ad_id',
         ]);
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME), 'default');
+
+        $entity->public_url = $ckBoxUploadData['response']['url'];
+
+        Cache::delete('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME));
     }
 
     /**
@@ -68,15 +105,20 @@ class AdvertisementsTable extends Table
             ->maxLength('title', 128)
             ->notEmptyString('title');
 
-        $validator
-            ->scalar('type')
-            ->maxLength('type', 8)
-            ->notEmptyString('type');
+        // $validator
+        //     ->scalar('type')
+        //     ->maxLength('type', 8)
+        //     ->notEmptyString('type');
 
-        $validator
-            ->scalar('src')
-            ->maxLength('src', 255)
-            ->notEmptyString('src');
+        // $validator
+        //     ->scalar('src')
+        //     ->maxLength('src', 255)
+        //     ->notEmptyString('src');
+
+        // $validator
+        //     ->scalar('public_url')
+        //     ->maxLength('public_url', 255)
+        //     ->notEmptyString('public_url');
 
         $validator
             ->scalar('dest')

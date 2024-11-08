@@ -20,6 +20,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <div class="btn-group">
                                 <?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
                                 <?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+                                <?= $this->Form->postLink('Delete', ['action' => 'delete', $advertisement->id], ['confirm' => __('Are you sure you want to delete # {0}?', $advertisement->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
                             </div>
                         </div>
                     </div>
@@ -41,6 +42,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                             echo $this->Form->control('dest', ['required' => false]);
                                             echo $this->Form->control('alt', ['required' => false]);
                                             echo $this->Form->control('src', ['required' => false]);
+                                            echo $this->Form->control('public_url', ['required' => false]);
                                         ?>
                                     </fieldset>
                                     <hr>
@@ -59,7 +61,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                             <div id="discover">
 							                    <section id="adPanel" class="panel mb0">
                                                     <a href="<?= $advertisement->dest ?>" rel="sponsored nofollow noopener" class="img-responsive" title="<?= $advertisement->title ?>" id="adBlock" target="_blank">
-                                                        <img id="adImage" class="ml0" src="<?= $advertisement->src ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
+                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
                                                     </a>
                                                     <label for="adBlock" class="pull-right mb20"><i>Advertisement</i></label>
                                                 </section>

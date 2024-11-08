@@ -82,9 +82,12 @@ class Application extends BaseApplication
         $this->addPlugin('Recaptcha');
         $this->addPlugin('CsvView');
         $this->addPlugin('Queue', ['routes' => false]);
+        $this->addPlugin('Josegonzalez/Upload');
 
         // Listener for CakeDC/users plugin Events
         $this->getEventManager()->on(new \App\Event\UsersListener());
+        // Listener for CkBox upload events
+        $this->getEventManager()->on(new \App\Event\CkBoxListener());
 
         $this->getEventManager()->on(
             'Server.buildMiddleware',
