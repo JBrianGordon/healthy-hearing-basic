@@ -40,6 +40,7 @@
 								alt="A woman struggles to hear a friend talking">
 						</picture>
 						<p class="lead text-primary">Hearing loss is a touchy subject that can bring out the procrastinator in even the best of us. If you think you have hearing loss, take our free online hearing test and then schedule an appointment for a complete hearing assessment at a hearing clinic near you.</p>
+						<br>
 						<p>The questions on this online hearing test can help you prepare for your first appointment with an audiologist or hearing aid specialist.</p>
 						<div class="mt5 mb20 text-center">
 							<a href="#HearingTest" role="button" onclick="HT.reset();" class="btn btn-light btn-large" data-bs-toggle="modal">Launch Online Hearing Test <span class="bi bi-caret-right-fill"></span></a>

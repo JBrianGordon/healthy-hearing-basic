@@ -69,6 +69,10 @@ class OnlineHearingTest {
 				e.preventDefault();
 			}
 		}
+		//unhide footerContainer
+		if (document.getElementById('footerContainer')) {
+			document.getElementById('footerContainer').style.display = 'block';
+		}
 		return true;
 	}
 
@@ -152,6 +156,10 @@ class OnlineHearingTest {
 			hearingResult: '',
 			emailSymptoms: []
 		};
+		//hide footerContainer if open
+		if (document.getElementById('footerContainer')) {
+			document.getElementById('footerContainer').style.display = 'none';
+		}
 		this.start(); // start from the beginning
 	}
 
