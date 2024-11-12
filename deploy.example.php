@@ -88,8 +88,6 @@ set('shared_dirs', [
 
 // CakePHP 4 Project Template shared files
 set('shared_files', [
-    'config/.env',
-    'config/app.php',
     'config/app_local.php'
 ]);
 

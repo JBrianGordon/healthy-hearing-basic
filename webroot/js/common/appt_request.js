@@ -34,13 +34,14 @@ window.submitApptRequest = () => {
             apptRequestModal.style.display = "none";
           }
           if (modalThankYou !== null) {
-            const closeModalButtons = modalThankYou.querySelectorAll("[data-dismiss='modal']");
+            const closeModalButtons = modalThankYou.querySelectorAll("[data-bs-dismiss='modal']");
             modalThankYou.classList.remove("fade");
             modalThankYou.style.display = "block";
             closeModalButtons.forEach(button => {
               button.addEventListener("click", () => {
                 modalThankYou.remove();
                 pageBody[0].classList.remove("modal-open");
+                pageBody[0].style.overflow = "auto";
               });
             });
           }
@@ -112,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function() {
           .then(data => {
             document.getElementById("ajaxModals").innerHTML = data;
             apptRequestModal = document.getElementById("apptRequestModal");
-            apptRequestThankYouModal = document.getElementById("apptRequestThankYouModal");
             if (apptRequestModal) {
               const closeModalButton = apptRequestModal.querySelector(".close");
               closeModalButton.addEventListener("click", function() {

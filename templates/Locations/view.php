@@ -271,10 +271,10 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 								</div>
 								<div id="apptRequestThankYouModal" style="display: none">
 									<div>
-										<div class="modal-content">
+										<div class="modal-content" aria-modal="true">
 											<div class="modal-header">
-												<button type="button" class="close pt10 pr10" data-bs-dismiss="modal" aria-hidden="true">X</button>
 												<h4>Thank you for requesting an appointment at <?= $location->title ?></h4>
+												<button type="button" class="close pt10 pr10" data-bs-dismiss="modal">X</button>
 											</div>
 											<div class="modal-body">
 												<p class="lead">
