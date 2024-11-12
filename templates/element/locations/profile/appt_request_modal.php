@@ -107,12 +107,12 @@ $topicOptions = [
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="apptRequestThankYouModal">
+<div class="modal fade" id="apptRequestThankYouModal" aria-modal="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close pt10 pr10" data-bs-dismiss="modal" aria-hidden="true">X</button>
 				<h4 class="mt10 mb10">Thank you for requesting an appointment at <?= $location->title ?></h4>
+				<button type="button" class="close pt10 pr10" data-bs-dismiss="modal">X</button>
 			</div>
 			<div class="modal-body">
 				<p class="lead">
