@@ -13,8 +13,7 @@ $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationI
 <div class="col-md-12 gutter-below">
 	<div class="well clinic-info">
 		<div class="row">
-			<h2 class="name mt0 pull-left">
-				<!-- *** TODO: check this when setLocation is working on the link function ***-->
+			<h2 class="name mt0 p0 pull-left">
 				<?= $this->Clinic->link($location, false, ['class' => 'text-primary ' . 'ClinicClick-' . $location->listing_type, 'escape' => false]) ?>
 			</h2>
 		</div>
@@ -22,7 +21,7 @@ $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationI
 			<div class="col-lg-6">
 				<?php if (!empty($displayOpenClosed)): ?>
 					<div class="hours mb5">
-						<span class="glyphicon glyphicon-time small"></span>
+						<span class="bi bi-clock"></span>
 						<?= $displayOpenClosed ?>
 					</div>
 				<?php endif; ?>
