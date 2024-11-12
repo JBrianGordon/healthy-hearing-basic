@@ -22,11 +22,11 @@ use League\Flysystem\FilesystemException;
 
 class CKBoxAdapter implements FilesystemAdapter
 {
-    protected $ckboxUtility;
+    protected $ckBoxUtility;
 
     public function __construct()
     {
-        $this->ckboxUtility = new CKBoxUtility();
+        $this->ckBoxUtility = new CKBoxUtility();
     }
 
     /**
@@ -47,7 +47,7 @@ class CKBoxAdapter implements FilesystemAdapter
     private function upload(string $path, $body, Config $config): void
     {
         try {
-            $this->ckboxUtility->uploadImage($body, $path);
+            $this->ckBoxUtility->uploadImage($body, $path);
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
@@ -60,7 +60,7 @@ class CKBoxAdapter implements FilesystemAdapter
     public function delete(string $imageId): void
     {
         try {
-            $this->ckboxUtility->deleteImage($imageId);
+            $this->ckBoxUtility->deleteImage($imageId);
         } catch (Exception $e) {
             throw new UnableToDeleteFile("Deleting file(s) failed.");
         }

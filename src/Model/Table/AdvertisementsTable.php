@@ -14,6 +14,8 @@ use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
 
+use App\Utility\CKBoxUtility;
+
 /**
  * Advertisements Model
  *
@@ -83,9 +85,30 @@ class AdvertisementsTable extends Table
     {
         $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME), 'default');
 
-        $entity->public_url = $ckBoxUploadData['response']['url'];
+        $publicUrl = $ckBoxUploadData['response']['url'];
+
+        if ($publicUrl !== null && is_string($publicUrl)) {
+            $entity->public_url = $ckBoxUploadData['response']['url'];
+        }
 
         Cache::delete('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME));
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $field = 'src';
+
+        $original = $entity->getOriginal($field);
+        if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
+            $ckBoxImageId = $matches[1];
+            $ckBoxUtility = new CKBoxUtility();
+            try {
+                $ckBoxUtility->deleteImage($ckBoxImageId);
+            } catch (Exception $e) {
+                // Ignore exceptions for now
+            }
+        }
     }
 
     /**
@@ -156,6 +179,15 @@ class AdvertisementsTable extends Table
         $validator
             ->boolean('tag_basic')
             ->notEmptyString('tag_basic');
+
+        $validator->setProvider('upload', \Josegonzalez\Upload\Validation\DefaultValidation::class);
+        $validator->add('src', 'fileFileUpload', [
+            'rule' => 'isFileUpload',
+            'message' => 'There was no image found to upload',
+            'provider' => 'upload',
+            'on' => 'create'
+        ]);
+
 
         return $validator;
     }
