@@ -184,6 +184,7 @@ return [
             'controller' => 'QuizResults',
             'action' => [
                 'onlineHearingTest',
+                'emailResults',
             ],
             'bypassAuth' => true,
         ],
