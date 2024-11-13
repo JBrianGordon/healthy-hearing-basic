@@ -49,7 +49,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                             ]);
                                         ?>
                                         <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
-                                        <?= $this->Form->control('public_url', ['required' => false]); ?>
+                                        <?=
+                                            $this->Form->control('public_url', [
+                                                'label' => ['text' => 'CkBox URL'],
+                                                'required' => false
+                                            ]);
+                                        ?>
                                     </fieldset>
                                     <hr>
                                     <div class="tabbable">
