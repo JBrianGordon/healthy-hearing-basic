@@ -24,6 +24,7 @@ $showSpecialAnnouncement = (
 $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
 ?>
+<meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <style type="text/css">
     .p10 {
         padding: 10px;
@@ -218,7 +219,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         <div class="panel-body">
             <div class="panel-section expanded">
                 <div class="form">
-                    <?= $this->Form->create($location) ?>
+                    <?= $this->Form->create($location, ['type' => 'file']) ?>
                     <fieldset>
                         <?= $this->Form->control('title') ?>
                         <div class="col-md-2 offset-md-3 pl0">
@@ -1643,3 +1644,51 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    document.querySelectorAll('.provider-photo-delete-ck').forEach(function(button) {
+        console.log('Adding event listener to:', button);
+        button.addEventListener('click', async (event) => {
+            const providerCk = event.currentTarget.getAttribute('data-provider-ck');
+            const providerIndex = event.currentTarget.getAttribute('data-provider-id');
+            const providerId = document.querySelector('input[name="providers[' + providerIndex + '][id]"]').value;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            console.log(providerCk);
+            console.log(csrfToken);
+            try {
+                const response = await fetch('/admin/providers/delete-provider-image', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ckBoxImageId: providerCk,
+                        providerId: providerId
+                    })
+                });
+
+                document.querySelector('#providers-' + providerIndex + '-square-url').value = '';
+                document.querySelector('#provider-pic-' + providerIndex).src = '';
+
+
+            } catch {
+                alert("OH NO");
+            }
+
+        });
+    });
+
+    document.querySelectorAll('.imageUpload').forEach(function(imageUpload) {
+            imageUpload.addEventListener('change', function(event) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var providerKey = imageUpload.getAttribute('data-provider-index');
+                    var output = document.getElementById('imagePreview-' + providerKey);
+                    output.src = reader.result;
+                    output.style.display = 'block';
+                };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    });
+</script>

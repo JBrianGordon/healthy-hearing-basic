@@ -83,16 +83,16 @@ class locationsAdminEdit {
       element.dispatchEvent(new Event('change'));
     });
 
-    document.body.addEventListener('change', (event) => {
-      const target = event.target;
-      if (target.type === 'file') {
-        if (target.id === 'LocationAdFile') {
-          editObj.onChangeLocationAdFile(target);
-        } else {
-          editObj.onChangeFileInput(target);
-        }
-      }
-    });
+    // document.body.addEventListener('change', (event) => {
+    //   const target = event.target;
+    //   if (target.type === 'file') {
+    //     if (target.id === 'LocationAdFile') {
+    //       editObj.onChangeLocationAdFile(target);
+    //     } else {
+    //       editObj.onChangeFileInput(target);
+    //     }
+    //   }
+    // });
 
     const directBookTypeElement = document.getElementById('direct-book-type');
     if (directBookTypeElement) {

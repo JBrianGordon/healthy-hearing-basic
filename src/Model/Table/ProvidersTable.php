@@ -11,6 +11,13 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
+use Cake\Cache\Cache;
+
 /**
  * Providers Model
  *
@@ -53,6 +60,31 @@ class ProvidersTable extends Table
             'Search.Search',
             'Timestamp',
         ]);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'square_url' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->public_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
+
 
         // Associations
         $this->hasMany('ImportProviders', [
@@ -135,6 +167,41 @@ class ProvidersTable extends Table
             ]);
     }
 
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isDirty('square_url') && $entity->ajax_delete !== true) {
+            $filename = pathinfo($entity->square_url, PATHINFO_FILENAME);
+
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . $filename, 'default');
+
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->public_url = $ckBoxUploadData['response']['url'];
+            }
+
+            Cache::delete('ckBoxUploadImage_' . $filename);            
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $field = 'square_url';
+
+        $original = $entity->getOriginal($field);
+
+        if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
+            $ckBoxImageId = $matches[1];
+            $ckBoxUtility = new CKBoxUtility();
+            try {
+                $ckBoxUtility->deleteImage($ckBoxImageId);
+            } catch (Exception $e) {
+                // Ignore exceptions for now
+            }
+        }
+    }
+
     /**
      * Default validation rules.
      *
@@ -187,10 +254,10 @@ class ProvidersTable extends Table
             ->maxLength('micro_url', 128)
             ->allowEmptyString('micro_url');
 
-        $validator
-            ->scalar('square_url')
-            ->maxLength('square_url', 128)
-            ->allowEmptyString('square_url');
+        // $validator
+        //     ->scalar('square_url')
+        //     ->maxLength('square_url', 128)
+        //     ->allowEmptyString('square_url');
 
         $validator
             ->scalar('thumb_url')

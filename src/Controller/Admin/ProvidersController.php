@@ -6,6 +6,8 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\View\JsonView;
 
+use App\Utility\CKBoxUtility;
+
 /**
  * Providers Controller
  *
@@ -179,4 +181,33 @@ class ProvidersController extends BaseAdminController
         $this->viewBuilder()->setOption('serialize', 'locations');
     }
 
+    public function deleteProviderImage()
+    {
+        $this->viewBuilder()->setLayout('ajax');
+
+        $ckBoxImageId = $this->request->getData('ckBoxImageId');
+        $providerId = $this->request->getData('providerId');
+
+        $ckBoxUtility = new CKBoxUtility();
+        try {
+            $ckBoxUtility->deleteImage($ckBoxImageId);
+
+            // Fetch the provider entity
+            $provider = $this->Providers->get($providerId);
+            $provider->square_url = null;
+            $provider->public_url = null;
+            $provider->ajax_delete = true;
+
+            if ($this->Providers->save($provider)) {
+                $response = ['success' => true];
+            } else {
+                $response = ['success' => false, 'message' => 'Failed to update provider.'];
+            }
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+        } catch (Exception $e) {
+            // Ignore exceptions for now
+        }
+    }
 }

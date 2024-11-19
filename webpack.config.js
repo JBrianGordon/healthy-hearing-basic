@@ -21,7 +21,7 @@ const folderMinify = (folder, files) => {
 }
 
 folderMinify(adminFolder, adminFiles);
-folderMinify(commonFolder, commonFiles);
+// folderMinify(commonFolder, commonFiles);
 
 module.exports = {
 	mode: 'production',

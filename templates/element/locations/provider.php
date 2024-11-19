@@ -119,17 +119,39 @@ use Cake\Core\Configure;
 	<?php
 		if (isset($provider)) {
 			echo '<span id="provider' . $key . 'Photo" class="clinic-anchor"></span>';
-			if (!empty($provider->thumb_url)) {
-				echo $this->Form->control("providers." . $key . ".thumb_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->thumb_url ?? '']);
-				echo '<div class="btn btn-danger btn-xs provider-photo-delete pull-right m10" data-target="providers-' . $key . '-thumb-url">Delete Photo</div>';
+			if (!empty($provider->square_url) && !empty($provider->public_url)) {
+	            preg_match("/assets\/(.*?)\/file/", $provider->public_url, $matches);
+	            $providerImageCkId = $matches[1];
+
+				echo $this->Form->control("providers." . $key . ".square_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->square_url ?? '']);
+				echo '<div class="btn btn-danger btn-xs provider-photo-delete-ck pull-right m10" data-target="providers-' . $key . '-thumb-url" data-provider-id="' . $key . '" data-provider-ck="'. $providerImageCkId .'">Delete Photo</div>';
+				echo "<div class='form-group'><div class='profile-pic-container'><img id=provider-pic-" . $key . " src=". $provider->public_url . " loading='lazy'</div></div>";
 			}
-			echo "<div class='form-group'><div class='col col-sm-9 col-md-offset-3'>" . $this->Clinic->providerImage($provider) . "</div></div>";
 		}
-		if (function_exists("imagecreate")) {
-			echo $this->Form->control("providers." . $key . ".file", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'value' => $provider->image_url ?? '', 'class' => 'col-sm-9 p15']);
-			echo '<span class="help-block text-danger tar" style="display:none" id="provider-photo-add-error-' . $key . '">Please resize this photo to under 2MB before uploading. If you need help resizing the photo, please email the photo to <a href="mailto:' . Configure::read("customer-support-email") .'">' . Configure::read("customer-support-email") .'</a> and we\'ll be happy to assist you.</span><p class="help-block tar">Photos must be JPG format and less than 2MB. To add a photo, click on "Choose File".</p>';
-		} else {
-			echo "<div class='col-md-offset-3 alert alert-danger'>Unable to upload new images. Need to install the GD library on this server to access the 'imagecreate' function.</div>";
-		}
+		echo $this->Form->control("providers." . $key . ".square_url", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'class' => 'imageUpload col-sm-9 p15', 'data-provider-index' => $key]);
+		echo '<img id="imagePreview-' . $key . '" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />'
 	?>
 </div>
+<script>
+    // document.getElementById('imageUpload').addEventListener('change', function(event) {
+    //     var reader = new FileReader();
+    //     reader.onload = function() {
+    //         var output = document.getElementById('imagePreview');
+    //         output.src = reader.result;
+    //         output.style.display = 'block';
+    //     };
+    //     reader.readAsDataURL(event.target.files[0]);
+    // });
+    // document.querySelectorAll('.imageUpload').forEach(function(imageUpload) {
+	//     	imageUpload.addEventListener('change', function(event) {
+	// 	        var reader = new FileReader();
+	// 	        reader.onload = function() {
+	// 	        	var providerKey = imageUpload.getAttribute('data-provider-index');
+	// 	            var output = document.getElementById('imagePreview-' + providerKey);
+	// 	            output.src = reader.result;
+	// 	            output.style.display = 'block';
+	// 	        };
+	//         reader.readAsDataURL(event.target.files[0]);
+	//     });
+    // });
+</script>
