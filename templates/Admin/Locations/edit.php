@@ -1681,11 +1681,11 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         });
     });
 
-    document.querySelectorAll('.imageUpload').forEach(function(imageUpload) {
-            imageUpload.addEventListener('change', function(event) {
+    document.querySelectorAll('.provider-imageUpload').forEach(function(providerImageUpload) {
+            providerImageUpload.addEventListener('change', function(event) {
                 var reader = new FileReader();
                 reader.onload = function() {
-                    var providerKey = imageUpload.getAttribute('data-provider-index');
+                    var providerKey = providerImageUpload.getAttribute('data-provider-index');
                     var output = document.getElementById('provider-imagePreview-' + providerKey);
                     output.src = reader.result;
                     output.style.display = 'block';
