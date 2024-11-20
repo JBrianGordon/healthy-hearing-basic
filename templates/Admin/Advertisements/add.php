@@ -35,13 +35,12 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                         <div class="col-md-offset-3 col-md-9 mb10">
                                             <?= $this->Form->checkbox('is_active', ['hiddenField' => false]) ?> Active
                                         </div>
-                                        <?php
-                                            echo $this->Form->control('type');
-                                            echo $this->Form->control('slot');
-                                            echo $this->Form->control('image', ['type' => 'file', 'required' => false]);
-                                            echo $this->Form->control('dest', ['required' => false]);
-                                            echo $this->Form->control('alt', ['required' => false]);
-                                        ?>
+                                        <?= $this->Form->control('type'); ?>
+                                        <?= $this->Form->control('slot'); ?>
+                                        <?= $this->Form->control('src', ['id' => 'imageUpload', 'type' => 'file', 'required' => false]); ?>
+                                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                        <?= $this->Form->control('dest', ['required' => false]); ?>
+                                        <?= $this->Form->control('alt', ['required' => false]); ?>
                                     </fieldset>
                                     <div class="form-actions tar">
                                         <?= $this->Form->button(__('Save ad'), ['class' => 'btn btn-primary btn-lg']) ?>
@@ -56,3 +55,14 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>

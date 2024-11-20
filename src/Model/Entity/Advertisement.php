@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property string $title
  * @property string $type
  * @property string $src
+ * @property string $public_url
  * @property string $dest
  * @property string $slot
  * @property string $height
@@ -42,6 +43,7 @@ class Advertisement extends Entity
         'title' => true,
         'type' => true,
         'src' => true,
+        'public_url' => true,
         'dest' => true,
         'slot' => true,
         'height' => true,

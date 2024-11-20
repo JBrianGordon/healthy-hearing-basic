@@ -31,6 +31,14 @@
     }
   }
 
+  &#mobileClinics {
+	@media(min-width:768px){
+		.panel-section.expanded{
+			padding:60px 25px;
+		}
+	}
+  }
+
   &#specialAnnouncement {
     img {
       width: 100%;

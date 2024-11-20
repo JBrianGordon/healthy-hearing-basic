@@ -20,6 +20,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <div class="btn-group">
                                 <?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
                                 <?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
+                                <?= $this->Form->postLink('Delete', ['action' => 'delete', $advertisement->id], ['confirm' => __('Are you sure you want to delete # {0}?', $advertisement->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
                             </div>
                         </div>
                     </div>
@@ -29,18 +30,30 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                         <div class="panel-body">
                             <div class="panel-section expanded">
                                 <div class="advertisements form content">
-                                    <?= $this->Form->create($advertisement) ?>
+                                    <?= $this->Form->create($advertisement, ['type' => 'file']) ?>
                                     <fieldset>
                                         <?= $this->Form->control('title') ?>
                                         <div class="col-md-offset-3 col-md-9 mb10">
                                             <?= $this->Form->checkbox('is_active', ['hiddenField' => false]) ?> Active
                                         </div>
-                                        <?php
-                                            echo $this->Form->control('type');
-                                            echo $this->Form->control('slot', ['required' => false]);
-                                            echo $this->Form->control('dest', ['required' => false]);
-                                            echo $this->Form->control('alt', ['required' => false]);
-                                            echo $this->Form->control('src', ['required' => false]);
+                                        <?= $this->Form->control('type'); ?>
+                                        <?= $this->Form->control('slot', ['required' => false]); ?>
+                                        <?= $this->Form->control('dest', ['required' => false]); ?>
+                                        <?= $this->Form->control('alt', ['required' => false]); ?>
+                                        <?=
+                                            $this->Form->control('src', [
+                                                'id' => 'imageUpload',
+                                                'type' => 'file',
+                                                'required' => false,
+                                                'label' => ['text' => 'Update image']
+                                            ]);
+                                        ?>
+                                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                        <?=
+                                            $this->Form->control('public_url', [
+                                                'label' => ['text' => 'CkBox URL'],
+                                                'required' => false
+                                            ]);
                                         ?>
                                     </fieldset>
                                     <hr>
@@ -59,7 +72,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                             <div id="discover">
 							                    <section id="adPanel" class="panel mb0">
                                                     <a href="<?= $advertisement->dest ?>" rel="sponsored nofollow noopener" class="img-responsive" title="<?= $advertisement->title ?>" id="adBlock" target="_blank">
-                                                        <img id="adImage" class="ml0" src="<?= $advertisement->src ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
+                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
                                                     </a>
                                                     <label for="adBlock" class="pull-right mb20"><i>Advertisement</i></label>
                                                 </section>
@@ -90,3 +103,14 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
