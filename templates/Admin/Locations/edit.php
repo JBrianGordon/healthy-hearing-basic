@@ -788,7 +788,9 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                         $count = count($location->providers);
                                     ?>
                                     <?php foreach ($location->providers as $key => $provider): ?>
-                                        <?= $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => false, 'locationId' => $id, 'isBasicClinic' => $isBasicClinic]) ?>
+                                        <div>
+                                            <?= $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => false, 'locationId' => $id, 'isBasicClinic' => $isBasicClinic]) ?>
+                                        </div>
                                     <?php endforeach; ?>
                                     <?= $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => false, 'isBasicClinic' => $isBasicClinic]) ?>
                                 </div>

@@ -118,17 +118,16 @@ use Cake\Core\Configure;
 	</div>
 	<?php
 		if (isset($provider)) {
-			echo '<span id="provider' . $key . 'Photo" class="clinic-anchor"></span>';
-			if (!empty($provider->square_url) && !empty($provider->public_url)) {
-	            preg_match("/assets\/(.*?)\/file/", $provider->public_url, $matches);
-	            $providerImageCkId = $matches[1];
+				if (!empty($provider->square_url) && !empty($provider->public_url)) {
+		            preg_match("/assets\/(.*?)\/file/", $provider->public_url, $matches);
+		            $providerImageCkId = $matches[1];
 
-				echo $this->Form->control("providers." . $key . ".square_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->square_url ?? '']);
-				echo '<div class="btn btn-danger btn-xs provider-photo-delete-ck pull-right m10" data-target="providers-' . $key . '-thumb-url" data-provider-id="' . $key . '" data-provider-ck="'. $providerImageCkId .'">Delete Photo</div>';
-				echo "<div class='form-group'><div class='profile-pic-container'><img id=provider-pic-" . $key . " src=". $provider->public_url . " loading='lazy'</div></div>";
-			}
+					echo $this->Form->control("providers." . $key . ".square_url", ['class' => 'col col-sm-9', 'label' => ['text' => 'Current photo', 'class' => 'col-sm-3 control-label'], 'value' => $provider->square_url ?? '']);
+					echo '<div class="btn btn-danger btn-xs provider-photo-delete-ck pull-right m10" data-target="providers-' . $key . '-thumb-url" data-provider-id="' . $key . '" data-provider-ck="'. $providerImageCkId .'">Delete Photo</div>';
+					echo "<div class='form-group'><div class='profile-pic-container'><img id=provider-pic-" . $key . " src=". $provider->public_url . " loading='lazy'</div></div>";
+				}
+				echo $this->Form->control("providers." . $key . ".square_url", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'class' => 'imageUpload col-sm-9 p15', 'data-provider-index' => $key]);
+				echo '<img id="imagePreview-' . $key . '" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />';
 		}
-		echo $this->Form->control("providers." . $key . ".square_url", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'class' => 'imageUpload col-sm-9 p15', 'data-provider-index' => $key]);
-		echo '<img id="imagePreview-' . $key . '" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />'
 	?>
 </div>
