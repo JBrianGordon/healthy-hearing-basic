@@ -1686,7 +1686,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                 var reader = new FileReader();
                 reader.onload = function() {
                     var providerKey = imageUpload.getAttribute('data-provider-index');
-                    var output = document.getElementById('imagePreview-' + providerKey);
+                    var output = document.getElementById('provider-imagePreview-' + providerKey);
                     output.src = reader.result;
                     output.style.display = 'block';
                 };
