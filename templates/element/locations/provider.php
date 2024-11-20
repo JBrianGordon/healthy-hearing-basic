@@ -132,26 +132,3 @@ use Cake\Core\Configure;
 		echo '<img id="imagePreview-' . $key . '" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />'
 	?>
 </div>
-<script>
-    // document.getElementById('imageUpload').addEventListener('change', function(event) {
-    //     var reader = new FileReader();
-    //     reader.onload = function() {
-    //         var output = document.getElementById('imagePreview');
-    //         output.src = reader.result;
-    //         output.style.display = 'block';
-    //     };
-    //     reader.readAsDataURL(event.target.files[0]);
-    // });
-    // document.querySelectorAll('.imageUpload').forEach(function(imageUpload) {
-	//     	imageUpload.addEventListener('change', function(event) {
-	// 	        var reader = new FileReader();
-	// 	        reader.onload = function() {
-	// 	        	var providerKey = imageUpload.getAttribute('data-provider-index');
-	// 	            var output = document.getElementById('imagePreview-' + providerKey);
-	// 	            output.src = reader.result;
-	// 	            output.style.display = 'block';
-	// 	        };
-	//         reader.readAsDataURL(event.target.files[0]);
-	//     });
-    // });
-</script>

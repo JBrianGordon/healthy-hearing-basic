@@ -144,7 +144,7 @@ class LocationsController extends BaseAdminController
         ])->all();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            // dd($data);
+
             // convert payment array to json string
             $data['payment'] = isset($data['payment']) ? json_encode($data['payment']) : "";
             // remove empty providers
@@ -171,6 +171,7 @@ class LocationsController extends BaseAdminController
                 ['associated' => $associations]
             );
             if ($this->Locations->save($location)) {
+                // TEMPORARILY TURN OFF WHILE WORKING ON LOCATIONS CRM
                 // $mailer = $this->getMailer('Profile');
                 // if($location['listing_type'] === "Basic" && $location['is_retail'] === false) {
                 //     $mailer->send('upgradeProfile', [$location]);

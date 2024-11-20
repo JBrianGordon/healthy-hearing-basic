@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\View\JsonView;
-
 use App\Utility\CKBoxUtility;
 
 /**
