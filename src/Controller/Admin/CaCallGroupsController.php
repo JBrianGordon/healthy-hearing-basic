@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use App\Model\Entity\CaCallGroup;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
+use Cake\Filesystem\File;
 
 /**
  * CaCallGroups Controller
@@ -517,6 +518,49 @@ class CaCallGroupsController extends BaseAdminController
             $data = ['vars' => ['command' => $cmd]];
             if ($queuedJobs->createJob('Shell', $data)) {
                 $this->Flash->success('Appts-by-state data will be emailed to you.');
+            } else {
+                $this->Flash->error('Unable to add to queue: '.$cmd);
+            }
+        }
+    }
+
+    /**
+    * Send email with calls-and-appts-by-date metrics
+    */
+    public function callsAndApptsByDate() {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $requestData = $this->request->getData();
+            $startDate = $requestData['start_date'];
+            $endDate = $requestData['end_date'];
+            $to = $requestData['email'] ?? $this->user->email;
+            $reportType = $requestData['report_type'] ?? 'totals';
+            $csvFile = $this->request->getUploadedFile('csv_file');
+            $queuedJobs = TableRegistry::get('Queue.QueuedJobs');
+            if ($reportType == 'totals') {
+                $cmd = "find_calls_and_appts";
+                $reportType = "Total call and appt";
+                $filename = WWW_ROOT . 'csvs' . DS . 'uploadClinicsForCallsAppts.csv';
+            } else {
+                $cmd = "find_prospect_call_groups";
+                $reportType = "Individual prospect call";
+                $filename = WWW_ROOT . 'csvs' . DS . 'uploadClinicsForProspectReport.csv';
+            }
+            $csvFile->moveTo($filename);
+            if (!empty($startDate)) {
+                $cmd .= ' -s '.$startDate;
+            }
+            if (!empty($endDate)) {
+                $cmd .= ' -e '.$endDate;
+            }
+            if (!empty($to)) {
+                $cmd .= ' -t '.$to;
+            }
+            if (!empty($this->user->first_name)) {
+                $cmd .= ' -u '.$this->user->first_name;
+            }
+            $data = ['vars' => ['command' => $cmd]];
+            if ($queuedJobs->createJob('Shell', $data)) {
+                $this->Flash->success($reportType.' data will be emailed to you.');
             } else {
                 $this->Flash->error('Unable to add to queue: '.$cmd);
             }

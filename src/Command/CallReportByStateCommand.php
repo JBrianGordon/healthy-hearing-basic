@@ -28,7 +28,7 @@ class CallReportByStateCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
         $parser
-            ->setDescription('Generate a report of Oticon import tier changes over time')
+            ->setDescription('Generate a report calls by state for a date range')
             ->addOption('to', [
                 'short' => 't',
                 'help' => 'to: email address'
