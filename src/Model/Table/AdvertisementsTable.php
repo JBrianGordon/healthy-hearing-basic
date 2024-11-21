@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use App\Utility\Adapter\CKBoxAdapter;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Cake\Cache\Cache;
+
 use ArrayObject;
+use App\Utility\CKBoxUtility;
+use App\Utility\Adapter\CKBoxAdapter;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
-
-use App\Utility\CKBoxUtility;
 
 /**
  * Advertisements Model

@@ -515,14 +515,16 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                         <tbody class="d-block">
                                                             <tr class="d-block">
                                                                 <td class="d-block">
-                                                                    <?php $logoSrc = empty($location->logo_url) ? "" : '/cloudfiles/clinics/'.$location->logo_url; ?>
-                                                                    <img class="ml60 mb10" id="photo-thumb-logo" src="<?= $logoSrc ?>">
-                                                                    <?= $this->Form->control("logo_file", [
-                                                                        'type' => 'file',
-                                                                        'label' => 'File name',
-                                                                        'class' => 'form-control photo-url',
-                                                                        'id' => 'LocationLogo0Url'
-                                                                    ]) ?>
+                                                                    <img class="ml60 mb10" id="location-logo" src="<?= $location->logo_url ?>">
+                                                                    <?=
+                                                                        $this->Form->control('logo_name', [
+                                                                            'id' => 'logo-imageUpload',
+                                                                            'type' => 'file',
+                                                                            'required' => false,
+                                                                            'label' => ['text' => 'Update logo']
+                                                                        ]);
+                                                                    ?>
+                                                                    <img id="logo-imagePreview" src="#" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -1692,5 +1694,15 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                 };
             reader.readAsDataURL(event.target.files[0]);
         });
+    });
+
+    document.getElementById('logo-imageUpload').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('logo-imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
     });
 </script>

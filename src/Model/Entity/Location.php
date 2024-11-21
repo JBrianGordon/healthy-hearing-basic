@@ -30,6 +30,7 @@ use Cake\Utility\Text;
  * @property float|null $lat
  * @property float|null $lon
  * @property string|null $email
+ * @property string|null $logo_name
  * @property string|null $logo_url
  * @property string|null $url
  * @property string|null $facebook
@@ -324,6 +325,7 @@ class Location extends Entity
         'lat' => true,
         'lon' => true,
         'email' => true,
+        'logo_name' => true,
         'logo_url' => true,
         'url' => true,
         'facebook' => true,

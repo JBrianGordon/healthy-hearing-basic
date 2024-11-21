@@ -20,6 +20,12 @@ use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use DateTime;
 use DateTimeZone;
+use ArrayObject;
+use App\Utility\CKBoxUtility;
+use App\Utility\Adapter\CKBoxAdapter;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+
 
 /**
  * Locations Model
@@ -93,6 +99,30 @@ class LocationsTable extends Table
         // The 'lng' field is named 'lon' in our Locations table
         $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
         $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'logo_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
 
         // Associations
         $this->hasMany('CaCallGroups', [
@@ -498,6 +528,36 @@ class LocationsTable extends Table
         }
     }
 
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
+
+        $publicUrl = $ckBoxUploadData['response']['url'];
+
+        if ($publicUrl !== null && is_string($publicUrl)) {
+            $entity->logo_url = $ckBoxUploadData['response']['url'];
+        }
+
+        Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $field = 'logo_name';
+
+        $original = $entity->getOriginal($field);
+        if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('logo_url'), $matches);
+            $ckBoxImageId = $matches[1];
+            $ckBoxUtility = new CKBoxUtility();
+            try {
+                $ckBoxUtility->deleteImage($ckBoxImageId);
+            } catch (Exception $e) {
+                // Ignore exceptions for now
+            }
+        }
+    }
+
     /**
      * Default validation rules.
      *
@@ -601,10 +661,10 @@ class LocationsTable extends Table
             ->email('email')
             ->allowEmptyString('email');
 
-        $validator
-            ->scalar('logo_url')
-            ->maxLength('logo_url', 128)
-            ->allowEmptyString('logo_url');
+        // $validator
+        //     ->scalar('logo_url')
+        //     ->maxLength('logo_url', 128)
+        //     ->allowEmptyString('logo_url');
 
         $validator
             ->scalar('url')

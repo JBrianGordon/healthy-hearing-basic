@@ -165,11 +165,13 @@ class LocationsController extends BaseAdminController
                     unset($data['location_notes'][$key]);
                 }
             }
+
             $location = $this->Locations->patchEntity(
                 $location,
                 $data,
                 ['associated' => $associations]
             );
+
             if ($this->Locations->save($location)) {
                 // TEMPORARILY TURN OFF WHILE WORKING ON LOCATIONS CRM
                 // $mailer = $this->getMailer('Profile');
