@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Advertisement $advertisement
  */
 
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body">
     <div class="row">
@@ -36,8 +36,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                         <div class="col-md-offset-3 col-md-9 mb10">
                                             <?= $this->Form->checkbox('is_active', ['hiddenField' => false]) ?> Active
                                         </div>
-                                        <?= $this->Form->control('type'); ?>
-                                        <?= $this->Form->control('slot', ['required' => false]); ?>
                                         <?= $this->Form->control('dest', ['required' => false]); ?>
                                         <?= $this->Form->control('alt', ['required' => false]); ?>
                                         <?=
@@ -48,7 +46,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                 'label' => ['text' => 'Update image']
                                             ]);
                                         ?>
-                                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" src="#" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
                                         <?=
                                             $this->Form->control('public_url', [
                                                 'label' => ['text' => 'CkBox URL'],
@@ -103,14 +101,3 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         </div>
     </div>
 </div>
-<script>
-    document.getElementById('imageUpload').addEventListener('change', function(event) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var output = document.getElementById('imagePreview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>
