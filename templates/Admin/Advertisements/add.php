@@ -45,7 +45,7 @@ $this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
                                                 'label' => ['text' => 'Upload image']
                                             ]);
                                         ?>
-                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" src="#" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
+                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
                                         <?=
                                             $this->Form->control('public_url', [
                                                 'label' => ['text' => 'CkBox URL'],
