@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\CsCall[]|\Cake\Collection\CollectionInterface $csCalls
  */
 use Cake\Core\Configure;
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/ca_call_groups_appts_by_date.min', ['block' => true]);
 
 $startDate = isset($startDate) ? $startDate : null;
 $endDate = isset($endDate) ? $endDate : null;
@@ -30,15 +30,15 @@ $caCallGroup = [];
                 <div class="row mb20">
                     <div class="col col-md-12">
                         <div data-toggle="buttons">
-                            <label class="btn btn-default active mb10">
+                            <label class="btn btn-default active mb10 w-auto pt5 pb5 pl15 pr15">
                                 <input type="radio" name="report_type" value="totals" checked>Clinic totals
                             </label>
-                            Spreadsheet will contain: <?php echo Configure::read('siteNameAbbr'); ?> ID, title, total call groups, usable calls, prospects and appts set.<br>
+                            &nbsp;Spreadsheet will contain: <?= Configure::read('siteNameAbbr') ?> ID, title, total call groups, usable calls, prospects and appts set.<br>
                             <div class="clearfix"></div>
-                            <label class="btn btn-default">
+                            <label class="btn btn-default w-auto pt5 pb5 pl15 pr15">
                                 <input type="radio" name="report_type" value="calls">Prospect calls
                             </label>
-                            Spreadsheet will contain: <?php echo Configure::read('siteNameAbbr'); ?> ID, title, call date, caller name/phone/email, patient name, score, and appt date.
+                            &nbsp;Spreadsheet will contain: <?= Configure::read('siteNameAbbr') ?> ID, title, call date, caller name/phone/email, patient name, score, and appt date.
                         </div>
                     </div>
                 </div>
@@ -46,8 +46,9 @@ $caCallGroup = [];
                     <div class="column-responsive column-80">
                         <div class="csCalls form content col col-md-6">
                             <fieldset>
+                                <?= $this->Form->control('csv_file', ['type' => 'file', 'required' => true]) ?>
+                                <span class="help-block col-md-offset-3 mb20">List of clinics. Must have 2 columns (id, title).</span>
                                 <?php
-                                    echo $this->Form->control('csv_file', ['type' => 'file', 'required' => true, 'help_block' => 'List of clinics. Must have 2 columns (id, title).']);
                                     echo $this->Form->control('start_date', ['type' => 'date', 'required' => true]);
                                     echo $this->Form->control('end_date', ['type' => 'date', 'required' => true]);
                                 ?>
