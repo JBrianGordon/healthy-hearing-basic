@@ -115,7 +115,7 @@ class TagsTable extends Table
         ])->all();
         $tagList = [];
         foreach ($tags as $tag) {
-            $tagList[$tag->id] = '<strong>'.$tag->display_header.'</strong><br><small>('.$tag->name.')</small>';
+            $tagList[$tag->id] = '<strong>&nbsp;'.$tag->display_header.'</strong><br><small>('.$tag->name.')</small>';
         }
         return $tagList;
     }

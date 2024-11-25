@@ -84,7 +84,22 @@ $this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
                                                         Select tags to display this ad only on certain report pages that are related to this tag.<br>
                                                         If no tags are selected, it will be considered a "generic ad" and will display on all pages that don't have an exclusive ad.
                                                     </p>
-                                                    <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                                    <?php
+                                                    // Get the IDs of the associated tags
+                                                    $selectedTags = [];
+                                                    if (!empty($advertisement->tags)) {
+                                                        foreach ($advertisement->tags as $tag) {
+                                                            $selectedTags[] = $tag->id;
+                                                        }
+                                                    }
+                                                    ?>
+                                                    <?= $this->Form->control('Wikis.Tags', [
+                                                        'label' => false,
+                                                        'options' => $tags,
+                                                        'multiple' => 'checkbox',
+                                                        'escape' => false,
+                                                        'value' => $selectedTags // Pre-check the associated tags
+                                                    ]) ?>
                                                 </div>
                                             </div>
                                         </div>
