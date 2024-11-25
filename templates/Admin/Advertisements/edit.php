@@ -46,7 +46,7 @@ $this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
                                                 'label' => ['text' => 'Update image']
                                             ]);
                                         ?>
-                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" src="#" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
+                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" src="<?= $advertisement->public_url ?>" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
                                         <?=
                                             $this->Form->control('public_url', [
                                                 'label' => ['text' => 'CkBox URL'],
@@ -70,7 +70,7 @@ $this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
                                             <div id="discover">
 							                    <section id="adPanel" class="panel mb0">
                                                     <a href="<?= $advertisement->dest ?>" rel="sponsored nofollow noopener" class="img-responsive" title="<?= $advertisement->title ?>" id="adBlock" target="_blank">
-                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
+                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="265px" height="265px">
                                                     </a>
                                                     <label for="adBlock" class="pull-right mb20"><i>Advertisement</i></label>
                                                 </section>
