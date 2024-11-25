@@ -27,7 +27,9 @@ class AdvertisementsController extends AppController
      */
     public function index()
     {
-        $advertisements = $this->paginate($this->Advertisements);
+        $advertisements = $this->paginate($this->Advertisements->find('all', [
+            'contain' => ['Tags']
+        ]));
 
         $this->set('title', 'Advertisements index');
         $this->set(compact('advertisements'));
