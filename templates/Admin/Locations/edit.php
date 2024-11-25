@@ -1650,14 +1650,11 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
 </div>
 <script type="text/javascript">
     document.querySelectorAll('.provider-photo-delete-ck').forEach(function(button) {
-        console.log('Adding event listener to:', button);
         button.addEventListener('click', async (event) => {
             const providerCk = event.currentTarget.getAttribute('data-provider-ck');
             const providerIndex = event.currentTarget.getAttribute('data-provider-id');
             const providerId = document.querySelector('input[name="providers[' + providerIndex + '][id]"]').value;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            console.log(providerCk);
-            console.log(csrfToken);
             try {
                 const response = await fetch('/admin/providers/delete-provider-image', {
                     headers: {
