@@ -45,7 +45,7 @@
     "jquery-ui": "~1.13.2",
     "penthouse": "~2.3.3",
     "uglify-js": "~3.17.3",
-    "webpack": "^5.97.1",
+    "webpack": "~5.88.2",
     "webpack-cli": "~4.10.0"
   },
   "devDependencies": {
