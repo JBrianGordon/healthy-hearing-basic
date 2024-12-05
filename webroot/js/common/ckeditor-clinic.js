@@ -57,6 +57,7 @@ const editorElements = document.querySelectorAll(".editor");
 editorElements.forEach((element) => {
 
     Editor.create(element, {
+        licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDM4MTExOTksImp0aSI6IjMwYjVhODM5LTU5NGItNGEzMi1iMmMxLWIxMzQwZmY4ZTg0ZiIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsic2giLCJkcnVwYWwiXSwid2hpdGVMYWJlbCI6dHJ1ZSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6IjRkNmFmNWM2In0.aa_FL8BYu4Thvv-61GQHK_Aptt8AIVN29WYVk4ljIUB_MKHWh13ERC7eV1XwkkAyX9NmM5_tSw5jXH2gUfwNWQ',
         toolbar: {
             items: [
                 'undo',
@@ -98,7 +99,6 @@ editorElements.forEach((element) => {
             tokenUrl: ckTokenUrl
         }
     	}).then(editor => {
-            console.log('Editor was initialized', editor);
             const editorElements = document.querySelectorAll(".editor");
           
             editorElements.forEach(element => {
