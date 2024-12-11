@@ -8,6 +8,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
+use Cake\Cache\Cache;
+
 /**
  * LocationPhotos Model
  *
@@ -47,10 +54,70 @@ class LocationPhotosTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'photo_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->photo_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
+
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
         ]);
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isDirty('photo_name') && $entity->ajax_delete !== true) {
+            $filename = pathinfo($entity->photo_name, PATHINFO_FILENAME);
+
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . $filename, 'default');
+
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->photo_url = $ckBoxUploadData['response']['url'];
+            }
+
+            Cache::delete('ckBoxUploadImage_' . $filename);
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $field = 'photo_name';
+
+        $original = $entity->getOriginal($field);
+
+        if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('photo_url'), $matches);
+            $ckBoxImageId = $matches[1];
+            $ckBoxUtility = new CKBoxUtility();
+            try {
+                $ckBoxUtility->deleteImage($ckBoxImageId);
+            } catch (Exception $e) {
+                // TODO
+                // Ignore exceptions for now
+            }
+        }
     }
 
     /**
@@ -64,6 +131,8 @@ class LocationPhotosTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
+
+        // TODO: ADD VALIDATION FOR PHOTO_NAME
 
         $validator
             ->scalar('photo_url')

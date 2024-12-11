@@ -83,16 +83,16 @@ class locationsAdminEdit {
       element.dispatchEvent(new Event('change'));
     });
 
-    // document.body.addEventListener('change', (event) => {
-    //   const target = event.target;
-    //   if (target.type === 'file') {
-    //     if (target.id === 'LocationAdFile') {
-    //       editObj.onChangeLocationAdFile(target);
-    //     } else {
-    //       editObj.onChangeFileInput(target);
-    //     }
-    //   }
-    // });
+    document.body.addEventListener('change', (event) => {
+      const target = event.target;
+      if (target.type === 'file') {
+        if (target.id === 'LocationAdFile') {
+          editObj.onChangeLocationAdFile(target);
+        } else {
+          editObj.onChangeFileInput(target);
+        }
+      }
+    });
 
     const directBookTypeElement = document.getElementById('direct-book-type');
     if (directBookTypeElement) {
@@ -139,6 +139,39 @@ class locationsAdminEdit {
     document.getElementById('is-mobile').dispatchEvent(new Event('change'));
     editObj.locationAutocomplete();
     editObj.initSpecialAnnouncements();
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
+            button.addEventListener('click', editObj.handleLocationPhotoDeleteClick);
+        });
+    });
+
+  }
+
+  async handleLocationPhotoDeleteClick(event) {
+    const clickedButton = event.currentTarget;
+    const locationPhotoId = clickedButton.getAttribute('data-location-photo-id');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    try {
+      if (locationPhotoId) { // Only perform for images already in CkBox
+        const response = await fetch('/admin/locations/delete-location-photo', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                locationPhotoId: locationPhotoId
+            })
+        });
+      }
+      const row = clickedButton.closest('tr');
+      row.remove();
+    } catch {
+      // TODO
+      alert ("OH NO");
+    }
   }
 
   selectImport(importId) {
@@ -197,14 +230,20 @@ class locationsAdminEdit {
   }
 
   onChangeFileInput(obj) {
+    const editObj = this;
     const id = obj.id;
+
     const row = document.getElementById(id).closest('tr');
-    const keyMatch = id.match(/LocationPhoto|LocationLogo|Provider(\d+)(.+)/);
+    const keyMatch = id.match(/location-photo|LocationLogo|Provider(\d+)(.+)/);
+
     const key = parseInt(keyMatch.input.match(/\d+/)[0]);
     const newKey = key + 1;
     const filename = obj.files[0].name;
     const filesize = obj.files[0].size;
+
+
     const maxSize = id.match(/LocationLogo/) ? 500000 : 2000000;
+
 
     // Check for errors in the inputs
     let errors = false;
@@ -258,26 +297,43 @@ class locationsAdminEdit {
         helpBlock.style.display = 'none';
       });
 
-    if (keyMatch[0] === 'LocationPhoto') {
+    if (keyMatch[0] === 'location-photo') {
       document.getElementById(`photo-add-error-${key}`).style.display = 'none';
       document.getElementById(`btn-photo-delete-${key}`).style.display = 'block';
       document.getElementById(`photo-description-${key}`).style.display = 'block';
-      document.getElementById(`LocationPhoto${key}Alt`).disabled = false;
+      document.getElementById(`location-photos-${key}-alt`).disabled = false;
 
       // Add a new row to the photos table
       const newRow = document.createElement('tr');
-      newRow.innerHTML = `<td><div class="row mt5 mb10"><div class="col-md-offset-3 col-md-9"><img id="photo-thumb-${newKey}"></div></div>` +
-        `<div class="form-group"><label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>` +
-        `<div class="col col-md-9"><input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File"></div></div>` +
-        `<div id="photo-description-${newKey}" style="display:none;"><div class="form-group required"><label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>` +
-        `<div class="col col-md-9"><input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt"></div></div></div>` +
-        `<span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span></td>`;
+      newRow.innerHTML =
+        `<td>` +
+          `<div class="row mt5 mb10">` +
+            `<div class="col-md-offset-3 col-md-9">` +
+              `<img id="photo-thumb-${newKey}">` +
+            `</div>` +
+          `</div>` +
+          `<div class="mb-3 form-group file">` +
+            `<label class="form-label" for="location-photo-imageUpload-${newKey}">Add a photo</label>` +
+            `<input type="file" name="location_photos[${newKey}][photo_name]" id="location-photo-imageUpload-${newKey}" class="form-control">` +
+          `</div>` +
+          `<div id="photo-description-${newKey}" style="display:none;">` +
+            `<div class="mb-3 form-group text required">` +
+              `<label class="form-label" for="location-photos-${newKey}-alt">Description</label>` +
+              `<input type="text" name="location_photos[${newKey}][alt]" disabled="disabled" required="required" id="location-photos-${newKey}-alt" aria-required="true" class="form-control" maxlength="100">` +
+            `</div>` +
+          `</div>` +
+          `<span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>` +
+        `</td>`;
 
-      const deleteButton = document.createElement('td');
-      deleteButton.setAttribute('align', 'center');
-      deleteButton.innerHTML = `<button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>`;
+      const deleteButtonContainer = document.createElement('td');
+      deleteButtonContainer.setAttribute('align', 'center');
+      deleteButtonContainer.innerHTML = `<button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>`;
 
-      newRow.appendChild(deleteButton);
+      // Add event listener to the delete button before appending it
+      const newDeleteButton = deleteButtonContainer.querySelector('button');
+      newDeleteButton.addEventListener('click', editObj.handleLocationPhotoDeleteClick);
+
+      newRow.appendChild(deleteButtonContainer);
       row.after(newRow);
     }
 

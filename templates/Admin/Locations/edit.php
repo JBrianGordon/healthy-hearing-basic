@@ -544,12 +544,12 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                         <td class="w-100">
                                                                             <div class='row mt5 mb10'>
                                                                                 <div class='col-md-9 offset-md-3'>
-                                                                                    <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>">
+                                                                                    <img src="<?= $photo->photo_url ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <?php
                                                                             echo $this->Form->hidden("location_photos.$key.id");
-                                                                            echo $this->Form->control("location_photos.$key.photo_url", [
+                                                                            echo $this->Form->control("location_photos.$key.photo_name", [
                                                                                 'label' => 'File name',
                                                                                 'readonly' => 'readonly',
                                                                             ]);
@@ -560,7 +560,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                             ?>
                                                                         </td>
                                                                         <td style="width:100px;" class="tac">
-                                                                            <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key; ?>">Delete</button>
+                                                                            <button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key; ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 <?php endif; ?>
@@ -573,14 +573,17 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                             <img id="photo-thumb-<?= $key ?>">
                                                                         </div>
                                                                     </div>
-                                                                    <?= $this->Form->input("location_photos." . $key . ".file", [
-                                                                        'type' => 'file',
-                                                                        'label' => 'File name',
-                                                                        'class' => 'form-control photo-url'
-                                                                    ])?>
+                                                                    <?=
+                                                                        $this->Form->control('location_photos.'.$key.'.photo_name', [
+                                                                            'id' => 'location-photo-imageUpload-' . $key,
+                                                                            'type' => 'file',
+                                                                            'required' => false,
+                                                                            'label' => ['text' => 'Add a photo']
+                                                                        ]);
+                                                                    ?>
                                                                     <div id="photo-description-<?= $key ?>" style="display:none;">
                                                                         <?php
-                                                                        echo $this->Form->input("location_photos.$key.alt", [
+                                                                        echo $this->Form->control("location_photos.$key.alt", [
                                                                             'label' => 'Description',
                                                                             'disabled' => true,
                                                                             'required' =>true,
@@ -590,7 +593,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                     <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
                                                                 </td>
                                                                 <td style="width:100px;" align="center">
-                                                                    <button class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>" style="display:none;">Delete</button>
+                                                                    <button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>" style="display:none;">Delete</button>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

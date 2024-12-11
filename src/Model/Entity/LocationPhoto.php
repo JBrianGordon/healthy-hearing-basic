@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $location_id
+ * @property string|null $photo_name
  * @property string|null $photo_url
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -30,6 +31,7 @@ class LocationPhoto extends Entity
      */
     protected $_accessible = [
         'location_id' => true,
+        'photo_name' => true,
         'photo_url' => true,
         'created' => true,
         'modified' => true,

@@ -7,6 +7,8 @@ use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
+use App\Utility\CKBoxUtility;
+use Cake\View\JsonView;
 
 /**
  * Locations Controller
@@ -37,6 +39,11 @@ class LocationsController extends BaseAdminController
         $this->loadComponent('PersistQueries', [
             'actions' => ['index'],
         ]);
+    }
+
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
     }
 
     /**
@@ -165,6 +172,9 @@ class LocationsController extends BaseAdminController
                     unset($data['location_notes'][$key]);
                 }
             }
+
+            // remove last empty/new LocationPhoto
+            array_pop($data['location_photos']);
 
             $location = $this->Locations->patchEntity(
                 $location,
@@ -354,5 +364,23 @@ class LocationsController extends BaseAdminController
             }
         }
         return r_implode('<br>', $displayErrors);
+    }
+
+    public function deleteLocationPhoto() {
+        $this->viewBuilder()->setLayout('ajax');
+
+        $locationPhotoId = $this->request->getData('locationPhotoId');
+
+        $locationPhotosTable = $this->fetchTable('LocationPhotos');
+        $locationPhotoEntity = $locationPhotosTable->get($locationPhotoId);
+
+        if ($locationPhotosTable->delete($locationPhotoEntity)) {
+            $response = ['success' => true];
+        } else {
+            $response = ['success' => false, 'message' => 'Failed to delete photo from album.'];
+        }
+
+        $this->set(compact('response'));
+        $this->viewBuilder()->setOption('serialize', 'response');
     }
 }
