@@ -27,7 +27,9 @@ class AdvertisementsController extends AppController
      */
     public function index()
     {
-        $advertisements = $this->paginate($this->Advertisements);
+        $advertisements = $this->paginate($this->Advertisements->find('all', [
+            'contain' => ['Tags']
+        ]));
 
         $this->set('title', 'Advertisements index');
         $this->set(compact('advertisements'));
@@ -46,6 +48,12 @@ class AdvertisementsController extends AppController
 
             $requestData = $this->request->getData();
 
+            // Handle tags
+            if (!empty($requestData['tags'])) {
+                $tags = $this->Advertisements->Tags->findOrCreateTags($requestData['tags']);
+                $requestData['tags'] = $tags;
+            }
+
             $advertisement = $this->Advertisements->patchEntity($advertisement, $this->request->getData());
 
             if ($this->Advertisements->save($advertisement)) {
@@ -55,8 +63,12 @@ class AdvertisementsController extends AppController
             }
             $this->Flash->error(__('The advertisement could not be saved. Please, try again.'));
         }
+
+        // Fetch existing tags for the form
+        $tags = $this->Advertisements->Tags->findTagList();
+
         $this->set('title', 'Add Advertisement');
-        $this->set(compact('advertisement'));
+        $this->set(compact('advertisement', 'tags'));
     }
 
     /**
@@ -69,7 +81,7 @@ class AdvertisementsController extends AppController
     public function edit($id = null)
     {
         $advertisement = $this->Advertisements->get($id, [
-            'contain' => [],
+            'contain' => ['Tags'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $advertisement = $this->Advertisements->patchEntity($advertisement, $this->request->getData());
@@ -80,8 +92,12 @@ class AdvertisementsController extends AppController
             }
             $this->Flash->error(__('The advertisement could not be saved. Please, try again.'));
         }
+
+        // Fetch existing tags for the form
+        $tags = $this->Advertisements->Tags->findTagList();
+
         $this->set('title', 'Edit Advertisement');
-        $this->set(compact('advertisement'));
+        $this->set(compact('advertisement', 'tags'));
     }
 
     /**

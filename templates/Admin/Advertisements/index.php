@@ -39,9 +39,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                         <th><?= $this->Paginator->sort('id') ?></th>
                                                         <th><?= $this->Paginator->sort('is_active') ?></th>
                                                         <th style="width:450px"><?= $this->Paginator->sort('title') ?><br><?= $this->Paginator->sort('src') ?></th>
-                                                        <th><?= $this->Paginator->sort('slot') ?><br><?= $this->Paginator->sort('type') ?></th>
-                                                        <th><?= $this->Paginator->sort('tag_corps') ?></th>
-                                                        <th><?= $this->Paginator->sort('tag_basic') ?></th>
+                                                        <th>Tags</th>
                                                         <th><?= $this->Paginator->sort('created') ?><br><?= $this->Paginator->sort('modified') ?></th>
                                                         <th class="actions">Actions</th>
                                                     </tr>
@@ -52,12 +50,16 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                         <td><?= $this->Number->format($advertisement->id) ?></td>
                                                         <td><?= h($advertisement->is_active) ? "<span class='badge bg-success bi bi-check-lg'> Active</span>" : "<span class='badge bg-danger bi bi-x-lg'> Inactive</span>"; ?></td>
                                                         <td style="max-width:450px;word-wrap:break-word"><?= h($advertisement->title) ?><br><?= h($advertisement->src) ?></td>
-                                                        <td><?= h($advertisement->slot) ?><br><span class="label label-default"><?= h($advertisement->type) ?></span></td>
-                                                        <td><?= h($advertisement->tag_corps) ?></td>
-                                                        <td><?= h($advertisement->tag_basic) ?></td>
+                                                        <td>
+                                                            <?php if (!empty($advertisement->tags)): ?>
+                                                                <?php foreach ($advertisement->tags as $tag): ?>
+                                                                    <span class="label label-default"><?= h($tag->name) ?></span><br>
+                                                                <?php endforeach; ?>
+                                                            <?php endif; ?>
+                                                        </td>
                                                         <td><?= date('m/d/Y', strtotime($advertisement->created)) ?><br><?= date('m/d/Y', strtotime($advertisement->modified)) ?></td>
                                                         <td class="actions">
-                                                            <?= $this->Html->link('Edit', ['action' => 'edit', $advertisement->id], ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
+                                                            <?= $this->Html->link(' Edit', ['action' => 'edit', $advertisement->id], ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
                                                         </td>
                                                     </tr>
                                                     <?php endforeach; ?>

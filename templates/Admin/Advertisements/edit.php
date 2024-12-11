@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Advertisement $advertisement
  */
 
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
 ?>
 <div class="container-fluid site-body">
     <div class="row">
@@ -36,8 +36,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                         <div class="col-md-offset-3 col-md-9 mb10">
                                             <?= $this->Form->checkbox('is_active', ['hiddenField' => false]) ?> Active
                                         </div>
-                                        <?= $this->Form->control('type'); ?>
-                                        <?= $this->Form->control('slot', ['required' => false]); ?>
                                         <?= $this->Form->control('dest', ['required' => false]); ?>
                                         <?= $this->Form->control('alt', ['required' => false]); ?>
                                         <?=
@@ -48,7 +46,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                 'label' => ['text' => 'Update image']
                                             ]);
                                         ?>
-                                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                        <img id="imagePreview" class="mb-3 form-group col-md-offset-3" src="<?= $advertisement->public_url ?>" alt="Image Preview" style="display: none; max-width: 265px; max-height: 265px;" />
                                         <?=
                                             $this->Form->control('public_url', [
                                                 'label' => ['text' => 'CkBox URL'],
@@ -72,7 +70,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                             <div id="discover">
 							                    <section id="adPanel" class="panel mb0">
                                                     <a href="<?= $advertisement->dest ?>" rel="sponsored nofollow noopener" class="img-responsive" title="<?= $advertisement->title ?>" id="adBlock" target="_blank">
-                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="<?= $advertisement->width ?>px" height="<?= $advertisement->height ?>px">
+                                                        <img id="adImage" class="ml0" src="<?= $advertisement->public_url ?>" data-value="ViewBanner_<?= $advertisement->id ?>" alt="<?= $advertisement->alt ?>" border="0" width="265px" height="265px">
                                                     </a>
                                                     <label for="adBlock" class="pull-right mb20"><i>Advertisement</i></label>
                                                 </section>
@@ -86,7 +84,22 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                         Select tags to display this ad only on certain report pages that are related to this tag.<br>
                                                         If no tags are selected, it will be considered a "generic ad" and will display on all pages that don't have an exclusive ad.
                                                     </p>
-                                                    <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                                    <?php
+                                                    // Get the IDs of the associated tags
+                                                    $selectedTags = [];
+                                                    if (!empty($advertisement->tags)) {
+                                                        foreach ($advertisement->tags as $tag) {
+                                                            $selectedTags[] = $tag->id;
+                                                        }
+                                                    }
+                                                    ?>
+                                                    <?= $this->Form->control('Wikis.Tags', [
+                                                        'label' => false,
+                                                        'options' => $tags,
+                                                        'multiple' => 'checkbox',
+                                                        'escape' => false,
+                                                        'value' => $selectedTags // Pre-check the associated tags
+                                                    ]) ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,14 +116,3 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
         </div>
     </div>
 </div>
-<script>
-    document.getElementById('imageUpload').addEventListener('change', function(event) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var output = document.getElementById('imagePreview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>

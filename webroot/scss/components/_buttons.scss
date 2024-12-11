@@ -51,8 +51,14 @@ button.close {
     border-radius: 30px;
   }
 
-  &:active {
-    color: #fff!important;
+  &:active, &.active {
+    color: #333;
+    background-color: #e6e6e6!important;
+    border-color: #adadad!important;
+  }
+
+  &.focus {
+    outline:none;
   }
 }
 
@@ -235,6 +241,12 @@ button.close {
     display: block;
     margin: 0 auto;
   }
+}
+
+[data-toggle="buttons"] [type="radio"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
 }
 
 // Directions link styles
