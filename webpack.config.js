@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJS = require('uglify-js');
 const penthouse = require('penthouse');
 const fs = require('fs');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
@@ -21,7 +20,9 @@ const folderMinify = (folder, files) => {
 }
 
 folderMinify(adminFolder, adminFiles);
+setTimeout(() => {
 folderMinify(commonFolder, commonFiles);
+}, 5000);
 
 module.exports = {
 	mode: 'production',
@@ -52,6 +53,7 @@ module.exports = {
   optimization: {
     minimizer: [
       "...",
+      //This is a dependency of CKEditor 5, so it must be included in the build
       new ImageMinimizerPlugin({
         minimizer: {
           implementation: ImageMinimizerPlugin.svgoMinify,
