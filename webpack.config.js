@@ -20,14 +20,13 @@ const folderMinify = (folder, files) => {
 }
 
 folderMinify(adminFolder, adminFiles);
-setTimeout(() => {
 folderMinify(commonFolder, commonFiles);
-}, 5000);
 
 module.exports = {
 	mode: 'production',
 	entry: entries,
-	devtool: 'source-map',
+  //change this to 'source-map' if you need to debug the code
+	devtool: false,
   cache: {
     type: 'filesystem',
     cacheDirectory: path.resolve('webpack_cache'),
