@@ -1,8 +1,8 @@
 /*** TODO: check this once it's pulled into results page ***/
 import './common';
-import {directBookBtn} from './direct_book_btn';
 import './appt_request';
-import './responsive_slider';
+import {directBookBtn} from './direct_book_btn';
+//import './responsive_slider';
 
 directBookBtn();
 

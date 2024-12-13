@@ -17,7 +17,7 @@ $topicOptions = [
 			<?= $this->Form->create(null, ['id' => 'CaCallApptRequestForm']) ?>
 				<div class="modal-header">
 					<h4 class="modal-title">Request an appointment at <?= $location->title ?>:</h4>
-					<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
 					<?php

@@ -889,7 +889,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         <h4>Your profile is <span id="completionPercentage"></span>% complete. Please fill out the following sections:</h4>
                                                         <ul id="completionList" class="p0" style="list-style-type:none;">
                                                         </ul>
-                                                        <button type="button" class="close-modal btn btn-lg btn-light" data-bs-dismiss="modal" aria-hidden="true">Ok</button>
+                                                        <button type="button" class="close-modal btn btn-lg btn-light" data-bs-dismiss="modal">Ok</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -902,7 +902,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                             Please bookmark the clinic login page and save your login credentials so you can<br>
                                                             log back in and edit this profile as needed to keep it up to date.
                                                         </p>
-                                                        <button type="button" class="close-modal btn btn-lg btn-light" data-bs-dismiss="modal" aria-hidden="true">Ok</button>
+                                                        <button type="button" class="close-modal btn btn-lg btn-light" data-bs-dismiss="modal">Ok</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -912,7 +912,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                     <div id="newUserModal" class="modal-dialog modal-lg modal fade <?= ($showModal) ? 'show in' : '' ?>">
                                         <div class="modal-content">
                                             <div class="modal-body tac">
-                                                <button type="button" class="close-modal" data-bs-dismiss="modal" aria-hidden="true">X</button>
+                                                <button type="button" class="close-modal" data-bs-dismiss="modal">X</button>
                                                 <h4>Looks like it's your first time here. Please read our clinic FAQ page to understand how to make the most of this <?= $siteName ?> profile:</h4>
                                                 <a id="completionList" href="/clinic/pages/faq" target="_blank">FAQ page</a>
                                             </div>

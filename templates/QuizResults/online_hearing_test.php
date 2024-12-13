@@ -183,13 +183,13 @@
 
 		<?php $this->append('bs-modals'); ?>
 		<!-- Modal hearing test -->
-		<div id="HearingTest" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="HearingTest" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content test-overlay">
 					<div class="modal-header d-block">
 						<div id="test-counter" class="modal-title d-inline"></div>
 						<button type="button" class="close pull-right" data-bs-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+							<span>&times;</span>
 						</button>
 					</div>
 					<div class="modal-body m0">

@@ -3,7 +3,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="border-bottom: 0">
-				<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+				<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
 				<div id="map" style="width:100%; height:60vh;"></div>

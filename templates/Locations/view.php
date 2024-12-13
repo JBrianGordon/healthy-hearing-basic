@@ -164,7 +164,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 										    'id' => 'CaCallApptRequestForm',
 											'role' => false
 										]) ?>
-											<button type="button" class="close pt10" data-bs-dismiss="modal" aria-hidden="true">X</button>
+											<button type="button" class="close pt10" data-bs-dismiss="modal">X</button>
 											<div class="panel-heading text-center mb10">
 												<h2 class="modal-title">Request an appointment</h2>
 											</div>

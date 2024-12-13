@@ -1,12 +1,12 @@
 <?php if (!empty($location->location_photos)): ?>
 	<?php $locationPhotos = $location->location_photos; ?>
 	<!-- Photo Gallery Modal -->
-	<div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal fade" id="photoModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
+	          <span>&times;</span>
 	        </button>
 	      </div>
 	      <div class="modal-body">

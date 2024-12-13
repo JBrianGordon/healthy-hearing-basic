@@ -80,7 +80,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 												<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 													<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
 														<!-- *** TODO: appointment request modal not functioning properly, I think some backend work may be needed: ***-->
-														<button type="button" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>" data-bs-toggle="modal">
+														<button type="button" class="btn btn-lg btn-secondary apptRequestBtn mb5" data-id="<?= $locationId ?>">
 															Request my appointment
 														</button>
 													<?php endif; ?>

@@ -75,12 +75,12 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 												</div>
 											</div>
 											<!-- Modal -->
-											<div class="modal fade" id="<?= $modalId ?>" tabindex="-1" role="dialog" aria-labelledby="<?= $modalIdTitle ?>" aria-hidden="true">
+											<div class="modal fade" id="<?= $modalId ?>" tabindex="-1" role="dialog" aria-labelledby="<?= $modalIdTitle ?>">
 												<div class="modal-dialog modal-lg" role="document">
 													<div class="modal-content">
 														<div class="modal-header">
 															<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-																<span aria-hidden="true">&times;</span>
+																<span>&times;</span>
 															</button>
 															<h4 class="modal-title" id="<?= $modalIdTitle ?>">
 																Preview: <?= $libraryItem['title'] ?>
@@ -147,12 +147,12 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 	</div>
 </div>
 
-<div class="modal fade" id="libraryExampleModal" tabindex="-1" role="dialog" aria-labelledby="libraryExampleModalTitle" aria-hidden="true">
+<div class="modal fade" id="libraryExampleModal" tabindex="-1" role="dialog" aria-labelledby="libraryExampleModalTitle">
 	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+					<span>&times;</span>
 				</button>
 				<h4 class="modal-title" id="libraryExampleModalTitle">
 					Example of shared <?= Configure::read('siteName') ?> content

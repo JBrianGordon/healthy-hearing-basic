@@ -157,12 +157,12 @@ $this->Html->script('dist/common.min', ['block' => true]);
             <?php endif; ?>
         </div>
         <?php $this->append('bs-modals'); ?>
-        <div class="modal fade" id="enlargeMap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="enlargeMap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header p15">
                         <h4>Pick a <?= $stateLabel ?></h4>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span>&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <center>

@@ -12,7 +12,7 @@ $zipLabel = Configure::read('zipLabel');
 ?>
 
 <!-- Review submit modal -->
-<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel" aria-hidden="true">
+<div class="modal fade" id="reviewSubmitModal" tabindex="-1" aria-labelledby="reviewSubmitModalLabel">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -140,7 +140,7 @@ $zipLabel = Configure::read('zipLabel');
 </div>
 
 <!-- Review thank you modal -->
-<div class="modal fade" id="reviewThankYouModal" tabindex="-1" aria-labelledby="reviewThankYouModalLabel" aria-hidden="true">
+<div class="modal fade" id="reviewThankYouModal" tabindex="-1" aria-labelledby="reviewThankYouModalLabel">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
