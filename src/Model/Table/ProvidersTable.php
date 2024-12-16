@@ -62,7 +62,7 @@ class ProvidersTable extends Table
         ]);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'square_url' => [
+            'photo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
                     'adapter' => new CKBoxAdapter(),
@@ -76,7 +76,7 @@ class ProvidersTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->public_url, $matches);
+                    preg_match("/assets\/(.*?)\/file/", $entity->photo_url, $matches);
                     $ckBoxImageId = $matches[1];
                     return [
                         $ckBoxImageId,
@@ -169,15 +169,15 @@ class ProvidersTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($entity->isDirty('square_url') && $entity->ajax_delete !== true) {
-            $filename = pathinfo($entity->square_url, PATHINFO_FILENAME);
+        if ($entity->isDirty('photo_name') && $entity->ajax_delete !== true) {
+            $filename = pathinfo($entity->photo_name, PATHINFO_FILENAME);
 
             $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . $filename, 'default');
 
             $publicUrl = $ckBoxUploadData['response']['url'];
 
             if ($publicUrl !== null && is_string($publicUrl)) {
-                $entity->public_url = $ckBoxUploadData['response']['url'];
+                $entity->photo_url = $ckBoxUploadData['response']['url'];
             }
 
             Cache::delete('ckBoxUploadImage_' . $filename);            
@@ -186,12 +186,12 @@ class ProvidersTable extends Table
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $field = 'square_url';
+        $field = 'photo_name';
 
         $original = $entity->getOriginal($field);
 
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
-            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('photo_url'), $matches);
             $ckBoxImageId = $matches[1];
             $ckBoxUtility = new CKBoxUtility();
             try {
@@ -255,9 +255,9 @@ class ProvidersTable extends Table
             ->allowEmptyString('micro_url');
 
         // $validator
-        //     ->scalar('square_url')
-        //     ->maxLength('square_url', 128)
-        //     ->allowEmptyString('square_url');
+        //     ->scalar('photo_name')
+        //     ->maxLength('photo_name', 128)
+        //     ->allowEmptyString('photo_name');
 
         $validator
             ->scalar('thumb_url')

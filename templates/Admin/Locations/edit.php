@@ -1672,9 +1672,8 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                     })
                 });
 
-                document.querySelector('#providers-' + providerIndex + '-square-url').value = '';
+                document.querySelector('#providers-' + providerIndex + '-photo-name').value = '';
                 document.querySelector('#provider-pic-' + providerIndex).src = '';
-
 
             } catch {
                 alert("OH NO");

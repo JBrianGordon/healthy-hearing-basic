@@ -17,7 +17,7 @@ use Cake\ORM\Entity;
  * @property string|null $email
  * @property string|null $description
  * @property string|null $micro_url
- * @property string|null $square_url
+ * @property string|null $photo_name
  * @property string|null $thumb_url
  * @property string|null $image_url
  * @property bool $is_active
@@ -52,7 +52,7 @@ class Provider extends Entity
         'email' => true,
         'description' => true,
         'micro_url' => true,
-        'square_url' => true,
+        'photo_name' => true,
         'thumb_url' => true,
         'image_url' => true,
         'is_active' => true,
