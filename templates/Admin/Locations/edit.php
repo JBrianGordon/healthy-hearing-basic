@@ -515,16 +515,16 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                         <tbody class="d-block">
                                                             <tr class="d-block">
                                                                 <td class="d-block">
-                                                                    <img class="ml60 mb10" id="location-logo" src="<?= $location->logo_url ?>">
+                                                                <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
                                                                     <?=
                                                                         $this->Form->control('logo_name', [
                                                                             'id' => 'logo-imageUpload',
+                                                                            'class' => 'mt-3',
                                                                             'type' => 'file',
                                                                             'required' => false,
                                                                             'label' => ['text' => 'Update logo']
                                                                         ]);
                                                                     ?>
-                                                                    <img id="logo-imagePreview" src="#" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -681,7 +681,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                             <?php endif; ?>
                                                                             <?php if (!empty($locationAd->photo_url)): ?>
                                                                                 <div class="panel-body">
-                                                                                    <img class="coupon-image" src="/cloudfiles/clinics/<?= $locationAd->photo_url ?>">
+                                                                                    <img class="coupon-image" src="<?= $locationAd->photo_url ?>">
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                             <?php if (!empty($locationAd->description)): ?>
@@ -1651,57 +1651,3 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         </div>
     </section>
 </div>
-<script type="text/javascript">
-    document.querySelectorAll('.provider-photo-delete-ck').forEach(function(button) {
-        button.addEventListener('click', async (event) => {
-            const providerCk = event.currentTarget.getAttribute('data-provider-ck');
-            const providerIndex = event.currentTarget.getAttribute('data-provider-id');
-            const providerId = document.querySelector('input[name="providers[' + providerIndex + '][id]"]').value;
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            try {
-                const response = await fetch('/admin/providers/delete-provider-image', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    method: 'POST',
-                    body: JSON.stringify({
-                        ckBoxImageId: providerCk,
-                        providerId: providerId
-                    })
-                });
-
-                document.querySelector('#providers-' + providerIndex + '-photo-name').value = '';
-                document.querySelector('#provider-pic-' + providerIndex).src = '';
-
-            } catch {
-                alert("OH NO");
-            }
-
-        });
-    });
-
-    document.querySelectorAll('.provider-imageUpload').forEach(function(providerImageUpload) {
-            providerImageUpload.addEventListener('change', function(event) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    var providerKey = providerImageUpload.getAttribute('data-provider-index');
-                    var output = document.getElementById('provider-imagePreview-' + providerKey);
-                    output.src = reader.result;
-                    output.style.display = 'block';
-                };
-            reader.readAsDataURL(event.target.files[0]);
-        });
-    });
-
-    document.getElementById('logo-imageUpload').addEventListener('change', function(event) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var output = document.getElementById('logo-imagePreview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>

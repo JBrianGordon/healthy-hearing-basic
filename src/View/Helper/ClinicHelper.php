@@ -641,8 +641,8 @@ class ClinicHelper extends Helper
         if (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name)) {
             return $this->Html->image('/tmp/' . $provider->file->name, ['width' => 150]);
         }
-        if (!empty($provider->thumb_url)) {
-            $url = $provider->thumb_url;
+        if (!empty($provider->photo_url)) {
+            $url = $provider->photo_url;
             $classLead = ' class="';
             $classClose = '"';
             if ($options['url_only']) {
@@ -665,10 +665,10 @@ class ClinicHelper extends Helper
             unset($options['url_only']);
             return '<div class="profile-pic-container"><img src="'.$url.'" loading="lazy"' . $classLead . $options['class'] . $classClose . ' alt="'.$options['alt'].'" width="'.$options['width'].'" height="'.$options['height'].'"></div>';
         }
-        if (!empty($provider->thumb_url)) {
-            $image_path = WWW_ROOT . $provider->thumb_url;
+        if (!empty($provider->photo_url)) {
+            $image_path = $provider->photo_url;
             if (file_exists($image_path)) {
-                return $this->Html->image($provider->thumb_url);
+                return $this->Html->image($provider->photo_url);
             }
         }
         return "";

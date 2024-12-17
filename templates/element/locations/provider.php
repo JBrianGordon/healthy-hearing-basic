@@ -127,7 +127,7 @@ use Cake\Core\Configure;
 					echo "<div class='form-group'><div class='profile-pic-container'><img id=provider-pic-" . $key . " src=". $provider->photo_url . " loading='lazy'</div></div>";
 				}
 				echo $this->Form->control("providers." . $key . ".photo_name", ['type' => 'file', 'label' => ['text' => 'Upload Image', 'class' => 'col-sm-3 control-label'], 'class' => 'provider-imageUpload col-sm-9 p15', 'data-provider-index' => $key]);
-				echo '<img id="provider-imagePreview-' . $key . '" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />';
+				echo '<img id="provider-imagePreview-' . $key . '" class="form-group col-md-offset-3" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;" />';
 		}
 	?>
 </div>

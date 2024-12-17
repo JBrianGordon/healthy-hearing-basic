@@ -2,6 +2,7 @@ import 'jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
 import './ck-clinic-package';
+import '../admin/image_preview';
 
 
 // If there are any errors on the page, scroll down
@@ -670,8 +671,13 @@ scrollToElement("#specialAnnouncements");
 const onChangeFileInput = (obj) => {
 const id = obj.id;
 const row = document.getElementById(id).closest('tr');
-const keyMatch = id.match(/locationphoto|LocationLogo|locationad|provider-(\d+)(.+)/);
-const key = parseInt(keyMatch.input.match(/\d+/)[0]);
+const keyMatch = id.match(/locationphoto|logo-imageUpload|locationad|provider-(\d+)(.+)/);
+let key;
+if (keyMatch && keyMatch[1]) {
+  key = parseInt(keyMatch.input.match(/\d+/)[0]);
+} else {
+  key = 0;
+}
 const newKey = Number(key) + 1;
 const filename = obj.files[0].name;
 const filesize = obj.files[0].size;
@@ -709,75 +715,80 @@ if (errors) {
   // Apply the error style to the input
   obj.style.background = 'rgba(200,100,100,.5)';
 
-  if (keyMatch.input === 'LocationLogo0Url') {
-    //*** TODO: add error messaging (currently nothing on prod): document.getElementById('photo-add-error-logo').style.display = 'block';
-  } else if (keyMatch[0].match(/Provider/)) {
-    document.getElementById('provider-photo-add-error-' + key).style.display = 'block';
-  } else {
-    document.getElementById('photo-add-error-' + key).style.display = 'block';
-  }
+  if(keyMatch){
+    if (keyMatch.input === 'logo-imageUpload') {
+      document.getElementById('logo-imageUpload').style.background = 'rgba(200,100,100,.5)';
+    } else if (keyMatch[0].match(/Provider/)) {
+      document.getElementById('provider-photo-add-error-' + key).style.display = 'block';
+    } else {
+      document.getElementById('photo-add-error-' + key).style.display = 'block';
+    }
 
-  document.querySelector("#LocationClinicEditForm input[type='submit']").setAttribute('disabled', 'disabled');
+    document.querySelector("#LocationClinicEditForm input[type='submit']").setAttribute('disabled', 'disabled');
+  }
   return false;
 } else {
-// Remove the error style from the input
-obj.style.background = '';
-document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
-const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
-helpBlocks.forEach((block) => {
-  block.style.display = 'none';
-});
-document.getElementById("photo-add-error-" + key).style.display = 'none';
-document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-document.getElementById("photo-description-" + key).style.display = 'block';
+  // Remove the error style from the input
+  obj.style.background = '';
+  document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
+  const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
+  helpBlocks.forEach((block) => {
+    block.style.display = 'none';
+  });
+  if(document.getElementById("photo-add-error-" + key)){
+    document.getElementById("photo-add-error-" + key).style.display = 'none';
+    document.getElementById("btn-photo-delete-" + key).style.display = 'block';
+    document.getElementById("photo-description-" + key).style.display = 'block';
+  }
+  if (keyMatch && keyMatch[0] === 'LocationPhoto') {
+    document.getElementById("photo-add-error-" + key).style.display = 'none';
+    document.getElementById("btn-photo-delete-" + key).style.display = 'block';
+    document.getElementById("photo-description-" + key).style.display = 'block';
+    document.querySelector("input#LocationPhoto" + key + "Alt").removeAttribute('disabled');
 
-if (keyMatch[0] === 'LocationPhoto') {
-  document.getElementById("photo-add-error-" + key).style.display = 'none';
-  document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-  document.getElementById("photo-description-" + key).style.display = 'block';
-  document.querySelector("input#LocationPhoto" + key + "Alt").removeAttribute('disabled');
-
-  // Add a new row to the photos table
-  const newRow = document.createElement('tr');
-  newRow.innerHTML = `<td>
-    <div class="row mt5 mb10">
-      <div class="col-md-offset-3 col-md-9">
-        <img id="photo-thumb-${newKey}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>
-      <div class="col col-md-9">
-        <input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File">
-      </div>
-    </div>
-    <div id="photo-description-${newKey}" style="display:none;">
-      <div class="form-group required">
-        <label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>
-        <div class="col col-md-9">
-          <input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt">
+    // Add a new row to the photos table
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `<td>
+      <div class="row mt5 mb10">
+        <div class="col-md-offset-3 col-md-9">
+          <img id="photo-thumb-${newKey}">
         </div>
       </div>
-    </div>
-    <span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>
-  </td>`;
-  newRow.innerHTML += `<td align="center">
-    <button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>
-  </td>`;
-  row.parentNode.insertBefore(newRow, row.nextSibling);
-}
-
-// Load the thumbnail image
-const files = obj.files;
-const reader = new FileReader();
-reader.onload = function (e) {
-  if (keyMatch.input === 'LocationLogo0Url') {
-    document.querySelector('img#photo-thumb-logo').src = e.target.result;
-  } else {
-    document.querySelector('img#photo-thumb-' + key).src = e.target.result;
+      <div class="form-group">
+        <label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>
+        <div class="col col-md-9">
+          <input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File">
+        </div>
+      </div>
+      <div id="photo-description-${newKey}" style="display:none;">
+        <div class="form-group required">
+          <label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>
+          <div class="col col-md-9">
+            <input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt">
+          </div>
+        </div>
+      </div>
+      <span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>
+    </td>`;
+    newRow.innerHTML += `<td align="center">
+      <button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>
+    </td>`;
+    row.parentNode.insertBefore(newRow, row.nextSibling);
   }
-};
-reader.readAsDataURL(files[0]);
+
+  // Load the thumbnail image
+  const files = obj.files;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    if(keyMatch){
+      if (keyMatch.input === 'logo-imageUpload') {
+        document.querySelector('img#logo-imagePreview0').src = e.target.result;
+      } else {
+        document.querySelector('img#photo-thumb-' + key).src = e.target.result;
+      }
+    }
+  };
+  reader.readAsDataURL(files[0]);
 };
 
 // Close completion check modal

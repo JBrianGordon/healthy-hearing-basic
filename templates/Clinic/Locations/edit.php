@@ -617,7 +617,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                                 <?php endif; ?>
                                                                                 <?php if (!empty($locationAd->photo_url)): ?>
                                                                                     <div class="panel-body">
-                                                                                        <img class="coupon-image" src="/cloudfiles/clinics/<?= $locationAd->photo_url ?>">
+                                                                                        <img class="coupon-image" src="<?= $locationAd->photo_url ?>">
                                                                                     </div>
                                                                                 <?php endif; ?>
                                                                                 <?php if (!empty($locationAd->description)): ?>
@@ -745,13 +745,15 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 <tbody class="col-12 p0">
                                                                     <tr class="col-12 p0">
                                                                         <td class="col-12 p20">
-                                                                            <img class="ml60 mb10" id="photo-thumb-logo" src="<?= (!empty($location->logo_url)) ? '/cloudfiles/clinics/' . $location->logo_url : '' ?>">
-                                                                            <?= $this->Form->control("logo_file", [
+                                                                            <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                                                            <?=
+                                                                                $this->Form->control('logo_name', [
+                                                                                    'id' => 'logo-imageUpload',
+                                                                                    'class' => 'mt-3',
                                                                                     'type' => 'file',
-                                                                                    'label' => ['text' => 'File name', 'class' => 'col-sm-3 control-label'],
-                                                                                    'class' => 'form-control photo-url col-sm-9',
-                                                                                    'id' => 'LocationLogo0Url'
-                                                                                ])
+                                                                                    'required' => false,
+                                                                                    'label' => ['text' => 'Update logo']
+                                                                                ]);
                                                                             ?>
                                                                         </td>
                                                                     </tr>
@@ -778,7 +780,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                                         'value' => $photo->photo_url
                                                                                     ]) ?>
                                                                                 </div>
-                                                                                <img src="/cloudfiles/clinics/<?= $photo->photo_url ?>" alt>
+                                                                                <img src="<?= $photo->photo_url ?>" alt>
                                                                                 <div id="photo-description-<?= $key ?>">
                                                                                     <?= $this->Form->control("LocationPhoto.$key.alt", [
                                                                                         'label' => ['text' => 'Description', 'class' => 'col-sm-3 control-label'],

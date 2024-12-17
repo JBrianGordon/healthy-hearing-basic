@@ -549,7 +549,7 @@ $this->Breadcrumbs->add($location->title, ['url' => '']);
 										<?php if (!empty($location->location_ad->photo_url)): ?>
 											<div class="panel-body">
 												<div class="panel-section condensed">
-													<img loading="lazy"<?php if(!empty($location->location_ad->border)){ echo ' class="' . $location->location_ad->border . '"';} ?> width="300" height="300" src="/cloudfiles/clinics/<?= $location->location_ad->photo_url; ?>" alt="Announcement for <?= $location->title ?>">
+													<img loading="lazy"<?php if(!empty($location->location_ad->border)){ echo ' class="' . $location->location_ad->border . '"';} ?> width="300" height="300" src="<?= $location->location_ad->photo_url; ?>" alt="Announcement for <?= $location->title ?>">
 												</div>
 											</div>
 										<?php endif; ?>

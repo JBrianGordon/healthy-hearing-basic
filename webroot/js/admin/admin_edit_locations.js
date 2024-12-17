@@ -3,6 +3,7 @@ import '../common/provider';
 import './nav_tabs';
 import './datepicker';
 import './ckpackage';
+import './image_preview';
 
 class locationsAdminEdit {
   constructor() {
