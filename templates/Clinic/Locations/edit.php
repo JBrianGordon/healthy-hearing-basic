@@ -746,7 +746,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 <tbody class="col-12 p0">
                                                                     <tr class="col-12 p0">
                                                                         <td class="col-12 p20">
-                                                                            <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                                                            <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="<?= $location->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
                                                                             <?=
                                                                                 $this->Form->control('logo_name', [
                                                                                     'id' => 'logo-imageUpload0',
