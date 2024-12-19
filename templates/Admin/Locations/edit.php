@@ -219,7 +219,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         <div class="panel-body">
             <div class="panel-section expanded">
                 <div class="form">
-                    <?= $this->Form->create($location, ['type' => 'file']) ?>
+                    <?= $this->Form->create($location, ['type' => 'file', 'id' => 'LocationForm']) ?>
                     <fieldset>
                         <?= $this->Form->control('title') ?>
                         <div class="col-md-2 offset-md-3 pl0">
@@ -508,17 +508,16 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             <div class="panel-heading">Premier features</div>
                                             <div class="panel-body m10<?php if ($location->listing_type != 'Premier'){echo " panel-disabled";}?>">
                                                 <!-- Clinic logo -->
-                                                <!-- *** TODO: This code will need to be updated once logo uploading added *** -->
                                                 <div>
                                                     <label class="col col-md-3 control-label">Clinic logo</label>
                                                     <table class="table-striped table-bordered col-md-offset-3 col-md-9 p0">
                                                         <tbody class="d-block">
                                                             <tr class="d-block">
                                                                 <td class="d-block">
-                                                                <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
+                                                                <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="<?= $location->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
                                                                     <?=
                                                                         $this->Form->control('logo_name', [
-                                                                            'id' => 'logo-imageUpload',
+                                                                            'id' => 'logo-imageUpload0',
                                                                             'class' => 'mt-3',
                                                                             'type' => 'file',
                                                                             'required' => false,
@@ -544,7 +543,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                         <td class="w-100">
                                                                             <div class='row mt5 mb10'>
                                                                                 <div class='col-md-9 offset-md-3'>
-                                                                                    <img src="<?= $photo->photo_url ?>">
+                                                                                    <img id="photo-thumb-<?= $key ?>" src="<?= $photo->photo_url ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <?php
@@ -558,9 +557,10 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                                 'required' => true
                                                                             ]);
                                                                             ?>
+                                                                            <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg</span>
                                                                         </td>
                                                                         <td style="width:100px;" class="tac">
-                                                                            <button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key; ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
+                                                                            <button type="button" id="btn-photo-delete-<?= $key ?>" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 <?php endif; ?>

@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		      galleryButton.textContent = 'View fewer photos';
 		    } else {
 		      const photoModal = document.querySelector('#photoModal');
-		      photoModal.classList.add('in');
+		      photoModal.classList.add('in', 'show');
 		      photoModal.style.display = 'block';
 		    }
 		  });
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		  for (let i = 0; i < closeButtons.length; i++) {
 		    closeButtons[i].addEventListener('click', function () {
 		      const photoModal = document.querySelector('#photoModal');
-		      photoModal.classList.remove('in');
+		      photoModal.classList.remove('in', 'show');
 		      photoModal.style.display = 'none';
 		    });
 		  }

@@ -2,7 +2,7 @@ import 'jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
 import './ck-clinic-package';
-import '../admin/image_preview';
+import * as imagePreview from '../admin/image_preview';
 
 
 // If there are any errors on the page, scroll down
@@ -379,9 +379,9 @@ button.addEventListener('click', () => {
   
   providers.forEach((provider) => {
     const providerId = provider.getAttribute('provider');
-    const firstName = document.querySelector('#Provider' + providerId + 'FirstName');
-    const lastName = document.querySelector('#Provider' + providerId + 'LastName');
-    const description = document.querySelector('#Provider' + providerId + 'Description');
+    const firstName = document.querySelector(`#providers-${providerId}-first-name`);
+    const lastName = document.querySelector(`#providers-${providerId}-last-name`);
+    const description = document.querySelector(`#providers-${providerId}-description`);
     
     if (firstName.value.length > 0 || lastName.value.length > 0 || description.value.length > 0) {
       firstName.setAttribute('required', 'required');
@@ -535,7 +535,7 @@ if (target.matches('input[type="file"]')) {
 	if (target.id === 'LocationAdFile') {
 		onChangeLocationAdFile(target);
 	} else {
-		onChangeFileInput(target);
+		imagePreview.onChangeFileInput(target);
 	}
 }
 
@@ -592,6 +592,13 @@ button.addEventListener('click', () => {
 	document.getElementById(target).value = '';
 	img.setAttribute('src', '');
 });
+});
+
+//Delete buttons for location photos
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
+      button.addEventListener('click', imagePreview.handleLocationPhotoDeleteClick);
+  });
 });
 
 const removePhotoRow = (obj, type) => {
@@ -667,154 +674,6 @@ document.getElementById("couponSelected").style.display = 'none';
 document.getElementById("uploadCoupon").style.display = 'none';
 scrollToElement("#specialAnnouncements");
 };
-
-const onChangeFileInput = (obj) => {
-const id = obj.id;
-const row = document.getElementById(id).closest('tr');
-const keyMatch = id.match(/locationphoto|logo-imageUpload|locationad|provider-(\d+)(.+)/);
-let key;
-if (keyMatch && keyMatch[1]) {
-  key = parseInt(keyMatch.input.match(/\d+/)[0]);
-} else {
-  key = 0;
-}
-const newKey = Number(key) + 1;
-const filename = obj.files[0].name;
-const filesize = obj.files[0].size;
-const maxSize = id.match(/LocationLogo/) ? 500000 : 2000000;
-
-// Check for errors in the inputs
-let errors = false;
-
-/*** TODO: Delete this block if unused: 
-// if (filename.length === 0) {
-//   // File is empty
-//   errors = true;
-//   document.querySelector(`.upload-text-${key}`).innerHTML = 'Click the button to choose a photo from your computer.';
-// } else {
-//   document.querySelector(`.upload-text-${key}`).innerHTML = filename;
-// }***/
-
-const match = filename.match(/\.(.+)/);
-let ext = '';
-if (match && (typeof match[1] !== undefined)) {
-  ext = match[1].toLowerCase();
-}
-
-if (!['jpg', 'jpeg'].includes(ext)) {
-  // File is not a jpg
-  errors = true;
-}
-
-if (filesize > maxSize) {
-  // File is larger than 500KB for logos, 2MB for photo gallery
-  errors = true;
-}
-
-if (errors) {
-  // Apply the error style to the input
-  obj.style.background = 'rgba(200,100,100,.5)';
-
-  if(keyMatch){
-    if (keyMatch.input === 'logo-imageUpload') {
-      document.getElementById('logo-imageUpload').style.background = 'rgba(200,100,100,.5)';
-    } else if (keyMatch[0].match(/Provider/)) {
-      document.getElementById('provider-photo-add-error-' + key).style.display = 'block';
-    } else {
-      document.getElementById('photo-add-error-' + key).style.display = 'block';
-    }
-
-    document.querySelector("#LocationClinicEditForm input[type='submit']").setAttribute('disabled', 'disabled');
-  }
-  return false;
-} else {
-  // Remove the error style from the input
-  obj.style.background = '';
-  document.querySelector("#LocationClinicEditForm input[type='submit']").removeAttribute('disabled');
-  const helpBlocks = document.querySelectorAll(".help-block.text-danger[style='']");
-  helpBlocks.forEach((block) => {
-    block.style.display = 'none';
-  });
-  if(document.getElementById("photo-add-error-" + key)){
-    document.getElementById("photo-add-error-" + key).style.display = 'none';
-    document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-    document.getElementById("photo-description-" + key).style.display = 'block';
-  }
-  if (keyMatch && keyMatch[0] === 'LocationPhoto') {
-    document.getElementById("photo-add-error-" + key).style.display = 'none';
-    document.getElementById("btn-photo-delete-" + key).style.display = 'block';
-    document.getElementById("photo-description-" + key).style.display = 'block';
-    document.querySelector("input#LocationPhoto" + key + "Alt").removeAttribute('disabled');
-
-    // Add a new row to the photos table
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `<td>
-      <div class="row mt5 mb10">
-        <div class="col-md-offset-3 col-md-9">
-          <img id="photo-thumb-${newKey}">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="LocationPhoto${newKey}File" class="col col-md-3 control-label">File name</label>
-        <div class="col col-md-9">
-          <input type="file" name="data[LocationPhoto][${newKey}][file]" class="form-control photo-url" id="LocationPhoto${newKey}File">
-        </div>
-      </div>
-      <div id="photo-description-${newKey}" style="display:none;">
-        <div class="form-group required">
-          <label for="LocationPhoto${newKey}Alt" class="col col-md-3 control-label">Description</label>
-          <div class="col col-md-9">
-            <input name="data[LocationPhoto][${newKey}][alt]" class="form-control" required="required" type="text" maxlength="100" disabled="disabled" id="LocationPhoto${newKey}Alt">
-          </div>
-        </div>
-      </div>
-      <span class="help-block text-danger" style="display:none;" id="photo-add-error-${newKey}">Photo is invalid. Must be a .jpg or .jpeg</span>
-    </td>`;
-    newRow.innerHTML += `<td align="center">
-      <button class="btn btn-md btn-danger js-photo-delete" data-key="${newKey}" id="btn-photo-delete-${newKey}" style="display:none;">Delete</button>
-    </td>`;
-    row.parentNode.insertBefore(newRow, row.nextSibling);
-  }
-
-  // Load the thumbnail image
-  const files = obj.files;
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    if(keyMatch){
-      if (keyMatch.input === 'logo-imageUpload') {
-        document.querySelector('img#logo-imagePreview0').src = e.target.result;
-      } else {
-        document.querySelector('img#photo-thumb-' + key).src = e.target.result;
-      }
-    }
-  };
-  reader.readAsDataURL(files[0]);
-};
-
-// Close completion check modal
-if(document.querySelector("#incompleteModal") !== null) {
-document.querySelector("#incompleteModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#incompleteModal").classList.remove("in");
-  document.querySelector("#incompleteModal").style.display = "none";
-});
-}
-
-if(document.querySelector("#completeModal") !== null) {
-document.querySelector("#completeModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#completeModal").classList.remove("in");
-  document.querySelector("#completeModal").style.display = "none";
-});
-}
-
-// Close new user modal
-if(document.querySelector("#newUserModal") !== null) {
-document.querySelector("#newUserModal .close-modal").addEventListener("click", () => {
-  document.querySelector("#newUserModal").classList.remove("show", "in");
-  document.querySelector("#newUserModal").style.display = "none";
-  document.querySelector("#faqTab").animate({ "bottom": 0 }, 500);
-});
-}
-}
 
 // Special announcement border selection
 document.querySelectorAll(".border-radio").forEach((radio) => {

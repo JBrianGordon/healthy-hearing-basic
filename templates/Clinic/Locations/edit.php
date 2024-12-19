@@ -16,6 +16,7 @@ $adId = $location->location_ad->id ?? null;
 
 $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
+<meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <!-- Additional ATF CSS, since the css generator can't access our pages behind the login -->
 <style type="text/css">
     .pt20 {
@@ -748,7 +749,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                             <img id="logo-imagePreview0" src="<?= $location->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display: none; max-width: 100px; max-height: 100px;" />
                                                                             <?=
                                                                                 $this->Form->control('logo_name', [
-                                                                                    'id' => 'logo-imageUpload',
+                                                                                    'id' => 'logo-imageUpload0',
                                                                                     'class' => 'mt-3',
                                                                                     'type' => 'file',
                                                                                     'required' => false,
@@ -770,76 +771,64 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                             <table class="table-striped table-bordered col-md-11 ml20 p0">
                                                                 <tbody class="col-12 p0">
                                                                     <?php foreach ($location->location_photos as $key => $photo): ?>
-                                                                        <tr class="col-12 p0 flex">
-                                                                            <td class="col-sm-10 p0">
-                                                                                <?= $this->Form->hidden("LocationPhoto.$key.id") ?>
-                                                                                <div>
-                                                                                    <?= $this->Form->control("LocationPhoto.$key.photo_url", [
-                                                                                        'label' => false,
-                                                                                        'div' => false,
-                                                                                        'value' => $photo->photo_url
-                                                                                    ]) ?>
-                                                                                </div>
-                                                                                <img src="<?= $photo->photo_url ?>" alt>
-                                                                                <div id="photo-description-<?= $key ?>">
-                                                                                    <?= $this->Form->control("LocationPhoto.$key.alt", [
-                                                                                        'label' => ['text' => 'Description', 'class' => 'col-sm-3 control-label'],
-                                                                                        'required' =>true,
-                                                                                        'class' => 'col-sm-9',
-                                                                                        'oninput' => 'validatePhotoAlt('.$key.')',
-                                                                                        'value' => $photo->alt
-                                                                                    ])
+                                                                        <?php if (!empty($photo->photo_url)): ?>
+                                                                            <tr>
+                                                                                <td class="w-100">
+                                                                                    <div class='row mt5 mb10'>
+                                                                                        <div class='col-md-9 offset-md-3'>
+                                                                                            <img id="photo-thumb-<?= $key ?>" src="<?= $photo->photo_url ?>">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <?php
+                                                                                    echo $this->Form->hidden("location_photos.$key.id");
+                                                                                    echo $this->Form->control("location_photos.$key.photo_name", [
+                                                                                        'label' => 'File name',
+                                                                                        'readonly' => 'readonly',
+                                                                                    ]);
+                                                                                    echo $this->Form->control("location_photos.$key.alt", [
+                                                                                        'label' => 'Description',
+                                                                                        'required' => true
+                                                                                    ]);
                                                                                     ?>
-                                                                                    <span class="help-block col-sm-9 col-sm-offset-3">Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.</span>
-                                                                                    <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td align="center" class="col-sm-2 center-both alignment-content-stretch">
-                                                                                <button type="button" class="btn btn-md btn-danger js-photo-delete" data-key="<?= $key ?>">Delete</button>
-                                                                            </td>
-                                                                        </tr>
+                                                                                    <span class="help-block col-md-9 col-md-offset-3">Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.</span>
+                                                                                    <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg</span>
+                                                                                </td>
+                                                                                <td style="width:100px;" class="tac">
+                                                                                    <button type="button" id="btn-photo-delete-<?= $key ?>" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php endif; ?>
                                                                     <?php endforeach; ?>
-                                                                    <tr class="col-12 p0">
-                                                                        <td class="col-sm-10 p0">
+                                                                    <tr>
+                                                                        <td>
                                                                             <?php $key = count($location->location_photos); ?>
                                                                             <div class='row mt5 mb10'>
-                                                                                <div class='col-sm-offset-3 col-sm-9'>
+                                                                                <div class='col-md-9 offset-md-3'>
                                                                                     <img id="photo-thumb-<?= $key ?>">
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group">
-                                                                                <div class="col col-sm-3 mb20" id="file-input-<?= $key ?>">
-                                                                                    <label class="btn btn-default pull-right col-12 p0">
-                                                                                        <span class="col-12 p0 pt10 pb10" style="margin-bottom:-10px">Add a new photo</span>
-                                                                                        <?= $this->Form->control("LocationPhoto." . $key . ".file", [
-                                                                                            'type' => 'file',
-                                                                                            'label' => false,
-                                                                                            'div' => false,
-                                                                                            'class' => 'form-control photo-url hidden'
-                                                                                        ])
-                                                                                        ?>
-                                                                                    </label>
-                                                                                </div>
-                                                                                <label class="col col-sm-3 control-label hidden" id="filename-label-<?= $key ?>">File name</label>
-                                                                                <div class="col col-md-9">
-                                                                                    <span class="upload-text-<?= $key ?>"> Click the button to choose a photo from your computer.</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div id="photo-description-<?= $key ?>" class="hidden">
-                                                                                <?= $this->Form->control("LocationPhoto.$key.alt", [
+                                                                            <?=
+                                                                                $this->Form->control('location_photos.'.$key.'.photo_name', [
+                                                                                    'id' => 'location-photo-imageUpload-' . $key,
+                                                                                    'type' => 'file',
+                                                                                    'required' => false,
+                                                                                    'label' => ['text' => 'Add a photo']
+                                                                                ]);
+                                                                            ?>
+                                                                            <div id="photo-description-<?= $key ?>" style="display:none;">
+                                                                                <?php
+                                                                                echo $this->Form->control("location_photos.$key.alt", [
                                                                                     'label' => 'Description',
-                                                                                    'help_block' => 'Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc.',
                                                                                     'disabled' => true,
                                                                                     'required' =>true,
-                                                                                    'oninput' => 'validatePhotoAlt('.$key.')'
-                                                                                ])
+                                                                                ]);
                                                                                 ?>
-                                                                                <span class="help-block-desc-<?= $key ?> text-danger col-md-9 col-md-offset-3 hidden"><strong>You must remove the phone number in the red field, above, before you can save the profile.</strong></span>
                                                                             </div>
-                                                                            <span class="help-block text-danger hidden" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
+                                                                            <span class="help-block col-md-9 col-md-offset-3 hidden">Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.</span>
+                                                                            <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
                                                                         </td>
-                                                                        <td align="center" class="col-sm-2">
-                                                                            <button class="btn btn-md btn-danger js-photo-delete hidden mb20" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>">Delete</button>
+                                                                        <td style="width:100px;" align="center">
+                                                                            <button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>" style="display:none;">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
