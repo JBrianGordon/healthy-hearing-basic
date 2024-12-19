@@ -3,7 +3,7 @@ export function onChangeFileInput(obj) {
     const id = obj.id;
 
     const row = document.getElementById(id).closest('tr');
-    const keyMatch = id.match(/location-photo|logo-imageUpload|Provider(\d+)(.+)/);
+    const keyMatch = id.match(/(?:location-photos|logo-imageUpload|providers)-?(\d*)-?(.*)/);
     const key = parseInt(keyMatch.input.match(/\d+/)[0]);
     const newKey = key + 1;
     // Check if a file is selected
