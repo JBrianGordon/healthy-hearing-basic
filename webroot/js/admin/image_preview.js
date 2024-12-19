@@ -3,7 +3,7 @@ export function onChangeFileInput(obj) {
     const id = obj.id;
 
     const row = document.getElementById(id).closest('tr');
-    const keyMatch = id.match(/(?:location-photos|logo-imageUpload|providers)-?(\d*)-?(.*)/);
+    const keyMatch = id.match(/(?:location-photo[s]?|logo-imageUpload|providers)-?(\d*)-?(.*)/);
     const key = parseInt(keyMatch.input.match(/\d+/)[0]);
     const newKey = key + 1;
     // Check if a file is selected
@@ -72,7 +72,7 @@ export function onChangeFileInput(obj) {
         helpBlock.style.display = 'none';
       });
 
-    if (keyMatch[0] === 'location-photo') {
+    if (keyMatch[0].includes('location-photo')) {
       document.getElementById(`photo-add-error-${key}`).style.display = 'none';
       document.getElementById(`btn-photo-delete-${key}`).style.display = 'block';
       document.getElementById(`photo-description-${key}`).style.display = 'block';
