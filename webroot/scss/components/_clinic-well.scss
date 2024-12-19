@@ -429,6 +429,12 @@ iframe[title='recaptcha challenge'] {
 .row.provider-bio {
   margin-bottom: 30px;
 
+  .img-responsive{
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
   .gutter-below {
     em {
       font-size: 9px;
