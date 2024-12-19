@@ -12,7 +12,7 @@
 	      <div class="modal-body">
 			<?php foreach($locationPhotos as $photo): ?>
 				<div class="modal-slide-container photo gallery">
-					<img loading="lazy" src="<?= $photo->url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+					<img loading="lazy" src="<?= $photo->photo_url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
 				</div>
 			<?php endforeach ?>
 	      </div>
