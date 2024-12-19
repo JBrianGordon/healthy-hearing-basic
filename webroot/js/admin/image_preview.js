@@ -120,8 +120,22 @@ export function onChangeFileInput(obj) {
     const files = obj.files;
     const reader = new FileReader();
     reader.onload = function(e) {
-      const imgElement = keyMatch.input === 'logo-imageUpload' ? document.querySelector('img#logo-imagePreview0') : document.querySelector(`img#photo-thumb-${key}`);
-      imgElement.src = e.target.result;
+        const inputId = obj.id;
+        let imgElement;
+    
+        if (inputId === 'logo-imageUpload') {
+            imgElement = document.querySelector('img#logo-imagePreview0');
+        } else if (/providers-\d+-photo-name/.test(inputId)) {
+            const key = inputId.match(/providers-(\d+)-photo-name/)[1];
+            imgElement = document.querySelector(`img#provider-pic-${key}`);
+        } else if (/location-photo-imageUpload-\d+/.test(inputId)) {
+            const key = inputId.match(/location-photo-imageUpload-(\d+)/)[1];
+            imgElement = document.querySelector(`img#photo-thumb-${key}`);
+        }
+    
+        if (imgElement) {
+            imgElement.src = e.target.result;
+        }
     };
     reader.readAsDataURL(files[0]);
     }
