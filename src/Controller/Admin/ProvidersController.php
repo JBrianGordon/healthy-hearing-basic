@@ -193,8 +193,8 @@ class ProvidersController extends BaseAdminController
 
             // Fetch the provider entity
             $provider = $this->Providers->get($providerId);
-            $provider->square_url = null;
-            $provider->public_url = null;
+            $provider->photo_name = null;
+            $provider->photo_url = null;
             $provider->ajax_delete = true;
 
             if ($this->Providers->save($provider)) {
