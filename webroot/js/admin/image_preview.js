@@ -127,7 +127,7 @@ export function onChangeFileInput(obj) {
             imgElement = document.querySelector('img#logo-imagePreview0');
         } else if (/providers-\d+-photo-name/.test(inputId)) {
             const key = inputId.match(/providers-(\d+)-photo-name/)[1];
-            imgElement = document.querySelector(`img#provider-pic-${key}`);
+            imgElement = document.querySelector(`img#provider-imagePreview-${key}`);
         } else if (/location-photo-imageUpload-\d+/.test(inputId)) {
             const key = inputId.match(/location-photo-imageUpload-(\d+)/)[1];
             imgElement = document.querySelector(`img#photo-thumb-${key}`);
