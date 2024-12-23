@@ -296,7 +296,7 @@ export function initSpecialAnnouncements() {
       const couponLibrary = document.querySelector('#couponLibrary');
       const couponSelected = document.querySelector('#couponSelected');
       const uploadCoupon = document.querySelector('#uploadCoupon');
-
+      
       if (isCqPremier && !adId) {
         if (couponId) {
           couponLibrary.style.display = 'none';

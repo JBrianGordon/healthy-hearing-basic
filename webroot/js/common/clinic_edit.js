@@ -474,37 +474,37 @@ if (target.matches('#LocationHourIsClosedLunch')) {
 });
 
 document.body.addEventListener("click", (e) => {
-if (e.target.classList.contains('js-photo-delete')) {
-	imagePreview.removePhotoRow(e.target, 'photo');
-	e.preventDefault();
-	return false;
-}
-if (e.target.classList.contains('js-logo-delete')) {
-	imagePreview.removePhotoRow(e.target, 'logo');
-	e.preventDefault();
-	return false;
-}
-if (e.target.classList.contains('js-ad-delete')) {
-	imagePreview.removePhotoRow(e.target, 'ad');
-	e.preventDefault();
-	return false;
-}
+  if (e.target.classList.contains('js-photo-delete')) {
+    imagePreview.removePhotoRow(e.target, 'photo');
+    e.preventDefault();
+    return false;
+  }
+  if (e.target.classList.contains('js-logo-delete')) {
+    imagePreview.removePhotoRow(e.target, 'logo');
+    e.preventDefault();
+    return false;
+  }
+  if (e.target.classList.contains('js-ad-delete')) {
+    imagePreview.removePhotoRow(e.target, 'ad');
+    e.preventDefault();
+    return false;
+  }
 
-const { target } = e;
+  const { target } = e;
 
-if (target.matches('.js-link-delete')) {
-	deleteLink(target);
-	e.preventDefault();
-} else if (target.matches('.js-coupon-select')) {
-	addCoupon(target);
-	e.preventDefault();
-} else if (target.matches('.js-choose-own-coupon')) {
-	chooseOwnCoupon();
-	e.preventDefault();
-} else if (target.matches('.js-show-coupon-library')) {
-	showCouponLibrary();
-	e.preventDefault();
-}
+  if (target.matches('.js-link-delete')) {
+    deleteLink(target);
+    e.preventDefault();
+  } else if (target.matches('.js-coupon-select')) {
+    addCoupon(target);
+    e.preventDefault();
+  } else if (target.matches('.js-choose-own-coupon')) {
+    chooseOwnCoupon();
+    e.preventDefault();
+  } else if (target.matches('.js-show-coupon-library')) {
+    showCouponLibrary();
+    e.preventDefault();
+  }
 });
 
 const deletePhotoButtons = document.querySelectorAll('.provider-photo-delete');
@@ -540,19 +540,20 @@ if (pattern.test(altInput.value)) {
 };
 
 const addCoupon = (obj) => {
-const couponId = obj.getAttribute("data-coupon-id");
-document.getElementById("LocationAdFile").value = "";
-document.getElementById("LocationAdTitle").value = "";
-document.getElementById("LocationAdDescription").value = "";
-document.getElementById("LocationAdPhotoUrl").value = "";
-document.getElementById("specialAnnouncements").dataset.adid = null;
-document.getElementById("id-coupon").value = couponId;
-document.getElementById("specialAnnouncements").dataset.couponid = couponId;
-document.querySelector("#couponSelected .coupon-image").setAttribute("src", `/img/coupons/coupon-${couponId}.jpg`);
-document.getElementById("couponLibrary").style.display = 'none';
-document.getElementById("couponSelected").style.display = 'block';
-document.getElementById("uploadCoupon").style.display = 'none';
-imagePreview.scrollToElement("#specialAnnouncements");
+  var couponId = obj.getAttribute("data-coupon-id");
+  document.getElementById("LocationAdFile").value = "";
+  document.getElementById("location-ad-title").value = "";
+  document.getElementById("location-ad-image-url").value = "";
+  var specialAnnouncements = document.getElementById('specialAnnouncements');
+  specialAnnouncements.dataset.adid = null;
+  document.getElementById("couponId").value = couponId;
+  specialAnnouncements.dataset.couponid = couponId;
+  document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
+  document.getElementById('couponLibrary').style.display = 'none';
+  document.getElementById('couponSelected').style.display = 'block';
+  document.getElementById('uploadCoupon').style.display = 'none';
+
+  imagePreview.scrollToElement("#specialAnnouncements");
 };
 
 const chooseOwnCoupon = () => {

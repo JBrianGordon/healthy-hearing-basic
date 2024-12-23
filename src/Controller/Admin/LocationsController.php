@@ -198,6 +198,7 @@ class LocationsController extends BaseAdminController
         $this->set('title', 'Edit ' . $location->title);
         $this->set(compact('location', 'lastOticonImportDate', 'importLocations', 'oticonImportStatuses', 'reviews'));
         $this->set('uniqueLocationLinks', $this->Locations->findUniqueLocationLinks($id));
+        $this->set('isCqPremier', $location->is_cq_premier);
         $this->set('days', $this->Locations->LocationHours->days);
     }
 
