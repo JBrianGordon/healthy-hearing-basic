@@ -15,7 +15,8 @@ $this->Html->script('dist/admin_edit_locations.min', ['block' => true]);
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 $id = $location->id;
 $isCqPremier = $location->is_cq_premier;
-$adId = $location->location_ad->id ?? null;
+$locationAd = $location->location_ad;
+$adId = $locationAd->id ?? null;
 $couponId = $location->id_coupon;
 $showSpecialAnnouncement = (
     ($location->listing_type == Location::LISTING_TYPE_PREMIER) ||
@@ -654,7 +655,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                             </div>
                                                         </div>
                                                         <div id="couponSelected" style="display:none;">
-                                                            <?= $this->Form->hidden('id_coupon'); ?>
+                                                            <?= $this->Form->hidden('id_coupon', ['id' => 'couponId']); ?>
                                                             <div class='col-md-3 offset-md-4'>
                                                                 <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
                                                             </div>
@@ -672,16 +673,16 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                             <?php if ($isCqPremier): ?>
                                                                 <div class="offset-md-3 mb20"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
                                                             <?php endif; ?>
-                                                            <?php //if (!empty($locationAd->photo_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
+                                                            <?php if (!empty($locationAd->image_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
                                                                 <div class='row mb20' id='location-ad-preview'>
                                                                     <div class='col-md-3 offset-md-3'>
                                                                         <div class="panel panel-light text-center mb5">
                                                                             <?php if (!empty($locationAd->title)): ?>
                                                                                 <div class="panel-heading"><?= $locationAd->title ?></div>
                                                                             <?php endif; ?>
-                                                                            <?php if (!empty($locationAd->photo_url)): ?>
+                                                                            <?php if (!empty($locationAd->image_url)): ?>
                                                                                 <div class="panel-body">
-                                                                                    <img class="coupon-image" src="<?= $locationAd->photo_url ?>">
+                                                                                    <img class="coupon-image" src="<?= $locationAd->image_url ?>">
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                             <?php if (!empty($locationAd->description)): ?>
@@ -691,33 +692,44 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                                         <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>
                                                                     </div>
                                                                 </div>
-                                                            <?php //endif; ?>
-                                                            <?php
-                                                                echo $this->Form->control("location_ad.photo_url", [
+                                                            <?php endif; ?>
+                                                            <?=
+                                                                $this->Form->control("location_ad.image_url", [
                                                                     'label' => 'File name',
+                                                                    'class' => 'col-md-7-override d-inline',
                                                                     'readonly' => 'readonly',
-                                                                    'wrapInput' => 'col-md-7',
-                                                                    'after' => '<label class="btn btn-sm btn-default mt5">
-                                                                        <span>Upload image</span>
-                                                                        <input type="file" name="location_ad[file]" class="form-control hidden" id="LocationAdFile">
-                                                                        </label>',
+                                                                    'templates' => [
+                                                                        'inputContainer' => '{{content}}<label class="btn btn-sm btn-default mt5 float-end col-md-2-override p5 tac"><span>Upload image</span><input type="file" name="location_ad[file]" class="form-control hidden" id="LocationAdFile"></label>{{help}}',
+                                                                        'help' => '<br><p class="form-text text-muted col-md-offset-3 mb-3">{{content}}</p>'
+                                                                    ],
                                                                     'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
-                                                                        <span class="text-danger" id="location-ad-error" style="display:none;" id="location-ad-error">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
+                                                                    <span class="text-danger" id="location-ad-error" style="display:none;">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
                                                                 ]);
                                                             ?>
                                                             <?php
                                                                 echo $this->Form->control("location_ad.title", [
                                                                     'label' => 'Title',
+                                                                    'class' => 'mt-3',
                                                                     'maxlength' => 50,
                                                                     'required' => false,
+                                                                    'templates' => [
+                                                                        'inputContainer' => '{{content}}{{help}}',
+                                                                        'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
+                                                                    ],
                                                                     'help' => 'This text will appear in the header of this space. 50 characters max.'
                                                                 ]);
+
                                                                 echo $this->Form->control("location_ad.description", [
                                                                     'type' => 'textarea',
                                                                     'rows' => 2,
                                                                     'label' => 'Message',
+                                                                    'class' => 'mt-3',
                                                                     'maxlength' => 500,
                                                                     'required' => false,
+                                                                    'templates' => [
+                                                                        'inputContainer' => '{{content}}{{help}}',
+                                                                        'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
+                                                                    ],
                                                                     'help' => 'This text will appear in the low text of this space. 500 characters max.'
                                                                 ]);
                                                             ?>

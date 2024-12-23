@@ -15,33 +15,6 @@ if (errorDivs.length) {
   });
 }
 
-const initSpecialAnnouncements = () => {
-  const specialAnnouncements = document.querySelector("#specialAnnouncements");
-  const isCqPremier = specialAnnouncements.dataset.iscqpremier;
-  const adId = specialAnnouncements.dataset.adid;
-  const couponId = specialAnnouncements.dataset.couponid;
-
-  const couponLibrary = document.querySelector("#couponLibrary");
-  const couponSelected = document.querySelector("#couponSelected");
-  const uploadCoupon = document.querySelector("#uploadCoupon");
-
-  if (isCqPremier && !adId) {
-    if (couponId) {
-      couponLibrary.style.display = "none";
-      couponSelected.style.display = "block";
-      uploadCoupon.style.display = "none";
-    } else {
-      couponLibrary.style.display = "block";
-      couponSelected.style.display = "none";
-      uploadCoupon.style.display = "none";
-    }
-  } else {
-    couponLibrary.style.display = "none";
-    couponSelected.style.display = "none";
-    uploadCoupon.style.display = "block";
-  }
-};
-
 const addLink = async (locationId, key) => {
   const newLink = document.querySelector('.linked-location');
   const linkedLocationId = document.querySelector('#LocationLinkedLocationId').value;
@@ -197,7 +170,7 @@ const onChangeIsMobile = (isMobile) => {
 
 // Initialize the "Special Announcements" section.
 // Coupon Library is currently only available to CQ Premier clinics
-initSpecialAnnouncements();
+imagePreview.initSpecialAnnouncements();
 	
 // Clinic profile completion. Currently we are only checking the first provider
 const providerArray = [
@@ -465,55 +438,6 @@ if (totalUpload > uploadLimit) {
 return true;
 }
 
-function onChangeLocationAdFile(obj){
-const id = obj.id;
-const row = document.getElementById(id).closest('tr');
-const filename = obj.files[0].name;
-const filesize = obj.files[0].size;
-
-// Check for errors in the inputs
-let errors = false;
-if (filename.length === 0) {
-  // File is empty
-  errors = true;
-} else {
-  document.getElementById('locationad-photo-url').value = filename;
-}
-
-const match = filename.match(/\.(.+)/);
-let ext = '';
-if (match && typeof match[1] !== 'undefined') {
-  ext = match[1].toLowerCase();
-}
-
-if (!['jpg', 'jpeg'].includes(ext)) {
-  // File is not a jpg
-  errors = true;
-}
-
-if (filesize > 500000) {
-  // File is larger than 2MB
-  errors = true;
-}
-
-if (errors) {
-  // Apply the error style to the input
-  document.getElementById('locationad-photo-url').style.background = 'rgba(200,100,100,.5)';
-  document.getElementById('location-ad-error').style.display = 'block';
-  document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
-    el.setAttribute('disabled', 'disabled');
-  });
-  return false;
-} else {
-  document.querySelectorAll("#LocationClinicEditForm input[type='submit'], #floatingSave").forEach((el) => {
-    el.removeAttribute('disabled');
-  });
-  // Remove the error style from the input
-  document.getElementById('LocationAdPhotoUrl').style.background = '';
-  document.getElementById('location-ad-error').style.display = 'none';
-}
-};
-
 /*** TODO: possibly deletable block: ***/
 // Allow form submission if user clicks modal continue
 // document.querySelector("#saveAndContinue").addEventListener("click", () => {
@@ -533,7 +457,7 @@ const { target } = e;
 
 if (target.matches('input[type="file"]')) {
 	if (target.id === 'LocationAdFile') {
-		onChangeLocationAdFile(target);
+		imagePreview.onChangeLocationAdFile(target);
 	} else {
 		imagePreview.onChangeFileInput(target);
 	}
@@ -551,17 +475,17 @@ if (target.matches('#LocationHourIsClosedLunch')) {
 
 document.body.addEventListener("click", (e) => {
 if (e.target.classList.contains('js-photo-delete')) {
-	removePhotoRow(e.target, 'photo');
+	imagePreview.removePhotoRow(e.target, 'photo');
 	e.preventDefault();
 	return false;
 }
 if (e.target.classList.contains('js-logo-delete')) {
-	removePhotoRow(e.target, 'logo');
+	imagePreview.removePhotoRow(e.target, 'logo');
 	e.preventDefault();
 	return false;
 }
 if (e.target.classList.contains('js-ad-delete')) {
-	removePhotoRow(e.target, 'ad');
+	imagePreview.removePhotoRow(e.target, 'ad');
 	e.preventDefault();
 	return false;
 }
@@ -601,36 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-const removePhotoRow = (obj, type) => {
-const row = obj.closest('tr');
-const key = obj.dataset.key;
-if (type === 'photo') {
-  document.getElementById(`locationphoto-${key}-photo-url`).value = '';
-  if (document.getElementById(`locationphoto-${key}-file`) !== null) {
-    document.getElementById(`locationphoto-${key}-file`).value = '';
-  }
-  row.style.display = 'none';
-}
-if (type === 'logo') {
-  document.getElementById('LocationLogoUrl').value = '';
-  document.getElementById('photo-thumb-logo').setAttribute('src', '');
-  if (document.getElementById('LocationLogo0File') !== null) {
-    document.getElementById('LocationLogo0File').value = '';
-  }
-}
-if (type === 'ad') {
-  document.getElementById('location-ad-preview').style.display = 'none';
-  document.getElementById('locationad-photo-url').value = '';
-  document.getElementById('locationad-title').value = '';
-  document.getElementById('locationad-description').value = '';
-  document.getElementById('locationad-photo-url').value = '';
-  document.getElementById('id-coupon').value = null;
-  document.getElementById('specialAnnouncements').dataset.adid = null;
-  document.getElementById('specialAnnouncements').dataset.couponid = null;
-  initSpecialAnnouncements();
-}
-};
-
 const validatePhotoAlt = (key) => {
 const pattern = new RegExp("^.*[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}.*$");
 const altInput = document.getElementById(`LocationPhoto${key}Alt`);
@@ -658,21 +552,21 @@ document.querySelector("#couponSelected .coupon-image").setAttribute("src", `/im
 document.getElementById("couponLibrary").style.display = 'none';
 document.getElementById("couponSelected").style.display = 'block';
 document.getElementById("uploadCoupon").style.display = 'none';
-scrollToElement("#specialAnnouncements");
+imagePreview.scrollToElement("#specialAnnouncements");
 };
 
 const chooseOwnCoupon = () => {
 document.getElementById("couponLibrary").style.display = 'none';
 document.getElementById("couponSelected").style.display = 'none';
 document.getElementById("uploadCoupon").style.display = 'block';
-scrollToElement("#specialAnnouncements");
+imagePreview.scrollToElement("#specialAnnouncements");
 };
 
 const showCouponLibrary = () => {
 document.getElementById("couponLibrary").style.display = 'block';
 document.getElementById("couponSelected").style.display = 'none';
 document.getElementById("uploadCoupon").style.display = 'none';
-scrollToElement("#specialAnnouncements");
+imagePreview.scrollToElement("#specialAnnouncements");
 };
 
 // Special announcement border selection

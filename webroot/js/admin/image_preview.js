@@ -1,3 +1,18 @@
+export function scrollToElement(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - 70;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    } else {
+        console.error(`Element not found: ${selector}`);
+    }
+}
+
 export function onChangeFileInput(obj) {
     const editObj = this;
     const id = obj.id;
@@ -232,6 +247,122 @@ export async function handleLocationPhotoDeleteClick(event) {
     } catch {
       // TODO
       alert ("OH NO");
+    }
+}
+
+export function removePhotoRow(obj, type) {
+    const row = obj.closest('tr');
+    const key = obj.dataset.key;
+    
+    if (type === "photo") {
+      document.querySelector(`#location-photos-${key}-photo-url`).value = '';
+      const fileInput = document.querySelector(`#location-photos-${key}-file`);
+      if (fileInput !== null) {
+        fileInput.value = '';
+      }
+      row.style.display = 'none';
+    }
+    
+    if (type === "logo") {
+      document.querySelector("#LocationLogo0Url").value = '';
+      document.querySelector("#photo-thumb-logo").src = '';
+      const fileInput = document.querySelector("#LocationLogo0File");
+      if (fileInput !== null) {
+        fileInput.value = '';
+      }
+    }
+    
+    if (type === "ad") {
+      document.getElementById("location-ad-preview").style.display = 'none';
+      document.getElementById("LocationAdFile").value = "";
+      document.getElementById("location-ad-title").value = "";
+      document.getElementById("location-ad-image-url").value = "";
+      document.getElementById("couponId").value = null;
+      document.getElementById('specialAnnouncements').dataset.adid = null;
+      document.getElementById('specialAnnouncements').dataset.couponid = null;
+
+      scrollToElement("#specialAnnouncements");
+      initSpecialAnnouncements();
+    }
+}
+
+export function initSpecialAnnouncements() {
+    const specialAnnouncements = document.querySelector('#specialAnnouncements');
+    if(specialAnnouncements !== null){
+      const isCqPremier = specialAnnouncements.dataset.iscqpremier;
+      const adId = specialAnnouncements.dataset.adid;
+      const couponId = specialAnnouncements.dataset.couponid;
+
+      const couponLibrary = document.querySelector('#couponLibrary');
+      const couponSelected = document.querySelector('#couponSelected');
+      const uploadCoupon = document.querySelector('#uploadCoupon');
+
+      if (isCqPremier && !adId) {
+        if (couponId) {
+          couponLibrary.style.display = 'none';
+          couponSelected.style.display = 'block';
+          uploadCoupon.style.display = 'none';
+        } else {
+          couponLibrary.style.display = 'block';
+          couponSelected.style.display = 'none';
+          uploadCoupon.style.display = 'none';
+        }
+      } else {
+        couponLibrary.style.display = 'none';
+        couponSelected.style.display = 'none';
+        uploadCoupon.style.display = 'block';
+      }
+    }
+}
+
+export function onChangeLocationAdFile(obj) {
+    const id = obj.id;
+    const row = document.getElementById(id).closest('tr');
+    const filename = obj.files[0].name;
+    const filesize = obj.files[0].size;
+
+    // Check for errors in the inputs
+    let errors = false;
+
+    if (filename.length === 0) {
+        // File is empty
+        errors = true;
+    } else {
+        document.getElementById('location-ad-image-url').value = filename;
+    }
+
+    const match = filename.match(/\.(.+)/);
+    let ext = '';
+
+    if (match && match[1]) {
+        ext = match[1].toLowerCase();
+    }
+
+    if (!['jpg', 'jpeg'].includes(ext)) {
+        // File is not a jpg
+        errors = true;
+    }
+
+    if (filesize > 500000) {
+        // File is larger than 2MB
+        errors = true;
+    }
+
+    if (errors) {
+        // Apply the error style to the input
+        document.getElementById('location-ad-image-url').style.background = 'rgba(200,100,100,.5)';
+        document.getElementById('location-ad-error').style.display = 'block';
+        document.querySelectorAll('.form-actions input').forEach(input => {
+        input.disabled = true;
+        });
+        return false;
+    } else {
+        document.querySelectorAll('.form-actions input').forEach(input => {
+        input.disabled = false;
+        });
+        // Remove the error style from the input
+        document.getElementById('location-ad-image-url').style.background = '';
+        document.getElementById('location-ad-error').style.display = 'none';
     }
 }
 
