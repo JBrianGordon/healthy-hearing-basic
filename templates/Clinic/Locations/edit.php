@@ -244,15 +244,16 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         
                                         <h2 class="mt20">Profile information</h2>
                                         <?php
-                                        echo $this->Form->hidden('Location.id');
-                                        echo $this->Form->hidden('Location.id_oticon');
-                                        echo $this->Form->control('Location.title', ['value' => $location->title, 'class' => 'col-sm-9 mb10', 'label' => ['class' => 'col-sm-3 control-label']]);
-                                        echo $this->Form->control('Location.slogan', ['value' => $location->slogan, 'class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
+                                        echo $this->Form->control('title', ['class' => 'col-sm-9 mb10', 'label' => ['class' => 'col-sm-3 control-label']]);
+                                        echo $this->Form->control('slogan', ['class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         ?>
                                         <div class="form-group">
                                             <label class="col col-sm-3 control-label">Mobile-only clinic?</label>
                                             <div class="col-sm-9" style="margin-left: -24px;">
-                                                <?= $this->Form->control('is_mobile', ['label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false], 'value' => $location->is_mobile, 'class' => 'ml0 mt10'])?>
+                                                <?= $this->Form->control('is_mobile', [
+                                                    'label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false],
+                                                    'class' => 'ml0 mt10'
+                                                ]) ?>
                                             </div>
                                         </div>
                                         <div id="radius" class="hidden">
@@ -261,47 +262,41 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                 'div' => 'form-group required',
                                                 'min' => 0,
                                                 'help_block' => 'How far are you willing to travel from '.$location->city.'?',
-                                                'value' => $location->radius
                                             ]) ?>
                                             <?= $this->Form->control('mobile_text', [
                                                 'label' => 'Mobile clinic description',
                                                 'placeholder' => Location::$mobileTextDefault,
                                                 'help_block' => 'This will be displayed instead of street address',
                                                 'required' => false,
-                                                'value' => $location->mobile_text
                                             ]) ?>
                                         </div>
                                         <?php
-                                        echo $this->Form->control('Location.landmarks', [
+                                        echo $this->Form->control('landmarks', [
                                             'label' => ['text' => 'Landmarks <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" data-bs-content="Use this field for landmarks, cross streets, neighborhood or other information that helps patients find your clinic."><span class="bi bi-question-circle-fill"></span></a>',
                                                 'escape' => false, 'class' => 'col-sm-3 control-label'
                                             ],
                                             'rows' => 2,
-                                            'value' => $location->landmarks,
                                             'class' => 'col-sm-9 mb10'
                                             ]);
                                         echo '<span id="urlAnchor" class="clinic-anchor"></span>';
-                                        echo $this->Form->control('Location.url', [
+                                        echo $this->Form->control('url', [
                                             'label' => ['text' => 'Website URL', 'class' => 'col-sm-3 control-label'],
                                             'help_block' => 'Must start with http:// or https://',
                                             'div' => 'form-group mb5',
-                                            'value' => $location->url,
                                             'class' => 'col-sm-9 mb10'
                                         ]);
-                                        echo $this->Form->control('Location.facebook', [
+                                        echo $this->Form->control('facebook', [
                                             'label' => ['text' => 'Facebook', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-12">',
                                             'afterInput' => '</div>',
-                                            'value' => $location->facebook,
                                             'class' => 'col-sm-9 mb10'
                                             ]);
-                                        echo $this->Form->control('Location.youtube', [
+                                        echo $this->Form->control('youtube', [
                                             'label' => ['text' => 'YouTube', 'class' => 'col-sm-3 control-label'],
                                             'placeholder' => 'Copy and paste the entire URL into this field',
                                             'beforeInput' => '<div class="input-group col-12">',
                                             'afterInput' => '</div>',
-                                            'value' => $location->youtube,
                                             'class' => 'col-sm-9 mb10'
                                             ]);
                                         ?>
@@ -317,15 +312,14 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0" id="aboutLabel">About us</h2>
                                         <small>Please limit your description to an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
-                                        <?php echo $this->Form->control('Location.about_us', ['value' => $location->about_us, 'label' => false, 'class' => 'editor']); 
+                                        <?php echo $this->Form->control('about_us', ['label' => false, 'class' => 'editor']); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0" id="servicesLabel">Services</h2>
                                         <small>This should be an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
                                         <?php
-                                        echo $this->Form->control('Location.services', [
+                                        echo $this->Form->control('services', [
                                             'label' => false,
-                                            'value' => $location->services,
                                             'class' => 'editor'
                                         ]); 
                                         echo '<span id="upsellMessageServices" class="text-danger pb20 col-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
@@ -448,7 +442,6 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                         'maxlength' => 400,
                                                         'required' => false,
                                                         'class' => 'col-sm-9',
-                                                        'value' => $location->optional_message
                                                     ]) ?>
                                                     <span class="help-block col-sm-9">Use this field to highlight a temporary announcement for patients, such as a note about any precautions your clinic is implementing regarding public health concerns. This is also a good place to highlight time-sensitive information such as closures due to illness, power outage, or renovation. The optional message field will only display on your profile if there is text in it.</span>
                                                 </div>

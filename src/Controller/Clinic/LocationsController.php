@@ -21,14 +21,35 @@ class LocationsController extends BaseClinicController
     public function edit($id = null)
     {
         $location = $this->Locations->get($id, [
-            'contain' => ['CallSources', 'LocationHours', 'LocationAds', 'LocationPhotos', 'LocationVidscrips', 'Providers'],
+            'contain' => [
+                'CallSources',
+                'LocationHours',
+                'LocationAds',
+                'LocationPhotos',
+                'LocationVidscrips',
+                'Providers'
+            ],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $location = $this->Locations->patchEntity($location, $this->request->getData());
+            $data = $this->request->getData();
+
+            // convert payment array to json string
+            $data['payment'] = isset($data['payment']) ? json_encode($data['payment']) : "";
+
+            // remove empty providers
+            foreach ($data['providers'] as $key => $provider) {
+                if (empty($provider['id']) && empty($provider['first_name'])) {
+                    unset($data['providers'][$key]);
+                }
+            }
+            $location = $this->Locations->patchEntity(
+                $location,
+                $data,
+                ['associated' => $associations]
+            );
             if ($this->Locations->save($location)) {
                 $this->Flash->success(__('The location has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($this->request->referer());
             }
             $this->Flash->error(__('The location could not be saved. Please, try again.'));
         }
