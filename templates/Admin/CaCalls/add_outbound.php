@@ -304,7 +304,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<?= $this->Form->control('ca_call_group.didConsumerAnswer', [
+										<?= $this->Form->control('ca_call_group.did_consumer_answer', [
 											'options' => ['yes'=>'Yes', 'no'=>'No', 'invalid'=>'Invalid/disconnected phone number'],
 											'empty' => 'Select One',
 											'label' => 'Did consumer answer?',
@@ -445,7 +445,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											</div>
 										</div>
 									</div>
-									<?= $this->Form->control('ca_call_group.didConsumerAnswer', [
+									<?= $this->Form->control('ca_call_group.did_consumer_answer', [
 										'options' => ['yes'=>'Yes', 'no'=>'No', 'invalid'=>'Invalid/disconnected phone number'],
 										'empty' => 'Select One',
 										'label' => 'Did consumer answer?',
@@ -608,7 +608,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 													</div>
 												</div>
 											</div>
-											<?= $this->Form->control('ca_call_group.didConsumerAnswer2', [
+											<?= $this->Form->control('ca_call_group.did_consumer_answer2', [
 												'options' => ['yes'=>'Yes', 'no'=>'No'],
 												'empty' => 'Select One',
 												'label' => 'Did consumer answer?',

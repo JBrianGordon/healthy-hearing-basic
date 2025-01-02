@@ -93,8 +93,8 @@ if ($copyPage) {
 	</div>
 <?php endif; ?>
 <?php $this->Form->setTemplates([
-    // Temporarily remove offset from checkbox containers
-    'checkboxContainer' => '<div{{containerAttrs}} class="{{containerClass}}form-group form-check{{variant}} {{type}}{{required}}">{{content}}{{help}}</div>',
+	// Temporarily remove offset from checkbox containers
+	'checkboxContainer' => '<div{{containerAttrs}} class="{{containerClass}}form-group form-check{{variant}} {{type}}{{required}}">{{content}}{{help}}</div>',
 ]); ?>
 <div class="form-group mb30">
 	<label class="col col-md-3 control-label">Topic</label>
@@ -106,13 +106,12 @@ if ($copyPage) {
 			<div class="checkbox col col-md-6">
 				<?php
 				foreach (CaCallGroup::$col2Topics as $topicKey => $label) {
-					echo $this->Form->control('ca_call_group.'.$topicKey, [
-						'type' => 'checkbox',
+					echo $this->Form->control($topicKey, [
 						'label' => [
-							'style' => 'text-align:left;',
-							'text' => '<span class="topic-label">'.$label.'</span>',
+							'text'=>'<span class="topic-label">'.$label.'</span>',
+							'style' => 'text-align:left;'
 						],
-						'escape' => false
+						'escape' => false,
 					]);
 				}
 				?>
@@ -121,8 +120,8 @@ if ($copyPage) {
 	</div>
 </div>
 <?php $this->Form->setTemplates([
-    // Add offset to checkbox containers
-    'checkboxContainer' => '<div{{containerAttrs}} class="offset-md-3 {{containerClass}}form-group form-check{{variant}} {{type}}{{required}}">{{content}}{{help}}</div>',
+	// Add offset to checkbox containers
+	'checkboxContainer' => '<div{{containerAttrs}} class="offset-md-3 {{containerClass}}form-group form-check{{variant}} {{type}}{{required}}">{{content}}{{help}}</div>',
 ]); ?>
 
 <!-- Hearing Test? -->

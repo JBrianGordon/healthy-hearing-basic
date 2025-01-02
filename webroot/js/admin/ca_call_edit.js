@@ -15,7 +15,7 @@ const onPageLoad = () => {
     const targetId = e.target.id;
 
     if (targetId === 'cancelBtn') {
-      const caCallGroupId = document.querySelector('#ca-call-group-id').value;
+      const caCallGroupId = document.querySelector('#ca-call-group-id')?.value;
       const url = `/ca-calls/unlock-call-group/${caCallGroupId}`;
 
       fetch(url)
@@ -34,12 +34,12 @@ const onPageLoad = () => {
     if (targetId === 'disconnectedBtn') {
       // The "disconnected" button was clicked
       // Make sure the Notes field is filled in
-      const callGroupNoteValue = document.querySelector('[id^=ca-call-group-ca-call-group-note]').value.trim();
+      const callGroupNoteValue = document.querySelector('[id^=ca-call-group-ca-call-group-note]')?.value.trim();
 
       //todo: make note required
       if (true) {
       //if (callGroupNoteValue) {
-        const callType = document.querySelector('#call-type').value;
+        const callType = document.querySelector('#call-type')?.value;
         const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
         let callDate;
 
@@ -58,7 +58,7 @@ const onPageLoad = () => {
     }
 
     if (targetId === 'unlockBtn') {
-      const caCallGroupId = document.querySelector('#ca-call-group-id').value;
+      const caCallGroupId = document.querySelector('#ca-call-group-id')?.value;
       try {
         const response = fetch(`/ca-calls/unlock-call-group/${caCallGroupId}`, {
           method: 'post',
@@ -348,7 +348,7 @@ function validateLocationId() {
     // location-search is hidden, so mark valid
     return true;
   }
-  const locationId = document.querySelector("#ca-call-group-location-id").value.trim();
+  const locationId = document.querySelector("#ca-call-group-location-id")?.value.trim();
   if (locationId && (parseInt(locationId) > 8119000000)) {
     document.querySelector(locationSearchInput).setCustomValidity('');
   } else {
@@ -362,7 +362,7 @@ const validateProspect = () => {
     let isProspectInvalid = false;
     if (prospectInput.value === PROSPECT_UNKNOWN) {
       const clinicAnswerUnknownInput = document.querySelector("#ca-call-group-did-clinic-answer-unknown");
-      if (clinicAnswerUnknownInput.value === 'no') {
+      if (clinicAnswerUnknownInput?.value === 'no') {
         // For unknown prospect, if clinic did not answer, save as non-prospect
         prospectInput.value = PROSPECT_NO;
       } else {
@@ -383,23 +383,23 @@ const calculateStatus = () => {
 
   if (IS_CALL_GROUP_EDIT_PAGE) {
     // Do not automatically calculate a new status on the Edit Call Group page
-  } else if (callType === CALL_TYPE_FOLLOWUP_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup").value === "no") {
+  } else if (callType === CALL_TYPE_FOLLOWUP_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
-    if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+    if (Number(document.querySelector("#ca-call-group-clinic-followup-count")?.value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
       document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_SET_APPT;
     } else {
       document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
-  } else if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup").value === "no") {
+  } else if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
-    if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
+    if (Number(document.querySelector("#ca-call-group-clinic-followup-count")?.value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
       document.querySelector("#ca-call-group-status").value = STATUS_TENTATIVE_APPT;
     } else {
       document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
-  } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup").value === "no") {
+  } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
     if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
       document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
@@ -408,7 +408,7 @@ const calculateStatus = () => {
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
   } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT && !IS_CLINIC_LOOKUP_PAGE) {
-    if (document.querySelector("#ca-call-group-did-consumer-answer").value === "yes" && document.querySelector("#ca-call-group-did-they-answer-followup").value === "no") {
+    if (document.querySelector("#ca-call-group-did-consumer-answer")?.value === "yes" && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
       // Consumer answered but clinic did not. Next attempt will not be direct book.
       if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
         document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
@@ -467,11 +467,11 @@ const calculateStatus = () => {
     document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
   } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
     document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
-  } else if (document.querySelector("#is-wrong-number").checked) {
+  } else if (document.querySelector("#is-wrong-number") && document.querySelector("#is-wrong-number").checked) {
     document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
   } else if (document.querySelector("#ca-call-group-refused-name-again-quick-pick") && document.querySelector("#ca-call-group-refused-name-again-quick-pick").checked) {
     document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
-  } else if (document.querySelector("#ca-call-group-did-clinic-answer").value === "cr") {
+  } else if (document.querySelector("#ca-call-group-did-clinic-answer") && document.querySelector("#ca-call-group-did-clinic-answer").value === "cr") {
     document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
   } else {
     // Inbound or Followup call
@@ -598,23 +598,23 @@ function handleLocationChange(data) {
         if (count === 0) {
           // No followup calls found
           document.querySelector("#ca-call-group-id").value = '';
-          document.querySelector(".found-no-calls").style.display = 'block';
-          document.querySelector(".found-multiple-calls").style.display = 'none';
-          document.querySelector(".group-found").style.display = 'none';
+          setElementDisplay('.found-no-calls', 'block');
+          setElementDisplay('.found-multiple-calls', 'none');
+          setElementDisplay('.group-found', 'none');
           updateVisibility();
         } else if (count == 1) {
           // One previous call found. Automatically select it.
-          document.querySelector(".found-no-calls").style.display = 'none';
-          document.querySelector(".found-multiple-calls").style.display = 'none';
+          setElementDisplay('.found-no-calls', 'none');
+          setElementDisplay('.found-multiple-calls', 'none');
           updateVisibility();
           const dataKeys = Object.keys(data);
           const groupId = dataKeys[0];
           onChangeGroupSearch(groupId);
         } else {
           // Found multiple followup calls. User must select one.
-          document.querySelector(".found-no-calls").style.display = 'none';
-          document.querySelector(".found-multiple-calls").style.display = 'block';
-          document.querySelector(".group-found").style.display = 'none';
+          setElementDisplay('.found-no-calls', 'none');
+          setElementDisplay('.found-multiple-calls', 'block');
+          setElementDisplay('.group-found', 'none');
           updateVisibility();
           document.querySelector("#ca-call-group-id").value = '';
           const callCountElement = document.querySelector("span.callCount");
@@ -633,8 +633,8 @@ function handleLocationChange(data) {
       });
     } else {
       // No location selected
-      document.querySelector(".found-no-calls").style.display = 'none';
-      document.querySelector(".found-multiple-calls").style.display = 'none';
+      setElementDisplay('.found-no-calls', 'none');
+      setElementDisplay('.found-multiple-calls', 'none');
       updateVisibility();
     }
   } else {
@@ -689,7 +689,6 @@ function onChangeCallType(callType) {
 }
 
 function loadReturnVoicemailForm(type) {
-  const returnVmFromInvalid = document.querySelector('#return_vm_from_invalid');
   const caCallGroupId = document.querySelector('#ca-call-group-id').value;
   let ajaxUrl = null;
   if (type === 'clinic') {
@@ -703,10 +702,9 @@ function loadReturnVoicemailForm(type) {
       .then(response => response.text())
       .then(data => {
         console.log('AJAX form loaded successfully: ' + type);
-        const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
-        returnVmAjaxForm.innerHTML = data;
-        returnVmAjaxForm.style.display = 'block';
-        returnVmFromInvalid.style.display = 'none';
+        setElementInnerHTML('#return_vm_ajax_form', data);
+        setElementDisplay('#return_vm_ajax_form', 'block');
+        setElementDisplay('#return_vm_from_invalid', 'none');
         locationAutocomplete();
         triggerChangeEvents(['#call-type']);
         triggerChange('#ca-call-group-did-they-answer-vm');
@@ -716,10 +714,9 @@ function loadReturnVoicemailForm(type) {
         console.error(error);
       });
   } else {
-    const returnVmAjaxForm = document.querySelector('#return_vm_ajax_form');
-    returnVmAjaxForm.innerHTML = '';
-    returnVmAjaxForm.style.display = 'none';
-    returnVmFromInvalid.style.display = 'block';
+    setElementInnerHTML('#return_vm_ajax_form', "");
+    setElementDisplay('#return_vm_ajax_form', 'none');
+    setElementDisplay('#return_vm_from_invalid', 'block');
   }
 }
 
@@ -781,44 +778,44 @@ function onChangeProspect(selectedProspect) {
   }
 
   if (calculatedProspect === PROSPECT_YES) {
-    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'block');
+    setElementDisplay('.prospectTopic', 'block');
+    setElementDisplay('.nonProspectTopic', 'none');
+    setElementDisplay('.prospectUnknownTopic', 'none');
     const wantsAppt = document.querySelector('#ca-call-group-topic-wants-appt').checked;
     const directBookType = document.querySelector("#ca-call-group-direct-book-type")?.value;
     const isDirectBookEarqOrBp = (directBookType === DIRECT_BOOK_BLUEPRINT) || (directBookType === DIRECT_BOOK_EARQ);
     const wantsHearingTest = document.querySelector('#ca-call-group-wants-hearing-test')?.value === '1';
     if (wantsAppt && (directBookType === DIRECT_BOOK_DM) && wantsHearingTest) {
-      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'block');
-      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
-      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
+      setElementDisplay('.directBookDm', 'block');
+      setElementDisplay('.directBookBlueprintEarQ', 'none');
+      setElementDisplay('.nonDirectBook', 'none');
     } else if (wantsAppt && isDirectBookEarqOrBp) {
-      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
-      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'block');
-      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'none');
+      setElementDisplay('.directBookDm', 'none');
+      setElementDisplay('.directBookBlueprintEarQ', 'block');
+      setElementDisplay('.nonDirectBook', 'none');
     } else {
-      document.querySelectorAll('.nonDirectBook').forEach(element => element.style.display = 'block');
-      document.querySelectorAll('.directBookDm').forEach(element => element.style.display = 'none');
-      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => element.style.display = 'none');
+      setElementDisplay('.directBookDm', 'none');
+      setElementDisplay('.directBookBlueprintEarQ', 'none');
+      setElementDisplay('.nonDirectBook', 'block');
     }
     updateVisibility();
   } else if (calculatedProspect === PROSPECT_NO) {
-    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'block');
+    setElementDisplay('.prospectTopic', 'none');
+    setElementDisplay('.nonProspectTopic', 'block');
+    setElementDisplay('.prospectUnknownTopic', 'none');
     updateVisibility();
     document.querySelector('#ca-call-group-score').value = '';
     document.querySelector('#ca-call-group-score').dispatchEvent(new Event('change', {bubbles: true}));
   } else if (calculatedProspect === PROSPECT_UNKNOWN) {
-    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'block');
+    setElementDisplay('.prospectTopic', 'none');
+    setElementDisplay('.nonProspectTopic', 'none');
+    setElementDisplay('.prospectUnknownTopic', 'block');
     updateVisibility();
   } else {
     // disconnected - no need to show any further script
-    document.querySelectorAll('.prospectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.nonProspectTopic').forEach(element => element.style.display = 'none');
-    document.querySelectorAll('.prospectUnknownTopic').forEach(element => element.style.display = 'none');
+    setElementDisplay('.prospectTopic', 'none');
+    setElementDisplay('.nonProspectTopic', 'none');
+    setElementDisplay('.prospectUnknownTopic', 'none');
     updateVisibility();
   }
 }
@@ -875,8 +872,7 @@ function onChangeScore(score) {
 }
 
 async function onChangeGroupSearch(group_id) {
-//  document.querySelector(".lock-error").style.display = "none";
-  document.querySelectorAll('.lock-error').forEach(element => element.style.display = 'none');
+  setElementDisplay('.lock-error', 'none');
   if (group_id) {
     try {
       fetch(`/admin/ca-calls/get-call-group-data/${group_id}`, {
@@ -889,8 +885,8 @@ async function onChangeGroupSearch(group_id) {
       .then(data => {
         if (data["lock_error"] === true) {
           console.log('getCallGroupData failed. Locked.');
-          document.querySelector(".lock-error").style.display = "block";
-          document.querySelector(".group-found").style.display = "none";
+          setElementDisplay('.lock-error', 'block');
+          setElementDisplay('.group-found', 'none');
           updateVisibility();
           document.querySelector("span.lockTime").textContent = data["lock_time"];
           document.querySelector("span.lockedBy").textContent = data["locked_by"];
@@ -1105,8 +1101,8 @@ function showGroupFound() {
             callTypeElement.value = CALL_TYPE_FOLLOWUP_APPT;
           }
 
-          groupFoundElement.innerHTML = data;
-          groupFoundElement.style.display = "block";
+          setElementInnerHTML('.group-found', data);
+          setElementDisplay('.group-found', 'block');
           onPageLoad();
           triggerChangeEvents(["#ca-call-group-location-id", "#call-type"]);
           setElementInnerHTML('span.locationTitle', locationTitle);
@@ -1116,10 +1112,8 @@ function showGroupFound() {
     setElementDisplay('.group-found-buttons', 'block');
     updateVisibility();
   } else {
-    if (groupFoundElement) {
-      groupFoundElement.innerHTML = "";
-      groupFoundElement.style.display = 'none';
-    }
+    setElementInnerHTML('.group-found', "");
+    setElementDisplay('.group-found', 'none');
     setElementDisplay('.group-found-buttons', 'none');
     updateVisibility();
   }
@@ -1162,15 +1156,9 @@ function onChangeCallerPhone(callerPhone) {
 function onChangePatientInfo() {
   const isPatient = document.querySelector('#ca-call-group-is-patient, #is-patient').checked;
   if (isPatient) {
-    document.querySelectorAll('span.not-self').forEach(element => {
-      element.style.display = 'none';
-    });
-    document.querySelectorAll('span.self').forEach(element => {
-      element.style.display = 'block';
-    });
-    document.querySelectorAll('span.isNotPatient').forEach(element => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('span.not-self', 'none');
+    setElementDisplay('span.self', 'block');
+    setElementDisplay('span.isNotPatient', 'none');
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
       const callerFirstName = document.querySelector('#ca-call-group-caller-first-name, #caller-first-name').value;
@@ -1178,21 +1166,15 @@ function onChangePatientInfo() {
       patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
     }
   } else {
-    document.querySelectorAll('span.isNotPatient').forEach(element => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('span.isNotPatient', 'block');
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
       const patientFirstName = document.querySelector('#ca-call-group-patient-first-name, #patient-first-name').value;
       const patientLastName = document.querySelector('#ca-call-group-patient-last-name, #patient-last-name').value;
       patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
     }
-    document.querySelectorAll('span.self').forEach(element => {
-      element.style.display = 'none';
-    });
-    document.querySelectorAll('span.not-self').forEach(element => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('span.not-self', 'block');
+    setElementDisplay('span.self', 'none');
   }
 }
 
@@ -1270,13 +1252,9 @@ function onChangeTopicWantsAppt(wantsAppt) {
 
   // If wants appt and this is a direct book DM location, show the hearing test question
   if (wantsAppt && isDirectBookDm) {
-    document.querySelectorAll('.wantsHearingTest').forEach(element => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('.wantsHearingTest', 'block');
   } else {
-    document.querySelectorAll('.wantsHearingTest').forEach(element => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('.wantsHearingTest', 'none');
   }
 
   updateVisibility();
@@ -1297,38 +1275,21 @@ function onChangeConsumerConsent(consumerConsent) {
 }
 
 function onChangeDidClinicAnswer(didClinicAnswer) {
-  const didClinicAnswerYes = document.querySelectorAll('.didClinicAnswerYes');
-  const didClinicAnswerNo = document.querySelectorAll('.didClinicAnswerNo');
-  const didClinicAnswerVm = document.querySelectorAll('.didClinicAnswerVm');
   const callGroupScore = document.getElementById('ca-call-group-score');
 
-  document.querySelectorAll('.prospectOptions').forEach(element => {
-    element.style.display = 'block';
-  });
+  setElementDisplay('.prospectOptions', 'block');
 
   if (didClinicAnswer === 'yes') {
-    didClinicAnswerYes.forEach(element => {
-      element.style.display = 'block';
-    });
-    didClinicAnswerNo.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerVm.forEach(element => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('.didClinicAnswerYes', 'block');
+    setElementDisplay('.didClinicAnswerNo', 'none');
+    setElementDisplay('.didClinicAnswerVm', 'none');
     updateVisibility();
     callGroupScore.value = '';
     callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
   } else if (didClinicAnswer === 'no') {
-    didClinicAnswerYes.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerNo.forEach(element => {
-      element.style.display = 'block';
-    });
-    didClinicAnswerVm.forEach(element => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('.didClinicAnswerYes', 'none');
+    setElementDisplay('.didClinicAnswerNo', 'block');
+    setElementDisplay('.didClinicAnswerVm', 'none');
     updateVisibility();
     const groupProspect = document.getElementById('ca-call-group-prospect').value;
     if (groupProspect === PROSPECT_YES) {
@@ -1341,46 +1302,28 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     }
   } else if (didClinicAnswer === 'vm') {
     // No, but we can leave a voicemail
-    didClinicAnswerYes.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerNo.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerVm.forEach(element => {
-      element.style.display = 'block';
-    });
+    setElementDisplay('.didClinicAnswerYes', 'none');
+    setElementDisplay('.didClinicAnswerNo', 'none');
+    setElementDisplay('.didClinicAnswerVm', 'block');
+    setElementDisplay('.followupForm', 'block');
     updateVisibility();
     if (document.getElementById('ca-call-group-prospect').value === PROSPECT_YES) {
       callGroupScore.value = SCORE_TENTATIVE_APPT;
       callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     }
   } else if (didClinicAnswer === 'cr') {
+    // caller refused
     callGroupScore.value = SCORE_DISCONNECTED;
-    document.querySelectorAll('.prospectOptions').forEach(element => {
-      element.style.display = 'none'
-    });
-    didClinicAnswerYes.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerNo.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerVm.forEach(element => {
-      element.style.display = 'none';
-    });
+    setElementDisplay('.prospectOptions', 'none');
+    setElementDisplay('.didClinicAnswerYes', 'none');
+    setElementDisplay('.didClinicAnswerNo', 'none');
+    setElementDisplay('.didClinicAnswerVm', 'none');
     updateVisibility();
   } else {
-    didClinicAnswerYes.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerNo.forEach(element => {
-      element.style.display = 'none';
-    });
-    didClinicAnswerVm.forEach(element => {
-      element.style.display = 'none';
-    });
-    document.querySelector('.scheduled_call_date').style.display = 'block';
+    setElementDisplay('.didClinicAnswerYes', 'none');
+    setElementDisplay('.didClinicAnswerNo', 'none');
+    setElementDisplay('.didClinicAnswerVm', 'none');
+    setElementDisplay('.scheduled_call_date', 'block');
     callGroupScore.value = '';
     callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     updateVisibility();
@@ -1390,34 +1333,30 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
 function onChangeDidTheyAnswerVm(didTheyAnswer) {
   const callDate = new Date();
 
-  const didTheyAnswerYes = document.getElementById('didTheyAnswerYes');
-  const didTheyAnswerNo = document.getElementById('didTheyAnswerNo');
-  const didTheyAnswerVm = document.getElementById('didTheyAnswerVm');
-
   if (didTheyAnswer === 'yes') {
-    didTheyAnswerYes.style.display = 'block';
-    didTheyAnswerNo.style.display = 'none';
-    didTheyAnswerVm.style.display = 'none';
+    setElementDisplay('#didTheyAnswerYes', 'block');
+    setElementDisplay('#didTheyAnswerNo', 'none');
+    setElementDisplay('#didTheyAnswerVm', 'none');
     updateVisibility();
   } else if (didTheyAnswer === 'vm') {
-    didTheyAnswerYes.style.display = 'none';
-    didTheyAnswerNo.style.display = 'none';
-    didTheyAnswerVm.style.display = 'block';
+    setElementDisplay('#didTheyAnswerYes', 'none');
+    setElementDisplay('#didTheyAnswerNo', 'none');
+    setElementDisplay('#didTheyAnswerVm', 'block');
     updateVisibility();
   } else if (didTheyAnswer === 'noAttempt') {
-    didTheyAnswerYes.style.display = 'none';
-    didTheyAnswerNo.style.display = 'block';
-    document.querySelector('#didTheyAnswerNo .scheduled_call_date').style.display = 'block';
-    didTheyAnswerVm.style.display = 'none';
+    setElementDisplay('#didTheyAnswerYes', 'none');
+    setElementDisplay('#didTheyAnswerNo', 'block');
+    setElementDisplay('#didTheyAnswerNo .scheduled_call_date', 'block');
+    setElementDisplay('#didTheyAnswerVm', 'none');
     updateVisibility();
     // Default next call time to 2 hours from now
     callDate.setMinutes(callDate.getMinutes() + 120);
     setDateField('#NoAnswerScheduledCallDate', callDate);
   } else {
-    didTheyAnswerYes.style.display = 'none';
-    didTheyAnswerNo.style.display = 'block';
-    document.querySelector('#didTheyAnswerNo .scheduled_call_date').style.display = 'block';
-    didTheyAnswerVm.style.display = 'none';
+    setElementDisplay('#didTheyAnswerYes', 'none');
+    setElementDisplay('#didTheyAnswerNo', 'block');
+    setElementDisplay('#didTheyAnswerNo .scheduled_call_date', 'block');
+    setElementDisplay('#didTheyAnswerVm', 'none');
     updateVisibility();
     // Default next call time to 30 minutes from now
     callDate.setMinutes(callDate.getMinutes() + 30);
@@ -1427,50 +1366,32 @@ function onChangeDidTheyAnswerVm(didTheyAnswer) {
 
 function onChangeDidTheyAnswerFollowup(answer) {
   const callType = document.querySelector("#call-type").value;
-  const didTheyAnswerFollowupYes = document.querySelector(".didTheyAnswerFollowupYes");
-  const didTheyAnswerFollowupNo = document.querySelector(".didTheyAnswerFollowupNo");
-  const didTheyAnswerFollowupVm = document.querySelector(".didTheyAnswerFollowupVm");
-  const followupForm = document.querySelector(".followupForm");
-  const scheduledCallDate = document.querySelector(".scheduled_call_date");
+  const callGroupScore = document.querySelector('#ca-call-group-score');
 
   if (answer === 'yes') {
-    didTheyAnswerFollowupYes.style.display = 'block';
-    if (didTheyAnswerFollowupNo) {
-      didTheyAnswerFollowupNo.style.display = 'none';
-    }
-    if (didTheyAnswerFollowupVm) {
-      didTheyAnswerFollowupVm.style.display = 'none';
-    }
-    scheduledCallDate.style.display = 'none';
+    setElementDisplay('.didTheyAnswerFollowupYes', 'block');
+    setElementDisplay('.didTheyAnswerFollowupNo', 'none');
+    setElementDisplay('.didTheyAnswerFollowupVm', 'none');
+    setElementDisplay('.scheduled_call_date', 'none');
   } else if (answer === 'vm') {
     const prospect = document.querySelector("#ca-call-group-prospect").value;
-    if (didTheyAnswerFollowupYes) {
-      didTheyAnswerFollowupYes.style.display = 'none';
-    }
-    if (didTheyAnswerFollowupNo) {
-      didTheyAnswerFollowupNo.style.display = 'none';
-    }
-    didTheyAnswerFollowupVm.style.display = 'block';
+    setElementDisplay('.didTheyAnswerFollowupYes', 'none');
+    setElementDisplay('.didTheyAnswerFollowupNo', 'none');
+    setElementDisplay('.didTheyAnswerFollowupVm', 'block');
     if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER || prospect === PROSPECT_NO) {
-      followupForm.style.display = 'none';
-      scheduledCallDate.style.display = 'none';
+      setElementDisplay('.followupForm', 'none');
+      setElementDisplay('.scheduled_call_date"', 'none');
     } else {
-      followupForm.style.display = 'block';
+      setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
       callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     }
   } else { // NO
-    if (didTheyAnswerFollowupYes) {
-      didTheyAnswerFollowupYes.style.display = 'none';
-    }
-    if (didTheyAnswerFollowupVm) {
-      didTheyAnswerFollowupVm.style.display = 'none';
-    }
-    if (didTheyAnswerFollowupNo) {
-      didTheyAnswerFollowupNo.style.display = 'block';
-    }
-    followupForm.style.display = 'none';
-    scheduledCallDate.style.display = 'block';
+    setElementDisplay('.didTheyAnswerFollowupYes', 'none');
+    setElementDisplay('.didTheyAnswerFollowupNo', 'block');
+    setElementDisplay('.didTheyAnswerFollowupVm', 'none');
+    setElementDisplay('.followupForm', 'none');
+    setElementDisplay('.scheduled_call_date', 'block');
     const nextCallDate = new Date();
     if (callType === CALL_TYPE_FOLLOWUP_APPT) {
       let nextCallMinutes = 15;
@@ -1510,54 +1431,47 @@ function onChangeDidTheyAnswerFollowup(answer) {
 
 function onChangeDidConsumerAnswer(answer) {
   const callType = document.querySelector("#call-type").value;
-  const didConsumerAnswerYes = document.querySelector(".didConsumerAnswerYes");
-  const didConsumerAnswerNo = document.querySelector(".didConsumerAnswerNo");
-  const didConsumerAnswerVm = document.querySelector(".didConsumerAnswerVm");
-  const didConsumerAnswerInvalid = document.querySelector(".didConsumerAnswerInvalid");
-  const followupForm = document.querySelector(".followupForm");
-  const scheduledCallDate = document.querySelector(".scheduled_call_date");
   const callGroupScore = document.querySelector("#ca-call-group-score");
   const nextCallDate = new Date();
-
   if (answer === 'yes') {
-    didConsumerAnswerYes.style.display = 'block';
-    didConsumerAnswerNo.style.display = 'none';
-    didConsumerAnswerVm.style.display = 'none';
-    didConsumerAnswerInvalid.style.display = 'none';
-    followupForm.style.display = 'block';
-    scheduledCallDate.style.display = 'none';
+    setElementDisplay('.didConsumerAnswerYes', 'block');
+    setElementDisplay('.didConsumerAnswerNo', 'none');
+    setElementDisplay('.didConsumerAnswerVm', 'none');
+    setElementDisplay('.didConsumerAnswerInvalid', 'none');
+    setElementDisplay('.followupForm', 'block');
+    setElementDisplay('.scheduled_call_date', 'none');
   } else if (answer === 'vm') {
-    didConsumerAnswerYes.style.display = 'none';
-    didConsumerAnswerNo.style.display = 'none';
-    didConsumerAnswerVm.style.display = 'block';
-    didConsumerAnswerInvalid.style.display = 'none';
+    setElementDisplay('.didConsumerAnswerYes', 'non');
+    setElementDisplay('.didConsumerAnswerNo', 'none');
+    setElementDisplay('.didConsumerAnswerVm', 'block');
+    setElementDisplay('.didConsumerAnswerInvalid', 'none');
     if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST) {
-      scheduledCallDate.style.display = 'block';
+      setElementDisplay('.scheduled_call_date', 'block');
       nextCallDate.setMinutes(nextCallDate.getMinutes() + 240);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
     } else {
-      followupForm.style.display = 'block';
+      setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
       callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     }
   } else if (answer === 'invalid') {
-    didConsumerAnswerYes.style.display = 'none';
-    didConsumerAnswerNo.style.display = 'none';
-    didConsumerAnswerVm.style.display = 'none';
-    didConsumerAnswerInvalid.style.display = 'block';
-    followupForm.style.display = 'block';
+    setElementDisplay('.didConsumerAnswerYes', 'non');
+    setElementDisplay('.didConsumerAnswerNo', 'none');
+    setElementDisplay('.didConsumerAnswerVm', 'none');
+    setElementDisplay('.didConsumerAnswerInvalid', 'block');
+    setElementDisplay('.followupForm', 'block');
     callGroupScore.value = SCORE_DISCONNECTED;
     callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
   } else { // NO
     const prospect = document.querySelector("#ca-call-group-prospect").value;
-    didConsumerAnswerYes.style.display = 'none';
-    didConsumerAnswerNo.style.display = 'block';
-    didConsumerAnswerVm.style.display = 'none';
-    didConsumerAnswerInvalid.style.display = 'none';
+    setElementDisplay('.didConsumerAnswerYes', 'non');
+    setElementDisplay('.didConsumerAnswerNo', 'block');
+    setElementDisplay('.didConsumerAnswerVm', 'none');
+    setElementDisplay('.didConsumerAnswerInvalid', 'none');
     if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT || prospect === PROSPECT_NO) {
-      followupForm.style.display = 'none';
+      setElementDisplay('.followupForm', 'none');
     } else {
-      followupForm.style.display = 'block';
+      setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
       callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     }
@@ -1566,21 +1480,17 @@ function onChangeDidConsumerAnswer(answer) {
 }
 
 function onChangeDidConsumerAnswer2(answer) {
-  const didConsumerAnswer2Yes = document.querySelector(".didConsumerAnswer2Yes");
-  const didConsumerAnswer2No = document.querySelector(".didConsumerAnswer2No");
-  const followupForm = document.querySelector(".followupForm");
-  const scheduledCallDate = document.querySelector(".scheduled_call_date");
   const callGroupScore = document.querySelector("#ca-call-group-score");
 
   if (answer === 'yes') {
-    didConsumerAnswer2Yes.style.display = 'block';
-    didConsumerAnswer2No.style.display = 'none';
-    followupForm.style.display = 'block';
-    scheduledCallDate.style.display = 'none';
+    setElementDisplay('.didConsumerAnswer2Yes', 'block');
+    setElementDisplay('.didConsumerAnswer2No', 'none');
+    setElementDisplay('.followupForm', 'block');
+    setElementDisplay('.scheduled_call_date', 'none');
   } else { // NO
-    didConsumerAnswer2Yes.style.display = 'none';
-    didConsumerAnswer2No.style.display = 'block';
-    followupForm.style.display = 'block';
+    setElementDisplay('.didConsumerAnswer2Yes', 'none');
+    setElementDisplay('.didConsumerAnswer2No', 'block');
+    setElementDisplay('.followupForm', 'block');
     callGroupScore.value = SCORE_TENTATIVE_APPT;
     callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
   }
@@ -1588,40 +1498,34 @@ function onChangeDidConsumerAnswer2(answer) {
 }
 
 function onChangeDidTheyWantHelp(answer) {
-  const wantHelpYes = document.querySelector(".wantHelpYes");
-  const wantHelpNo = document.querySelector(".wantHelpNo");
-
   if (answer === 1) { // YES
-    wantHelpYes.style.display = 'block';
-    wantHelpNo.style.display = 'none';
+    setElementDisplay('.wantHelpYes', 'block');
+    setElementDisplay('.wantHelpNo', 'none');
   } else { // NO
-    wantHelpYes.style.display = 'none';
-    wantHelpNo.style.display = 'block';
+    setElementDisplay('.wantHelpYes', 'none');
+    setElementDisplay('.wantHelpNo', 'block');
   }
   updateVisibility();
 }
 
 function onChangeDidClinicContactConsumer(answer) {
-  const didClinicContactConsumerYes = document.querySelector(".didClinicContactConsumerYes");
-  const didClinicContactConsumerNo = document.querySelector(".didClinicContactConsumerNo");
-  const followupForm = document.querySelector(".followupForm");
   const callType = document.querySelector("#call-type").value;
   const callGroupScore = document.querySelector("#ca-call-group-score");
 
   if (answer === 1) { // YES
-    didClinicContactConsumerYes.style.display = 'block';
-    didClinicContactConsumerNo.style.display = 'none';
-    followupForm.style.display = 'block';
+    setElementDisplay('.didClinicContactConsumerYes', 'block');
+    setElementDisplay('.didClinicContactConsumerNo', 'none');
+    setElementDisplay('.followupForm', 'block');
   } else { // NO
-    didClinicContactConsumerYes.style.display = 'none';
-    didClinicContactConsumerNo.style.display = 'block';
+    setElementDisplay('.didClinicContactConsumerYes', 'none');
+    setElementDisplay('.didClinicContactConsumerNo', 'block');
     document.querySelector('#ca-call-group-did-they-want-help').value = '';
     callGroupScore.value = SCORE_MISSED_OPPORTUNITY;
     callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
     if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT) {
-      followupForm.style.display = 'block';
+      setElementDisplay('.followupForm', 'block');
     } else { // CALL_TYPE_FOLLOWUP_NO_ANSWER
-      followupForm.style.display = 'none';
+      setElementDisplay('.followupForm', 'none');
     }
   }
   updateVisibility();
@@ -1660,14 +1564,14 @@ function onChangeDidClinicRefuse() {
   const isReviewNeeded = document.querySelector('#ca-call-group-is-review-needed');
   const score = document.querySelector('#ca-call-group-score');
   if (document.querySelector('#ca-call-group-did-clinic-refuse').checked) {
-    didClinicRefuseYes.style.display = "block";
+    setElementDisplay('.didClinicRefuseYes', 'block');
     if (pageLoadComplete) {
       isReviewNeeded.checked = true;
       score.value = SCORE_MISSED_OPPORTUNITY;
       score.dispatchEvent(new Event('change', {bubbles: true}));
     }
   } else {
-    didClinicRefuseYes.style.display = "none";
+    setElementDisplay('.didClinicRefuseYes', 'none');
     if (pageLoadComplete) {
       isReviewNeeded.checked = false;
       score.value = SCORE_TENTATIVE_APPT;

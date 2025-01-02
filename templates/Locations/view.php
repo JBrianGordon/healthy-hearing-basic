@@ -31,7 +31,7 @@ if ($region == 'DC-Dist-Of-Columbia') {
 	$this->Breadcrumbs->add($location->state_full, ['controller'=>'locations', 'action'=>'viewState', 'region'=>$region]);
 }
 $this->Breadcrumbs->add(cleanCityName($city), ['controller'=>'locations', 'action'=>'viewCityZip', 'region'=>$region, 'city'=>$city]);
-$this->Breadcrumbs->add($location->title, ['url' => '']);
+$this->Breadcrumbs->add($location->title);
 ?>
 <div class="site-body container-fluid fap-results">
 	<div class="row">

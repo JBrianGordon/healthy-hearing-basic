@@ -539,41 +539,45 @@ class CaCallGroupsTable extends Table
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($entity->isDirty('status')) {
-            $location = empty($entity->location) ? $this->Locations->get($entity->location_id) : $entity->location;
-            // Status has changed. Save an automated note.
-            $this->CaCallGroupNotes->addStatusChangeNote($entity->id, $entity->getOriginal('status'), $entity->status);
-            // If status changed to Followup No Answer, send an automated email
-            if ($entity->status == CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER) {
-                $url = router::url('/admin/ca_call_groups/view/'.$this->id, true);
-                $this->sendEmail(
-                    Configure::read('ca-supervisor-email'), //to
-                    Configure::read('email'), //from
-                    'ca_clinic_no_answer', //template
-                    'Location did not answer followup call attempts', //subject
-                    [
-                        'locationId' => $entity->location_id,
-                        'locationTitle' => $location->title,
-                        'caCallGroupId' => $entity->id,
-                        'url' => $url
-                    ]
-                );
-            }
+            // isDirty is sometimes a false positive. Make sure they are actually different.
+            if ($entity->getOriginal('status') != $entity->status) {
+                // Status has changed. Save an automated note.
+                $this->CaCallGroupNotes->addStatusChangeNote($entity->id, $entity->getOriginal('status'), $entity->status);
+                
+                // If status changed to Followup No Answer, send an automated email
+                if ($entity->status == CaCallGroup::STATUS_FOLLOWUP_NO_ANSWER) {
+                    $url = router::url('/admin/ca_call_groups/view/'.$this->id, true);
+                    $location = empty($entity->location) ? $this->Locations->get($entity->location_id) : $entity->location;
+                    $this->sendEmail(
+                        Configure::read('ca-supervisor-email'), //to
+                        Configure::read('email'), //from
+                        'ca_clinic_no_answer', //template
+                        'Location did not answer followup call attempts', //subject
+                        [
+                            'locationId' => $entity->location_id,
+                            'locationTitle' => $location->title,
+                            'caCallGroupId' => $entity->id,
+                            'url' => $url
+                        ]
+                    );
+                }
 
-            // If status changed to New, send an automated email to Becky to investigate
-            if ($entity->status == CaCallGroup::STATUS_NEW) {
-                $message = 'Becky,<br>'.
-                    '<strong>Please investigate.</strong> CA Call Group '.$entity->id.
-                    ' was saved with "New" status.<br>'.
-                    '<pre>'.json_encode($entity, JSON_PRETTY_PRINT).'</pre>';
-                $this->sendEmail(
-                    'blemons@healthyhearing.com', //to
-                    Configure::read('email'), //from
-                    'generic', //template
-                    "'New' status found in call group", //subject
-                    [
-                        'message' => $message,
-                    ]
-                );
+                // If status changed to New, send an automated email to Becky to investigate
+                if ($entity->status == CaCallGroup::STATUS_NEW) {
+                    $message = 'Becky,<br>'.
+                        '<strong>Please investigate.</strong> CA Call Group '.$entity->id.
+                        ' was saved with "New" status.<br>'.
+                        '<pre>'.json_encode($entity, JSON_PRETTY_PRINT).'</pre>';
+                    $this->sendEmail(
+                        'blemons@healthyhearing.com', //to
+                        Configure::read('email'), //from
+                        'generic', //template
+                        "'New' status found in call group", //subject
+                        [
+                            'message' => $message,
+                        ]
+                    );
+                }
             }
         }
     }

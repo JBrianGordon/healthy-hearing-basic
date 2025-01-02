@@ -28,12 +28,13 @@ echo $this->Form->control('ca_call_group.is_patient', [
 			<div class="checkbox col col-md-6">
 				<?php
 				foreach (CaCallGroup::$col2Topics as $topicKey => $label) {
-					echo $this->Form->control('ca_call_group.'.$topicKey, array(
-						'label' => [
-							'class' => 'control-label pt0',
-							'style' => 'text-align:left;',
-							'text' => '<span class="topic-label">'.$label.'</span>'],
-					));
+					echo $this->Form->control('ca_call_group.'.$topicKey, [
+                        'label' => [
+                            'text'=>'<span class="topic-label">'.$label.'</span>',
+                            'style' => 'text-align:left;'
+                        ],
+                        'escape' => false,
+                    ]);
 				}
 				?>
 			</div>

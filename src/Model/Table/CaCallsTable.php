@@ -64,6 +64,8 @@ class CaCallsTable extends Table
         $this->belongsTo('CaCallGroups', [
             'foreignKey' => 'ca_call_group_id',
             'joinType' => 'LEFT',
+            'className' => 'CaCallGroups',
+            'propertyName' => 'ca_call_group'
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

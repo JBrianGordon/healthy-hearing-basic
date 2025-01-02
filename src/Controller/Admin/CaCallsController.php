@@ -302,6 +302,15 @@ class CaCallsController extends BaseAdminController
             $this->Flash->error('This record is locked.');
             $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
+        $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
+        $caCall = $this->CaCalls->newEntity([
+            'ca_call_group_id' => $caCallGroupId,
+            //'start_time' => getCurrentEasternTime(),
+            //'user_id' => $this->user->id,
+            //'ca_call_group' => $caCallGroup
+        ],
+        ['associated' => ['CaCallGroups' => ['accessibleFields' => ['id' => true]]]]);
+        $caCall->ca_call_group = $caCallGroup;
 
         if ($this->request->is('post')) {
             $requestData = $this->request->getData();
@@ -316,12 +325,15 @@ class CaCallsController extends BaseAdminController
             // Saving an outbound call
             $requestData['duration'] = strtotime(getCurrentEasternTime()) - strtotime($requestData['start_time']);
             $checkRules = ($requestData['ca_call_group']['status'] == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
-            $caCall = $this->CaCalls->newEmptyEntity();
-            $this->CaCalls->patchEntity($caCall, $requestData, [
-                'associated' => ['CaCallGroups']
+            if (!empty($requestData['ca_call_group_id'])) {
+                $caCall->ca_call_group_id = $requestData['ca_call_group_id'];
+            }
+            $caCall = $this->CaCalls->patchEntity($caCall, $requestData, [
+                'associated' => ['CaCallGroups' => ['accessibleFields' => ['id' => true]]]
             ]);
+
             if ($this->CaCalls->save($caCall, ['checkRules' => $checkRules])) {
-                $this->CaCallGroups->unlock();
+                $this->CaCallGroups->unlock($caCallGroupId);
                 $this->Flash->success(__('The call has been saved'));
                 if ($requestData['ca_call_group']['original_group_id'] != $requestData['ca_call_group']['id']) {
                     // This was a voicemail related to a previous call group.
@@ -342,13 +354,9 @@ class CaCallsController extends BaseAdminController
                 $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
             }
         } else {
-            $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
             $previousCalls = $this->CaCalls->find('all', [
                 'conditions' => ['ca_call_group_id' => $caCallGroupId]
             ])->all();
-            /*$caCallGroupNotes = $this->CaCallGroupNotes->find('all', [
-                'conditions' => ['ca_call_group_id' => $caCallGroupId]
-            ])->all();*/
             $caCall = $this->CaCalls->newEntity([
                 'ca_call_group_id' => $caCallGroupId,
                 'start_time' => getCurrentEasternTime(),

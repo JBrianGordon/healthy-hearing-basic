@@ -156,26 +156,26 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                     <div class="col-md-6">
                                         <?php
                                         foreach (CaCallGroup::$col1Topics as $topicKey => $label) {
-                                            echo $this->Form->control($topicKey, array(
+                                            echo $this->Form->control($topicKey, [
                                                 'label' => [
                                                     'text'=>'<span class="topic-label">'.$label.'</span>',
                                                     'style' => 'text-align:left;'
                                                 ],
                                                 'escape' => false,
-                                            ));
+                                            ]);
                                         }
                                         ?>
                                     </div>
                                     <div class="col-md-6">
                                         <?php
                                         foreach (CaCallGroup::$col2Topics as $topicKey => $label) {
-                                            echo $this->Form->control($topicKey, array(
+                                            echo $this->Form->control($topicKey, [
                                                 'label' => [
                                                     'text'=>'<span class="topic-label">'.$label.'</span>',
                                                     'style' => 'text-align:left;'
                                                 ],
                                                 'escape' => false,
-                                            ));
+                                            ]);
                                         }
                                         ?>
                                     </div>
