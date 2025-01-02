@@ -154,6 +154,7 @@ class LocationsController extends BaseAdminController
 
             // convert payment array to json string
             $data['payment'] = isset($data['payment']) ? json_encode($data['payment']) : "";
+
             // remove empty providers
             foreach ($data['providers'] as $key => $provider) {
                 if (empty($provider['id']) && empty($provider['first_name'])) {
