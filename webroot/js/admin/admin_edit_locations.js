@@ -3,7 +3,7 @@ import '../common/provider';
 import './nav_tabs';
 import './datepicker';
 import './ckpackage';
-import * as imagePreview from './image_preview';
+import * as sharedFunctions from './shared_profile_functions';
 
 class locationsAdminEdit {
   constructor() {
@@ -20,15 +20,15 @@ class locationsAdminEdit {
         return false;
       }
       if (target.classList.contains('js-photo-delete')) {
-        imagePreview.removePhotoRow(target, 'photo');
+        sharedFunctions.removePhotoRow(target, 'photo');
         return false;
       }
       if (target.classList.contains('js-logo-delete')) {
-        imagePreview.removePhotoRow(target, 'logo');
+        sharedFunctions.removePhotoRow(target, 'logo');
         return false;
       }
       if (target.classList.contains('js-ad-delete')) {
-        imagePreview.removePhotoRow(target, 'ad');
+        sharedFunctions.removePhotoRow(target, 'ad');
         return false;
       }
       if (target.classList.contains('js-show-coupon-library')) {
@@ -88,9 +88,9 @@ class locationsAdminEdit {
       const target = event.target;
       if (target.type === 'file') {
         if (target.id === 'LocationAdFile') {
-          imagePreview.onChangeLocationAdFile(target);
+          sharedFunctions.onChangeLocationAdFile(target);
         } else {
-          imagePreview.onChangeFileInput(target);
+          sharedFunctions.onChangeFileInput(target);
         }
       }
     });
@@ -106,44 +106,37 @@ class locationsAdminEdit {
           // Display and require the direct_book_url and direct_book_iframe fields
           urlRequired = true;
         }
-        editObj.onChangeFeature(urlRequired, '#direct-book-url');
-        editObj.onChangeFeature(urlRequired, '#direct-book-iframe');
+        sharedFunctions.onChangeFeature(urlRequired, '#direct-book-url');
+        sharedFunctions.onChangeFeature(urlRequired, '#direct-book-iframe');
       });
       directBookTypeElement.dispatchEvent(new Event('change'));
     }
     const isListingTypeFrozenElement = document.getElementById('is-listing-type-frozen');
     if (isListingTypeFrozenElement) {
       isListingTypeFrozenElement.addEventListener('change', function () {
-        editObj.onChangeFeature(this.checked, '#frozen-expiration');
+        sharedFunctions.onChangeFeature(this.checked, '#frozen-expiration');
       });
       isListingTypeFrozenElement.dispatchEvent(new Event('change'));
     }
     const featureContentLibraryElement = document.getElementById('feature-content-library');
     if (featureContentLibraryElement) {
       featureContentLibraryElement.addEventListener('change', function () {
-        editObj.onChangeFeature(this.checked, '#content-library-expiration');
+        sharedFunctions.onChangeFeature(this.checked, '#content-library-expiration');
       });
       featureContentLibraryElement.dispatchEvent(new Event('change'));
     }
     document.getElementById('location-hour-is-closed-lunch').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#location-hour-lunch-start');
-      editObj.onChangeFeature(this.checked, '#location-hour-lunch-end');
-      editObj.onChangeFeature(this.checked, '#closedLunch');
+      sharedFunctions.onChangeFeature(this.checked, '#location-hour-lunch-start');
+      sharedFunctions.onChangeFeature(this.checked, '#location-hour-lunch-end');
+      sharedFunctions.onChangeFeature(this.checked, '#closedLunch');
     });
     document.getElementById('location-hour-is-closed-lunch').dispatchEvent(new Event('change'));
-    document.getElementById('is-mobile').addEventListener('change', function () {
-      editObj.onChangeFeature(this.checked, '#radius');
-      editObj.onChangeFeature(this.checked, '#mobile-text');
-      document.getElementById('addressHelp').classList.toggle("hidden");
-      document.getElementById('radiusHelp').classList.toggle("hidden");
-    });
-    document.getElementById('is-mobile').dispatchEvent(new Event('change'));
     editObj.locationAutocomplete();
-    imagePreview.initSpecialAnnouncements();
+    sharedFunctions.initSpecialAnnouncements();
 
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
-            button.addEventListener('click', imagePreview.handleLocationPhotoDeleteClick);
+            button.addEventListener('click', sharedFunctions.handleLocationPhotoDeleteClick);
         });
     });
 
@@ -256,22 +249,6 @@ class locationsAdminEdit {
     }
   }
 
-  // Display and require an extra field based on if this feature is enabled
-  onChangeFeature(isFeature, requiredElementId) {
-    const requiredElement = document.querySelector(requiredElementId);
-    const formGroup = requiredElement.closest('.form-group');
-
-    if (isFeature) {
-      requiredElement.required = true;
-      formGroup.style.display = 'flex';
-      formGroup.classList.add('required');
-    } else {
-      requiredElement.required = false;
-      formGroup.style.display = 'none';
-      formGroup.classList.remove('required');
-    }
-  }
-
   locationAutocomplete() {
     const linkedLocationInput = document.querySelector("input.linked-location");
     const editObj = this;
@@ -322,7 +299,7 @@ class locationsAdminEdit {
     couponSelected.style.display = 'none';
     uploadCoupon.style.display = 'block';
 
-    imagePreview.scrollToElement('#specialAnnouncements');
+    sharedFunctions.scrollToElement('#specialAnnouncements');
   }
 
   showCouponLibrary() {
@@ -334,7 +311,7 @@ class locationsAdminEdit {
     couponSelected.style.display = 'none';
     uploadCoupon.style.display = 'none';
 
-    imagePreview.scrollToElement('#specialAnnouncements');
+    sharedFunctions.scrollToElement('#specialAnnouncements');
   }
 
   addCoupon(obj) {
@@ -351,7 +328,7 @@ class locationsAdminEdit {
     document.getElementById('couponSelected').style.display = 'block';
     document.getElementById('uploadCoupon').style.display = 'none';
 
-    imagePreview.scrollToElement("#specialAnnouncements");
+    sharedFunctions.scrollToElement("#specialAnnouncements");
   }
 
   //Scrolling function used in many of the above functions

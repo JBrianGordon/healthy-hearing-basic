@@ -2,7 +2,7 @@ import 'jquery-ui/ui/widgets/autocomplete';
 import './provider';
 import '../modules/wordcount';
 import './ck-clinic-package';
-import * as imagePreview from '../admin/image_preview';
+import * as sharedFunctions from '../admin/shared_profile_functions';
 
 
 // If there are any errors on the page, scroll down
@@ -170,7 +170,7 @@ const onChangeIsMobile = (isMobile) => {
 
 // Initialize the "Special Announcements" section.
 // Coupon Library is currently only available to CQ Premier clinics
-imagePreview.initSpecialAnnouncements();
+sharedFunctions.initSpecialAnnouncements();
 	
 // Clinic profile completion. Currently we are only checking the first provider
 const providerArray = [
@@ -183,23 +183,70 @@ const incompleteArray = [];
 let completionPercentage = 100;
 
 document.addEventListener("DOMContentLoaded", function() {
-  if (document.querySelector("#location-about-us").nextSibling.querySelector(".ck-content").innerHTML === "") {
-    completionPercentage -= 25;
-    incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
-    document.querySelector("#aboutLabel").classList.add("red");
+  const aboutUsElement = document.querySelector("#aboutUs");
+  let nextSiblingDiv = aboutUsElement.nextElementSibling;
+
+  while (nextSiblingDiv) {
+    if (nextSiblingDiv.classList.contains('textarea')) {
+      const ckContentElement = nextSiblingDiv.querySelector(".ck-content");
+      if (ckContentElement && ckContentElement.innerHTML === "") {
+        completionPercentage -= 25;
+        incompleteArray.push("<li><a href='#aboutUs'>- About us</a></li>");
+        document.querySelector("#aboutLabel").classList.add("red");
+      }
+      break;
+    }
+    nextSiblingDiv = nextSiblingDiv.nextElementSibling;
   }
-  if (document.querySelector("#location-services").nextSibling.querySelector(".ck-content").innerHTML === "") {
-    completionPercentage -= 25;
-    incompleteArray.push("<li><a href='#services'>- Services</a></li>");
-    document.querySelector("#servicesLabel").classList.add("red");
+
+  const servicesElement = document.querySelector("#services");
+  nextSiblingDiv = servicesElement.nextElementSibling;
+
+  while (nextSiblingDiv) {
+    if (nextSiblingDiv.classList.contains('textarea')) {
+      const ckContentElement = nextSiblingDiv.querySelector(".ck-content");
+      if (ckContentElement && ckContentElement.innerHTML === "") {
+        completionPercentage -= 25;
+        incompleteArray.push("<li><a href='#services'>- Services</a></li>");
+        document.querySelector("#servicesLabel").classList.add("red");
+      }
+      break;
+    }
+    nextSiblingDiv = nextSiblingDiv.nextElementSibling;
   }
+
   const providerDescription = document.querySelector("#providers-0-description");
   providerArray.forEach(function(input) {
-    if ((!providerDescription && input.value === "") || (providerDescription?.nextSibling.querySelector(".ck-content").innerHTML === "")) {
-      input.closest(".form-group").classList.add("has-error");
-      input.closest(".form-group").previousElementSibling.classList.add("red");
+    let nextSiblingDiv = providerDescription ? providerDescription.nextElementSibling : null;
+
+    while (nextSiblingDiv) {
+      if (nextSiblingDiv.classList.contains('textarea')) {
+        const ckContentElement = nextSiblingDiv.querySelector(".ck-content");
+        if ((!providerDescription && input.value === "") || (ckContentElement && ckContentElement.innerHTML === "")) {
+          input.closest(".form-group").classList.add("has-error");
+          input.closest(".form-group").previousElementSibling.classList.add("red");
+        }
+        break;
+      }
+      nextSiblingDiv = nextSiblingDiv.nextElementSibling;
     }
   });
+
+  // Check provider description separately
+  if (providerDescription) {
+    let nextSiblingDiv = providerDescription.nextElementSibling;
+    while (nextSiblingDiv) {
+      if (nextSiblingDiv.classList.contains('textarea')) {
+        const ckContentElement = nextSiblingDiv.querySelector(".ck-content");
+        if (ckContentElement && ckContentElement.innerHTML === "") {
+          completionPercentage -= 5;
+          incompleteArray.push("<li><a href='#providers-0-description'>- Provider description</a></li>");
+        }
+        break;
+      }
+      nextSiblingDiv = nextSiblingDiv.nextElementSibling;
+    }
+  }
 });
 
 /*** TODO: uncomment when hhtv added: */
@@ -230,14 +277,6 @@ if (document.querySelector("#providers-0-last-name").value === "") {
   completionPercentage -= 5;
   incompleteArray.push("<li><a href='#providers-0-last-name'>- Provider last name</a></li>");
 }
-
-// Provider description
-document.addEventListener("DOMContentLoaded", function() {
-  if (document.querySelector("#providers-0-description").nextSibling.querySelector(".ck-content").innerHTML === "") {
-    completionPercentage -= 5;
-    incompleteArray.push("<li><a href='#providers-0-description'>- Provider description</a></li>");
-  }
-})
 
 // Provider photo
 /*** TODO: uncomment when ~line 85 is uncommented above
@@ -277,11 +316,11 @@ if (isPaymentIncomplete) {
 }
 
 // Website url check
-if (document.querySelector("#location-url").value === "") {
+if (document.querySelector("#url").value === "") {
   completionPercentage -= 5;
   incompleteArray.push("<li><a href='#urlAnchor'>- Website URL</a></li>");
-  document.querySelector("#location-url").parentElement.classList.add("has-error");
-  document.querySelector("#location-url").previousElementSibling.classList.add("red");
+  document.querySelector("#url").parentElement.classList.add("has-error");
+  document.querySelector("#url").previousElementSibling.classList.add("red");
 }
 
 // Vidscrip validation
@@ -457,9 +496,9 @@ const { target } = e;
 
 if (target.matches('input[type="file"]')) {
 	if (target.id === 'LocationAdFile') {
-		imagePreview.onChangeLocationAdFile(target);
+		sharedFunctions.onChangeLocationAdFile(target);
 	} else {
-		imagePreview.onChangeFileInput(target);
+		sharedFunctions.onChangeFileInput(target);
 	}
 }
 
@@ -475,17 +514,17 @@ if (target.matches('#LocationHourIsClosedLunch')) {
 
 document.body.addEventListener("click", (e) => {
   if (e.target.classList.contains('js-photo-delete')) {
-    imagePreview.removePhotoRow(e.target, 'photo');
+    sharedFunctions.removePhotoRow(e.target, 'photo');
     e.preventDefault();
     return false;
   }
   if (e.target.classList.contains('js-logo-delete')) {
-    imagePreview.removePhotoRow(e.target, 'logo');
+    sharedFunctions.removePhotoRow(e.target, 'logo');
     e.preventDefault();
     return false;
   }
   if (e.target.classList.contains('js-ad-delete')) {
-    imagePreview.removePhotoRow(e.target, 'ad');
+    sharedFunctions.removePhotoRow(e.target, 'ad');
     e.preventDefault();
     return false;
   }
@@ -521,7 +560,7 @@ button.addEventListener('click', () => {
 //Delete buttons for location photos
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
-      button.addEventListener('click', imagePreview.handleLocationPhotoDeleteClick);
+      button.addEventListener('click', sharedFunctions.handleLocationPhotoDeleteClick);
   });
 });
 
@@ -553,21 +592,21 @@ const addCoupon = (obj) => {
   document.getElementById('couponSelected').style.display = 'block';
   document.getElementById('uploadCoupon').style.display = 'none';
 
-  imagePreview.scrollToElement("#specialAnnouncements");
+  sharedFunctions.scrollToElement("#specialAnnouncements");
 };
 
 const chooseOwnCoupon = () => {
 document.getElementById("couponLibrary").style.display = 'none';
 document.getElementById("couponSelected").style.display = 'none';
 document.getElementById("uploadCoupon").style.display = 'block';
-imagePreview.scrollToElement("#specialAnnouncements");
+sharedFunctions.scrollToElement("#specialAnnouncements");
 };
 
 const showCouponLibrary = () => {
 document.getElementById("couponLibrary").style.display = 'block';
 document.getElementById("couponSelected").style.display = 'none';
 document.getElementById("uploadCoupon").style.display = 'none';
-imagePreview.scrollToElement("#specialAnnouncements");
+sharedFunctions.scrollToElement("#specialAnnouncements");
 };
 
 // Special announcement border selection

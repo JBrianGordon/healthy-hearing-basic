@@ -248,7 +248,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         echo $this->Form->control('slogan', ['class' => 'col-sm-9 mb10', 'type' => 'text', 'label' => ['class' => 'col-sm-3 control-label']]);
                                         ?>
                                         <div class="form-group">
-                                            <label class="col col-sm-3 control-label">Mobile-only clinic?</label>
+                                            <label class="col col-sm-3 control-label"> Mobile-only clinic?</label>
                                             <div class="col-sm-9" style="margin-left: -24px;">
                                                 <?= $this->Form->control('is_mobile', [
                                                     'label' => ['text' => '<span class="ml5 mt0 help-block">Check this to hide your street address from your profile</span>', 'class' => 'mt5', 'escape' => false],
@@ -256,19 +256,24 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                 ]) ?>
                                             </div>
                                         </div>
-                                        <div id="radius" class="hidden">
+                                        <div>
                                             <?= $this->Form->control('radius', [
                                                 'label' => Configure::read('isMetric') ? 'Radius (km)' : 'Radius (miles)',
-                                                'div' => 'form-group required',
                                                 'min' => 0,
-                                                'help_block' => 'How far are you willing to travel from '.$location->city.'?',
+                                                'templates' => [
+                                                    'inputContainer' => '<div class="form-group input {{type}}{{required}}" style="display:none">{{content}}</div>'
+                                                ]
                                             ]) ?>
+                                            <span id="radiusHelp" class="help-block col-md-offset-3 mt0 hidden">How far are you willing to travel from <?= $location->city ?>?</span>
                                             <?= $this->Form->control('mobile_text', [
                                                 'label' => 'Mobile clinic description',
                                                 'placeholder' => Location::$mobileTextDefault,
-                                                'help_block' => 'This will be displayed instead of street address',
                                                 'required' => false,
+                                                'templates' => [
+                                                    'inputContainer' => '<div class="form-group input {{type}}{{required}}" style="display:none">{{content}}</div>'
+                                                ]
                                             ]) ?>
+                                            <span id="addressHelp" class="help-block col-md-offset-3 mt0 mb10 hidden">This will be displayed instead of street address</span>
                                         </div>
                                         <?php
                                         echo $this->Form->control('landmarks', [

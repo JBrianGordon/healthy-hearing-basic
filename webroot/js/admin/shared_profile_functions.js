@@ -366,8 +366,42 @@ export function onChangeLocationAdFile(obj) {
     }
 }
 
+// Display and require an extra field based on if this feature is enabled
+export function onChangeFeature(isFeature, requiredElementId) {
+  const requiredElement = document.querySelector(requiredElementId);
+  const formGroup = requiredElement.closest('.form-group');
+
+  if (isFeature) {
+    requiredElement.required = true;
+    formGroup.style.display = 'flex';
+    formGroup.classList.add('required');
+  } else {
+    requiredElement.required = false;
+    formGroup.style.display = 'none';
+    formGroup.classList.remove('required');
+  }
+}
+
+export function initIsMobile() {
+  document.getElementById('is-mobile').addEventListener('change', e => {
+    const isChecked = e.target.checked;
+    onChangeFeature(isChecked, '#radius');
+    onChangeFeature(isChecked, '#mobile-text');
+    
+    if (isChecked) {
+      document.getElementById('addressHelp').classList.remove("hidden");
+      document.getElementById('radiusHelp').classList.remove("hidden");
+    } else {
+      document.getElementById('addressHelp').classList.add("hidden");
+      document.getElementById('radiusHelp').classList.add("hidden");
+    }
+  });
+  document.getElementById('is-mobile').dispatchEvent(new Event('change'));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupProviderPhotoDelete();
     setupProviderImageUpload();
     setupLogoImageUpload();
+    initIsMobile();
 });
