@@ -122,6 +122,26 @@ return [
             'action' => 'clinicFaq',
         ],
 
+        [ // Clinics can only delete Provider images from their clinic
+            'role' => 'clinic',
+            'prefix' => 'Admin',
+            'controller' => 'Providers',
+            'action' => 'deleteProviderImage',
+            'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
+                $providerId = $request->getData('providerId');
+                $locationsProvidersRecord = \Cake\ORM\TableRegistry::get('LocationsProviders')
+                    ->find('all')
+                    ->where(['provider_id' => $providerId])
+                    ->first();
+                $userLocationId = $user->locations[0]->id;
+
+                if (!empty($locationsProvidersRecord) && !empty($userLocationId)) {
+                    return $userLocationId === $locationsProvidersRecord->location_id;
+                }
+                return false;
+            }
+        ],
+
 /********************************************
 *************** Public routes ***************
 *********************************************/
