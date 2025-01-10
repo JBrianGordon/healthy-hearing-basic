@@ -142,6 +142,24 @@ return [
             }
         ],
 
+        [ // Clinics can only delete LocationPhoto images from their clinic
+            'role' => 'clinic',
+            'prefix' => 'Admin',
+            'controller' => 'Locations',
+            'action' => 'deleteLocationPhoto',
+            'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
+                $locationPhotoId = $request->getData('locationPhotoId');
+                $locationPhotosRecord = \Cake\ORM\TableRegistry::get('LocationPhotos')->get($locationPhotoId);
+
+                $userLocationId = $user->locations[0]->id;
+
+                if (!empty($locationPhotosRecord) && !empty($userLocationId)) {
+                    return $userLocationId === $locationPhotosRecord->location_id;
+                }
+                return false;
+            }
+        ],
+
 /********************************************
 *************** Public routes ***************
 *********************************************/
