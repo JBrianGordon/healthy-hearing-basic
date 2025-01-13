@@ -665,6 +665,7 @@
   .modal-dialog {
     @media only screen and (min-width: $screen-sm-min) {
       width: 80%;
+	  max-width: none;
     }
 
     .modal-header {

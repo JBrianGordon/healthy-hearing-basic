@@ -16,7 +16,7 @@ $this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 				<?php foreach($location->providers as $providerKey => $provider): ?>
 					<?php if((Configure::read('country') == 'CA' || $isEnhancedOrPremier || $providerKey < 1) && (!empty($provider['title']) || !empty($provider['credentials']) || !empty($provider['thumb_url']) || !empty($provider['description']))) : ?>
 						<div class="row provider-bio">
-							<?php if(!empty($provider->thumb_url) || (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name))): ?>
+							<?php if(!empty($provider->photo_url) || (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name))): ?>
 								<div class="col-md-4">
 									<?php
 									$alt = 'Photo of '.htmlentities(strip_tags($provider->first_name.' '.$provider->last_name));

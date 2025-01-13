@@ -5,15 +5,17 @@
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+	        <button type="button" class="close ms-auto" data-bs-dismiss="modal" aria-label="Close">
 	          <span>&times;</span>
 	        </button>
 	      </div>
 	      <div class="modal-body">
 			<?php foreach($locationPhotos as $photo): ?>
-				<div class="modal-slide-container photo gallery">
-					<img loading="lazy" src="<?= $photo->photo_url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
-				</div>
+				<?php if (!empty($photo->photo_name && !empty($photo->photo_url))) : ?>
+					<div class="modal-slide-container photo gallery">
+						<img loading="lazy" src="<?= $photo->photo_url ?>" alt="<?= $photo->alt; ?>" width="200" height="150" />
+					</div>
+				<?php endif; ?>
 			<?php endforeach ?>
 	      </div>
 	    </div>
