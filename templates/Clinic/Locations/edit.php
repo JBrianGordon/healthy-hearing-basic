@@ -130,7 +130,13 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                     ?>
                                     <h1>Welcome to your <?= Configure::read('siteName') ?> profile!</h1>
                                     <h2><strong><?= $location->title ?></strong></h2>
-                                    <?= $this->Form->create($location, ['class' => 'form-horizontal', 'id' => 'LocationClinicEditForm']); ?>
+                                    <?=
+                                        $this->Form->create($location, [
+                                            'type' => 'file',
+                                            'class' => 'form-horizontal',
+                                            'id' => 'LocationClinicEditForm'
+                                        ]);
+                                    ?>
                                     <?php if ($isAdmin && !isset($locationId)): ?>
                                         <div class="row">
                                             <div class="col col-lg-6 noprint">
