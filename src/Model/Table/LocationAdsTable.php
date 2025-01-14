@@ -8,6 +8,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
+use Cake\Cache\Cache;
+
 /**
  * LocationAds Model
  *
@@ -47,10 +54,70 @@ class LocationAdsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'image_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->image_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
+
         $this->belongsTo('Locations', [
             'foreignKey' => 'location_id',
             'joinType' => 'LEFT',
         ]);
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->isDirty('image_name') && $entity->ajax_delete !== true) {
+            $filename = pathinfo($entity->image_name, PATHINFO_FILENAME);
+
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . $filename, 'default');
+
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->image_url = $ckBoxUploadData['response']['url'];
+            }
+
+            Cache::delete('ckBoxUploadImage_' . $filename);
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $field = 'image_name';
+
+        $original = $entity->getOriginal($field);
+
+        if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('image_url'), $matches);
+            $ckBoxImageId = $matches[1];
+            $ckBoxUtility = new CKBoxUtility();
+            try {
+                $ckBoxUtility->deleteImage($ckBoxImageId);
+            } catch (Exception $e) {
+                // TODO
+                // Ignore exceptions for now
+            }
+        }
     }
 
     /**

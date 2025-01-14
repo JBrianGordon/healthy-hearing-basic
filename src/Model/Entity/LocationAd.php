@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $location_id
+ * @property string|null $image_name
+ * @property string|null $image_url
  * @property string|null $photo_url
  * @property string|null $alt
  * @property string|null $title
@@ -33,6 +35,8 @@ class LocationAd extends Entity
      */
     protected $_accessible = [
         'location_id' => true,
+        'image_name' => true,
+        'image_url' => true,
         'photo_url' => true,
         'alt' => true,
         'title' => true,

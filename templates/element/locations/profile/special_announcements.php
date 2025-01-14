@@ -89,15 +89,10 @@
             <?php endif; ?>
         </div>
         <?=
-            $this->Form->control("location_ad.image_url", [
+            $this->Form->control("location_ad.image_name", [
                 'label' => 'File name',
                 'class' => 'col-md-7-override d-inline',
-                'value' => $locationAd->image_url ?? '',
-                'readonly' => 'readonly',
-                'templates' => [
-                    'inputContainer' => '{{content}}<label class="btn btn-sm btn-default mt5 float-end col-md-2-override p5 tac"><span>Upload image</span><input type="file" name="location_ad[file]" class="form-control hidden" id="LocationAdFile"></label>{{help}}',
-                    'help' => '<br><p class="form-text text-muted col-md-offset-3 mb-3">{{content}}</p>'
-                ],
+                'type' => 'file',
                 'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
                 <span class="text-danger" id="location-ad-error" style="display:none;">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
             ]);
