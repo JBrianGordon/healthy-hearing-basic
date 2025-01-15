@@ -1,3 +1,6 @@
+<?php
+$locationAd = $location->location_ad;
+?>
 <!-- Special announcements / Flex space / Coupons -->
 <div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= $adId; ?>" data-couponid="<?= $couponId; ?>">
     <label class="form-label col-md-3">Special announcement</label>
@@ -75,11 +78,9 @@
                         <?php if (!empty($locationAd->title)): ?>
                             <div class="panel-heading"><?= $locationAd->title ?></div>
                         <?php endif; ?>
-                        <?php if (!empty($locationAd->image_url)): ?>
-                            <div class="panel-body">
-                                <img class="coupon-image" src="<?= $locationAd->image_url ?>">
-                            </div>
-                        <?php endif; ?>
+                        <div class="panel-body">
+                            <img class="coupon-image coupon-preview<?= empty($locationAd->image_url) ? ' d-none' : '' ?>" src="<?= $locationAd->image_url ?>">
+                        </div>
                         <?php if (!empty($locationAd->description)): ?>
                             <div class="panel-footer"><?= $locationAd->description ?></div>
                         <?php endif; ?>
@@ -90,10 +91,14 @@
         </div>
         <?=
             $this->Form->control("location_ad.image_name", [
+                'id' => 'location-ad-image-name0',
                 'label' => 'File name',
-                'class' => 'col-md-7-override d-inline',
                 'type' => 'file',
-                'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.<br>
+                'templates' => [
+                    'inputContainer' => '{{content}}{{help}}',
+                    'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
+                ],
+                'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.
                 <span class="text-danger" id="location-ad-error" style="display:none;">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
             ]);
         ?>
@@ -128,7 +133,7 @@
             <label for="LocationAdBorder" class="form-label col-md-3">Border</label>
             <input type="hidden" name="location_ad[border]" id="LocationAdBlank_" value="">
             <?php
-            $border = $location->location_ad->border ?? '';
+            $border = $locationAd->border ?? '';
             $borderIsBlank = in_array($border, ['blank', '']);
             ?>
             <div class="col col-md-9">

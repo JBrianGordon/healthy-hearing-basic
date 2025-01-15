@@ -18,7 +18,7 @@ export function onChangeFileInput(obj) {
     const id = obj.id;
 
     const row = document.getElementById(id).closest('tr');
-    const keyMatch = id.match(/(?:location-photo[s]?|logo-imageUpload|providers)-?(\d*)-?(.*)/);
+    const keyMatch = id.match(/(?:location-photo[s]?|logo-imageUpload|providers|location-ad)-?(\d*)-?(.*)/);
     const key = parseInt(keyMatch.input.match(/\d+/)[0]);
     const newKey = key + 1;
     // Check if a file is selected
@@ -216,12 +216,32 @@ export function setupLogoImageUpload() {
 
         var reader = new FileReader();
         reader.onload = function() {
-            var output = document.getElementById('logo-imagePreview0');
+            var output = document.querySelector('#logo-imagePreview0');
             output.src = reader.result;
             output.style.display = 'block';
         };
         reader.readAsDataURL(file);
     });
+}
+
+// Function to handle special announcement image upload preview
+export function setupAdImageUpload() {
+  document.getElementById('location-ad-image-name0').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+
+      // Check if a file is selected
+      if (!file) {
+          return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function() {
+          var output = document.querySelector('.coupon-preview');
+          output.src = reader.result;
+          output.classList.remove('d-none');
+      };
+      reader.readAsDataURL(file);
+  });
 }
 
 export async function handleLocationPhotoDeleteClick(event) {
@@ -273,10 +293,9 @@ export function removePhotoRow(obj, type) {
     }
     
     if (type === "ad") {
-      document.getElementById("location-ad-preview").style.display = 'none';
-      document.getElementById("LocationAdFile").value = "";
+      document.querySelector(".coupon-preview").classList.add('d-none');
+      document.getElementById("location-ad-image-name0").value = "";
       document.getElementById("location-ad-title").value = "";
-      document.getElementById("location-ad-image-url").value = "";
       document.getElementById("couponId").value = null;
       document.getElementById('specialAnnouncements').dataset.adid = null;
       document.getElementById('specialAnnouncements').dataset.couponid = null;
@@ -403,5 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupProviderPhotoDelete();
     setupProviderImageUpload();
     setupLogoImageUpload();
+    setupAdImageUpload();
     initIsMobile();
 });

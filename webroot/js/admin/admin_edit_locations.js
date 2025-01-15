@@ -316,9 +316,8 @@ class locationsAdminEdit {
 
   addCoupon(obj) {
     var couponId = obj.getAttribute("data-coupon-id");
-    document.getElementById("LocationAdFile").value = "";
+    document.getElementById("location-ad-image-name0").value = "";
     document.getElementById("location-ad-title").value = "";
-    document.getElementById("location-ad-image-url").value = "";
     var specialAnnouncements = document.getElementById('specialAnnouncements');
     specialAnnouncements.dataset.adid = null;
     document.getElementById("couponId").value = couponId;
