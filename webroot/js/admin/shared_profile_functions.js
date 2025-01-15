@@ -204,9 +204,16 @@ export function setupProviderImageUpload() {
     });
 }
 
-// Function to handle logo image upload preview
-export function setupLogoImageUpload() {
-    document.getElementById('logo-imageUpload0').addEventListener('change', function(event) {
+// Generic function to handle image upload preview
+export function setupImageUpload(inputId, previewSelector) {
+    const fileInput = document.getElementById(inputId);
+    
+    if (!fileInput) {
+        console.error(`File input element with ID ${inputId} not found`);
+        return;
+    }
+
+    fileInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
 
         // Check if a file is selected
@@ -214,34 +221,31 @@ export function setupLogoImageUpload() {
             return;
         }
 
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function() {
-            var output = document.querySelector('#logo-imagePreview0');
+            const output = document.querySelector(previewSelector);
+            
+            if (!output) {
+                console.error(`Output element with selector ${previewSelector} not found`);
+                return;
+            }
+
             output.src = reader.result;
             output.style.display = 'block';
+            output.classList.remove('d-none');
         };
         reader.readAsDataURL(file);
     });
 }
 
+// Function to handle logo image upload preview
+export function setupLogoImageUpload() {
+    setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
+}
+
 // Function to handle special announcement image upload preview
 export function setupAdImageUpload() {
-  document.getElementById('location-ad-image-name0').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-
-      // Check if a file is selected
-      if (!file) {
-          return;
-      }
-
-      var reader = new FileReader();
-      reader.onload = function() {
-          var output = document.querySelector('.coupon-preview');
-          output.src = reader.result;
-          output.classList.remove('d-none');
-      };
-      reader.readAsDataURL(file);
-  });
+    setupImageUpload('location-ad-image-name0', '.coupon-preview');
 }
 
 export async function handleLocationPhotoDeleteClick(event) {
