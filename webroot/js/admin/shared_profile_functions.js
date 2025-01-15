@@ -238,14 +238,20 @@ export function setupImageUpload(inputId, previewSelector) {
     });
 }
 
-// Function to handle logo image upload preview
-export function setupLogoImageUpload() {
-    setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
-}
+export function addCoupon(obj) {
+  var couponId = obj.getAttribute("data-coupon-id");
+  document.getElementById("location-ad-image-name0").value = "";
+  document.getElementById("location-ad-title").value = "";
+  var specialAnnouncements = document.getElementById('specialAnnouncements');
+  specialAnnouncements.dataset.adid = null;
+  document.getElementById("couponId").value = couponId;
+  specialAnnouncements.dataset.couponid = couponId;
+  document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
+  document.getElementById('couponLibrary').style.display = 'none';
+  document.getElementById('couponSelected').style.display = 'block';
+  document.getElementById('uploadCoupon').style.display = 'none';
 
-// Function to handle special announcement image upload preview
-export function setupAdImageUpload() {
-    setupImageUpload('location-ad-image-name0', '.coupon-preview');
+  scrollToElement("#specialAnnouncements");
 }
 
 export async function handleLocationPhotoDeleteClick(event) {
@@ -425,7 +431,7 @@ export function initIsMobile() {
 document.addEventListener('DOMContentLoaded', () => {
     setupProviderPhotoDelete();
     setupProviderImageUpload();
-    setupLogoImageUpload();
-    setupAdImageUpload();
+    setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
+    setupImageUpload('location-ad-image-name0', '.coupon-preview');
     initIsMobile();
 });

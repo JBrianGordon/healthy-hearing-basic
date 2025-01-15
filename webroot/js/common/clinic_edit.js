@@ -535,7 +535,7 @@ document.body.addEventListener("click", (e) => {
     deleteLink(target);
     e.preventDefault();
   } else if (target.matches('.js-coupon-select')) {
-    addCoupon(target);
+    sharedFunctions.addCoupon(target);
     e.preventDefault();
   } else if (target.matches('.js-choose-own-coupon')) {
     chooseOwnCoupon();
@@ -576,23 +576,6 @@ if (pattern.test(altInput.value)) {
   document.querySelector(`.help-block-desc-${key}`).style.display = 'none';
   altInput.parentNode.classList.remove("has-error");
 }
-};
-
-const addCoupon = (obj) => {
-  var couponId = obj.getAttribute("data-coupon-id");
-  document.getElementById("LocationAdFile").value = "";
-  document.getElementById("location-ad-title").value = "";
-  document.getElementById("location-ad-image-url").value = "";
-  var specialAnnouncements = document.getElementById('specialAnnouncements');
-  specialAnnouncements.dataset.adid = null;
-  document.getElementById("couponId").value = couponId;
-  specialAnnouncements.dataset.couponid = couponId;
-  document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
-  document.getElementById('couponLibrary').style.display = 'none';
-  document.getElementById('couponSelected').style.display = 'block';
-  document.getElementById('uploadCoupon').style.display = 'none';
-
-  sharedFunctions.scrollToElement("#specialAnnouncements");
 };
 
 const chooseOwnCoupon = () => {

@@ -40,7 +40,7 @@ class locationsAdminEdit {
         return false;
       }
       if (target.classList.contains('js-coupon-select')) {
-        editObj.addCoupon(target);
+        sharedFunctions.addCoupon(target);
         return false;
       }
       if (target.classList.contains('is-closed-checkbox')) {
@@ -312,22 +312,6 @@ class locationsAdminEdit {
     uploadCoupon.style.display = 'none';
 
     sharedFunctions.scrollToElement('#specialAnnouncements');
-  }
-
-  addCoupon(obj) {
-    var couponId = obj.getAttribute("data-coupon-id");
-    document.getElementById("location-ad-image-name0").value = "";
-    document.getElementById("location-ad-title").value = "";
-    var specialAnnouncements = document.getElementById('specialAnnouncements');
-    specialAnnouncements.dataset.adid = null;
-    document.getElementById("couponId").value = couponId;
-    specialAnnouncements.dataset.couponid = couponId;
-    document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
-    document.getElementById('couponLibrary').style.display = 'none';
-    document.getElementById('couponSelected').style.display = 'block';
-    document.getElementById('uploadCoupon').style.display = 'none';
-
-    sharedFunctions.scrollToElement("#specialAnnouncements");
   }
 
   //Scrolling function used in many of the above functions
