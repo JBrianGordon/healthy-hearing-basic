@@ -530,15 +530,16 @@ class LocationsTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
+        if ($entity->logo_name !== null) {
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
+        }
 
         $publicUrl = $ckBoxUploadData['response']['url'];
 
         if ($publicUrl !== null && is_string($publicUrl)) {
             $entity->logo_url = $ckBoxUploadData['response']['url'];
+            Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
         }
-
-        Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
     }
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
