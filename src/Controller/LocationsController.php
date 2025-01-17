@@ -398,7 +398,7 @@ class LocationsController extends AppController
         $this->meta['title'] = $title;
         $this->meta['DC.title'] = $title;
         $metaAddress = $location->is_mobile ? "mobile clinic based from" : $location->address.",";
-		if(Configure::read('siteNameAbbr') == 'HD'){
+		if($location->state == 'ON'){
 			$this->meta['description'] = "Book a hearing appointment, buy hearing aids and more at {$location['Location']['title']}, {$metaAddress} {$location['Location']['city']}, {$location['Location']['state_full']} {$location['Location']['zip']}.";
 		} else {
 			$this->meta['description'] = "Read verified clinic information, patient reviews and make an appointment at {$location['Location']['title']}, {$metaAddress} {$location['Location']['city']}, {$location['Location']['state_full']} {$location['Location']['zip']}.";
