@@ -577,11 +577,3 @@ if (pattern.test(altInput.value)) {
   altInput.parentNode.classList.remove("has-error");
 }
 };
-
-// Special announcement border selection
-document.querySelectorAll(".border-radio").forEach((radio) => {
-radio.addEventListener("click", () => {
-  document.querySelector(".selected-border").classList.remove("selected-border");
-  radio.classList.add("selected-border");
-});
-});

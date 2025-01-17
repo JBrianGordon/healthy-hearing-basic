@@ -77,8 +77,8 @@ $locationAd = $location->location_ad;
                         <?php if (!empty($locationAd->title)): ?>
                             <div class="panel-heading"><?= $locationAd->title ?></div>
                         <?php endif; ?>
-                        <div class="panel-body">
-                            <img class="coupon-image coupon-preview<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
+                        <div class="panel-body p10">
+                            <img class="coupon-image coupon-preview p0<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
                         </div>
                         <?php if (!empty($locationAd->description)): ?>
                             <div class="panel-footer"><?= $locationAd->description ?></div>

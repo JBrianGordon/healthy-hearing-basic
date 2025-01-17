@@ -207,7 +207,6 @@ export function setupProviderImageUpload() {
 // Generic function to handle image upload preview
 export function setupImageUpload(inputId, previewSelector) {
     const fileInput = document.getElementById(inputId);
-    var adId = obj.getAttribute("data-ad-id");
     
     if (!fileInput) {
         console.error(`File input element with ID ${inputId} not found`);
@@ -234,10 +233,12 @@ export function setupImageUpload(inputId, previewSelector) {
             output.src = reader.result;
             output.style.display = 'block';
             output.classList.remove('d-none');
-            var specialAnnouncements = document.getElementById('specialAnnouncements');
-            specialAnnouncements.dataset.adid = adId;
-            specialAnnouncements.dataset.couponid = "";
-            document.getElementById("couponId").value = "";
+            if(inputId === 'location-ad-image-name0'){
+              var specialAnnouncements = document.getElementById('specialAnnouncements');
+              specialAnnouncements.dataset.adid = document.getElementById("location-ad-id").value;
+              specialAnnouncements.dataset.couponid = "";
+              document.getElementById("couponId").value = "";
+            }
         };
         reader.readAsDataURL(file);
     });
@@ -356,7 +357,7 @@ export const chooseOwnCoupon = () => {
   document.getElementById("uploadCoupon").style.display = 'block';
   document.getElementById("couponOption").style.display = 'block';
   scrollToElement("#specialAnnouncements");
-  };
+};
   
 export const showCouponLibrary = () => {
   document.getElementById("couponLibrary").style.display = 'block';
@@ -364,7 +365,19 @@ export const showCouponLibrary = () => {
   document.getElementById("uploadCoupon").style.display = 'none';
   document.getElementById("couponOption").style.display = 'none';
   scrollToElement("#specialAnnouncements");
-  };
+};
+
+// Special announcement border selection
+export function initSelectBorder() {
+  document.querySelectorAll(".border-radio").forEach((radio) => {
+    radio.addEventListener("click", () => {
+      document.querySelector('.coupon-preview').classList.remove(document.querySelector('.selected-border input').value);
+      document.querySelector(".selected-border").classList.remove("selected-border");
+      radio.classList.add("selected-border");
+      document.querySelector('.coupon-preview').classList.add(document.querySelector('.selected-border input').value);
+    });
+  })
+}
 
 export function onChangeLocationAdFile(obj) {
     const id = obj.id;
@@ -455,5 +468,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupProviderImageUpload();
     setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
     setupImageUpload('location-ad-image-name0', '.coupon-preview');
+    initSelectBorder();
     initIsMobile();
 });
