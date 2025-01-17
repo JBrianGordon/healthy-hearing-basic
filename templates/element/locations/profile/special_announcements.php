@@ -2,7 +2,7 @@
 $locationAd = $location->location_ad;
 ?>
 <!-- Special announcements / Flex space / Coupons -->
-<div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= $adId; ?>" data-couponid="<?= $couponId; ?>">
+<div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= isset($couponId) && !empty($couponId) ? '' : $adId; ?>" data-couponid="<?= $couponId; ?>">
     <label class="form-label col-md-3">Special announcement</label>
     <div class="clearfix"></div>
     <?php if ($isCqPremier): ?>

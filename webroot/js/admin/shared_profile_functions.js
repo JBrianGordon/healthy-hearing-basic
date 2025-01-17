@@ -207,6 +207,7 @@ export function setupProviderImageUpload() {
 // Generic function to handle image upload preview
 export function setupImageUpload(inputId, previewSelector) {
     const fileInput = document.getElementById(inputId);
+    var adId = obj.getAttribute("data-ad-id");
     
     if (!fileInput) {
         console.error(`File input element with ID ${inputId} not found`);
@@ -233,6 +234,10 @@ export function setupImageUpload(inputId, previewSelector) {
             output.src = reader.result;
             output.style.display = 'block';
             output.classList.remove('d-none');
+            var specialAnnouncements = document.getElementById('specialAnnouncements');
+            specialAnnouncements.dataset.adid = adId;
+            specialAnnouncements.dataset.couponid = "";
+            document.getElementById("couponId").value = "";
         };
         reader.readAsDataURL(file);
     });
@@ -243,7 +248,7 @@ export function addCoupon(obj) {
   document.getElementById("location-ad-image-name0").value = "";
   document.getElementById("location-ad-title").value = "";
   var specialAnnouncements = document.getElementById('specialAnnouncements');
-  specialAnnouncements.dataset.adid = null;
+  specialAnnouncements.dataset.adid = "";
   document.getElementById("couponId").value = couponId;
   specialAnnouncements.dataset.couponid = couponId;
   document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
@@ -308,8 +313,8 @@ export function removePhotoRow(obj, type) {
       document.getElementById("location-ad-image-name0").value = "";
       document.getElementById("location-ad-title").value = "";
       document.getElementById("couponId").value = null;
-      document.getElementById('specialAnnouncements').dataset.adid = null;
-      document.getElementById('specialAnnouncements').dataset.couponid = null;
+      document.getElementById('specialAnnouncements').dataset.adid = "";
+      document.getElementById('specialAnnouncements').dataset.couponid = "";
 
       scrollToElement("#specialAnnouncements");
       initSpecialAnnouncements();

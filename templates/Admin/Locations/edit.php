@@ -603,7 +603,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <?php if ($showSpecialAnnouncement): ?>
-                                                    <?= $this->element('locations/profile/special_announcements') ?>
+                                                    <?= $this->element('locations/profile/special_announcements', ['adId' => $adId, 'couponId' => $couponId]) ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

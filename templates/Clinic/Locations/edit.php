@@ -13,7 +13,7 @@ $hhUrl = $location->hh_url;
 preg_match('/\d+/', $hhUrl, $shortId);
 $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $shortId[0];
 $locationAd = $location->location_ad;
-$adId = $location->location_ad->id ?? null;
+$adId = $locationAd->id ?? null;
 
 $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
 ?>
@@ -538,7 +538,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                     <p class="m10"><a href="/clinic">Click here</a> to learn more about Healthy Hearing's <strong><em>Premier</em></strong> profile features or <a href="mailto:<?= Configure::read('customer-support-email') ?>">Contact us</a> for more details today!</p>
                                                 <?php endif; ?>
                                                 <div class="panel-body m10<?= ($location->listing_type !== Location::LISTING_TYPE_PREMIER) ? " panel-disabled" : ''  ?>">
-                                                    <?= $this->element('locations/profile/special_announcements') ?>
+                                                    <?= $this->element('locations/profile/special_announcements', ['adId' => $adId, 'couponId' => $couponId]) ?>
                                                         <?php if ($isCqPremier): ?>
                                                             <!-- Vidscrips -->
                                                             <div>
