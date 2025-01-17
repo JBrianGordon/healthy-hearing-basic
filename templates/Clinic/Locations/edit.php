@@ -6,6 +6,7 @@ use App\Model\Entity\Location;
 
 $siteUrl = Configure::read('siteUrl');
 $locationId = $location->id;
+$couponId = $location->id_coupon;
 $showSpecialAnnouncement = ($location->listing_type == Location::LISTING_TYPE_PREMIER);
 $isBasicClinic = $location->listing_type == Location::LISTING_TYPE_BASIC;
 $hhUrl = $location->hh_url;

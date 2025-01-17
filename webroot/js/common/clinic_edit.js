@@ -538,10 +538,10 @@ document.body.addEventListener("click", (e) => {
     sharedFunctions.addCoupon(target);
     e.preventDefault();
   } else if (target.matches('.js-choose-own-coupon')) {
-    chooseOwnCoupon();
+    sharedFunctions.chooseOwnCoupon();
     e.preventDefault();
   } else if (target.matches('.js-show-coupon-library')) {
-    showCouponLibrary();
+    sharedFunctions.showCouponLibrary();
     e.preventDefault();
   }
 });
@@ -576,20 +576,6 @@ if (pattern.test(altInput.value)) {
   document.querySelector(`.help-block-desc-${key}`).style.display = 'none';
   altInput.parentNode.classList.remove("has-error");
 }
-};
-
-const chooseOwnCoupon = () => {
-document.getElementById("couponLibrary").style.display = 'none';
-document.getElementById("couponSelected").style.display = 'none';
-document.getElementById("uploadCoupon").style.display = 'block';
-sharedFunctions.scrollToElement("#specialAnnouncements");
-};
-
-const showCouponLibrary = () => {
-document.getElementById("couponLibrary").style.display = 'block';
-document.getElementById("couponSelected").style.display = 'none';
-document.getElementById("uploadCoupon").style.display = 'none';
-sharedFunctions.scrollToElement("#specialAnnouncements");
 };
 
 // Special announcement border selection

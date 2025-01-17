@@ -249,6 +249,7 @@ export function addCoupon(obj) {
   document.querySelector("#couponSelected .coupon-image").src = "/img/coupons/coupon-" + couponId + ".jpg";
   document.getElementById('couponLibrary').style.display = 'none';
   document.getElementById('couponSelected').style.display = 'block';
+  document.getElementById('couponOption').style.display = 'block';
   document.getElementById('uploadCoupon').style.display = 'none';
 
   scrollToElement("#specialAnnouncements");
@@ -332,9 +333,9 @@ export function initSpecialAnnouncements() {
           couponSelected.style.display = 'block';
           uploadCoupon.style.display = 'none';
         } else {
-          couponLibrary.style.display = 'block';
+          couponLibrary.style.display = 'none';
           couponSelected.style.display = 'none';
-          uploadCoupon.style.display = 'none';
+          uploadCoupon.style.display = 'block';
         }
       } else {
         couponLibrary.style.display = 'none';
@@ -343,6 +344,22 @@ export function initSpecialAnnouncements() {
       }
     }
 }
+
+export const chooseOwnCoupon = () => {
+  document.getElementById("couponLibrary").style.display = 'none';
+  document.getElementById("couponSelected").style.display = 'none';
+  document.getElementById("uploadCoupon").style.display = 'block';
+  document.getElementById("couponOption").style.display = 'block';
+  scrollToElement("#specialAnnouncements");
+  };
+  
+export const showCouponLibrary = () => {
+  document.getElementById("couponLibrary").style.display = 'block';
+  document.getElementById("couponSelected").style.display = 'none';
+  document.getElementById("uploadCoupon").style.display = 'none';
+  document.getElementById("couponOption").style.display = 'none';
+  scrollToElement("#specialAnnouncements");
+  };
 
 export function onChangeLocationAdFile(obj) {
     const id = obj.id;

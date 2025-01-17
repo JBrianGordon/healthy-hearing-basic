@@ -5,6 +5,9 @@ $locationAd = $location->location_ad;
 <div id="specialAnnouncements" data-iscqpremier="<?= $isCqPremier; ?>" data-adid="<?= $adId; ?>" data-couponid="<?= $couponId; ?>">
     <label class="form-label col-md-3">Special announcement</label>
     <div class="clearfix"></div>
+    <?php if ($isCqPremier): ?>
+        <div class="offset-md-3 mb20" id="couponOption"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
+    <?php endif; ?>
     <div id="couponLibrary" style="display:none;">
         <div class="row mb20 pr20 pl20">
             <div class="col-md-3">
@@ -53,7 +56,7 @@ $locationAd = $location->location_ad;
     </div>
     <div id="couponSelected" style="display:none;">
         <?= $this->Form->hidden('id_coupon', ['id' => 'couponId']); ?>
-        <div class='col-md-3 offset-md-4'>
+        <div class='col-md-3 offset-md-3 pl0'>
             <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
         </div>
         <div class='col-md-5'></div>
@@ -67,10 +70,6 @@ $locationAd = $location->location_ad;
                 ]);
             ?>
         <?php endif; ?>
-        
-        <?php if ($isCqPremier): ?>
-            <div class="offset-md-3 mb20"><button type="button" class="btn btn-md btn-primary js-show-coupon-library mt5">View Coupon Options</button></div>
-        <?php endif; ?>
         <div class='row mb20' id='location-ad-preview'>
             <?php if (!empty($locationAd->image_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
                 <div class='col-md-3 offset-md-3'>
@@ -79,26 +78,26 @@ $locationAd = $location->location_ad;
                             <div class="panel-heading"><?= $locationAd->title ?></div>
                         <?php endif; ?>
                         <div class="panel-body">
-                            <img class="coupon-image coupon-preview<?= empty($locationAd->image_url) ? ' d-none' : '' ?>" src="<?= $locationAd->image_url ?>">
+                            <img class="coupon-image coupon-preview<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
                         </div>
                         <?php if (!empty($locationAd->description)): ?>
                             <div class="panel-footer"><?= $locationAd->description ?></div>
                         <?php endif; ?>
                     </div>
-                    <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement /<br>Choose another</button></div>
+                    <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement</button></div>
                 </div>
             <?php endif; ?>
         </div>
         <?=
             $this->Form->control("location_ad.image_name", [
                 'id' => 'location-ad-image-name0',
-                'label' => 'File name',
+                'label' => 'Upload image',
                 'type' => 'file',
                 'templates' => [
                     'inputContainer' => '{{content}}{{help}}',
                     'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
                 ],
-                'help' => 'Images must be JPG format, less than 500kb, and under 700 pixels in width.
+                'help' => 'Upload your own announcement image. Images must be JPG format, less than 500kb, and under 700 pixels in width.
                 <span class="text-danger" id="location-ad-error" style="display:none;">Image is invalid. Must be a .jpg or .jpeg and less than 500kb.</span>'
             ]);
         ?>

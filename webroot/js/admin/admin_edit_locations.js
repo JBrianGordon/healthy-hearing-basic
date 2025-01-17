@@ -32,11 +32,11 @@ class locationsAdminEdit {
         return false;
       }
       if (target.classList.contains('js-show-coupon-library')) {
-        editObj.showCouponLibrary();
+        sharedFunctions.showCouponLibrary();
         return false;
       }
       if (target.classList.contains('js-choose-own-coupon')) {
-        editObj.chooseOwnCoupon();
+        sharedFunctions.chooseOwnCoupon();
         return false;
       }
       if (target.classList.contains('js-coupon-select')) {
@@ -288,30 +288,6 @@ class locationsAdminEdit {
       return true;
     }
     return false;
-  }
-
-  chooseOwnCoupon() {
-    const couponLibrary = document.querySelector('#couponLibrary');
-    const couponSelected = document.querySelector('#couponSelected');
-    const uploadCoupon = document.querySelector('#uploadCoupon');
-
-    couponLibrary.style.display = 'none';
-    couponSelected.style.display = 'none';
-    uploadCoupon.style.display = 'block';
-
-    sharedFunctions.scrollToElement('#specialAnnouncements');
-  }
-
-  showCouponLibrary() {
-    const couponLibrary = document.querySelector('#couponLibrary');
-    const couponSelected = document.querySelector('#couponSelected');
-    const uploadCoupon = document.querySelector('#uploadCoupon');
-
-    couponLibrary.style.display = 'block';
-    couponSelected.style.display = 'none';
-    uploadCoupon.style.display = 'none';
-
-    sharedFunctions.scrollToElement('#specialAnnouncements');
   }
 
   //Scrolling function used in many of the above functions
