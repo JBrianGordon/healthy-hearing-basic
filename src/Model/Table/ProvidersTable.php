@@ -76,11 +76,14 @@ class ProvidersTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->photo_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->photo_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->photo_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
                 }
             ],
         ]);

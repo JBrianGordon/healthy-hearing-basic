@@ -157,6 +157,42 @@ export function onChangeFileInput(obj) {
   }
 
 // Function to handle provider photo delete
+export function setupProviderDelete() {
+    document.querySelectorAll('.provider-delete').forEach(function(button) {
+        button.addEventListener('click', async (event) => {
+            const clickedButton = event.currentTarget;
+            const locationId = event.currentTarget.getAttribute('data-provider-location-id');
+            const providerId = event.currentTarget.getAttribute('data-provider-id');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            const userConfirmed = confirm("Are you sure you would like to delete this provider?");
+
+            if (userConfirmed) {
+                try {
+                    const response = await fetch('/admin/providers/delete-provider-from-clinic', {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-type': 'application/json',
+                            'X-CSRF-Token': csrfToken
+                        },
+                        method: 'POST',
+                        body: JSON.stringify({
+                            providerId: providerId,
+                            locationId: locationId
+                        })
+                    });
+
+                    const providerDiv = clickedButton.closest('.well.provider').parentElement;
+                    providerDiv.remove();
+                } catch {
+                    alert("OH NO");
+                }
+            }
+        });
+    });
+}
+
+// Function to handle provider photo delete
 export function setupProviderPhotoDelete() {
     document.querySelectorAll('.provider-photo-delete-ck').forEach(function(button) {
         button.addEventListener('click', async (event) => {
@@ -464,6 +500,7 @@ export function initIsMobile() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupProviderDelete();
     setupProviderPhotoDelete();
     setupProviderImageUpload();
     setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');

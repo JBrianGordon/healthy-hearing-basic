@@ -20,7 +20,7 @@ use Cake\Core\Configure;
 	<?php
 		echo $this->Form->hidden("providers." . $key . ".id", ['value'=>$provider->id ?? '']);
 		if (!empty($provider->id)) {
-			echo $this->Html->link('Delete Provider', ['controller' => 'providers', 'action' => 'delete', $provider->id, isset($locationId) ? $locationId : ''], ['class' => 'btn btn-danger btn-xs'], 'Are you sure?');
+			echo '<div class="btn btn-danger btn-xs provider-delete" data-provider-id="' . $provider->id . '" data-provider-location-id="'. $locationId .'">Delete Provider</div>';
 		}
 		echo '<span id="provider' . $key . 'First" class="clinic-anchor"></span>';
 		echo '<div class="form-group">';

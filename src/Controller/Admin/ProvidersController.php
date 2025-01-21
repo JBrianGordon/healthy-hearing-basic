@@ -209,4 +209,27 @@ class ProvidersController extends BaseAdminController
             // Ignore exceptions for now
         }
     }
+
+    public function deleteProviderFromClinic()
+    {
+        $this->viewBuilder()->setLayout('ajax');
+
+        $providerId = $this->request->getData('providerId');
+        $locationId = $this->request->getData('locationId');
+
+        try {
+            $provider = $this->Providers->get($providerId);
+
+            if ($this->Providers->delete($provider)) {
+                $response = ['success' => true];
+            } else {
+                $response = ['success' => false, 'message' => 'Failed to update provider.'];
+            }
+
+            $this->set(compact('response'));
+            $this->viewBuilder()->setOption('serialize', 'response');
+        } catch (Exception $e) {
+            // Ignore exceptions for now
+        }
+    }
 }
