@@ -277,7 +277,6 @@ export function setupImageUpload(inputId, previewSelector) {
 export function addCoupon(obj) {
   var couponId = obj.getAttribute("data-coupon-id");
   document.getElementById("location-ad-image-name0").value = "";
-  document.getElementById("location-ad-title").value = "";
   var specialAnnouncements = document.getElementById('specialAnnouncements');
   specialAnnouncements.dataset.adid = "";
   document.getElementById("couponId").value = couponId;
@@ -342,7 +341,6 @@ export function removePhotoRow(obj, type) {
     if (type === "ad") {
       document.querySelector(".coupon-preview").classList.add('d-none');
       document.getElementById("location-ad-image-name0").value = "";
-      document.getElementById("location-ad-title").value = "";
       document.getElementById("couponId").value = null;
       document.getElementById('specialAnnouncements').dataset.adid = "";
       document.getElementById('specialAnnouncements').dataset.couponid = "";
