@@ -1169,7 +1169,7 @@ class ClinicHelper extends Helper
             $retval .= '<div class="text-center"><button type="button" class="btn btn-large btn-primary text-center js-coupon-select" data-coupon-id="'.$couponId.'">Select</button></div>';
         }
         if ($showRemoveBtn) {
-            $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement</button></div>';
+            $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start">Delete announcement</button></div>';
         }
         return $retval;
     }

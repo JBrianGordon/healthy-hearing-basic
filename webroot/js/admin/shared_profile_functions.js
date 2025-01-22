@@ -269,12 +269,6 @@ export function setupImageUpload(inputId, previewSelector) {
             output.src = reader.result;
             output.style.display = 'block';
             output.classList.remove('d-none');
-            if(inputId === 'location-ad-image-name0'){
-              var specialAnnouncements = document.getElementById('specialAnnouncements');
-              specialAnnouncements.dataset.adid = document.getElementById("location-ad-id").value;
-              specialAnnouncements.dataset.couponid = "";
-              document.getElementById("couponId").value = "";
-            }
         };
         reader.readAsDataURL(file);
     });
@@ -392,6 +386,13 @@ export const chooseOwnCoupon = () => {
   document.getElementById("couponSelected").style.display = 'none';
   document.getElementById("uploadCoupon").style.display = 'block';
   document.getElementById("couponOption").style.display = 'block';
+  const specialAnnouncements = document.getElementById('specialAnnouncements');
+  const locationAdIdElement = document.getElementById("location-ad-id");
+  if (locationAdIdElement !== null) {
+      specialAnnouncements.dataset.adid = locationAdIdElement.value;
+  }
+  specialAnnouncements.dataset.couponid = "";
+  document.getElementById("couponId").value = "";
   scrollToElement("#specialAnnouncements");
 };
   
@@ -402,6 +403,33 @@ export const showCouponLibrary = () => {
   document.getElementById("couponOption").style.display = 'none';
   scrollToElement("#specialAnnouncements");
 };
+
+export function initSpecialAnnouncementHandlers() {
+  const titleInput = document.getElementById('location-ad-title');
+  const descriptionTextarea = document.getElementById('location-ad-description');
+  const panelHeading = document.querySelector('#location-ad-preview .panel-heading');
+  const panelFooter = document.querySelector('#location-ad-preview .panel-footer');
+
+  function handleInputChange(inputElement, targetElement) {
+      inputElement.addEventListener('input', function() {
+          if (inputElement.value.trim() !== '') {
+              targetElement.classList.remove('d-none');
+              targetElement.innerHTML = inputElement.value;
+          } else {
+              targetElement.classList.add('d-none');
+              targetElement.innerHTML = '';
+          }
+      });
+  }
+
+  if (titleInput && panelHeading) {
+      handleInputChange(titleInput, panelHeading);
+  }
+
+  if (descriptionTextarea && panelFooter) {
+      handleInputChange(descriptionTextarea, panelFooter);
+  }
+}
 
 // Special announcement border selection
 export function initSelectBorder() {
@@ -505,6 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupProviderImageUpload();
     setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
     setupImageUpload('location-ad-image-name0', '.coupon-preview');
+    initSpecialAnnouncementHandlers();
     initSelectBorder();
     initIsMobile();
 });

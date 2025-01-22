@@ -63,30 +63,24 @@ $locationAd = $location->location_ad;
     </div>
     <div id="uploadCoupon" style="display:none;">
         <?php if ($adId): ?>
-            <?php echo $this->Form->control('location_ad.id',
+            <?= $this->Form->control('location_ad.id',
                 [
                     'type' => 'hidden',
                     'value' => $adId
-                ]);
+                ])
             ?>
         <?php endif; ?>
         <div class='row mb20' id='location-ad-preview'>
-            <?php if (!empty($locationAd->image_url) || !empty($locationAd->title) || !empty($locationAd->description)): ?>
-                <div class='col-md-3 offset-md-3'>
-                    <div class="panel panel-light text-center mb5">
-                        <?php if (!empty($locationAd->title)): ?>
-                            <div class="panel-heading"><?= $locationAd->title ?></div>
-                        <?php endif; ?>
-                        <div class="panel-body p10">
-                            <img class="coupon-image coupon-preview p0<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
-                        </div>
-                        <?php if (!empty($locationAd->description)): ?>
-                            <div class="panel-footer"><?= $locationAd->description ?></div>
-                        <?php endif; ?>
+            <div class='col-md-3 offset-md-3 pl0'>
+                <div class="panel panel-light text-center mb5">
+                    <div class="panel-heading<?= empty($locationAd->title) ? ' d-none' : '' ?>"><?= $locationAd->title ?></div>
+                    <div class="panel-body">
+                        <img class="coupon-image coupon-preview p0<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
                     </div>
-                    <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5">Delete announcement</button></div>
+                    <div class="panel-footer<?= empty($locationAd->description) ? ' d-none' : ''  ?>"><?= $locationAd->description ?></div>
                 </div>
-            <?php endif; ?>
+                <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start">Delete announcement</button></div>
+            </div>
         </div>
         <?=
             $this->Form->control("location_ad.image_name", [
