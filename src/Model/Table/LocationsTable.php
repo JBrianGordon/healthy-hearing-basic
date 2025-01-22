@@ -142,6 +142,8 @@ class LocationsTable extends Table
         ]);
         $this->hasOne('LocationAds', [
             'foreignKey' => 'location_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true,
         ]);
         $this->hasMany('LocationEmails', [
             'foreignKey' => 'location_id',

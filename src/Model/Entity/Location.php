@@ -428,7 +428,7 @@ class Location extends Entity
         'cs_calls' => true,
         'import_locations' => true,
         'import_status' => true,
-        'location_ads' => true,
+        'location_ad' => true,
         'location_emails' => true,
         'location_hours' => true,
         'location_links' => true,
