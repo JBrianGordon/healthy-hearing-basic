@@ -396,7 +396,7 @@ class LocationsController extends BaseAdminController
         if ($locationAdsTable->delete($locationAdEntity)) {
             $response = ['success' => true];
         } else {
-            $response = ['success' => false, 'message' => 'Failed to delete photo from album.'];
+            $response = ['success' => false, 'message' => 'Failed to delete Special Announcement.'];
         }
 
         $this->set(compact('response'));
