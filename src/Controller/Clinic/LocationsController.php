@@ -26,7 +26,6 @@ class LocationsController extends BaseClinicController
                 'LocationHours',
                 'LocationAds',
                 'LocationPhotos',
-                'LocationVidscrips',
                 'Providers'
             ],
         ]);

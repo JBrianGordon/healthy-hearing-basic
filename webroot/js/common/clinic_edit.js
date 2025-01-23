@@ -324,23 +324,23 @@ if (document.querySelector("#url").value === "") {
 }
 
 // Vidscrip validation
-const vidscripsVidscripInput = document.querySelector("#locationvidscrips-vidscrip");
-const vidscripsEmailInput = document.querySelector("#locationvidscrips-email");
+// const vidscripsVidscripInput = document.querySelector("#locationvidscrips-vidscrip");
+// const vidscripsEmailInput = document.querySelector("#locationvidscrips-email");
 
-const handleVidscripBlur = () => {
-  if (vidscripsVidscripInput.value === "" && vidscripsEmailInput.value === "") {
-    vidscripsVidscripInput.required = false;
-    vidscripsEmailInput.required = false;
-  } else {
-    vidscripsVidscripInput.required = true;
-    vidscripsEmailInput.required = true;
-  }
-};
+// const handleVidscripBlur = () => {
+//   if (vidscripsVidscripInput.value === "" && vidscripsEmailInput.value === "") {
+//     vidscripsVidscripInput.required = false;
+//     vidscripsEmailInput.required = false;
+//   } else {
+//     vidscripsVidscripInput.required = true;
+//     vidscripsEmailInput.required = true;
+//   }
+// };
 
-if(vidscripsVidscripInput !== null){
-	vidscripsVidscripInput.addEventListener("blur", handleVidscripBlur);
-	vidscripsEmailInput.addEventListener("blur", handleVidscripBlur);
-}
+// if(vidscripsVidscripInput !== null){
+// 	vidscripsVidscripInput.addEventListener("blur", handleVidscripBlur);
+// 	vidscripsEmailInput.addEventListener("blur", handleVidscripBlur);
+// }
 
 // Only display the completion modal once per session. Display again if the percentage changes.
 /*** TODO: uncomment when isClinic check added:

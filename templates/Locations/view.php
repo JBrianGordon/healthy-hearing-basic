@@ -455,7 +455,7 @@ $this->Breadcrumbs->add($location->title);
 							<?php endif; ?>
 							
 							<!-- Vidscrips -->
-							<?php if ($location->is_cq_premier && isset($location->location_vidscrip->vidscrip)) : ?>
+							<?php /*if ($location->is_cq_premier && isset($location->location_vidscrip->vidscrip)) : ?>
 								<div class="vidscrip-container" style="margin: 0 auto 20px; max-width: 600px">
 									<div id="vidscrip-embed-<?= $location->location_vidscrip->vidscrip ?>"></div>
 									<script src="https://widget.vidscrip.com/vidscrip.js"></script>
@@ -493,7 +493,7 @@ $this->Breadcrumbs->add($location->title);
 											
 									</script>
 								</div>
-							<?php endif; ?>
+							<?php endif;*/ ?>
 				
 							<!-- Linked Locations -->
 							<?php if ($isEnhancedOrPremier): ?>

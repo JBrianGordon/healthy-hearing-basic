@@ -38,7 +38,6 @@ class LocationsTableTest extends TestCase
         'app.LocationPhotos',
         'app.LocationsProviders',
         'app.LocationsUsers',
-        'app.LocationVidscrips',
         'app.Reviews',
         'app.Content',
     ];
