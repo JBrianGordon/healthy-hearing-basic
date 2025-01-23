@@ -75,11 +75,11 @@ $locationAd = $location->location_ad;
                 <div class="panel panel-light text-center mb5">
                     <div class="panel-heading<?= empty($locationAd->title) ? ' d-none' : '' ?>"><?= $locationAd->title ?></div>
                     <div class="panel-body">
-                        <img class="coupon-image coupon-preview p0<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
+                        <img id="location-ad-id-uploaded" class="coupon-image coupon-preview p0<?= !empty($location->location_ad->border) ? ' ' . $location->location_ad->border : '' ?><?= (empty($locationAd->image_url) && empty($locationAd->id_coupon)) ? ' d-none' : '' ?>" src="<?= empty($locationAd->id_coupon) ? $locationAd->image_url : $locationAd->id_coupon ?>">
                     </div>
                     <div class="panel-footer<?= empty($locationAd->description) ? ' d-none' : ''  ?>"><?= $locationAd->description ?></div>
                 </div>
-                <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start">Delete announcement</button></div>
+                <div class="text-center"><button type="button" class="btn btn-md btn-danger ck-location-ad-delete mt5 ml5 float-start" data-location-ad-id="<?= $locationAd->id ?>">Delete announcement</button></div>
             </div>
         </div>
         <?=

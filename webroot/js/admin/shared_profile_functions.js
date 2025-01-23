@@ -290,6 +290,35 @@ export function addCoupon(obj) {
   scrollToElement("#specialAnnouncements");
 }
 
+export async function setupSpecialAnnouncementPhotoDelete(event) {
+    document.querySelectorAll('.ck-location-ad-delete').forEach(function(button) {
+        button.addEventListener('click', async (event) => {
+            const locationAdId = button.getAttribute('data-location-ad-id');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            try {
+              if (locationAdId) { // Only perform for images already in CkBox
+                const response = await fetch('/admin/locations/delete-location-ad', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        locationAdId: locationAdId
+                    })
+                });
+                const image = document.getElementById('location-ad-id-uploaded');
+                image.classList.add('d-none'); // BRIAN -- more delete code?
+              }
+            } catch {
+              // TODO
+              alert ("OH NO");
+            }
+        })
+    });
+}
+
 export async function handleLocationPhotoDeleteClick(event) {
     const clickedButton = event.currentTarget;
     const locationPhotoId = clickedButton.getAttribute('data-location-photo-id');
@@ -533,5 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupImageUpload('location-ad-image-name0', '.coupon-preview');
     initSpecialAnnouncementHandlers();
     initSelectBorder();
+    setupSpecialAnnouncementPhotoDelete();
     initIsMobile();
 });

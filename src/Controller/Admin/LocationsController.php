@@ -385,4 +385,22 @@ class LocationsController extends BaseAdminController
         $this->set(compact('response'));
         $this->viewBuilder()->setOption('serialize', 'response');
     }
+
+    public function deleteLocationAd() {
+        $this->viewBuilder()->setLayout('ajax');
+
+        $locationAdId = $this->request->getData('locationAdId');
+
+        $locationAdsTable = $this->fetchTable('LocationAds');
+        $locationAdEntity = $locationAdsTable->get($locationAdId);
+
+        if ($locationAdsTable->delete($locationAdEntity)) {
+            $response = ['success' => true];
+        } else {
+            $response = ['success' => false, 'message' => 'Failed to delete photo from album.'];
+        }
+
+        $this->set(compact('response'));
+        $this->viewBuilder()->setOption('serialize', 'response');
+    }
 }

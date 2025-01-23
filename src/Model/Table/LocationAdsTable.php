@@ -69,11 +69,14 @@ class LocationAdsTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->image_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->image_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->image_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
                 }
             ],
         ]);
