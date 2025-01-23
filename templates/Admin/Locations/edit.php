@@ -608,7 +608,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             </div>
                                         </div>
                                     <?php endif; ?>
-                                    <?php if ($isCqPremier): ?>
+                                    <?php /*if ($isCqPremier): ?>
                                         <!-- Vidscrips -->
                                         <div id="vidscrips">
                                             <?= $this->Form->control('location_vidscrip.id',
@@ -633,7 +633,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             ?>
                                             <span class="help-block">Enter the email address associated with your Vidscrip account.</span>
                                         </div>
-                                    <?php endif; ?>
+                                    <?php endif; */?>
                                 </div>
                                 
                                 <!-- Provider Tab -->

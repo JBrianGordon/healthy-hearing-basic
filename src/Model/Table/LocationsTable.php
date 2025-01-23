@@ -42,7 +42,6 @@ use Cake\Datasource\EntityInterface;
  * @property \App\Model\Table\LocationNotesTable&\Cake\ORM\Association\HasMany $LocationNotes
  * @property \App\Model\Table\LocationPhotosTable&\Cake\ORM\Association\HasMany $LocationPhotos
  * @property \App\Model\Table\LocationUsersTable&\Cake\ORM\Association\HasMany $LocationUsers
- * @property \App\Model\Table\LocationVidscripsTable&\Cake\ORM\Association\HasMany $LocationVidscrips
  * @property \App\Model\Table\ReviewsTable&\Cake\ORM\Association\HasMany $Reviews
  *
  * @method \App\Model\Entity\Location newEmptyEntity()
@@ -168,9 +167,6 @@ class LocationsTable extends Table
                 'Providers.priority' => 'ASC',
                 'Providers.id' => 'ASC',
             ]
-        ]);
-        $this->hasOne('LocationVidscrips', [
-            'foreignKey' => 'location_id',
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'location_id',
@@ -1435,13 +1431,6 @@ class LocationsTable extends Table
 
                 // Get ads/coupons/special announcements
                 $location->location_ad = $this->LocationAds->find('all', [
-                    'contain' => [],
-                    'conditions' => ['location_id' => $locationId]
-                ])->first();
-            }
-            //Get vidscrips
-            if ($location->is_cq_premier) {
-                $location->location_vidscrip = $this->LocationVidscrips->find('all', [
                     'contain' => [],
                     'conditions' => ['location_id' => $locationId]
                 ])->first();

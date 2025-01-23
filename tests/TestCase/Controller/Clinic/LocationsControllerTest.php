@@ -36,7 +36,6 @@ class LocationsControllerTest extends TestCase
         'app.LocationPhotos',
         'app.LocationsProviders',
         'app.LocationsUsers',
-        'app.LocationVidscrips',
         'app.Reviews',
     ];
 

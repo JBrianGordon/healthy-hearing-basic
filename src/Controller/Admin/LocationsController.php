@@ -114,7 +114,6 @@ class LocationsController extends BaseAdminController
             'LocationHours',
             'LocationAds',
             'LocationPhotos',
-            'LocationVidscrips',
             'Providers',
             'LocationNotes' => [
                 'sort' => ['LocationNotes.created' => 'DESC']

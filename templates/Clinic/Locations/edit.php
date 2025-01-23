@@ -539,7 +539,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                 <?php endif; ?>
                                                 <div class="panel-body m10<?= ($location->listing_type !== Location::LISTING_TYPE_PREMIER) ? " panel-disabled" : ''  ?>">
                                                     <?= $this->element('locations/profile/special_announcements', ['adId' => $adId, 'couponId' => $couponId]) ?>
-                                                        <?php if ($isCqPremier): ?>
+                                                        <?php /* if ($isCqPremier): ?>
                                                             <!-- Vidscrips -->
                                                             <div>
                                                                 <h2 class="mt20 mb20">Vidscrips</h2>
@@ -568,8 +568,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                 <span class="help-block col-md-9 col-md-offset-3">Add Vidscrip ID number and email to access embedded Vidscrip videos.</span>
                                                             </div>
                                                             <div class="clearfix"></div>
-                                                        <?php endif; ?>
-                                                        <hr>
+                                                        <?php endif; */ ?>
                                                         <!-- Clinic logo -->
                                                         <div>
                                                             <h2 class="mt20 mb20">Clinic logo</h2>
