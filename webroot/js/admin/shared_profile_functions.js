@@ -418,6 +418,7 @@ export async function setupSpecialAnnouncementPhotoDelete() {
       const adImage = document.getElementById('location-ad-id-uploaded');
       const adDescription = document.getElementById('location-ad-description');
       specialAnnouncements.dataset.couponid = '';
+      document.getElementById("couponId").value = "";
       imageInput.value = '';
       couponSelected.style.display = 'none';
       uploadCoupon.style.display = 'block';
