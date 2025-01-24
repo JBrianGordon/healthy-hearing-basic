@@ -274,6 +274,117 @@ export function setupImageUpload(inputId, previewSelector) {
     });
 }
 
+export async function handleLocationPhotoDeleteClick(event) {
+    const clickedButton = event.currentTarget;
+    const locationPhotoId = clickedButton.getAttribute('data-location-photo-id');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    try {
+      if (locationPhotoId) { // Only perform for images already in CkBox
+        const response = await fetch('/admin/locations/delete-location-photo', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                locationPhotoId: locationPhotoId
+            })
+        });
+      }
+      const row = clickedButton.closest('tr');
+      row.remove();
+    } catch {
+      // TODO
+      alert ("OH NO");
+    }
+}
+
+export function initLocationPhotoDelete() {
+    document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
+        button.addEventListener('click', handleLocationPhotoDeleteClick);
+    });
+}
+
+export function initSpecialAnnouncements() {
+    const specialAnnouncements = document.querySelector('#specialAnnouncements');
+    if(specialAnnouncements !== null){
+      const isCqPremier = specialAnnouncements.dataset.iscqpremier;
+      const adId = specialAnnouncements.dataset.adid;
+      const couponId = specialAnnouncements.dataset.couponid;
+
+      const couponLibrary = document.querySelector('#couponLibrary');
+      const couponSelected = document.querySelector('#couponSelected');
+      const uploadCoupon = document.querySelector('#uploadCoupon');
+      
+      if (isCqPremier && !adId) {
+        if (couponId) {
+          couponLibrary.style.display = 'none';
+          couponSelected.style.display = 'block';
+          uploadCoupon.style.display = 'none';
+        } else {
+          couponLibrary.style.display = 'none';
+          couponSelected.style.display = 'none';
+          uploadCoupon.style.display = 'block';
+        }
+      } else {
+        couponLibrary.style.display = 'none';
+        couponSelected.style.display = 'none';
+        uploadCoupon.style.display = 'block';
+      }
+    }
+}
+
+export function initSpecialAnnouncementHandlers() {
+  const titleInput = document.getElementById('location-ad-title');
+  const descriptionTextarea = document.getElementById('location-ad-description');
+  const panelHeading = document.querySelector('#location-ad-preview .panel-heading');
+  const panelFooter = document.querySelector('#location-ad-preview .panel-footer');
+
+  function handleInputChange(inputElement, targetElement) {
+      inputElement.addEventListener('input', function() {
+          if (inputElement.value.trim() !== '') {
+              targetElement.classList.remove('d-none');
+              targetElement.innerHTML = inputElement.value;
+          } else {
+              targetElement.classList.add('d-none');
+              targetElement.innerHTML = '';
+          }
+      });
+  }
+
+  if (titleInput && panelHeading) {
+      handleInputChange(titleInput, panelHeading);
+  }
+
+  if (descriptionTextarea && panelFooter) {
+      handleInputChange(descriptionTextarea, panelFooter);
+  }
+}
+
+export const chooseOwnCoupon = () => {
+  document.getElementById("couponLibrary").style.display = 'none';
+  document.getElementById("couponSelected").style.display = 'none';
+  document.getElementById("uploadCoupon").style.display = 'block';
+  document.getElementById("couponOption").style.display = 'block';
+  const specialAnnouncements = document.getElementById('specialAnnouncements');
+  const locationAdIdElement = document.getElementById("location-ad-id");
+  if (locationAdIdElement !== null) {
+      specialAnnouncements.dataset.adid = locationAdIdElement.value;
+  }
+  specialAnnouncements.dataset.couponid = "";
+  document.getElementById("couponId").value = "";
+  scrollToElement("#specialAnnouncements");
+};
+  
+export const showCouponLibrary = () => {
+  document.getElementById("couponLibrary").style.display = 'block';
+  document.getElementById("couponSelected").style.display = 'none';
+  document.getElementById("uploadCoupon").style.display = 'none';
+  document.getElementById("couponOption").style.display = 'none';
+  scrollToElement("#specialAnnouncements");
+};
+
 export function addCoupon(obj) {
   var couponId = obj.getAttribute("data-coupon-id");
   document.getElementById("location-ad-image-name0").value = "";
@@ -335,111 +446,6 @@ export async function setupSpecialAnnouncementPhotoDelete() {
       }
     });
   });
-}
-
-export async function handleLocationPhotoDeleteClick(event) {
-    const clickedButton = event.currentTarget;
-    const locationPhotoId = clickedButton.getAttribute('data-location-photo-id');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    try {
-      if (locationPhotoId) { // Only perform for images already in CkBox
-        const response = await fetch('/admin/locations/delete-location-photo', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-                'X-CSRF-Token': csrfToken
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                locationPhotoId: locationPhotoId
-            })
-        });
-      }
-      const row = clickedButton.closest('tr');
-      row.remove();
-    } catch {
-      // TODO
-      alert ("OH NO");
-    }
-}
-
-export function initSpecialAnnouncements() {
-    const specialAnnouncements = document.querySelector('#specialAnnouncements');
-    if(specialAnnouncements !== null){
-      const isCqPremier = specialAnnouncements.dataset.iscqpremier;
-      const adId = specialAnnouncements.dataset.adid;
-      const couponId = specialAnnouncements.dataset.couponid;
-
-      const couponLibrary = document.querySelector('#couponLibrary');
-      const couponSelected = document.querySelector('#couponSelected');
-      const uploadCoupon = document.querySelector('#uploadCoupon');
-      
-      if (isCqPremier && !adId) {
-        if (couponId) {
-          couponLibrary.style.display = 'none';
-          couponSelected.style.display = 'block';
-          uploadCoupon.style.display = 'none';
-        } else {
-          couponLibrary.style.display = 'none';
-          couponSelected.style.display = 'none';
-          uploadCoupon.style.display = 'block';
-        }
-      } else {
-        couponLibrary.style.display = 'none';
-        couponSelected.style.display = 'none';
-        uploadCoupon.style.display = 'block';
-      }
-    }
-}
-
-export const chooseOwnCoupon = () => {
-  document.getElementById("couponLibrary").style.display = 'none';
-  document.getElementById("couponSelected").style.display = 'none';
-  document.getElementById("uploadCoupon").style.display = 'block';
-  document.getElementById("couponOption").style.display = 'block';
-  const specialAnnouncements = document.getElementById('specialAnnouncements');
-  const locationAdIdElement = document.getElementById("location-ad-id");
-  if (locationAdIdElement !== null) {
-      specialAnnouncements.dataset.adid = locationAdIdElement.value;
-  }
-  specialAnnouncements.dataset.couponid = "";
-  document.getElementById("couponId").value = "";
-  scrollToElement("#specialAnnouncements");
-};
-  
-export const showCouponLibrary = () => {
-  document.getElementById("couponLibrary").style.display = 'block';
-  document.getElementById("couponSelected").style.display = 'none';
-  document.getElementById("uploadCoupon").style.display = 'none';
-  document.getElementById("couponOption").style.display = 'none';
-  scrollToElement("#specialAnnouncements");
-};
-
-export function initSpecialAnnouncementHandlers() {
-  const titleInput = document.getElementById('location-ad-title');
-  const descriptionTextarea = document.getElementById('location-ad-description');
-  const panelHeading = document.querySelector('#location-ad-preview .panel-heading');
-  const panelFooter = document.querySelector('#location-ad-preview .panel-footer');
-
-  function handleInputChange(inputElement, targetElement) {
-      inputElement.addEventListener('input', function() {
-          if (inputElement.value.trim() !== '') {
-              targetElement.classList.remove('d-none');
-              targetElement.innerHTML = inputElement.value;
-          } else {
-              targetElement.classList.add('d-none');
-              targetElement.innerHTML = '';
-          }
-      });
-  }
-
-  if (titleInput && panelHeading) {
-      handleInputChange(titleInput, panelHeading);
-  }
-
-  if (descriptionTextarea && panelFooter) {
-      handleInputChange(descriptionTextarea, panelFooter);
-  }
 }
 
 // Special announcement border selection
@@ -544,6 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupProviderImageUpload();
     setupImageUpload('logo-imageUpload0', '#logo-imagePreview0');
     setupImageUpload('location-ad-image-name0', '.coupon-preview');
+    initLocationPhotoDelete();
+    initSpecialAnnouncements();
     initSpecialAnnouncementHandlers();
     initSelectBorder();
     setupSpecialAnnouncementPhotoDelete();

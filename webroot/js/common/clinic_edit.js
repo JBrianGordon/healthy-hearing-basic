@@ -167,10 +167,6 @@ const onChangeIsMobile = (isMobile) => {
     locationRadius.required = false;
   }
 };
-
-// Initialize the "Special Announcements" section.
-// Coupon Library is currently only available to CQ Premier clinics
-sharedFunctions.initSpecialAnnouncements();
 	
 // Clinic profile completion. Currently we are only checking the first provider
 const providerArray = [
@@ -539,13 +535,6 @@ button.addEventListener('click', () => {
 	document.getElementById(target).value = '';
 	img.setAttribute('src', '');
 });
-});
-
-//Delete buttons for location photos
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
-      button.addEventListener('click', sharedFunctions.handleLocationPhotoDeleteClick);
-  });
 });
 
 const validatePhotoAlt = (key) => {

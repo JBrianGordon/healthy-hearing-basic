@@ -120,14 +120,6 @@ class locationsAdminEdit {
     });
     document.getElementById('location-hour-is-closed-lunch').dispatchEvent(new Event('change'));
     editObj.locationAutocomplete();
-    sharedFunctions.initSpecialAnnouncements();
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.ck-location-photo-delete').forEach(function(button) {
-            button.addEventListener('click', sharedFunctions.handleLocationPhotoDeleteClick);
-        });
-    });
-
   }
 
   selectImport(importId) {
