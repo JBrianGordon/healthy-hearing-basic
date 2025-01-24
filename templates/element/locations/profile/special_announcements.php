@@ -79,7 +79,7 @@ $locationAd = $location->location_ad;
                     </div>
                     <div class="panel-footer<?= empty($locationAd->description) ? ' d-none' : ''  ?>"><?= $locationAd->description ?></div>
                 </div>
-                <div class="text-center"><button type="button" class="btn btn-md btn-danger ck-location-ad-delete mt5 ml5 float-start" data-location-ad-id="<?= $locationAd->id ?>">Delete announcement</button></div>
+                <div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start" data-location-ad-id="<?= $locationAd->id ?>">Delete announcement</button></div>
             </div>
         </div>
         <?=

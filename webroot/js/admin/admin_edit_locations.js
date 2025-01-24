@@ -19,18 +19,6 @@ class locationsAdminEdit {
         editObj.deleteLink(target);
         return false;
       }
-      if (target.classList.contains('js-photo-delete')) {
-        sharedFunctions.removePhotoRow(target, 'photo');
-        return false;
-      }
-      if (target.classList.contains('js-logo-delete')) {
-        sharedFunctions.removePhotoRow(target, 'logo');
-        return false;
-      }
-      if (target.classList.contains('js-ad-delete')) {
-        sharedFunctions.removePhotoRow(target, 'ad');
-        return false;
-      }
       if (target.classList.contains('js-show-coupon-library')) {
         sharedFunctions.showCouponLibrary();
         return false;

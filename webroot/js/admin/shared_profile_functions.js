@@ -290,33 +290,51 @@ export function addCoupon(obj) {
   scrollToElement("#specialAnnouncements");
 }
 
-export async function setupSpecialAnnouncementPhotoDelete(event) {
-    document.querySelectorAll('.ck-location-ad-delete').forEach(function(button) {
-        button.addEventListener('click', async (event) => {
-            const locationAdId = button.getAttribute('data-location-ad-id');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            try {
-              if (locationAdId) { // Only perform for images already in CkBox
-                const response = await fetch('/admin/locations/delete-location-ad', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    method: 'POST',
-                    body: JSON.stringify({
-                        locationAdId: locationAdId
-                    })
-                });
-                const image = document.getElementById('location-ad-id-uploaded');
-                image.classList.add('d-none'); // BRIAN -- more delete code?
-              }
-            } catch {
-              // TODO
-              alert ("OH NO");
-            }
-        })
+export async function setupSpecialAnnouncementPhotoDelete() {
+  const adDeleteButtons = document.querySelectorAll('.js-ad-delete');
+
+  adDeleteButtons.forEach((button) => {
+    button.addEventListener('click', async (e) => {
+      const specialAnnouncements = document.getElementById('specialAnnouncements');
+      const locationAdId = e.currentTarget.getAttribute('data-location-ad-id');
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      const couponSelected = document.getElementById('couponSelected');
+      const uploadCoupon = document.getElementById('uploadCoupon');
+      const imageInput = document.getElementById('location-ad-image-name0');
+      const titlePreview = document.querySelector('#uploadCoupon .panel-heading');
+      const descriptionPreview = document.querySelector('#uploadCoupon .panel-footer');
+      const adTitle = document.getElementById('location-ad-title');
+      const adImage = document.getElementById('location-ad-id-uploaded');
+      const adDescription = document.getElementById('location-ad-description');
+      specialAnnouncements.dataset.couponid = '';
+      imageInput.value = '';
+      couponSelected.style.display = 'none';
+      uploadCoupon.style.display = 'block';
+      titlePreview.classList.add('d-none');
+      descriptionPreview.classList.add('d-none');
+      adTitle.value = '';
+      adImage.classList.add('d-none');
+      adDescription.value = '';
+      try {
+        if (locationAdId) { // Only perform for images already in CkBox
+          const response = await fetch('/admin/locations/delete-location-ad', {
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-type': 'application/json',
+                  'X-CSRF-Token': csrfToken
+              },
+              method: 'POST',
+              body: JSON.stringify({
+                  locationAdId: locationAdId
+              })
+          });
+        }
+      } catch {
+        // TODO
+        alert ("OH NO");
+      }
     });
+  });
 }
 
 export async function handleLocationPhotoDeleteClick(event) {
@@ -342,40 +360,6 @@ export async function handleLocationPhotoDeleteClick(event) {
     } catch {
       // TODO
       alert ("OH NO");
-    }
-}
-
-export function removePhotoRow(obj, type) {
-    const row = obj.closest('tr');
-    const key = obj.dataset.key;
-    
-    if (type === "photo") {
-      document.querySelector(`#location-photos-${key}-photo-url`).value = '';
-      const fileInput = document.querySelector(`#location-photos-${key}-file`);
-      if (fileInput !== null) {
-        fileInput.value = '';
-      }
-      row.style.display = 'none';
-    }
-    
-    if (type === "logo") {
-      document.querySelector("#LocationLogo0Url").value = '';
-      document.querySelector("#photo-thumb-logo").src = '';
-      const fileInput = document.querySelector("#LocationLogo0File");
-      if (fileInput !== null) {
-        fileInput.value = '';
-      }
-    }
-    
-    if (type === "ad") {
-      document.querySelector(".coupon-preview").classList.add('d-none');
-      document.getElementById("location-ad-image-name0").value = "";
-      document.getElementById("couponId").value = null;
-      document.getElementById('specialAnnouncements').dataset.adid = "";
-      document.getElementById('specialAnnouncements').dataset.couponid = "";
-
-      scrollToElement("#specialAnnouncements");
-      initSpecialAnnouncements();
     }
 }
 

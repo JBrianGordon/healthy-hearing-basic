@@ -513,22 +513,6 @@ if (target.matches('#LocationHourIsClosedLunch')) {
 });
 
 document.body.addEventListener("click", (e) => {
-  if (e.target.classList.contains('js-photo-delete')) {
-    sharedFunctions.removePhotoRow(e.target, 'photo');
-    e.preventDefault();
-    return false;
-  }
-  if (e.target.classList.contains('js-logo-delete')) {
-    sharedFunctions.removePhotoRow(e.target, 'logo');
-    e.preventDefault();
-    return false;
-  }
-  if (e.target.classList.contains('js-ad-delete')) {
-    sharedFunctions.removePhotoRow(e.target, 'ad');
-    e.preventDefault();
-    return false;
-  }
-
   const { target } = e;
 
   if (target.matches('.js-link-delete')) {
