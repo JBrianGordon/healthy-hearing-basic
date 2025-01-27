@@ -1156,7 +1156,7 @@ class ClinicHelper extends Helper
     /**
     * Display a coupon preview with select or remove button
     */
-    public function previewCoupon($couponId, $showSelectBtn=true, $showRemoveBtn=false) {
+    public function previewCoupon($couponId, $showSelectBtn=true, $showRemoveBtn=false, $locationAdId=null) {
         $retval = '<div class="panel panel-light text-center mb5">';
             $retval .= '<div class="panel-heading">Special Offer</div>';
                 $retval .= '<div class="panel-body">';
@@ -1169,7 +1169,7 @@ class ClinicHelper extends Helper
             $retval .= '<div class="text-center"><button type="button" class="btn btn-large btn-primary text-center js-coupon-select" data-coupon-id="'.$couponId.'">Select</button></div>';
         }
         if ($showRemoveBtn) {
-            $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start">Delete announcement</button></div>';
+            $retval .= '<div class="text-center"><button type="button" class="btn btn-md btn-danger js-ad-delete mt5 ml5 float-start" data-location-ad-id=' . $locationAdId . '>Delete announcement</button></div>';
         }
         return $retval;
     }

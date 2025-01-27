@@ -57,7 +57,7 @@ $locationAd = $location->location_ad;
     <div id="couponSelected" style="display:none;">
         <?= $this->Form->hidden('id_coupon', ['id' => 'couponId']); ?>
         <div class='col-md-3 offset-md-3 pl0'>
-            <?= $this->Clinic->previewCoupon($couponId, false, true) ?>
+            <?= $this->Clinic->previewCoupon($couponId, false, true, $locationAd->id) ?>
         </div>
         <div class='col-md-5'></div>
     </div>
