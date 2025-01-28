@@ -107,6 +107,7 @@ if ($copyPage) {
 				<?php
 				foreach (CaCallGroup::$col2Topics as $topicKey => $label) {
 					echo $this->Form->control($topicKey, [
+						'type' => 'checkbox',
 						'label' => [
 							'text'=>'<span class="topic-label">'.$label.'</span>',
 							'style' => 'text-align:left;'
