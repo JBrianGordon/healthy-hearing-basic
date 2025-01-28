@@ -160,6 +160,24 @@ return [
             }
         ],
 
+        [ // Clinics can only delete LocationAd images from their clinic
+            'role' => 'clinic',
+            'prefix' => 'Admin',
+            'controller' => 'Locations',
+            'action' => 'deleteLocationAd',
+            'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
+                $locationAdId = $request->getData('locationAdId');
+                $locationAdsRecord = \Cake\ORM\TableRegistry::get('LocationAds')->get($locationAdId);
+
+                $userLocationId = $user->locations[0]->id;
+
+                if (!empty($locationAdsRecord) && !empty($userLocationId)) {
+                    return $userLocationId === $locationAdsRecord->location_id;
+                }
+                return false;
+            }
+        ],
+
 /********************************************
 *************** Public routes ***************
 *********************************************/

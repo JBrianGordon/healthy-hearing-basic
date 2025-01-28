@@ -41,6 +41,20 @@ class LocationsController extends BaseClinicController
                     unset($data['providers'][$key]);
                 }
             }
+
+            // remove last empty/new LocationPhoto
+            array_pop($data['location_photos']);
+
+            // Delete LocationAd records if no custom ad/special announcement is uploaded
+            if ($data['location_ad']['title'] === '' &&
+                $data['location_ad']['description'] === '' &&
+                ($data['location_ad']['image_name'])->getClientFilename() === '') {
+                if (!empty($data->location_ad)) {
+                    $this->Locations->LocationAds->delete($data->location_ad);
+                }
+                unset($data['location_ad']);
+            }
+
             $location = $this->Locations->patchEntity(
                 $location,
                 $data,
