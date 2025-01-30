@@ -68,7 +68,9 @@ class CorpsController extends BaseAdminController
             'contain' => ['Author', 'Contributors'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+
             $corp = $this->Corps->patchEntity($corp, $this->request->getData());
+
             if ($this->Corps->save($corp)) {
                 $this->Flash->success(__('The corp has been saved.'));
 

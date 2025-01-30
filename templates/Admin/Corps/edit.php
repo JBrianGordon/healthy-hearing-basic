@@ -43,7 +43,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 								<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
 							</div>
 							<div class="clearfix"></div>
-				            <?= $this->Form->create($corp, ['id' => 'corpForm']) ?>
+				            <?= $this->Form->create($corp, ['type' => 'file', 'id' => 'corpForm']) ?>
 				            <fieldset>
 				                <?php
 					                echo $this->Form->control('title');
@@ -72,9 +72,32 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 												echo $this->Form->control('title_long');
 												echo $this->Form->control('slug');
 												echo $this->Form->control('thumb_url');
-												//*** TODO: add upload file functionality ***
+											?>
+                                            <img id="logo-imagePreview0" src="<?= $corp->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="<?= $corp->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
+                                            <?=
+                                                $this->Form->control('logo_name', [
+                                                    'id' => 'logo-imageUpload0',
+                                                    'class' => 'mt-3',
+                                                    'type' => 'file',
+                                                    'required' => false,
+                                                    'label' => ['text' => 'Update logo']
+                                                ]);
+                                            ?>
+                                            <?php
 												echo $this->Form->control('facebook_title');
 												echo $this->Form->control('facebook_description');
+											?>
+                                            <img id="facebook-imagePreview0" src="<?= $corp->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="<?= $corp->facebook_image_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
+                                            <?=
+                                                $this->Form->control('facebook_image_name', [
+                                                    'id' => 'facebook-imageUpload0',
+                                                    'class' => 'mt-3',
+                                                    'type' => 'file',
+                                                    'required' => false,
+                                                    'label' => ['text' => 'Update Facebook Image']
+                                                ]);
+                                            ?>
+											<?php
 												echo $this->Form->control('facebook_image');
 												echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 											?>

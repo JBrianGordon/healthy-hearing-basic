@@ -7,6 +7,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
+use Cake\Cache\Cache;
+
 /**
  * Corps Model
  *
@@ -64,6 +71,53 @@ class CorpsTable extends Table
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
             'priority' => 0.7,
         ]);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'logo_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+            'facebook_image_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+                    $ckBoxImageId = $matches[1];
+                    return [
+                        $ckBoxImageId,
+                    ];
+                }
+            ],
+        ]);
+
+        // Associations
         $this->belongsTo('Author')
             ->setClassName('Users')
             ->setForeignKey('user_id');
@@ -74,6 +128,54 @@ class CorpsTable extends Table
             ->setTargetForeignKey('user_id')
             ->setProperty('contributors')
             ->setThrough('CorpsUsers');
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity->logo_name !== null) {
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
+        }
+
+        $publicUrl = $ckBoxUploadData['response']['url'];
+
+        if ($publicUrl !== null && is_string($publicUrl)) {
+            $entity->logo_url = $ckBoxUploadData['response']['url'];
+            Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
+        }
+
+        if ($entity->facebook_image_name !== null) {
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->facebook_image_name, PATHINFO_FILENAME), 'default');
+        }
+
+        $publicUrl = $ckBoxUploadData['response']['url'];
+
+        if ($publicUrl !== null && is_string($publicUrl)) {
+            $entity->facebook_image_url = $ckBoxUploadData['response']['url'];
+            Cache::delete('ckBoxUploadImage_' . pathinfo($entity->facebook_image_name, PATHINFO_FILENAME));
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $fields = [
+            'logo_name' => 'logo_url',
+            'facebook_image_name' => 'facebook_image_url'
+        ];
+
+        foreach ($fields as $filename => $publicUrl) {
+            $original = $entity->getOriginal($filename);
+            if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
+                preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
+                $ckBoxImageId = $matches[1];
+                $ckBoxUtility = new CKBoxUtility();
+                try {
+                    $ckBoxUtility->deleteImage($ckBoxImageId);
+                } catch (Exception $e) {
+                    // Ignore exceptions for now
+                }
+            }
+        }
+
     }
 
     /**
