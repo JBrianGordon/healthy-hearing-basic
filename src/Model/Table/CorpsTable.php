@@ -132,26 +132,24 @@ class CorpsTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($entity->logo_name !== null) {
-            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
-        }
+        $fields = [
+            'logo_name' => 'logo_url',
+            'facebook_image_name' => 'facebook_image_url'
+        ];
 
-        $publicUrl = $ckBoxUploadData['response']['url'];
+        foreach ($fields as $filename => $fileUrl) {
+            $ckBoxUploadData = [];
 
-        if ($publicUrl !== null && is_string($publicUrl)) {
-            $entity->logo_url = $ckBoxUploadData['response']['url'];
-            Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
-        }
+            if ($entity->{$filename} !== null) {
+                $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME), 'default');
+            }
 
-        if ($entity->facebook_image_name !== null) {
-            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->facebook_image_name, PATHINFO_FILENAME), 'default');
-        }
+            $publicUrl = $ckBoxUploadData['response']['url'];
 
-        $publicUrl = $ckBoxUploadData['response']['url'];
-
-        if ($publicUrl !== null && is_string($publicUrl)) {
-            $entity->facebook_image_url = $ckBoxUploadData['response']['url'];
-            Cache::delete('ckBoxUploadImage_' . pathinfo($entity->facebook_image_name, PATHINFO_FILENAME));
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->{$fileUrl} = $ckBoxUploadData['response']['url'];
+                Cache::delete('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME));
+            }
         }
     }
 
@@ -164,6 +162,7 @@ class CorpsTable extends Table
 
         foreach ($fields as $filename => $publicUrl) {
             $original = $entity->getOriginal($filename);
+
             if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
                 preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
                 $ckBoxImageId = $matches[1];
