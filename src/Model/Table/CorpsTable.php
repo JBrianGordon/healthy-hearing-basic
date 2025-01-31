@@ -140,7 +140,7 @@ class CorpsTable extends Table
         foreach ($fields as $filename => $fileUrl) {
             $ckBoxUploadData = [];
 
-            if ($entity->{$filename} !== null) {
+            if ($entity->{$filename} !== null && $entity->isDirty($filename)) {
                 $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME), 'default');
             }
 

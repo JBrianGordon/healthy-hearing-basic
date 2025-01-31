@@ -27,7 +27,7 @@ $author_default = false;
 				<div class="row">
 				    <div class="column-responsive column-80">
 				        <div class="corps form content">
-				            <?= $this->Form->create($corp) ?>
+				            <?= $this->Form->create($corp, ['type' => 'file']) ?>
 				            <fieldset>
 					            <div class="col-md-3 float-start"></div>
 					            <strong class="col-md-9 mb20 float-end">Note: Creating a new company requires an update to the routes.php file.  Please contact a developer for assistance.</strong>
@@ -65,10 +65,32 @@ $author_default = false;
 											echo $this->Form->control('title_long');
 											echo $this->Form->control('slug');
 											echo $this->Form->control('thumb_url');
-											//*** TODO: add upload file functionality ***
+										?>
+                                        <img id="logo-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display:none; max-width: 100px; max-height: 100px;" />
+                                        <?=
+                                            $this->Form->control('logo_name', [
+                                                'id' => 'logo-imageUpload0',
+                                                'class' => 'mt-3',
+                                                'type' => 'file',
+                                                'required' => false,
+                                                'label' => ['text' => 'Add logo']
+                                            ]);
+                                        ?>
+                                        <?php
 											echo $this->Form->control('facebook_title');
 											echo $this->Form->control('facebook_description');
-											echo $this->Form->control('facebook_image');
+										?>
+                                        <img id="facebook-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="display:none; max-width: 100px; max-height: 100px;" />
+                                        <?=
+                                            $this->Form->control('facebook_image_name', [
+                                                'id' => 'facebook-imageUpload0',
+                                                'class' => 'mt-3',
+                                                'type' => 'file',
+                                                'required' => false,
+                                                'label' => ['text' => 'Add Facebook Image']
+                                            ]);
+                                        ?>
+										<?php
 											echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 										?>
 										<hr>

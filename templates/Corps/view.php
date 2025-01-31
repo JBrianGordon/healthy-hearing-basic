@@ -19,7 +19,7 @@ $isPreview = isset($isPreview) ? $isPreview : false;
 $manuSchema = '<script type="application/ld+json">{';
 $manuSchema .= '"@context": "https://schema.org", "@type": "Article",';
 $manuSchema .= '"mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
-$manuSchema .= '"headline": "' . $corp->title . '", "datePublished": "' . $corp->created . '", "dateModified": "' . $corp->modified . '", "image": "' . Router::url($corp->facebook_image, true) . '", "articleBody": "' . h(strip_tags($corp->description)) . '",';
+$manuSchema .= '"headline": "' . $corp->title . '", "datePublished": "' . $corp->created . '", "dateModified": "' . $corp->modified . '", "image": "' . Router::url($corp->facebook_image_url, true) . '", "articleBody": "' . h(strip_tags($corp->description)) . '",';
 $manuSchema .= '"author": {"@type": "Person", "name": "' . $corp->author->first_name . ' ' . $corp->author->last_name . '"';
 if(!empty($corp->author->degrees)) {
 	$manuSchema .= ', "honorificSuffix": "' . $corp->author->degrees . '"';
@@ -88,8 +88,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
 											</p>
 										</div>
 										<div class="col-md-4 manuf-logo">
-											<div style="display:none"><?= Router::url($corp->facebook_image, true); ?></div>
-											<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
+											<div style="display:none"><?= Router::url($corp->facebook_image_url, true); ?></div>
+											<img src="<?= $corp->logo_url ?>" loading="lazy" class="pull-right img-fluid" alt="<?= $corp->facebook_title ?>" width="150" height="60">
 											<?=
 												$this->AuthLink->link('Edit', [
 													'prefix' => 'Admin',
