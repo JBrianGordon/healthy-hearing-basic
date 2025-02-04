@@ -87,11 +87,14 @@ class CorpsTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->logo_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
                 }
             ],
             'facebook_image_name' => [
@@ -108,11 +111,14 @@ class CorpsTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->facebook_image_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
                 }
             ],
         ]);
