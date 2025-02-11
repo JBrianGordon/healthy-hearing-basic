@@ -37,11 +37,12 @@ $image = Router::url($image, true);
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const pinterestButton = document.querySelector('.btn-pinterest');
+			let pinterestHref = pinterestButton.href;
 
 			// Check if the Pinterest script has modified the href
 			setTimeout(() => {
 				if (!pinterestButton.hasAttribute('data-pin-href')) {
-					pinterestButton.href = 'https://www.pinterest.com';
+					pinterestButton.href = pinterestHref;
 				}
 			}, 1000);
 		});
