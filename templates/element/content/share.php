@@ -34,4 +34,16 @@ $image = Router::url($image, true);
 	<button class="btn btn-print btn-light noprint ml15" onclick="window.print()"><span class="icon hh-icon-printer"></span> Print</button>
 	<!-- Pinterest button JS -->
 	<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js" data-pin-custom="true"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const pinterestButton = document.querySelector('.btn-pinterest');
+
+			// Check if the Pinterest script has modified the href
+			setTimeout(() => {
+				if (!pinterestButton.hasAttribute('data-pin-href')) {
+					pinterestButton.href = 'https://www.pinterest.com';
+				}
+			}, 1000);
+		});
+	</script>
 </footer>
