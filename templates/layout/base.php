@@ -16,8 +16,8 @@ use Cake\Core\Configure;
 
     <!--Preload fonts-->
     <link rel="preload" href="/font/hh-icons.woff?j17ed6" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="/font/roboto-v20-latin-regular.woff" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="/font/lato-v17-latin-regular.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="/font/roboto-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/font/lato-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 
 
     <?= $this->fetch('meta') ?>
