@@ -5,6 +5,10 @@ namespace App\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Query;
+use App\Utility\CKBoxUtility;
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Draft behavior
@@ -16,7 +20,9 @@ class DraftBehavior extends Behavior
      *
      * @var array
      */
-    protected $_defaultConfig = [];
+    protected $_defaultConfig = [
+        'ckImageKeys' => [],
+    ];
 
     /**
      * Check for existing draft item
@@ -47,10 +53,65 @@ class DraftBehavior extends Behavior
     public function copy(int $id)
     {
         $draft = $this->_table->duplicate($id);
+
         // DuplicatableBehavior unsets original entity ID so we set it here
         $draft->id_draft_parent = $id;
 
-        return $this->_table->save($draft);
+        // Replace draft's images from original item
+        // in CKBox with new copies
+        $copiedCkImageInfo = $this->copyCkImages($draft);
+
+        // Update draft's image fields with copied image information
+        foreach ($copiedCkImageInfo as $key => $value) {
+            $draft[$key] = $value;
+        }
+
+        // Skip afterSave() in Model to avoid deleting original item's images
+        return $this->_table->save($draft, ['skipAfterSave' => true]);
+    }
+
+    public function copyCkImages($draft)
+    {
+        $copiedImages = [];
+        $ckBoxUtility = new CKBoxUtility();
+
+        $newImagesInfo = [];
+
+        foreach ($this->_config['ckImageKeys'] as $filename => $fileUrl) {
+            if (isset($draft[$filename])) {
+                $draftFilenameNoExt = pathinfo($draft[$filename], PATHINFO_FILENAME);
+
+                preg_match("/assets\/(.*?)\/file/", $draft[$fileUrl], $matches);
+                $ckBoxImageId = $matches[1];
+                $copied = $ckBoxUtility->copyImage($ckBoxImageId);
+
+                $recentCkItems = $ckBoxUtility->recentItems();
+
+                $filteredItems = array_filter($recentCkItems['items'], function($item) use ($draftFilenameNoExt) {
+                    return strpos($item['name'], $draftFilenameNoExt) !== false;
+                });
+
+                $firstMatch = reset($filteredItems);
+
+                $newFilename = $this->republishFilename($firstMatch['name']);
+                $newFilename = $newFilename . '.' . pathinfo($draft[$filename], PATHINFO_EXTENSION);
+                $renamed = $ckBoxUtility->renameItem($firstMatch['id'], $newFilename);
+
+                $newImagesInfo[$filename] = $newFilename;
+                $newImagesInfo[$fileUrl] = $firstMatch['url'];
+            }
+        }
+        return $newImagesInfo;
+    }
+
+    // Generate new filenames to replace auto-generated
+    // CKBox filenames for copied images
+    public function republishFilename($filename)
+    {
+        $lastHyphenPos = strrpos($filename, '-');
+        $baseFilename = substr($filename, 0, $lastHyphenPos + 1);
+
+        return $baseFilename . uniqid();
     }
 
     /**
@@ -94,8 +155,18 @@ class DraftBehavior extends Behavior
             return false;
         }
 
+        foreach ($this->_config['ckImageKeys'] as $fileName => $fileUrl) {
+            $draftItem->set($fileName, NULL);
+            $draftItem->set($fileUrl, NULL);
+        }
+
+        $this->_table->save($draftItem, ['skipAfterSave' => true]);
+
+        $savedDraftItem = $this->_table->get($draftId);
+
         $this->_table->save($updatedArticle);
-        $this->_table->delete($draftItem);
+
+        $this->_table->delete($savedDraftItem);
 
         return true;
     }

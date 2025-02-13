@@ -140,4 +140,117 @@ class CKBoxUtility
 
         return json_decode($response, true);
     }
+
+    public function copyImage($imageId)
+    {
+        // Authorization token
+        $token = $this->generateToken($this->userId, $this->role);
+
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set URL
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl . '/copy');
+
+        // Set request method
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        // Build POST fields
+        $post_fields = [
+            'target' => [
+                'categoryId' => $this->categoryId,
+            ],
+            'assetsActions' => [
+                [
+                    'assetId' => $imageId,
+                    'action' => 'rename',
+                ]
+            ]
+        ];
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
+
+        // Set POST headers
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Return the response instead of printing it
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute the request and close the curl session
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return json_decode($response, true);
+    }
+
+    public function recentItems()
+    {
+        // Authorization token
+        $token = $this->generateToken($this->userId, $this->role);
+
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set URL
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl . '/recent?limit=5');
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Return the response instead of printing it
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute the request and close the curl session
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return json_decode($response, true);
+    }
+
+    public function renameItem($assetId, $newFilename)
+    {
+         // Authorization token
+        $token = $this->generateToken($this->userId, $this->role);
+
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set URL
+        curl_setopt($ch, CURLOPT_URL, $this->apiUrl . '/' . $assetId);
+
+        // Build POST fields
+        $post_fields = [
+            'name' => $newFilename,
+        ];
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
+
+        // Set request method
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Return the response instead of printing it
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute the request and close the curl session
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return json_decode($response, true);
+    }
 }

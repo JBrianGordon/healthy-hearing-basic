@@ -56,7 +56,12 @@ class CorpsTable extends Table
 
         $this->addBehaviors([
             'Timestamp',
-            'Draft',
+        ]);
+        $this->addBehavior('Draft',[
+            'ckImageKeys' => [
+                'logo_name' => 'logo_url',
+                'facebook_image_name' => 'facebook_image_url',
+            ],
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
             'set' => [
@@ -138,6 +143,7 @@ class CorpsTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+
         $fields = [
             'logo_name' => 'logo_url',
             'facebook_image_name' => 'facebook_image_url'
@@ -161,26 +167,27 @@ class CorpsTable extends Table
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $fields = [
-            'logo_name' => 'logo_url',
-            'facebook_image_name' => 'facebook_image_url'
-        ];
+        if (! $options['skipAfterSave']) {
+            $fields = [
+                'logo_name' => 'logo_url',
+                'facebook_image_name' => 'facebook_image_url'
+            ];
 
-        foreach ($fields as $filename => $publicUrl) {
-            $original = $entity->getOriginal($filename);
+            foreach ($fields as $filename => $publicUrl) {
+                $original = $entity->getOriginal($filename);
 
-            if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
-                preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
-                $ckBoxImageId = $matches[1];
-                $ckBoxUtility = new CKBoxUtility();
-                try {
-                    $ckBoxUtility->deleteImage($ckBoxImageId);
-                } catch (Exception $e) {
-                    // Ignore exceptions for now
+                if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility = new CKBoxUtility();
+                    try {
+                        $ckBoxUtility->deleteImage($ckBoxImageId);
+                    } catch (Exception $e) {
+                        // Ignore exceptions for now
+                    }
                 }
             }
         }
-
     }
 
     /**
