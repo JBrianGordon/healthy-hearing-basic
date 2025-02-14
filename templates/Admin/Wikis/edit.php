@@ -36,7 +36,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 					</div>
 				<?php endif; ?>
 		        <div class="wikis form content">
-		            <?= $this->Form->create($wiki, ['id' => 'wikisForm']) ?>
+		            <?= $this->Form->create($wiki, ['type' => 'file', 'id' => 'wikisForm']) ?>
 		            <fieldset>
 		                <?php
 		                    echo $this->Form->control('name');
@@ -71,6 +71,18 @@ $isDraft = !empty($wiki->id_draft_parent);
 				                    echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
 				                    echo '</div>';
 				                    echo $this->Form->control('facebook_image');
+			                    ?>
+                                    <img id="facebook-imagePreview0" src="<?= $wiki->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="<?= $wiki->facebook_image_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
+                                    <?=
+                                        $this->Form->control('facebook_image_name', [
+                                            'id' => 'facebook-imageUpload0',
+                                            'class' => 'mt-3',
+                                            'type' => 'file',
+                                            'required' => false,
+                                            'label' => ['text' => 'Update Facebook Image']
+                                        ]);
+                                    ?>
+                                <?php
 				                    echo $this->Form->control('facebook_image_width', ['label' => 'Image Width (min 800px)', 'required' => false]);
 				                    echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
 				                    echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);

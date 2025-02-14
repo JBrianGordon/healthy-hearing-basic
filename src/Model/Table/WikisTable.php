@@ -12,6 +12,12 @@ use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Search\Model\Filter\Base;
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
+use Cake\Cache\Cache;
 
 /**
  * Wikis Model
@@ -55,9 +61,13 @@ class WikisTable extends Table
         $this->addBehaviors([
             'Timestamp',
             'Search.Search',
-            'Draft',
         ]);
 
+        $this->addBehavior('Draft',[
+            'ckImageKeys' => [
+                'facebook_image_name' => 'facebook_image_url',
+            ],
+        ]);
         // HACK for custom isUnique rule (see rule below).
         // 'id_draft_parent' is temporarily set to 1 so that the draft can save
         // w/o failing the unique slug rule, before being immediately overwritten
@@ -81,6 +91,33 @@ class WikisTable extends Table
                 'name' => 'ASC',
             ],
             'priority' => 0.8,
+        ]);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'facebook_image_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    if (!empty($entity->facebook_image_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
+                }
+            ],
         ]);
 
         $this->belongsTo('Author', [
@@ -143,6 +180,52 @@ class WikisTable extends Table
                 'wildcardOne' => '?',
                 'fields' => ['name', 'slug', 'short'],
             ]);
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $fields = [
+            'facebook_image_name' => 'facebook_image_url'
+        ];
+
+        foreach ($fields as $filename => $fileUrl) {
+            $ckBoxUploadData = [];
+
+            if ($entity->{$filename} !== null && $entity->isDirty($filename)) {
+                $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME), 'default');
+            }
+
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->{$fileUrl} = $ckBoxUploadData['response']['url'];
+                Cache::delete('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME));
+            }
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if (! $options['skipAfterSave']) {
+            $fields = [
+                'facebook_image_name' => 'facebook_image_url'
+            ];
+
+            foreach ($fields as $filename => $publicUrl) {
+                $original = $entity->getOriginal($filename);
+
+                if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility = new CKBoxUtility();
+                    try {
+                        $ckBoxUtility->deleteImage($ckBoxImageId);
+                    } catch (Exception $e) {
+                        // Ignore exceptions for now
+                    }
+                }
+            }
+        }
     }
 
     public function getAdvSearchFields()
