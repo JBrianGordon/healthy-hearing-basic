@@ -38,7 +38,7 @@ if (empty($content->id)) {
         <div class="panel-body">
             <div class="panel-section expanded">                                    
                 <div class="wikis form content">
-                    <?= $this->Form->create($wiki, ['id' => 'wikisForm']) ?>
+                    <?= $this->Form->create($wiki, ['id' => 'wikisForm', 'type' => 'file']) ?>
                     <fieldset>
                         <?php
                             echo $this->Form->control('name');
@@ -76,6 +76,18 @@ if (empty($content->id)) {
                                     echo $this->Form->control('meta_description');
                                     echo $this->Form->control('facebook_title');
                                     echo $this->Form->control('facebook_description');
+                                ?>
+                                <img id="facebook-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="display:none; max-width: 100px; max-height: 100px;" />
+                                <?=
+                                    $this->Form->control('facebook_image_name', [
+                                        'id' => 'facebook-imageUpload0',
+                                        'class' => 'mt-3',
+                                        'type' => 'file',
+                                        'required' => false,
+                                        'label' => ['text' => 'Add Facebook Image']
+                                    ]);
+                                ?>
+                                <?php
                                     echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
                                     echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
                                     echo '</div>';
