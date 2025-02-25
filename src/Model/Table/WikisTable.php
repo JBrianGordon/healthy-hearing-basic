@@ -77,6 +77,9 @@ class WikisTable extends Table
         // https://github.com/riesenia/cakephp-duplicatable
         // Please update when we make it to 5.x :)
         $this->addBehavior('Duplicatable.Duplicatable', [
+            'contain' => [
+                'Author', 'Contributors', 'Reviewers', 'Tags'
+            ],
             'set' => [
                 'is_active' => 0,
                 'id_draft_parent' => 1
