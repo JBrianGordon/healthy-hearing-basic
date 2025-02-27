@@ -8,6 +8,7 @@ use Geocoder\Provider\GeoIP2\GeoIP2;
 use Geocoder\Provider\GeoIP2\GeoIP2Adapter;
 use Geocoder\Query\GeocodeQuery;
 use GeoIp2\Database\Reader;
+use Cake\Core\Configure;
 
 class GeoLocIpUtility
 {
@@ -53,8 +54,27 @@ class GeoLocIpUtility
                 'latitude' => $geoLocResult->getCoordinates()->getLatitude(),
                 'longitude' => $geoLocResult->getCoordinates()->getLongitude(),
             ];
+            if (!$this->isValidZip($geoLocInfo['zip'])) {
+                // Clear zip if not valid
+                $geoLocInfo['zip'] = null;
+            }
         }
 
         return $geoLocInfo;
+    }
+
+    /**
+    * tests a string to see if it is a valid zip code
+    * @param string $input - (query)string which will be tested
+    * @return bool
+    */
+    private function isValidZip($input) {
+        $country = Configure::read('country');
+        if ($country == 'US') {
+            $regex = '/^((\d{5}-\d{4})|(\d{5})|([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[A-Za-z]\s?\d[A-Za-z]\d))$/';
+        } elseif ($country == 'CA') {
+            $regex = '/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/';
+        }
+        return (preg_match($regex,$input));
     }
 }
