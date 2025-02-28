@@ -25,6 +25,10 @@ body {
   background-color: $body-bg;
   @include font($font-family-primary, 'normal', "400");
   -webkit-font-smoothing: antialiased;
+
+  p, a , li {
+    font-size: 20px;
+  }
 }
 
 h1, .h1,
@@ -241,6 +245,10 @@ th {
     font-style: italic;
     font-weight: normal;
     color: #999;
+  }
+
+  .actions {
+    min-width: 110px;
   }
 }
 
@@ -479,6 +487,10 @@ summary {
 
   a {
     color: $brand-secondary;
+
+    @media(max-width: $screen-md-max) {
+      font-size: 3rem;
+    }
   }
 }
 
@@ -545,7 +557,7 @@ pre {
 }
 
 .text-small {
-  font-size: 87.5%;
+  font-size: calc(20px * 0.87)!important;
 }
 
 .lead {

@@ -132,7 +132,12 @@
   }
   
   h2 {
+	  font-size: 22px;
 	  line-height: 1.5;
+  }
+
+  h3 {
+	  font-size: 22px;
   }
   
   small {
@@ -644,6 +649,10 @@
 	    }
 	  }
 	}
+
+	.btn:not(.btn-xs) {
+		font-size: 20px;
+	}
 }
 
 #clinicPhotos .photo-button {
@@ -731,7 +740,7 @@
 
   .btn {
     @media only screen and (max-width: $screen-xs-max) {
-      width: 120px;
+      width: 130px;
       max-width: 40vw;
       margin: 10px 2vw;
       display: inline-block;
@@ -810,6 +819,9 @@
 }
 
 #CaCallApptRequestForm, #HearingTestNewsletterForm, #PageContactUsForm {
+  .g-recaptcha {
+	margin-top:-20px;
+  }
   .grecaptcha-badge {
     display: none;
   }
@@ -829,7 +841,7 @@
 		position: fixed;
 		right: -90px;
 		bottom: -30px;
-		height: 30px;
-		width: 120px;
+		height: 40px;
+		width: 150px;
 	}
 }

@@ -19,7 +19,7 @@ $image = Router::url($image, true);
 <footer class="panel-footer text-center btn-set noprint">
 	<div id="fb-root"></div>
 	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0"></script>
-	<div id="fbBtn" class="btn btn-share btn-facebook fb-share-btn ml0" data-href="https://developers.facebook.com/docs/plugins/" data-layout="" data-size="">
+	<div id="fbBtn" class="btn btn-share btn-facebook fb-share-btn" data-href="https://developers.facebook.com/docs/plugins/" data-layout="" data-size="">
 		<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?= $encodedUrl ?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
 			<span class="hh-icon-facebook"></span> Share
 		</a>

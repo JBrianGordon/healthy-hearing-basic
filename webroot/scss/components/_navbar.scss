@@ -348,6 +348,12 @@
   .nav-link {
     color: $brand-primary;
   }
+
+  &.location-tabs {
+    .nav-link {
+      padding: 0 7px;
+    }
+  }
 }
 
 .nav-stacked {

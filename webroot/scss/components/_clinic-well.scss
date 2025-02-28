@@ -14,7 +14,7 @@
     &[data-bs-target='#reviewSubmitModal'] {
       margin: 0 auto !important;
       display: block;
-      max-width: 160px;
+      max-width: 210px;
 
       @media only screen and (min-width: $screen-sm-min) {
         margin: auto;
@@ -35,10 +35,15 @@
     &.pull-left {
       margin-left: 15px;
     }
+
+    a {
+      font-size: 3rem;
+    }
   }
 
   .address {
     color: #555657;
+    font-size: 20px;
     min-height: 50px;
 
     @media only screen and (max-width: $screen-md-max) {
@@ -55,6 +60,7 @@
 
   .hours {
     color: #555657;
+    font-size: 20px;
 
     .bi-clock {
       color: #999;
@@ -72,6 +78,7 @@
     margin-bottom: 5px;
 
     a {
+      font-size: 120%;
       letter-spacing: -0.04em;
     }
   }
@@ -90,6 +97,7 @@
 
   .reviews {
     color: #555657;
+    font-size: 20px;
     margin-bottom: 5px;
 
     i {
@@ -177,7 +185,7 @@
 
       .patient-praise {
         display: inline-block;
-        margin: 0 calc(50% - 82px);
+        margin: 0 calc(50% - 100px);
         width: auto;
         padding: 0 4px;
         border: 0;
@@ -324,6 +332,7 @@
 
       h2 {
         background-color: $brand-secondary;
+        font-size: 22px;
         color: #fff;
         padding: 10px 0;
         margin: 0;
@@ -342,7 +351,11 @@
     }
 
     label {
-      font-size: 14px;
+      font-size: 18px;
+      line-height: 18px;
+      padding-top: 0;
+      padding-bottom: 20px;
+      margin-bottom: -15px;
       display: block;
       text-align: left;
 
@@ -353,6 +366,12 @@
 
     .help-block {
       font-size: 14px;
+      line-height: 18px;
+
+      a {
+        font-size: 14px;
+        line-height: 18px;
+      }
     }
 
     .form-fields {
@@ -378,6 +397,10 @@
       width: auto;
       margin: 0 auto;
     }
+  }
+
+  .topic-label {
+    padding-left: 5px;
   }
 }
 
@@ -421,8 +444,15 @@ iframe[title='recaptcha challenge'] {
   }
   .directBookBtn,
   .apptRequestBtn {
+    font-size: 20px;
     margin-top: 10px;
-    width: 270px;
+    width: 310px;
+
+    @media(max-width: $screen-md-max) {
+      font-size: 18px;
+      width: 310px;
+      margin-left: -16px;
+    }
   }
 }
 

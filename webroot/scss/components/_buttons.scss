@@ -20,6 +20,8 @@ button.close {
   font-size: 85%;
   border-radius: 3em;
   box-shadow: rgba(0,0,0,0.15) 0px 1px 2px;
+  word-wrap: break-word;
+  white-space: normal;
   text-transform: uppercase;
   font-weight: bold;
   line-height: 1.4;
@@ -142,6 +144,8 @@ button.close {
 }
 
 .btn-set {
+  font-size: 20px;
+
   .btn {
     display: block;
     margin: 1em 0;
@@ -167,7 +171,7 @@ button.close {
   color: $body-bg;
   height: 35px;
   line-height: 30px!important;
-  padding: 3px 1.5em!important;
+  padding: 3px 0.5em!important;
   text-transform: none;
 
   &:hover, &:focus, &:active {
@@ -216,6 +220,7 @@ button.close {
 .IN-widget { 
   background: $color-linkedin;
   margin: 13.6px 0 13.6px 13.6px!important;
+  vertical-align: middle!important;
 
   &:hover {
     background: #006097;
@@ -226,7 +231,7 @@ button.close {
   }
 
   button {
-    font-size: 14px!important;
+    font-size: 20px!important;
   }
 }
 .btn-pinterest { 

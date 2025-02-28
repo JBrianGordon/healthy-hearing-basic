@@ -250,13 +250,13 @@ $this->Breadcrumbs->add($location->title);
 											</div>
 											<p class="col-xs-12 tac"><small class="tac help-block"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
 											<div class="row col-xs-12 ml0">
-												<div class="col col-sm-12">
+												<div class="col-xs-12 col-sm-12">
 													<div id="apptRequestSubmitError" class="alert alert-danger tal" role="alert" style="display:none;">
 														<button type="button" class="close" data-dismiss="alert">x</button>
 														<span id="apptRequestSubmitErrorMessage">Error</span>
 													</div>
 												</div>
-												<div class="col col-xs-12 col-sm-4 col-sm-offset-4 tac">
+												<div class="col-xs-12 col-sm-4 col-sm-offset-4 tac">
 													<button id="apptRequestSubmitBtn" type="submit" class="btn btn-secondary btn-block btn-lg">Submit</button>
 												</div>
 												<div class="g-recaptcha"

@@ -40,7 +40,7 @@ $blog-border-color: lighten($brand-light, 30%);
 // Blog Styles
 .blog {
   h4 {
-    font-size: 18px;
+    font-size: 22px;
     line-height: 1.5;
   }
 
@@ -64,7 +64,7 @@ $blog-border-color: lighten($brand-light, 30%);
   }
 
   .blog-title {
-    & h2 {
+    &h2 {
       font-size: 24px;
       line-height: 1.5;
       font-weight: 500;
@@ -74,6 +74,7 @@ $blog-border-color: lighten($brand-light, 30%);
 
     a {
       color: $text-color;
+      font-size: 2.4rem;
 
       &:hover {
         color: $link-color;
