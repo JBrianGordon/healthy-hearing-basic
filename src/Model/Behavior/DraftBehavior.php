@@ -139,18 +139,37 @@ class DraftBehavior extends Behavior
      */
     public function publish(int $draftId): bool
     {
-        $draftItem = $this->_table->get($draftId);
+        $contains = [];
+        if ($this->_table->hasBehavior('Duplicatable')) {
+            $contains = $this->_table->getBehavior('Duplicatable')->getConfig('contain');
+        }
+
+        $draftItem = $this->_table->get(
+            $draftId, [
+                'contain' => $contains
+            ]
+        );
+
         $draftItemId = $draftItem->id;
         $draftItemArray = $draftItem->toArray();
 
-        $originalItem = $this->_table->get($draftItem->id_draft_parent);
+        $originalItem = $this->_table->get(
+            $draftItem->id_draft_parent, [
+                'contain' => $contains
+            ]
+        );
 
         // Unset fields that we don't want to update in the original
         unset($draftItemArray['id']);
         unset($draftItemArray['is_active']);
         unset($draftItemArray['id_draft_parent']);
 
-        $updatedArticle = $this->_table->patchEntity($originalItem, $draftItemArray);
+        $updatedArticle = $this->_table->patchEntity(
+            $originalItem,
+            $draftItemArray,
+            ['associated' => $contains]
+        );
+
         if ($updatedArticle->getErrors()) {
             return false;
         }

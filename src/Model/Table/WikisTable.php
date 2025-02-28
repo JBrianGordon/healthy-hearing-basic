@@ -78,7 +78,7 @@ class WikisTable extends Table
         // Please update when we make it to 5.x :)
         $this->addBehavior('Duplicatable.Duplicatable', [
             'contain' => [
-                'Author', 'Contributors', 'Reviewers', 'Tags'
+                'Contributors', 'Reviewers', 'Tags'
             ],
             'set' => [
                 'is_active' => 0,

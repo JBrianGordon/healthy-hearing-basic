@@ -53,7 +53,8 @@ class TagsTable extends Table
         $this->hasMany('TagAds', [
             'foreignKey' => 'tag_id',
         ]);
-        $this->hasMany('TagWikis', [
+        $this->belongsToMany('Wikis', [
+            'joinTable' => 'tag_wikis',
             'foreignKey' => 'tag_id',
         ]);
         $this->belongsToMany('Content', [

@@ -409,7 +409,6 @@ class UsersTable extends CakeDcUsersTable
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
         $rules->add($rules->existsIn('corp_id', 'Corps'), ['errorField' => 'corp_id']);
 
         return $rules;
