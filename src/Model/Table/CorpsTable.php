@@ -64,6 +64,9 @@ class CorpsTable extends Table
             ],
         ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
+            'contain' => [
+                'Contributors'
+            ],
             'set' => [
                 'is_active' => 0,
             ],
