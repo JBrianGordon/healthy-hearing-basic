@@ -6,12 +6,11 @@
  */
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
- 
+
 $this->Html->script('dist/content_edit.min', ['block' => true]);
 
 $author_default = false;
-$isFrozen = !empty($content->is_frozen);
-$isDraft = !empty($content->id_draft_parent);
+
 if (empty($content->id)) {
 	if (in_array($user->id, $authors)) {
 		$author_default = $user->id;
@@ -24,16 +23,6 @@ if (empty($content->id)) {
 		<div class="panel-body p10">
 			<div class="btn-group">
 				<?= $this->Html->link( 'Browse', ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
-				<?php if (!empty($content->id)): ?>
-					<?= $this->Html->link(' Add', ['action' => 'edit'], ['class' => 'btn btn-success bi-plus-lg']) ?>
-					<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
-		            <!--*** TODO: Preview button not functioning correctly ***-->
-					<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-					<?php if (!$isDraft): ?>
-						<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-						<?= $this->Form->postLink(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
-					<?php endif; ?>
-				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -42,11 +31,6 @@ if (empty($content->id)) {
 	<section class="panel">
 		<div class="panel-body">
 			<div class="panel-section expanded">
-				<?php if($isDraft): ?>
-					<div class="alert alert-warning" role="alert">
-						This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->id_draft_parent], ['target' => '_blank']) ?>.
-					</div>
-				<?php endif; ?>
 				<div class="row">
 				    <div class="column-responsive column-80">
 				        <div class="content form">
@@ -61,9 +45,6 @@ if (empty($content->id)) {
 			                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true, 'type' => 'datetime', 'dateFormat' => 'MDY',]);
 			                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 			                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
-								if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {
-									echo $this->Form->control('current_url', ['value' => Router::url($content->hh_url, true), 'disabled' => false]);
-								}
 								?>
 								<?php if (empty($content->is_active)): ?>
 									<div class="form-group">
@@ -102,14 +83,6 @@ if (empty($content->id)) {
 				                            type="button" role="tab"
 				                            aria-controls="details" aria-selected="false">Details</button>
 				                    </li>
-				                    <?php if(isset($content->created)) : ?>
-					                    <li class="nav-item" role="presentation">
-					                        <button class="nav-link" id="admin-tab"
-					                            data-bs-toggle="tab" data-bs-target="#admin"
-					                            type="button" role="tab"
-					                            aria-controls="admin" aria-selected="false">Admin</button>
-					                    </li>
-					                <?php endif ?>
 				                </ul>
 				                <div class="tab-content">
 				                    <!-- Content Tab -->
@@ -149,7 +122,7 @@ if (empty($content->id)) {
 				                            echo $this->Form->control('facebook_image_width', ['label' => 'Image Width']);
 				                            echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
 				                            echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
-			                        	?>
+										?>
 										<hr>
 										<h3>Additional Authors</h3>
 										<strong>
@@ -171,19 +144,18 @@ if (empty($content->id)) {
 				                    </div>
 				                    <?php if(isset($content->created)) : ?>
 					                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
-					                    	<div class="row">
-					                    		<strong class="col-sm-3 tar">Date last saved</strong>
+											<div class="row">
+												<strong class="col-sm-3 tar">Date last saved</strong>
 						                        <p class="col-sm-9"><?= date('F j, Y', strtotime($content->last_modified)) ?></p>
 						                    </div>
 						                    <div class="row">
-						                    	<strong class="col-sm-3 tar">Date created</strong>
-						                    	<p class="col-sm-9"><?= date('F j, Y', strtotime($content->created)) ?></p>
+												<strong class="col-sm-3 tar">Date created</strong>
+												<p class="col-sm-9"><?= date('F j, Y', strtotime($content->created)) ?></p>
 						                    </div>
 					                    </div>
 					                <?php endif; ?>
 				                </div>
-				
-				            </fieldset>
+							</fieldset>
 				            <div class="form-actions tar">
 				            <?= $this->Form->submit('Save For Approval', ['id' => 'ApproveLink', 'class' => 'btn btn-lg btn-info', 'name' => 'saveForApproval']) ?>
 				            <?= $this->Form->submit('Save Content', ['class' => 'btn btn-primary btn-lg']) ?>

@@ -60,6 +60,7 @@ class EditorialPublishCommand extends Command
         $io->out('Searching for drafts which have a last mod date of today or before');
 
         $itemsToPublish = $table->find('publishableItems')->all();
+
         $io->out('Publishing ' . count($itemsToPublish) . ' items');
 
         foreach ($itemsToPublish as $itemToPublish) {

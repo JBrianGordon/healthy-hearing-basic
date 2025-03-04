@@ -185,6 +185,34 @@ class WikisTable extends Table
             ]);
     }
 
+    public function getAdvSearchFields()
+    {
+        // Get search fields from Search behavior config
+        $advSearchFields = $this->searchManager()
+            ->getFilters()
+            ->getIterator();
+
+        // Remove multi-field query
+        $advSearchFields->offsetUnset('q');
+
+        // Retrieve array from Iterator
+        $advSearchFields = array_keys($advSearchFields->getArrayCopy());
+
+        // Remove '_date_range' from any datetime range
+        // search filters
+        $advSearchFields = array_map(function($value) {
+            return str_replace('_date_range', '', $value);
+        }, $advSearchFields);
+
+        $tableSchema = $this->getSchema()->typeMap();
+
+        // Return advanced search fields w/data types
+        return array_intersect_key(
+            $tableSchema,
+            array_flip($advSearchFields)
+        );
+    }
+
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $fields = [
@@ -229,34 +257,6 @@ class WikisTable extends Table
                 }
             }
         }
-    }
-
-    public function getAdvSearchFields()
-    {
-        // Get search fields from Search behavior config
-        $advSearchFields = $this->searchManager()
-            ->getFilters()
-            ->getIterator();
-
-        // Remove multi-field query
-        $advSearchFields->offsetUnset('q');
-
-        // Retrieve array from Iterator
-        $advSearchFields = array_keys($advSearchFields->getArrayCopy());
-
-        // Remove '_date_range' from any datetime range
-        // search filters
-        $advSearchFields = array_map(function($value) {
-            return str_replace('_date_range', '', $value);
-        }, $advSearchFields);
-
-        $tableSchema = $this->getSchema()->typeMap();
-
-        // Return advanced search fields w/data types
-        return array_intersect_key(
-            $tableSchema,
-            array_flip($advSearchFields)
-        );
     }
 
     /**

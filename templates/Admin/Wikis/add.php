@@ -11,8 +11,7 @@ use Cake\I18n\FrozenTime;
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
 $author_default = false;
-$isFrozen = !empty($content->is_frozen);
-$isDraft = !empty($content->id_draft_parent);
+
 if (empty($content->id)) {
     if (in_array($user->id, $authors)) {
         $author_default = $user->id;
@@ -25,10 +24,6 @@ if (empty($content->id)) {
         <div class="panel-body p10">
             <div class="btn-group">
                 <?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
-                <?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
-                <?= $this->Html->link(__(' Preview'), ['action' => 'preview', $wiki->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-                <?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-                <?= $this->Html->link(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi bi-clipboard-check']) ?>
             </div>
         </div>
     </div>

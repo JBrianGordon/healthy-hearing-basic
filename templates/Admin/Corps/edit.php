@@ -19,9 +19,9 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 				<?= $this->Form->postLink(__(' Delete'),['action' => 'delete', $corp->id],['confirm' => __('Are you sure you want to delete # {0}?', $corp->id), 'class' => 'btn btn-danger bi bi-trash-fill', 'id' => 'deleteBtn']) ?>
 				<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $corp->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-				<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?php if(!$isDraft): ?>
-					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $corp->id], ['class' => 'btn btn-default']) ?>
+					<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'corps', 'action' => 'view', $corp->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $corp->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 				<?php endif; ?>
 			</div>
 		</div>

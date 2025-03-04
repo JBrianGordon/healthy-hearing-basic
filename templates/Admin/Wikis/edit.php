@@ -18,9 +18,9 @@ $isDraft = !empty($wiki->id_draft_parent);
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
 				<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $wiki->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-				<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?php if(!$isDraft): ?>
-					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi bi-clipboard-check']) ?>
+					<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 				<?php endif; ?>
 			</div>
 		</div>

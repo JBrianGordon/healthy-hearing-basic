@@ -62,3 +62,41 @@ $(document).ready(function() {
 		$(".datepicker").datepicker();
 		
 });
+
+// Generic function to handle image upload preview
+export function setupImageUpload(inputId, previewSelector) {
+    const fileInput = document.getElementById(inputId);
+
+    if (!fileInput) {
+        console.error(`File input element with ID ${inputId} not found`);
+        return;
+    }
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        // Check if a file is selected
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.querySelector(previewSelector);
+
+            if (!output) {
+                console.error(`Output element with selector ${previewSelector} not found`);
+                return;
+            }
+
+            output.src = reader.result;
+            output.style.display = 'block';
+            output.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupImageUpload('facebook-imageUpload0', '#facebook-imagePreview0');
+});

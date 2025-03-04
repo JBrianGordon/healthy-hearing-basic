@@ -119,6 +119,30 @@ class ContentController extends BaseAdminController
     }
 
     /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $content = $this->Content->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $content = $this->Content->patchEntity($content, $this->request->getData());
+            if ($this->Content->save($content)) {
+                $this->Flash->success(__('The report has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The report could not be saved. Please, try again.'));
+        }
+        $this->set('title', 'Add Report');
+        $this->set('tags', $this->Content->Tags->findTagList());
+        $this->set('types', Content::$typeOptions);
+        $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content', 'Report'));
+        $this->set(compact('content'));
+    }
+
+    /**
      * Edit method
      *
      * @param string|null $id Content id.
@@ -130,7 +154,7 @@ class ContentController extends BaseAdminController
         $content = null;
         if (!empty($id)) {
             $content = $this->Content->get($id, [
-                'contain' => ['PrimaryAuthor', 'Contributors'],
+                'contain' => ['PrimaryAuthor', 'Contributors', 'Tags'],
             ]);
         }
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -163,6 +187,19 @@ class ContentController extends BaseAdminController
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
         $this->set('authors', $this->Content->PrimaryAuthor->authorList('Content', 'Report'));
+    }
+
+    public function preview($id = null)
+    {
+        $content = $this->Content->get($id, [
+            'contain' => ['Tags','PrimaryAuthor','Contributors'],
+        ]);
+        $this->set('content', $content);
+        $this->set('isPreview', true);
+
+        // Set the template path to the non-prefixed template
+        $this->viewBuilder()->setTemplatePath('Content');
+        $this->render('view');
     }
 
     /**
