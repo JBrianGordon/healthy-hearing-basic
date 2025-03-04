@@ -13,6 +13,11 @@ use Cake\Cache\Cache;
 use Cake\Validation\Validator;
 use Cake\Routing\Router;
 use Search\Model\Filter\Base;
+use ArrayObject;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use App\Utility\Adapter\CKBoxAdapter;
+use App\Utility\CKBoxUtility;
 
 /**
  * Content Model
@@ -54,11 +59,18 @@ class ContentTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehaviors([
-            'Draft',
             'Search.Search',
             'Timestamp',
         ]);
+        $this->addBehavior('Draft',[
+            'ckImageKeys' => [
+                'facebook_image_name' => 'facebook_image_url',
+            ],
+        ]);
         $this->addBehavior('Duplicatable.Duplicatable', [
+            'contain' => [
+                'Contributors', 'Tags'
+            ],
             'set' => [
                 'is_active' => 0,
             ],
@@ -74,6 +86,33 @@ class ContentTable extends Table
             'priority' => 0.8,
         ]);
 
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'facebook_image_name' => [
+                'writer' => 'App\Utility\Writer\CkBoxWriter',
+                'filesystem' => [
+                    'adapter' => new CKBoxAdapter(),
+                ],
+                'path' => '',
+                'keepFilesOnDelete' => false,
+                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+                    $filename = $data->getClientFilename();
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    return $basename . '-' . uniqid() . '.' . $extension;
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    if (!empty($entity->facebook_image_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    }
+                    return [];
+                }
+            ],
+        ]);
+
         // Associations
         $this->belongsTo('PrimaryAuthor')
             ->setClassName('Users')
@@ -87,10 +126,9 @@ class ContentTable extends Table
             ->setProperty('contributors')
             ->setThrough('ContentUsers');
 
-        $this->hasMany('ContentTags');
-
-        $this->belongsToMany('Tags')
-            ->setThrough('ContentTags');
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'content_tags',
+        ]);
 
         // Setup search filter using search manager
         $this->searchManager()
@@ -154,6 +192,52 @@ class ContentTable extends Table
                 'wildcardOne' => '?',
                 'fields' => ['title', 'subtitle', 'short'],
             ]);
+    }
+
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $fields = [
+            'facebook_image_name' => 'facebook_image_url'
+        ];
+
+        foreach ($fields as $filename => $fileUrl) {
+            $ckBoxUploadData = [];
+
+            if ($entity->{$filename} !== null && $entity->isDirty($filename)) {
+                $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME), 'default');
+            }
+
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->{$fileUrl} = $ckBoxUploadData['response']['url'];
+                Cache::delete('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME));
+            }
+        }
+    }
+
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if (! $options['skipAfterSave']) {
+            $fields = [
+                'facebook_image_name' => 'facebook_image_url'
+            ];
+
+            foreach ($fields as $filename => $publicUrl) {
+                $original = $entity->getOriginal($filename);
+
+                if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
+                    preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility = new CKBoxUtility();
+                    try {
+                        $ckBoxUtility->deleteImage($ckBoxImageId);
+                    } catch (Exception $e) {
+                        // Ignore exceptions for now
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -268,6 +352,12 @@ class ContentTable extends Table
         //     ->scalar('facebook_image')
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
+
+        // $validator
+        //     // ->scalar('facebook_image_name')
+        //     ->requirePresence('facebook_image_name', false)
+        //     // ->allowEmptyString('facebook_image_name')
+        //     ->allowEmptyFile('facebook_image_name');
 
         // // TO-DO
         // $validator
@@ -405,7 +495,7 @@ class ContentTable extends Table
             return $this->find('all', [
                 'conditions' => [
                     'Content.id' => (int) $id,
-                    'Content.date <= CURDATE()',
+                    'Content.last_modified <= CURDATE()',
                     'Content.is_active' => true
                 ],
                 'contain' => ['Tags','PrimaryAuthor','Contributors']

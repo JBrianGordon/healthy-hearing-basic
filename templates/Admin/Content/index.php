@@ -64,7 +64,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 		<div class="panel-heading">Content Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group btn-group-sm">
-				<?= $this->Html->link("+ Add", ['action' => 'edit'], ['class' => 'btn btn-success', 'escape' => false]) ?>
+				<?= $this->Html->link("+ Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 				<?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
 			</div>
 		</div>
@@ -113,7 +113,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 									?>
 									<?= $this->Html->badge($content->id, ['class' => 'light label']) ?>
 								</td>
-								<td><?= h($content->title) ?></td>
+			                    <td><?= $this->Editorial->adminIndexDraft($content->id_draft_parent) . h($content->title) ?></td>
 								<td><?= h($content->type) ?><?= $content->is_library_item ? '<span class="bi-book-fill"></span>' : ''?></td>
 								<td>
 									<?php

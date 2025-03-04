@@ -55,10 +55,9 @@ class TagsTable extends Table
         ]);
         $this->belongsToMany('Wikis', [
             'joinTable' => 'tag_wikis',
-            'foreignKey' => 'tag_id',
         ]);
         $this->belongsToMany('Content', [
-            'through' => 'ContentTags',
+            'joinTable' => 'content_tags',
         ]);
     }
 
@@ -70,39 +69,40 @@ class TagsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->nonNegativeInteger('id')
-            ->allowEmptyString('id', null, 'create');
+        // $validator
+        //     ->nonNegativeInteger('id')
+        //     ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+        // $validator
+        //     ->scalar('name')
+        //     ->maxLength('name', 100)
+        //     ->requirePresence('name', 'create')
+        //     ->notEmptyString('name');
 
-        $validator
-            ->boolean('is_category')
-            ->notEmptyString('is_category');
+        // $validator
+        //     ->boolean('is_category')
+        //     ->notEmptyString('is_category');
 
-        $validator
-            ->boolean('is_sub_category')
-            ->notEmptyString('is_sub_category');
+        // $validator
+        //     ->boolean('is_sub_category')
+        //     ->notEmptyString('is_sub_category');
 
-        $validator
-            ->scalar('header')
-            ->allowEmptyString('header');
+        // $validator
+        //     ->scalar('header')
+        //     ->allowEmptyString('header');
 
-        $validator
-            ->scalar('display_header')
-            ->maxLength('display_header', 255)
-            ->requirePresence('display_header', 'create')
-            ->notEmptyString('display_header');
+        // $validator
+        //     ->scalar('display_header')
+        //     ->maxLength('display_header', 255)
+        //     ->requirePresence('display_header', 'create')
+        //     ->notEmptyString('display_header');
 
-        $validator
-            ->scalar('ribbon_header')
-            ->maxLength('ribbon_header', 255)
-            ->requirePresence('ribbon_header', 'create')
-            ->notEmptyString('ribbon_header');
+        // $validator
+        //     ->scalar('ribbon_header')
+        //     ->maxLength('ribbon_header', 255)
+        //     ->requirePresence('ribbon_header', 'create')
+        //     // Changed from 'not' to 'allow' to make Editorial Publish commmand work for Content
+        //     ->allowEmptyString('ribbon_header');
 
         return $validator;
     }

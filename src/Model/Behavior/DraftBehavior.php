@@ -149,7 +149,6 @@ class DraftBehavior extends Behavior
                 'contain' => $contains
             ]
         );
-
         $draftItemId = $draftItem->id;
         $draftItemArray = $draftItem->toArray();
 

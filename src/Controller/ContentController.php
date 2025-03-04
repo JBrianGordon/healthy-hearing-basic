@@ -122,6 +122,7 @@ class ContentController extends AppController
         }
 
         $content = $this->Content->findByIdSlug($id, $_SERVER['REQUEST_URI']);
+
         if (empty($content)) {
             if ($redirect = $this->Content->findForRedirectById($id)) {
                 if ($_SERVER['REQUEST_URI'] != Router::url($redirect) && $this->Content->isActive($id)) {

@@ -32,6 +32,8 @@ use Cake\ORM\Entity;
  * @property string|null $facebook_title
  * @property string|null $facebook_description
  * @property string|null $facebook_image
+ * @property string|null $facebook_image_name
+ * @property string|null $facebook_image_url
  * @property int $facebook_image_width
  * @property bool|null $facebook_image_width_override
  * @property int $facebook_image_height
@@ -87,6 +89,8 @@ class Content extends Entity
         'facebook_title' => true,
         'facebook_description' => true,
         'facebook_image' => true,
+        'facebook_image_name' => true,
+        'facebook_image_url' => true,
         'facebook_image_width' => true,
         'facebook_image_width_override' => true,
         'facebook_image_height' => true,
