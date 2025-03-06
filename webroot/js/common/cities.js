@@ -29,8 +29,8 @@ const contentContainer = document.getElementById("top");
 function scrollCheck() {
   const contentWidth = contentContainer.offsetWidth;
   const contentOffset = contentContainer.getBoundingClientRect();
-  const backToTopLeftPosition = contentOffset.left + contentWidth - 125;
-  const backToTopRightPosition = window.outerWidth + 125;
+  const backToTopLeftPosition = contentOffset.left + contentWidth - 170;
+  const backToTopRightPosition = window.outerWidth + 170;
 
   if (window.scrollY > windowHeight) {
     document.getElementById("backToTop").style.left = backToTopLeftPosition + "px";

@@ -32,11 +32,11 @@ $this->Html->script('dist/contact.min', ['block' => true]);
                                     <?= $this->Form->create($contactUsForm, ['class' => 'form-horizontal', 'role' => false, 'id' => 'PageContactUsForm']) ?>
                                         <p><strong>If you are trying to reach a specific clinic, please click on the "Find a clinic" menu above and enter your <?= strtolower(Configure::read('zipLabel')) ?>.</strong></p>
                                         <?php 
-                                            echo $this->Form->control('first_name', ['placeholder' => 'First name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0']]);
-                                            echo $this->Form->control('last_name', ['placeholder' => 'Last name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0']]);
-                                            echo $this->Form->control('phone', ['placeholder' => 'Phone', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0']]);
-                                            echo $this->Form->control('email', ['placeholder' => 'Email', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0'], 'required' => false]);
-                                            echo $this->Form->control('zip', ['class' => 'col-sm-9 mb15', 'label' => ['text' => Configure::read('zipLabel'), 'class' => 'col-sm-3 control-label pl0'], 'placeholder' => Configure::read('zipLabel')]);
+                                            echo $this->Form->control('first_name', ['placeholder' => 'First name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0 tal']]);
+                                            echo $this->Form->control('last_name', ['placeholder' => 'Last name', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0 tal']]);
+                                            echo $this->Form->control('phone', ['placeholder' => 'Phone', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0 tal']]);
+                                            echo $this->Form->control('email', ['placeholder' => 'Email', 'class' => 'col-sm-9 mb15', 'label' => ['class' => 'col-sm-3 control-label pl0 tal'], 'required' => false]);
+                                            echo $this->Form->control('zip', ['class' => 'col-sm-9 mb15', 'label' => ['text' => Configure::read('zipLabel'), 'class' => 'col-sm-3 control-label pl0 tal'], 'placeholder' => Configure::read('zipLabel')]);
                                             if (Configure::read('showNewsletter')) {
                                                 echo $this->Form->control('subscribe', ['checked' => true,'type' => 'checkbox', 'class' => 'col-sm-offset-2', 'label' => ['class' => 'control-label pt5 pl45','text' => 'Subscribe to our newsletter']
                                                 ]); 

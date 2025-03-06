@@ -30,6 +30,14 @@ form {
     }
   }
 
+  &#PageContactUsForm {
+    .help-block {
+      a {
+        font-size: 16px;
+      }
+    }
+  }
+
   label {
     &[for="FooterContactEmail"] {
       font-size: 0;
@@ -100,6 +108,8 @@ form {
     margin-left: -25px;
   }
 }
+
+
 
 .border-radio {
   &.selected-border label {
