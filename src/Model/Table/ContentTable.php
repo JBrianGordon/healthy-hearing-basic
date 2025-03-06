@@ -460,14 +460,15 @@ class ContentTable extends Table
             return [];
         }
 
-        $contentTags = $this->ContentTags->find('all', [
-            'contain' => ['Content'],
-            'conditions' => [
-                'tag_id IN' => $tagIds,
-                'Content.is_active' => true,
-                'Content.last_modified <= CURDATE()',
-            ],
-        ])->all();
+        $contentTags = $this->Tags->find()
+            ->contain(['Content' => function ($q) {
+                return $q->where([
+                    'Content.is_active' => true,
+                    'Content.last_modified <=' => date('Y-m-d')
+                ]);
+            }])
+            ->where(['Tags.id IN' => $tagIds])
+            ->all();
 
         $contents = [];
         $contentIds = [];
@@ -477,9 +478,11 @@ class ContentTable extends Table
                 $contents[] = $contentTag->content;
             }
         }
+        $contents = $contents[0];
         usort ($contents, function($first,$second) {
-            return $first->last_modified->timestamp <=> $second->last_modified->timestamp;
+            return $second->last_modified->timestamp <=> $first->last_modified->timestamp;
         });
+
         $contents = array_slice($contents, 0, $limit);
         return $contents;
     }
