@@ -17,14 +17,14 @@ class CKBoxUtility
     private $userId;
     private $role;
 
-    public function __construct()
+    public function __construct($categoryId)
     {
         $this->apiUrl = 'https://api.ckbox.io/assets';
         $this->envId = Configure::read('CK.envId');
         $this->apiSecret = Configure::read('CK.apiSecret');
         $this->userId = Configure::read('CK.userId');
         $this->role = Configure::read('CK.role');
-        $this->categoryId = Configure::read('CK.categoryId-testing');
+        $this->categoryId = $categoryId;
     }
 
     public function generateToken($userId, $role)

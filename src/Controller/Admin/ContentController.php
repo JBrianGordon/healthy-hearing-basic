@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use App\Model\Entity\Content;
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Mailer\MailerAwareTrait;
 
@@ -242,7 +243,7 @@ class ContentController extends BaseAdminController
             return $this->redirect(['action' => 'edit', $draftId]);
         }
 
-        $newDraft = $this->Content->copy($id);
+        $newDraft = $this->Content->copy($id, Configure::read('CK.content-uploads'));
 
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }

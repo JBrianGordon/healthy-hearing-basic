@@ -7,7 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\Core\Configure;
 use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
@@ -58,7 +58,7 @@ class LocationPhotosTable extends Table
             'photo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.locationPhotos-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -110,7 +110,7 @@ class LocationPhotosTable extends Table
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
             preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('photo_url'), $matches);
             $ckBoxImageId = $matches[1];
-            $ckBoxUtility = new CKBoxUtility();
+            $ckBoxUtility = new CKBoxUtility(Configure::read('CK.locationPhotos-uploads'));
             try {
                 $ckBoxUtility->deleteImage($ckBoxImageId);
             } catch (Exception $e) {

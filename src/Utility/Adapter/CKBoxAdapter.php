@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Utility\Adapter;
 
 use App\Utility\CKBoxUtility;
-
+use Cake\Core\Configure;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\UnableToWriteFile;
@@ -24,9 +24,10 @@ class CKBoxAdapter implements FilesystemAdapter
 {
     protected $ckBoxUtility;
 
-    public function __construct()
+    public function __construct($categoryId = null)
     {
-        $this->ckBoxUtility = new CKBoxUtility();
+        $categoryId = $categoryId ?? Configure::read('CK.categoryId-testing');
+        $this->ckBoxUtility = new CKBoxUtility($categoryId);
     }
 
     /**

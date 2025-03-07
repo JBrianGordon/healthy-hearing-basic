@@ -100,7 +100,7 @@ class WikisTable extends Table
             'facebook_image_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.wikis-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -248,7 +248,7 @@ class WikisTable extends Table
                 if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
                     preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
                     $ckBoxImageId = $matches[1];
-                    $ckBoxUtility = new CKBoxUtility();
+                    $ckBoxUtility = new CKBoxUtility(Configure::read('CK.wikis-uploads'));
                     try {
                         $ckBoxUtility->deleteImage($ckBoxImageId);
                     } catch (Exception $e) {

@@ -103,7 +103,7 @@ class LocationsTable extends Table
             'logo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.locations-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -548,7 +548,7 @@ class LocationsTable extends Table
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
             preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('logo_url'), $matches);
             $ckBoxImageId = $matches[1];
-            $ckBoxUtility = new CKBoxUtility();
+            $ckBoxUtility = new CKBoxUtility(Configure::read('CK.locations-uploads'));
             try {
                 $ckBoxUtility->deleteImage($ckBoxImageId);
             } catch (Exception $e) {

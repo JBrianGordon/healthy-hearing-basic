@@ -9,7 +9,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Cake\Cache\Cache;
-
+use Cake\Core\Configure;
 use ArrayObject;
 use App\Utility\CKBoxUtility;
 use App\Utility\Adapter\CKBoxAdapter;
@@ -56,7 +56,7 @@ class AdvertisementsTable extends Table
             'src' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.advertisements-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -108,7 +108,7 @@ class AdvertisementsTable extends Table
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
             preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
             $ckBoxImageId = $matches[1];
-            $ckBoxUtility = new CKBoxUtility();
+            $ckBoxUtility = new CKBoxUtility(Configure::read('CK.advertisements-uploads'));
             try {
                 $ckBoxUtility->deleteImage($ckBoxImageId);
             } catch (Exception $e) {
