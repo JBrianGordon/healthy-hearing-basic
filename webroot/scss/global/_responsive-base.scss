@@ -612,6 +612,12 @@ pre {
   .popover-content {
     color: #2b2c2d;
   }
+
+  &.blog-byline {
+    .text-link {
+      font-size: 16px;
+    }
+  }
 }
 
 .dropdown-item {

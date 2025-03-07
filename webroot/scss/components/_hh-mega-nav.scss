@@ -44,6 +44,12 @@
   .mega-nav-inner {
     padding: 30px 25px;
 
+    h4 {
+      a {
+        font-size: 24px;
+      }
+    }
+
     p {
       .flag {
         display: none;
@@ -74,7 +80,7 @@
   }
 
   @media only screen and (min-width: $screen-lg-min) {
-    max-width: 880px;
+    max-width: 990px;
     position: absolute;
     right: calc(50% - 570px);
   }

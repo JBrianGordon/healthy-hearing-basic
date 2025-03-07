@@ -359,6 +359,10 @@
       display: block;
       text-align: left;
 
+      &.w40 {
+        padding-left: 10px;
+      }
+
       @media only screen and (min-width: $screen-md-min) {
         display: inline-block;
       }

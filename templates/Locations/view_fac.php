@@ -34,7 +34,7 @@ $this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block'
 										<p>Do you need help finding a provider for hearing loss or tinnitus? <?= $siteName ?> has the most comprehensive directory of audiologists, hearing instrument specialists and hearing clinics in <?= Configure::read('countryName') ?>. Find trusted professionals to help you on your journey to better hearing health.</p>
 									<?php endif; ?>
 								</div>
-								<div class="col-lg-5 tar">
+								<div class="col-lg-5">
 									<?php if (!empty($clinicsNearMe)): ?>
 										<p class="h3">Hearing clinics near me</p>
 										<span id="nearme-locations_block">
