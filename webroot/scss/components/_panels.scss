@@ -274,6 +274,7 @@
 
   &.expanded {
 	padding: 15px;
+	word-break: break-word;
 	
 		&[itemprop=articleBody] {
 		  @media only screen and (max-width:736px) {
