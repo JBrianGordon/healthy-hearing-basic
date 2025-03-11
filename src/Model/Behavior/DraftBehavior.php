@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Behavior;
 
+use Cake\Core\Configure;
 use Cake\ORM\Behavior;
 use Cake\ORM\Query;
 use App\Utility\CKBoxUtility;
@@ -50,7 +51,7 @@ class DraftBehavior extends Behavior
      * @param int $id Model entity id.
      * @return \Cake\Datasource\EntityInterface|false
      */
-    public function copy(int $id)
+    public function copy(int $id, string $ckCategoryId)
     {
         $draft = $this->_table->duplicate($id);
 
@@ -59,7 +60,7 @@ class DraftBehavior extends Behavior
 
         // Replace draft's images from original item
         // in CKBox with new copies
-        $copiedCkImageInfo = $this->copyCkImages($draft);
+        $copiedCkImageInfo = $this->copyCkImages($draft, $ckCategoryId);
 
         // Update draft's image fields with copied image information
         foreach ($copiedCkImageInfo as $key => $value) {
@@ -70,10 +71,10 @@ class DraftBehavior extends Behavior
         return $this->_table->save($draft, ['skipAfterSave' => true]);
     }
 
-    public function copyCkImages($draft)
+    public function copyCkImages($draft, string $ckCategoryId)
     {
         $copiedImages = [];
-        $ckBoxUtility = new CKBoxUtility();
+        $ckBoxUtility = new CKBoxUtility($ckCategoryId);
 
         $newImagesInfo = [];
 

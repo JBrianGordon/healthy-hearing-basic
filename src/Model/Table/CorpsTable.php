@@ -6,7 +6,7 @@ namespace App\Model\Table;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\Core\Configure;
 use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
@@ -84,7 +84,7 @@ class CorpsTable extends Table
             'logo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.corps-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -108,7 +108,7 @@ class CorpsTable extends Table
             'facebook_image_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.corps-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -182,7 +182,7 @@ class CorpsTable extends Table
                 if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
                     preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
                     $ckBoxImageId = $matches[1];
-                    $ckBoxUtility = new CKBoxUtility();
+                    $ckBoxUtility = new CKBoxUtility(Configure::read('CK.corps-uploads'));
                     try {
                         $ckBoxUtility->deleteImage($ckBoxImageId);
                     } catch (Exception $e) {

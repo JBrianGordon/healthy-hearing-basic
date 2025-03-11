@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Corps Controller
@@ -136,7 +137,7 @@ class CorpsController extends BaseAdminController
             return $this->redirect(['action' => 'edit', $draftId]);
         }
 
-        $newDraft = $this->Corps->copy($id);
+        $newDraft = $this->Corps->copy($id, Configure::read('CK.corps-uploads'));
 
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }

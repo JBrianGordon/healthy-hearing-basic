@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
@@ -90,9 +91,12 @@ class ContentTable extends Table
             'facebook_image_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.content-uploads')),
                 ],
                 'path' => '',
+                'fields' => [
+                    'type' => 'facebook_image'
+                ],
                 'keepFilesOnDelete' => false,
                 'nameCallback' => function ($table, $entity, $data, $field, $settings) {
                     $filename = $data->getClientFilename();
@@ -229,7 +233,7 @@ class ContentTable extends Table
                 if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
                     preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
                     $ckBoxImageId = $matches[1];
-                    $ckBoxUtility = new CKBoxUtility();
+                    $ckBoxUtility = new CKBoxUtility(Configure::read('CK.content-uploads'));
                     try {
                         $ckBoxUtility->deleteImage($ckBoxImageId);
                     } catch (Exception $e) {

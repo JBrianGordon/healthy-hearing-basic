@@ -10,7 +10,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
-
+use Cake\Core\Configure;
 use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
@@ -65,7 +65,7 @@ class ProvidersTable extends Table
             'photo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
-                    'adapter' => new CKBoxAdapter(),
+                    'adapter' => new CKBoxAdapter(Configure::read('CK.providers-uploads')),
                 ],
                 'path' => '',
                 'keepFilesOnDelete' => false,
@@ -196,7 +196,7 @@ class ProvidersTable extends Table
         if ($entity->{$field} !== $original && !empty($original) && is_object($original) === false) {
             preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('photo_url'), $matches);
             $ckBoxImageId = $matches[1];
-            $ckBoxUtility = new CKBoxUtility();
+            $ckBoxUtility = new CKBoxUtility(Configure::read('CK.providers-uploads'));
             try {
                 $ckBoxUtility->deleteImage($ckBoxImageId);
             } catch (Exception $e) {

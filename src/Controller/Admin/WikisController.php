@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use App\Model\Entity\Wikis;
+use Cake\Core\Configure;
 
 /**
  * Wikis Controller
@@ -218,7 +219,7 @@ class WikisController extends BaseAdminController
             return $this->redirect(['action' => 'edit', $draftId]);
         }
 
-        $newDraft = $this->Wikis->copy($id);
+        $newDraft = $this->Wikis->copy($id, Configure::read('CK.wikis-uploads'));
 
         return $this->redirect(['action' => 'edit', $newDraft->id]);
     }
