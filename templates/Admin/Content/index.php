@@ -74,7 +74,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 	<section class="panel">
 		<div class="panel-body">
 			<div class="panel-section expanded">
-				<h2><?= __('Reports') ?></h2>
+				<h2>Reports</h2>
 				<?= $this->element('pagination') ?>
 				<?= $this->element('admin_filter', ['modelName' => 'content']) ?>
 				<?= $this->element('advanced_search', ['fields' => $advancedSearchFields]) ?>
@@ -121,7 +121,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 										echo $this->Html->link(
 											__($content->primary_author->username),
 											'/admin/users/edit/'.$content->user_id,
-											['class' => 'btn btn-default rounded']
+											['class' => 'btn btn-default rounded pl5 pr5']
 										);
 									}
 									?>

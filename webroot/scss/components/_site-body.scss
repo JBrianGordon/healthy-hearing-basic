@@ -12,6 +12,15 @@
 	  }
 	}
 
+	&.admin {
+		p:not(.btn), a:not(.btn) {
+			font-size: 16px;
+		}
+		.btn:not(.btn-xs) {
+			font-size: 14px;
+		}
+	}
+
 	&.fap-results {
 	  section {
 	    &.panel-primary {

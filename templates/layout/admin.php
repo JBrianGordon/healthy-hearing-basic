@@ -11,7 +11,7 @@ $this->extend('/layout/base');
         echo $this->element('header/default');
     $this->end();
 ?>
-<div class="container-fluid site-body">
+<div class="container-fluid site-body admin">
     <div class="row">
         <div class="backdrop-container">
             <div class="backdrop backdrop-gradient backdrop-height"></div>

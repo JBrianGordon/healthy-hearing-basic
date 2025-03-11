@@ -218,6 +218,10 @@ table {
       }
     }
   }
+
+  th, td {
+    word-break: initial;
+  }
 }
 
 .text-primary {
@@ -248,6 +252,12 @@ th {
   }
 
   .actions {
+    min-width: 110px;
+  }
+}
+
+td {
+  &.actions {
     min-width: 110px;
   }
 }
