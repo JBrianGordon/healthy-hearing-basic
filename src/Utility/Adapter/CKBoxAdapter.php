@@ -26,7 +26,7 @@ class CKBoxAdapter implements FilesystemAdapter
 
     public function __construct($categoryId = null)
     {
-        $categoryId = $categoryId ?? Configure::read('CK.categoryId-testing');
+        $categoryId = $categoryId ?? Configure::read('CK.categoryId');
         $this->ckBoxUtility = new CKBoxUtility($categoryId);
     }
 
