@@ -33,7 +33,7 @@ $this->Breadcrumbs->add([
 					          <div class="row">
 					            <div class="col-xl-3 gutter-below">
 						            <div class="logo-container">
-					            		<img src="<?= $corp->thumb_url ?>" loading="lazy" alt="<?= $corp->title ?>" class="img-responsive align-center" width="150px">
+													<img src="<?= $corp->logo_url ?>" loading="lazy" alt="<?= $corp->title ?>" class="img-responsive align-center" width="150px">
 						            </div>
 					            </div>
 					            <div class="col-xl-9">
