@@ -38,7 +38,10 @@ class CorpsController extends AppController
             $this->set('ad', $exclusiveAd);
         }
         $corps = $this->Corps->find('all', [
-            'conditions' => ['is_active' => 1],
+            'conditions' => [
+                'is_active' => 1,
+                'id_draft_parent' => 0
+            ],
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
         ])->all();
         $this->set('corps', $corps);
