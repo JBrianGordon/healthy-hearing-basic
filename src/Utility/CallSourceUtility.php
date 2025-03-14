@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Utility;
 
 use Cake\Core\Configure;
-use GuzzleHttp\Client;
+use Cake\Http\Client;
 use Cake\Utility\Xml;
 use App\Model\Entity\Location;
 
@@ -17,16 +17,15 @@ class CallSourceUtility
 
     public function __construct()
     {
-        $this->uri = 'http://xml.callsource.com/services/Provision';
+        $this->uri = 'http://csxml.callsource.com/services/Provision';
         $this->callSourceUsername = Configure::read('callSourceUsername');
         $this->callSourcePassword = Configure::read('callSourcePassword');
         $this->httpClient = new Client([
-            'base_uri' => $this->uri,
-            'timeout' => 10,
+            'timeout' => 2000,
         ]);
         $this->adSource = Configure::read('callSourceAdSource');
-        $this->isTestAccount = ($this->callSourceUsername == 'xmluser_hh') ? true : false;
-        $this->whisperFile = $this->isTestAccount ? 'healthyhearingwspr3.wav' : 'healthyhearingwspr2.wav';
+        $this->isTestAccount = ($this->callSourceUsername == 'xmluser_aholdingstest') ? true : false;
+        $this->whisperFile = 'healthyhearingwspr2.wav';
         // In most cases we do not want to create customers and campaigns in our test account
         $this->allowTest = false;
         $this->xmlHeader = '<?xml version="1.0" encoding="UTF-8" ?>';
@@ -165,7 +164,7 @@ class CallSourceUtility
             $postAdfValue = [
                 'Timing' => 'start',
                 'Template' => 'ADFEmailTemplateXML.txt',
-                'URL' => 'http://budevsupport01.callsource.com/crmtools/crm_re-direct.php?url=https://hhcs.oticon.com/PostXmlData.aspx'
+                'URL' => 'https://hhcs.oticon.com/PostXmlData.aspx'
             ];
         }
         $data = [
@@ -175,10 +174,9 @@ class CallSourceUtility
             'Campaign|{"ID":"new"}' => [
                 'Name' => $name,
                 'StartDate' => date('m/d/Y'),
-                'EndDate' => date('m/d/Y', strtotime('01/01/2025')),
+                'EndDate' => '',
                 'AdSource|{"dimension":"Ad Source"}' => $this->adSource,
                 'AdSource|{"dimension":"Zip Code"}' => '0',
-                'MailMaster' => 'true',
                 'EmailADF|{"enabled":"false"}' => '',
                 $postAdfKey => $postAdfValue,
                 'VoiceMail|{"enabled":"false"}' => '',
@@ -186,10 +184,6 @@ class CallSourceUtility
                 $whisperKey => $whisperValue
             ]
         ];
-        if ($this->isTestAccount) {
-            // The test account does not have a Zip Code ad source
-            unset($data['Campaign|{"ID":"new"}']['AdSource|{"dimension":"Zip Code"}']);
-        }
         return $this->saveCampaign($data);
     }
 
@@ -199,10 +193,10 @@ class CallSourceUtility
     * - 'Customer' => array('CustomerCode' => 'code'),
     * - 'Campaign' => array()
     */
-    function saveCampaign($data = []){
+    function saveCampaign($data = [], $returnResult = 'true'){
         // Do not save campaigns to test account unless allowed
         if (!$this->isTestAccount || $this->allowTest) {
-            return $this->api('CampaignRequest', $data, ['autoCreateIfNew' => 'true', 'returnResult' => 'true']);
+            return $this->api('CampaignRequest', $data, ['autoCreateIfNew' => 'true', 'returnResult' => $returnResult]);
         } else {
             // When tests are disabled, fake success.
             return ['@status' => 'OK'];
@@ -231,62 +225,19 @@ class CallSourceUtility
     * @return mixed result
     */
     function endCampaign($campaign_id = null, $customer_code = null){
-        if ($this->isTestAccount) {
-            // Test account campaigns do not need a referral period
-            return $this->endCampaignNoReferral($campaign_id, $customer_code);
-        }
         $data = [
             'Customer' => [
                 'CustomerCode' => $customer_code
             ],
             'Campaign|{"ID":"'.$campaign_id.'"}' => [
                 'EndDate' => date('m/d/Y'),
-                'ReferralEndDate' => date('m/d/Y', strtotime('+1 month')),
-            ]
-        ];
-        return $this->saveCampaign($data);
-    }
-
-    /**
-    * End a campaign with no referral by setting the endDate and ReferralEndDate to today.
-    * @param string campaign_id
-    * @param string customer_code
-    * @return mixed result
-    */
-    function endCampaignNoReferral($campaign_id = null, $customer_code = null){
-        $data = [
-            'Customer' => [
-                'CustomerCode' => $customer_code
-            ],
-            'Campaign|{"ID":"'.$campaign_id.'"}' => [
-                'EndDate' => date('m/d/Y'),
-                'ReferralEndDate' => date('m/d/Y'),
             ]
         ];
         // Allow ending campaigns on test account
         $this->allowCsTest();
-        $result = $this->saveCampaign($data);
+        $result = $this->saveCampaign($data, 'false');
         $this->disallowCsTest();
         return $result;
-    }
-
-    /**
-    * End a campaign by setting the endDate to today.
-    * @param string campaign_id
-    * @param string customer_code
-    * @param datetime endDate
-    * @return mixed result
-    */
-    function changeCampaignEndDate($campaign_id = null, $customer_code = null, $endDate = null){
-        $data = [
-            'Customer' => [
-                'CustomerCode' => $customer_code
-            ],
-            'Campaign|{"ID":"'.$campaign_id.'"}' => [
-                'EndDate' => date('m/d/Y', $endDate),
-            ]
-        ];
-        return $this->saveCampaign($data);
     }
 
     /**
@@ -393,7 +344,7 @@ class CallSourceUtility
             $postAdfValue = [
                 'Timing' => 'start',
                 'Template' => 'ADFEmailTemplateXML.txt',
-                'URL' => 'http://budevsupport01.callsource.com/crmtools/crm_re-direct.php?url=https://hhcs.oticon.com/PostXmlData.aspx'
+                'URL' => 'https://hhcs.oticon.com/PostXmlData.aspx'
             ];
         }
         $data = [
@@ -412,10 +363,6 @@ class CallSourceUtility
                 ]
             ]
         ];
-        if ($this->isTestAccount) {
-            // The test account does not have a Zip Code ad source
-            unset($data['Campaign|{"ID":"'.$campaignId.'"}']['AdSource|{"dimension":"Zip Code"}']);
-        }
         return $this->saveCampaign($data);
     }
 
@@ -457,6 +404,7 @@ class CallSourceUtility
         }
         $result = $this->apiAddNumberToCampaign($data);
         if ($result['@status'] == 'OK') {
+            // success
             return $result;
         }
 
@@ -610,11 +558,36 @@ class CallSourceUtility
     * @param mixed result of request
     */
     function __request($xml = null, $method = null, $options = []){
-        if($this->buildXml($xml, $method, $options)){
+        if ($this->buildXml($xml, $method, $options)) {
             $this->__signRequest();
             $this->__requestLog[] = $this->_request;
-            $result = $this->httpClient->post($this->uri, ['body'=>$this->_request]);
-            return $this->__parseResult($result);
+            $response = $this->httpClient->post(
+                $this->uri,
+                $this->_request,
+                ['type' => 'xml']
+            );
+            if ($response->isOk()) {
+                $return = $this->__parseResult($response);
+            } else {
+                //Don't try to parse a failed response. It is not parsable.
+                $return = ['@status' => 'Error', 'error' => $response->getXml()];
+            }
+            if (empty($return['@status'])) {
+                $return['@status'] = 'Error';
+            }
+
+            // Enable this to debug errors
+            /*
+            if (($return['@status'] !== 'OK') && (!in_array($method, ['GetProvisioningInfoRequest', 'AddNumberToCampaignRequest']))) {
+                echo "method = ".$method."\n\n";
+                echo "request = \n";
+                echo $this->_request;
+                echo "\n\nresult = \n";
+                echo $response."\n\n";
+                die('CallSource command failed');
+            }
+            */
+            return $return;
         }
         return false;
     }
@@ -625,7 +598,7 @@ class CallSourceUtility
     * @return deep result of query
     */
     function __parseResult($result){
-        $result = Xml::toArray(Xml::build($result->getBody()->getContents()));
+        $result = Xml::toArray($result->getXml());
         $key = str_replace("Request",'Response', $this->method);
         return isset($result['CallSource']['CallSourceService'][$key]) ? $result['CallSource']['CallSourceService'][$key] : $result;
     }
@@ -636,7 +609,7 @@ class CallSourceUtility
     function __signRequest(){
         $username = $this->elem('Username', [], $this->callSourceUsername);
         $authentication = $this->elem('Authentication', [], $this->authenticationToken());
-        $callsource = $this->elem('CallSource', ['version' => 'E'], $username . $authentication . $this->_xml);
+        $callsource = $this->elem('CallSource', ['version' => 'F'], $username . $authentication . $this->_xml);
         $this->_request = $this->xmlHeader . $callsource;
     }
 

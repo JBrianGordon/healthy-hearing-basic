@@ -437,7 +437,8 @@ class CallSourcesTable extends Table
                 $activeCampaign = $this->getActiveCampaign($locationId);
                 $retval = false;
                 if (empty($activeCampaign)) {
-                    $this->errors[] = 'No active campaigns found for this customer';
+                    // No active campaigns found for this customer
+                    $retval = true;
                 } else {
                     $campaignId = $activeCampaign['@ID'];
                     $result = $this->Call->endCampaign($campaignId, $customerCode);
@@ -557,17 +558,18 @@ class CallSourcesTable extends Table
             $csCustomerData = $this->Call->findByCustomerCode($customerCode);
             if ($csCustomerData['@status'] == 'OK') {
                 if (isset($csCustomerData['Customer']['Campaign']['@ID'])) {
-                    if (($csCustomerData['Customer']['Campaign']['Status'] == 'active') && (strtotime($csCustomerData['Customer']['Campaign']['EndDate']) > strtotime('today'))) {
+                    $endDate = strtotime($csCustomerData['Customer']['Campaign']['EndDate']);
+                    if (($csCustomerData['Customer']['Campaign']['Status'] == 'active') && (($endDate > strtotime('today')) || empty($endDate))) {
                         $activeCampaign = $csCustomerData['Customer']['Campaign'];
                     }
                 } elseif (isset($csCustomerData['Customer']['Campaign'][0])) {
                     foreach ($csCustomerData['Customer']['Campaign'] as $campaign) {
-                        if (($campaign['Status'] == 'active') && (strtotime($campaign['EndDate']) > strtotime('today'))) {
-                            if ($activeCampaign == null) {
-                                $activeCampaign = $campaign;
-                            } else {
-                                $this->Call->endCampaignNoReferral($campaign['@ID'], $customerCode);
-                            }
+                        $endDate = strtotime($campaign['EndDate']);
+                        if (($campaign['Status'] == 'active') && (($endDate > strtotime('today')) || empty($endDate))) {
+                            $activeCampaign = $campaign;
+                        } else {
+                            // We already have an active campaign and should not have more than one.
+                            $this->Call->endCampaign($campaign['@ID'], $customerCode);
                         }
                     }
                 }
@@ -632,48 +634,6 @@ class CallSourcesTable extends Table
         } catch(Exception $e){
             echo "Exception caught in updateCampaign(): {$e->getMessage()}";
             $this->errors[] = "Exception caught in updateCampaign(): {$e->getMessage()}";
-        }
-        return false;
-    }
-
-    /**
-    * Update the campaign end date for a location
-    * @param int id of location in database
-    * @param datetime end date
-    * @return boolean success
-    */
-    function updateEndDate($location_id = null, $endDate = null){
-        $this->errors = array();
-        $this->loadCallSource();
-        try{
-            $activeCampaign = $this->getActiveCampaign($location_id);
-            if (!empty($activeCampaign)) {
-                // Update the active campaign
-                $campaignId = $activeCampaign['@ID'];
-                $retval = false;
-                $result = $this->Call->changeCampaignEndDate($campaignId, $customerCode, $endDate);
-                if ($result['@status'] == 'OK') {
-                    $retval = true;
-                } else {
-                    $this->errors[] = $result;
-                    $retval = false;
-                }
-
-                // Update the CallSource record in our db
-                if ($retval) {
-                    $callSourceEntity = $this->find('all', [
-                        'conditions' => ['location_id' => $location_id]
-                    ])->first();
-                    if (!empty($callSourceEntity)) {
-                        $callSourceEntity->end_date = date('m/d/Y', $endDate);
-                        $this->save($callSourceEntity);
-                    }
-                }
-                return $retval;
-            }
-        } catch(Exception $e){
-            echo "Exception caught in updateEndDate(): {$e->getMessage()}";
-            $this->errors[] = "Exception caught in updateEndDate(): {$e->getMessage()}";
         }
         return false;
     }
