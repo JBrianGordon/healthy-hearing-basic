@@ -48,7 +48,6 @@ use Cake\Core\Configure;
 							<ul class="dropdown-menu">
 								<li><a class="text-link" tabindex="-1" href="/help/tinnitus">Tinnitus overview</a></li>
 								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/symptoms">Symptoms</a></li>
-								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/treatment">Diagnosis & treatment</a></li>
 								<li><a class="text-link" tabindex="-1" href="/help/tinnitus/relief">Relief</a></li>
 							</ul>
 						</li>
