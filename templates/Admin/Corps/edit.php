@@ -53,6 +53,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 					                echo $this->Form->control('priority', [
 										'label' => 'Order',
 										'min' => -20,
+										'max' => 1000,
 					                ]);
 					                if ($corp->id_draft_parent > 0) {
 										echo $this->Form->control('last_modified', [
