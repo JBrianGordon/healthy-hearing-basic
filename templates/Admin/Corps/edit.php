@@ -6,6 +6,8 @@
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
 
+use Cake\I18n\FrozenTime;
+
 $isDraft = !empty($corp->id_draft_parent);
 
 $this->Html->script('dist/corp_edit.min', ['block' => true]);
@@ -49,7 +51,23 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 					                echo $this->Form->control('title');
 					                echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 					                echo $this->Form->control('priority', ['label' => 'Order']);
-					                echo $this->Form->control('last_modified', ['type' => 'datetime', 'dateFormat' => 'MDY']);
+					                if ($corp->id_draft_parent > 0) {
+										echo $this->Form->control('last_modified', [
+											'type' => 'datetime',
+											'dateFormat' => 'MDY',
+											'min' => FrozenTime::now()
+												->addDay()
+												->startOfDay()
+												->i18nFormat('yyyy-MM-dd HH:mm:ss'),
+											// 'min' => '2025-03-24 00:00:00',
+										]);
+					                } else {
+										echo $this->Form->control('last_modified', [
+											'type' => 'datetime',
+											'dateFormat' => 'MDY',
+										]);
+					                }
+
 					                echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 					                echo $this->Form->control('is_active', ['label' => 'Active']);
 					                echo '</div>';

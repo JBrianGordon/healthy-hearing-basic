@@ -13,6 +13,7 @@ use Cake\Datasource\EntityInterface;
 use App\Utility\Adapter\CKBoxAdapter;
 use App\Utility\CKBoxUtility;
 use Cake\Cache\Cache;
+use Cake\I18n\FrozenTime;
 
 /**
  * Corps Model
@@ -69,6 +70,7 @@ class CorpsTable extends Table
             ],
             'set' => [
                 'is_active' => 0,
+                'last_modified' => FrozenTime::now()->addDays(30)->format('Y-m-d H:i:s'),
             ],
         ]);
         $this->addBehavior('Sitemap.Sitemap', [
