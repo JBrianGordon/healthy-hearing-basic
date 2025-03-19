@@ -15,7 +15,6 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $last_modified
  * @property int $modified_by
  * @property string $title
- * @property string $title_long
  * @property string $slug
  * @property string|null $short
  * @property string|null $description
@@ -23,7 +22,6 @@ use Cake\ORM\Entity;
  * @property string|null $facebook_title
  * @property string|null $facebook_description
  * @property string|null $facebook_image
- * @property \Cake\I18n\FrozenTime|null $date_approved
  * @property bool $is_active
  * @property int $id_draft_parent
  * @property int $priority
@@ -50,7 +48,6 @@ class Corp extends Entity
         'last_modified' => true,
         'modified_by' => true,
         'title' => true,
-        'title_long' => true,
         'slug' => true,
         'short' => true,
         'description' => true,
@@ -62,7 +59,6 @@ class Corp extends Entity
         'facebook_image_name' => true,
         'facebook_image_url' => true,
         'facebook_image' => true,
-        'date_approved' => true,
         'is_active' => true,
         'id_draft_parent' => true,
         'priority' => true,

@@ -225,12 +225,6 @@ class CorpsTable extends Table
             ->integer('user_id');
 
         // $validator
-        //     ->scalar('title_long')
-        //     ->maxLength('title_long', 255)
-        //     ->requirePresence('title_long', 'create')
-        //     ->notEmptyString('title_long');
-
-        // $validator
         //     ->scalar('slug')
         //     ->maxLength('slug', 128)
         //     ->requirePresence('slug', 'create')
@@ -264,9 +258,9 @@ class CorpsTable extends Table
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
 
-        // $validator
-        //     ->dateTime('date_approved')
-        //     ->allowEmptyDateTime('date_approved');
+        $validator
+            ->requirePresence('facebook_image_name', false)
+            ->allowEmptyString('facebook_image_name');
 
         // $validator
         //     ->boolean('is_active')

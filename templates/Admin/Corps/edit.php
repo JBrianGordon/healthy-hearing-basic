@@ -42,7 +42,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 				    <div class="column-responsive column-80">
 				        <div class="corps form content">
 							<div class="logo-container">
-								<img src="<?= $corp->thumb_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" width="150" height="60">
+								<img src="<?= $corp->logo_url ?>" loading="lazy" class="pull-right" alt="<?= $corp->facebook_title ?>" style="<?= $corp->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;">
 							</div>
 							<div class="clearfix"></div>
 				            <?= $this->Form->create($corp, ['type' => 'file', 'id' => 'corpForm']) ?>
@@ -90,9 +90,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 										</div>
 										<div class="tab-pane" id="Admin">
 											<?php
-												echo $this->Form->control('title_long');
 												echo $this->Form->control('slug');
-												echo $this->Form->control('thumb_url');
 											?>
                                             <img id="logo-imagePreview0" src="<?= $corp->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="<?= $corp->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
                                             <?=
@@ -120,7 +118,6 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
                                             ?>
 											<?php
 												echo $this->Form->control('facebook_image');
-												echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 											?>
 											<hr>
 											<h3>Contributors</h3>
