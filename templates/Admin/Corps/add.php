@@ -62,7 +62,6 @@ $author_default = false;
 									</div>
 									<div class="tab-pane" id="Admin">
 										<?php
-											echo $this->Form->control('title_long');
 											echo $this->Form->control('slug');
 											echo $this->Form->control('thumb_url');
 										?>

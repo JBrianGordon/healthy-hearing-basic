@@ -225,12 +225,6 @@ class CorpsTable extends Table
             ->integer('user_id');
 
         // $validator
-        //     ->scalar('title_long')
-        //     ->maxLength('title_long', 255)
-        //     ->requirePresence('title_long', 'create')
-        //     ->notEmptyString('title_long');
-
-        // $validator
         //     ->scalar('slug')
         //     ->maxLength('slug', 128)
         //     ->requirePresence('slug', 'create')

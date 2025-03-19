@@ -15,7 +15,6 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $last_modified
  * @property int $modified_by
  * @property string $title
- * @property string $title_long
  * @property string $slug
  * @property string|null $short
  * @property string|null $description
@@ -49,7 +48,6 @@ class Corp extends Entity
         'last_modified' => true,
         'modified_by' => true,
         'title' => true,
-        'title_long' => true,
         'slug' => true,
         'short' => true,
         'description' => true,
