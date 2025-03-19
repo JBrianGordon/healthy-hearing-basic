@@ -259,6 +259,10 @@ class CorpsTable extends Table
         //     ->allowEmptyFile('facebook_image');
 
         $validator
+            ->requirePresence('logo_name', false)
+            ->allowEmptyString('logo_name');
+
+        $validator
             ->requirePresence('facebook_image_name', false)
             ->allowEmptyString('facebook_image_name');
 
