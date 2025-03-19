@@ -90,9 +90,6 @@ $author_default = false;
                                                 'label' => ['text' => 'Add Facebook Image']
                                             ]);
                                         ?>
-										<?php
-											echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
-										?>
 										<hr>
 										<h3>Contributors</h3>
 		                                <strong>

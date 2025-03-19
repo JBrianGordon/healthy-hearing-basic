@@ -265,10 +265,6 @@ class CorpsTable extends Table
         //     ->allowEmptyFile('facebook_image');
 
         // $validator
-        //     ->dateTime('date_approved')
-        //     ->allowEmptyDateTime('date_approved');
-
-        // $validator
         //     ->boolean('is_active')
         //     ->notEmptyString('is_active');
 

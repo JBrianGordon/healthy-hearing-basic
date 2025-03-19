@@ -120,7 +120,6 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
                                             ?>
 											<?php
 												echo $this->Form->control('facebook_image');
-												echo $this->Form->control('date_approved', ['empty' => true, 'type' => 'date', 'dateFormat' => 'MDY']);
 											?>
 											<hr>
 											<h3>Contributors</h3>

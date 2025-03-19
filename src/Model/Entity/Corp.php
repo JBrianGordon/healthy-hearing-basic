@@ -23,7 +23,6 @@ use Cake\ORM\Entity;
  * @property string|null $facebook_title
  * @property string|null $facebook_description
  * @property string|null $facebook_image
- * @property \Cake\I18n\FrozenTime|null $date_approved
  * @property bool $is_active
  * @property int $id_draft_parent
  * @property int $priority
@@ -62,7 +61,6 @@ class Corp extends Entity
         'facebook_image_name' => true,
         'facebook_image_url' => true,
         'facebook_image' => true,
-        'date_approved' => true,
         'is_active' => true,
         'id_draft_parent' => true,
         'priority' => true,
