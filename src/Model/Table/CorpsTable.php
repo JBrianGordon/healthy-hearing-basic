@@ -258,6 +258,10 @@ class CorpsTable extends Table
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
 
+        $validator
+            ->requirePresence('facebook_image_name', false)
+            ->allowEmptyString('facebook_image_name');
+
         // $validator
         //     ->boolean('is_active')
         //     ->notEmptyString('is_active');

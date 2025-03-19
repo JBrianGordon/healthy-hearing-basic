@@ -63,7 +63,6 @@ $author_default = false;
 									<div class="tab-pane" id="Admin">
 										<?php
 											echo $this->Form->control('slug');
-											echo $this->Form->control('thumb_url');
 										?>
                                         <img id="logo-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="display:none; max-width: 100px; max-height: 100px;" />
                                         <?=
