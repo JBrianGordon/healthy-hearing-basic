@@ -32,6 +32,7 @@ $this->assign('meta', $meta);
 
 $wikiSchema = '<script type="application/ld+json">{';
 $wikiSchema .= '"@context": "https://schema.org", "@type": "Article", ';
+$wikiSchema .= '"about": {"@type": "Thing", "name": "' . $wiki->tags[0]->ribbon_header . '"},';
 $wikiSchema .= '"mainEntityOfPage": {"@type": "MedicalWebPage", "@id": "' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"';
 if(!empty($wiki->reviewers)) {
 	$wikiSchema .= ', "reviewedBy": {"@type": "Person", "name": "' . $wiki->reviewers[0]->first_name . ' ' . $wiki->reviewers[0]->last_name . '"';

@@ -39,8 +39,9 @@ $this->assign('meta', $meta);
 
 $contentSchema = '<script type="application/ld+json">{
 	"@context": "https://schema.org",
-	"@type": "NewsArticle",';
-	$contentSchema .= '"mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
+	"@type": "Article",';
+	$contentSchema .= '"about": {"@type": "Thing", "name": "' . $content->tags[0]->ribbon_header . '"},';
+	$contentSchema .= '"mainEntityOfPage": {"@type": "MedicalWebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
 	$contentSchema .= '"headline": "' . htmlentities(strip_tags($title)) . '",
 	"alternativeHeadline": "' . $altTitle . '",';
 	if (!empty($content->facebook_image)) {
@@ -109,6 +110,11 @@ $contentSchema = '<script type="application/ld+json">{
 				"width": "400px",
 				"height": "400px"
 			}
+		},';
+		$contentSchema .= '"isPartOf" : {
+			"@type": "WebPage",
+			"name": "The Healthy Hearing Report",
+			"mainEntityOfPage": "https://www.healthyhearing.com/report"
 		}
 	}</script>';
 
@@ -116,8 +122,6 @@ echo $contentSchema;
  
 $this->Html->script('dist/content.min', ['block' => true]);
 ?>
-
-<?= $this->element('schema/person', ['author' => $content->primary_author]) ?>
 
 <div class="container-fluid site-body blog">
   <div class="row">
