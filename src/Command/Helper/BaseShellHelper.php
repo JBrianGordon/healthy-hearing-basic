@@ -99,7 +99,7 @@ class BaseShellHelper extends Helper
     * Prompt to continue, helper method, will exit if answer is n or q, returns true otherwise
     * @param string text to prompt
     */
-    protected function promptContinue($text = null) {
+    public function promptContinue($text = null) {
         switch ($this->promptYesNo($text)) {
             case 'q':
             case 'n':

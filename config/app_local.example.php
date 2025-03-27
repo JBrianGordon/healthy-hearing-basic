@@ -6,7 +6,10 @@
  * into source code version control.
  */
 return [
-    'env' => 'local', // change this on dev/qa servers
+    /*
+     * Environment
+     */
+    'env' => '_environment_',
     'host' => 'hh.loc', // change this on dev/qa servers
     'localIp' => '_my_ip_',
     'country' => 'US',
@@ -78,6 +81,17 @@ return [
             //'schema' => 'myapp',
             'url' => env('DATABASE_TEST_URL', 'sqlite://127.0.0.1/tests.sqlite'),
         ],
+    ],
+
+    /*
+     * Database console/shell configuration
+     */
+    'DbShell' => [
+        'dbFilePrefix' => '_db_file_prefix_',
+        'dbFileExt' => '.sql.gz',
+        'localDir' => '/tmp/',
+        'dbServer' => '_db_server_name_',
+        'remoteFolder' => '_db_backup_dir_',
     ],
 
     /*
