@@ -65,7 +65,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 				<span style="display:none;" id="corp-id"><?= $corp->id; ?></span>
 				<div class="col-lg-9" style="min-height:100vh">
 					<?php if ($isPreview): ?>
-						<div class="alert alert-warning" role="alert">
+						<div class="alert alert-warning mb-3" role="alert">
 							This is not the greatest Manufacturer page in the world, no. <br />
 							This is just a <strong><em>preview</em></strong>!
 						</div>

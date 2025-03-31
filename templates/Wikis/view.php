@@ -140,7 +140,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					</div>
 					<div class="row header-content col-sm-8">
 						<?php if ($isPreview): ?>
-							<div class="alert alert-warning" role="alert">
+							<div class="alert alert-warning mb-3" role="alert">
 								This is not the greatest Help page in the world, no. <br />
 								This is just a <strong><em>preview</em></strong>!
 							</div>
