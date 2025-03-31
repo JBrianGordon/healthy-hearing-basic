@@ -70,7 +70,7 @@ if(!empty($wiki->reviewers)) {
 $wikiSchema .= ', "lastReviewed": "' . $wiki->last_modified . '"}, ';
 $wikiSchema .= '"headline": "' . $wiki->title_h1 . '", ';
 $wikiSchema .= '"image": {"@type": "imageObject", "url": "' . $_SERVER['HTTP_HOST'] . $wiki->facebook_image . '", "width": "' . $wiki->facebook_image_width . '", "height": "' . $wiki->facebook_image_width . '", "description": "' . htmlentities($wiki->facebook_image_alt) . '"}, ';
-$wikiSchema .= '"datePublished": "' . $wiki->created . '", "dateModified": "' . $wiki->last_modified . '", "description": "' . htmlentities($wiki->meta_description) . '", "copyrightYear": "' . date('Y', strtotime($wiki->last_modified)) . '", "name": "' . $wiki->name . '", "url": "' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '", ';
+$wikiSchema .= '"datePublished": "' . $wiki->created . '-05:00", "dateModified": "' . $wiki->last_modified . '-05:00", "description": "' . htmlentities($wiki->meta_description) . '", "copyrightYear": "' . date('Y', strtotime($wiki->last_modified)) . '", "name": "' . $wiki->name . '", "url": "' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '", ';
 $wikiSchema .= '"author": {"@type": "Person", "name": "' . $wiki->author->first_name . ' ' . $wiki->author->last_name . '", "jobTitle": "' . $wiki->author->title_dept_company . '", "url": "' . $_SERVER['HTTP_HOST'] . $wiki->author->url . '", ';
 if (!empty($wiki->author->honorific_prefix)) {
 	$wikiSchema .= '"honorificPrefix": "' . $wiki->author->honorific_prefix . '", ';
