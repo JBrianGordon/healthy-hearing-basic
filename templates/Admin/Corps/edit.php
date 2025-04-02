@@ -34,7 +34,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<?php if($isDraft): ?>
-					<div class="alert alert-warning" role="alert">
+					<div class="alert alert-warning mb-3" role="alert">
 						This manufacturer is a draft copy of an existing one. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $corp->id_draft_parent], ['target' => '_blank']) ?>.
 					</div>
 				<?php endif; ?>

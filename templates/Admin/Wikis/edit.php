@@ -5,6 +5,8 @@
  * @var \App\Model\Entity\Wiki $wiki
  * @var string[]|\Cake\Collection\CollectionInterface $users
  */
+
+use Cake\I18n\FrozenTime;
  
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
@@ -31,7 +33,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<?php if($isDraft): ?>
-					<div class="alert alert-warning" role="alert">
+					<div class="alert alert-warning mb-3" role="alert">
 						This Help page is a draft copy of an existing one. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $wiki->id_draft_parent], ['target' => '_blank']) ?>.
 					</div>
 				<?php endif; ?>
@@ -42,7 +44,21 @@ $isDraft = !empty($wiki->id_draft_parent);
 		                    echo $this->Form->control('name');
 		                    echo $this->Form->control('slug');
 		                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
-		                    echo $this->Form->control('last_modified', ['empty' => true]);
+							if ($wiki->id_draft_parent > 0) {
+								echo $this->Form->control('last_modified', [
+									'type' => 'datetime',
+									'dateFormat' => 'MDY',
+									'min' => FrozenTime::now()
+										->addDay()
+										->startOfDay()
+										->i18nFormat('yyyy-MM-dd HH:mm:ss'),
+								]);
+							} else {
+								echo $this->Form->control('last_modified', [
+									'type' => 'datetime',
+									'dateFormat' => 'MDY',
+								]);
+							}
 		                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 		                    echo $this->Form->control('is_active', ['label' => ' Active']);
 		                    echo '</div>';
@@ -61,17 +77,22 @@ $isDraft = !empty($wiki->id_draft_parent);
 							</div>
 							<div class="tab-pane" id="admin">
 								<?php
-				                    echo $this->Form->control('priority', ['required' => true]);
-				                    echo $this->Form->control('title_head');
-				                    echo $this->Form->control('title_h1');
-				                    echo $this->Form->control('meta_description');
-				                    echo $this->Form->control('facebook_title');
-				                    echo $this->Form->control('facebook_description');
-				                    echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
-				                    echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
-				                    echo '</div>';
-				                    echo $this->Form->control('facebook_image');
-			                    ?>
+									echo $this->Form->control('priority', [
+										'required' => true,
+										'label' => 'Order',
+										'min' => -20,
+										'max' => 1000,
+									]);
+									echo $this->Form->control('title_head');
+									echo $this->Form->control('title_h1');
+									echo $this->Form->control('meta_description');
+									echo $this->Form->control('facebook_title');
+									echo $this->Form->control('facebook_description');
+									echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
+									echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
+									echo '</div>';
+									echo $this->Form->control('facebook_image');
+								?>
                                     <img id="facebook-imagePreview0" src="<?= $wiki->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="<?= $wiki->facebook_image_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
                                     <?=
                                         $this->Form->control('facebook_image_name', [

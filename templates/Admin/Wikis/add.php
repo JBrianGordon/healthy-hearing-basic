@@ -78,7 +78,6 @@ if (empty($content->id)) {
                                         'id' => 'facebook-imageUpload0',
                                         'class' => 'mt-3',
                                         'type' => 'file',
-                                        'required' => false,
                                         'label' => ['text' => 'Add Facebook Image']
                                     ]);
                                 ?>

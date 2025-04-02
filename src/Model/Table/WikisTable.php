@@ -82,7 +82,8 @@ class WikisTable extends Table
             ],
             'set' => [
                 'is_active' => 0,
-                'id_draft_parent' => 1
+                'id_draft_parent' => 1,
+                'last_modified' => FrozenTime::now()->addDays(30)->format('Y-m-d H:i:s'),
             ],
         ]);
         $this->addBehavior('Sitemap.Sitemap', [
@@ -367,6 +368,10 @@ class WikisTable extends Table
         //     ->scalar('facebook_description')
         //     ->maxLength('facebook_description', 255)
         //     ->allowEmptyString('facebook_description');
+
+        $validator
+            ->requirePresence('facebook_image_name', 'create')
+            ->notEmptyString('facebook_image_name', 'must have image');
 
         $validator
             ->dateTime('last_modified')

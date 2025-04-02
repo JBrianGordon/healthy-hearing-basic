@@ -153,7 +153,7 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 								$wiki->id
 							], [
 								'class' => 'btn btn-primary pull-right',
-								'style' => 'width:66px',
+								'style' => 'width:70px',
 							])
 						?>
 						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
