@@ -65,7 +65,12 @@ if (empty($content->id)) {
                             </div>
                             <div class="tab-pane" id="admin">
                                 <?php
-                                    echo $this->Form->control('priority', ['required' => true]);
+                                    echo $this->Form->control('priority', [
+                                        'required' => true,
+                                        'label' => 'Order',
+                                        'min' => -20,
+                                        'max' => 1000,
+                                    ]);
                                     echo $this->Form->control('title_head');
                                     echo $this->Form->control('title_h1');
                                     echo $this->Form->control('meta_description');

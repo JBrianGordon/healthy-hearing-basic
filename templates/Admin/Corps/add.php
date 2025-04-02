@@ -40,7 +40,11 @@ $author_default = false;
 										'default' => $author_default,
 										'empty' => 'Select an author',
 									]);
-					                echo $this->Form->control('priority', ['label' => 'Order']);
+					                echo $this->Form->control('priority', [
+										'label' => 'Order',
+										'min' => -20,
+										'max' => 1000,
+					                ]);
 					                echo $this->Form->control(
 										'last_modified', [
 											'default' => date("Y-m-d H:i:s")
