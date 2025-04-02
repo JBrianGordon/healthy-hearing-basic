@@ -259,12 +259,12 @@ class CorpsTable extends Table
         //     ->allowEmptyFile('facebook_image');
 
         $validator
-            ->requirePresence('logo_name', false)
-            ->allowEmptyString('logo_name');
+            ->requirePresence('logo_name', 'create')
+            ->notEmptyString('logo_name', 'must have image');
 
         $validator
-            ->requirePresence('facebook_image_name', false)
-            ->allowEmptyString('facebook_image_name');
+            ->requirePresence('facebook_image_name', 'create')
+            ->notEmptyString('facebook_image_name', 'must have image');
 
         // $validator
         //     ->boolean('is_active')

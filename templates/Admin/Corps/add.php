@@ -74,7 +74,6 @@ $author_default = false;
                                                 'id' => 'logo-imageUpload0',
                                                 'class' => 'mt-3',
                                                 'type' => 'file',
-                                                'required' => false,
                                                 'label' => ['text' => 'Add logo']
                                             ]);
                                         ?>
@@ -88,7 +87,6 @@ $author_default = false;
                                                 'id' => 'facebook-imageUpload0',
                                                 'class' => 'mt-3',
                                                 'type' => 'file',
-                                                'required' => false,
                                                 'label' => ['text' => 'Add Facebook Image']
                                             ]);
                                         ?>
