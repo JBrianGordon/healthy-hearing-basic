@@ -7,6 +7,9 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
 use CakeDC\Users\Model\Table\UsersTable as CakeDcUsersTable;
+use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Model
@@ -547,5 +550,68 @@ class UsersTable extends CakeDcUsersTable
             $reviewerList[$reviewer->id] = $reviewer->first_name.' '.$reviewer->last_name.' ('.$reviewer->username.')';
         }
         return $reviewerList;
+    }
+
+    public function createClinicUserFromLocationId($locationId) {
+        $password = $this->randPassComplex();
+
+        //TODO:
+        // Don't require email validation
+        //$emailValidation = $this->validate['email'];
+        //unset($this->validate['email']);
+
+        $saveData = [
+            'username' => $locationId,
+            'role' => 'clinic',
+            'password' => $password,
+            'password_confirm' => $password,
+            'clinic_password' => $password,
+            'is_active' => true,
+        ];
+        $user = $this->newEntity($saveData);
+
+        if ($this->save($user)) {
+            //TODO: There is probably a way to save this association in a single command.
+            // Now that we have a saved user, save the LocationsUsers association.
+            $location = $this->Locations->get($locationId);
+            $this->Locations->link($user, [$location]);
+            $retval = $user->id;
+        } else {
+            debug($this->validationErrors);
+            $retval = false;
+        }
+
+        //TODO:
+        //$this->validate['email'] = $emailValidation;
+        
+        return $retval;
+    }
+
+    /**
+    * Return a random password
+    */
+    public function randPassComplex($length = 8) {
+        $password = $this->randPass($length);
+        while (!$this->passwordComplexity($password)) {
+            $password = $this->randPass($length);
+        }
+        return $password;
+    }
+    public function randPass($length = 8) {
+        return substr(md5(rand().rand()), 0, $length);
+    }
+    /**
+    * Validation Rule, to verify passwords are complex enough
+    */
+    public function passwordComplexity($passwordField) {
+        while (is_array($passwordField)) {
+            $passwordField = current($passwordField);
+        }
+        $passwordValue = trim($passwordField);
+        return (
+            empty($passwordValue) || (
+            strlen($passwordValue) >= 6 &&
+            preg_match('/([0123456789\!\@\#\$\%\^\&\*\(\)\_\+\<\>\?\:\"\{\}\|\~\`\-\=\[\]\\\\;\'\,\.\/\|])/',$passwordValue)
+        ));
     }
 }

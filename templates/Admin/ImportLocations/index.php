@@ -10,9 +10,14 @@ $queryParams = $this->request->getQueryParams();
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 // Advanced search details
 $advancedSearchFields = [];
-$ignoreFields = [];
+$ignoreFields = ['match_type'];
+if (!Configure::read('isCqpImportEnabled')) {
+    $ignoreFields[] = 'id_cqp_practice';
+    $ignoreFields[] = 'id_cqp_office';
+    $ignoreFields[] = 'import_type';
+}
 // Add additional fields
-$fields['Imports.type'] = 'string';
+//$fields['Imports.type'] = 'string';
 $fields['Locations[is_junk]'] = 'boolean';
 $fields['Locations[review_needed]'] = 'boolean';
 $additionalBlacklist = ['Imports', 'Locations'];
@@ -28,6 +33,9 @@ foreach ($fields as $field => $type) {
             $value['end'] = isset($queryParams[$field.'_end']) ? $queryParams[$field.'_end'] : null;
         }
         switch ($field) {
+            case 'state':
+                $label = ucfirst(Configure::read('stateLabel'));
+                break;
             case 'Imports.type':
                 $label = 'Import Type';
                 $type = 'select';
@@ -72,7 +80,9 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                             <div class="btn-group">
                                 <?= $this->Html->link(" Dashboard", ['controller' => 'import-locations', 'action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
                                 <?= $this->Html->link(" Stats", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
-                                <?= $this->Html->link(" Tier Status Change", ['controller' => 'locations', 'action' => 'tier-status-report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+                                <?php if (Configure::read('isTieringEnabled')): ?>
+                                    <?= $this->Html->link(" Tier Status Change", ['controller' => 'locations', 'action' => 'tier-status-report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

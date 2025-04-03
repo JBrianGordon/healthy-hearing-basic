@@ -14,7 +14,9 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 			<div class="btn-group">
                 <?= $this->Html->link(" Dashboard", ['controller' => 'import-locations', 'action' => 'index'], ['class' => 'btn btn-default bi bi-speedometer', 'escape' => false]) ?>
                 <?= $this->Html->link(" Stats", ['controller' => 'imports', 'action' => 'index'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
-                <?= $this->Html->link(" Tier Status Change", ['controller' => 'locations', 'action' => 'tier-status-report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+                <?php if (Configure::read('isTieringEnabled')): ?>
+                	<?= $this->Html->link(" Tier Status Change", ['controller' => 'locations', 'action' => 'tier-status-report'], ['class' => 'btn btn-default bi bi-bar-chart-fill', 'escape' => false]) ?>
+                <?php endif; ?>
 			</div>
 		</div>
 	</div>

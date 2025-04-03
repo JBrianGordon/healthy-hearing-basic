@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\Location;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -34,6 +35,7 @@ class ImportsController extends BaseAdminController
         $this->Providers = TableRegistry::get('Providers');
         $this->ImportProviders = TableRegistry::get('ImportProviders');
         $this->LocationsProviders = TableRegistry::get('LocationsProviders');
+        $this->Users = TableRegistry::get('Users');
     }
 
     public function beforeRender(EventInterface $event)
@@ -154,7 +156,7 @@ class ImportsController extends BaseAdminController
         $location = $this->Locations->get($locationId);
         if (empty($location)) {
             $this->Flash->error('Location not found.');
-            $this->redirect('/admin/imports');
+            return $this->redirect('/admin/imports');
         }
         $importIndexReferer = $this->getImportIndexReferer();
 
@@ -324,7 +326,7 @@ class ImportsController extends BaseAdminController
             if (!$this->Locations->save($location)) {
                 $errors = json_encode(Hash::flatten($location->getErrors()));
                 $this->Flash->error('Failed to save location '.$locationId.'<br>'.$errors, ['escape' => false]);
-                $this->redirect('/admin/imports');
+                return $this->redirect('/admin/imports');
             }
 
             // Get the list of YHN Providers to update
@@ -376,7 +378,7 @@ class ImportsController extends BaseAdminController
 
             // Successfully reviewed! Return us to the referring index page.
             $this->Flash->success('Location has been reviewed!');
-            $this->redirect($importIndexReferer);
+            return $this->redirect($importIndexReferer);
         }
 
         // Send our data to the view.
@@ -390,5 +392,141 @@ class ImportsController extends BaseAdminController
         $this->set('fields', $this->ImportLocations->fields);
         $this->set('providerFields', $this->ImportProviders->fields);
         $this->set('importIndexReferer', $importIndexReferer);
+    }
+
+    public function locationAdd($importLocationId) {
+        $importIndexReferer = $this->getImportIndexReferer();
+        $importLocation = $this->ImportLocations->findById($importLocationId)->contain('Imports')->first();
+        if (empty($importLocation)) {
+            $this->Flash->error('Import location could not be found.');
+            return $this->redirect('/admin/imports');
+        }
+
+        $this->set('importLocation', $importLocation);
+        $this->set('importIndexReferer', $importIndexReferer);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $officeData = $this->request->getData();
+
+            // New locations are always saved with active and
+            // Basic for YHN, Enhanced for HD Canada
+            $listingType = Configure::read('isTieringEnabled') ? Location::LISTING_TYPE_BASIC : Location::LISTING_TYPE_ENHANCED;
+            $locationData = [
+                'id_oticon' => $officeData['id_oticon'],
+                'address' => $officeData['address'],
+                'address_2' => $officeData['address_2'],
+                'city' => $officeData['city'],
+                'state' => $officeData['state'],
+                'zip' => $officeData['zip'],
+                'country' => Configure::read('country'),
+                'review_needed' => 0,
+                'title' => $officeData['title'],
+                'phone' => $officeData['phone'],
+                'email' => $officeData['email'],
+                'url' => $officeData['url'],
+                'is_retail' => $officeData['is_retail'],
+                'id_yhn_location' => $officeData['id_external'],
+                'listing_type' => $listingType,
+                'is_active' => true,
+                'is_show' => false,
+                'payment' => null,
+                'filter_insurance' => true,
+                'is_call_assist' => false,
+            ];
+            if ($importLocation->import->type == "yhn") {
+                $locationData['is_yhn'] = true;
+                $locationData['yhn_tier'] = 2;
+            } else if ($importLocation->import->type == "cqp") {
+                $locationData['is_cqp'] = true;
+                $locationData['cqp_tier'] = 2;
+                $locationData['id_cqp_practice'] = $officeData['id_cqp_practice'];
+                $locationData['id_cqp_office'] = $officeData['id_cqp_office'];
+            } else { // Canada
+                $locationData['yhn_tier'] = 2;
+            }
+
+            $location = $this->Locations->newEntity($locationData);
+
+            if (empty($location->getErrors())) {
+                $this->Locations->save($location);
+            } else { // validation errors
+                $errors = $location->getErrors();
+                $errorList = [];
+                foreach ($errors as $model => $modelErrors) {
+                    foreach ($modelErrors as $modelError) {
+                        if (is_array($modelError)) {
+                            foreach ($modelError as $errorMessage) {
+                                $errorList[] = '<li>' . $model.' - '.$errorMessage . '</li>';
+                            }
+                        } else {
+                            $errorList[] = '<li>' . $model.' - '.$modelError . '</li>';
+                        }
+                    }
+                }
+
+                $errorMessages = '<ul>' . implode(' ', $errorList) . '</ul>';
+                $this->Flash->error('Errors: <br />' . $errorMessages, ['escape' => false]);
+                return $this->redirect('/admin/imports/location_add/' . $importLocationId);
+            }
+
+            $locationId = $location->id;
+
+            // Add a location user for this Location
+            $this->Users->createClinicUserFromLocationId($locationId);
+
+            // Geocode this Location
+            $this->Locations->geoLocById($locationId);
+
+            // Update Review Status
+            $this->Locations->updateReviewStatus($locationId);
+            $this->Locations->completeness($locationId);
+
+            $importLocationEntity = $this->ImportLocations->get($importLocationId);
+            $importLocationEntity->location_id = $locationId;
+            $importLocationEntity->match_type = 4;
+            $this->ImportLocations->save($importLocationEntity);
+
+            $importProviders = $this->ImportProviders->getByImportLocationId($importLocationId); 
+
+            // Automatically add each YHN Provider from here to 
+            foreach ($importProviders as $importProviderData) {
+                $importProvider = $importProviderData['ImportProvider'];
+
+                // Put together the list of fields for saving the Provider
+                $providerData = [
+                    'first_name' => $importProvider['first_name'],
+                    'last_name' => $importProvider['last_name'],
+                    'email' => $importProvider['email'],
+                    'is_active' => 1,
+                    'aud_or_his' => $importProvider['aud_or_his'],
+                    'credentials' => '',
+                    'id_yhn_provider' => $importProvider['id_external'],
+                ];
+
+                // Save this provider as a new provider
+                $provider = $this->Providers->newEntity($providerData);
+                $this->Providers->save($provider);
+                $providerId = $provider->id;
+
+                // Add the entry to location_providers, to link this provider to this location.
+                $locationProviderData = [
+                    'provider_id' => $providerId,
+                    'location_id' => $locationId,
+                ];
+                $locationProvider = $this->LocationsProviders->newEntity($locationsProvidersData);
+                $this->LocationProviders->save($locationProvider);
+            }
+
+            $this->Locations->setEmailsFromProviders($locationId);
+
+            if (Configure::read('isCallSourceGenerationEnabled')) {
+                // Add this number to the input dashboard.
+                $this->Locations->CallSources->saveCallSource($locationId);
+            }
+
+            // Successfully added! Return us to the referring index page.
+            $this->Flash->success('Location has been added!');
+            return $this->redirect($importIndexReferer);
+        }
     }
 }

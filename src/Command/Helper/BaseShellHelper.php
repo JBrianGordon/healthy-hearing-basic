@@ -116,4 +116,65 @@ class BaseShellHelper extends Helper
         $this->_io->out($message);
         exit();
     }
+
+    /**
+    * Copy a local file to an sftp server
+    */
+    function sftpCopyFile($serverName, $username, $password, $localFilename, $remoteFilename=null, $sshKeyPublic=null, $sshKeyPrivate=null){
+        if (empty($remoteFilename)) {
+            $remoteFilename = $localFilename;
+        }
+        $this->_io->info('Copying '.$localFilename.' to '.$serverName.'/'.$remoteFilename);
+        try {
+            //TODO: convert this to curl implementation. See sftpRetrieveFile().
+            die('todo sftpCopyFile');
+            /*
+            $connection = ssh2_connect($serverName);
+            if (!$connection) {
+                $this->errorMessage("Failed to connect to ".$serverName);
+                return false;
+            }
+            if (!empty($sshKeyPublic) && !empty($sshKeyPrivate)) {
+                @ssh2_auth_pubkey_file($connection, $username, $sshKeyPublic, $sshKeyPrivate);
+            }
+            if (!ssh2_auth_password($connection, $username, $password)) {
+                $this->errorMessage("Failed to login to ".$serverName);
+                return false;
+            }
+            $sftp = ssh2_sftp($connection);
+            $remote_path = "ssh2.sftp://" . intval($sftp) . "/" . $remoteFilename;
+            $resFile = fopen($remote_path, 'w');
+            $srcFile = fopen($localFilename, 'r');
+            $writtenBytes = stream_copy_to_stream($srcFile, $resFile);
+            fclose($resFile);
+            fclose($srcFile);*/
+        } catch (Exception $e) {
+            error_log('Exception: ' . $e->getMessage());
+            $this->errorMessage('Exception: ' . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+    * Copy a remote file to a local location via sftp
+    */
+    function sftpRetrieveFile($serverName, $username, $password, $remoteName, $localName){
+        $this->_io->info('Copying ' . $remoteName . ' from ' . $serverName . ' to ' . $localName);
+        try {
+            $remote = "sftp://$serverName/$remoteName";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $remote);
+            curl_setopt($curl, CURLOPT_PROTOCOLS, CURLPROTO_SFTP);
+            curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            file_put_contents($localName, curl_exec($curl));
+            curl_close($curl);
+        } catch (Exception $e) {
+            error_log('Exception: ' . $e->getMessage());
+            $this->errorMessage('Exception: ' . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
 }
