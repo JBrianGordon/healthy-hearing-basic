@@ -91,7 +91,6 @@ $isDraft = !empty($wiki->id_draft_parent);
 									echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
 									echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
 									echo '</div>';
-									echo $this->Form->control('facebook_image');
 								?>
                                     <img id="facebook-imagePreview0" src="<?= $wiki->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="<?= $wiki->facebook_image_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
                                     <?=
