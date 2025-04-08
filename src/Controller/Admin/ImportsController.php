@@ -529,4 +529,75 @@ class ImportsController extends BaseAdminController
             return $this->redirect($importIndexReferer);
         }
     }
+
+    public function locationLink($importLocationId) {
+        $importIndexReferer = $this->getImportIndexReferer();
+        $importLocation = $this->ImportLocations->get($importLocationId, [
+            'contain' => ['Imports']
+        ]);
+        $locationId = $importLocation->location_id;
+
+        if (!empty($locationId)) {
+            $location = $this->Locations->get($locationId);
+            if ($importLocation->import->type == 'cqp') {
+                $location->id_cqp_practice = $importLocation->id_cqp_practice;
+                $location->id_cqp_office = $importLocation->id_cqp_office;
+                $location->is_cqp = true;
+                $location->cqp_tier = 2;
+                $location->review_needed = true;
+                $this->Locations->save($location);
+            } else {
+                $location->id_yhn_location = $importLocation->id_external;
+                $location->is_yhn = true;
+                $location->yhn_tier = 2;
+                $location->review_needed = true;
+                $this->Locations->save($location);
+            }
+
+            // Save the Location ID & Match Type (just for record keeping in db)
+            $importLocation->location_id = $locationId;
+            $importLocation->match_type = 5;
+            $this->ImportLocations->save($importLocation);
+
+            // Recalculate listing type after linking
+            $this->Locations->calculateListingType($locationId);
+
+            // Successfully linked! Send us to location review.
+            $this->Flash->success('Location has been linked!');
+            return $this->redirect('/admin/imports/location_review/' . $locationId . '/' . $importLocationId);
+        }
+        $this->set('importLocation', $importLocation);
+        $this->set('importIndexReferer', $importIndexReferer);
+    }
+
+    public function locationUnlink($importLocationId) {
+        $importLocation = $this->ImportLocations->get($importLocationId, [
+            'contain' => ['Imports']
+        ]);
+        $locationId = $importLocation->location_id;
+        $location = $this->Locations->get($locationId);
+
+        if ($importLocation->import->type == 'cqp') {
+            $location->id_cqp_practice = null;
+            $location->id_cqp_office = null;
+            $location->is_cqp = false;
+            $location->cqp_tier = 0;
+            $this->Locations->save($location);
+        } else {
+            $location->id_yhn_location = null;
+            $location->is_yhn = false;
+            $location->yhn_tier = 0;
+            $this->Locations->save($location);
+        }
+        $this->Locations->calculateListingType($locationId);
+
+        $importLocation->location_id = null;
+        $importLocation->match_type = null;
+        $this->ImportLocations->save($importLocation);
+
+        // Successfully unlinked! Return us to the referring index page.
+        $this->Flash->success('Location has been unlinked!');
+        $importIndexReferer = $this->getImportIndexReferer();
+        return $this->redirect($importIndexReferer);
+    }
 }
