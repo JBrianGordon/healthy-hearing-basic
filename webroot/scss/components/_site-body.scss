@@ -19,6 +19,11 @@
 		.btn:not(.btn-xs) {
 			font-size: 14px;
 		}
+		.ck-editor {
+			p:not(.btn), a:not(.btn) {
+				font-size: 20px;
+			}
+		}
 	}
 
 	&.fap-results {

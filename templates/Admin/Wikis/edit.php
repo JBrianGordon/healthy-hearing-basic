@@ -41,7 +41,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 		            <?= $this->Form->create($wiki, ['type' => 'file', 'id' => 'wikisForm']) ?>
 		            <fieldset>
 		                <?php
-		                    echo $this->Form->control('name');
+		                    echo $this->Form->control('name', ['label' => 'Menu Name']);
 		                    echo $this->Form->control('slug');
 		                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 							if ($wiki->id_draft_parent > 0) {
@@ -69,7 +69,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 							<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#tags" data-bs-toggle="tab" type="button">Tag</button></li>
 						</ul>
 						<div class="tab-content mt20">
-							<div class="tab-pane active" id="details">
+							<div class="tab-pane active content-body" id="details">
 								<?php
 				                    echo $this->Form->control('body', ['required' => false, 'class' => 'editor', 'label' => false]);
 				                    echo $this->Form->control('short');
@@ -83,8 +83,8 @@ $isDraft = !empty($wiki->id_draft_parent);
 										'min' => -20,
 										'max' => 1000,
 									]);
-									echo $this->Form->control('title_head');
-									echo $this->Form->control('title_h1');
+									echo $this->Form->control('title_head', ['label' => 'Search title tag']);
+									echo $this->Form->control('title_h1', ['label' => 'title/h1']);
 									echo $this->Form->control('meta_description');
 									echo $this->Form->control('facebook_title');
 									echo $this->Form->control('facebook_description');
