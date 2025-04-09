@@ -38,7 +38,7 @@ $class = $autocomplete ? 'form-control autocomplete col-12 mb15' : 'form-control
 			'label' => 'Enter city or zip/postal code',
 			'style' => 'height:48px;width:100%'
 		]); ?>
-		<span class="input-group-btn ml0" style="position:static">
+		<span class="input-group-btn ml0" style="position:static; min-width:100px">
 			<button class="btn btn-secondary rounded-0 w-100" id="<?= $btnId; ?>" type="submit">Search</button>
 		</span>
 	</div>

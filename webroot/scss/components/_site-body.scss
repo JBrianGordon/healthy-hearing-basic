@@ -19,7 +19,7 @@
 		.btn:not(.btn-xs) {
 			font-size: 14px;
 		}
-		.ck-editor {
+		.ck-editor, #wiki-body, #content_body, .help-menu {
 			p:not(.btn), a:not(.btn) {
 				font-size: 20px;
 			}

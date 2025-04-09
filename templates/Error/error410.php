@@ -34,7 +34,7 @@ $this->assign('title', '410 Gone');
                                         <label for="LocationSearch">Enter city or zip/postal code</label>
                                         <input name="data[Location][search]" class="form-control autocomplete float-start" placeholder="Enter city or ZIP" id="LocationSearch" type="text">
                                         <span class="input-group-btn float-end">
-                                            <button class="btn btn-secondary rounded-0" id="LocationSearchBtn" type="submit">Search</button>
+                                            <button class="btn btn-secondary rounded-0" id="LocationSearchBtn" type="submit" style="min-width:100px">Search</button>
                                         </span>
                                     </div>
                                 </form>
