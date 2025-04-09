@@ -313,12 +313,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         	}).then(editor => {
                 const editorElements = document.querySelectorAll(".editor");
+                const wrapper = document.querySelector('.ck-body-wrapper');
               
                 editorElements.forEach(element => {
                     element.style.display = "block";
                     element.style.position = "absolute";
                     element.style.zIndex = "-1";
                 });
+
+                document.querySelectorAll('.ck-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        button.after(wrapper);
+                    });
+                  });
             }).catch( error => {
     	    console.error( error );
         });
