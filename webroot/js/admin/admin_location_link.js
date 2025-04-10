@@ -2,7 +2,7 @@ import './admin_common';
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('searchBtn');
-  const importLocationSearch = document.getElementById('ImportLocationSearch');
+  const importLocationSearch = document.getElementById('search');
   const searchResults = document.getElementById('searchResults');
 
   searchBtn.addEventListener('click', async function() {
