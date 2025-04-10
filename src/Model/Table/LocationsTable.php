@@ -539,6 +539,11 @@ class LocationsTable extends Table
             $entity->logo_url = $ckBoxUploadData['response']['url'];
             Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
         }
+
+        if (($entity->is_show == true) && ($entity->is_junk == true)) {
+            // If a clinic is showing, it should not be marked is_junk
+            $entity->is_junk = false;
+        }
     }
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)

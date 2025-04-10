@@ -133,6 +133,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                                             $newQuery['filter'] = $filter;
                                             if ($filter == 'all') {
                                                 unset($newQuery['filter']);
+                                                $newQuery['preserve'] = 0;
                                             }
                                             $friendlyFilter = ucfirst(str_replace('-', ' ', $filter));
                                             if ($selectedFilter == $filter) {

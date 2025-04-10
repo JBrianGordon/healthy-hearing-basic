@@ -45,12 +45,29 @@ class ImportsController extends BaseAdminController
         $this->set('externalIdLabel', $externalIdLabel);
     }
 
-    public function getImportIndexReferer() {
+    private function getImportIndexReferer() {
         $referer = $this->request->getSession()->read('importIndexReferer');
         if (empty($referer)) {
             $referer = '/admin/import-locations';
         }
         return $referer;
+    }
+
+    private function flashValidationErrors($errors) {
+        $errorList = [];
+        foreach ($errors as $model => $modelErrors) {
+            foreach ($modelErrors as $modelError) {
+                if (is_array($modelError)) {
+                    foreach ($modelError as $errorMessage) {
+                        $errorList[] = '<li>' . $model.' - '.$errorMessage . '</li>';
+                    }
+                } else {
+                    $errorList[] = '<li>' . $model.' - '.$modelError . '</li>';
+                }
+            }
+        }
+        $errorMessages = '<ul>' . implode(' ', $errorList) . '</ul>';
+        $this->Flash->error('Errors: <br>' . $errorMessages, ['escape' => false]);
     }
 
     /**
@@ -446,26 +463,11 @@ class ImportsController extends BaseAdminController
             }
 
             $location = $this->Locations->newEntity($locationData);
-
-            if (empty($location->getErrors())) {
+            $errors = $location->getErrors();
+            if (empty($errors)) {
                 $this->Locations->save($location);
             } else { // validation errors
-                $errors = $location->getErrors();
-                $errorList = [];
-                foreach ($errors as $model => $modelErrors) {
-                    foreach ($modelErrors as $modelError) {
-                        if (is_array($modelError)) {
-                            foreach ($modelError as $errorMessage) {
-                                $errorList[] = '<li>' . $model.' - '.$errorMessage . '</li>';
-                            }
-                        } else {
-                            $errorList[] = '<li>' . $model.' - '.$modelError . '</li>';
-                        }
-                    }
-                }
-
-                $errorMessages = '<ul>' . implode(' ', $errorList) . '</ul>';
-                $this->Flash->error('Errors: <br />' . $errorMessages, ['escape' => false]);
+                $this->flashValidationErrors($errors);
                 return $this->redirect('/admin/imports/location_add/' . $importLocationId);
             }
 
@@ -599,5 +601,98 @@ class ImportsController extends BaseAdminController
         $this->Flash->success('Location has been unlinked!');
         $importIndexReferer = $this->getImportIndexReferer();
         return $this->redirect($importIndexReferer);
+    }
+
+    public function locationAddJunk($importLocationId) {
+        $importLocation = $this->ImportLocations->get($importLocationId, [
+            'contain' => ['Imports']
+        ]);
+        if (empty($importLocation)) {
+            $this->Flash->error('Import location could not be found.');
+            return $this->redirect('/admin/imports');
+        }
+        $importIndexReferer = $this->getImportIndexReferer();
+        $locationId = $importLocation->location_id;
+        $isNew = empty($locationId);
+        if ($isNew) {
+            $location = $this->Locations->newEmptyEntity();
+        } else {
+            $location = $this->Locations->get($locationId);
+        }
+        // Junk/Competitor locations are always saved with inactive, no-show, LISTING_TYPE_NONE
+        $locationData = [
+            'yhn_location_id' => $importLocation->external_id,
+            'oticon_id' => empty($importLocation->id_oticon) ? '' : $importLocation->id_oticon,
+            'title' => $importLocation->title,
+            'subtitle' => $importLocation->subtitle,
+            'email' => $importLocation->email,
+            'address' => $importLocation->address,
+            'address_2' => $importLocation->address_2,
+            'city' => $importLocation->city,
+            'state' => $importLocation->state,
+            'zip' => $importLocation->zip,
+            'country' => Configure::read('country'),
+            'phone' => $importLocation->phone,
+            'is_retail' => $importLocation->is_retail,
+            'review_needed' => 0,
+            'listing_type' => Location::LISTING_TYPE_NONE,
+            'is_active' => false,
+            'is_show' => false,
+            'payment' => $this->Location->defaultPayment,
+            'filter_insurance' => true,
+            'is_call_assist' => false,
+            'is_junk' => true
+        ];
+        if ($importLocation->import->type == "yhn") {
+            $locationData['is_yhn'] = true;
+            $locationData['yhn_tier'] = 2;
+        } else if ($importLocation->import->type == "cqp") {
+            $locationData['is_cqp'] = true;
+            $locationData['cqp_tier'] = 2;
+            $locationData['id_cqp_practice'] = $importLocation->id_cqp_practice;
+            $locationData['id_cqp_office'] = $importLocation->id_cqp_office;
+        } else { // Canada
+            $locationData['yhn_tier'] = 2;
+        }
+
+        $this->Locations->patchEntity($location, $locationData);
+        $errors = $location->getErrors();
+        if (empty($errors)) {
+            $this->Locations->save($location);
+        } else { // validation errors
+            $this->flashValidationErrors($errors);
+            return $this->redirect($importIndexReferer);
+        }
+
+        if ($isNew) {
+            // Add a location user for new locations
+            $locationId = $location->id;
+            $this->Users->createClinicUserFromLocationId($locationId);
+            $this->Locations->geoLocById($locationId);
+        } else {
+            // For existing locations, make sure the CS number is ended
+            $this->Locations->CallSources->endCallSource($locationId);
+        }
+
+        $importLocation->location_id = $locationId;
+        $importLocation->match_type = 4;
+        $this->ImportLocations->save($importLocation);
+
+        // Successfully added! Return us to the referring index page.
+        if ($isNew) {
+            $this->Flash->success('Location '.$locationId.' has been added and marked as junk');
+        } else {
+            $this->Flash->success('Existing location '.$locationId.' has been marked as junk');
+        }
+        $this->redirect($importIndexReferer);
+    }
+
+    public function locationNotJunk($locationId) {
+        $location = $this->Locations->get($locationId);
+        $location->is_junk = false;
+        $this->Locations->save($location);
+        $this->Flash->success('Location '.$locationId.' has been removed from junk');
+        $importIndexReferer = $this->getImportIndexReferer();
+        $this->redirect($importIndexReferer);
     }
 }
