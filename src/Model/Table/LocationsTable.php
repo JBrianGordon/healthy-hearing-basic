@@ -428,7 +428,7 @@ class LocationsTable extends Table
                             $arrayBadgeFieldsTrue['Locations.'.$badgeField] = true;
                         }
                         $query->andWhere([
-                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'Locations.listing_type IN' => [Location::LISTING_TYPE_PREMIER, Location::LISTING_TYPE_ENHANCED],
                             'OR' => $arrayBadgeFieldsTrue]);
                     } else {
                         $arrayBadgeFieldsFalse = [];
@@ -437,7 +437,7 @@ class LocationsTable extends Table
                         }
                         $query->andWhere([
                             'OR' => [
-                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.listing_type NOT IN' => [Location::LISTING_TYPE_PREMIER, Location::LISTING_TYPE_ENHANCED],
                                 'AND' => $arrayBadgeFieldsFalse,
                             ]
                         ]);
