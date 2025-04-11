@@ -145,7 +145,23 @@ $this->Html->script('dist/content.min', ['block' => true]);
 						</div>
 						<div class="panel-body">
 							<div class="panel-section expanded">
-								<?= $this->Editorial->adminLink($content->id, $isAdmin);	?>
+								<?php if ($isPreview): ?>
+									<div class="alert alert-warning mb-3" role="alert">
+										This is not the greatest Report page in the world, no. <br />
+										This is just a <strong><em>preview</em></strong>!
+									</div>
+								<?php endif; ?>
+								<?=
+									$this->AuthLink->link('Edit', [
+										'prefix' => 'Admin',
+										'controller' => 'content',
+										'action' => 'edit',
+										$content->id
+									], [
+										'class' => 'btn btn-primary pull-right',
+										'style' => 'width:70px',
+									])
+								?>
 								<h1 class="text-primary blog-title<?php if(isset($subtitle)){ echo " mb10"; } ?>">
 									<?= $title ?>
 								</h1>

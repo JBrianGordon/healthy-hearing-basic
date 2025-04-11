@@ -41,10 +41,22 @@ if (empty($content->id)) {
 			                    echo $this->Form->hidden('id_draft_parent');
 			                    echo $this->Form->control('title');
 			                    echo $this->Form->control('subtitle');
-			                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
-			                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true, 'type' => 'datetime', 'dateFormat' => 'MDY',]);
+			                    echo $this->Form->control('date', [
+									'id' => 'ContentDate',
+									'label' => 'Publication Date',
+									'type' => 'datetime',
+			                    ]);
+			                    echo $this->Form->control('last_modified', [
+									'id' => 'ContentLastModified',
+									'type' => 'datetime',
+			                    ]);
 			                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
-			                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
+			                    echo $this->Form->control('user_id', [
+									'label' => 'Primary Author',
+									'options' => $authors,
+									'default' => $author_default,
+									'empty' => 'Select an author'
+			                    ]);
 								?>
 								<?php if (empty($content->is_active)): ?>
 									<div class="form-group">
@@ -113,8 +125,7 @@ if (empty($content->id)) {
 	                                            'id' => 'facebook-imageUpload0',
 	                                            'class' => 'mt-3',
 	                                            'type' => 'file',
-	                                            'required' => false,
-	                                            'label' => ['text' => 'Update Facebook Image']
+	                                            'label' => ['text' => 'Add Facebook Image']
 	                                        ]);
 	                                    ?>
 						                <?php

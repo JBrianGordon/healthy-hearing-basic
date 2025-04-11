@@ -97,6 +97,21 @@ export function setupImageUpload(inputId, previewSelector) {
     });
 }
 
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'ContentDate') {
+        document.getElementById('ContentLastModified').value = e.target.value;
+    }
+});
+
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'ContentLastModified') {
+        if (document.getElementById('ContentDate').value === '') {
+            document.getElementById('ContentDate').value = e.target.value;
+        }
+    }
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
     setupImageUpload('facebook-imageUpload0', '#facebook-imagePreview0');
 });

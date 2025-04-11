@@ -165,15 +165,15 @@ class EditorialHelper extends Helper
         return null;
     }
 
-    public function adminLink($contentId, $isAdmin) {
-        if (!$isAdmin) {
-            return '';
-        }
-        if (is_object($contentId)) {
-            $contentId = $contentId->id;
-        }
-        return $this->Html->link('Edit', ['prefix' => 'Admin', 'controller' => 'content', 'action' => 'edit', $contentId], ['class' => 'btn btn-inverse']);
-    }
+    // public function adminLink($contentId, $isAdmin) {
+    //     if (!$isAdmin) {
+    //         return '';
+    //     }
+    //     if (is_object($contentId)) {
+    //         $contentId = $contentId->id;
+    //     }
+    //     return $this->Html->link('Edit', ['prefix' => 'Admin', 'controller' => 'content', 'action' => 'edit', $contentId], ['class' => 'btn btn-inverse']);
+    // }
 
     public function displayDate($content) {
         if (!is_object($content)) {

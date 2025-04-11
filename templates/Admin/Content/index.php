@@ -131,12 +131,28 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 								<td><?= h($content->date) ?></td>
 								<td class="actions">
 									<div class="btn-group-vertical btn-group-sm">
-										<?=
-											$this->Html->link(' View',
-												array_merge(['prefix' => false], $content->hh_url),
-												['class' => 'btn btn-default bi-eye-fill btn-xs']
-											)
-										?>
+										<?php if($content->id_draft_parent === 0): ?>
+											<?=
+												$this->Html->link(' View',
+													$content->hh_url,
+													[
+														'class' => 'btn btn-default bi-eye-fill btn-xs',
+														'target' => '_blank',
+													]
+												)
+											?>
+										<?php else: ?>
+											<?=
+												$this->Html->link(' Preview', [
+														'action' => 'preview',
+														$content->id
+													], [
+														'class' => 'btn btn-default bi-eye-fill btn-xs',
+														'target'=>'_blank'
+													]
+												)
+											?>
+										<?php endif; ?>
 										<?=
 											$this->Html->link(' Edit',
 												['action' => 'edit', $content->id],

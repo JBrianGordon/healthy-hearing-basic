@@ -4,8 +4,10 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Content $content
  */
+
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
+use Cake\I18n\FrozenTime;
  
 $this->Html->script('dist/content_edit.min', ['block' => true]);
 
@@ -25,13 +27,14 @@ if (empty($content->id)) {
 			<div class="btn-group">
 				<?= $this->Html->link( 'Browse', ['action' => 'index'], ['class' => 'btn btn-default bi-search']) ?>
 				<?php if (!empty($content->id)): ?>
-					<?= $this->Html->link(' Add', ['action' => 'edit'], ['class' => 'btn btn-success bi-plus-lg']) ?>
+					<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
 					<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
-		            <!--*** TODO: Preview button not functioning correctly ***-->
 					<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
 					<?php if (!$isDraft): ?>
 						<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-						<?= $this->Form->postLink(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
+						<?php if ($isFrozen): ?>
+							<?= $this->Form->postLink(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
+						<?php endif; ?>
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>
@@ -43,7 +46,7 @@ if (empty($content->id)) {
 		<div class="panel-body">
 			<div class="panel-section expanded">
 				<?php if($isDraft): ?>
-					<div class="alert alert-warning" role="alert">
+					<div class="alert alert-warning mb-3" role="alert">
 						This content is a draft copy of an existing article. <?= $this->Html->link('Click here to edit the original', ['action' => 'edit', 'prefix'=>'Admin', $content->id_draft_parent], ['target' => '_blank']) ?>.
 					</div>
 				<?php endif; ?>
@@ -57,8 +60,26 @@ if (empty($content->id)) {
 			                    echo $this->Form->hidden('id_draft_parent');
 			                    echo $this->Form->control('title');
 			                    echo $this->Form->control('subtitle');
-			                    echo $this->Form->control('date', ['label' => 'Publication Date', 'empty' => true, 'disabled' => true]);
-			                    echo $this->Form->control('last_modified', ['label' => 'Date for republication', 'empty' => true, 'type' => 'datetime', 'dateFormat' => 'MDY',]);
+			                    echo $this->Form->control('date', [
+									'id' => 'ContentDate',
+									'label' => 'Publication Date',
+									'empty' => true,
+									'readonly' => $isFrozen
+			                    ]);
+								if ($content->id_draft_parent > 0) {
+									echo $this->Form->control('last_modified', [
+										'id' => 'ContentLastModified',
+										'type' => 'datetime',
+										'min' => FrozenTime::now()
+											->addDay()
+											->startOfDay()
+											->i18nFormat('yyyy-MM-dd HH:mm:ss'),
+									]);
+								} else {
+									echo $this->Form->control('last_modified', [
+										'type' => 'datetime',
+									]);
+								}
 			                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 			                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 								if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {

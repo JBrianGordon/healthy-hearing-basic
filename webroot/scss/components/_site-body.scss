@@ -190,6 +190,10 @@
 	    background-color: #eee;
 	    opacity: 1;
 	  }
+
+	  &[readonly] {
+			background-color: papayawhip;
+	  }
 	}
 
 	.form-check {

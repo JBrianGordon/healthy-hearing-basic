@@ -74,6 +74,7 @@ class ContentTable extends Table
             ],
             'set' => [
                 'is_active' => 0,
+                'last_modified' => FrozenTime::now()->addDays(30)->format('Y-m-d H:i:s'),
             ],
         ]);
         $this->addBehavior('Sitemap.Sitemap', [
@@ -265,13 +266,23 @@ class ContentTable extends Table
             ->requirePresence('type', true, 'Type is a required field')
             ->notEmptyString('type', 'Type cannot be left blank');
 
-        // $validator
-        //     ->date('date')
-        //     ->allowEmptyDate('date');
+        $validator
+            ->dateTime('date')
+            ->requirePresence('date', function ($context) {
+                    return !$context['data']['is_frozen'];
+                },
+                'Publication Date is a required field'
+            );
 
         $validator
             ->dateTime('last_modified')
-            ->allowEmptyDateTime('last_modified');
+            ->requirePresence('last_modified', true, 'Last Modified is a required field')
+            ->add('last_modified', 'custom', [
+                'rule' => function ($value, $context) {
+                    return $value >= $context['data']['date'];
+                },
+                'message' => 'The Last Modified date cannot be earlier than the Publication Date'
+            ]);
 
         $validator
             ->requirePresence('title', true, 'Title is a required field')
@@ -297,10 +308,11 @@ class ContentTable extends Table
         //     ->requirePresence('title_head', 'create')
         //     ->notEmptyString('title_head');
 
-        // $validator
-        //     ->scalar('slug')
-        //     ->maxLength('slug', 128)
-        //     ->notEmptyString('slug');
+        $validator
+            ->scalar('slug')
+            ->maxLength('slug', 255)
+            ->requirePresence('slug', true, 'Slug is a required field')
+            ->notEmptyString('slug', 'Slug cannot be left blank');
 
         // $validator
         //     ->scalar('short')
@@ -357,11 +369,9 @@ class ContentTable extends Table
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
 
-        // $validator
-        //     // ->scalar('facebook_image_name')
-        //     ->requirePresence('facebook_image_name', false)
-        //     // ->allowEmptyString('facebook_image_name')
-        //     ->allowEmptyFile('facebook_image_name');
+        $validator
+            ->requirePresence('facebook_image_name', 'create')
+            ->notEmptyString('facebook_image_name', 'must have image');
 
         // // TO-DO
         // $validator
@@ -396,6 +406,8 @@ class ContentTable extends Table
 
         // // TO-DO
         // $validator for 'user_id' in addition to rules checker
+        $validator
+            ->integer('user_id');
 
         return $validator;
     }
