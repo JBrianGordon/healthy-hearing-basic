@@ -91,7 +91,28 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                    <td><?= date_format($wiki->last_modified, 'M j, o') ?><br><?= date_format($wiki->modified, 'M j, o') ?></td>
 					                    <td class="actions">
 						                    <div class="btn-group btn-group-vertical">
-					                        	<?= $this->Html->link(__(' View'), ['prefix' => false, 'controller' => 'wikis', 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default btn-xs bi bi-eye-fill', 'target' => '_blank']) ?>
+											<?php if($wiki->id_draft_parent === 0): ?>
+												<?=
+													$this->Html->link(' View',
+														$wiki->hh_url,
+														[
+															'class' => 'btn btn-default bi-eye-fill btn-xs',
+															'target' => '_blank',
+														]
+													)
+												?>
+											<?php else: ?>
+												<?=
+													$this->Html->link(' Preview', [
+															'action' => 'preview',
+															$wiki->id
+														], [
+															'class' => 'btn btn-default bi-eye-fill btn-xs',
+															'target'=>'_blank'
+														]
+													)
+												?>
+											<?php endif; ?>
 												<?= $this->Html->link(__(' Edit'), ['action' => 'edit', $wiki->id], ['class' => 'btn btn-default btn-xs bi bi-pencil-fill']) ?>
 												<?= $this->Form->postLink(__(' Delete'), ['action' => 'delete', $wiki->id], ['confirm' => __('Are you sure you want to delete # {0}?', $wiki->id), 'class' => 'btn btn-xs btn-danger mt0 bi bi-trash']) ?>
 						                    </div>
