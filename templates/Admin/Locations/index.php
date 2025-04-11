@@ -29,7 +29,7 @@ $fields['using_badges'] = 'boolean';
 $fields['using_linked_locations'] = 'boolean';
 $fields['q'] = 'string';
 // Fields to ignore
-$ignore_fields = ['last_xml','lat','lon','facebook','twitter','youtube','slogan','about_us','payment','services','is_geocoded','filter_evening_weekend','filter_adult_hearing_test','filter_hearing_aid_fitting','redirect','landmarks','url','country','direct_book_url','direct_book_iframe','content_library_expiration','special_announcement_expiration','logo_url','id_coupon','mobile_text','radius','created'];
+$ignore_fields = ['last_xml','lat','lon','facebook','twitter','youtube','slogan','about_us','payment','services','is_geocoded','filter_evening_weekend','filter_adult_hearing_test','filter_hearing_aid_fitting','redirect','landmarks','url','country','direct_book_url','direct_book_iframe','content_library_expiration','special_announcement_expiration','logo_url', 'logo_name', 'id_coupon','mobile_text','radius','created'];
 if (!Configure::read('isCallAssistEnabled')) {
     $ignore_fields = array_merge($ignore_fields, ['is_call_assist', 'direct_book_type']);
 }
@@ -43,7 +43,7 @@ if (!Configure::read('isOticonImportEnabled')) {
     $ignore_fields = array_merge($ignore_fields, ['is_oticon', 'oticon_tier', 'location_segment', 'entity_segment', 'is_title_ignore', 'is_address_ignore', 'is_phone_ignore', 'is_email_ignore']);
 }
 if (!Configure::read('isTieringEnabled')) {
-    $ignore_fields = array_merge($ignore_fields, ['is_listing_type_frozen', 'frozen_expiration', 'is_grace_period', 'grace_period_end', 'badge_coffee', 'badge_wifi', 'badge_parking', 'badge_curbside', 'badge_wheelchair', 'badge_service_pets', 'badge_cochlear_implants', 'badge_ald', 'badge_pediatrics', 'badge_mobile_clinic', 'badge_financing', 'badge_telehearing', 'badge_asl', 'badge_tinnitus', 'badge_balance', 'badge_home', 'badge_remote', 'badge_mask', 'badge_ear_cleaning', 'badge_spanish', 'badge_french', 'badge_russian', 'badge_chinese', 'badge_punjabi', 'is_service_agreement_signed', 'using_logo', 'using_photos', 'using_flex_space', 'using_badges', 'using_linked_locations']);
+    $ignore_fields = array_merge($ignore_fields, ['is_listing_type_frozen', 'frozen_expiration', 'is_grace_period', 'grace_period_end', 'is_service_agreement_signed', 'using_logo', 'using_photos', 'using_flex_space', 'using_linked_locations']);
 }
 foreach ($fields as $field => $type) {
     if (in_array($field, $ignore_fields)) {

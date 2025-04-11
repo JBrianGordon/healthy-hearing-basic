@@ -173,6 +173,8 @@ class User extends CakeDcUser
         'queue_task_logs' => true,
         'queue_tasks' => true,
         'wikis' => true,
+        'locations' => true,
+        'locations_users' => true,
     ];
 
     /**

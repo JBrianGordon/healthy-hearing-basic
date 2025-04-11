@@ -58,7 +58,7 @@ if (empty($content->id)) {
 				                <?php
 			                    echo $this->Form->hidden('is_frozen');
 			                    echo $this->Form->hidden('id_draft_parent');
-			                    echo $this->Form->control('title');
+			                    echo $this->Form->control('title', ['label' => 'title/h1']);
 			                    echo $this->Form->control('subtitle');
 			                    echo $this->Form->control('date', [
 									'id' => 'ContentDate',
@@ -134,7 +134,7 @@ if (empty($content->id)) {
 				                </ul>
 				                <div class="tab-content">
 				                    <!-- Content Tab -->
-				                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
+				                    <div class="tab-pane fade show active content-body" id="content" role="tabpanel" aria-labelledby="content-tab">
 				                       <?php
 				                            echo $this->Form->control('body', ['label' => false, 'class' => 'editor', 'required' => false]);
 				                            echo $this->Form->control('short');
@@ -145,7 +145,7 @@ if (empty($content->id)) {
 				                        <?php
 				                            echo $this->Form->control('slug');
 				                            echo $this->Form->control('alt_title', ['label' => 'Alt Headline (hidden)']);
-				                            echo $this->Form->control('title_head', ['label' => 'Title Tag']);
+				                            echo $this->Form->control('title_head', ['label' => 'Search title tag']);
 				                            echo $this->Form->control('meta_description');
 				                            echo $this->Form->control('facebook_title');
 				                            echo $this->Form->control('facebook_description');

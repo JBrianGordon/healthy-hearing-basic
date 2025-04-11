@@ -434,7 +434,8 @@ class Location extends Entity
         'location_notes' => true,
         'location_photos' => true,
         'providers' => true,
-        'location_users' => true,
+        'locations_users' => true,
+        'users' => true,
         'reviews' => true,
         'is_oticon' => true,
     ];

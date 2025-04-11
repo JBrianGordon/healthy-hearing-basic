@@ -96,7 +96,8 @@ class LocationsTable extends Table
         ]);
 
         // The 'lng' field is named 'lon' in our Locations table
-        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M'];
+        $googleMapsWebServicesApiKey = Configure::read('googleMapsWebServicesApiKey');
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$googleMapsWebServicesApiKey];
         $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
@@ -427,7 +428,7 @@ class LocationsTable extends Table
                             $arrayBadgeFieldsTrue['Locations.'.$badgeField] = true;
                         }
                         $query->andWhere([
-                            'Locations.listing_type' => Location::LISTING_TYPE_PREMIER,
+                            'Locations.listing_type IN' => [Location::LISTING_TYPE_PREMIER, Location::LISTING_TYPE_ENHANCED],
                             'OR' => $arrayBadgeFieldsTrue]);
                     } else {
                         $arrayBadgeFieldsFalse = [];
@@ -436,7 +437,7 @@ class LocationsTable extends Table
                         }
                         $query->andWhere([
                             'OR' => [
-                                'Locations.listing_type !=' => Location::LISTING_TYPE_PREMIER,
+                                'Locations.listing_type NOT IN' => [Location::LISTING_TYPE_PREMIER, Location::LISTING_TYPE_ENHANCED],
                                 'AND' => $arrayBadgeFieldsFalse,
                             ]
                         ]);
@@ -537,6 +538,11 @@ class LocationsTable extends Table
         if ($publicUrl !== null && is_string($publicUrl)) {
             $entity->logo_url = $ckBoxUploadData['response']['url'];
             Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
+        }
+
+        if (($entity->is_show == true) && ($entity->is_junk == true)) {
+            // If a clinic is showing, it should not be marked is_junk
+            $entity->is_junk = false;
         }
     }
 
@@ -714,14 +720,12 @@ class LocationsTable extends Table
         $validator
             ->scalar('location_segment')
             ->maxLength('location_segment', 50)
-            ->requirePresence('location_segment', 'create')
-            ->notEmptyString('location_segment');
+            ->allowEmptyString('location_segment');
 
         $validator
             ->scalar('entity_segment')
             ->maxLength('entity_segment', 50)
-            ->requirePresence('entity_segment', 'create')
-            ->notEmptyString('entity_segment');
+            ->allowEmptyString('entity_segment');
 
         $validator
             ->integer('title_status')
@@ -918,8 +922,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('review_status')
             ->maxLength('review_status', 50)
-            ->requirePresence('review_status', 'create')
-            ->notEmptyString('review_status');
+            ->allowEmptyString('review_status');
 
         $validator
             ->date('last_review_date')
@@ -957,8 +960,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('completeness')
             ->maxLength('completeness', 50)
-            ->requirePresence('completeness', 'create')
-            ->notEmptyString('completeness');
+            ->allowEmptyString('completeness');
 
         $validator
             ->scalar('redirect')
@@ -980,8 +982,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('id_yhn_location')
             ->maxLength('id_yhn_location', 50)
-            ->requirePresence('id_yhn_location', 'create')
-            ->notEmptyString('id_yhn_location');
+            ->allowEmptyString('id_yhn_location');
 
         $validator
             ->integer('review_needed')
@@ -994,8 +995,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('direct_book_type')
             ->maxLength('direct_book_type', 20)
-            ->requirePresence('direct_book_type', 'create')
-            ->notEmptyString('direct_book_type');
+            ->allowEmptyString('direct_book_type');
 
         $validator
             ->scalar('direct_book_url')
@@ -1034,8 +1034,7 @@ class LocationsTable extends Table
         $validator
             ->scalar('timezone')
             ->maxLength('timezone', 50)
-            ->requirePresence('timezone', 'create')
-            ->notEmptyString('timezone');
+            ->allowEmptyString('timezone');
 
         $validator
             ->scalar('optional_message')
@@ -1088,9 +1087,9 @@ class LocationsTable extends Table
             $location = $this->get($location);
         }
         if (!Configure::read('isTieringEnabled')) {
-            // For Canada, if the clinic came in on most recent import, mark it Enhanced. Otherwise None.
+            // For Canada, if the clinic came in on most recent import or it was added by HD, mark it Enhanced. Otherwise None.
             $listingType = Location::LISTING_TYPE_NONE;
-            if ($this->isLocationInLatestImport($location->id, 'ca')) {
+            if (($location->yhn_tier == 2) || $location->is_hh) {
                 $listingType = Location::LISTING_TYPE_ENHANCED;
             }
         } else {
@@ -1126,12 +1125,14 @@ class LocationsTable extends Table
     public function noShowLocations(ConsoleIo $io) {
         $io->helper('BaseShell')->title('Find locations that should be no-show');
         // Make sure Quick Pick and Return Call from Clinic are not shown
-        foreach (['1111', '2222'] as $locationId) {
-            $locationEntity = $this->get($locationId);
-            if ($locationEntity->is_show == true) {
-                $locationEntity->is_show = false;
-                $this->save($locationEntity);
-                $io->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
+        if (Configure::read('isCallAssistEnabled')) {
+            foreach (['1111', '2222'] as $locationId) {
+                $locationEntity = $this->get($locationId);
+                if ($locationEntity->is_show == true) {
+                    $locationEntity->is_show = false;
+                    $this->save($locationEntity);
+                    $io->out('WARNING: Location '.$locationId.' was shown. Marked as no-show.');
+                }
             }
         }
         $locationIds = $this->find('list', [
@@ -2303,7 +2304,6 @@ class LocationsTable extends Table
                 'Locations.id' => $locationId
             ],
             'contain' => [
-                'LocationsProviders',
                 'Providers',
                 'LocationHours'
             ]
@@ -2423,5 +2423,111 @@ class LocationsTable extends Table
         $addressGeocoder = new GeoLocAddressUtility();
         $addressGeocoderResult = $addressGeocoder->byAddress($address);
         return $addressGeocoderResult;
+    }
+
+    /**
+    * Re-GeoLoc a location by ID
+    * @param int location id
+    * @return boolean success
+    */
+    public function geoLocById($locationId = null) {
+        $location = $this->get($locationId);
+        if (!empty($location)) {
+            $address = "{$location->address}, {$location->city}, {$location->state} {$location->zip} {$location->country}";
+            if ($geoloc = $this->geoLocAddress($address)) {
+                $location->lat = $geoloc[0];
+                $location->lon = $geoloc[1];
+                $this->save($location);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Determines the review status of a single locationId
+    * @param locationId
+    * @return string 'Review5Plus', 'Review4Less'
+    */
+    public function updateReviewStatus($locationId = null) {
+        $location = $this->get($locationId);
+        if (empty($location)) {
+            return false;
+        }
+
+        if ($location->reviews_approved >= 5) {
+            $reviewStatus = Location::REVIEW_STATUS_5_PLUS;
+        } else {
+            $reviewStatus = Location::REVIEW_STATUS_4_LESS;
+        }
+
+        // Review Status is already correct.  No need to save it.
+        if ($reviewStatus != $location->review_status) {
+            $location->review_status = $reviewStatus;
+            $this->save($location);
+        }
+        return $reviewStatus;
+    }
+
+    /**
+    * Set the emails for this location from the provider emails.
+    * @param integer $locationId
+    * @return null
+    */
+    public function setEmailsFromProviders($locationId) {
+        // Get a list of Providers, Location Emails, and Location Users
+        $location = $this->find('all', [
+            'conditions' => ['Locations.id' => $locationId],
+            'contain' => ['Providers', 'Users', 'LocationEmails']
+        ])->first();
+
+        // Create an array of unique providers
+        $providerEmails = [];
+        foreach ($location->providers as $provider) {
+            if (in_array($provider->email, $providerEmails)) {
+                continue;
+            }
+            $providerEmails[] = trim($provider->email);
+        }
+
+        // Create an array of emails from the Location that already exist
+        $locationEmails = [];
+        foreach ($location->location_emails as $locationEmail) {
+            $locationEmails[] = trim($locationEmail->email);
+        }
+        if (!empty($location->email)) {
+            $locationEmails[] = trim($location->email);
+        }
+        foreach ($location->users as $user) {
+            if (!empty($user->email)) {
+                $locationEmails[] = trim($user->email);
+            }
+        }
+
+        // If location email is blank, we want to leave it blank so we know to search for the real clinic email.
+        // If recovery email is blank, use the location email if we have one.
+        if (!empty($location->users[0])) {
+            if (empty($location->users[0]->email) && !empty($location->email)) {
+                $user = $this->Users->get($location->users[0]->id);
+                $user->email = $location->email;
+                $this->Users->save($user);
+            }
+        }
+
+        // Add the rest as Location Emails
+        foreach ($providerEmails AS $providerEmail) {
+            // Make sure we don't already have it.
+            if (in_array($providerEmail, $locationEmails)) {
+                continue;
+            }
+
+            // Add new Location Emails
+            $locationEmailData = [
+                'location_id' => $locationId,
+                'email' => $providerEmail,
+            ];
+            $locationEmail = $this->LocationEmails->newEntity($locationEmailData);
+            $this->LocationEmails->save($locationEmail);
+        }
     }
 }

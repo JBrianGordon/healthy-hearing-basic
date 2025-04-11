@@ -42,6 +42,15 @@ class ImportCommand extends Command
     ];
     protected $cqpFilename = 'tmp/latestCqpImport.xml';
 
+    // Credentials for Canadian sftp server
+    protected $canadianServer = [
+        'username'  => 'HearingAssist',
+        'password'  => 'Listen123',
+        'url'       => 'sftp.us.dgs.com',
+    ];
+    protected $caLocationFile = 'tmp/latestCaLocationImportFile.xml';
+    protected $caProviderFile = 'tmp/latestCaProviderImportFile.xml';
+
     // Used for tracking which locations changed tiers for reporting purposes.
     private $changedTiers = [];
 
@@ -69,7 +78,7 @@ class ImportCommand extends Command
         $parser
             ->setDescription('Import clinic data from specified group')
             ->addArgument('importType', [
-                'help' => 'The type of import to run (YHN, CQP, ...)',
+                'help' => 'The type of import to run (YHN, CQP, CA, ...)',
                 'required' => true,
                 'choices' => ['yhn', 'cqp', 'ca'],
             ])
@@ -439,7 +448,7 @@ class ImportCommand extends Command
             }
         }
 
-        // Set up our return data, unused right now.
+        // Set up our return data
         $yhnLogData = [
             'total_locations' => $locationCount,
             'new_locations' => count($this->newLocations),
@@ -1358,5 +1367,322 @@ class ImportCommand extends Command
             }
         }
         $io->out($count." locations are no longer in the CQP import");
+    }
+
+    /*
+     *  Import YHN XML and parse it into our database.
+     */
+    public function ca() {
+        $io = $this->io;
+        $io->helper('BaseShell')->title("Import for HearingDirectory CA");
+        if (Configure::read('country') != 'CA') {
+            $io->error('CA imports are disabled on this server.');
+            exit;
+        }
+        $startTime = microtime(true);
+        $this->setPreviousImportId('ca');
+
+        // Generate a new CA Import row
+        $newImport = $this->Imports->newEmptyEntity();
+        $newImport->type = 'ca';
+        $this->importId = $this->previousImportId;
+        $this->Imports->save($newImport);
+        $this->importId = $newImport->id;
+
+        $io->info('New import ID = ' . $this->importId);
+        $io->info('Previous import ID = ' . $this->previousImportId);
+
+        // Retrieve our data feed
+        if ($this->bypass) {
+            // Read most recent downloaded file
+            $io->out('Bypassing file download. Reading local files: '.$this->caLocationFile.' and '.$this->caProviderFile);
+            if (!file_exists($this->caLocationFile)) {
+                $io->error('Unable to read file '.$this->caLocationFile);
+                exit;
+            }
+            if (!file_exists($this->caProviderFile)) {
+                $io->error('Unable to read file '.$this->caProviderFile);
+                exit;
+            }
+        } else {
+            // Download new location and provider import files
+            $io->helper('BaseShell')->sftpRetrieveFile(
+                $this->canadianServer['url'],
+                $this->canadianServer['username'],
+                $this->canadianServer['password'],
+                'Clinic List.xml',
+                $this->caLocationFile
+            );
+            $io->helper('BaseShell')->sftpRetrieveFile(
+                $this->canadianServer['url'],
+                $this->canadianServer['username'],
+                $this->canadianServer['password'],
+                'Provider List.xml',
+                $this->caProviderFile
+            );
+        }
+        // Parse and process our locations
+        $fileContent = utf8_encode(file_get_contents($this->caLocationFile));
+        $locations = simplexml_load_string($fileContent);
+        $locations = json_encode($locations);
+        $locations = str_replace("{}", '""', $locations); // Convert empty arrays to empty strings
+        $locations = json_decode($locations, true);
+        if (empty($locations)) {
+            $this->errorMessage('No locations found in import file.');
+            return false;
+        }
+        $caLogData = $this->parseCaLocations($locations);
+        unset($locations);
+        // Save our location total counts to import table.
+        $this->Imports->patchEntity($newImport, $caLogData);
+        $this->Imports->save($newImport);
+
+        // Parse and process our providers
+        $fileContent = utf8_encode(file_get_contents($this->caProviderFile));
+        $providers = simplexml_load_string($fileContent);
+        $providers = json_decode(json_encode($providers), true);
+        if (empty($providers)) {
+            $this->errorMessage('No providers found in import file.');
+            return false;
+        }
+        $caLogData = $this->parseCaProviders($providers);
+        unset($providers);
+        // Save our provider total counts to import table.
+        $this->Imports->patchEntity($newImport, $caLogData);
+        $this->Imports->save($newImport);
+
+        // Find changes between this import and last
+        $this->findImportChanges();
+
+        //TODO: This is done in yhn import, but not CA. I don't think we need it for CA, but need to verify
+        // Update is_retail flag for each location
+        //$this->updateRetailStatus();
+
+        // Set locations that are no longer in the import as inactive.
+        $this->removedCaLocations();
+
+        // Calculate listing types for each location
+        $this->Locations->calculateListingTypes($io);
+
+        // Add CallSource numbers if needed
+        $this->Locations->addCallSourceNumbers($io);
+        // End CallSource numbers that are no longer needed
+        $this->CallSources->endInvalidCallSourceNumbers($io);
+        $this->Locations->noShowLocations($io);
+        $this->Locations->showClinicsWithActiveCS($io);
+
+        // Update filters
+        $this->Locations->updateAllFilters($io);
+
+        $this->createReport($this->importId);
+
+        $io->success('Import complete.');
+
+        // Display verbose stats
+        $endTime = microtime(true);
+        $totalTime = number_format(($endTime - $startTime), 2);
+        $this->displayVerboseStats();
+        $io->out();
+        $io->out('Import Duration: ' . $totalTime . 's');
+    }
+
+    /*
+     *  Remove Locations that were not in the last CA Import
+     *  TODO: I think this is the same as removedLocations(). Can we use same function for YHN and CA?
+     */
+    function removedCaLocations() {
+        $io = $this->io;
+        // Get a list of all CA Location IDs from the last import
+        $importLocations = $this->ImportLocations->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'id_external',
+            'conditions' => [
+                'import_id' => $this->importId
+            ],
+        ])->toArray();
+
+        // Get a list of all current Locations that are CA (yhn_tier=2)
+        $currentLocations = $this->Locations->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'id_yhn_location',
+            'conditions' => [
+                'yhn_tier' => 2
+            ],
+        ])->toArray();
+
+        // Determine which of the CA Locations is no longer in the import
+        $removedLocations = [];
+        $countRemoved=0;
+        $countNotRemoved=0;
+        foreach ($currentLocations as $id => $yhnLocationId) {
+            if (!in_array($yhnLocationId, $importLocations)) {
+                $removedLocations[] = $id;
+            }
+        }
+
+        // Set yhn tier data for each removed location
+        foreach ($removedLocations as $locationId) {
+            // Keep the id_yhn_location, but set yhn_tier to 0
+            $locationEntity = $this->Locations->get($locationId);
+            $locationEntity->yhn_tier = 0;
+            $this->Locations->save($locationEntity);
+            $io->out('Location: ' . $locationId . ' is no longer a CA Location.');
+        }
+        $io->out(count($removedLocations).' total locations have been removed from CA import.');
+    }
+
+    function parseCaLocations($locations) {
+        $io = $this->io;
+        $io->info('Parsing Locations ..');
+        $io->out(count($locations['ClinicItem']).' locations found in import file.');
+        $newCount=0;
+        foreach ($locations['ClinicItem'] as $location) {
+            $externalId = (string)$location['LocationID'] ? (string)$location['LocationID'] : (string)$location['OticonID'];
+            $externalId = filter_var($externalId, FILTER_SANITIZE_SPECIAL_CHARS);
+            $externalId = trim(str_replace("&nbsp;", '', htmlentities($externalId)));
+            // Clean special characters from email
+            $email = filter_var($location['Email'], FILTER_SANITIZE_EMAIL);
+            $saveData = [
+                'import_id' => $this->importId,
+                'id_external' => $externalId,
+                'title' => $location['Title'],
+                'subtitle' => $location['Subtitle'],
+                'address' => $location['Address1'],
+                'address_2' => $location['Address2'],
+                'city' => $location['City'],
+                'state' => $location['State'],
+                'zip' => $location['Zip'],
+                'phone' => $location['Phone'],
+                'email' => $email,
+                'is_retail' => $location['is_retail'] == 'Yes' ? 1 : 0,
+                'id_oticon' => (string)$location['OticonID'],
+                'listing_type' => Location::LISTING_TYPE_ENHANCED,
+                'is_call_assist' => false
+            ];
+
+            // Attempt to match this location.
+            $locationMatch = $this->Locations->find('all', [
+                'contain' => [],
+                'fields' => ['id', 'id_yhn_location'],
+                'conditions' => ['id_yhn_location' => $externalId]
+            ])->first();
+
+            if (empty($locationMatch)) {
+                // Check for id_yhn_location that is missing leading zeros
+                $noLeadingZeros = ltrim($externalId, '0');
+                $locationMatch = $this->Locations->find('all', [
+                    'contain' => [],
+                    'fields' => ['id', 'id_yhn_location'],
+                    'conditions' => ['id_yhn_location' => $noLeadingZeros]
+                ])->first();
+                if (!empty($locationMatch)) {
+                    $io->out('Found and updating a location without leading zeros: '.$locationMatch->id.': '.$locationMatch->id_yhn_location.' -> '.$externalId);
+                    $locationEntity = $this->Locations->get($locationMatch->id);
+                    $locationEntity->id_yhn_location = $externalId;
+                    $this->Locations->save($locationEntity);
+                }
+            }
+
+            if (!empty($locationMatch)) {
+                $locationEntity = $this->Locations->get($locationMatch->id);
+                $locationEntity->yhn_tier = 2;
+                $this->Locations->save($locationEntity);
+                $saveData['location_id'] = $locationMatch['Location']['id'];
+                $saveData['match_type'] = 1;
+            } else {
+                $newCount++;
+                if ($location->is_retail == 'Yes') {
+                    $io->out('New retail location = '.$externalId);
+                } else {
+                    $io->out('New Oticon location = '.$externalId);
+                }
+            }
+
+            // Save CA Location with the matched location ID.
+            $importLocationEntity = $this->ImportLocations->newEntity($saveData);
+            if ($importLocationEntity->getErrors()) {
+                $io->error('Failed to save ImportLocation');
+                $io->error(print_r($importLocationEntity->getErrors(), true));
+                pr($importLocationEntity);
+                exit;
+            }
+            $importLocation = $this->ImportLocations->save($importLocationEntity);
+
+            // Retrieve the ID of the Location we just saved
+            $this->importLocations[$externalId] = $importLocationEntity->id;
+        }
+        $io->out($newCount.' new locations.');
+        // Set up our return data
+        $caLogData = [
+            'total_locations' => count($locations['ClinicItem']),
+            'new_locations' => $newCount,
+        ];
+        return $caLogData;
+    }
+
+    function parseCaProviders($providers) {
+        $io = $this->io;
+        $io->info('Parsing Providers ..');
+        $io->out(count($providers['ProviderItem']).' providers found in import file.');
+
+        $existingProviders = $this->Providers->find('list', [
+            'keyField' => 'id_yhn_provider',
+            'valueField' => 'id',
+            'conditions' => ['id_yhn_provider != ""'],
+        ])->toArray();
+        $newCount = 0;
+
+        foreach ($providers['ProviderItem'] as $provider) {
+            $email = filter_var($location['Email'], FILTER_SANITIZE_EMAIL);
+            $externalId = trim($provider['ProviderID']);
+            $saveData = [
+                'import_id' => $this->importId,
+                'first_name' => trim($provider['FirstName']),
+                'last_name' => trim($provider['LastName']),
+                'email' => $email,
+                'id_external' => $externalId,
+            ];
+
+            // Save the import record to our database
+            $importProviderEntity = $this->ImportProviders->newEntity($saveData);
+            $this->ImportProviders->save($importProviderEntity);
+
+            // Does this provider match an existing provider in our database?
+            if (!empty($externalId) && !empty($existingProviders[$externalId])) {
+                // Found a match
+                $importProviderEntity->provider_id = $existingProviders[$externalId];
+                $this->ImportProviders->save($importProviderEntity);
+            } else {
+                // TODO: Should I be saving a new provider to the provider table here, or does that happen in the import dashboard?
+                $newCount++;
+            }
+
+            $importProviderId   = $importProviderEntity->id;
+            $locationExternalId = (string)$provider['LocationID'];
+
+            // Retrieve related Location
+            if (empty($this->importLocations[$locationExternalId])) {
+                $errorMessage = 'Warning: External location ID "' . $locationExternalId . '" does not exist within the most recent clinic list.  Please contact XML provider.';
+                $this->errorMessage($errorMessage);
+                $this->reportErrors[] = $errorMessage;
+                continue;
+            }
+            $importLocationId   = $this->importLocations[$locationExternalId];
+
+            // Save our association to the ImportLocationProvider table
+            $locationProviderData = [
+                'import_id'             => $this->importId,
+                'import_provider_id'    => $importProviderId,
+                'import_location_id'    => $importLocationId,
+            ];
+            $importLocationProviderEntity = $this->ImportLocationProviders->newEntity($locationProviderData);
+            $this->ImportProviders->save($importProviderEntity);
+        }
+        // Set up our return data
+        $caLogData = [
+            'total_providers' => count($providers['ProviderItem']),
+            'new_providers' => $newCount,
+        ];
+        return $caLogData;
     }
 }
