@@ -103,8 +103,14 @@ $isDraft = !empty($wiki->id_draft_parent);
                                         ]);
                                     ?>
                                 <?php
-				                    echo $this->Form->control('facebook_image_width', ['label' => 'Image Width (min 800px)', 'required' => false]);
-				                    echo $this->Form->control('facebook_image_height', ['label' => 'Image Height']);
+									echo $this->Form->control('facebook_image_width', [
+										'label' => 'Image Width (min 800px)',
+										'readonly' => true,
+									]);
+									echo $this->Form->control('facebook_image_height', [
+										'label' => 'Image Height',
+										'readonly' => true,
+									]);
 				                    echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
 				                ?>
                                 <hr>

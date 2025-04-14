@@ -230,7 +230,12 @@ class WikisTable extends Table
             $publicUrl = $ckBoxUploadData['response']['url'];
 
             if ($publicUrl !== null && is_string($publicUrl)) {
+                $imageWidth = $ckBoxUploadData['response']['metadata']['width'];
+                $imageHeight = $ckBoxUploadData['response']['metadata']['height'];
+
                 $entity->{$fileUrl} = $ckBoxUploadData['response']['url'];
+                $entity->{str_replace('name', 'width', $filename)} = $imageWidth;
+                $entity->{str_replace('name', 'height', $filename)} = $imageHeight;
                 Cache::delete('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME));
             }
         }
@@ -372,6 +377,18 @@ class WikisTable extends Table
         $validator
             ->requirePresence('facebook_image_name', 'create')
             ->notEmptyString('facebook_image_name', 'must have image');
+
+        $validator->setProvider('upload', \Josegonzalez\Upload\Validation\ImageValidation::class);
+        $validator->add('facebook_image_name', 'fileAboveMinWidth', [
+            'rule' => ['isAboveMinWidth', 800],
+            'on' => function ($context) {
+                $imageSizeGreaterThanZero = $context['data']['facebook_image_name']->getSize() > 0;
+                $imageFilenameNotEmpty = !empty($context['data']['facebook_image_name']->getClientFilename());
+                return ($imageSizeGreaterThanZero && $imageFilenameNotEmpty);
+            },
+            'message' => 'This image should at least be 800px wide',
+            'provider' => 'upload'
+        ]);
 
         $validator
             ->dateTime('last_modified')

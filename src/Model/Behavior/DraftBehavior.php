@@ -167,7 +167,10 @@ class DraftBehavior extends Behavior
         $updatedArticle = $this->_table->patchEntity(
             $originalItem,
             $draftItemArray,
-            ['associated' => $contains]
+            [
+                'associated' => $contains,
+                'validate' => false,
+            ]
         );
 
         if ($updatedArticle->getErrors()) {
