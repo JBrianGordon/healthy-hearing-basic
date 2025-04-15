@@ -61,8 +61,11 @@ import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
 import WProofreader from'@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
-//Importing custom CSS
-import '../../css/ckeditor/ckeditor.css';
+// Load an external CKEditor CSS file
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css';
+document.head.appendChild(link);
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 
@@ -311,22 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 serviceId: servId,
                 srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
             }
-        	}).then(editor => {
-                const editorElements = document.querySelectorAll(".editor");
-                const wrapper = document.querySelector('.ck-body-wrapper');
-              
-                editorElements.forEach(element => {
-                    element.style.display = "block";
-                    element.style.position = "absolute";
-                    element.style.zIndex = "-1";
-                });
-
-                document.querySelectorAll('.ck-button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        button.after(wrapper);
-                    });
-                  });
-            }).catch( error => {
+        	}).catch( error => {
     	    console.error( error );
         });
     });
