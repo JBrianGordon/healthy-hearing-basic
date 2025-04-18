@@ -3,6 +3,7 @@ use Cake\Core\Configure;
 
 echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("tagVersion"));
 ?>
+<meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
         <div class="panel-heading">Imports Actions</div>
@@ -59,8 +60,16 @@ echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("t
                     </table>
 
                     <?= $this->Form->create($importLocation) ?>
-                        <strong>Search by Title, Subtitle, Address, City, <?php echo ucwords($zipShort); ?> or ID.</strong><br><br>
-                        <?= $this->Form->control('search', ['label' => 'Search', 'default' => $importLocation->title]) ?>
+                        <?php $helpText = "Search by Title, Subtitle, Address, City, ".ucwords($zipShort)." or ID."; ?>
+                        <?= $this->Form->control('search', [
+                            'label' => 'Search',
+                            'templates' => [
+                                'inputContainer' => '{{content}}{{help}}',
+                                'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
+                            ],
+                            'help' => $helpText,
+                            'default' => $importLocation->zip,
+                        ]) ?>
                         <div class="form-actions tar">
                             <a href="<?= $importIndexReferer ?>">
                                 <input type="button" tabindex="1" value="Cancel" class="btn btn-danger btn-lg">

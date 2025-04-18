@@ -212,7 +212,6 @@ class LocationsTable extends Table
             ->value('last_note_status', $defaultOptions)
             ->value('last_import_status', $defaultOptions)
             ->value('grace_period_end', $defaultOptions)
-            ->value('review_needed', $defaultOptions)
             ->value('email_status', $defaultOptions)
             ->value('phone_status', $defaultOptions)
             ->value('address_status', $defaultOptions)
@@ -223,6 +222,7 @@ class LocationsTable extends Table
             ->boolean('is_show')
             ->boolean('filter_has_photo')
             ->boolean('filter_insurance')
+            ->boolean('review_needed')
             ->boolean('is_oticon')
             ->boolean('is_retail')
             ->boolean('is_hh')
@@ -985,8 +985,8 @@ class LocationsTable extends Table
             ->allowEmptyString('id_yhn_location');
 
         $validator
-            ->integer('review_needed')
-            ->allowEmptyString('review_needed');
+            ->boolean('review_needed')
+            ->notEmptyString('review_needed');
 
         $validator
             ->boolean('is_retail')

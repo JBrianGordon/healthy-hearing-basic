@@ -537,7 +537,7 @@ class ImportsController extends BaseAdminController
         $importLocation = $this->ImportLocations->get($importLocationId, [
             'contain' => ['Imports']
         ]);
-        $locationId = $importLocation->location_id;
+        $locationId = $this->request->getQuery('location_id');
 
         if (!empty($locationId)) {
             $location = $this->Locations->get($locationId);
@@ -548,7 +548,7 @@ class ImportsController extends BaseAdminController
                 $location->cqp_tier = 2;
                 $location->review_needed = true;
                 $this->Locations->save($location);
-            } else {
+            } else { // YHN or CA
                 $location->id_yhn_location = $importLocation->id_external;
                 $location->is_yhn = true;
                 $location->yhn_tier = 2;
@@ -601,6 +601,37 @@ class ImportsController extends BaseAdminController
         $this->Flash->success('Location has been unlinked!');
         $importIndexReferer = $this->getImportIndexReferer();
         return $this->redirect($importIndexReferer);
+    }
+
+    // This function is called via AJAX from location_link. It displays a list of clinics that match the search term.
+    public function ajaxLocationSearch() {
+        $this->viewBuilder()->setLayout('ajax');
+        $searchTerm = $this->request->getData('search');
+        $importType = $this->request->getData('importType');
+
+        $locations = $this->Locations->find('all', [
+            'conditions' => [
+                'OR' => [
+                    'Locations.title LIKE ' => "%$searchTerm%",
+                    'Locations.subtitle LIKE ' => "%$searchTerm%",
+                    'Locations.address LIKE ' => "%$searchTerm%",
+                    'Locations.address_2 LIKE ' => "%$searchTerm%",
+                    'Locations.city LIKE ' => "%$searchTerm%",
+                    'Locations.state LIKE ' => "%$searchTerm%",
+                    'Locations.zip LIKE ' => "%$searchTerm%",
+                    'Locations.id_oticon LIKE ' => "%$searchTerm%",
+                    'Locations.id_yhn_location LIKE ' => "%$searchTerm%",
+                    'Locations.id_cqp_practice LIKE ' => "%$searchTerm%",
+                    'Locations.id_cqp_office LIKE ' => "%$searchTerm%",
+                    'Locations.id ' => intval($searchTerm),
+                ]
+            ],
+            'limit' => 30
+        ])->all();
+
+        $this->set('locations', $locations);
+        $this->set('importType', $importType);
+        $this->viewBuilder()->setOption('serialize', 'locations');
     }
 
     public function locationAddJunk($importLocationId) {

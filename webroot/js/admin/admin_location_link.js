@@ -9,23 +9,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = this;
     const importType = button.dataset.importType;
     const search = importLocationSearch.value;
+    const csrfToken = $('input[name="_csrfToken"]').val();
     button.disabled = true;
-    console.log(search);
 
     try {
-      const response = await fetch('/admin/imports/location_search/', {
+      const response = await fetch('/admin/imports/ajax_location_search', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ search, importType })
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          "X-CSRF-Token": csrfToken
+        },
+        body: JSON.stringify({search: search, importType: importType})
       });
 
       if (response.ok) {
         const data = await response.text();
         searchResults.innerHTML = data;
       } else {
+        console.error('ajax_location_search failed');
         throw new Error('Request failed');
       }
     } catch (error) {
+      console.error('ajax_location_search failed');
       console.error(error);
     }
 

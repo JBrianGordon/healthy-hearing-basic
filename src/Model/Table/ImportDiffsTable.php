@@ -86,8 +86,8 @@ class ImportDiffsTable extends Table
             ->allowEmptyString('value');
 
         $validator
-            ->integer('review_needed')
-            ->allowEmptyString('review_needed');
+            ->boolean('review_needed')
+            ->notEmptyString('review_needed');
 
         return $validator;
     }
