@@ -176,6 +176,11 @@ $this->Html->script('dist/content.min', ['block' => true]);
 										<span><em>Last updated <?= date_format($content->modified, 'F jS, Y') ?></em></span>
 									<?php endif; ?>
 								</p>
+								<a href="#" class="btn btn-share btn-facebook top-btn mb10 mr5"><span class="hh-icon-facebook"></span></a>
+							    <a href="#" class="btn btn-share btn-twitter top-btn mb10 mr5"><span class="hh-icon-x"></span></a>
+							    <a href="#" class="btn btn-share btn-linkedin top-btn mb10 mr5"><span class="hh-icon-linkedin"></span></a>
+							    <a href="#" class="btn btn-share btn-pinterest top-btn mb10 mr5 ml0"><span class="hh-icon-pinterest"></span></a>
+							    <button class="btn btn-light btn-print top-btn mb10 mr5 mt0" onclick="window.print()"><span class="hh-icon-printer"></span></button>
 								<div id="content_body" class="content-body">
 									<?= $content->body ?>
 								</div>
@@ -191,7 +196,7 @@ $this->Html->script('dist/content.min', ['block' => true]);
 							</div>
 						</div>
 					</div>
-					<?php echo $this->element('content/share'); ?>
+					<?= $this->element('content/share') ?>
 				</article>
 			</div>
 			<?= $this->element('responsive_slider') ?>

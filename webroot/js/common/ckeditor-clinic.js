@@ -22,8 +22,11 @@ import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
 import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
-//Importing custom CSS
-import '../../css/ckeditor/ckeditor.css';
+// Load an external CKEditor CSS file
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css';
+document.head.appendChild(link);
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 

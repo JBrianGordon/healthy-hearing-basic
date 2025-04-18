@@ -27,6 +27,10 @@ form {
 
     .ck.ck-editor {
       width: 100%;
+
+      .ck-content {
+        height: 400px;
+      }
     }
   }
 

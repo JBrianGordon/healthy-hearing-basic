@@ -173,6 +173,11 @@ $this->Html->script('dist/wiki.min', ['block' => true]);
 					<div class="col-lg-9 float-start mb70">
 						<div class="panel panel-section expanded mb0">
 							<div id="wiki-body">
+								<a href="#" class="btn btn-share btn-facebook top-btn mb10 mr5"><span class="hh-icon-facebook"></span></a>
+							    <a href="#" class="btn btn-share btn-twitter top-btn mb10 mr5"><span class="hh-icon-x"></span></a>
+							    <a href="#" class="btn btn-share btn-linkedin top-btn mb10 mr5"><span class="hh-icon-linkedin"></span></a>
+							    <a href="#" class="btn btn-share btn-pinterest top-btn mb10 mr5 ml0"><span class="hh-icon-pinterest"></span></a>
+							    <button class="btn btn-light btn-print top-btn mb10 mr5 mt0" onclick="window.print()"><span class="hh-icon-printer"></span></button>
 								<?= $wiki->body ?>
 								<div class="about-author">
 									<?= $this->Editorial->getAuthorsBio($wiki->author, $wiki->contributors) ?>

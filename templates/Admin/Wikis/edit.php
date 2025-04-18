@@ -7,6 +7,7 @@
  */
 
 use Cake\I18n\FrozenTime;
+use Cake\Routing\Router;
  
 $this->Html->script('dist/wiki_edit.min', ['block' => true]);
 
@@ -19,10 +20,11 @@ $isDraft = !empty($wiki->id_draft_parent);
 			<div class="btn-group">
 				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Html->link(__(' Add'), ['action' => 'add'], ['class' => 'btn btn-success bi bi-plus-lg']) ?>
-				<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $wiki->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
-				<?php if(!$isDraft): ?>
+				<?php if(!$isDraft && $wiki->is_active): ?>
 					<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $wiki->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 					<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $wiki->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
+				<?php else: ?>
+					<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $wiki->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -42,6 +44,9 @@ $isDraft = !empty($wiki->id_draft_parent);
 		            <fieldset>
 		                <?php
 		                    echo $this->Form->control('name', ['label' => 'Menu Name']);
+		                ?>
+						<span class="col-md-9 col-md-offset-3 ps-0 mt-n4 alert alert-info"><strong class="ps-3">URL:</strong> <?= Router::url($wiki->hh_url, true) ?></span>
+		                <?php
 		                    echo $this->Form->control('slug');
 		                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'empty' => true]);
 							if ($wiki->id_draft_parent > 0) {
