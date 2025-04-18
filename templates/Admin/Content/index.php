@@ -131,7 +131,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 								<td><?= h($content->date) ?></td>
 								<td class="actions">
 									<div class="btn-group-vertical btn-group-sm">
-										<?php if($content->id_draft_parent === 0): ?>
+										<?php if ($content->id_draft_parent === 0 && $content->is_active === true): ?>
 											<?=
 												$this->Html->link(' View',
 													$content->hh_url,

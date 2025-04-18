@@ -91,7 +91,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 					                    <td><?= date_format($wiki->last_modified, 'M j, o') ?><br><?= date_format($wiki->modified, 'M j, o') ?></td>
 					                    <td class="actions">
 						                    <div class="btn-group btn-group-vertical">
-											<?php if($wiki->id_draft_parent === 0 && $wiki->is_active === true): ?>
+											<?php if ($wiki->id_draft_parent === 0 && $wiki->is_active === true): ?>
 												<?=
 													$this->Html->link(' View',
 														$wiki->hh_url,

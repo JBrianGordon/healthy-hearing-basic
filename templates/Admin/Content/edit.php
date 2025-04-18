@@ -29,13 +29,14 @@ if (empty($content->id)) {
 				<?php if (!empty($content->id)): ?>
 					<?= $this->Html->link(' Add', ['action' => 'add'], ['class' => 'btn btn-success bi-plus-lg']) ?>
 					<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
-					<?= $this->Html->link(' Preview', ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-					<?php if (!$isDraft): ?>
-						<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi-eye-fill', 'target'=>'_blank']) ?>
-						<?php if ($isFrozen): ?>
-							<?= $this->Form->postLink(' Update and republish', ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
-						<?php endif; ?>
+				<?php endif; ?>
+				<?php if(!$isDraft && $content->is_active): ?>
+					<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $content->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+					<?php if ($isFrozen): ?>
+						<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 					<?php endif; ?>
+				<?php else: ?>
+					<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -82,10 +83,8 @@ if (empty($content->id)) {
 								}
 			                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 			                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
-								if (!$isDraft && isset($content->hh_url) && is_array($content->hh_url)) {
-									echo $this->Form->control('current_url', ['value' => Router::url($content->hh_url, true), 'disabled' => false]);
-								}
 								?>
+								<span class="col-md-9 col-md-offset-3 ps-0 mt-n4 alert alert-info"><strong class="ps-3">URL:</strong> <?= Router::url($content->hh_url, true) ?></span>
 								<?php if (empty($content->is_active)): ?>
 									<div class="form-group">
 										<label class="col col-md-3 control-label">Redirects To:</label>
@@ -142,6 +141,7 @@ if (empty($content->id)) {
 				                        ?>
 				                    </div>
 				                    <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+										<span class="col-md-9 col-md-offset-3 ps-0 mt-n4 alert alert-info"><strong class="ps-3">URL:</strong> <?= Router::url($content->hh_url, true) ?></span>
 				                        <?php
 				                            echo $this->Form->control('slug');
 				                            echo $this->Form->control('alt_title', ['label' => 'Alt Headline (hidden)']);
