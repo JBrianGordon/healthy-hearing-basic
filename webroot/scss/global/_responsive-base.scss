@@ -109,16 +109,18 @@ blockquote {
 }
 
 @media only screen and (max-width: $screen-sm-max) {
-  h1, .h1 {
-    font-size: $font-size-h1 * 0.8;
-  }
+  body {
+    h1, .h1 {
+      font-size: 38px;
+    }
 
-  h2, .h2 {
-    font-size: $font-size-h2 * 0.8;
-  }
+    h2, .h2, h2 > a {
+      font-size: 24px;
+    }
 
-  h3, .h3 {
-    font-size: $font-size-h3 * 0.8;
+    h3, .h3, h3 > a {
+      font-size: 22px;
+    }
   }
 }
 
