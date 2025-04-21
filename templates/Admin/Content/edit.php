@@ -166,7 +166,6 @@ if (empty($content->id)) {
 	                                        ]);
 	                                    ?>
 						                <?php
-				                            echo $this->Form->control('facebook_image', ['label' => 'Schema/Facebook Image<br><a class="btn btn-xs btn-info ck-box">Select New Image</a>', 'escape' => false]);
 				                            echo $this->Form->control('facebook_image_width', [
 												'label' => 'Image Width (min 800px)',
 												'readonly' => true,
