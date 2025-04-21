@@ -31,7 +31,7 @@ if (empty($content->id)) {
 					<?= $this->Form->postLink('Delete', ['action' => 'delete', $content->id], ['confirm' => __('Are you sure you want to delete # {0}?', $content->id), 'class' => 'btn btn-danger bi-trash-fill', 'id' => 'deleteBtn']) ?>
 				<?php endif; ?>
 				<?php if(!$isDraft && $content->is_active): ?>
-					<?= $this->Html->link(__(' View'), ['prefix' => false, 'action' => 'view', $content->slug], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
+					<?= $this->Html->link(' View', $content->hh_url, ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 					<?php if ($isFrozen): ?>
 						<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 					<?php endif; ?>
