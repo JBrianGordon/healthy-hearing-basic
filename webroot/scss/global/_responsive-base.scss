@@ -29,6 +29,14 @@ body {
   p, a , li {
     font-size: 20px;
   }
+
+	h2 > a {
+		font-size: 30px;
+	}
+	
+	h3 > a {
+		font-size: 24px;
+	}
 }
 
 h1, .h1,
