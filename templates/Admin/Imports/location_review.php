@@ -67,14 +67,14 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                 'class' => 'w-100'
                                             ]) ?>
                                         </td>
-                                        <td class="text-center"><button class="js-copy-left form-control" type="button">&larr;</button></td>
+                                        <td class="text-center"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
                                         <?php
                                         if ($field['hh'] == 'phone') {
                                             $value = str_replace('-', '', $importLocation->{$field['hh']});
                                         } else {
                                             $value = $importLocation->{$field['hh']};
                                         }
-                                        $class = (trim($value ?? '') == trim($location->{$field['hh']} ?? '')) ? 'form-control match' : 'form-control different';
+                                        $class = (trim($value ?? '') == trim($location->{$field['hh']} ?? '')) ? 'form-control match w-100' : 'form-control different w-100';
                                         ?>
                                         <td><input disabled class="<?= $class ?>" value="<?= $value ?>" /></td>
                                     </tr>
@@ -85,6 +85,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                     </th>
                                     <td>
                                         <?= $this->Form->control("id_yhn_location", [
+                                            'class' => 'w-100',
                                             'label' => false,
                                             'disabled' => 'disabled'
                                         ]) ?>
@@ -93,7 +94,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                     </td>
                                     <td>
                                         <!-- This is here to keep the javascript happy so the first ID field doesn't get highlighted. -->
-                                        <input class="form-control match" value="<?= $importLocation->id_external ?>" disabled="disabled" />    
+                                        <input class="form-control match w-100" value="<?= $importLocation->id_external ?>" disabled="disabled" />    
                                     </td>
                                 </tr>
                                 <?php if (Configure::read('isTieringEnabled')): ?>
@@ -103,6 +104,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                         </th>
                                         <td>
                                             <?= $this->Form->control('listing_type', [
+                                                'class' => 'w-100',
                                                 'label' => false,
                                                 'disabled' => 'disabled'
                                             ]) ?>
@@ -111,7 +113,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                         </td>
                                         <td>
                                             <!-- This is here to keep the javascript happy so the first listing type field doesn't get highlighted. -->
-                                            <input class="form-control" value="<?= $location->listing_type ?>" type="hidden" />
+                                            <input class="form-control w-100" value="<?= $location->listing_type ?>" type="hidden" />
                                         </td>
                                     </tr>
                                 <?php endif; ?>
@@ -229,17 +231,17 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                                 ]) ?>
                                                             </td>
                                                             <td class="border-0 p20"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
-                                                            <td class="text-center border-0 pl0">
+                                                            <td class="text-center border-0 pl20">
                                                                 <?php if ($isLinked): ?>
                                                                     <?= $this->Form->control("providers.$providerCount.$field", [
                                                                         'label' => false,
-                                                                        'class'=>'form-control import-data '.$class,
+                                                                        'class'=>'form-control import-data w-100 '.$class,
                                                                         'field' => $field,
                                                                         'value' => trim($importProvider[$field]),
                                                                         'disabled' => 'disabled'
                                                                     ]) ?>
                                                                 <?php else: ?>
-                                                                    <input class="form-control import-data" field="<?= $field ?>" disabled />
+                                                                    <input class="form-control import-data w-100" field="<?= $field ?>" disabled />
                                                                 <?php endif; ?>
                                                             </td>
                                                         </tr>
@@ -262,8 +264,8 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                             <table class="table-condensed">
                                                 <tr providerCount="<?= $providerCount ?>">
                                                     <td class="text-center">
-                                                        <button class="js-add-provider form-control pull-left bi bi-left" style="width:50%;"> Add</button>
-                                                        <button class="js-link yhn-link form-control pull-right bi bi-link-45deg" style="width:50%;"></button>
+                                                        <button class="js-add-provider form-control pull-left bi bi-left d-inline" style="width:50%;"> Add</button>
+                                                        <button class="js-link yhn-link form-control pull-right bi bi-link-45deg d-inline" style="width:50%;"></button>
                                                         <button class="js-link-cancel form-control hidden bi bi-x-circle"></button>
                                                     </td>
                                                     <td colspan=4 class="text-center">
@@ -283,29 +285,29 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                     $class = "linked different";
                                                     ?>
                                                     <tr providerCount="<?= $providerCount ?>">
-                                                        <td><label class="control-label"><?= $label ?></label></td>
+                                                        <td><label class="control-label w-100 tal"><?= $label ?></label></td>
                                                         <td class="text-center">
                                                             <?= $this->Form->control("providers.$providerCount.$field", [
+                                                                'class' => 'w-100',
                                                                 'label' => false,
                                                                 'field' => $field,
                                                                 'value' => '',
                                                             ]) ?>
                                                         </td>
-                                                        <td><button class="js-copy-left form-control" type="button">&larr;</button></td>
+                                                        <td><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
                                                         <td class="text-center">
                                                             <?php if (!empty($importProvider->{$field})): ?>
                                                                 <?= $this->Form->control("providers.$providerCount.$field", [
                                                                     'label' => false,
-                                                                    'class'=>'form-control import-data '.$class,
+                                                                    'class'=>'form-control import-data w-100 '.$class,
                                                                     'field' => $field,
                                                                     'value' => trim($importProvider->{$field}),
                                                                     'disabled' => 'disabled'
                                                                 ]) ?>
                                                             <?php else: ?>
-                                                                <input class="form-control" field="<?= $field ?>" disabled />
+                                                                <input class="form-control w-100" field="<?= $field ?>" disabled />
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td class="text-center"></td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                                 <?php $providerCount++; ?>

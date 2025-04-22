@@ -10,6 +10,9 @@ webpack_cache
 webroot/css/*
 !webroot/css/atf
 !webroot/css/ckeditor
+!webroot/css/admin/
+!webroot/css/admin/imports.css
+webroot/css/admin/responsive-admin.css
 webroot/csvs/*
 webroot/js/dist/*.min.js*
 webroot/debug_kit
