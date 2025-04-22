@@ -164,7 +164,6 @@ class WikisTable extends Table
                 'after' => true,
             ])
             ->boolean('facebook_image')
-            ->boolean('facebook_image_bypass')
             ->add('created_date_range', 'Search.Callback', [
                 'callback' => function (Query $query, array $args, Base $filter) {
                     [$start, $end] = explode(',', $args['created_date_range']);
@@ -340,10 +339,6 @@ class WikisTable extends Table
         //     ->maxLength('facebook_image', 255)
         //     ->notEmptyFile('facebook_image');
             // ADD MIME TYPE CHECKING
-
-        // $validator
-        //     ->boolean('facebook_image_bypass')
-        //     ->allowEmptyFile('facebook_image_bypass');
 
         // $validator
         //     ->integer('facebook_image_width')

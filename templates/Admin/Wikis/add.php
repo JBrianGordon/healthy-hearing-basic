@@ -87,9 +87,6 @@ if (empty($content->id)) {
                                     ]);
                                 ?>
                                 <?php
-                                    echo '<div class="col-md-9 col-md-offset-3 pl0 mb-3">';
-                                    echo $this->Form->control('facebook_image_bypass', ['label' => 'Bypass image selection, width and alt text errors', 'class' => 'mb20']);
-                                    echo '</div>';
                                     echo $this->Form->control('facebook_image_width', [
                                         'label' => 'Image Width (min 800px)',
                                         'readonly' => true,

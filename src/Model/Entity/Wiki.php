@@ -24,7 +24,6 @@ use Cake\ORM\Entity;
  * @property string|null $facebook_image
  * @property string|null $facebook_image_name
  * @property string|null $facebook_image_url
- * @property bool|null $facebook_image_bypass
  * @property int $facebook_image_width
  * @property int $facebook_image_height
  * @property string|null $facebook_image_alt
@@ -64,7 +63,6 @@ class Wiki extends Entity
         'facebook_image' => true,
         'facebook_image_name' => true,
         'facebook_image_url' => true,
-        'facebook_image_bypass' => true,
         'facebook_image_width' => true,
         'facebook_image_height' => true,
         'facebook_image_alt' => true,
