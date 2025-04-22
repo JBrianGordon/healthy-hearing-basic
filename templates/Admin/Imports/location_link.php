@@ -61,6 +61,7 @@ echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("t
 
                     <?= $this->Form->create($importLocation) ?>
                         <?php $helpText = "Search by Title, Subtitle, Address, City, ".ucwords($zipShort)." or ID."; ?>
+                        <?php $defaultSearch = (Configure::read('country') == 'US') ? substr($importLocation->zip, 0, 5) : $importLocation->city; ?>
                         <?= $this->Form->control('search', [
                             'label' => 'Search',
                             'templates' => [
@@ -68,7 +69,7 @@ echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("t
                                 'help' => '<small class="form-text text-muted col-md-offset-3 mb-3">{{content}}</small><br>'
                             ],
                             'help' => $helpText,
-                            'default' => $importLocation->zip,
+                            'default' => $defaultSearch,
                         ]) ?>
                         <div class="form-actions tar">
                             <a href="<?= $importIndexReferer ?>">

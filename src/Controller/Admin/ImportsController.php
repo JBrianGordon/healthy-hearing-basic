@@ -510,13 +510,13 @@ class ImportsController extends BaseAdminController
                 $this->Providers->save($provider);
                 $providerId = $provider->id;
 
-                // Add the entry to location_providers, to link this provider to this location.
-                $locationProviderData = [
+                // Add the entry to locations_providers, to link this provider to this location.
+                $locationsProvidersData = [
                     'provider_id' => $providerId,
                     'location_id' => $locationId,
                 ];
-                $locationProvider = $this->LocationsProviders->newEntity($locationsProvidersData);
-                $this->LocationProviders->save($locationProvider);
+                $locationsProvider = $this->LocationsProviders->newEntity($locationsProvidersData);
+                $this->LocationsProviders->save($locationsProvider);
             }
 
             $this->Locations->setEmailsFromProviders($locationId);
