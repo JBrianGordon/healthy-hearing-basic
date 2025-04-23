@@ -164,7 +164,6 @@ class ContentTable extends Table
             ])
             ->boolean('is_gone')
             ->boolean('facebook_image')
-            ->boolean('facebook_image_width_override')
             ->exists('id_draft_parent', [
                 'nullValue' => '0',
             ])
@@ -389,10 +388,6 @@ class ContentTable extends Table
             'message' => 'This image should at least be 800px wide',
             'provider' => 'upload'
         ]);
-
-        // $validator
-        //     ->boolean('facebook_image_width_override')
-        //     ->allowEmptyFile('facebook_image_width_override');
 
         // $validator
         //     ->integer('facebook_image_height')

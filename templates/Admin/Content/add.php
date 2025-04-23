@@ -114,11 +114,6 @@ if (empty($content->id)) {
 				                            echo $this->Form->control('facebook_title');
 				                            echo $this->Form->control('facebook_description');
 				                        ?>
-				                        <div class="row">
-											<div class="col-sm-9 col-sm-offset-3">
-					                        <?= $this->Form->control('facebook_image_width_override', ['type' => 'checkbox', 'label' => 'Bypass image selection, width and alt text errors'])?>
-						                    </div>
-						                </div>
 	                                    <img id="facebook-imagePreview0" src="<?= $content->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="<?= $content->facebook_image_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
 	                                    <?=
 	                                        $this->Form->control('facebook_image_name', [
