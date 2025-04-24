@@ -153,7 +153,7 @@ class ImportLocationsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['Locations.title', 'Locations.subtitle'],
+                'fields' => ['Locations.title', 'Locations.subtitle', 'Locations.city', 'Locations.address', 'Locations.address_2', 'Locations.zip', 'Locations.id_yhn_location', 'Locations.id_cqp_practice', 'Locations.id_cqp_office'],
             ]);
     }
 
