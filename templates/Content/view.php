@@ -59,7 +59,7 @@ $contentSchema = '<script type="application/ld+json">{
 			}
 		$contentSchema .= '},';
 	}
-	$contentSchema .= '"datePublished": "' . $content->created . '-05:00",
+	$contentSchema .= '"datePublished": "' . $content->date . '-05:00",
 		"dateModified": "' . $content->last_modified . '-05:00",
 		"description": "' . htmlentities(strip_tags($content->facebook_description)) . '",
 		"copyrightYear": "' . date('Y', $content->last_modified->timestamp) . '",
