@@ -21,7 +21,7 @@ class ContentController extends BaseAdminController
     
     public $paginate = [
         'order' => [
-            'Content.last_modified' => 'desc',
+            'Content.modified' => 'desc',
         ],
     ];
 
