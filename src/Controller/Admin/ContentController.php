@@ -169,7 +169,7 @@ class ContentController extends BaseAdminController
 				}
                 $this->Flash->success(__('The content has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit', $content->id]);
             }
             $this->Flash->error(__('The content could not be saved. Please, try again.'));
         }
