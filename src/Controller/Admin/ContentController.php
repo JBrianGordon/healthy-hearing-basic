@@ -21,7 +21,7 @@ class ContentController extends BaseAdminController
     
     public $paginate = [
         'order' => [
-            'Content.last_modified' => 'desc',
+            'Content.modified' => 'desc',
         ],
     ];
 
@@ -161,15 +161,11 @@ class ContentController extends BaseAdminController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $content = $this->Content->patchEntity($content, $this->request->getData());
             if ($this->Content->save($content)) {
-                /*** TODO: possibly add notify field for this condition ***/
-				if (!empty($this->request->getData('saveForApproval'))/* && !empty($this->request->data['Content']['notify'])*/) {
-                    // Send the email
-                    $mailer = $this->getMailer('ContentReadyApprove');
-                    $mailer->send('contentReadyApprove', [$content]);
-				}
+                /*** TODO-re-evaluate later: add back 'Save for Approval' button and 'admin notify email' ***/
+
                 $this->Flash->success(__('The content has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit', $content->id]);
             }
             $this->Flash->error(__('The content could not be saved. Please, try again.'));
         }
