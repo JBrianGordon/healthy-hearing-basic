@@ -328,10 +328,9 @@ class ContentTable extends Table
             ->requirePresence('body', true, 'Main content section (body) is a required field')
             ->notEmptyString('body', 'Main content section (body) cannot be left blank');
 
-        // $validator
-        //     ->scalar('meta_description')
-        //     ->maxLength('meta_description', 255)
-        //     ->notEmptyString('meta_description');
+        $validator
+            ->scalar('meta_description')
+            ->maxLength('meta_description', 160);
 
         // $validator
         //     ->scalar('bodyclass')
