@@ -1,7 +1,11 @@
-//CKBox modal creation if class ck-box element exists
-if(document.querySelector('.ck-box') !== null) {
-    document.querySelector('.ck-box').addEventListener('click', () => {
-        const imagePathInput = document.getElementById("facebook-image");
+//CKBox modal creation if class #facebook-imageUpload0 element exists
+const imagePathInput = document.getElementById("facebook-imageUpload0");
+const facebookImageUrl = document.getElementById("facebookImageUrl");
+const imagePreview = document.getElementById("facebook-imagePreview0");
+
+if(imagePathInput) {
+    imagePathInput.addEventListener('click', e => {
+        e.preventDefault();
         const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 
     	const ckboxDiv = document.createElement('div');
@@ -21,8 +25,11 @@ if(document.querySelector('.ck-box') !== null) {
             assets: {
                 onChoose: assets => {
                     assets.forEach(asset => {
-                        console.log(asset);
-                        imagePathInput.value = asset.getUrl();
+                        const assetUrl = asset.data.url;
+                        imagePreview.src = assetUrl;
+                        imagePreview.classList.remove('d-none');
+                        facebookImageUrl.innerHTML = assetUrl;
+                        facebookImageUrl.classList.remove('d-none');
                     });
                 }
             }
