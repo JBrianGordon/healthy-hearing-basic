@@ -194,12 +194,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
                         name: 'div',
                         attributes: true,
-                        classes: true
+                        classes: true,
+                        styles : true
                     },
                     {
                         name: 'span',
                         attributes: true,
-                        classes: true
+                        classes: true,
+                        styles: true
                     },
                     {
                         name: 'a',
