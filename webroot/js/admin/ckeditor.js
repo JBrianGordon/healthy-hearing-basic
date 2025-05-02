@@ -45,7 +45,6 @@ import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specia
 import SpecialCharactersArrows from '@ckeditor/ckeditor5-special-characters/src/specialcharactersarrows.js';
 import SpecialCharactersCurrency from '@ckeditor/ckeditor5-special-characters/src/specialcharacterscurrency.js';
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials.js';
-import StandardEditingMode from '@ckeditor/ckeditor5-restricted-editing/src/standardeditingmode.js';
 import Style from '@ckeditor/ckeditor5-style/src/style.js';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript.js';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
@@ -68,6 +67,25 @@ link.href = 'https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css';
 document.head.appendChild(link);
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
+
+// add French characters
+function AddFrenchCharacters(editor) {
+    const specialCharacters = editor.plugins.get('SpecialCharacters');
+    specialCharacters.addItems('French', [
+        { title: 'Cedilla (ç)', character: 'ç' },
+        { title: 'Capital Cedilla (Ç)', character: 'Ç' },
+        { title: 'E Acute (é)', character: 'é' },
+        { title: 'Capital E Acute (É)', character: 'É' },
+        { title: 'E Grave (è)', character: 'è' },
+        { title: 'Capital E Grave (È)', character: 'È' },
+        { title: 'A Circumflex (â)', character: 'â' },
+        { title: 'Capital A Circumflex (Â)', character: 'Â' },
+        { title: 'E Circumflex (ê)', character: 'ê' },
+        { title: 'Capital E Circumflex (Ê)', character: 'Ê' },
+        { title: 'O Circumflex (ô)', character: 'ô' },
+        { title: 'Capital O Circumflex (Ô)', character: 'Ô' }
+    ]);
+}
 
 class Editor extends ClassicEditor {}
 
@@ -115,7 +133,7 @@ Editor.builtinPlugins = [
     SpecialCharactersArrows,
     SpecialCharactersCurrency,
     SpecialCharactersEssentials,
-    StandardEditingMode,
+    AddFrenchCharacters,
     Style,
     Subscript,
     Superscript,
@@ -184,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     '|',
                     'horizontalLine',
                     'highlight',
-                    'restrictedEditingException',
                     'wproofreader'
                 ],
                 shouldNotGroupWhenFull: true
@@ -297,7 +314,6 @@ document.addEventListener('DOMContentLoaded', function() {
             heading: {
                 options: [
                     { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
                     { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
                     { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
                     { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
