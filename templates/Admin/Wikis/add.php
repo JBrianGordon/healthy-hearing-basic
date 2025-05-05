@@ -83,7 +83,8 @@ if (empty($content->id)) {
                                     $this->Form->control('facebook_image_name', [
                                         'id' => 'facebook-imageUpload0',
                                         'class' => 'mt-3 btn btn-light btn-sm w-25',
-                                        'label' => ['text' => 'Add Facebook Image'],
+                                        'required' => false,
+                                        'label' => ['text' => 'Update Facebook Image'],
                                         'value' => 'Choose an image'
                                     ]);
                                 ?>

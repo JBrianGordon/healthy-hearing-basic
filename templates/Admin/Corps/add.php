@@ -83,14 +83,15 @@ $author_default = false;
 										?>
                                         <img id="facebook-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="display:none; max-width: 100px; max-height: 100px;" />
 										<?= '<p class="col-md-9 col-md-offset-3 pl0' . (isset($wiki->facebook_image_url) ? '' : ' d-none') . '" id="facebookImageUrl">' . $wiki->facebook_image_url . '</p>' ?>
-                                        <?=
-                                            $this->Form->control('facebook_image_name', [
-                                                'id' => 'facebook-imageUpload0',
-                                                'class' => 'mt-3 btn btn-light btn-sm w-25',
-                                                'label' => ['text' => 'Add Facebook Image'],
+										<?=
+											$this->Form->control('facebook_image_name', [
+												'id' => 'facebook-imageUpload0',
+												'class' => 'mt-3 btn btn-light btn-sm w-25',
+												'required' => false,
+												'label' => ['text' => 'Update Facebook Image'],
 												'value' => 'Choose an image'
-                                            ]);
-                                        ?>
+											]);
+										?>
 										<hr>
 										<h3>Contributors</h3>
 		                                <strong>
