@@ -19,7 +19,7 @@ class PersistQueriesComponent extends Component
     protected $_defaultConfig = [
         'autoApply' => true,
         'actions' => [],
-        'ignoreParams' => ['page'],
+        'ignoreParams' => ['page', 'sort', 'direction'],
         'disablePreserveWithParam' => 'preserve'
     ];
 

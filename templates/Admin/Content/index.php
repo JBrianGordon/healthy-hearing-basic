@@ -64,6 +64,7 @@ $this->Html->script('dist/admin_content_index.min', ['block' => true]);
 		<div class="panel-heading">Content Actions</div>
 		<div class="panel-body p10">
 			<div class="btn-group btn-group-sm">
+				<?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
 				<?= $this->Html->link("+ Add", ['action' => 'add'], ['class' => 'btn btn-success', 'escape' => false]) ?>
 				<?= $this->Form->button("<i class='bi bi-download'></i> Export", ['type' => 'button', 'id' => 'exportBtn', 'class' => 'btn btn-default', 'escapeTitle' => false]) ?>
 			</div>
