@@ -156,6 +156,12 @@
 	      margin-bottom: 20px;
 	    }
 	  }
+
+	  #ckbox {
+		.ckbox-view-dialog {
+			top: 80px!important;
+		}
+	  }
 	}
 
 	.form-control, .form-select {
