@@ -152,14 +152,15 @@ if (empty($content->id)) {
 				                        ?>
 	                                    <img id="facebook-imagePreview0" src="<?= $content->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3<?= $content->facebook_image_url ? '' : " d-none" ?>" alt="Facebook Image Preview" style="max-width: 100px; max-height: 100px;" />
 										<?= '<p class="col-md-9 col-md-offset-3 pl0' . (isset($wiki->facebook_image_url) ? '' : ' d-none') . '" id="facebookImageUrl">' . $wiki->facebook_image_url . '</p>' ?>
-	                                    <?=
-	                                        $this->Form->control('facebook_image_name', [
-	                                            'id' => 'facebook-imageUpload0',
-	                                            'class' => 'mt-3 btn btn-light btn-sm w-25',
-	                                            'required' => false,
-	                                            'label' => ['text' => 'Update Facebook Image']
-	                                        ]);
-	                                    ?>
+										<?=
+											$this->Form->control('facebook_image_name', [
+												'id' => 'facebook-imageUpload0',
+												'class' => 'mt-3 btn btn-light btn-sm w-25',
+												'required' => false,
+												'label' => ['text' => 'Update Facebook Image'],
+												'value' => 'Choose an image'
+											]);
+										?>
 						                <?php
 				                            echo $this->Form->control('facebook_image_width', [
 												'label' => 'Image Width (min 800px)',

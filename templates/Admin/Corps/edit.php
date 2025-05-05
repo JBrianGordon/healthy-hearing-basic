@@ -117,9 +117,6 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 													'value' => 'Choose an image'
                                                 ]);
                                             ?>
-											<?php
-												echo $this->Form->control('facebook_image');
-											?>
 											<hr>
 											<h3>Contributors</h3>
 			                                <strong>
