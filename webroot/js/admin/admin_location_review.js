@@ -127,12 +127,17 @@ function highlightDifferences() {
 }
 
 function deleteProvider(obj) {
-  const row = obj.closest('tr');
+  const row = obj.closest('.provider-tr');
   const providerId = row.getAttribute('provider');
-  
+  const csrfToken = $('input[name="_csrfToken"]').val();
   if (confirm('Are you sure you want to delete this provider?')) {
-    fetch(`/admin/imports/delete_provider/${providerId}`, {
-      method: 'POST'
+    fetch(`/admin/imports/ajax_delete_provider/${providerId}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+        "X-CSRF-Token": csrfToken
+      },
     })
       .then(response => {
         if (response.ok) {
@@ -150,9 +155,9 @@ function deleteProvider(obj) {
 function addProvider(obj) {
   const row = obj.closest('tr');
   const providerCount = row.getAttribute('providercount');
-  const copyLeftButton = document.querySelector(`[providercount='${providerCount}'] .js-copy-left`);
-  if (copyLeftButton) {
+  const copyLeftButtons = document.querySelectorAll(`[providercount='${providerCount}'] .js-copy-left`);
+  copyLeftButtons.forEach(copyLeftButton => {
     copyLeftButton.click();
-  }
+  });
 }
 

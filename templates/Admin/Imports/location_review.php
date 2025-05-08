@@ -171,15 +171,15 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                         $importProvider = $importProviders[$importProviderId];
                                     }
                                     ?>
-                                    <tr provider="<?= $provider->id ?>" providerCount="<?= $providerCount ?>">
+                                    <tr provider="<?= $provider->id ?>" providerCount="<?= $providerCount ?>" class="provider-tr">
                                         <td colspan='4'>
                                             <table class="table-condensed border-0">
                                                 <tbody>
                                                     <tr provider="<?= $provider->id ?>" providerCount="<?= $providerCount ?>">
                                                         <td class="text-center border-0 w-25 p10">
-                                                            <button class="js-link-delete form-control bi bi-x-circle w-100"> Delete</button>
+                                                            <button type="button" class="js-link-delete form-control bi bi-x-circle w-100"> Delete</button>
                                                             <?php if (empty($provider->id_yhn_provider) || !in_array($provider->id_yhn_provider, $importProviderIds)): ?>
-                                                                <button class="js-link hh-link hidden form-control bi bi-link-45deg"></button>
+                                                                <button type="button" class="js-link hh-link hidden form-control bi bi-link-45deg"></button>
                                                             <?php endif; ?>
                                                         </td>
                                                         <td colspan=3 class="text-center border-0 p10">
@@ -223,8 +223,9 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td class="text-center border-0 p10">
-                                                                <?= $this->Form->text("providers.$providerCount.$field", [
+                                                                <?= $this->Form->control("providers.$providerCount.$field", [
                                                                     'label' => false,
+                                                                    'required' => false,
                                                                     'field' => $field,
                                                                     'value' => trim($provider->{$field}),
                                                                     'class' => 'w-100',
@@ -233,7 +234,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                             <td class="border-0 p20"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
                                                             <td class="text-center border-0 pl20">
                                                                 <?php if ($isLinked): ?>
-                                                                    <?= $this->Form->control("providers.$providerCount.$field", [
+                                                                    <?= $this->Form->text("providers.$providerCount.$field", [
                                                                         'label' => false,
                                                                         'class'=>'form-control import-data w-100 '.$class,
                                                                         'field' => $field,
@@ -264,9 +265,9 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                             <table class="table-condensed">
                                                 <tr providerCount="<?= $providerCount ?>">
                                                     <td class="text-center">
-                                                        <button class="js-add-provider form-control pull-left bi bi-left d-inline" style="width:50%;"> Add</button>
-                                                        <button class="js-link yhn-link form-control pull-right bi bi-link-45deg d-inline" style="width:50%;"></button>
-                                                        <button class="js-link-cancel form-control hidden bi bi-x-circle"></button>
+                                                        <button type="button" class="js-add-provider form-control pull-left bi bi-arrow-left d-inline" style="width:50%;"> Add</button>
+                                                        <button type="button" class="js-link yhn-link form-control pull-right bi bi-link-45deg d-inline" style="width:50%;"></button>
+                                                        <button type="button" class="js-link-cancel form-control hidden bi bi-x-circle"></button>
                                                     </td>
                                                     <td colspan=4 class="text-center">
                                                         <div class="well import-well">
@@ -290,6 +291,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                             <?= $this->Form->control("providers.$providerCount.$field", [
                                                                 'class' => 'w-100',
                                                                 'label' => false,
+                                                                'required' => false,
                                                                 'field' => $field,
                                                                 'value' => '',
                                                             ]) ?>

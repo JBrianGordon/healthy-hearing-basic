@@ -348,15 +348,22 @@ class ImportsController extends BaseAdminController
 
             // Get the list of YHN Providers to update
             foreach ($providerData as $provider) {
-                if (empty($provider['id']) && !empty($provider['first_name'])) {
-                    // Add a note for new providers
-                    $noteBody .= 'Provider added<br>';
-                    foreach (['first_name', 'last_name', 'email'] as $field) {
-                        $noteBody .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$field.': '.$provider[$field].'<br>';
+                if (empty($provider['id'])) {
+                    if (!empty($provider['first_name'])) {
+                        // Add a note for new providers
+                        $noteBody .= 'Provider added<br>';
+                        foreach (['first_name', 'last_name', 'email'] as $field) {
+                            $noteBody .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$field.': '.$provider[$field].'<br>';
+                        }
+                        $providerEntity = $this->Providers->newEntity($provider);
+                    } else {
+                        // We did not to accept the new provider
+                        continue;
                     }
-                    $providerEntity = $this->Providers->newEntity($provider);
                 } else {
+                    // Existing provider
                     $providerEntity = $this->Providers->get($provider['id']);
+                    $this->Providers->patchEntity($providerEntity, $provider);
                 }
                 $yhnProviderId = $provider['id_yhn_provider'];
                 $providerEntity->is_active = true;
@@ -725,5 +732,37 @@ class ImportsController extends BaseAdminController
         $this->Flash->success('Location '.$locationId.' has been removed from junk');
         $importIndexReferer = $this->getImportIndexReferer();
         $this->redirect($importIndexReferer);
+    }
+
+    public function ajaxDeleteProvider($providerId) {
+        $this->viewBuilder()->setLayout('ajax');
+        $locationsProviders = $this->LocationsProviders->find('all', [
+            'contain' => ['Providers'],
+            'conditions' => [
+                'provider_id'=> $providerId
+            ]
+        ])->all();
+        // Add a note that we deleted this provider
+        foreach ($locationsProviders as $locationsProvider) {
+            $noteBody = 'Deleted provider: '.$locationsProvider->provider->first_name.' '.$locationsProvider->provider->last_name;
+            $this->Locations->LocationNotes->add($locationsProvider->location_id, $noteBody);
+        }
+
+        // Delete the association with the location
+        $this->LocationsProviders->deleteAll([
+            'provider_id' => $providerId
+        ]);
+
+        // Delete the provider
+        $providerEntity = $this->Providers->get($providerId);
+        $this->Providers->delete($providerEntity);
+
+        // Remove the association from the ImportProvider
+        $this->ImportProviders->updateAll(
+            ['provider_id' => null],
+            ['provider_id' => $providerId]
+        );
+        $result = ['success' => true];
+        $this->viewBuilder()->setOption('serialize', 'result');
     }
 }

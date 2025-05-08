@@ -54,7 +54,7 @@ $this->loadHelper('Search.Search', [
 ]);
 ?>
 <div class="row justify-content-end">
-    <?php if ($this->Search->isSearch()) : ?>
+    <?php if (!empty($this->request->getQuery())): ?>
             <div class="col col-md-auto p-0">
                 Showing search results.
                 <?= $this->Html->link('Clear Search', ['?'=> ['preserve' => 0]]) ?>

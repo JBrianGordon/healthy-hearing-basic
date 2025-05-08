@@ -10,14 +10,15 @@ $queryParams = $this->request->getQueryParams();
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 // Advanced search details
 $advancedSearchFields = [];
-$ignoreFields = ['match_type'];
+$ignoreFields = ['id', 'match_type'];
 if (!Configure::read('isCqpImportEnabled')) {
     $ignoreFields[] = 'id_cqp_practice';
     $ignoreFields[] = 'id_cqp_office';
-    $ignoreFields[] = 'import_type';
 }
 // Add additional fields
-//$fields['Imports.type'] = 'string';
+if (Configure::read('isCqpImportEnabled')) {
+    $fields['Imports[type]'] = 'string';
+}
 $fields['Locations[is_junk]'] = 'boolean';
 $fields['Locations[review_needed]'] = 'boolean';
 $additionalBlacklist = ['Imports', 'Locations'];
@@ -36,7 +37,7 @@ foreach ($fields as $field => $type) {
             case 'state':
                 $label = ucfirst(Configure::read('stateLabel'));
                 break;
-            case 'Imports.type':
+            case 'Imports[type]':
                 $label = 'Import Type';
                 $type = 'select';
                 $empty = '(select one)';
@@ -49,6 +50,18 @@ foreach ($fields as $field => $type) {
             case 'Locations[review_needed]':
                 $label = 'Review needed';
                 $value = isset($queryParams['Locations']['review_needed']) ? $queryParams['Locations']['review_needed'] : null;
+                break;
+            case 'id_external':
+                $label = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'Retail ID';
+                break;
+            case 'id_cqp_office':
+                $label = 'CQP Office ID';
+                break;
+            case 'id_cqp_practice':
+                $label = 'CQP Practice ID';
+                break;
+            case 'id_oticon':
+                $label = 'Oticon ID';
                 break;
         }
         $advancedSearchFields[] = [
