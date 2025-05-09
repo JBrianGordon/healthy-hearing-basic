@@ -32,16 +32,16 @@ use Cake\Core\Configure;
     <tr>
         <td>
             <?php if (!empty($location->id_oticon)): ?>
-                <span class="label label-oticon"><?= $location->id_oticon ?></span><br>
+                <span class="badge bg-oticon"><?= $location->id_oticon ?></span><br>
             <?php endif; ?>
             <?php if (!empty($location->id_yhn_location)): ?>
-                <span class="label label-yhn"><?= $location->id_yhn_location ?></span><br>
+                <span class="badge bg-yhn"><?= $location->id_yhn_location ?></span><br>
             <?php endif; ?>
             <?php if (!empty($location->id_cqp_practice)): ?>
-                <span class="label label-cqp"><?= $location->id_cqp_practice ?></span><br>
+                <span class="badge bg-cqp"><?= $location->id_cqp_practice ?></span><br>
             <?php endif; ?>
             <?php if (!empty($location->id_cqp_office)): ?>
-                <span class="label label-cqp"><?= $location->id_cqp_office ?></span><br>
+                <span class="badge bg-cqp"><?= $location->id_cqp_office ?></span><br>
             <?php endif; ?>
         </td>
         <td>
@@ -54,14 +54,14 @@ use Cake\Core\Configure;
                 <?= $location->listing_type ?><br>
             <?php endif; ?>
             <?php if ($location->is_show): ?>
-                <span class="label label-success">Show</span>
+                <span class="badge bg-success">Show</span>
             <?php else: ?>
-                <span class="label label-danger">No Show</span>
+                <span class="badge bg-danger">No Show</span>
             <?php endif; ?>
             <?php if ($location->is_active): ?>
-                <span class="label label-success">Active</span>
+                <span class="badge bg-success">Active</span>
             <?php else: ?>
-                <span class="label label-danger">Inactive</span>
+                <span class="badge bg-danger">Inactive</span>
             <?php endif; ?>
         </td>
         <td><?= $location->address ?></td>
@@ -69,34 +69,30 @@ use Cake\Core\Configure;
         <td>
             <?php if ($importType == 'cqp'): ?>
                 <?php if (!empty($location->id_yhn_location)): ?>
-                    <span class="label label-yhn">YHN Linked</span><br>
+                    <span class="badge bg-yhn">YHN Linked</span><br>
                 <?php endif; ?>
                 <?php if (!empty($location->id_cqp_office)): ?>
-                    <span class="label label-cqp">CQP Linked</span><br>
+                    <span class="badge bg-cqp">CQP Linked</span><br>
                     <div class="btn-group btn-group-vertical">
-                        <?php echo $this->Html->link('<span class="glyphicon glyphicon-link"></span> Link', "?location_id=".$location->id, ['escape' => false, 'class' => 'btn btn-default btn-xs'], 'This location is already linked. The existing CQP practice and office IDs will be overwritten with the new id. Are you sure?'); ?>
+                        <?php echo $this->Html->link(' Link', "?location_id=".$location->id, ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-link-45deg'], 'This location is already linked. The existing CQP practice and office IDs will be overwritten with the new id. Are you sure?'); ?>
                     </div>
                 <?php else: ?>
                     <div class="btn-group btn-group-vertical">
-                        <a href="?location_id=<?= $location->id ?>" class="btn btn-default btn-xs">
-                            <span class="glyphicon glyphicon-link"></span> Link
-                        </a>
+                        <a href="?location_id=<?= $location->id ?>" class="btn btn-default btn-xs bi bi-link-45deg"> Link</a>
                     </div>
                 <?php endif; ?>
             <?php else: ?>
                 <?php if (!empty($location->id_cqp_office)): ?>
-                    <span class="label label-cqp">CQP Linked</span><br>
+                    <span class="badge bg-cqp">CQP Linked</span><br>
                 <?php endif; ?>
                 <?php if (!empty($location->id_yhn_location)): ?>
-                    <span class="label label-success"><?= Configure::read('importTag') ?> Linked</span><br>
+                    <span class="badge bg-success"><?= Configure::read('importTag') ?> Linked</span><br>
                     <div class="btn-group btn-group-vertical">
-                        <?php echo $this->Html->link('<span class="glyphicon glyphicon-link"></span> Link', "?location_id=".$location->id, ['escape' => false, 'class' => 'btn btn-default btn-xs'], 'This location is already linked. The existing YHN ID will be overwritten with the new id. Are you sure?'); ?>
+                        <?php echo $this->Html->link(' Link', "?location_id=".$location->id, ['escape' => false, 'class' => 'btn btn-default btn-xs bi bi-link-45deg'], 'This location is already linked. The existing YHN ID will be overwritten with the new id. Are you sure?'); ?>
                     </div>
                 <?php else: ?>
                     <div class="btn-group btn-group-vertical">
-                        <a href="?location_id=<?= $location->id ?>" class="btn btn-default btn-xs">
-                            <span class="glyphicon glyphicon-link"></span> Link
-                        </a>
+                        <a href="?location_id=<?= $location->id ?>" class="btn btn-default btn-xs bi bi-link-45deg"> Link</a>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>

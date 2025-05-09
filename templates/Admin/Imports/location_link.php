@@ -79,6 +79,10 @@ echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("t
                         </div>
                     <?= $this->Form->end() ?>
                     <div id="searchResults" class="table-responsive"></div>
+                    <br>
+                    <div class="form-actions tar">
+                        Didn't find a match?  <a href="/admin/imports/location_add/<?= $importLocation->id ?>" class="btn btn-default btn-xs bi bi-plus-circle-fill"> Add Location</a>
+                    </div>
                 </div>
             </div>
         </div>

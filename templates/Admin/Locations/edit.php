@@ -990,7 +990,7 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             <?php foreach($reviews as $review): ?>
                                                 <?= $this->element('locations/review_body', ['review' => $review, 'clinicName' => $location->title]) ?>
                                                 <div class="ml20 mt10">
-                                                    <span class='label label-default'><?= Review::$statuses[$review->status] ?></span>
+                                                    <span class='badge bg-info'><?= Review::$statuses[$review->status] ?></span>
                                                     <?= $this->Html->link("<span class='glyphicon glyphicon-pencil'></span> Edit This Review",
                                                         ['controller' => 'reviews', 'action' => 'edit', $review->id],
                                                         ['escape' => false, 'class' => 'btn btn-xs btn-default ml10']) ?>

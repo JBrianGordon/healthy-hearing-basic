@@ -39,11 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   importLocationSearch.addEventListener('keydown', function(e) {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13) { // Enter key
       searchBtn.click();
       e.preventDefault();
     }
   });
 
   importLocationSearch.focus();
+  searchBtn.click();
 });

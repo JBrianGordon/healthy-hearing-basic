@@ -53,7 +53,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                                         <td>
                                                             <?php if (!empty($advertisement->tags)): ?>
                                                                 <?php foreach ($advertisement->tags as $tag): ?>
-                                                                    <span class="label label-default"><?= h($tag->name) ?></span><br>
+                                                                    <span class="badge bg-info"><?= h($tag->name) ?></span><br>
                                                                 <?php endforeach; ?>
                                                             <?php endif; ?>
                                                         </td>

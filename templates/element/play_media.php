@@ -25,7 +25,7 @@ $media = isset($media) ? $media : array('url' => false, 'id' => null);
                     <div class="jp-volume-bar-value"></div>
                 </div>-->
                 <div class="clearfix"></div>
-                <span class="jp-time-holder label label-primary">
+                <span class="jp-time-holder badge bg-primary">
                     <span class="jp-current-time"></span> / <span class="jp-duration-removeme"><?php echo $this->App->secondsToMinutes($media['duration']); ?></span>
                     <!--<ul class="jp-toggles">
                         <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>

@@ -185,11 +185,11 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                         <td colspan=3 class="text-center border-0 p10">
                                                             <div class='well import-well'>
                                                                 <?php if ($isLinked): ?>
-                                                                    <span class="label label-warning bi bi-globe2"><?= ' ' . Configure::read('importTag') ?></span>
+                                                                    <span class="badge bg-warning bi bi-globe2"><?= ' ' . Configure::read('importTag') ?></span>
                                                                 <?php elseif (!empty($provider->id_yhn_provider)): ?>
-                                                                    <span class="label label-danger"><span class="bi bi-cone-striped"></span></span>
+                                                                    <span class="badge bg-danger"><span class="bi bi-cone-striped"></span></span>
                                                                 <?php else: ?>
-                                                                    <span class="label label-success bi bi-check"><?= ' ' . Configure::read('siteNameAbbr') ?></span>
+                                                                    <span class="badge bg-success bi bi-check"><?= ' ' . Configure::read('siteNameAbbr') ?></span>
                                                                 <?php endif ?>
                                                                 <?= $provider->first_name.' '.$provider->last_name ?>
                                                             </div>
@@ -271,7 +271,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                     </td>
                                                     <td colspan=4 class="text-center">
                                                         <div class="well import-well">
-                                                            <span class="label label-warning bi bi-globe-americas" style=""><?= ' ' . Configure::read('importTag') ?></span>
+                                                            <span class="badge bg-warning bi bi-globe-americas" style=""><?= ' ' . Configure::read('importTag') ?></span>
                                                             <?= $importProvider->first_name.' '.$importProvider->last_name ?>
                                                         </div>
                                                     </td>
