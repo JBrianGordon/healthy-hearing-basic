@@ -1,6 +1,6 @@
 <?php
 use Cake\Core\Configure;
-
+$importType = strtoupper($importLocation->import->type);
 $searchButton = '
 <a target="_blank" rel="noopener" href="https://www.google.com/search?q=' . urlencode($importLocation->title . ' ' . $importLocation->city) . ' "
     <button class="btn btn-lg btn-success">
@@ -25,7 +25,7 @@ $this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVers
     <section class="panel">
         <div class="panel-body">
             <div class="panel-section expanded">
-                <h2>Add Location from <?= strtoupper($importLocation->import->type) ?> Import</h2>
+                <h2>Add Location from <?= $importType ?> Import</h2>
                 <?= $this->Form->create($importLocation)?>
                     <?= $this->Form->control('title', ['label' => 'Title', 'default' => $importLocation->title]); ?>
                     <?= $this->Form->control('subtitle', ['label' => 'Subtitle', 'default' => $importLocation->subtitle]); ?>
@@ -39,7 +39,7 @@ $this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVers
                     <?= $this->Form->control('is_retail', ['label' => 'Is Retail', 'default' => $importLocation->is_retail, 'type' => 'boolean']); ?>
                     <?= $this->Form->control('id_oticon', ['label' => 'Oticon ID', 'default' => $importLocation->id_oticon, 'type' => 'text']); ?>
                     <?= $this->Form->control('url', ['label' => 'Website', 'default' => '', 'type' => 'text', 'wrapInput' => 'col col-md-7', 'after' => $searchButton]); ?>
-                    <?php if ($importLocation->import->type == 'cqp'): ?>
+                    <?php if ($importType == 'CQP'): ?>
                         <?= $this->Form->control('id_cqp_practice', ['label' => 'CQP practice ID', 'default' => $importLocation->id_cqp_practice, 'disabled' => true, 'type' => 'text']); ?>
                         <?= $this->Form->control('id_cqp_office', ['label' => 'CQP office ID', 'default' => $importLocation->id_cqp_office, 'disabled' => true, 'type' => 'text']); ?>
                         <?= $this->Form->hidden('id_cqp_practice', ['default' => $importLocation->id_cqp_practice]); ?>
@@ -50,11 +50,35 @@ $this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVers
                         <?= $this->Form->hidden('id_external', ['default' => $importLocation->id_external]); ?>
                     <?php endif; ?>
 
+                    <?php if (!empty($importProviders)): ?>
+                        <!-- Display YHN providers that will be added -->
+                        <hr>
+                        <h4 class="mb5">YHN Providers</h4>
+                        <p>We will automatically add these providers from YHN. They can be modified on the following Review page.</p>
+                        <table class="table table-striped table-bordered table-condensed">
+                            <tr>
+                                <th>First</th>
+                                <th>Last</th>
+                                <th>AUD or HIS</th>
+                                <th>Email</th>
+                            </tr>
+                            <?php foreach ($importProviders as $importProvider): ?>
+                                <tr>
+                                    <td><?= empty($importProvider->first_name) ? '' : $importProvider->first_name ?></td>
+                                    <td><?= empty($importProvider->last_name) ? '' : $importProvider->last_name ?></td>
+                                    <td><?= empty($importProvider->aud_or_his) ? '' : $importProvider->aud_or_his ?></td>
+                                    <td><?= empty($importProvider->email) ? '' : $importProvider->email ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <br>
+                    <?php endif; ?>
+
                     <div class="form-actions tar">
                         <a href="<?= $importIndexReferer; ?>">
                             <input type="button" tabindex="1" value="Cancel" class="btn btn-danger btn-lg">
                         </a>
-                        <input type="submit" tabindex="1" value="Add Location" class="btn btn-primary btn-lg" id="submitBtn">
+                        <input type="submit" tabindex="1" value="Add Location & Review" class="btn btn-primary btn-lg" id="submitBtn">
                     </div>
                 </form>
                 <?= $this->Form->end() ?>

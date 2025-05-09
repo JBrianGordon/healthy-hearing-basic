@@ -425,9 +425,11 @@ class ImportsController extends BaseAdminController
             $this->Flash->error('Import location could not be found.');
             return $this->redirect('/admin/imports');
         }
+        $importProviders = $this->ImportProviders->getByImportLocationId($importLocationId);
 
         $this->set('importLocation', $importLocation);
         $this->set('importIndexReferer', $importIndexReferer);
+        $this->set('importProviders', $importProviders);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $officeData = $this->request->getData();
@@ -495,21 +497,17 @@ class ImportsController extends BaseAdminController
             $importLocationEntity->match_type = 4;
             $this->ImportLocations->save($importLocationEntity);
 
-            $importProviders = $this->ImportProviders->getByImportLocationId($importLocationId); 
-
             // Automatically add each YHN Provider from here to 
-            foreach ($importProviders as $importProviderData) {
-                $importProvider = $importProviderData['ImportProvider'];
-
+            foreach ($importProviders as $importProvider) {
                 // Put together the list of fields for saving the Provider
                 $providerData = [
-                    'first_name' => $importProvider['first_name'],
-                    'last_name' => $importProvider['last_name'],
-                    'email' => $importProvider['email'],
+                    'first_name' => $importProvider->first_name,
+                    'last_name' => $importProvider->last_name,
+                    'email' => $importProvider->email,
                     'is_active' => 1,
-                    'aud_or_his' => $importProvider['aud_or_his'],
+                    'aud_or_his' => $importProvider->aud_or_his,
                     'credentials' => '',
-                    'id_yhn_provider' => $importProvider['id_external'],
+                    'id_yhn_provider' => $importProvider->id_external,
                 ];
 
                 // Save this provider as a new provider
@@ -518,12 +516,14 @@ class ImportsController extends BaseAdminController
                 $providerId = $provider->id;
 
                 // Add the entry to locations_providers, to link this provider to this location.
-                $locationsProvidersData = [
-                    'provider_id' => $providerId,
-                    'location_id' => $locationId,
-                ];
-                $locationsProvider = $this->LocationsProviders->newEntity($locationsProvidersData);
-                $this->LocationsProviders->save($locationsProvider);
+                if (!empty($providerId)) {
+                    $locationsProvidersData = [
+                        'provider_id' => $providerId,
+                        'location_id' => $locationId,
+                    ];
+                    $locationsProvider = $this->LocationsProviders->newEntity($locationsProvidersData);
+                    $this->LocationsProviders->save($locationsProvider);
+                }
             }
 
             $this->Locations->setEmailsFromProviders($locationId);
@@ -533,9 +533,9 @@ class ImportsController extends BaseAdminController
                 $this->Locations->CallSources->saveCallSource($locationId);
             }
 
-            // Successfully added! Return us to the referring index page.
+            // Successfully added! Redirect to the Review page.
             $this->Flash->success('Location has been added!');
-            return $this->redirect($importIndexReferer);
+            return $this->redirect("/admin/imports/location_review/".$locationId."/".$importLocation->id);
         }
     }
 
