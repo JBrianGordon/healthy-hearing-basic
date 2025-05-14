@@ -92,9 +92,9 @@ $this->Breadcrumbs->add($location->title);
 											<?php if(!$displayOpenClosed && $isEnhancedOrPremier && Configure::read('isCallAssistEnabled')): ?>
 												<p style="margin-left:-10px"><strong>It is outside of normal business hours for this location. Please fill out the <a <?php if($isMobileDevice){ echo 'href="#apptRequestModalAnchor" '; }?>class="requestFormHighlight" href="#">appointment request form</a> for a call back.</strong></p>
 											<?php endif; ?>
-											<div class="clinicPhone" data-id="<?= $location->id ?>">
-												<div class="telephone h2 bi bi-telephone-fill">
-													<?= $this->Clinic->phone($location, ['link' => $isMobileDevice]); ?>
+											<div class="clinicPhone<?= $isMobileDevice ? " btn btn-secondary" : "" ?>" data-id="<?= $location->id ?>">
+												<div class="telephone h2 bi bi-telephone-fill<?= $isMobileDevice ? " text-white" : ""?>">
+													<?= $this->Clinic->phone($location, ['link' => $isMobileDevice, 'class' => $isMobileDevice ? 'text-white' : '']); ?>
 												</div>
 												<!-- Appointment request -->
 												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>

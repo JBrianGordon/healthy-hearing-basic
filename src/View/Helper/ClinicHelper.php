@@ -418,7 +418,8 @@ class ClinicHelper extends Helper
         }
 
         $options = array_merge([
-            'link' => false
+            'link' => false,
+            'class' => ''
         ],(array)$options);
 
         $retval = $location->phone;
@@ -444,6 +445,7 @@ class ClinicHelper extends Helper
         if ($options['link']) {
             $sPhone = preg_replace("/[^0-9]/",'',$retval);
             $link = $category = null;
+            $class = $options['class'];
             switch ($options['link']) {
                 /*case 'skype':
                     $link = "callto://1$sPhone";
@@ -454,7 +456,7 @@ class ClinicHelper extends Helper
                     $category = 'Mobile-Click';
                     break;
             }
-            return "<a href='$link' onclick=\"dataLayer.hhTrackEvent('Phone-Call','$category', '1$sPhone', $.Clinic.diff_time());\">". formatPhoneNumber($retval) ."</a>";
+            return "<a href='$link' class='$class' onclick=\"dataLayer.hhTrackEvent('Phone-Call','$category', '1$sPhone', $.Clinic.diff_time());\">". formatPhoneNumber($retval) ."</a>";
 
         }
         return formatPhoneNumber($retval);
