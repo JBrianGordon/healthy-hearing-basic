@@ -96,8 +96,8 @@ class LocationsTable extends Table
         ]);
 
         // The 'lng' field is named 'lon' in our Locations table
-        $googleMapsWebServicesApiKey = Configure::read('googleMapsWebServicesApiKey');
-        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$googleMapsWebServicesApiKey];
+        $apiKey = Configure::read('GoogleMaps.WebServicesApiKey');
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$apiKey];
         $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
@@ -1523,7 +1523,9 @@ class LocationsTable extends Table
             $lon = $locationEntity->lon;
             $timestamp = time();
             // Only access google api on prod
-            $apiKey = (Configure::read('env') == 'prod') ? Configure::read('googleMapsWebServicesApiKey') : '';
+            //$apiKey = (Configure::read('env') == 'prod') ? Configure::read('GoogleMaps.WebServicesApiKey') : '';
+            // TODO: For Cake4 testing, allow API access on dev as well
+            $apiKey = Configure::read('GoogleMaps.WebServicesApiKey');
             $url = "https://maps.googleapis.com/maps/api/timezone/json?location=".$lat.",".$lon."&amp;timestamp=".$timestamp."&sensor=false&key=".$apiKey;
             $apiResult = json_decode(file_get_contents($url));
             if (!empty($apiResult->timeZoneId)) {

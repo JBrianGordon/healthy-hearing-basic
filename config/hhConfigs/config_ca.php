@@ -32,10 +32,12 @@ return [
     ],
     // Google tag manager
     'gtmId' => 'GTM-TC3K3WL',
-    // Google Maps API
-    'googleMapsApiKey' => 'AIzaSyAdwuk4zA0Qf4vHkcvgs--KUEa62wpF4MU',
-    'googleMapsStaticApiKey' => 'AIzaSyC2yyY0gUKa9BwjQI9B0iafy9ebTpH4C0Y',
-    'googleMapsWebServicesApiKey' => 'AIzaSyBNN0_W1SW0RK9a6qSmiBtXU5DJxEPmMJ8',
+    // Google Maps API - Development project
+    'GoogleMaps' => [
+        'MapsJsApiKey' => 'AIzaSyCKrxAOnAWOJkqV1qn3vVz7fUfzrQnNemE',
+        'MapsStaticApiKey' => 'AIzaSyA19OSEZ1mrfA4-ReJ3zK_iOsp_gXXhpTo',
+        'WebServicesApiKey' => 'AIzaSyD4eNrfxMTwBPEVAXdhZKMgfVaCdXt8GDQ',
+    ],
     // From email address
     'email' => ['contacthd@hearingdirectory.ca' => 'Hearing Directory'],
     'customer-support-email' => 'contacthd@hearingdirectory.ca',

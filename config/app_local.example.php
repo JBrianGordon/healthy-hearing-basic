@@ -152,8 +152,12 @@ return [
         'locationPhotos-uploads' => '_ck_locationPhotos_category_id_',
         'providers-uploads' => '_ck_providers_category_id_',
     ],
-    'GoogleMap' => [
-        'key' => '_google_map_key_',
+    // Google Maps API keys
+    'GoogleMaps' => [
+        // Google Maps API
+        'MapsJsApiKey' => '_google_maps_js_api_key_',
+        'MapsStaticApiKey' => '_google_maps_static_api_key_',
+        'WebServicesApiKey' => '_google_web_services_api_key_',
     ],
 
     // reCAPTCHA keys

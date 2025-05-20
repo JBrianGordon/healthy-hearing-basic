@@ -73,10 +73,12 @@ return [
     'importTag' => 'YHN',
     // Google tag manager
     'gtmId' => 'GTM-P2V6GQ',
-	// Google Maps API
-	'googleMapsApiKey' => 'AIzaSyBdpzVE7OdpGkFyWuNSwbTLOkK27lY02jA',
-	'googleMapsStaticApiKey' => 'AIzaSyDX5OmjecFoD5TWZZwMnWkupVFpdEQOOa4',
-	'googleMapsWebServicesApiKey' => 'AIzaSyDwFnCP8X_TM8j4rlRZohfW2-D9bG_-Ryg',
+    // Google Maps API - Development project
+    'GoogleMaps' => [
+        'MapsJsApiKey' => 'AIzaSyCKrxAOnAWOJkqV1qn3vVz7fUfzrQnNemE',
+        'MapsStaticApiKey' => 'AIzaSyA19OSEZ1mrfA4-ReJ3zK_iOsp_gXXhpTo',
+        'WebServicesApiKey' => 'AIzaSyD4eNrfxMTwBPEVAXdhZKMgfVaCdXt8GDQ',
+    ],
     // Misc
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',

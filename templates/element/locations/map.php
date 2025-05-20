@@ -23,7 +23,7 @@ if ($isMobile) {
 	// Custom mobile icon is the short URL for https://www.healthyhearing.com/img/mobile-clinic.png
 	$markers = $isMobile ? "icon:https://bit.ly/36TTEej" : "color:red";
 	$infoWindowContent = "<div style='width: 300px;'><h3 class='h4 mt0 mb5'>".$title."</h3>".$this->Clinic->address($location)."</div>";
-	$googleApiLink = "https://maps.googleapis.com/maps/api/js?key=".Configure::read('googleMapsApiKey')."&callback=initMap";
+	$googleApiLink = "https://maps.googleapis.com/maps/api/js?key=".Configure::read('GoogleMaps.MapsJsApiKey')."&callback=initMap";
 	?>
 	<script>
 		<?php if(isset($lat) && isset($lon)) : ?>
@@ -34,7 +34,7 @@ if ($isMobile) {
 				};
 			const markers = <?= '"'.$markers.'"' ?>;
 			const staticMap = document.getElementById("staticMap");
-			const mapSrc = `https://maps.googleapis.com/maps/api/staticmap?center=${latLon.lat},${latLon.lng}&zoom=15&size=640x410&markers=${markers}%7C${latLon.lat},${latLon.lng}&key=<?= Configure::read('googleMapsStaticApiKey') ?>`;
+			const mapSrc = `https://maps.googleapis.com/maps/api/staticmap?center=${latLon.lat},${latLon.lng}&zoom=15&size=640x410&markers=${markers}%7C${latLon.lat},${latLon.lng}&key=<?= Configure::read('GoogleMaps.MapsStaticApiKey') ?>`;
 
 			staticMap.setAttribute("src", mapSrc);
 			staticMap.addEventListener("click", function() {

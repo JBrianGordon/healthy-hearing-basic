@@ -24,7 +24,7 @@ class GeoLocAddressUtility
     {
         $this->httpClient = new Client();
 
-        $this->provider = new GoogleMaps($this->httpClient, null, Configure::read('GoogleMap.key'));
+        $this->provider = new GoogleMaps($this->httpClient, null, Configure::read('GoogleMaps.WebServicesApiKey'));
     }
 
     public function byAddress($address)
