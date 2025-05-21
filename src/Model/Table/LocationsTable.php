@@ -544,6 +544,10 @@ class LocationsTable extends Table
             // If a clinic is showing, it should not be marked is_junk
             $entity->is_junk = false;
         }
+
+        if (empty($entity->is_retail)) {
+            $entity->is_retail = false;
+        }
     }
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
@@ -990,7 +994,7 @@ class LocationsTable extends Table
 
         $validator
             ->boolean('is_retail')
-            ->notEmptyString('is_retail');
+            ->allowEmptyString('is_retail');
 
         $validator
             ->scalar('direct_book_type')

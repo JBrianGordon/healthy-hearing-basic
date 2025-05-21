@@ -33,7 +33,8 @@ class ImportLocationsController extends BaseAdminController
         ]);
 
         $this->paginate = [
-            'order' => ['ImportLocations.id' => 'DESC']
+            'order' => ['ImportLocations.id' => 'DESC'],
+            'sortableFields' => ['Imports.type', 'Imports.created', 'import_id', 'address', 'city', 'state', 'title']
         ];
     }
     /**

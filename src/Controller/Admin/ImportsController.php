@@ -173,7 +173,7 @@ class ImportsController extends BaseAdminController
         $location = $this->Locations->get($locationId);
         if (empty($location)) {
             $this->Flash->error('Location not found.');
-            return $this->redirect('/admin/imports');
+            return $this->redirect('/admin/import-locations');
         }
         $importIndexReferer = $this->getImportIndexReferer();
 
@@ -200,7 +200,7 @@ class ImportsController extends BaseAdminController
         ]);
         if (empty($importLocation)) {
             $this->Flash->error('Import location not found.');
-            return $this->redirect('/admin/imports');
+            return $this->redirect('/admin/import-locations');
         }
 
         // Retrieve the provider information from this Location
@@ -343,7 +343,7 @@ class ImportsController extends BaseAdminController
             if (!$this->Locations->save($location)) {
                 $errors = json_encode(Hash::flatten($location->getErrors()));
                 $this->Flash->error('Failed to save location '.$locationId.'<br>'.$errors, ['escape' => false]);
-                return $this->redirect('/admin/imports');
+                return $this->redirect('/admin/import-locations');
             }
 
             // Get the list of YHN Providers to update
@@ -423,7 +423,7 @@ class ImportsController extends BaseAdminController
         $importLocation = $this->ImportLocations->findById($importLocationId)->contain('Imports')->first();
         if (empty($importLocation)) {
             $this->Flash->error('Import location could not be found.');
-            return $this->redirect('/admin/imports');
+            return $this->redirect('/admin/import-locations');
         }
         $importProviders = $this->ImportProviders->getByImportLocationId($importLocationId);
 
@@ -647,7 +647,7 @@ class ImportsController extends BaseAdminController
         ]);
         if (empty($importLocation)) {
             $this->Flash->error('Import location could not be found.');
-            return $this->redirect('/admin/imports');
+            return $this->redirect('/admin/import-locations');
         }
         $importIndexReferer = $this->getImportIndexReferer();
         $locationId = $importLocation->location_id;

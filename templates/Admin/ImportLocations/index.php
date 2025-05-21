@@ -168,8 +168,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                                         <table class="table table-bordered table-sm">
                                             <thead>
                                                 <tr>
-                                                    <!-- *** TODO: Test out sorting when DB is updated and controller further built out *** -->
-                                                    <th class="p5"><?= $this->Paginator->sort('import_id', ['label' => 'Import ID']) ?><br><?= $this->Paginator->sort('type') ?><br><?= $this->Paginator->sort('created') ?></th>
+                                                    <th class="p5"><?= $this->Paginator->sort('import_id', 'Import ID') ?><br><?= $this->Paginator->sort('Imports.type', 'Type') ?><br><?= $this->Paginator->sort('Imports.created', 'Date') ?></th>
                                                     <th class="p5" style="min-width:300px"><?= $this->Paginator->sort('title') ?></th>
                                                     <th class="p5" nowrap>
                                                         <?php if (Configure::read('isCqpImportEnabled')): ?>
