@@ -299,6 +299,7 @@ class LocationsController extends BaseAdminController
                 $this->Flash->error('Unable to add to queue: '.$cmd);
             }
         }
+        $this->set(compact('email'));
     }
 
     // Create or update the CallSource number for this location

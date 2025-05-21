@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 $this->Html->script('dist/admin_common.min', ['block' => true]);
+$email = isset($email) ? $email : '';
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
@@ -25,14 +26,22 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                                 'type' => 'date',
                                 'min' => date("Y-m-d", strtotime('01/01/2011')),
                                 'max' => date("Y-m-d", strtotime('today')),
+                                'container' => ['class' => 'mb0'] //containerClass
                             ]); ?>
+                            <span class="help-block col-md-9 col-md-offset-3 p0">Leave blank for all</span>
                             <?= $this->Form->control('end_date', [
                                 'type' => 'date',
                                 'min' => date("Y-m-d", strtotime('01/01/2011')),
                                 'max' => date("Y-m-d", strtotime('today')),
+                                'container' => ['class' => 'mb0']
                             ]); ?>
                             <span class="help-block col-md-9 col-md-offset-3 p0">Leave blank for all<br>(Note: Locations that were first imported after this date will show zero imports in the report)</span>
-                            <?= $this->Form->control('email', ['label' => ['class' => 'col-md-4'], 'class' => 'col-md-8']) ?>
+                            <?= $this->Form->control('email', [
+                                'label' => ['class' => 'col-md-4'],
+                                'class' => 'col-md-8',
+                                'default' => $email,
+                                'container' => ['class' => 'mb0']
+                            ]) ?>
                             <span class="help-block col-md-9 col-md-offset-3 p0">The report will be sent to this email when complete.</span>
                         </fieldset>
                         <div class="form-actions tar clearfix">
