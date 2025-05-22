@@ -3,6 +3,15 @@
  * @var \App\View\AppView $this
  */
 $userId = $this->Identity->getId();
+$hideSaveButton = false;
+if ($this->request->getParam('controller') == 'ImportLocations') {
+    // On the import dashboard, if passed query is empty, hide the save button
+    // Otherwise it will always show because we have a background filter in place to only show most recent imports
+    if (empty($this->request->getQueryParams())) {
+        $hideSaveButton = true;
+    }
+}
+
 
 // function to sort by priority values
 function compareByPriority($a, $b) {
@@ -101,7 +110,7 @@ usort($crmSearches, 'compareByPriority');
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
-    <?php if ($_isSearch === true && $savedSearch === false) : ?>
+    <?php if ($_isSearch === true && $savedSearch === false && $hideSaveButton === false) : ?>
         <div class="btn-group btn-group-xs m-1" role="group">
             <?php
                 echo $this->Form->postLink(

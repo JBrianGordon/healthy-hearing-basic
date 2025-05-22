@@ -118,6 +118,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                                             $importTypeLinks = [];
                                             foreach ($importTypes as $importType) {
                                                 $newQuery = $queryParams;
+                                                unset($newQuery['page']);
                                                 $newQuery['Imports']['type'] = $importType;
                                                 $friendlyType = strtoupper($importType);
                                                 if ($importType == 'all') {
@@ -144,6 +145,7 @@ $this->Html->script('dist/admin_index_import.min', ['block' => true]);
                                         foreach ($filters as $filter) {
                                             $newQuery = $queryParams;
                                             $newQuery['filter'] = $filter;
+                                            unset($newQuery['page']);
                                             if ($filter == 'all') {
                                                 unset($newQuery['filter']);
                                                 $newQuery['preserve'] = 0;

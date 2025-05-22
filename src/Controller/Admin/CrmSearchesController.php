@@ -131,6 +131,9 @@ class CrmSearchesController extends BaseAdminController
         $this->disableAutoRender();
 
         $data = $this->request->getData();
+        if (empty($data['searchData'])) {
+            $data['searchData'] = [];
+        }
         $data['searchData']['saved_search'] = true;
 
         $saveData = [
