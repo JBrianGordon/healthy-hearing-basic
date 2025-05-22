@@ -51,7 +51,13 @@ class AppHelper extends Helper
         if (!$userId) {
             return null;
         }
-        $user = TableRegistry::getTableLocator()->get('Users')->get($userId);
+
+        $this->Users = TableRegistry::get('Users');
+        if (!$this->Users->exists(['id' => $userId])) {
+            // User no longer exists
+            return null;
+        }
+        $user = $this->Users->get($userId);
         return $user->username;
     }
 

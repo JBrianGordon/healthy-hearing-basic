@@ -5,7 +5,10 @@ $body = strip_tags($note->body, '<div><ul><li><a><span><br><u>');
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td class="note_who">
-                <?= $this->Html->link($this->App->getUserName($note->user_id), ['controller' => 'users', 'action' => 'edit', $note->user_id]) ?>
+                <?php $username = $this->App->getUserName($note->user_id); ?>
+                <?php if (!empty($username)): ?>
+                    <?= $this->Html->link($username, ['controller' => 'users', 'action' => 'edit', $note->user_id]) ?>
+                <?php endif; ?>
             </td>
             <td class="when">
                 <?= dateTimeCentralToEastern($note->created) ?>
