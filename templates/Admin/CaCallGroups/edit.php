@@ -107,19 +107,19 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                 <td>
                                     <div class="notes">
                                         <?php foreach ($caCallGroup->ca_call_group_notes as $caCallGroupNotes) : ?>
-                                            <div class="single_note p0">
-                                                <table cellpadding="0" cellspacing="0" class="mb0">
+                                            <div class="single_note">
+                                                <table cellpadding="0" cellspacing="0" class="mb0 border-0">
                                                     <tbody>             
                                                         <tr>
-                                                            <td class="note_who"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
-                                                            <td class="status"><?= empty($caCallGroupNotes->status) ? '' : CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
-                                                            <td class="when"><?= dateTimeCentralToEastern($caCallGroupNotes->created) ?></td>
-                                                            <td class="delete">
+                                                            <td class="note_who p0 border-0"><?= $this->App->getUserName($caCallGroupNotes->user_id) ?></td>
+                                                            <td class="status p0 border-0"><?= empty($caCallGroupNotes->status) ? '' : CaCallGroup::$statuses[$caCallGroupNotes->status] ?></td>
+                                                            <td class="when p0 border-0"><?= dateTimeCentralToEastern($caCallGroupNotes->created) ?></td>
+                                                            <td class="delete p0 border-0">
                                                                 <?= $this->Form->postLink(__('Delete'), ['controller' => 'ca_call_group_notes', 'action' => 'delete', $caCallGroupNotes->id], ['confirm' => __('Are you sure you want to delete # {0}?', $caCallGroup->id), 'class' => 'btn btn-danger btn-xs']) ?> 
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3" class="body"><?= $caCallGroupNotes->body ?></td>
+                                                            <td colspan="3" class="body p0 border-0"><?= $caCallGroupNotes->body ?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
