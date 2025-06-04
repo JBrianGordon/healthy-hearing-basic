@@ -106,6 +106,8 @@ class AdvertisementsTable extends Table
 
         $original = $entity->getOriginal($field);
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            // TO-DO: This was a quick-fix for the image migration process
+            // It might be fine to stay; it might not be needed.
             if ($entity->getOriginal('public_url') === null) {
                 return;
             }
