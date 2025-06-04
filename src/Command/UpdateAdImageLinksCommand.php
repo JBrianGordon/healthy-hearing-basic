@@ -63,23 +63,26 @@ class UpdateAdImageLinksCommand extends Command
 
             // ---- Ad src ---- //
 
-            $srcUrl = str_replace('https://www.healthyhearing.com', '', $ad->src);
-            $srcUrl = 'https://www.healthyhearing.com' . $ad->src;
-            $srcUrlEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($ad->src);
+            $srcUrl = $ad->src;
+            $srcUrlEncoded = $this->urlEncoder($ad->src);
 
             // Check if any old filename matches the ad record's src
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($srcUrl, $oldFilename) !== false) {
+                if (!empty($srcUrl) &&
+                    strpos($srcUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                     // Update the ad record's src
-                    $ad->src = $newFilename;
+                    $ad->src = basename($oldFilename);
+                    $ad->public_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
             // Check if any old filename matches the ad record's src with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($srcUrlEncoded, $oldFilename) !== false) {
+                if (!empty($srcUrl) &&
+                    strpos($srcUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                     // Update the ad record's src
-                    $ad->src = $newFilename;
+                    $ad->src = basename($oldFilename);
+                    $ad->public_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }

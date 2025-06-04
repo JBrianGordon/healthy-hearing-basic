@@ -73,21 +73,19 @@ class UpdateWikiImageLinksCommand extends Command
             foreach ($imgs as $img) {
                 // Get the src attribute
                 $oldSrc = $img->getAttribute('src');
-                $oldSrcWithUrl = 'https://www.healthyhearing.com' . $oldSrc;
-                $oldSrcEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($oldSrc);
-                $io->out($oldSrcWithUrl);
+                $oldSrcEncoded = $this->urlEncoder($oldSrc);
 
                 // Check if any old filename partially matches the src
                 foreach ($filenameMap as $oldFilename => $newFilename) {
-                    if (strpos($oldSrcWithUrl, $oldFilename) !== false) {
+                    if (strpos($oldSrc, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
-                        break; // Stop checking other old filenames
+                        break 2; // Stop checking other old filenames and exit main foreach()
                     }
                 }
                 // Check if any old filename partially matches the src with encoding
                 foreach ($filenameMap as $oldFilename => $newFilename) {
-                    if (strpos($oldSrcEncoded, $oldFilename) !== false) {
+                    if (strpos($oldSrcEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
                         break; // Stop checking other old filenames
@@ -104,21 +102,26 @@ class UpdateWikiImageLinksCommand extends Command
 
             // ---- Facebook Image ---- //
 
-            $facebookImage = 'https://www.healthyhearing.com' . $wiki->facebook_image;
-            $facebookImageEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($wiki->facebook_image);
-            // Check if any old filename matches the wiki record's facebook_image
+            $facebookImage = $wiki->facebook_image;
+            $facebookImageEncoded = $this->urlEncoder($wiki->facebook_image);
+
+            // Check if any old filename matches the content record's facebook_image
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($facebookImage, $oldFilename) !== false) {
-                    // Update the wiki record's facebook_image
-                    $wiki->facebook_image = $newFilename;
-                    break; // Stop checking other old filenames
+                if (!empty($facebookImage) &&
+                    strpos($facebookImage, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the content record's facebook_image
+                    $wiki->facebook_image_name = basename($oldFilename);
+                    $wiki->facebook_image_url = $newFilename;
+                    break 2; // Stop checking other old filenames and exit main foreach()
                 }
             }
-            // Check if any old filename matches the wiki record's facebook_image with encoding
+            // Check if any old filename matches the content record's facebook_image with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($facebookImageEncoded, $oldFilename) !== false) {
-                    // Update the wiki record's facebook_image
-                    $wiki->facebook_image = $newFilename;
+                if (!empty($facebookImage) &&
+                    strpos($facebookImageEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the content record's facebook_image
+                    $wiki->facebook_image_name = basename($oldFilename);
+                    $wiki->facebook_image_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }

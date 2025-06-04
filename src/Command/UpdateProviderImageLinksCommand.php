@@ -63,23 +63,27 @@ class UpdateProviderImageLinksCommand extends Command
 
             // ---- Provider thumb_url ---- //
 
-            $thumbUrl = 'https://www.healthyhearing.com/cloudfiles/clinicians/' . $provider->thumb_url;
-            $thumbUrlEncoded = 'https://www.healthyhearing.com/cloudfiles/clinicians/' . $this->urlEncoder($provider->thumb_url);
+            $thumbUrl = $provider->thumb_url;
+            $thumbUrlEncoded = $this->urlEncoder($provider->thumb_url);
 
             // Check if any old filename matches the provider record's thumb_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrl, $oldFilename) !== false) {
-                    // Update the provider record's thumb_url
-                    $provider->thumb_url = $newFilename;
-                    break; // Stop checking other old filenames
+                if (!empty($thumbUrl) &&
+                    strpos('/cloudfiles/clinicians/' . $thumbUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the provider record's photo info
+                    $provider->photo_name = basename($oldFilename);
+                    $provider->photo_url = $newFilename;
+                    break; // Stop checking other old filenames and exit main foreach()
                 }
             }
 
             // Check if any old filename matches the provider record's thumb_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrlEncoded, $oldFilename) !== false) {
-                    // Update the provider record's thumb_url
-                    $provider->thumb_url = $newFilename;
+                if (!empty($thumbUrl) &&
+                    strpos('/cloudfiles/clinicians/' . $thumbUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the provider record's photo info
+                    $provider->photo_name = basename($oldFilename);
+                    $provider->photo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }

@@ -106,6 +106,9 @@ class AdvertisementsTable extends Table
 
         $original = $entity->getOriginal($field);
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
+            if ($entity->getOriginal('public_url') === null) {
+                return;
+            }
             preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
             $ckBoxImageId = $matches[1];
             $ckBoxUtility = new CKBoxUtility(Configure::read('CK.advertisements-uploads'));

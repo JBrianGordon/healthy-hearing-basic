@@ -63,20 +63,25 @@ class UpdateLocationProfileImageLinksCommand extends Command
 
             // ---- Location logo_url ---- //
 
-            $logoUrl = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $location->logo_url;
-            $logoUrlEncoded = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $this->urlEncoder($location->logo_url);
+            $logoUrl = $location->logo_url;
+            $logoUrlEncoded = $this->urlEncoder($location->logo_url);
+
             // Check if any old filename matches the location record's logo_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($logoUrl, $oldFilename) !== false) {
-                    // Update the location record's logo_url
+                if (!empty($logoUrl) &&
+                    strpos('/cloudfiles/clinics/' . $logoUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the location record's logo
+                    $location->logo_name = basename($oldFilename);
                     $location->logo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
             // Check if any old filename matches the location record's logo_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($logoUrlEncoded, $oldFilename) !== false) {
-                    // Update the location record's logo_url
+                if (!empty($logoUrl) &&
+                    strpos('/cloudfiles/clinics/' . $logoUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the location record's logo
+                    $location->logo_name = basename($oldFilename);
                     $location->logo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }

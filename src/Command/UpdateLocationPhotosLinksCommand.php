@@ -63,24 +63,27 @@ class UpdateLocationPhotosLinksCommand extends Command
 
             // ---- Location Photo photo_url ---- //
 
-            $photoUrl = str_replace('https://www.healthyhearing.com', '', $locationPhoto->photo_url);
-            $photoUrl = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $locationPhoto->photo_url;
-            $photoUrlEncoded = 'https://www.healthyhearing.com/cloudfiles/clinics/' . $this->urlEncoder($locationPhoto->photo_url);
+            $photoUrl = $locationPhoto->photo_url;
+            $photoUrlEncoded = $this->urlEncoder($locationPhoto->photo_url);
 
             // Check if any old filename matches the locationPhoto record's photo_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($photoUrl, $oldFilename) !== false) {
-                    // Update the locationPhoto record's photo_url
-                    $locationPhoto->photo_url = $newFilename;
-                    break; // Stop checking other old filenames
+                if (!empty($photoUrl) &&
+                    strpos('/cloudfiles/clinics/' . $photoUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                        // Update the locationPhoto record's photo info
+                        $locationPhoto->photo_name = basename($oldFilename);
+                        $locationPhoto->photo_url = $newFilename;
+                        break; // Stop checking other old filenames
                 }
             }
             // Check if any old filename matches the locationPhoto record's photo_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($photoUrlEncoded, $oldFilename) !== false) {
-                    // Update the locationPhoto record's photo_url
-                    $locationPhoto->photo_url = $newFilename;
-                    break; // Stop checking other old filenames
+                if (!empty($photoUrl) &&
+                    strpos('/cloudfiles/clinics/' . $photoUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                        // Update the locationPhoto record's photo info
+                        $locationPhoto->photo_name = basename($oldFilename);
+                        $locationPhoto->photo_url = $newFilename;
+                        break; // Stop checking other old filenames
                 }
             }
 

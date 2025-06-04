@@ -17,7 +17,7 @@ if (!empty($ad->id) && $show_ad) {
 	# -----------------------------------------------------------
 	# -- add tracking information for this ad
 	// look at actual source
-	$src = $ad->src;
+	$src = $ad->public_url;
 	$dest = $ad->dest;
 	// make passthrough - desc & src
 	$dest = '/ads/click/'.$id;

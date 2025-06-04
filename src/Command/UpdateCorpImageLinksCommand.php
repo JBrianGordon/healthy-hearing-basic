@@ -73,20 +73,20 @@ class UpdateCorpImageLinksCommand extends Command
             foreach ($imgs as $img) {
                 // Get the src attribute
                 $oldSrc = $img->getAttribute('src');
-                $oldSrc = 'https://www.healthyhearing.com' . $oldSrc;
-                $oldSrcEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($oldSrc);
+                $oldSrcEncoded = $this->urlEncoder($oldSrc);
 
                 // Check if any old filename partially matches the src
                 foreach ($filenameMap as $oldFilename => $newFilename) {
-                    if (strpos($oldSrc, $oldFilename) !== false) {
+                    if (strpos($oldSrc, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
-                        break; // Stop checking other old filenames
+                        break 2; // Stop checking other old filenames and exit main foreach()
                     }
                 }
+
                 // Check if any old filename partially matches the src with encoding
                 foreach ($filenameMap as $oldFilename => $newFilename) {
-                    if (strpos($oldSrcEncoded, $oldFilename) !== false) {
+                    if (strpos($oldSrcEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
                         break; // Stop checking other old filenames
@@ -99,44 +99,52 @@ class UpdateCorpImageLinksCommand extends Command
 
             // ---- Thumb URL ---- //
 
-            $thumbUrl = str_replace('https://www.healthyhearing.com', '', $corp->thumb_url);
-            $thumbUrl = 'https://www.healthyhearing.com' . $thumbUrl;
-            $thumbUrlEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($thumbUrl);
+            $thumbUrl = $corp->thumb_url;
+            $thumbUrlEncoded = $this->urlEncoder($thumbUrl);
 
             // Check if any old filename matches the corp record's thumb_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrl, $oldFilename) !== false) {
-                    // Update the corp record's facebook_image
-                    $corp->thumb_url = $newFilename;
+                if (!empty($thumbUrl) &&
+                    strpos($thumbUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the corp record's logo image information
+                    $corp->logo_name = basename($oldFilename);
+                    $corp->logo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
             // Check if any old filename matches the corp record's thumb_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($thumbUrlEncoded, $oldFilename) !== false) {
-                    // Update the corp record's facebook_image
-                    $corp->thumb_url = $newFilename;
+                if (!empty($thumbUrl) &&
+                    strpos($thumbUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
+                    // Update the corp record's logo image information
+                    $corp->logo_name = basename($oldFilename);
+                    $corp->logo_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
 
             // ---- Facebook Image ---- //
 
-            $facebookImage = 'https://www.healthyhearing.com' . $corp->facebook_image;
-            $facebookImageEncoded = 'https://www.healthyhearing.com' . $this->urlEncoder($corp->facebook_image);
+            $facebookImage = $corp->facebook_image;
+            $facebookImageEncoded = $this->urlEncoder($corp->facebook_image);
+
             // Check if any old filename matches the corp record's facebook_image
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($facebookImage, $oldFilename) !== false) {
+                if (!empty($facebookImage) &&
+                    strpos($facebookImage, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                     // Update the corp record's facebook_image
-                    $corp->facebook_image = $newFilename;
+                    $corp->facebook_image_name = basename($oldFilename);
+                    $corp->facebook_image_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }
             // Check if any old filename matches the corp record's facebook_image with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
-                if (strpos($facebookImageEncoded, $oldFilename) !== false) {
+                if (!empty($facebookImage) &&
+                    strpos($facebookImageEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                     // Update the corp record's facebook_image
-                    $corp->facebook_image = $newFilename;
+                    $corp->facebook_image_name = basename($oldFilename);
+                    $corp->facebook_image_url = $newFilename;
                     break; // Stop checking other old filenames
                 }
             }

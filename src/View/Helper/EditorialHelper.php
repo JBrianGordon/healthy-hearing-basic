@@ -158,7 +158,7 @@ class EditorialHelper extends Helper
         if (!is_object($content)) {
             $content = $this->ContentTable->get($content);
         }
-        if ($image = $content->facebook_image) {
+        if ($image = $content->facebook_image_url) {
             $imageAlt = $content->facebook_image_alt ? $content->facebook_image_alt : 'An article image';
             return $this->Html->link('<img src="' . $image . '" width="340" height="260" loading="lazy" class="img-responsive" alt="' . $imageAlt .'">', $content->hh_url, ['escape' => false]);
         }

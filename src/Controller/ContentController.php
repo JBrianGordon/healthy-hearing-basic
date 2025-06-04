@@ -32,6 +32,8 @@ class ContentController extends AppController
             'Content.is_active',
             'Content.facebook_image',
             'Content.facebook_image_alt',
+            'Content.facebook_image_name',
+            'Content.facebook_image_url',
         ],
     ];
 
