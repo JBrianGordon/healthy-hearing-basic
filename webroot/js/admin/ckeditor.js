@@ -30,6 +30,7 @@ import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize.js';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle.js';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
+import InsertKeyPoints from './insert_key_points.js';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
 import Link from '@ckeditor/ckeditor5-link/src/link.js';
 import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage.js';
@@ -57,7 +58,7 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount.js';
-import WProofreader from'@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
+import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
 
 // Load an external CKEditor CSS file
@@ -87,7 +88,7 @@ function AddFrenchCharacters(editor) {
     ]);
 }
 
-class Editor extends ClassicEditor {}
+class Editor extends ClassicEditor { }
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
@@ -118,6 +119,7 @@ Editor.builtinPlugins = [
     ImageStyle,
     ImageToolbar,
     ImageUpload,
+    InsertKeyPoints,
     Italic,
     Link,
     LinkImage,
@@ -149,14 +151,14 @@ Editor.builtinPlugins = [
     WProofreader
 ];
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get all elements with the "editor" class
     const editorElements = document.querySelectorAll(".editor");
 
     //Set serviceId and site language depending on site
     let servId, siteLang;
 
-    if(document.documentElement.lang === 'en-CA'){
+    if (document.documentElement.lang === 'en-CA') {
         servId = 'fu3PtF9xYtAkFgt';
         siteLang = 'en_CA';
     } else {
@@ -188,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     '|',
                     'ckbox',
                     'blockQuote',
+                    'insertKeyPoints',
                     'insertTable',
                     'mediaEmbed',
                     'alignment',
@@ -212,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         name: 'div',
                         attributes: true,
                         classes: true,
-                        styles : true
+                        styles: true
                     },
                     {
                         name: 'span',
@@ -330,10 +333,10 @@ document.addEventListener('DOMContentLoaded', function() {
             wproofreader: {
                 lang: siteLang,
                 serviceId: servId,
-                srcUrl:'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
+                srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
             }
-        	}).catch( error => {
-    	    console.error( error );
+        }).catch(error => {
+            console.error(error);
         });
     });
 });
