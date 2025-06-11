@@ -9,6 +9,8 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\ORM\TableRegistry;
 use DOMDocument;
+use App\Utility\CKBoxUtility;
+use Cake\Core\Configure;
 
 /**
  * UpdateContentImageLinks command.
@@ -54,6 +56,9 @@ class UpdateContentImageLinksCommand extends Command
             fclose($handle);
         }
 
+        $ckCategoryId = Configure::read('CK.content-uploads');
+        $ckBoxUtility = new CKBoxUtility($ckCategoryId);
+
         // Fetch all Content entities
         $contentTable =$this->fetchTable('content');
         $contentItems = $contentTable->find('all');
@@ -80,6 +85,12 @@ class UpdateContentImageLinksCommand extends Command
                     if (strpos($oldSrc, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
+
+                        // Move to content category in CKBox
+                        preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                        $ckBoxImageId = $matches[1];
+                        $ckBoxUtility->moveImage($ckBoxImageId);
+
                         break 2; // Stop checking other old filenames and exit main foreach()
                     }
                 }
@@ -88,6 +99,12 @@ class UpdateContentImageLinksCommand extends Command
                     if (strpos($oldSrcEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
+
+                        // Move to content category in CKBox
+                        preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                        $ckBoxImageId = $matches[1];
+                        $ckBoxUtility->moveImage($ckBoxImageId);
+
                         break; // Stop checking other old filenames
                     }
                 }
@@ -109,7 +126,13 @@ class UpdateContentImageLinksCommand extends Command
                     // Update the content record's facebook_image
                     $content->facebook_image_name = basename($oldFilename);
                     $content->facebook_image_url = $newFilename;
-                    break 2; // Stop checking other old filenames and exit main foreach()
+
+                    // Move to content category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
+                    break; // Stop checking other old filenames and exit main foreach()
                 }
             }
             // Check if any old filename matches the content record's facebook_image with encoding
@@ -119,6 +142,12 @@ class UpdateContentImageLinksCommand extends Command
                     // Update the content record's facebook_image
                     $content->facebook_image_name = basename($oldFilename);
                     $content->facebook_image_url = $newFilename;
+
+                    // Move to content category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }

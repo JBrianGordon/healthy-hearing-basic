@@ -9,6 +9,8 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\ORM\TableRegistry;
 use DOMDocument;
+use App\Utility\CKBoxUtility;
+use Cake\Core\Configure;
 
 /**
  * UpdateCorpImageLinks command.
@@ -54,6 +56,9 @@ class UpdateCorpImageLinksCommand extends Command
             fclose($handle);
         }
 
+        $ckCategoryId = Configure::read('CK.corps-uploads');
+        $ckBoxUtility = new CKBoxUtility($ckCategoryId);
+
         // Fetch all Corp entities
         $corpsTable =$this->fetchTable('corps');
         $corpsItems = $corpsTable->find('all');
@@ -80,6 +85,12 @@ class UpdateCorpImageLinksCommand extends Command
                     if (strpos($oldSrc, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
+
+                        // Move to manufacturers category in CKBox
+                        preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                        $ckBoxImageId = $matches[1];
+                        $ckBoxUtility->moveImage($ckBoxImageId);
+
                         break 2; // Stop checking other old filenames and exit main foreach()
                     }
                 }
@@ -89,6 +100,12 @@ class UpdateCorpImageLinksCommand extends Command
                     if (strpos($oldSrcEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
                         // Update the src attribute
                         $img->setAttribute('src', $newFilename);
+
+                        // Move to manufacturers category in CKBox
+                        preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                        $ckBoxImageId = $matches[1];
+                        $ckBoxUtility->moveImage($ckBoxImageId);
+
                         break; // Stop checking other old filenames
                     }
                 }
@@ -109,6 +126,12 @@ class UpdateCorpImageLinksCommand extends Command
                     // Update the corp record's logo image information
                     $corp->logo_name = basename($oldFilename);
                     $corp->logo_url = $newFilename;
+
+                    // Move to manufacturers category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }
@@ -119,6 +142,12 @@ class UpdateCorpImageLinksCommand extends Command
                     // Update the corp record's logo image information
                     $corp->logo_name = basename($oldFilename);
                     $corp->logo_url = $newFilename;
+
+                    // Move to manufacturers category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }
@@ -135,6 +164,12 @@ class UpdateCorpImageLinksCommand extends Command
                     // Update the corp record's facebook_image
                     $corp->facebook_image_name = basename($oldFilename);
                     $corp->facebook_image_url = $newFilename;
+
+                    // Move to manufacturers category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }
@@ -145,6 +180,12 @@ class UpdateCorpImageLinksCommand extends Command
                     // Update the corp record's facebook_image
                     $corp->facebook_image_name = basename($oldFilename);
                     $corp->facebook_image_url = $newFilename;
+
+                    // Move to manufacturers category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }

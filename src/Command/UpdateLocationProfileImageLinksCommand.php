@@ -9,6 +9,8 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\ORM\TableRegistry;
 use DOMDocument;
+use App\Utility\CKBoxUtility;
+use Cake\Core\Configure;
 
 /**
  * UpdateLocationProfileImageLinks command.
@@ -54,6 +56,9 @@ class UpdateLocationProfileImageLinksCommand extends Command
             fclose($handle);
         }
 
+        $ckCategoryId = Configure::read('CK.locations-uploads');
+        $ckBoxUtility = new CKBoxUtility($ckCategoryId);
+
         // Fetch all Location entities
         $locationsTable =$this->fetchTable('locations');
         $locationsItems = $locationsTable->find('all');
@@ -73,6 +78,12 @@ class UpdateLocationProfileImageLinksCommand extends Command
                     // Update the location record's logo
                     $location->logo_name = basename($oldFilename);
                     $location->logo_url = $newFilename;
+
+                    // Move to Location Logos category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }
@@ -83,6 +94,12 @@ class UpdateLocationProfileImageLinksCommand extends Command
                     // Update the location record's logo
                     $location->logo_name = basename($oldFilename);
                     $location->logo_url = $newFilename;
+
+                    // Move to Location Logos category in CKBox
+                    preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
+                    $ckBoxImageId = $matches[1];
+                    $ckBoxUtility->moveImage($ckBoxImageId);
+
                     break; // Stop checking other old filenames
                 }
             }
