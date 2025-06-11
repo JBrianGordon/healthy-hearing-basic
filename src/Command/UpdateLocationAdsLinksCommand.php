@@ -13,9 +13,9 @@ use App\Utility\CKBoxUtility;
 use Cake\Core\Configure;
 
 /**
- * UpdateLocationPhotosLinks command.
+ * UpdateLocationAdsLinks command.
  */
-class UpdateLocationPhotosLinksCommand extends Command
+class UpdateLocationAdsLinksCommand extends Command
 {
     /**
      * Hook method for defining this command's option parser.
@@ -56,30 +56,30 @@ class UpdateLocationPhotosLinksCommand extends Command
             fclose($handle);
         }
 
-        $ckCategoryId = Configure::read('CK.locationPhotos-uploads');
+        $ckCategoryId = Configure::read('CK.locationAds-uploads');
         $ckBoxUtility = new CKBoxUtility($ckCategoryId);
 
-        // Fetch all LocationPhoto entities
-        $locationPhotosTable =$this->fetchTable('location_photos');
-        $locationPhotosItems = $locationPhotosTable->find('all');
+        // Fetch all LocationAd entities
+        $locationAdsTable =$this->fetchTable('location_ads');
+        $locationAdsItems = $locationAdsTable->find('all');
 
-        foreach ($locationPhotosItems as $locationPhoto) {
-            $io->out('Location Photo ID: ' . $locationPhoto->id);
+        foreach ($locationAdsItems as $locationAd) {
+            $io->out('Location Ad ID: ' . $locationAd->id);
 
-            // ---- Location Photo photo_url ---- //
+            // ---- Location Ad photo_url ---- //
 
-            $photoUrl = $locationPhoto->photo_url;
-            $photoUrlEncoded = $this->urlEncoder($locationPhoto->photo_url);
+            $photoUrl = $locationAd->photo_url;
+            $photoUrlEncoded = $this->urlEncoder($locationAd->photo_url);
 
-            // Check if any old filename matches the locationPhoto record's photo_url
+            // Check if any old filename matches the locationAd record's photo_url
             foreach ($filenameMap as $oldFilename => $newFilename) {
                 if (!empty($photoUrl) &&
                     strpos('/cloudfiles/clinics/' . $photoUrl, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
-                        // Update the locationPhoto record's photo info
-                        $locationPhoto->photo_name = basename($oldFilename);
-                        $locationPhoto->photo_url = $newFilename;
+                        // Update the locationAd record's image info
+                        $locationAd->image_name = basename($oldFilename);
+                        $locationAd->image_url = $newFilename;
 
-                        // Move to LocationPhotos category in CKBox
+                        // Move to LocationAds category in CKBox
                         preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
                         $ckBoxImageId = $matches[1];
                         $ckBoxUtility->moveImage($ckBoxImageId);
@@ -87,15 +87,15 @@ class UpdateLocationPhotosLinksCommand extends Command
                         break; // Stop checking other old filenames
                 }
             }
-            // Check if any old filename matches the locationPhoto record's photo_url with encoding
+            // Check if any old filename matches the locationAd record's photo_url with encoding
             foreach ($filenameMap as $oldFilename => $newFilename) {
                 if (!empty($photoUrl) &&
                     strpos('/cloudfiles/clinics/' . $photoUrlEncoded, str_replace('https://www.healthyhearing.com', '', $oldFilename)) !== false) {
-                        // Update the locationPhoto record's photo info
-                        $locationPhoto->photo_name = basename($oldFilename);
-                        $locationPhoto->photo_url = $newFilename;
+                        // Update the locationAd record's image info
+                        $locationAd->image_name = basename($oldFilename);
+                        $locationAd->image_url = $newFilename;
 
-                        // Move to LocationPhotos category in CKBox
+                        // Move to LocationAds category in CKBox
                         preg_match("/assets\/(.*?)\/images/", $newFilename, $matches);
                         $ckBoxImageId = $matches[1];
                         $ckBoxUtility->moveImage($ckBoxImageId);
@@ -105,7 +105,7 @@ class UpdateLocationPhotosLinksCommand extends Command
             }
 
             // Save the entity back to the database
-            $locationPhotosTable->save($locationPhoto);
+            $locationAdsTable->save($locationAd);
         }
     }
 
@@ -116,7 +116,7 @@ class UpdateLocationPhotosLinksCommand extends Command
         }
         return str_replace(
             [' ', '[', ']', ',', '(', ')'],
-            ['%20', '%5B', '%5D', '%2C', '%28', '%29'], 
+            ['%20', '%5B', '%5D', '%2C', '%28', '%29'],
             $url
         );
     }
