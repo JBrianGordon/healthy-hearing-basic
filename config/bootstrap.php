@@ -762,3 +762,10 @@ function str2datetime($str = 'now') {
 function divide($num, $denom) {
     return (!$denom) ? 0 : $num / $denom;
 }
+
+/**
+* If value is a string, trim it. Otherwise return value.
+*/
+function trimIfString($value) {
+    return is_string($value) ? trim($value) : $value;
+}

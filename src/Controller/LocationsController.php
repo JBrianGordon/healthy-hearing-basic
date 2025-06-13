@@ -399,9 +399,9 @@ class LocationsController extends AppController
         $this->meta['DC.title'] = $title;
         $metaAddress = $location->is_mobile ? "mobile clinic based from" : $location->address.",";
 		if($location->state == 'ON'){
-			$this->meta['description'] = "Book a hearing appointment, buy hearing aids and more at {$location['Location']['title']}, {$metaAddress} {$location['Location']['city']}, {$location['Location']['state_full']} {$location['Location']['zip']}.";
+			$this->meta['description'] = "Book a hearing appointment, buy hearing aids and more at {$location->title}, {$metaAddress} {$location->city}, {$location->state_full} {$location->zip}.";
 		} else {
-			$this->meta['description'] = "Read verified clinic information, patient reviews and make an appointment at {$location['Location']['title']}, {$metaAddress} {$location['Location']['city']}, {$location['Location']['state_full']} {$location['Location']['zip']}.";
+			$this->meta['description'] = "Read verified clinic information, patient reviews and make an appointment at {$location->title}, {$metaAddress} {$location->city}, {$location->state_full} {$location->zip}.";
 		}
         $this->meta['ICBM']="{$location->lat}, {$location->lon}";
         $this->meta['geo.position']="{$location->lat};{$location->lon}";

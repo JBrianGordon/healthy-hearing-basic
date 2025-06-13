@@ -306,7 +306,7 @@ class CaCallsTable extends Table
 
         $clinicLatLons = [];
         foreach ($closestClinics as $location) {
-            $clinicLatLons[] = $location['Location']['lat'].','.$location['Location']['lon'];
+            $clinicLatLons[] = $location->lat.','.$location->lon;
         }
 
         //TODO: SORT THIS LIST OF CLINICS BY DRIVING DISTANCE FROM THE PATIENT

@@ -4,6 +4,7 @@
  */
 
 use Cake\Core\Configure;
+use App\Model\Entity\Location;
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">
@@ -53,7 +54,7 @@ use Cake\Core\Configure;
             echo $this->Html->css('/css/atf/report-page.css');
         } elseif ($_SERVER['REQUEST_URI'] == '/hearing-aids') {
             echo $this->Html->css('/css/atf/hearing-aids.css');
-        } else if(isset($location['Location']['listing_type']) && $location['Location']['listing_type'] == Location::LISTING_TYPE_ENHANCED){
+        } else if(isset($location->listing_type) && $location->listing_type == Location::LISTING_TYPE_ENHANCED){
             echo $this->Html->css('/css/atf/enhanced-page.css');
         } elseif (preg_match('/\/hearing-aids\/[0-9]{5}/', $_SERVER['REQUEST_URI'])) {
             echo $this->Html->css('/css/atf/clinic-page.css');

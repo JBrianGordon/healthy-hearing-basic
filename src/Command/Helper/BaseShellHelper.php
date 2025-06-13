@@ -131,14 +131,14 @@ class BaseShellHelper extends Helper
             /*
             $connection = ssh2_connect($serverName);
             if (!$connection) {
-                $this->errorMessage("Failed to connect to ".$serverName);
+                $this->_io->error("Failed to connect to ".$serverName);
                 return false;
             }
             if (!empty($sshKeyPublic) && !empty($sshKeyPrivate)) {
                 @ssh2_auth_pubkey_file($connection, $username, $sshKeyPublic, $sshKeyPrivate);
             }
             if (!ssh2_auth_password($connection, $username, $password)) {
-                $this->errorMessage("Failed to login to ".$serverName);
+                $this->_io->error("Failed to login to ".$serverName);
                 return false;
             }
             $sftp = ssh2_sftp($connection);
@@ -150,7 +150,7 @@ class BaseShellHelper extends Helper
             fclose($srcFile);*/
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
-            $this->errorMessage('Exception: ' . $e->getMessage());
+            $this->_io->error('Exception: ' . $e->getMessage());
             return false;
         }
         return true;
@@ -172,7 +172,7 @@ class BaseShellHelper extends Helper
             curl_close($curl);
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
-            $this->errorMessage('Exception: ' . $e->getMessage());
+            $this->_io->error('Exception: ' . $e->getMessage());
             return false;
         }
         return true;

@@ -632,7 +632,6 @@ class ImportCommand extends Command
         foreach ($previousImportLocations as $previousImportLocation) {
             $previousExternalLocationId = $previousImportLocation['id_external'];
 
-
             // Sort out the provider information (by yhn provider ID as array key)
             foreach ($previousImportLocation['import_location_providers'] as $previousLocationProvider) {
                 $previousExternalProviderId = $previousLocationProvider['import_provider']['id_external'];
@@ -1428,7 +1427,7 @@ class ImportCommand extends Command
         $locations = str_replace("{}", '""', $locations); // Convert empty arrays to empty strings
         $locations = json_decode($locations, true);
         if (empty($locations)) {
-            $this->errorMessage('No locations found in import file.');
+            $io->error('No locations found in import file.');
             return false;
         }
         $caLogData = $this->parseCaLocations($locations);
@@ -1442,7 +1441,7 @@ class ImportCommand extends Command
         $providers = simplexml_load_string($fileContent);
         $providers = json_decode(json_encode($providers), true);
         if (empty($providers)) {
-            $this->errorMessage('No providers found in import file.');
+            $io->error('No providers found in import file.');
             return false;
         }
         $caLogData = $this->parseCaProviders($providers);
@@ -1536,6 +1535,8 @@ class ImportCommand extends Command
         $io->info('Parsing Locations ..');
         $io->out(count($locations['ClinicItem']).' locations found in import file.');
         $newCount=0;
+        $spacesInExternalId = false;
+        $spacesCount=0;
         foreach ($locations['ClinicItem'] as $location) {
             $externalId = (string)$location['LocationID'] ? (string)$location['LocationID'] : (string)$location['OticonID'];
             $externalId = filter_var($externalId, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -1545,15 +1546,15 @@ class ImportCommand extends Command
             $saveData = [
                 'import_id' => $this->importId,
                 'id_external' => $externalId,
-                'title' => $location['Title'],
-                'subtitle' => $location['Subtitle'],
-                'address' => $location['Address1'],
-                'address_2' => $location['Address2'],
-                'city' => $location['City'],
-                'state' => $location['State'],
-                'zip' => $location['Zip'],
-                'phone' => $location['Phone'],
-                'email' => $email,
+                'title' => trimIfString($location['Title']),
+                'subtitle' => trimIfString($location['Subtitle']),
+                'address' => trimIfString($location['Address1']),
+                'address_2' => trimIfString($location['Address2']),
+                'city' => trimIfString($location['City']),
+                'state' => trimIfString($location['State']),
+                'zip' => trimIfString($location['Zip']),
+                'phone' => trimIfString($location['Phone']),
+                'email' => trimIfString($email),
                 'is_retail' => $location['is_retail'] == 'Yes' ? 1 : 0,
                 'id_oticon' => (string)$location['OticonID'],
                 'listing_type' => Location::LISTING_TYPE_ENHANCED,
@@ -1567,7 +1568,21 @@ class ImportCommand extends Command
                 'conditions' => ['id_yhn_location' => $externalId]
             ])->first();
 
-            if (empty($locationMatch)) {
+            // Check for nbsp and regular spaces in external ID for clinics already in the dB
+            if (!empty($locationMatch)) {
+                if (preg_match('/[\xC2\xA0 ]/', $locationMatch->id_yhn_location)) {
+                    $locationMatch = [];
+                    $spacesInExternalId = true;
+                    $spacesCount++;
+                }
+            }
+
+            // Check for nbsp and regular spaces in external ID values in the import file
+            if (preg_match('/[\xC2\xA0 ]/', $externalId)) {
+                $this->info('External ID ' . $externalId . ' has spaces!');
+            }
+
+            if (empty($locationMatch) && $spacesInExternalId == false) {
                 // Check for id_yhn_location that is missing leading zeros
                 $noLeadingZeros = ltrim($externalId, '0');
                 $locationMatch = $this->Locations->find('all', [
@@ -1587,7 +1602,7 @@ class ImportCommand extends Command
                 $locationEntity = $this->Locations->get($locationMatch->id);
                 $locationEntity->yhn_tier = 2;
                 $this->Locations->save($locationEntity);
-                $saveData['location_id'] = $locationMatch['Location']['id'];
+                $saveData['location_id'] = $locationMatch->id;
                 $saveData['match_type'] = 1;
             } else {
                 $newCount++;
@@ -1612,6 +1627,7 @@ class ImportCommand extends Command
             $this->importLocations[$externalId] = $importLocationEntity->id;
         }
         $io->out($newCount.' new locations.');
+        $io->out($spacesCount.' existing locations contained a space.');
         // Set up our return data
         $caLogData = [
             'total_locations' => count($locations['ClinicItem']),
@@ -1663,7 +1679,7 @@ class ImportCommand extends Command
             // Retrieve related Location
             if (empty($this->importLocations[$locationExternalId])) {
                 $errorMessage = 'Warning: External location ID "' . $locationExternalId . '" does not exist within the most recent clinic list.  Please contact XML provider.';
-                $this->errorMessage($errorMessage);
+                $io->error($errorMessage);
                 $this->reportErrors[] = $errorMessage;
                 continue;
             }
