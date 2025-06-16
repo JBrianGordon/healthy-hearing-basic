@@ -3,15 +3,15 @@ const imagePathInput = document.getElementById("facebook-imageUpload0");
 const facebookImageUrl = document.getElementById("facebookImageUrl");
 const imagePreview = document.getElementById("facebook-imagePreview0");
 
-if(imagePathInput) {
+if (imagePathInput) {
     imagePathInput.addEventListener('click', e => {
         e.preventDefault();
         const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
 
-    	const ckboxDiv = document.createElement('div');
-    	const firstContainer = document.querySelector(".site-body > .row > .container");
-    	ckboxDiv.id = 'ckbox';
-    	firstContainer.appendChild(ckboxDiv);
+        const ckboxDiv = document.createElement('div');
+        const firstContainer = document.querySelector(".site-body > .row > .container");
+        ckboxDiv.id = 'ckbox';
+        firstContainer.appendChild(ckboxDiv);
 
         CKBox.mount(ckboxDiv, {
             tokenUrl: ckTokenUrl,
@@ -26,10 +26,22 @@ if(imagePathInput) {
                 onChoose: assets => {
                     assets.forEach(asset => {
                         const assetUrl = asset.data.url;
-                        imagePreview.src = assetUrl;
-                        imagePreview.classList.remove('d-none');
-                        facebookImageUrl.innerHTML = assetUrl;
-                        facebookImageUrl.classList.remove('d-none');
+                        const assetWidth = asset.data.metadata.width;
+                        const assetHeight = asset.data.metadata.height;
+                        const facebookImageWidth = document.getElementById("facebook-image-width");
+                        const facebookImageHeight = document.getElementById("facebook-image-height");
+
+                        if (assetWidth >= 800) {
+                            imagePreview.src = assetUrl;
+                            imagePreview.classList.remove('d-none');
+                            imagePathInput.value = assetUrl;
+                            facebookImageUrl.value = assetUrl;
+                            facebookImageWidth.value = assetWidth;
+                            facebookImageHeight.value = assetHeight;
+                            facebookImageUrl.classList.remove('d-none');
+                        } else {
+                            alert(`The selected image must be at least 800px wide. assetWidth = ${assetWidth}`);
+                        }
                     });
                 }
             }

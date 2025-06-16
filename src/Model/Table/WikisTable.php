@@ -374,16 +374,6 @@ class WikisTable extends Table
             ->notEmptyString('facebook_image_name', 'must have image');
 
         $validator->setProvider('upload', \Josegonzalez\Upload\Validation\ImageValidation::class);
-        $validator->add('facebook_image_name', 'fileAboveMinWidth', [
-            'rule' => ['isAboveMinWidth', 800],
-            'on' => function ($context) {
-                $imageSizeGreaterThanZero = $context['data']['facebook_image_name']->getSize() > 0;
-                $imageFilenameNotEmpty = !empty($context['data']['facebook_image_name']->getClientFilename());
-                return ($imageSizeGreaterThanZero && $imageFilenameNotEmpty);
-            },
-            'message' => 'This image should at least be 800px wide',
-            'provider' => 'upload'
-        ]);
 
         $validator
             ->dateTime('last_modified')
