@@ -40,7 +40,7 @@ if (imagePathInput) {
                             facebookImageHeight.value = assetHeight;
                             facebookImageUrl.classList.remove('d-none');
                         } else {
-                            alert(`The selected image must be at least 800px wide. assetWidth = ${assetWidth}`);
+                            alert(`The selected image must be at least 800px wide. This image is ${assetWidth}px wide.`);
                         }
                     });
                 }
