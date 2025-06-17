@@ -85,7 +85,7 @@ $author_default = false;
 										<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none">
 										<?php
 											$inputValue = $this->Form->getValue('facebook_image_name');
-											$class = empty($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
+											$class = isset($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
 										?>
 
 										<?=
