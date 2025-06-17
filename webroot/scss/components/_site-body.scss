@@ -1,536 +1,560 @@
 .site-body {
-  background: $body-bg;
-  position: relative;
-  @include transition(all 0.3s ease-in);
-  z-index: 1;
-  overflow-y: hidden;
-  padding: 0 15px;
-  
+	background: $body-bg;
+	position: relative;
+	@include transition(all 0.3s ease-in);
+	z-index: 1;
+	overflow-y: hidden;
+	padding: 0 15px;
+
 	&.home {
-	  .row {
-	    display: block;
-	  }
+		.row {
+			display: block;
+		}
 	}
 
 	&.admin {
-		p:not(.btn), a:not(.btn) {
+
+		p:not(.btn),
+		a:not(.btn) {
 			font-size: 16px;
 		}
+
 		.btn:not(.btn-xs) {
 			font-size: 14px;
 		}
-		.ck-editor, #wiki-body, #content_body, .help-menu {
-			p:not(.btn), a:not(.btn) {
+
+		.ck-editor,
+		#wiki-body,
+		#content_body,
+		.help-menu {
+
+			p:not(.btn),
+			a:not(.btn) {
 				font-size: 20px;
 			}
+		}
+
+		#facebook-imageUpload0::placeholder {
+			color: #fff;
 		}
 	}
 
 	&.fap-results {
-	  section {
-	    &.panel-primary {
-	      ul {
-	        list-style-type: disc;
-	        margin-block-start: 1em;
-	        margin-block-end: 1em;
-	        padding-left: 40px;
-	      }
-	    }
-	  }
+		section {
+			&.panel-primary {
+				ul {
+					list-style-type: disc;
+					margin-block-start: 1em;
+					margin-block-end: 1em;
+					padding-left: 40px;
+				}
+			}
+		}
 
-	  details {
-	    &.filter-box {
-	      display: block;
-	      border: 0;
-	      padding: 15px;
-	      margin-bottom: 0;
+		details {
+			&.filter-box {
+				display: block;
+				border: 0;
+				padding: 15px;
+				margin-bottom: 0;
 
-	      summary {
-	        margin: 0 auto;
-	        display: block;
-	        width: 250px;
-	        list-style-type: none;
-	      }
+				summary {
+					margin: 0 auto;
+					display: block;
+					width: 250px;
+					list-style-type: none;
+				}
 
-	      .row {
-	        width: 250px;
-	        margin: 0 auto;
-	      }
+				.row {
+					width: 250px;
+					margin: 0 auto;
+				}
 
-	      input.filter-box {
-	        display: block;
-	      }
-	    }
-	  }
+				input.filter-box {
+					display: block;
+				}
+			}
+		}
 
-	  .logo-container {
-	    height: 80px;
-	    margin: 0 auto 10px;
+		.logo-container {
+			height: 80px;
+			margin: 0 auto 10px;
 
-	    .clinic-logo {
-	      display: block;
-	      max-width: 120px;
-	      max-height: 120px;
-	      margin: 0 auto;
+			.clinic-logo {
+				display: block;
+				max-width: 120px;
+				max-height: 120px;
+				margin: 0 auto;
 
-	      @media (max-width: $screen-md-max) {
-	        margin-left: -15px;
-	      }
+				@media (max-width: $screen-md-max) {
+					margin-left: -15px;
+				}
 
-	      @media (max-width: $screen-sm-max) {
-	        margin-left: 5px;
-	        margin-top: 10px;
-	      }
-	    }
-	  }
+				@media (max-width: $screen-sm-max) {
+					margin-left: 5px;
+					margin-top: 10px;
+				}
+			}
+		}
 	}
 
 	&.secondary {
 
-	  .page-content {
-	    margin-top: 25px;
-	  }
+		.page-content {
+			margin-top: 25px;
+		}
 
-	  .panel-section.find-professionals-links {
-	    @media only screen and (min-width: $screen-sm-min) {
-	      padding: 0 70px;
-	    }
-	  }
+		.panel-section.find-professionals-links {
+			@media only screen and (min-width: $screen-sm-min) {
+				padding: 0 70px;
+			}
+		}
 
-	  .two-lines {
-	    line-height: 1.6em;
-	    height: 3.2em;
-	    overflow: hidden;
-	  }
+		.two-lines {
+			line-height: 1.6em;
+			height: 3.2em;
+			overflow: hidden;
+		}
 	}
 
 	label {
-	  width: 25%;
-	  float: left;
-	  text-align: right;
-	  padding: 7px 15px 0;
-	  font-weight: bold;
+		width: 25%;
+		float: left;
+		text-align: right;
+		padding: 7px 15px 0;
+		font-weight: bold;
 
-	  @media (max-width: $screen-sm-max) {
-	    width: 100%;
-	    text-align: left;
-	  }
+		@media (max-width: $screen-sm-max) {
+			width: 100%;
+			text-align: left;
+		}
 
-	  &.col-md-1-override {
-	    width: 8.33333%;
-	  }
+		&.col-md-1-override {
+			width: 8.33333%;
+		}
 
-	  &.col-md-2-override {
-	    width: 16.66666%;
-	  }
+		&.col-md-2-override {
+			width: 16.66666%;
+		}
 
-	  &.col-md-4-override {
-	    width: 33.33333%;
-	  }
+		&.col-md-4-override {
+			width: 33.33333%;
+		}
 	}
 
 	.container {
-	  padding-left: 15px;
-	  padding-right: 15px;
+		padding-left: 15px;
+		padding-right: 15px;
 
 		.wiki-body {
-		  figcaption {
-		    font-style: italic;
-		    @include font($font-family-serif, 'italic', 'normal');
-		    font-size: 87.5%;
-		  }
-		  a {
-		    border-bottom: dotted 1px $link-color;
-		    text-decoration: none;
+			figcaption {
+				font-style: italic;
+				@include font($font-family-serif, 'italic', 'normal');
+				font-size: 87.5%;
+			}
 
-		    &:hover {
-		      border-bottom-color: $link-hover-color;
-		      text-decoration: none;
-		    }
-		  }
+			a {
+				border-bottom: dotted 1px $link-color;
+				text-decoration: none;
+
+				&:hover {
+					border-bottom-color: $link-hover-color;
+					text-decoration: none;
+				}
+			}
 		}
 
-	  .notes {
-	    .ck-editor {
-	      float: right;
-	      margin-bottom: 20px;
-	    }
-	  }
-
-	  #ckbox {
-		.ckbox-view-dialog {
-			top: 80px!important;
+		.notes {
+			.ck-editor {
+				float: right;
+				margin-bottom: 20px;
+			}
 		}
-	  }
+
+		#ckbox {
+			.ckbox-view-dialog {
+				top: 80px !important;
+			}
+		}
 	}
 
-	.form-control, .form-select {
-	  width: 75%;
-	  font-size: 16px;
-	  flex-flow: row-reverse;
+	.form-control,
+	.form-select {
+		width: 75%;
+		font-size: 16px;
+		flex-flow: row-reverse;
 
-	  @media (max-width: $screen-sm-max) {
-	    width: 100%;
-	  }
+		@media (max-width: $screen-sm-max) {
+			width: 100%;
+		}
 
-	  &.inline-date {
-	    width: 46%;
-	  }
+		&.inline-date {
+			width: 46%;
+		}
 
-	  &.col-md-7-override {
-	    width: 58.33333%;
-	  }
+		&.col-md-7-override {
+			width: 58.33333%;
+		}
 
-	  &.col-md-8-override {
-	    width: 66.66666%;
-	  }
+		&.col-md-8-override {
+			width: 66.66666%;
+		}
 
-	  &.col-md-10-override {
-	    width: 83.33333%;
-	  }
+		&.col-md-10-override {
+			width: 83.33333%;
+		}
 
-	  &#services, &#about-us {
-	    display: block;
-	    width: 0;
-	    padding: 0;
-	    border: 0;
-	  }
+		&#services,
+		&#about-us {
+			display: block;
+			width: 0;
+			padding: 0;
+			border: 0;
+		}
 
-	  &[disabled] {
-	    cursor: not-allowed;
-	    background-color: #eee;
-	    opacity: 1;
-	  }
+		&[disabled] {
+			cursor: not-allowed;
+			background-color: #eee;
+			opacity: 1;
+		}
 
-	  &[readonly] {
+		&[readonly] {
 			background-color: papayawhip;
-	  }
+		}
 	}
 
 	.form-check {
-	  padding-left: 0;
+		padding-left: 0;
 
-	  .form-check-input {
-	    float: none;
-	    position: relative;
-	    left: 30px;
-	    top: 8px;
-	  }
+		.form-check-input {
+			float: none;
+			position: relative;
+			left: 30px;
+			top: 8px;
+		}
 
-	  &.checkbox {
-	    label {
-	      min-height: 25px;
-	      padding-left: 30px;
-	      margin-bottom: 0;
-	      font-weight: normal;
-	      cursor: pointer;
-	      width: auto;
+		&.checkbox {
+			label {
+				min-height: 25px;
+				padding-left: 30px;
+				margin-bottom: 0;
+				font-weight: normal;
+				cursor: pointer;
+				width: auto;
 
-	      input[type=checkbox] {
-	        position: relative;
-	        margin-right: 10px;
-	        float: left;
-	      }
-	    }
-	  }
+				input[type=checkbox] {
+					position: relative;
+					margin-right: 10px;
+					float: left;
+				}
+			}
+		}
 	}
 
 	.form-group {
-	  display: flex;
-	  flex-grow: 1;
-	  margin-bottom: 10px;
+		display: flex;
+		flex-grow: 1;
+		margin-bottom: 10px;
 
-	  &.multicheckbox {
-	    flex-wrap: wrap;
+		&.multicheckbox {
+			flex-wrap: wrap;
 
-	    .form-check {
-	      flex: 0 0 33.33%;
-	      box-sizing: border-box;
+			.form-check {
+				flex: 0 0 33.33%;
+				box-sizing: border-box;
 
-	      .form-check-label {
-	        width: auto;
-	        float: none;
-	        padding-left: 30px;
-	        text-align: left;
-	      }
-	    }
-	  }
+				.form-check-label {
+					width: auto;
+					float: none;
+					padding-left: 30px;
+					text-align: left;
+				}
+			}
+		}
 
-	  &.is-invalid {
-	  	flex-wrap: wrap;
+		&.is-invalid {
+			flex-wrap: wrap;
 
-	  	#password-error {
-	  		text-align: right;
-	  	}
-	  }
+			#password-error {
+				text-align: right;
+			}
+		}
 
-	  @media (max-width: $screen-sm-max) {
-	    flex-direction: column;
+		@media (max-width: $screen-sm-max) {
+			flex-direction: column;
 
-	    &.checkbox {
-	      flex-direction: initial;
-	    }
-	  }
+			&.checkbox {
+				flex-direction: initial;
+			}
+		}
 	}
 
 	.read-more-row {
-	  max-width: 100%;
-	  margin-left: 0;
+		max-width: 100%;
+		margin-left: 0;
 	}
 
 	@media (min-width: $screen-sm-min) {
-	  .next-help {
-	    a {
-	      float: left;
-	    }
-	  }
+		.next-help {
+			a {
+				float: left;
+			}
+		}
 
-	  .back-to-top {
-	    a {
-	      float: right;
-	    }
-	  }
+		.back-to-top {
+			a {
+				float: right;
+			}
+		}
 	}
 
 	@media ($screen-md-min) {
-	  &.fap-results {
-	    overflow-y: visible;
+		&.fap-results {
+			overflow-y: visible;
 
-	    details {
-	      display: block;
-	      padding: 25px;
+			details {
+				display: block;
+				padding: 25px;
 
-	      &.filter-box {
-	        border: 0;
-	        text-align: center;
-	        padding-top: 0;
-	        padding-bottom: 0;
+				&.filter-box {
+					border: 0;
+					text-align: center;
+					padding-top: 0;
+					padding-bottom: 0;
 
-	        .row {
-	          width: 100%;
-	        }
-	      }
+					.row {
+						width: 100%;
+					}
+				}
 
-	      summary {
-	        width: 250px;
-	        margin: 0 auto;
-	        display: block;
-	      }
-	    }
+				summary {
+					width: 250px;
+					margin: 0 auto;
+					display: block;
+				}
+			}
 
-	    input {
-	      .filter-box {
-	        display: inline-block !important;
-	      }
-	    }
+			input {
+				.filter-box {
+					display: inline-block !important;
+				}
+			}
 
-	    .checkbox {
-	      label {
-	        float: left;
-	      }
-	    }
+			.checkbox {
+				label {
+					float: left;
+				}
+			}
 
-	    div.filter-box {
-	      display: none;
-	    }
+			div.filter-box {
+				display: none;
+			}
 
-	    details {
-	      &.well {
-	        display: block;
-	        border: 0;
-	        padding: 0;
-	        margin-bottom: 0;
+			details {
+				&.well {
+					display: block;
+					border: 0;
+					padding: 0;
+					margin-bottom: 0;
 
-	        summary {
-	          display: block;
-	          width: 280px;
-	          margin: 0 auto;
-	        }
-	      }
-	    }
-	  }
+					summary {
+						display: block;
+						width: 280px;
+						margin: 0 auto;
+					}
+				}
+			}
+		}
 	}
 
 	&.blog {
-	  overflow-y: visible;
+		overflow-y: visible;
 
-	  .row {
-	    @media (max-width: $screen-sm-max) {
-	      display: flex;
+		.row {
+			@media (max-width: $screen-sm-max) {
+				display: flex;
 
-	      .col-md-3, .col-md-9 {
-	        padding: 0;
-	      }
-	    }
+				.col-md-3,
+				.col-md-9 {
+					padding: 0;
+				}
+			}
 
-	    .blog-image {
-	      .img-responsive {
-	        display: block;
-	        max-width: 100%;
-	        height: auto;
-	      }
-	    }
+			.blog-image {
+				.img-responsive {
+					display: block;
+					max-width: 100%;
+					height: auto;
+				}
+			}
 
-	    .table-responsive {
-	      .table {
-	        width: 100%;
-	        max-width: 100%;
-	        caption-side: top;
+			.table-responsive {
+				.table {
+					width: 100%;
+					max-width: 100%;
+					caption-side: top;
 
-	        thead, tbody, tfoot {
-	          th, td {
-	            border-width: 1px;
-	            padding: 12px 24px;
-	            line-height: 1.6;
+					thead,
+					tbody,
+					tfoot {
 
-	            @media (max-width: $screen-xs-max) {
-	              white-space: nowrap;
-	            }
-	          }
-	        }
+						th,
+						td {
+							border-width: 1px;
+							padding: 12px 24px;
+							line-height: 1.6;
 
-	        @media (max-width: $screen-xs-max) {
-	          margin-bottom: 0;
-	        }
-	      }
+							@media (max-width: $screen-xs-max) {
+								white-space: nowrap;
+							}
+						}
+					}
 
-	      @media (max-width: $screen-xs-max) {
-	        width: 100%;
-	        margin-bottom: 18.75px;
-	        overflow-y: hidden;
-	        border: 1px solid #ddd;
-	      }
-	    }
+					@media (max-width: $screen-xs-max) {
+						margin-bottom: 0;
+					}
+				}
+
+				@media (max-width: $screen-xs-max) {
+					width: 100%;
+					margin-bottom: 18.75px;
+					overflow-y: hidden;
+					border: 1px solid #ddd;
+				}
+			}
 
 			.manufacturer {
-			  .logo-container {
-			    width: auto;
-			    height: auto;
+				.logo-container {
+					width: auto;
+					height: auto;
 
-			    @media (max-width:1199px) {
-			      max-width: 120px;
-				  min-height: 60px;
-			      margin: 0 auto;
-			    }
-			  }
+					@media (max-width:1199px) {
+						max-width: 120px;
+						min-height: 60px;
+						margin: 0 auto;
+					}
+				}
 			}
 
 			.manuf-logo {
-			  @media only screen and (max-width: $screen-xs-max) {
-			    display: none;
-			  }
+				@media only screen and (max-width: $screen-xs-max) {
+					display: none;
+				}
 
-			  img {
-			    max-width: 150px;
-			  }
+				img {
+					max-width: 150px;
+				}
 			}
-	  }
+		}
 	}
-  
+
 	&.content-body {
-	  overflow-y: visible;
-	  overflow-x: hidden;
+		overflow-y: visible;
+		overflow-x: hidden;
 
-	  article {
-	    .row {
-	      @media (max-width: $screen-sm-max) {
-	        display: block;
-	        padding: 0 15px;
-	      }
-	    }
-	  }
+		article {
+			.row {
+				@media (max-width: $screen-sm-max) {
+					display: block;
+					padding: 0 15px;
+				}
+			}
+		}
 
-	  header {
-	    > div:first-child {
-	      padding: 0 0 22px;
+		header {
+			>div:first-child {
+				padding: 0 0 22px;
 
-	      @media only screen and (min-width: $screen-sm-min) {
-	        padding: 0 60px 25px;
-	      }
-	    }
-	  }
+				@media only screen and (min-width: $screen-sm-min) {
+					padding: 0 60px 25px;
+				}
+			}
+		}
 
-	  .header-content {
-	    @media (max-width: $screen-sm-max) {
-	      display: block;
-	      padding: 0 15px;
-	    }
+		.header-content {
+			@media (max-width: $screen-sm-max) {
+				display: block;
+				padding: 0 15px;
+			}
 
-	    .col-md-8 {
-	      > div {
-	        @media only screen and (min-width: $screen-sm-min) {
-	          padding: 0 70px;
-	        }
-	      }
-	    }
+			.col-md-8 {
+				>div {
+					@media only screen and (min-width: $screen-sm-min) {
+						padding: 0 70px;
+					}
+				}
+			}
 
-	    #authorLine {
-	      font-size: 18px;
+			#authorLine {
+				font-size: 18px;
 
-		  a {
-			font-size: 16px;;
-		  }
-	    }
-	  }
+				a {
+					font-size: 16px;
+					;
+				}
+			}
+		}
 
-	  .help-menu {
-	    li {
-	      @media only screen and (min-width: $screen-sm-min) {
-	        list-style-type: none;
-	      }
-	    }
-	    ul {
-	      @media only screen and (min-width: $screen-sm-min) {
-	        margin: 10px 0;
-	        padding: 0;
+		.help-menu {
+			li {
+				@media only screen and (min-width: $screen-sm-min) {
+					list-style-type: none;
+				}
+			}
 
-	        li {
-	          margin-left: 20px;
+			ul {
+				@media only screen and (min-width: $screen-sm-min) {
+					margin: 10px 0;
+					padding: 0;
 
-	          &.active {
-	            font-weight: bold;
-	          }
-	        }
-	      }
-	    }
-	  }
+					li {
+						margin-left: 20px;
 
-	  .header-content {
-	    @media (min-width: $screen-sm-min) {
-	      padding: 0 70px;
-	    }
-	  }
+						&.active {
+							font-weight: bold;
+						}
+					}
+				}
+			}
+		}
 
-	  #wiki-body {
-	    padding: 15px;
+		.header-content {
+			@media (min-width: $screen-sm-min) {
+				padding: 0 70px;
+			}
+		}
 
-	    .aside aside {
-	      @media only screen and (min-width: $screen-sm-min) {
-	        display: none;
-	      }
-	    }
-	  }
+		#wiki-body {
+			padding: 15px;
+
+			.aside aside {
+				@media only screen and (min-width: $screen-sm-min) {
+					display: none;
+				}
+			}
+		}
 	}
 
 	&.secondary-fixed-nav {
-	  padding-top: $navbar-height + $navbar-inverse-height;
+		padding-top: $navbar-height + $navbar-inverse-height;
 	}
 
 	.col-md-5.col-lg-5.col-lg-offset-1.over-backdrop {
-	  margin-bottom: 2em;
+		margin-bottom: 2em;
 	}
 
 	html.show-side-nav {
-	  overflow: hidden;
+		overflow: hidden;
 
-	  [data-hh-side-nav] {
-	    display: block;
-	  }
+		[data-hh-side-nav] {
+			display: block;
+		}
 	}
 
 	.notes {
 		margin: 20px 0px;
 	}
+
 	.single_note {
 		padding: 5px;
 		border: 1px solid #DDD;
