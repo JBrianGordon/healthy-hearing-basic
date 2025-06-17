@@ -81,16 +81,34 @@ $author_default = false;
 											echo $this->Form->control('facebook_title');
 											echo $this->Form->control('facebook_description');
 										?>
-                                        <img id="facebook-imagePreview0" src="#" class="form-group col-md-offset-3 mt-3" alt="Facebook Image Preview" style="display:none; max-width: 100px; max-height: 100px;" />
-										<?= '<p class="col-md-9 col-md-offset-3 pl0' . (isset($wiki->facebook_image_url) ? '' : ' d-none') . '" id="facebookImageUrl">' . $wiki->facebook_image_url . '</p>' ?>
+										<img id="facebook-imagePreview0" src="<?= $corp->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3<?= $corp->facebook_image_url ? '' : " d-none" ?>" alt="Facebook Image Preview" style="max-width: 100px; max-height: 100px;" />
+										<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none">
+										<?php
+											$inputValue = $this->Form->getValue('facebook_image_name');
+											$class = empty($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
+										?>
+
 										<?=
 											$this->Form->control('facebook_image_name', [
 												'id' => 'facebook-imageUpload0',
-												'class' => 'mt-3 btn btn-light btn-sm w-25',
+												'class' => $class,
+												'style' => 'background-color:#78afc9;color:#fff',
 												'required' => false,
 												'label' => ['text' => 'Update Facebook Image'],
-												'value' => 'Choose an image'
+												'placeholder' => 'Choose an image',
+												'readonly' => true
 											]);
+										?>
+										<?php
+											echo $this->Form->control('facebook_image_width', [
+												'label' => 'Image Width (min 800px)',
+												'readonly' => true,
+											]);
+											echo $this->Form->control('facebook_image_height', [
+												'label' => 'Image Height',
+												'readonly' => true,
+											]);
+											echo $this->Form->control('facebook_image_alt', ['label' => 'Image Alt Text', 'required' => false]);
 										?>
 										<hr>
 										<h3>Contributors</h3>
