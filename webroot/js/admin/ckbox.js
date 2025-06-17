@@ -35,6 +35,7 @@ if (imagePathInput) {
                             imagePreview.src = assetUrl;
                             imagePreview.classList.remove('d-none');
                             imagePathInput.value = assetUrl;
+                            imagePathInput.setAttribute('value', assetUrl);
                             imagePathInput.classList.remove('w-25');
                             facebookImageUrl.value = assetUrl;
                             facebookImageWidth.value = assetWidth;
