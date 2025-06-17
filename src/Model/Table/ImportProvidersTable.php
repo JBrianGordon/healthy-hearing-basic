@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
 
 /**
  * ImportProviders Model
@@ -35,6 +36,8 @@ class ImportProvidersTable extends Table
         'first_name' => 'First Name',
         'last_name' => 'Last Name',
         'email' => 'Email'
+        // Add aud_or_his for US
+        // Add title for CA
     ];
 
     /**
@@ -60,6 +63,11 @@ class ImportProvidersTable extends Table
         $this->hasMany('ImportLocationProviders', [
             'foreignKey' => 'import_provider_id',
         ]);
+        if (Configure::read('country') == 'CA') {
+            $this->fields['title'] = 'Title';
+        } else {
+            $this->fields['aud_or_his'] = 'AUD or HIS';
+        }
     }
 
     /**
@@ -96,6 +104,11 @@ class ImportProvidersTable extends Table
             ->scalar('aud_or_his')
             ->maxLength('aud_or_his', 255)
             ->allowEmptyString('aud_or_his');
+
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 128)
+            ->allowEmptyString('title');
 
         return $validator;
     }

@@ -172,9 +172,12 @@ class LocationsController extends BaseAdminController
                     unset($data['location_notes'][$key]);
                 }
             }
-
-            // remove last empty/new LocationPhoto
-            array_pop($data['location_photos']);
+            // remove empty location photos
+            foreach ($data['location_photos'] as $key => $locationPhoto) {
+                if (empty($locationPhoto['photo_name'])) {
+                    unset($data['location_photos'][$key]);
+                }
+            }
 
             // Delete LocationAd records if no custom ad/special announcement is uploaded
             if ($data['location_ad']['title'] === '' &&

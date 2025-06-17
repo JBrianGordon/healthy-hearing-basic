@@ -51,22 +51,30 @@ $this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVers
                     <?php endif; ?>
 
                     <?php if (!empty($importProviders)): ?>
-                        <!-- Display YHN providers that will be added -->
+                        <!-- Display providers that will be added -->
                         <hr>
-                        <h4 class="mb5">YHN Providers</h4>
-                        <p>We will automatically add these providers from YHN. They can be modified on the following Review page.</p>
+                        <h4 class="mb5">Providers</h4>
+                        <p>We will automatically add these providers from the <?= $importType ?> import file. They can be modified on the following Review page.</p>
                         <table class="table table-striped table-bordered table-condensed">
                             <tr>
                                 <th>First</th>
                                 <th>Last</th>
-                                <th>AUD or HIS</th>
+                                <?php if (Configure::read('country') == 'CA'): ?>
+                                    <th>Title</th>
+                                <?php else: ?>
+                                    <th>AUD or HIS</th>
+                                <?php endif; ?>
                                 <th>Email</th>
                             </tr>
                             <?php foreach ($importProviders as $importProvider): ?>
                                 <tr>
                                     <td><?= empty($importProvider->first_name) ? '' : $importProvider->first_name ?></td>
                                     <td><?= empty($importProvider->last_name) ? '' : $importProvider->last_name ?></td>
-                                    <td><?= empty($importProvider->aud_or_his) ? '' : $importProvider->aud_or_his ?></td>
+                                    <?php if (Configure::read('country') == 'CA'): ?>
+                                        <td><?= empty($importProvider->title) ? '' : $importProvider->title ?></td>
+                                    <?php else: ?>
+                                        <td><?= empty($importProvider->aud_or_his) ? '' : $importProvider->aud_or_his ?></td>
+                                    <?php endif; ?>
                                     <td><?= empty($importProvider->email) ? '' : $importProvider->email ?></td>
                                 </tr>
                             <?php endforeach; ?>

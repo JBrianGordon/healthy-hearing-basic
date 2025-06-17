@@ -40,6 +40,7 @@ class ImportProvider extends Entity
         'last_name' => true,
         'email' => true,
         'aud_or_his' => true,
+        'title' => true,
         'import' => true,
         'provider' => true,
         'import_location_providers' => true,

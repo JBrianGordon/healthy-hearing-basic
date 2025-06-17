@@ -176,13 +176,13 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                             <table class="table-condensed border-0">
                                                 <tbody>
                                                     <tr provider="<?= $provider->id ?>" providerCount="<?= $providerCount ?>">
-                                                        <td class="text-center border-0 w-25 p10">
+                                                        <td class="text-center border-0 w-25 p0">
                                                             <button type="button" class="js-link-delete form-control bi bi-x-circle w-100"> Delete</button>
                                                             <?php if (empty($provider->id_yhn_provider) || !in_array($provider->id_yhn_provider, $importProviderIds)): ?>
                                                                 <button type="button" class="js-link hh-link hidden form-control bi bi-link-45deg"></button>
                                                             <?php endif; ?>
                                                         </td>
-                                                        <td colspan=3 class="text-center border-0 p10">
+                                                        <td colspan=3 class="text-center border-0 p0">
                                                             <div class='well import-well'>
                                                                 <?php if ($isLinked): ?>
                                                                     <span class="badge bg-warning bi bi-globe2"><?= ' ' . Configure::read('importTag') ?></span>
@@ -214,7 +214,7 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                         $class = ($isMatch) ? "linked match" : "linked different";
                                                         ?>
                                                         <tr providerCount="<?=  $providerCount ?>">
-                                                            <td class="border-0 p10 <?= $reviewNeeded ?>">
+                                                            <td class="border-0 p0 <?= $reviewNeeded ?>">
                                                                 <label class="control-label w-100 tal"><?= $label ?></label>
                                                                 <?php if (!empty($providerDiffs[$providerId][$field])): ?>
                                                                     <?php $diff = current($providerDiffs[$providerId][$field]); ?>
@@ -222,17 +222,18 @@ echo $this->Html->script('dist/admin_location_review.min.js?v='.Configure::read(
                                                                     <small>Changed: <?= date('F j, Y', strtotime($diff['created'])) ?></small>
                                                                 <?php endif; ?>
                                                             </td>
-                                                            <td class="text-center border-0 p10">
+                                                            <td class="text-center border-0 p0 pl20">
                                                                 <?= $this->Form->control("providers.$providerCount.$field", [
                                                                     'label' => false,
                                                                     'required' => false,
                                                                     'field' => $field,
                                                                     'value' => trim($provider->{$field}),
                                                                     'class' => 'w-100',
+                                                                    'container' => ['class' => 'mb0']
                                                                 ]) ?>
                                                             </td>
-                                                            <td class="border-0 p20"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
-                                                            <td class="text-center border-0 pl20">
+                                                            <td class="border-0 p5 pl20"><button class="js-copy-left form-control w-100" type="button">&larr;</button></td>
+                                                            <td class="text-center border-0 p0 pl20">
                                                                 <?php if ($isLinked): ?>
                                                                     <?= $this->Form->text("providers.$providerCount.$field", [
                                                                         'label' => false,

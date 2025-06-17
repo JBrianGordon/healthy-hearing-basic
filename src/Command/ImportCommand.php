@@ -1649,7 +1649,7 @@ class ImportCommand extends Command
         $newCount = 0;
 
         foreach ($providers['ProviderItem'] as $provider) {
-            $email = filter_var($location['Email'], FILTER_SANITIZE_EMAIL);
+            $email = filter_var($provider['Email'], FILTER_SANITIZE_EMAIL);
             $externalId = trim($provider['ProviderID']);
             $saveData = [
                 'import_id' => $this->importId,
@@ -1657,6 +1657,7 @@ class ImportCommand extends Command
                 'last_name' => trim($provider['LastName']),
                 'email' => $email,
                 'id_external' => $externalId,
+                'title' => trim($provider['Credentials']),
             ];
 
             // Save the import record to our database
@@ -1692,7 +1693,7 @@ class ImportCommand extends Command
                 'import_location_id'    => $importLocationId,
             ];
             $importLocationProviderEntity = $this->ImportLocationProviders->newEntity($locationProviderData);
-            $this->ImportProviders->save($importProviderEntity);
+            $this->ImportLocationProviders->save($importLocationProviderEntity);
         }
         // Set up our return data
         $caLogData = [

@@ -506,6 +506,7 @@ class ImportsController extends BaseAdminController
                     'email' => $importProvider->email,
                     'is_active' => 1,
                     'aud_or_his' => $importProvider->aud_or_his,
+                    'title' => $importProvider->title,
                     'credentials' => '',
                     'id_yhn_provider' => $importProvider->id_external,
                 ];
