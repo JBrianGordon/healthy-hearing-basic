@@ -7,7 +7,7 @@ class InsertKeyPointsCommand extends Command {
         const editor = this.editor;
 
         const html = `
-          <div style="background-color:#e8f5ff;padding:10px 20px;filter:drop-shadow(4px 4px lightgrey);">
+          <div style="background-color:#fff;border:1px solid black;padding:10px 20px;filter:drop-shadow(4px 4px lightgrey);">
             <h3><strong>Key points:</strong></h3>
             <ul>
               <li><p>TEXT HERE</p></li>
