@@ -162,6 +162,7 @@ class BaseShellHelper extends Helper
     function sftpRetrieveFile($serverName, $username, $password, $remoteName, $localName){
         $this->_io->info('Copying ' . $remoteName . ' from ' . $serverName . ' to ' . $localName);
         try {
+            $remoteName = rawurlencode($remoteName);
             $remote = "sftp://$serverName/$remoteName";
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $remote);
@@ -169,6 +170,11 @@ class BaseShellHelper extends Helper
             curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             file_put_contents($localName, curl_exec($curl));
+            if (curl_errno($curl)) {
+                $errorCode = curl_errno($curl);
+                $this->_io->error('Curl error: '.$errorCode);
+                $this->_io->error(curl_strerror($errorCode));
+            }
             curl_close($curl);
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
