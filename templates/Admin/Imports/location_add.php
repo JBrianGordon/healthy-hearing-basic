@@ -50,7 +50,7 @@ $this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVers
                         <?= $this->Form->hidden('id_external', ['default' => $importLocation->id_external]); ?>
                     <?php endif; ?>
 
-                    <?php if (!empty($importProviders)): ?>
+                    <?php if (count($importProviders)): ?>
                         <!-- Display providers that will be added -->
                         <hr>
                         <h4 class="mb5">Providers</h4>
