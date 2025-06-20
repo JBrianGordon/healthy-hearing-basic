@@ -172,4 +172,7 @@ return [
     // CallSource API
     //'callSourceUsername' => '_example_', //prod only
     //'callSourcePassword' => '_example_', //prod only
+
+    // Honeybadger.io
+    'honeybadgerApiKey' => '_honeybadger_api_key_',
 ];

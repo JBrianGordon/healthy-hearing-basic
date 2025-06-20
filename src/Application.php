@@ -33,6 +33,7 @@ use Middlewares\TrailingSlash;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Event\EventInterface;
 use Muffin\Footprint\Middleware\FootprintMiddleware;
+use Honeybadger\Honeybadger;
 
 /**
  * Application setup class.
@@ -51,6 +52,11 @@ class Application extends BaseApplication
     {
         // Call parent to load bootstrap from files.
         parent::bootstrap();
+
+        $this->honeybadger = Honeybadger::new([
+            'api_key' => Configure::read('honeybadgerApiKey'),
+            'environment_name' => Configure::read('env'),
+        ]);
 
         if (PHP_SAPI === 'cli') {
             $this->bootstrapCli();

@@ -161,8 +161,18 @@ if (PHP_SAPI === 'cli') {
  */
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
 if (!$fullBaseUrl) {
+    /*
+     * When using proxies or load balancers, SSL/TLS connections might
+     * get terminated before reaching the server. If you trust the proxy,
+     * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
+     * header to determine whether to generate URLs using `https`.
+     *
+     * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
+     */
+    $trustProxy = false;
+
     $s = null;
-    if (env('HTTPS')) {
+    if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
         $s = 's';
     }
 
@@ -199,6 +209,41 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
+
+/*
+ * You can enable default locale format parsing by adding calls
+ * to `useLocaleParser()`. This enables the automatic conversion of
+ * locale specific date formats. For details see
+ * @link https://book.cakephp.org/4/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
+ */
+// \Cake\Database\TypeFactory::build('time')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('date')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('datetime')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('timestamp')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('datetimefractional')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('timestampfractional')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('datetimetimezone')
+//    ->useLocaleParser();
+// \Cake\Database\TypeFactory::build('timestamptimezone')
+//    ->useLocaleParser();
+
+// There is no time-specific type in Cake
+TypeFactory::map('time', StringType::class);
+
+/*
+ * Custom Inflector rules, can be set to correctly pluralize or singularize
+ * table, model, controller names or whatever other string is passed to the
+ * inflection functions.
+ */
+//Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
+//Inflector::rules('irregular', ['red' => 'redlings']);
+//Inflector::rules('uninflected', ['dontinflectme']);
 
 /**
 * Returns an array, derived from whatever the input was.  Optionally cleans empties from the array as well.
@@ -361,42 +406,6 @@ function setCheck($data, $path=null, $returnBool=true) {
 	}
 	return true;
 }
-
-/*
- * You can enable default locale format parsing by adding calls
- * to `useLocaleParser()`. This enables the automatic conversion of
- * locale specific date formats. For details see
- * @link https://book.cakephp.org/4/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
- */
-// \Cake\Database\TypeFactory::build('time')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('date')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetime')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamp')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimefractional')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestampfractional')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimetimezone')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamptimezone')
-//    ->useLocaleParser();
-
-// There is no time-specific type in Cake
-TypeFactory::map('time', StringType::class);
-
-/*
- * Custom Inflector rules, can be set to correctly pluralize or singularize
- * table, model, controller names or whatever other string is passed to the
- * inflection functions.
- */
-//Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
-//Inflector::rules('irregular', ['red' => 'redlings']);
-//Inflector::rules('uninflected', ['dontinflectme']);
-
 
 function formatNumber($sPhone){
     //TODO: REMOVE THIS FUNCTION AFTER PULLING CODE INTO CAKE4
