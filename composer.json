@@ -22,6 +22,7 @@
         "geocoder-php/geoip2-provider": "^4.3",
         "geocoder-php/google-maps-provider": "^4.7",
         "guzzlehttp/guzzle": "^7.4",
+        "honeybadger-io/honeybadger-php": "^2.24",
         "josegonzalez/cakephp-upload": "^7.0",
         "mailchimp/marketing": "^3.0",
         "middlewares/trailing-slash": "^2.0",
