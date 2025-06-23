@@ -444,16 +444,6 @@ class ContentTable extends Table
             $retval = $this->find('all', [
                 'conditions' => ['Content.is_active' => true, 'Content.last_modified <= CURDATE()'],
                 'contain' => ['PrimaryAuthor'],
-                'fields' => [
-                    'Content.old_url',
-                    'Content.title',
-                    'Content.type',
-                    'Content.slug',
-                    'Content.id',
-                    'Content.date',
-                    'Content.short',
-                    'Content.last_modified'
-                ],
                 'order' => 'Content.last_modified DESC',
                 'limit' => $count
             ])->all();

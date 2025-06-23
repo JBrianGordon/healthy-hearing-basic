@@ -111,10 +111,10 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                         <div class="subtitle">Article</div>
                                         <h3 class="mt0"><?= $this->Editorial->titleLink($articlesArray[0], false, ['class' => 'text-link']) ?></h3>
                                         <p>
-                                            <a href="<?= Router::url($this->Editorial->get('hh_url')) ?>" class="btn btn-light">Read Post</a>
+                                            <a href="<?= Router::url($articles->first()->get('hh_url')) ?>" class="btn btn-light">Read Post</a>
                                         </p>
                                         <p class="blog-byline text-caption">
-                                            <em>Contributed by <?= $this->Editorial->author() ?></em>
+                                            <em>Contributed by <?= $this->Editorial->getAuthorsByline($articles->first()->primary_author) ?></em>
                                         </p>
                                         <p>
                                             <?= $articlesArray[0]->get('short') ?>

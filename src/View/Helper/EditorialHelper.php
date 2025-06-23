@@ -91,7 +91,7 @@ class EditorialHelper extends Helper
      * @param string $leadingText
      * @return string Imploded list of authors beginning with 'Contributed by' and joined by ' and '
      */
-    public function getAuthorsByline($primaryAuthor, $contributors, $leadingText='Contributed by')
+    public function getAuthorsByline($primaryAuthor, $contributors = [], $leadingText='Contributed by')
     {
         $authors = $this->getAuthorsArray($primaryAuthor, $contributors);
         $authorBylines = [];
@@ -126,6 +126,11 @@ class EditorialHelper extends Helper
             if (!empty($author->$field)) {
                 $additionalAuthorInfo .= ', '.$author->$field;
             }
+        }
+
+        // Use About-page author URL on homepage
+        if ($this->getView()->getRequest()->getParam('_matchedRoute') === '/') {
+            return '<a href="/about#' . strtolower(str_replace(' ', '', $author->full_name)) . '" class="text-link">'.$author->full_name.'</a>'.$additionalAuthorInfo;
         }
         return '<a href="#about-author-' . $anchorName . '" class="text-link">'.$author->full_name.'</a>'.$additionalAuthorInfo;
     }
