@@ -26,6 +26,7 @@ use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\Log\Log;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
@@ -34,6 +35,7 @@ use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Event\EventInterface;
 use Muffin\Footprint\Middleware\FootprintMiddleware;
 use Honeybadger\Honeybadger;
+use Honeybadger\Exceptions\ServiceException;
 
 /**
  * Application setup class.
@@ -56,6 +58,9 @@ class Application extends BaseApplication
         $this->honeybadger = Honeybadger::new([
             'api_key' => Configure::read('honeybadgerApiKey'),
             'environment_name' => Configure::read('env'),
+            'service_exception_handler' => function (ServiceException $e) {
+                Log::warning('Honeybadger error: ' . $e->getMessage());
+            },
         ]);
 
         if (PHP_SAPI === 'cli') {
