@@ -63,7 +63,6 @@ class AppController extends Controller
     {
         parent::beforeRender($event);
 
-        $title = $this->viewBuilder()->getVars()['title'];
         $SeoTitles = $this->getTableLocator()->get('SeoTitles');
         $request = $this->request->getRequestTarget();
         $seoTitle = $SeoTitles->findTitleByUri($request);
