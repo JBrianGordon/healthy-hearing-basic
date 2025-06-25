@@ -484,12 +484,18 @@ class ContentTable extends Table
 
         $contents = [];
         $contentIds = [];
+
+        // TO-DO: This loop was causing errors with how it was trying to read
+        // contentTag 'id' values (doing it the Cake 2 way?). Beyond that,
+        // I'm not sure what this block is doing, since I think Wikis can only
+        // have one tag (is that right?) (BT).
         foreach ($contentTags as $contentTag) {
-            if (!in_array($contentTag->content->id, $contentIds)) {
-                $contentIds[] = $contentTag->content->id;
+            if (!in_array($contentTag->id, $contentIds)) {
+                $contentIds[] = $contentTag->id;
                 $contents[] = $contentTag->content;
             }
         }
+
         $contents = $contents[0];
         usort ($contents, function($first,$second) {
             return $second->last_modified->timestamp <=> $first->last_modified->timestamp;
