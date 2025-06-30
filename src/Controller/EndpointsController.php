@@ -12,7 +12,7 @@ class EndpointsController extends Controller
         $user = $this->request->getSession()->read('Auth');
         $userRole = ($user && $user['role'] === 'admin') ? 'admin' : 'user';
 
-        $accessKey = 'GruAKE1qtAen5lwdhiJbsn3z0ieiQ6JKfdDa5fTH0zK2sapn9fcfr0lWOZi6';
+        $accessKey = Configure::read('ckEditorAccessKey');
         $environmentId = Configure::read('ckEditorEnvironmentId');
 
         $payload = [
@@ -26,10 +26,14 @@ class EndpointsController extends Controller
             ]
         ];
 
-        $jwt = JWT::encode($payload, $accessKey, 'HS256');
-
-        $this->response = $this->response->withType('application/json')->withStringBody(json_encode(['token' => $jwt]));
-
-        return $this->response;
+        try {
+            $jwt = JWT::encode($payload, $accessKey, 'HS256');
+            // Return the token as a response
+            return $this->response->withStringBody($jwt);
+        } catch (\Exception $e) {
+            // Handle errors and return a JSON response
+            $error = ['error' => $e->getMessage()];
+            return $this->response->withType('application/json')->withStringBody(json_encode($error));
+        }
     }
 }
