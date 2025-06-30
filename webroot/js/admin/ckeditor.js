@@ -67,7 +67,7 @@ link.rel = 'stylesheet';
 link.href = 'https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css';
 document.head.appendChild(link);
 
-const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
+const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor-endpoint`;
 
 // add French characters
 function AddFrenchCharacters(editor) {

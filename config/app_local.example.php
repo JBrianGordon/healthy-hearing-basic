@@ -175,4 +175,8 @@ return [
 
     // Honeybadger.io
     'honeybadgerApiKey' => '_honeybadger_api_key_',
+
+    // CKEditor key and env
+    'ckEditorAccessKey' => '_ck_editor_access_key_',
+    'ckEditorEnvironmentId' => '_ck_editor_environment_id_',
 ];

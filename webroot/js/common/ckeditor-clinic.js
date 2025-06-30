@@ -28,9 +28,9 @@ link.rel = 'stylesheet';
 link.href = 'https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css';
 document.head.appendChild(link);
 
-const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
+const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor-endpoint`;
 
-class Editor extends ClassicEditor {}
+class Editor extends ClassicEditor { }
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
@@ -88,7 +88,7 @@ editorElements.forEach((element) => {
                         target: '_blank',
                         rel: 'noopener noreferrer'
                     }
-                },        
+                },
                 addClass: {
                     mode: 'manual',
                     label: 'Add orange button classes',
@@ -111,15 +111,15 @@ editorElements.forEach((element) => {
         CloudServices: {
             tokenUrl: ckTokenUrl
         }
-    	}).then(editor => {
-            const editorElements = document.querySelectorAll(".editor");
-          
-            editorElements.forEach(element => {
-              element.style.display = "block";
-              element.style.position = "absolute";
-              element.style.zIndex = "-1";
-            });
-        }).catch( error => {
-    	    console.error( error );
+    }).then(editor => {
+        const editorElements = document.querySelectorAll(".editor");
+
+        editorElements.forEach(element => {
+            element.style.display = "block";
+            element.style.position = "absolute";
+            element.style.zIndex = "-1";
+        });
+    }).catch(error => {
+        console.error(error);
     });
 });

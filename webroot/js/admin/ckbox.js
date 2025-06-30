@@ -6,7 +6,7 @@ const imagePreview = document.getElementById("facebook-imagePreview0");
 if (imagePathInput) {
     imagePathInput.addEventListener('click', e => {
         e.preventDefault();
-        const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor_endpoint`;
+        const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor-endpoint`;
 
         const ckboxDiv = document.createElement('div');
         const firstContainer = document.querySelector(".site-body > .row > .container");

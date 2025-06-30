@@ -2,22 +2,34 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
-use Cake\View\View;
+use Cake\Core\Configure;
+use Firebase\JWT\JWT;
 
 class EndpointsController extends Controller
 {
     public function ckeditorEndpoint()
     {
-        // Disable the auto layout
-        $this->viewBuilder()->disableAutoLayout();
+        $user = $this->request->getSession()->read('Auth');
+        $userRole = ($user && $user['role'] === 'admin') ? 'admin' : 'user';
 
-        //Set role
-        $this->user = $this->request->getSession()->read('Auth');
-        $userRole = ($this->user->role === 'admin') ? 'admin' : 'user';
-        $this->set('userRole', $userRole);
+        $accessKey = 'GruAKE1qtAen5lwdhiJbsn3z0ieiQ6JKfdDa5fTH0zK2sapn9fcfr0lWOZi6';
+        $environmentId = Configure::read('ckEditorEnvironmentId');
 
-        // Render the template without layout
-        return $this->render('/Endpoints/ckeditor_endpoint');
+        $payload = [
+            'aud' => $environmentId,
+            'iat' => time(),
+            'sub' => 'finance@healthyhearing.com',
+            'auth' => [
+                'ckbox' => [
+                    'role' => $userRole,
+                ]
+            ]
+        ];
+
+        $jwt = JWT::encode($payload, $accessKey, 'HS256');
+
+        $this->response = $this->response->withType('application/json')->withStringBody(json_encode(['token' => $jwt]));
+
+        return $this->response;
     }
 }
-?>

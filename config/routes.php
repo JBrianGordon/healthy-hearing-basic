@@ -74,6 +74,10 @@ return static function (RouteBuilder $routes) {
         // Online hearing test
         $builder->connect('/help/online-hearing-test', ['controller' => 'quizResults', 'action' => 'online_hearing_test']);
 
+        // CKEditor endpoint route
+        $builder->connect('/endpoints/ckeditor-endpoint', ['controller' => 'Endpoints', 'action' => 'ckeditorEndpoint']);
+
+
         /*
          * Connect catchall routes for all controllers.
          *
