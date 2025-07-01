@@ -84,7 +84,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 										<br>
 										<div class="tab-pane active content-body" id="Corp">
 											<?php
-												echo $this->Form->control('description', ['class' => 'editor']);
+												echo $this->Form->control('description', ['class' => 'editor', 'label' => ['style' => 'word-break: auto-phrase;']]);
 												echo $this->Form->control('short');
 											?>
 										</div>

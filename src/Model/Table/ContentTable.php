@@ -88,35 +88,35 @@ class ContentTable extends Table
             'priority' => 0.8,
         ]);
 
-        $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'facebook_image_name' => [
-                'writer' => 'App\Utility\Writer\CkBoxWriter',
-                'filesystem' => [
-                    'adapter' => new CKBoxAdapter(Configure::read('CK.content-uploads')),
-                ],
-                'path' => '',
-                'fields' => [
-                    'type' => 'facebook_image'
-                ],
-                'keepFilesOnDelete' => false,
-                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
-                    $filename = $data->getClientFilename();
-                    $basename = pathinfo($filename, PATHINFO_FILENAME);
-                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    return $basename . '-' . uniqid() . '.' . $extension;
-                },
-                'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    if (!empty($entity->facebook_image_url)) {
-                        preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
-                        $ckBoxImageId = $matches[1];
-                        return [
-                            $ckBoxImageId,
-                        ];
-                    }
-                    return [];
-                }
-            ],
-        ]);
+        // $this->addBehavior('Josegonzalez/Upload.Upload', [
+        //     'facebook_image_name' => [
+        //         'writer' => 'App\Utility\Writer\CkBoxWriter',
+        //         'filesystem' => [
+        //             'adapter' => new CKBoxAdapter(Configure::read('CK.content-uploads')),
+        //         ],
+        //         'path' => '',
+        //         'fields' => [
+        //             'type' => 'facebook_image'
+        //         ],
+        //         'keepFilesOnDelete' => false,
+        //         'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+        //             $filename = $data->getClientFilename();
+        //             $basename = pathinfo($filename, PATHINFO_FILENAME);
+        //             $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        //             return $basename . '-' . uniqid() . '.' . $extension;
+        //         },
+        //         'deleteCallback' => function ($path, $entity, $field, $settings) {
+        //             if (!empty($entity->facebook_image_url)) {
+        //                 preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+        //                 $ckBoxImageId = $matches[1];
+        //                 return [
+        //                     $ckBoxImageId,
+        //                 ];
+        //             }
+        //             return [];
+        //         }
+        //     ],
+        // ]);
 
         // Associations
         $this->belongsTo('PrimaryAuthor')
@@ -377,16 +377,16 @@ class ContentTable extends Table
             ->notEmptyString('facebook_image_name', 'must have image');
 
         $validator->setProvider('upload', \Josegonzalez\Upload\Validation\ImageValidation::class);
-        $validator->add('facebook_image_name', 'fileAboveMinWidth', [
-            'rule' => ['isAboveMinWidth', 800],
-            'on' => function ($context) {
-                $imageSizeGreaterThanZero = $context['data']['facebook_image_name']->getSize() > 0;
-                $imageFilenameNotEmpty = !empty($context['data']['facebook_image_name']->getClientFilename());
-                return ($imageSizeGreaterThanZero && $imageFilenameNotEmpty);
-            },
-            'message' => 'This image should at least be 800px wide',
-            'provider' => 'upload'
-        ]);
+        // $validator->add('facebook_image_name', 'fileAboveMinWidth', [
+        //     'rule' => ['isAboveMinWidth', 800],
+        //     'on' => function ($context) {
+        //         $imageSizeGreaterThanZero = $context['data']['facebook_image_name']->getSize() > 0;
+        //         $imageFilenameNotEmpty = !empty($context['data']['facebook_image_name']->getClientFilename());
+        //         return ($imageSizeGreaterThanZero && $imageFilenameNotEmpty);
+        //     },
+        //     'message' => 'This image should at least be 800px wide',
+        //     'provider' => 'upload'
+        // ]);
 
         // $validator
         //     ->integer('facebook_image_height')
