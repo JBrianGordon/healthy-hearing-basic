@@ -60,7 +60,7 @@ $author_default = false;
 									<br>
 									<div class="tab-pane active" id="Corp">
 										<?php
-											echo $this->Form->control('description', ['class' => 'editor']);
+											echo $this->Form->control('description', ['class' => 'editor', 'label' => ['style' => 'word-break: auto-phrase;']]);
 											echo $this->Form->control('short');
 										?>
 									</div>

@@ -3,6 +3,19 @@ const imagePathInput = document.getElementById("facebook-imageUpload0");
 const facebookImageUrl = document.getElementById("facebookImageUrl");
 const imagePreview = document.getElementById("facebook-imagePreview0");
 
+// Function to adjust Facebook image width
+function adjustInputWidth(inputElement) {
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.whiteSpace = 'nowrap';
+    tempSpan.style.font = window.getComputedStyle(inputElement).font;
+    tempSpan.textContent = inputElement.value;
+
+    document.body.appendChild(tempSpan);
+    inputElement.style.width = `${tempSpan.offsetWidth + 70}px`;
+    document.body.removeChild(tempSpan);
+}
+
 if (imagePathInput) {
     imagePathInput.addEventListener('click', e => {
         e.preventDefault();
@@ -26,6 +39,7 @@ if (imagePathInput) {
                 onChoose: assets => {
                     assets.forEach(asset => {
                         const assetUrl = asset.data.url;
+                        const assetName = asset.data.name;
                         const assetWidth = asset.data.metadata.width;
                         const assetHeight = asset.data.metadata.height;
                         const facebookImageWidth = document.getElementById("facebook-image-width");
@@ -34,13 +48,14 @@ if (imagePathInput) {
                         if (assetWidth >= 800) {
                             imagePreview.src = assetUrl;
                             imagePreview.classList.remove('d-none');
-                            imagePathInput.value = assetUrl;
-                            imagePathInput.setAttribute('value', assetUrl);
+                            imagePathInput.value = assetName;
+                            imagePathInput.setAttribute('value', assetName);
                             imagePathInput.classList.remove('w-25');
                             facebookImageUrl.value = assetUrl;
                             facebookImageWidth.value = assetWidth;
                             facebookImageHeight.value = assetHeight;
                             facebookImageUrl.classList.remove('d-none');
+                            adjustInputWidth(imagePathInput);
                         } else {
                             alert(`The selected image must be at least 800px wide. This image is ${assetWidth}px wide.`);
                         }

@@ -107,30 +107,30 @@ class CorpsTable extends Table
                     return [];
                 }
             ],
-            'facebook_image_name' => [
-                'writer' => 'App\Utility\Writer\CkBoxWriter',
-                'filesystem' => [
-                    'adapter' => new CKBoxAdapter(Configure::read('CK.corps-uploads')),
-                ],
-                'path' => '',
-                'keepFilesOnDelete' => false,
-                'nameCallback' => function ($table, $entity, $data, $field, $settings) {
-                    $filename = $data->getClientFilename();
-                    $basename = pathinfo($filename, PATHINFO_FILENAME);
-                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    return $basename . '-' . uniqid() . '.' . $extension;
-                },
-                'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    if (!empty($entity->facebook_image_url)) {
-                        preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
-                        $ckBoxImageId = $matches[1];
-                        return [
-                            $ckBoxImageId,
-                        ];
-                    }
-                    return [];
-                }
-            ],
+            // 'facebook_image_name' => [
+            //     'writer' => 'App\Utility\Writer\CkBoxWriter',
+            //     'filesystem' => [
+            //         'adapter' => new CKBoxAdapter(Configure::read('CK.corps-uploads')),
+            //     ],
+            //     'path' => '',
+            //     'keepFilesOnDelete' => false,
+            //     'nameCallback' => function ($table, $entity, $data, $field, $settings) {
+            //         $filename = $data->getClientFilename();
+            //         $basename = pathinfo($filename, PATHINFO_FILENAME);
+            //         $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            //         return $basename . '-' . uniqid() . '.' . $extension;
+            //     },
+            //     'deleteCallback' => function ($path, $entity, $field, $settings) {
+            //         if (!empty($entity->facebook_image_url)) {
+            //             preg_match("/assets\/(.*?)\/file/", $entity->facebook_image_url, $matches);
+            //             $ckBoxImageId = $matches[1];
+            //             return [
+            //                 $ckBoxImageId,
+            //             ];
+            //         }
+            //         return [];
+            //     }
+            // ],
         ]);
 
         // Associations
