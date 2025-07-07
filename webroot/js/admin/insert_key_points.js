@@ -7,15 +7,14 @@ class InsertKeyPointsCommand extends Command {
         const editor = this.editor;
 
         const html = `
-          <div style="background-color:#fff;border:1px solid black;padding:10px 20px;filter:drop-shadow(4px 4px lightgrey);">
+          <div class="key-points mb50">
             <h3><strong>Key points:</strong></h3>
             <ul>
-              <li><p>TEXT HERE</p></li>
-              <li><p>TEXT HERE</p></li>
+              <li class="mb50"><p>TEXT HERE</p></li>
+              <li class="mb50"><p>TEXT HERE</p></li>
               <li><p>TEXT HERE</p></li>
             </ul>
           </div>
-          <p></p>
         `;
 
         // Convert the HTML string to a view fragment for the model

@@ -278,6 +278,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: 'h6',
                         attributes: true,
                         classes: true
+                    },
+                    {
+                        name: 'li',
+                        attributes: true,
+                        classes: true
                     }
                 ]
             },
