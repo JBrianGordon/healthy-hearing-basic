@@ -14,9 +14,9 @@
 			<?php if (Configure::read('isCallAssistEnabled') && $location->is_call_assist && $isEnhancedOrPremier && !TableRegistry::get('Configurations')->isCallTrackingBypassed()): ?>
 				<div>
 					<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && !empty($location->direct_book_iframe)): ?>
-						<a href="#" class="btn btn-secondary directBookBtn" data-button="<?= $location->id; ?>" style="min-width:180px;">Book now!</a>
+						<a href="#" class="btn btn-success directBookBtn" data-button="<?= $location->id; ?>" style="min-width:180px;">Book now!</a>
 					<?php else: ?>
-						<a href="#" class="btn btn-secondary apptRequestBtn">Request my appointment</a>
+						<a href="#" class="btn btn-success apptRequestBtn">Request my appointment</a>
 					<?php endif; ?>
 				</div>
 				<?php if(!empty($displayOpenClosed) || !Configure::read('isCallAssistEnabled')): ?>

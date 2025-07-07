@@ -99,7 +99,7 @@ $this->Breadcrumbs->add($location->title);
 												<!-- Appointment request -->
 												<?php if (Configure::read('isCallAssistEnabled') && !$isCallTrackingBypassed): ?>
 													<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && !empty($location->direct_book_iframe)): ?>
-														<div><a href="#" class='btn btn-secondary directBookBtn' style="min-width:250px;float:left;height:43px;padding:13px" data-button="<?= $location->id; ?>">Book now!</a></div>
+														<div><a href="#" class='btn btn-success directBookBtn' style="min-width:250px;float:left;height:43px;padding:13px" data-button="<?= $location->id; ?>">Book now!</a></div>
 													<?php endif; ?>
 												<?php endif; ?>
 											</div>

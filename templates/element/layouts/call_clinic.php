@@ -20,10 +20,10 @@ $isCallAssistEnabled = Configure::read('isCallAssistEnabled');
 				<!-- Appointment request -->
 				<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 					<?php if ($location->is_call_assist && $isEnhancedOrPremier): ?>
-						<div class="tac"><a href="#" class="btn btn-lg btn-secondary apptRequestBtn mb5" style="min-width:250px;" title="An agent will call you to schedule your appointment">Request my appointment</a></div>
+						<div class="tac"><a href="#" class="btn btn-lg btn-success apptRequestBtn mb5" style="min-width:250px;" title="An agent will call you to schedule your appointment">Request my appointment</a></div>
 					<?php endif; ?>
 					<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && !empty($location->direct_book_iframe)): ?>
-						<div class="tac"><a href="#" class="btn btn-lg btn-secondary directBookBtn" style="min-width:250px;" data-button="<?= $location->id ?>">Book now!</a></div>
+						<div class="tac"><a href="#" class="btn btn-lg btn-success directBookBtn" style="min-width:250px;" data-button="<?= $location->id ?>">Book now!</a></div>
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>

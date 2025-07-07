@@ -41,14 +41,14 @@ $isEnhancedOrPremier = $this->Clinic->isEnhancedOrPremierByLocationId($locationI
 					<!-- Appointment request -->
 					<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
 						<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
-							<a href="#" class="btn btn-lg btn-secondary apptRequestBtn" data-id="<?= $locationId ?>">
+							<a href="#" class="btn btn-lg btn-success apptRequestBtn" data-id="<?= $locationId ?>">
 								Request my appointment
 							</a>
 						<?php endif; ?>
 					<?php endif; ?>
 					<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
 						<div>
-							<a href="#" class='btn btn-lg btn-secondary directBookBtn mb5 mt10' data-button="<?=$location->id ?>">Book now!</a>
+							<a href="#" class='btn btn-lg btn-success directBookBtn mb5 mt10' data-button="<?=$location->id ?>">Book now!</a>
 						</div>
 						<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 					<?php endif; ?>
