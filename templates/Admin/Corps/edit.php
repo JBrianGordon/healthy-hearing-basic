@@ -107,7 +107,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 												echo $this->Form->control('facebook_description');
 											?>
 											<img id="facebook-imagePreview0" src="<?= $corp->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3<?= $corp->facebook_image_url ? '' : " d-none" ?>" alt="Facebook Image Preview" style="max-width: 100px; max-height: 100px;" />
-											<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none">
+											<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none" value="<?= $corp->facebook_image_url ?>">
 											<?php
 												$inputValue = $this->Form->getValue('facebook_image_name');
 												$class = isset($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
@@ -121,7 +121,8 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 													'required' => false,
 													'label' => ['text' => 'Update Facebook Image'],
 													'placeholder' => 'Choose an image',
-													'readonly' => true
+													'readonly' => true,
+													'value' => $corp->facebook_image_name ?? ''
 												]);
 											?>
 											<?php
