@@ -13,11 +13,12 @@ form {
 
   .editor {
     position: absolute;
-    width: 1px!important;
+    width: 1px !important;
     height: 1px;
   }
 
-  &#contentForm, &#wikisForm {
+  &#contentForm,
+  &#wikisForm {
     .provider {
       .ck-editor__main {
         width: 75%;
@@ -62,7 +63,7 @@ form {
       }
     }
 
-    .is-invalid ~ .invalid-feedback {
+    .is-invalid~.invalid-feedback {
       display: none;
     }
   }
@@ -73,9 +74,16 @@ form {
       border-color: $brand-primary;
     }
   }
+
+  #facebook-image-name-error {
+    padding-left: 25%;
+  }
 }
 
-.form-control, .form-control[type=text], .form-control[type=tel], .form-control[type=email] {
+.form-control,
+.form-control[type=text],
+.form-control[type=tel],
+.form-control[type=email] {
   @include box-shadow(inset 0px 0px 3px rgba(0, 0, 0, 0.15));
   padding: 10px $padding-base-horizontal;
   font-size: 16px;
@@ -107,7 +115,8 @@ form {
   @include form-control-validation($brand-success, $brand-success, $state-success-bg);
 }
 
-#LocationForm, .clinic-badges {
+#LocationForm,
+.clinic-badges {
   input[type="checkbox"] {
     margin-left: -25px;
   }
