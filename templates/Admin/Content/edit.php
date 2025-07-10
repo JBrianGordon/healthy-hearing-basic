@@ -151,7 +151,7 @@ if (empty($content->id)) {
 				                            echo $this->Form->control('facebook_description');
 				                        ?>
 										<img id="facebook-imagePreview0" src="<?= $content->facebook_image_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3<?= $content->facebook_image_url ? '' : " d-none" ?>" alt="Facebook Image Preview" style="max-width: 100px; max-height: 100px;" />
-										<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none">
+										<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none" value="<?= $content->facebook_image_url ?>">
 										<?php
 											$inputValue = $this->Form->getValue('facebook_image_name');
 											$class = isset($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
@@ -165,7 +165,8 @@ if (empty($content->id)) {
 												'required' => false,
 												'label' => ['text' => 'Update Facebook Image'],
 												'placeholder' => 'Choose an image',
-												'readonly' => true
+												'readonly' => true,
+												'value' => $content->facebook_image_name ?? ''
 											]);
 										?>
 										<?php
