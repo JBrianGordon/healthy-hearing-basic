@@ -107,11 +107,11 @@ $this->Html->script('dist/common.min', ['block' => true]);
 											</p>
 										</div>
 									</div>
-									<a href="#" class="btn btn-share btn-facebook top-btn mb10 mr5"><span class="hh-icon-facebook"></span></a>
-									<a href="#" class="btn btn-share btn-twitter top-btn mb10 mr5"><span class="hh-icon-x"></span></a>
-									<a href="#" class="btn btn-share btn-linkedin top-btn mb10 mr5"><span class="hh-icon-linkedin"></span></a>
-									<a href="#" class="btn btn-share btn-pinterest top-btn mb10 mr5 ml0"><span class="hh-icon-pinterest"></span></a>
-									<button class="btn btn-light btn-print top-btn mb10 mr5 mt0" onclick="window.print()"><span class="hh-icon-printer"></span></button>
+									<a href="#" class="btn btn-share btn-facebook top-btn mb10 mr5"><span class="hh-icon-facebook"></span><span class="visually-hidden">Facebook share</span></a>
+									<a href="#" class="btn btn-share btn-twitter top-btn mb10 mr5"><span class="hh-icon-x"></span><span class="visually-hidden">X share</span></a>
+									<a href="#" class="btn btn-share btn-linkedin top-btn mb10 mr5"><span class="hh-icon-linkedin"></span><span class="visually-hidden">LinkedIn share</span></span></a>
+									<a href="#" class="btn btn-share btn-pinterest top-btn mb10 mr5 ml0"><span class="hh-icon-pinterest"></span><span class="visually-hidden">Pinterest share</span></a>
+									<button class="btn btn-light btn-print top-btn mb10 mr5 mt0" onclick="window.print()"><span class="hh-icon-printer"></span><span class="visually-hidden">Print page</span></button>
 								</div>
 							</div>
 						</header>

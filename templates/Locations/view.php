@@ -248,8 +248,8 @@ $this->Breadcrumbs->add($location->title);
 													</div>
 												</div>
 											</div>
-											<p class="col-xs-12 tac"><small class="tac help-block"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
-											<div class="row col-xs-12 ml0">
+											<p class="col-xs-12 tac"><small class="tac help-block mb0"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
+											<div class="row col-xs-12">
 												<div class="col-xs-12 col-sm-12">
 													<div id="apptRequestSubmitError" class="alert alert-danger tal" role="alert" style="display:none;">
 														<button type="button" class="close" data-dismiss="alert">x</button>
@@ -264,7 +264,7 @@ $this->Breadcrumbs->add($location->title);
 													 data-callback='submitApptRequest'
 													 data-size="invisible">
 												</div>
-												<small class="help-block p10 tac clearfix">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</small>
+												<small class="help-block p10 tac clearfix mt0">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</small>
 											</div>
 										<?= $this->Form->end(); ?>
 									</div>
