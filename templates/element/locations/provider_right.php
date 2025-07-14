@@ -27,19 +27,22 @@ $locationUrl = Router::url($location->hh_url);
             <?php if (!empty($providerTitle)): ?>
                 <h4 class="provider-title text-primary"><?= $providerTitle ?></h4>
             <?php endif; ?>
-            <p class="clinic-provider-bio mb0"><?php echo $this->Clinic->truncate(strip_tags($provider->description), 100, "..."); ?></p>
+            <p class="clinic-provider-bio mb0"><?= $this->Clinic->truncate(strip_tags($provider->description), 100, "..."); ?></p>
         </div>
         <div class='col-sm-4'>
             <a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
                 <?php if(!empty($location->logo_url) && !$isMobileDevice && $location->listing_type == 'Premier'): ?>
                     <div class="logo-container mr10 col-xs-12"><img loading="lazy" class="clinic-logo" src="<?=$location->logo_url?>" alt="<?=$location->title?> logo" width="120" height="40"></div>
                 <?php endif; ?>
-                <?php echo $this->Clinic->providerImage($provider, [
+                <?= $this->Clinic->providerImage($provider, [
                     'class' => 'img-responsive align-center',
                     'alt' => $alt,
                     'width' => 200,
                     'height' => 150,
                 ]); ?>
+                <span class="visually-hidden">
+                    <?= $location->title ?>
+                </span>
              </a>
         </div>
     </div>
