@@ -20,6 +20,8 @@ use App\Model\Entity\Location;
     <link rel="preload" href="/font/roboto-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/font/lato-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 
+    <!-- AutocompleteJS styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
     <?= $this->fetch('meta') ?>
 

@@ -25,6 +25,8 @@ use App\Utility\CKBoxUtility;
 use App\Utility\Adapter\CKBoxAdapter;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Log\Log;
 
 
 /**
@@ -1729,7 +1731,7 @@ class LocationsTable extends Table
 
             // Force CA zip code into A1A 1A1 format
             $settings = Configure::read('International');
-            if ($settings['country'] == 'CA') {
+            if (Configure::read('country') == 'CA') {
                 $zip = substr($zip, 0, 3) . ' ' . substr($zip, 3, 3);
             }
 
@@ -1741,16 +1743,30 @@ class LocationsTable extends Table
                     break;
             }
             $zipTable = TableRegistry::getTableLocator()->get('Zips');
-            $found = $zipTable->get($zip);
-            return array(
-                'admin' => false,
-                'plugin' => false,
-                'action' => 'index',
-                'controller' => 'locations',
-                'region' => $this->stateSlug($found['state']),
-                'city' => slugifyCity($found['city']),
-                'zip' => $found['zip'],
-            );
+
+            $found = $zipTable->find('all', [
+                'conditions' => [
+                    'zip' => $zip,
+                    'state IN' => array_keys(Configure::read('states')),
+                ],
+            ])->first();
+
+            if (!empty($found)) {
+                return [
+                    'admin' => false,
+                    'plugin' => false,
+                    'action' => 'viewCityZip',
+                    'controller' => 'locations',
+                    'region' => $this->stateSlug($found['state']),
+                    'city' => slugifyCity($found['city']),
+                    'zip' => $found['zip'],
+                ];
+            } else {
+                return [
+                    'controller' => 'Pages',
+                    'action' => 'home',
+                ];
+            }
         }
         return null;
     }

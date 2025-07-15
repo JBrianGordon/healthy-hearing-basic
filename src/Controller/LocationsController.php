@@ -599,4 +599,70 @@ class LocationsController extends AppController
         $this->set(compact('location'));
         $this->viewBuilder()->setOption('serialize', 'location');
     }
+
+    public function autocomplete()
+    {
+        $query = $this->request->getQuery('q');
+
+        $results = [];
+
+        // *- City query -*
+        $cities = $this->fetchTable('cities')->find()
+            ->where(['city LIKE' => '%' . $query . '%'])
+            ->order([
+                'is_near_location' => 'DESC',
+                'population' => 'DESC',
+                'city' => 'ASC',
+                'state' => 'ASC'
+            ])
+            ->limit(10)
+            ->all();
+
+        foreach ($cities as $city) {
+            $results[] = [
+                'name' => $city->city . ', ' . $city->state,
+                'url' => Router::url($city->hh_url)
+            ];
+        }
+
+        // *- State query -*
+        $states = $this->fetchTable('states')->find()
+            ->where([
+                'name LIKE' => '%' . $query . '%',
+                'is_active' => true,
+            ])
+            ->order([
+                'name' => 'ASC'
+            ])
+            ->limit(10)
+            ->all();
+
+        foreach ($states as $state) {
+            $results[] = [
+                'name' => $state->name,
+                'url' => Router::url($state->hh_url)
+            ];
+        }
+
+        // *- ZIP query -*
+        $zips = $this->fetchTable('zips')->find()
+            ->where([
+                'zip LIKE' => '%' . $query . '%',
+            ])
+            ->order([
+                'zip' => 'ASC'
+            ])
+            ->limit(10)
+            ->all();
+
+        foreach ($zips as $zip) {
+            $results[] = [
+                'name' => $zip->zip,
+                'url' => Router::url($this->Locations->findUrlByZip($zip->zip))
+            ];
+        }
+
+        $this->set(compact('results'));
+        $this->viewBuilder()->setOption('serialize', 'results');
+    }
 }

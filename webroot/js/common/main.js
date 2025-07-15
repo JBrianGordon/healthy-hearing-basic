@@ -1,4 +1,7 @@
 import 'jquery-ui/ui/widgets/autocomplete';
+import autoComplete from "@tarekraafat/autocomplete.js";
+
+const autoCompleteJS = new autoComplete({ config });
 
 $(window).ready(function() {
 
