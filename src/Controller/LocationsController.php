@@ -609,7 +609,7 @@ class LocationsController extends AppController
 
         // *- City query -*
         $cities = $this->fetchTable('Cities')->find()
-            ->where(['city LIKE' => '%' . $query . '%'])
+            ->where(['city LIKE' => $query . '%'])
             ->order([
                 'is_near_location' => 'DESC',
                 'population' => 'DESC',
@@ -629,7 +629,7 @@ class LocationsController extends AppController
         // *- State query -*
         $states = $this->fetchTable('States')->find()
             ->where([
-                'name LIKE' => '%' . $query . '%',
+                'name LIKE' => $query . '%',
                 'is_active' => true,
             ])
             ->order([
@@ -651,7 +651,7 @@ class LocationsController extends AppController
         // *- ZIP query -*
         $zips = $this->fetchTable('Zips')->find()
             ->where([
-                'zip LIKE' => '%' . $query . '%',
+                'zip LIKE' => $query . '%',
             ])
             ->order([
                 'zip' => 'ASC'
