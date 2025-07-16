@@ -13,6 +13,7 @@ use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use Cake\Utility\Hash;
 use Cake\ORM\Query;
+use Cake\Cache\Cache;
 
 /**
  * Locations Controller
@@ -644,23 +645,45 @@ class LocationsController extends AppController
             ];
         }
 
-        // *- ZIP query -*
-        $zips = $this->fetchTable('Zips')->find()
-            ->where([
-                'zip LIKE' => '%' . $query . '%',
-            ])
-            ->order([
-                'zip' => 'ASC'
-            ])
-            ->limit(10)
-            ->all();
+        // *- ZIP query with caching -*
+        $zipsTable = Cache::read('zips_table');
+        if ($zipsTable === null) {
+            $allZips = $this->fetchTable('Zips')->find('all')
+                ->select(['id', 'zip', 'city', 'state'])
+                ->enableHydration(false)
+                ->toArray();
+            Cache::write('zips_table', $allZips);
+        }
+
+        $zips = array_filter($zipsTable, function ($zip) use ($query) {
+            return stripos($zip['zip'], $query) !== false;
+        });
 
         foreach ($zips as $zip) {
             $results[] = [
-                'name' => $zip->zip,
-                'url' => Router::url($this->Locations->findUrlByZip($zip->zip))
+                'name' => $zip['zip'],
+                'url' => Router::url($this->Locations->findUrlByZip($zip['zip']))
             ];
         }
+
+        // TO-DO: GET RID OR KEEP AFTER EVALUATING DIFFERENT METHODS
+        // // *- ZIP query -*
+        // $zips = $this->fetchTable('Zips')->find()
+        //     ->where([
+        //         'zip LIKE' => '%' . $query . '%',
+        //     ])
+        //     ->order([
+        //         'zip' => 'ASC'
+        //     ])
+        //     ->limit(10)
+        //     ->all();
+
+        // foreach ($zips as $zip) {
+        //     $results[] = [
+        //         'name' => $zip->zip,
+        //         'url' => Router::url($this->Locations->findUrlByZip($zip->zip))
+        //     ];
+        // }
 
         $this->set(compact('results'));
         $this->viewBuilder()->setOption('serialize', 'results');
