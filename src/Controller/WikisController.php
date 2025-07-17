@@ -93,8 +93,16 @@ class WikisController extends AppController
             $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
             $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
             $this->set('seoMetaTags', $seoMetaTags);
+            
             if (empty($title)) {
-                $this->set('title', isset($wiki->title_head) ? $wiki->title_head : $this->siteName);
+                $title = isset($wiki->title_head) ? $wiki->title_head : $this->siteName;
+
+                $env = Configure::read('env');
+                if (!empty($env) && $env != 'prod') {
+                    $title = $env . ': ' . $title;
+                }
+
+                $this->set('title', $title);
             }
 
             if (!empty($wiki->short)) {

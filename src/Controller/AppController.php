@@ -69,14 +69,14 @@ class AppController extends Controller
 
         if ($seoTitle !== null) {
             $title = $seoTitle['title'];
-        } elseif (empty($title)) {
-            $title = $this->request->getParam('controller').' '.$this->request->getParam('action');
+
+            $env = Configure::read('env');
+            if ($env != 'prod') {
+                $title = $env.': '.$title;
+            }
+
+            $this->set('title', $title);
         }
-        $env = Configure::read('env');
-        if ($env != 'prod') {
-            $title = $env.': '.$title;
-        }
-        $this->set('title', $title);
     }
 
     public function beforeFilter(EventInterface $event)

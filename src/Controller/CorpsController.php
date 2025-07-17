@@ -44,6 +44,13 @@ class CorpsController extends AppController
             ],
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
         ])->all();
+        $title = "Hearing aid and cochlear implant companies";
+
+        $env = Configure::read('env');
+        if (!empty($env) && $env != 'prod') {
+            $title = $env . ': ' . $title;
+        }
+        $this->set('title', $title);
         $this->set('corps', $corps);
         $this->set('pageContent', $this->fetchTable('Pages')->getContent('manufacturers'));
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
@@ -113,7 +120,14 @@ class CorpsController extends AppController
         $this->set('seoMetaTags', $seoMetaTags);
 
         if (empty($title)) {
-            $this->set('title', isset($corp->title) ? $corp->title : $this->siteName);
+            $title = isset($corp->title) ? $corp->title : $this->siteName;
+
+            $env = Configure::read('env');
+            if (!empty($env) && $env != 'prod') {
+                $title = $env . ': ' . $title;
+            }
+
+            $this->set('title', $title);
         }
 
         $articles = $this->Content->findLatest(4);

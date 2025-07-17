@@ -145,7 +145,13 @@ class ContentController extends AppController
         $this->set('seoMetaTags', $seoMetaTags);
 
         if (empty($title)) {
-            $this->set('title', isset($content->title_head) ? $content->title_head : $this->siteName);
+            $title = isset($content->title_head) ? $content->title_head : $this->siteName;
+            $env = Configure::read('env');
+            if ($env != 'prod') {
+                $title = $env . ': ' . $title;
+            }
+        
+            $this->set('title', $title);
         }
 
         $this->meta['description'] = (isset($this->meta['description']) ? $this->meta['description'] : null);
