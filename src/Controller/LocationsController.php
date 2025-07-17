@@ -283,7 +283,8 @@ class LocationsController extends AppController
             $this->meta['robots'] = "NOINDEX, FOLLOW";
         }
         if (empty($title)) {
-            $title = 'Hearing ' . Configure::read('regionalSpelling.center') . 's in ' . Inflector::humanize($city) . ', ' . $stateAbbr;
+            $cityName = str_replace('-', ' ', $city);
+            $title = 'Hearing ' . Configure::read('regionalSpelling.center') . 's in ' . Inflector::humanize($cityName) . ', ' . $stateAbbr;
 
             $env = Configure::read('env');
             if (!empty($env) && $env != 'prod') {
