@@ -253,9 +253,14 @@ class PagesController extends AppController
      */
     public function privacyPolicy() {
         $page = $this->Pages->findByTitle('privacyPolicy')->first();
-        if (empty($title)) {
-            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        $env = Configure::read('env');
+        $title = 'Privacy Policy';
+
+        if (!empty($env) && $env != 'prod') {
+            $title = $env . ': ' . $title;
         }
+
+        $this->set('title', $title);
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }
@@ -291,9 +296,14 @@ class PagesController extends AppController
      */
     public function termsOfUse() {
         $page = $this->Pages->findByTitle('termsOfUse')->first();
-        if (empty($title)) {
-            $this->set('title', isset($page->title) ? $page->title : $this->siteName);
+        $env = Configure::read('env');
+        $title = 'Terms of Use';
+
+        if (!empty($env) && $env != 'prod') {
+            $title = $env . ': ' . $title;
         }
+
+        $this->set('title', $title);
         $this->set(compact('page'));
         $this->set('show_slider', false);
     }
