@@ -44,7 +44,7 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
                             <tbody>
                                 <?php foreach ($seoTitles as $seoTitle): ?>
                                 <tr>
-                                    <td><?= $seoTitle->has('seo_uri') ? $this->Html->link($seoTitle->seo_uri->uri, ['controller' => 'SeoUris', 'action' => 'view', $seoTitle->seo_uri->uri]) : '' ?></td>
+                                    <td><?= $seoTitle->has('seo_uri') ? $this->Html->link($seoTitle->seo_uri->uri, ['controller' => 'SeoUris', 'action' => 'view', $seoTitle->seo_uri->id]) : '' ?></td>
                                     <td><?= h($seoTitle->title) ?></td>
                                     <td><?= h($seoTitle->modified->format('M jS Y, H:i')) ?></td>
                                     <td class="actions">
