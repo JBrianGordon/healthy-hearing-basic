@@ -5,8 +5,6 @@ use Cake\Routing\Router;
 $this->Html->script('dist/common.min', ['block' => true]);
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/autoComplete.min.js"></script>
-
 <div class="container-fluid site-body home">
     <div class="row pt0">
         <div class="backdrop-container">
@@ -53,7 +51,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                     </header>
                     <div class="panel-body">
                         <div class="panel-section text-center">
-                            <input id="autoCompleteJs">
+                            <input id="FACHomepagePanel" class="autoCompleteJs">
                             <p class="btn-set text-center">
                                 <a href="/hearing-aids" class="btn btn-secondary">Browse by <?= $stateLabel ?></a>
                             </p>
@@ -170,43 +168,5 @@ $this->Html->script('dist/common.min', ['block' => true]);
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    const autoCompleteJS = new autoComplete({
-        selector: "#autoCompleteJs",
-        placeHolder: "Search for a city, state, or ZIP...",
-        debounce: 300,
-        data: {
-            src: async (query) => {
-                try {
-                    const response = await fetch(`/locations/autocomplete?q=${encodeURIComponent(query)}`, {
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
-                    return await response.json();
-                } catch (error) {
-                    console.error('Autocomplete fetch error:', error);
-                    return [];
-                }
-            },
-            keys: ['name'],
-            cache: false
-        },
-        resultItem: {
-            highlight: true
-        },
-        events: {
-            input: {
-                selection: (event) => {
-                    const selection = event.detail.selection.value;
-                    document.querySelector("#autoCompleteJs").value = selection.name;
-
-                    window.location.href = selection.url;
-                }
-            }
-        }
-    });
-</script>
 
 <?php $this->end(); ?>

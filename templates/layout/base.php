@@ -76,6 +76,9 @@ use App\Model\Entity\Location;
             echo $this->Html->css('/css/atf/home.css');
         }
     ?>
+
+    <!-- AutocompleteJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/autoComplete.min.js"></script>
 </head>
 <body>
     <?= $this->fetch('header') ?>

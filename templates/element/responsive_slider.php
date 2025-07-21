@@ -28,7 +28,8 @@ if ($this->Clinic->isDifferentCountry()) {
                     'auto_id' => 'SliderSearchId',
                     'search_id' => 'SliderSearch',
                     'btnId' => 'SliderSearchBtn',
-                    'autocomplete' => true
+                    'autocomplete' => true,
+                    'class' => 'autoCompleteJs',
                 ]) ?>
             <?php endif; ?>
             <?= $this->element('fac_config_text', ["locationsPage" => $locationsPage]) ?>

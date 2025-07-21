@@ -120,7 +120,8 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							'auto_id' => 'fapdropdownsearchid',
 							'search_id' => 'fapdropdownSearch',
 							'btnId' => 'fapdropdownSearchBtn',
-							'inline' => true
+							'inline' => true,
+							'class' => 'autoCompleteJs'
 						]); ?>
 					</div>
 				</div>
