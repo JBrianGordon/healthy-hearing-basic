@@ -83,8 +83,6 @@ $this->Html->script('dist/admin_index_review.min', ['block' => true]);
                             'escape' => false
                         ])
                 ?>
-                <?= $this->Html->link("<i class='bi bi-search'></i> Find Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
-                <?= $this->Html->link("<i class='bi bi-x-lg'></i> Clear Spam", ['action' => 'index'], ['class' => 'btn btn-default', 'escape' => false]) ?>
             </div>
         </div>
     </div>

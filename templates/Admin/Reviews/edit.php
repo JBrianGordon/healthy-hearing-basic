@@ -107,7 +107,6 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                     );
                                     echo $this->Form->control('response');
                                     echo $this->Form->control('response_status', ['required' => false, 'options' => ReviewResponseStatus::getResponseStatusLabelArray()]);
-                                    echo $this->Form->control('denied_date', ['empty' => true]);
                                 ?>
                             </fieldset>
                             <div class="form-actions tar">
