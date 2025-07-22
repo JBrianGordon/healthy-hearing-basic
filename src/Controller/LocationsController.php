@@ -186,6 +186,27 @@ class LocationsController extends AppController
         $cities = $citiesTable->findAllByState($state, true);
         $this->set('region', $this->Locations->stateRegion($state));
         $this->set(compact('cities','stateNice','stateAbbr'));
+        $totalClinics = $this->Locations->find('all', [
+            'conditions' => [
+                'is_active' => true,
+                'is_show' => true,
+                'state' => $stateAbbr,
+            ],
+        ])->count();
+        $this->set('totalClinics', $totalClinics);
+
+        $allActiveShowLocations = $this->Locations->find()
+            ->where([
+                'is_active' => true,
+                'is_show' => true,
+            ]);
+        $totalReviews = $allActiveShowLocations->select([
+            'totalReviews' => $allActiveShowLocations
+                ->func()
+                ->sum('reviews_approved')
+            ])->first()->totalReviews;
+        $this->set('totalReviews', round($totalReviews, -2, PHP_ROUND_HALF_DOWN));
+
         $this->meta['description'] = 'Looking for a hearing clinic near you? '. $this->siteName .' has unbiased reviews from real patients for over '. $totalClinics .' hearing aid and audiology clinics in '. $stateNice .'. '. $this->siteName .'\'s clinic directory is the best way to find local hearing aid specialists and audiologists to schedule a hearing test at a center near you.';
         //Custom Variables
         $customVars['type'] = 'state';

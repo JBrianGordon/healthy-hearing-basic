@@ -115,7 +115,7 @@ $this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), [
 										</div>
 										<?php if(Configure::read('country') == 'US'): ?>
 										<h2 style="clear:both" class="text-primary">Tell us about your experience</h2>
-										<p>If you visit one of the hearing clinics on our site, we encourage you to come back to our site and submit a review of your experience! With more than <?= $roundedReviews ?> consumer reviews, our hearing care directory is the largest of its kind in the continental United States.<?php endif; ?></p>
+										<p>If you visit one of the hearing clinics on our site, we encourage you to come back to our site and submit a review of your experience! With more than <?= number_format($totalReviews) ?> consumer reviews, our hearing care directory is the largest of its kind in the continental United States.<?php endif; ?></p>
 									</div>  <!-- End city listing -->
 								<?php endif; ?>
 							</div>
