@@ -6,7 +6,7 @@ return [
     'siteUrl' => 'HearingDirectory.ca',
     'logo' => '/img/hearing-directory.svg',
     'map' => '/img/ca-map.svg',
-    'heroHeadline' => '<em>Be part of the </em><br />conversation',
+    'heroHeadline' => 'Find a hearing specialist now',
     'countryName' => 'Canada',
     'fullCountryName' => 'Canada',
     'stateLabel' => 'province',
