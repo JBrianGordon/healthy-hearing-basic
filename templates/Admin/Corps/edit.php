@@ -93,13 +93,17 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 												echo $this->Form->control('slug');
 											?>
                                             <img id="logo-imagePreview0" src="<?= $corp->logo_url ?? '#' ?>" class="form-group col-md-offset-3 mt-3" alt="Logo Preview" style="<?= $corp->logo_url ? '' : "display:none; " ?>max-width: 100px; max-height: 100px;" />
+											<input type="hidden" id="logoUrl" name="logo_url" class="d-none" value="<?= $corp->logo_url ?>">
                                             <?=
                                                 $this->Form->control('logo_name', [
                                                     'id' => 'logo-imageUpload0',
-                                                    'class' => 'mt-3',
-                                                    'type' => 'file',
+                                                    'class' => 'mt-3 btn w-50',
+													'style' => 'background-color:#78afc9;color:#fff',
                                                     'required' => false,
-                                                    'label' => ['text' => 'Update logo']
+                                                    'label' => ['text' => 'Update logo'],
+													'placeholder' => 'Choose an image',
+													'readonly' => true,
+													'value' => $corp->logo_name ?? ''
                                                 ]);
                                             ?>
                                             <?php
@@ -110,7 +114,7 @@ $this->Html->script('dist/corp_edit.min', ['block' => true]);
 											<input type="hidden" id="facebookImageUrl" name="facebook_image_url" class="d-none" value="<?= $corp->facebook_image_url ?>">
 											<?php
 												$inputValue = $this->Form->getValue('facebook_image_name');
-												$class = isset($inputValue) ? 'mt-3 btn w-25' : 'mt-3 btn';
+												$class = isset($inputValue) ? 'mt-3 btn w-50' : 'mt-3 btn';
 											?>
 
 											<?=
