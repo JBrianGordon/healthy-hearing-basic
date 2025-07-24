@@ -3,11 +3,11 @@
   overflow-x: hidden;
 
   .intro-text {
-    min-height: 490px;
+    min-height: 260px;
 
     h1 {
-      font-size: 75px;
-      font-style: italic;
+      font-size: 35px;
+      font-style: normal;
       line-height: 0.7;
 
       em {
@@ -94,19 +94,6 @@
 
     .blog-preview {
       padding: 30px 25px;
-    }
-  }
-}
-
-// HTML Specific Styles
-html[lang='en-CA'] {
-  .home {
-    .intro-text {
-      min-height: 450px;
-
-      @media only screen and (max-width: $screen-sm-max) {
-        min-height: 490px;
-      }
     }
   }
 }

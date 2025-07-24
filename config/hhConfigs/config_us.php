@@ -7,7 +7,7 @@ return [
     'sitemapGenUrl' => 'www1.healthyhearing.com',
     'logo' => '/img/hh-logo.svg',
     'map' => '/img/us-map.svg',
-    'heroHeadline' => '<em>Be part of the </em><br />conversation',
+    'heroHeadline' => 'Find a hearing specialist now',
     'countryName' => 'the US',
     'fullCountryName' => 'the United States',
     'stateLabel' => 'state',

@@ -21,7 +21,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                 <?php //***TODO: uncomment when flash elements added*** echo $this->element('flashes'); ?>
                 <div class="col-sm-7 col-lg-6 over-backdrop">
                     <section class="intro-text inverse">
-                        <h1 class="hero-headline"><em>Be part of the </em><br>conversation</h1>
+                        <h1 class="hero-headline"><?= Configure::read('heroHeadline') ?></h1>
                         <p class="lead">
                             <p><?= $content ?></p>
                         </p>
