@@ -152,7 +152,7 @@ class EditorialHelper extends Helper
             }
             $bioBlock .= strip_tags($author->bio);
             if (!empty($author->url)) {
-                $bioBlock .= '<a href="' . $author->url . ' itemprop="url">Read more about ' . $author->first_name . '</a>';
+                $bioBlock .= '<a href="' . $author->url . '" itemprop="url">Read more about ' . $author->first_name . '</a>';
             }
             $bioBlock .= '</p><div class="clearfix"></div></div>';
         }
