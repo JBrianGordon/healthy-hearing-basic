@@ -135,6 +135,9 @@ return static function (RouteBuilder $routes) {
         $builder->connect('/{id}-{slug}', 'Content::view')
             ->setPass(['id', 'slug'])
             ->setPatterns(['id' => '\d+']);
+        $builder->connect('/{id}', 'Content::view')
+            ->setPass(['id'])
+            ->setPatterns(['id' => '\d+']);
     });
 
     // Corps/manufacturers index page
