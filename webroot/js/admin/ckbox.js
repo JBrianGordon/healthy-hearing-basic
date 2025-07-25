@@ -1,9 +1,12 @@
-//CKBox modal creation if class #facebook-imageUpload0 element exists
-const imagePathInput = document.getElementById("facebook-imageUpload0");
+// CKBox modal creation if class #facebook-imageUpload0 or #logo-imageUpload0 element exists
+const logoImagePathInput = document.getElementById("logo-imageUpload0");
+const logoImageUrl = document.getElementById("logoUrl");
+const logoImagePreview = document.getElementById("logo-imagePreview0");
+const facebookImagePathInput = document.getElementById("facebook-imageUpload0");
 const facebookImageUrl = document.getElementById("facebookImageUrl");
-const imagePreview = document.getElementById("facebook-imagePreview0");
+const facebookImagePreview = document.getElementById("facebook-imagePreview0");
 
-// Function to adjust Facebook image width
+// Function to adjust input width
 function adjustInputWidth(inputElement) {
     const tempSpan = document.createElement('span');
     tempSpan.style.visibility = 'hidden';
@@ -16,8 +19,9 @@ function adjustInputWidth(inputElement) {
     document.body.removeChild(tempSpan);
 }
 
-if (imagePathInput) {
-    imagePathInput.addEventListener('click', e => {
+// Function to mount CKBox for a given input and preview (logos have min dimensions)
+function mountCKBox(inputElement, previewElement, urlElement, widthElement = null, heightElement = null, minWidth = null) {
+    inputElement.addEventListener('click', e => {
         e.preventDefault();
         const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor-endpoint`;
 
@@ -32,7 +36,7 @@ if (imagePathInput) {
                 width: 700,
                 height: 500,
                 onClose: () => {
-                    ckboxDiv.remove()
+                    ckboxDiv.remove();
                 }
             },
             assets: {
@@ -42,26 +46,42 @@ if (imagePathInput) {
                         const assetName = asset.data.name;
                         const assetWidth = asset.data.metadata.width;
                         const assetHeight = asset.data.metadata.height;
-                        const facebookImageWidth = document.getElementById("facebook-image-width");
-                        const facebookImageHeight = document.getElementById("facebook-image-height");
 
-                        if (assetWidth >= 800) {
-                            imagePreview.src = assetUrl;
-                            imagePreview.classList.remove('d-none');
-                            imagePathInput.value = assetName;
-                            imagePathInput.setAttribute('value', assetName);
-                            imagePathInput.classList.remove('w-25');
-                            facebookImageUrl.value = assetUrl;
-                            facebookImageWidth.value = assetWidth;
-                            facebookImageHeight.value = assetHeight;
-                            facebookImageUrl.classList.remove('d-none');
-                            adjustInputWidth(imagePathInput);
+                        // I.e., if logo with no min width or facebook image greater than or equal to min width
+                        if (minWidth === null || assetWidth >= minWidth) {
+                            previewElement.src = assetUrl;
+                            previewElement.classList.remove('d-none');
+                            inputElement.value = assetName;
+                            inputElement.setAttribute('value', assetName);
+                            inputElement.classList.remove('w-50');
+                            urlElement.value = assetUrl;
+
+                            // Only set width and height if the elements exist
+                            if (widthElement) widthElement.value = assetWidth;
+                            if (heightElement) heightElement.value = assetHeight;
+
+                            urlElement.classList.remove('d-none');
+                            adjustInputWidth(inputElement);
                         } else {
-                            alert(`The selected image must be at least 800px wide. This image is ${assetWidth}px wide.`);
+                            alert(`The selected image must be at least ${minWidth}px wide. This image is ${assetWidth}px wide.`);
                         }
                     });
                 }
             }
         });
     });
+}
+
+// Mount CKBox for Facebook elements if they exist
+if (facebookImagePathInput) {
+    const facebookImageWidth = document.getElementById("facebook-image-width");
+    const facebookImageHeight = document.getElementById("facebook-image-height");
+    mountCKBox(facebookImagePathInput, facebookImagePreview, facebookImageUrl, facebookImageWidth, facebookImageHeight, 800);
+}
+
+// Mount CKBox for Logo elements if they exist
+if (logoImagePathInput) {
+    const logoImageWidth = document.getElementById("logo-image-width");
+    const logoImageHeight = document.getElementById("logo-image-height");
+    mountCKBox(logoImagePathInput, logoImagePreview, logoImageUrl, logoImageWidth || null, logoImageHeight || null);
 }
