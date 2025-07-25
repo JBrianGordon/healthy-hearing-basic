@@ -6,7 +6,7 @@
   background: transparent 50% 50% no-repeat;
   display: block;
   position: absolute;
-  left:0;
+  left: 0;
   width: 100%;
 }
 
@@ -15,34 +15,36 @@
 }
 
 .backdrop-home-gradient {
-	background-image: linear-gradient(to bottom, $brand-primary 0%, $brand-light 100%);
-}
-.backdrop-opacity {
-	opacity: 0.85;
-}
-.backdrop-height {
-	height: 1520px;
-  z-index: -1;
-	
-	&.backdrop-home-gradient {
-		height: 520px;
-	}
+  background-image: linear-gradient(to bottom, $brand-primary 0%, $brand-light 100%);
 }
 
-.backdrop-home, .backdrop-help {
-	height: 520px;
-	position: absolute;
-	right: calc(50vw - 760px);
+.backdrop-opacity {
+  opacity: 0.85;
+}
+
+.backdrop-height {
+  height: 1520px;
   z-index: -1;
-	
-	@media only screen and (max-width: $screen-sm-max) {
-		height: auto;
-	}
+
+  &.backdrop-home-gradient {
+    height: 520px;
+  }
+}
+
+.backdrop-home,
+.backdrop-help {
+  height: 520px;
+  position: absolute;
+  right: calc(50vw - 760px);
+  z-index: -1;
+
+  @media only screen and (max-width: $screen-sm-max) {
+    height: auto;
+  }
 }
 
 .over-backdrop {
   margin-top: 1em;
-  margin-bottom: 2em;
   display: inline-block;
 
   @media only screen and (min-width: $screen-sm-min) {
