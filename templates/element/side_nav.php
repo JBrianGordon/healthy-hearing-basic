@@ -59,6 +59,9 @@ use Cake\Core\Configure;
 								</ul>
 						</li>
 					<?php endif; ?>
+					<li>
+						<a href="/help/online-hearing-test" tabindex="-1">Online hearing test</a>
+					</li>
 					<?php $aldUrl = (Configure::read('country') == 'CA') ? "/help/hearing-aids/assistive-listening-devices" : "/help/assistive-listening-devices"; ?>
 					<li><a href="<?= $aldUrl ?>">Assistive listening devices</a></li>
 					<?php if (Configure::read('showReports')): ?>
