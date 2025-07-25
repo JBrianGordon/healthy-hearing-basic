@@ -73,12 +73,16 @@ class DbImportCommand extends Command
         // Retrieve database dump file
         $dbFile = $this->getDbFile($io);
 
+        $success = false;
         // Import database dump file;
         if (!empty($dbFile)) {
             $success = $this->importDatabase($io, $dbFile, $dbName);
         }
         if ($success) {
             $io->success('Import completed successfully.');
+        } else {
+            $io->error('Database file not downloaded successfully.');
+            $this->abort();
         }
 
         //Run migrations
@@ -112,7 +116,12 @@ class DbImportCommand extends Command
         $io->out("Attempting to scp file: " . $dbFile . "  (Attempt: " . ($attempts) . ")");
 
         // Attempt to scp the db backup from the remote server to our local folder (usually /tmp)
-        $scpResult = exec('scp ' . $this->dbServer . ':' . $this->remoteFolder . $dbFile . ' ' . $this->localDir);
+        // TO-DO: TEMPORARY CP/COPY STEP FOR 'DEV' WHILE WE DON'T HAVE LIVE DB BACKUP SERVER
+        if (Configure::read('env') === 'dev') {
+            $cpResult = exec('cp ' . $this->remoteFolder . $dbFile . ' ' . $this->localDir);
+        } else {
+            $scpResult = exec('scp ' . $this->dbServer . ':' . $this->remoteFolder . $dbFile . ' ' . $this->localDir);
+        }
 
         // Check to see if it worked.
         if (!file_exists($this->localDir . $dbFile)) {
