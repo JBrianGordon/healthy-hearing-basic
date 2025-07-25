@@ -193,11 +193,11 @@ class DbImportCommand extends Command
 
         if ($io->helper('BaseShell')->promptContinue('Are you sure you want to delete the database?')) {
             $io->out('Deleting database...');
-            $connection->execute('DROP DATABASE IF EXISTS ' . $dbName);
+            $connection->execute('DROP DATABASE IF EXISTS `' . $dbName . '`');
             $io->out('Database deleted.');
 
             $io->out('Creating new database: ' . $dbName);
-            $connection->execute('CREATE DATABASE ' . $dbName);
+            $connection->execute('CREATE DATABASE `' . $dbName . '`');
 
             // Select the newly created database
             $connection->execute('USE ' . $dbName);
