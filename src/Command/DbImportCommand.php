@@ -185,6 +185,8 @@ class DbImportCommand extends Command
         }
 
         $io->success('Database import finished.');
+
+        return true;
     }
 
     private function deleteDatabase(ConsoleIo $io, $dbName)
