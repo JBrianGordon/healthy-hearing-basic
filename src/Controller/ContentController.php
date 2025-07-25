@@ -183,7 +183,7 @@ class ContentController extends AppController
         $this->set('show_header', false);
         $this->set('content', $content);
         $this->set('customVars', $customVars);
-        $this->set('cont', $content);
+        // $this->set('cont', $content);
         $this->set('id', $id);
         $this->set('slug', $slug);
         $this->set('isPreview', false);
