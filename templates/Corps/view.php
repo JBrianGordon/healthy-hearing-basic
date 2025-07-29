@@ -19,7 +19,7 @@ $isPreview = isset($isPreview) ? $isPreview : false;
 $manuSchema = '<script type="application/ld+json">{';
 $manuSchema .= '"@context": "https://schema.org", "@type": "Article",';
 $manuSchema .= '"mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
-$manuSchema .= '"headline": "' . $corp->title . '", "datePublished": "' . $corp->created . '-05:00", "dateModified": "' . $corp->modified . '-05:00", "image": "' . Router::url($corp->facebook_image_url, true) . '", "articleBody": "' . h(strip_tags($corp->description)) . '",';
+$manuSchema .= '"headline": "' . htmlentities(strip_tags($corp->title)) . '", "datePublished": "' . $corp->created . '-05:00", "dateModified": "' . $corp->modified . '-05:00", "image": "' . Router::url($corp->facebook_image_url, true) . '", "articleBody": "' . h(strip_tags($corp->description)) . '",';
 $manuSchema .= '"author": {"@type": "Person", "name": "' . $corp->author->first_name . ' ' . $corp->author->last_name . '"';
 if(!empty($corp->author->degrees)) {
 	$manuSchema .= ', "honorificSuffix": "' . $corp->author->degrees . '"';
