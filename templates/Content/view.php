@@ -40,7 +40,11 @@ $this->assign('meta', $meta);
 $contentSchema = '<script type="application/ld+json">{
 	"@context": "https://schema.org",
 	"@type": "Article",';
-	$contentSchema .= '"about": {"@type": "Thing", "name": "' . $content->tags[0]->ribbon_header . '"},';
+	$contentSchema .= '"about": {"@type": "Thing"';
+	if (!empty($content->tags) && isset($content->tags[0]->ribbon_header)) {
+		$contentSchema .= ', "name": "' . $content->tags[0]->ribbon_header . '"';
+	}
+	$contentSchema .= '},';
 	$contentSchema .= '"mainEntityOfPage": {"@type": "MedicalWebPage", "@id": "https://www.' . Configure::read('siteUrl') . $_SERVER['REQUEST_URI'] . '"},';
 	$contentSchema .= '"headline": "' . htmlentities(strip_tags($title)) . '",
 	"alternativeHeadline": "' . $altTitle . '",';

@@ -31,6 +31,9 @@ form {
 
       .ck-content {
         height: 400px;
+        min-height: 0;
+        resize: vertical;
+        overflow: auto;
       }
     }
   }

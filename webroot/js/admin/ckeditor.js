@@ -308,6 +308,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     'imageStyle:block',
                     'imageStyle:side',
                     'linkImage'
+                ],
+                styles: [
+                    'alignLeft',
+                    'alignCenter',
+                    'alignRight',
                 ]
             },
             table: {
