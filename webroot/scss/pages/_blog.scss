@@ -158,7 +158,8 @@ $blog-border-color: lighten($brand-light, 30%);
 }
 
 // Image Styles
-.caption, figure.image {
+.caption,
+figure.image {
   padding: 20px 0px 20px 30px;
 
   &.image_resized {
@@ -166,6 +167,10 @@ $blog-border-color: lighten($brand-light, 30%);
       width: 100%;
       height: auto;
     }
+  }
+
+  &[data-ckbox-resource-id] {
+    text-align: center;
   }
 
   &.image-style-side {
@@ -180,7 +185,8 @@ $blog-border-color: lighten($brand-light, 30%);
     float: none !important;
     padding: 20px 0px;
 
-    img, figcaption {
+    img,
+    figcaption {
       display: block;
       margin: 0 auto;
       max-width: 300px;
