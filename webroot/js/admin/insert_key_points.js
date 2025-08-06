@@ -15,6 +15,7 @@ class InsertKeyPointsCommand extends Command {
               <li><p>TEXT HERE</p></li>
             </ul>
           </div>
+          <br>
         `;
 
         // Convert the HTML string to a view fragment for the model
