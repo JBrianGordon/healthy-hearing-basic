@@ -35,9 +35,8 @@ if (empty($content->id)) {
 					<?php if ($isFrozen): ?>
 						<?= $this->Form->postLink(__(' Update and republish'), ['action' => 'draft', $content->id], ['class' => 'btn btn-default bi-arrow-repeat']) ?>
 					<?php endif; ?>
-				<?php else: ?>
-					<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 				<?php endif; ?>
+					<?= $this->Html->link(__(' Preview'), ['action' => 'preview', $content->id], ['class' => 'btn btn-default bi bi-eye-fill', 'target' => '_blank']) ?>
 			</div>
 		</div>
 	</div>
@@ -63,6 +62,7 @@ if (empty($content->id)) {
 			                    echo $this->Form->control('subtitle');
 			                    echo $this->Form->control('date', [
 									'id' => 'ContentDate',
+									'type' => 'datetime',
 									'label' => 'Publication Date',
 									'empty' => true,
 									'readonly' => $isFrozen
