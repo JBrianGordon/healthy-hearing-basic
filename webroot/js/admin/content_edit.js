@@ -63,11 +63,6 @@ $(document).ready(function () {
 			// Replace spaces with hyphens
 			value = value.replace(/\s+/g, '-');
 
-			// Ensure it starts with a forward slash
-			if (!value.startsWith('/')) {
-				value = '/' + value;
-			}
-
 			slugInput.value = value;
 		});
 	}
