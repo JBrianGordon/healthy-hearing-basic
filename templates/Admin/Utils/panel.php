@@ -6,7 +6,9 @@ use Cake\Core\Configure;
 
 Configure::load('hhConfigs/config_adminMenu', 'default');
 $adminMenu = Configure::read('adminMenu');
-$userRole = isset($user->role) ? $user->role : '';
+
+$identity = $this->getRequest()->getAttribute('identity');
+$userRole = $identity ? $identity->get('role') : null;
 
 $this->set('title', 'Admin');
 $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer', 'block' => true]);
@@ -41,7 +43,7 @@ $this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['def
                               $allowedRoles = $menuContents['permissions'];
                               unset($menuContents['permissions']);
                             ?>
-                            <?php if (in_array($user->role, $allowedRoles)): ?>
+                            <?php if (in_array($userRole, $allowedRoles)): ?>
                               <div class="col panel panel-primary">
                                 <div class="card">
                                   <h5 class="card-header bg-primary text-white panel-heading"><?= $menuHeader ?></h5>
