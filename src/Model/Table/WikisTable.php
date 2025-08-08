@@ -213,57 +213,6 @@ class WikisTable extends Table
         );
     }
 
-    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        $fields = [
-            'facebook_image_name' => 'facebook_image_url'
-        ];
-
-        foreach ($fields as $filename => $fileUrl) {
-            $ckBoxUploadData = [];
-
-            if ($entity->{$filename} !== null && $entity->isDirty($filename)) {
-                $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME), 'default');
-            }
-
-            $publicUrl = $ckBoxUploadData['response']['url'];
-
-            if ($publicUrl !== null && is_string($publicUrl)) {
-                $imageWidth = $ckBoxUploadData['response']['metadata']['width'];
-                $imageHeight = $ckBoxUploadData['response']['metadata']['height'];
-
-                $entity->{$fileUrl} = $ckBoxUploadData['response']['url'];
-                $entity->{str_replace('name', 'width', $filename)} = $imageWidth;
-                $entity->{str_replace('name', 'height', $filename)} = $imageHeight;
-                Cache::delete('ckBoxUploadImage_' . pathinfo($entity->{$filename}, PATHINFO_FILENAME));
-            }
-        }
-    }
-
-    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        if (! $options['skipAfterSave']) {
-            $fields = [
-                'facebook_image_name' => 'facebook_image_url'
-            ];
-
-            foreach ($fields as $filename => $publicUrl) {
-                $original = $entity->getOriginal($filename);
-
-                if ($entity->{$filename} !== $original && $original !== null && is_object($original) === false) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->getOriginal($publicUrl), $matches);
-                    $ckBoxImageId = $matches[1];
-                    $ckBoxUtility = new CKBoxUtility(Configure::read('CK.wikis-uploads'));
-                    try {
-                        $ckBoxUtility->deleteImage($ckBoxImageId);
-                    } catch (Exception $e) {
-                        // Ignore exceptions for now
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Default validation rules.
      *
@@ -372,8 +321,6 @@ class WikisTable extends Table
         $validator
             ->requirePresence('facebook_image_name', 'create')
             ->notEmptyString('facebook_image_name', 'must have image');
-
-        $validator->setProvider('upload', \Josegonzalez\Upload\Validation\ImageValidation::class);
 
         $validator
             ->dateTime('last_modified')
