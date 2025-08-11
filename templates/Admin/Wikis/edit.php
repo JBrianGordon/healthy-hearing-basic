@@ -152,7 +152,7 @@ $isDraft = !empty($wiki->id_draft_parent);
 						</div>
 		            </fieldset>
 		            <div class="form-actions tar">
-		            	<?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary btn-lg']) ?>
+						<?= $this->Form->button(__('Save Help Page'), ['class' => 'btn btn-primary btn-lg']) ?>
 		            </div>
 		            <?= $this->Form->end() ?>
 		        </div>
