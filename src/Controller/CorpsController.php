@@ -27,9 +27,7 @@ class CorpsController extends AppController
         //     // Self-heal url
         //     return $this->redirect(['controller'=>'corps','action'=>'index'], 301);
         // }
-        if ($title == $this->siteName) {
-            $this->set('title', 'Hearing aid and cochlear implant companies');
-        }
+
         $this->meta['description'] = "Before buying hearing aids or cochlear implants, it is wise to compare hearing aid manufacturers. Learn more about them here.";
         $this->Content = $this->fetchTable('Content');
         $exclusiveAd = $this->fetchTable('Advertisements')->findAdForCorps();
