@@ -98,6 +98,11 @@ class LocationsTable extends Table
             'priority' => 0.8,
         ]);
 
+        // The 'lng' field is named 'lon' in our Locations table
+        $apiKey = Configure::read('GoogleMaps.WebServicesApiKey');
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$apiKey];
+        $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
+
         $this->addBehavior('Josegonzalez/Upload.Upload', [
             'logo_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
