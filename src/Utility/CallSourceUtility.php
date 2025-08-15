@@ -80,11 +80,22 @@ class CallSourceUtility
     * @param customer_code to find
     */
     function findByCustomerCode($customer_code = null){
-        $data = [
-            'CustomerCode|{"contact":"true","target":"true"}' => $customer_code
-        ];
-        // This API call is always allowed on test account
-        return $this->api('GetProvisioningInfoRequest', $data);
+        // Do not save customer to test account unless allowed
+        if (!$this->isTestAccount || $this->allowTest) {
+            $data = [
+                'CustomerCode|{"contact":"true","target":"true"}' => $customer_code
+            ];
+            // This API call is always allowed on test account
+            return $this->api('GetProvisioningInfoRequest', $data);
+        } else {
+            // When tests are disabled, fake success.
+            return [
+                '@status' => 'OK',
+                'Customer' => [
+                    'Campaign' => ['DID' => ['@Number' => '1111111111']]
+                ]
+            ];
+        }
     }
 
     /**
@@ -199,7 +210,10 @@ class CallSourceUtility
             return $this->api('CampaignRequest', $data, ['autoCreateIfNew' => 'true', 'returnResult' => $returnResult]);
         } else {
             // When tests are disabled, fake success.
-            return ['@status' => 'OK'];
+            return [
+                '@status' => 'OK',
+                'Campaign' => ['@ID' => '123']
+            ];
         }
     }
 
@@ -486,7 +500,10 @@ class CallSourceUtility
             return $this->api('AddNumberToCampaignRequest', $data, ['returnResult' => 'true']);
         } else {
             // When tests are disabled, fake success.
-            return ['@status' => 'OK'];
+            return [
+                '@status' => 'OK',
+                'Campaign' => ['DID' => ['@Number' => '1111111111']]
+            ];
         }
     }
 

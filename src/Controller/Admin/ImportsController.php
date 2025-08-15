@@ -660,8 +660,8 @@ class ImportsController extends BaseAdminController
         }
         // Junk/Competitor locations are always saved with inactive, no-show, LISTING_TYPE_NONE
         $locationData = [
-            'yhn_location_id' => $importLocation->external_id,
-            'oticon_id' => empty($importLocation->id_oticon) ? '' : $importLocation->id_oticon,
+            'id_yhn_location' => $importLocation->id_external,
+            'id_oticon' => empty($importLocation->id_oticon) ? '' : $importLocation->id_oticon,
             'title' => $importLocation->title,
             'subtitle' => $importLocation->subtitle,
             'email' => $importLocation->email,
@@ -677,7 +677,7 @@ class ImportsController extends BaseAdminController
             'listing_type' => Location::LISTING_TYPE_NONE,
             'is_active' => false,
             'is_show' => false,
-            'payment' => $this->Location->defaultPayment,
+            'payment' => null,
             'filter_insurance' => true,
             'is_call_assist' => false,
             'is_junk' => true

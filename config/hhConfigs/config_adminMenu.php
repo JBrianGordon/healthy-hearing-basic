@@ -233,9 +233,6 @@ $utilitiesItems['Clear session'] = [
 $utilitiesItems['Queued Jobs'] = [
     'url' => '/admin/utils/queued-jobs',
 ];
-$utilitiesItems['CRM searches'] = [
-    'url' => '/admin/crm-searches',
-];
 /*
 TODO: Hopefully Rsync will not be needed in Cake4
 if (Configure::read('isLoadBalanced')) {
@@ -260,23 +257,17 @@ $utilitiesMenu = [
 * IT - Utilities
 ********************************/
 $itUtilitiesItems = [];
+$itUtilitiesItems['CRM searches'] = [
+    'url' => '/admin/crm-searches',
+];
 $itUtilitiesItems['Quiz results'] = [
     'url' => '/admin/quiz-results',
-];
-$itUtilitiesItems['SEO Blacklists'] = [
-    'url' => '/admin/seo/seo-blacklists',
 ];
 $itUtilitiesItems['SEO URIs'] = [
     'url' => '/admin/seo/seo-uris',
 ];
 $itUtilitiesItems['Sitemap URLs'] = [
     'url' => '/admin/sitemap-urls',
-];
-$itUtilitiesItems['Cloud assets'] = [
-    'url' => '/admin/cloud-assets',
-];
-$itUtilitiesItems['Fix cache permissions'] = [
-    'url' => '/admin/utils/cache-permissions',
 ];
 $itUtilitiesMenu = [
     'items' => $itUtilitiesItems,

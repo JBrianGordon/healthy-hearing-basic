@@ -252,25 +252,25 @@ TypeFactory::map('time', StringType::class);
 * @return array $inputAsArray
 */
 function asArray($input,$cleanEmpties=true) {
-	if (!empty($input) || $input==0){
-		if (is_object($input)) {
-			$input = get_object_vars($input);
-		} elseif (!is_array($input)) {
-			$input = array($input);
-		}
-		// get all first level nested objects (if any)
-		foreach ( $input as $key => $val ) {
-			if (is_object($val)) {
-				$input[$key] = asArray($val);
-			}
-		}
-		if ($cleanEmpties) {
-			return array_diff((array)$input,array(null,'',' '));
-		} else {
-			return $input;
-		}
-	}
-	return array();
+    if (!empty($input) || $input==0){
+        if (is_object($input)) {
+            $input = get_object_vars($input);
+        } elseif (!is_array($input)) {
+            $input = array($input);
+        }
+        // get all first level nested objects (if any)
+        foreach ( $input as $key => $val ) {
+            if (is_object($val)) {
+                $input[$key] = asArray($val);
+            }
+        }
+        if ($cleanEmpties) {
+            return array_diff((array)$input,array(null,'',' '));
+        } else {
+            return $input;
+        }
+    }
+    return array();
 }
 
 /**
@@ -281,29 +281,29 @@ function asArray($input,$cleanEmpties=true) {
 * @return bool $dataIsNotEmptyOrInAllow
 */
 function isValid($data,$allow=true,$onlyAllow=false) {
-	if (is_array($data) && count($data)==1) {
-		$data = array_shift($data);
-	}
-	if (is_bool($allow) || is_int($allow)) {
-		$allow = array($allow);
-	} elseif (!is_array($allow)) {
-		$allow = explode(',',strval($allow));
-	}
-	$disallow = array_diff(array('0000-00-00','0000-00-00 00:00:00','',null,false),$allow);
-	if (is_array($data) && $onlyAllow) {
-		return Set::check($data,$allow);
-	} else {
-		if ($onlyAllow) {
-			return in_array($data,$allow,true);
-		} elseif (!in_array($data,$disallow,true)) {
-			if (!empty($data)) {
-				return true;
-			} else {
-				return in_array($data,$allow,(is_bool($data) || $data==null));
-			}
-		}
-	}
-	return false;
+    if (is_array($data) && count($data)==1) {
+        $data = array_shift($data);
+    }
+    if (is_bool($allow) || is_int($allow)) {
+        $allow = array($allow);
+    } elseif (!is_array($allow)) {
+        $allow = explode(',',strval($allow));
+    }
+    $disallow = array_diff(array('0000-00-00','0000-00-00 00:00:00','',null,false),$allow);
+    if (is_array($data) && $onlyAllow) {
+        return Set::check($data,$allow);
+    } else {
+        if ($onlyAllow) {
+            return in_array($data,$allow,true);
+        } elseif (!in_array($data,$disallow,true)) {
+            if (!empty($data)) {
+                return true;
+            } else {
+                return in_array($data,$allow,(is_bool($data) || $data==null));
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -318,35 +318,35 @@ function isValid($data,$allow=true,$onlyAllow=false) {
 * @return mixed $pluckedValuesOrDefault
 */
 function pluck($data,$path=null,$default=null) {
-	$return = null;
-	if (is_array($path)) {
-		// finds and returns the first match which is not the default
-		foreach ( $path as $_path ) {
-			$return = pluck($data,$_path,$default);
-			if (!$return==$default) {
-				return $return;
-			}
-		}
-	} else {
-		$path = trim(strval($path));
-		$path = str_replace('\\.','[dot]',$path);
-		if (strpos($path,"/")!==false) {
-			$path = str_replace('.','[dot]',$path);
-		}
-		$path = str_replace('/','.',$path);
-		$path = trim($path,'.');
-		if (is_array($data) && isValid($path,0)) {
-			if (setCheck($data,$path)) {
-				return setCheck($data,$path,false);
-			}
-		} elseif (empty($path) || $path===true) {
-			$return = $data;
-		}
-	}
-	if ($return===null) {
-		return $default;
-	}
-	return $return;
+    $return = null;
+    if (is_array($path)) {
+        // finds and returns the first match which is not the default
+        foreach ( $path as $_path ) {
+            $return = pluck($data,$_path,$default);
+            if (!$return==$default) {
+                return $return;
+            }
+        }
+    } else {
+        $path = trim(strval($path));
+        $path = str_replace('\\.','[dot]',$path);
+        if (strpos($path,"/")!==false) {
+            $path = str_replace('.','[dot]',$path);
+        }
+        $path = str_replace('/','.',$path);
+        $path = trim($path,'.');
+        if (is_array($data) && isValid($path,0)) {
+            if (setCheck($data,$path)) {
+                return setCheck($data,$path,false);
+            }
+        } elseif (empty($path) || $path===true) {
+            $return = $data;
+        }
+    }
+    if ($return===null) {
+        return $default;
+    }
+    return $return;
 }
 
 /**
@@ -358,7 +358,7 @@ function pluck($data,$path=null,$default=null) {
 * @return bool $dataIsNotEmptyOrInAllow
 */
 function pluckIsValid($data,$path=null,$allow=true,$onlyAllow=false) {
-	return isValid(pluck($data,$path),$allow,$onlyAllow);
+    return isValid(pluck($data,$path),$allow,$onlyAllow);
 }
 
 /**
@@ -368,43 +368,43 @@ function pluckIsValid($data,$path=null,$allow=true,$onlyAllow=false) {
 * @param mixed $path A dot-separated string.
 * @param boolean $returnBool
 * @return mixed if path is found and $returnBool==true,
-* 					the value of the path if path is found, false otherwise
+*                   the value of the path if path is found, false otherwise
 * @access public
 * @static
 */
 function setCheck($data, $path=null, $returnBool=true) {
-	if (empty($path) && $path!=0) {
-		return $data;
-	}
-	if (!is_array($path)) {
-		$path = trim(strval($path));
-		$path = str_replace('\\.','[dot]',$path);
-		if (strpos($path,"/")!==false) {
-			$path = str_replace('.','[dot]',$path);
-		}
-		$path = str_replace('/','.',$path);
-		$path = trim($path,'.');
-		$path = explode('.', $path);
-	}
-	foreach ($path as $i => $key) {
-		if (is_numeric($key) && intval($key) > 0 || $key === '0') {
-			$key = intval($key);
-		}
-		// escaping
-		$key = str_replace('[dot]','.',$key);
-		if ($i === count($path) - 1 && is_array($data) && array_key_exists($key, $data)) {
-			if ($returnBool) {
-				return true;
-			} else {
-				return $data[$key];
-			}
-		}
-		if (!is_array($data) || !array_key_exists($key, $data)) {
-			return false;
-		}
-		$data = $data[$key];
-	}
-	return true;
+    if (empty($path) && $path!=0) {
+        return $data;
+    }
+    if (!is_array($path)) {
+        $path = trim(strval($path));
+        $path = str_replace('\\.','[dot]',$path);
+        if (strpos($path,"/")!==false) {
+            $path = str_replace('.','[dot]',$path);
+        }
+        $path = str_replace('/','.',$path);
+        $path = trim($path,'.');
+        $path = explode('.', $path);
+    }
+    foreach ($path as $i => $key) {
+        if (is_numeric($key) && intval($key) > 0 || $key === '0') {
+            $key = intval($key);
+        }
+        // escaping
+        $key = str_replace('[dot]','.',$key);
+        if ($i === count($path) - 1 && is_array($data) && array_key_exists($key, $data)) {
+            if ($returnBool) {
+                return true;
+            } else {
+                return $data[$key];
+            }
+        }
+        if (!is_array($data) || !array_key_exists($key, $data)) {
+            return false;
+        }
+        $data = $data[$key];
+    }
+    return true;
 }
 
 function formatNumber($sPhone){
@@ -537,9 +537,9 @@ function r_implode($glue, $pieces) {
 * Convert a slug to human readable form
 */
 function humanize($input){
-	$input = str_replace("-","_", $input);
-	$input = strtolower($input);
-	return Inflector::humanize($input);
+    $input = str_replace("-","_", $input);
+    $input = strtolower($input);
+    return Inflector::humanize($input);
 }
 
 /**
@@ -700,6 +700,24 @@ function slugifyZip($zip = null){
     return $zip;
 }
 /**
+* Convert country name to abbreviation
+*/
+function countryAbbr($country) {
+    switch (strtolower($country)) {
+        case 'united states':
+        case 'the united states':
+        case 'usa':
+            $country = 'US';
+            break;
+        case 'canada':
+            $country = 'CA';
+            break;
+        default:
+            break;
+    }
+    return $country;
+}
+/**
 * Get the word count of a text block
 * @param string
 * @return int word count of body.
@@ -777,4 +795,14 @@ function divide($num, $denom) {
 */
 function trimIfString($value) {
     return is_string($value) ? trim($value) : $value;
+}
+
+function csvToArrayWithHeaders($csvFile) {
+    $rows = array_map('str_getcsv', file($csvFile));
+    $header = array_shift($rows);
+    $csv = array();
+    foreach ($rows as $row) {
+        $csv[] = array_combine($header, $row);
+    }
+    return $csv;
 }

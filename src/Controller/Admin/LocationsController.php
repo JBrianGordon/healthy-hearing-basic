@@ -9,6 +9,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 use App\Utility\CKBoxUtility;
 use Cake\View\JsonView;
+use App\Model\Entity\Location;
 
 /**
  * Locations Controller
@@ -180,13 +181,15 @@ class LocationsController extends BaseAdminController
             }
 
             // Delete LocationAd records if no custom ad/special announcement is uploaded
-            if ($data['location_ad']['title'] === '' &&
-                $data['location_ad']['description'] === '' &&
-                ($data['location_ad']['image_name'])->getClientFilename() === '') {
-                if (!empty($data->location_ad)) {
-                    $this->Locations->LocationAds->delete($data->location_ad);
+            if (isset($data['location_ad'])) {
+                if ($data['location_ad']['title'] === '' &&
+                    $data['location_ad']['description'] === '' &&
+                    ($data['location_ad']['image_name'])->getClientFilename() === '') {
+                    if (!empty($data->location_ad)) {
+                        $this->Locations->LocationAds->delete($data->location_ad);
+                    }
+                    unset($data['location_ad']);
                 }
-                unset($data['location_ad']);
             }
 
             $location = $this->Locations->patchEntity(
@@ -195,6 +198,8 @@ class LocationsController extends BaseAdminController
                 ['associated' => $associations]
             );
 
+
+            $isPhoneChanged = $location->isDirty('phone');
             if ($this->Locations->save($location)) {
                 // TEMPORARILY TURN OFF WHILE WORKING ON LOCATIONS CRM
                 // $mailer = $this->getMailer('Profile');
@@ -203,7 +208,17 @@ class LocationsController extends BaseAdminController
                 // } else {
                 //     $mailer->send('profileUpdate', [$location]);
                 // }
-                $this->Flash->success(__('The location has been saved.'));
+                $isValidListingType = ($location->listing_type != Location::LISTING_TYPE_NONE);
+                if ($isValidListingType && !empty($this->Locations->CallSources->errors)) {
+                    $csErrors = r_implode('<br />', $this->Locations->CallSources->errors);
+                    $this->Flash->error('Location changes saved, but failed to update the CallSource number.<br>Error(s): ' . $csErrors);
+                } else {
+                    $goodFlash = 'Success!';
+                    if ($isPhoneChanged) {
+                        $goodFlash .= '<br>CallSource has been updated with new clinic phone number.';
+                    }
+                    $this->Flash->success(__('The location has been saved.'));
+                }
                 return $this->redirect($this->request->referer());
             }
             $this->Flash->error('The location could not be saved.<br>' . $this->displayErrors($location->getErrors()), ['escape' => false]);

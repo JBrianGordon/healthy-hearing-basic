@@ -40,5 +40,16 @@ class AdminMailer extends Mailer
             ->viewBuilder()
                 ->setTemplate('default')
                 ->setVar('content', $body);
+        if (!empty($email['attachments'])) {
+            foreach ($email['attachments'] as $key => $attachment) {
+                $filesize = filesize($attachment);
+                // Do not attach files larger than 5MB
+                if ($filesize > 5000000) {
+                    pr('Error: Attachment is too large to send ('.$attachment.')');
+                    unset($email['attachments'][$key]);
+                }
+            }
+            $this->setAttachments($email['attachments']);
+        }
     }
 }

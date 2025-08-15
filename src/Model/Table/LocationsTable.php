@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
 use Search\Model\Filter\Base;
 use App\Model\Entity\Location;
 use App\Model\Entity\ImportStatus;
+use App\Model\Entity\CallSource;
 use App\Enums\Model\Review\ReviewStatus;
 use App\Utility\GeoLocAddressUtility;
 use Cake\Core\Configure;
@@ -96,11 +97,6 @@ class LocationsTable extends Table
             ],
             'priority' => 0.8,
         ]);
-
-        // The 'lng' field is named 'lon' in our Locations table
-        $apiKey = Configure::read('GoogleMaps.WebServicesApiKey');
-        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$apiKey];
-        $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
             'logo_name' => [
@@ -531,24 +527,20 @@ class LocationsTable extends Table
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        $publicUrl = null;
         if ($entity->logo_name !== null) {
             $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME), 'default');
+            $publicUrl = $ckBoxUploadData['response']['url'];
         }
 
-        $publicUrl = $ckBoxUploadData['response']['url'];
-
         if ($publicUrl !== null && is_string($publicUrl)) {
-            $entity->logo_url = $ckBoxUploadData['response']['url'];
+            $entity->logo_url = $publicUrl;
             Cache::delete('ckBoxUploadImage_' . pathinfo($entity->logo_name, PATHINFO_FILENAME));
         }
 
         if (($entity->is_show == true) && ($entity->is_junk == true)) {
             // If a clinic is showing, it should not be marked is_junk
             $entity->is_junk = false;
-        }
-
-        if (empty($entity->is_retail)) {
-            $entity->is_retail = false;
         }
     }
 
@@ -566,6 +558,28 @@ class LocationsTable extends Table
             } catch (Exception $e) {
                 // Ignore exceptions for now
             }
+        }
+        // If any of these fields change, we want to update the CallSource contact data
+        $contactFields = ['title', 'address', 'address_2', 'city', 'state', 'zip', 'phone'];
+        $contactFieldChanged = false;
+        foreach ($contactFields as $field) {
+            if ($entity->isDirty($field)) {
+                $contactFieldChanged = true;
+            }
+        }
+        if ($contactFieldChanged) {
+            $this->CallSources->updateCustomer($entity->id);    
+        }
+        // If any of these fields change, we want to update the CallSource routing data
+        $routingFields = ['phone', 'listing_type', 'is_retail', 'is_call_assist'];
+        $routingFieldChanged = false;
+        foreach ($routingFields as $field) {
+            if ($entity->isDirty($field)) {
+                $routingFieldChanged = true;
+            }
+        }
+        if ($routingFieldChanged) {
+            $this->CallSources->saveCallSource($entity->id);
         }
     }
 
@@ -996,7 +1010,7 @@ class LocationsTable extends Table
 
         $validator
             ->boolean('is_retail')
-            ->allowEmptyString('is_retail');
+            ->notEmptyString('is_retail');
 
         $validator
             ->scalar('direct_book_type')
@@ -1088,9 +1102,16 @@ class LocationsTable extends Table
     * @param entity object location or int locationId
     */
     public function calculateListingType($location) {
-        if (!is_object($location)) {
+        if (is_int($location)) {
             // Location ID was passed
+            if (!$this->exists(['id'=>$location])) {
+                echo 'Location '.$location.' does not exist';
+                return false;
+            }
             $location = $this->get($location);
+        } else if (is_array($location)) {
+            // Array was passed. Convert to entity object.
+            $location = $this->newEntity($location);
         }
         if (!Configure::read('isTieringEnabled')) {
             // For Canada, if the clinic came in on most recent import or it was added by HD, mark it Enhanced. Otherwise None.
@@ -1123,6 +1144,55 @@ class LocationsTable extends Table
             $this->save($location);
             return $listingType;
         }
+    }
+
+    /**
+    * Calculate is_call_assist for this location id, based on listing_type
+    * @param int locationId or object location
+    */
+    public function calculateIsCallAssist($location) {
+        if (is_int($location)) {
+            // Location ID was passed
+            if (!$this->exists(['id'=>$location])) {
+                echo 'Location '.$location.' does not exist';
+                return false;
+            }
+            $location = $this->get($location);
+        } else if (is_array($location)) {
+            // Array was passed. Convert to entity object.
+            $location = $this->newEntity($location);
+        }
+        if (!Configure::read('isCallAssistEnabled')) {
+            // Call Assist disabled in Canada
+            $isCallAssist = false;
+        } else {
+            if ($location->listing_type == Location::LISTING_TYPE_BASIC) {
+                // US Basic clinics do not use Call Assist
+                $isCallAssist = false;
+            } elseif (!empty($location->id) && in_array($location->id, Location::$northGeorgiaAudiology)) {
+                // NGA does not use Call Assist
+                $isCallAssist = false;
+            } elseif (!empty($location->id) && in_array($location->id, CallSource::$specialLocations)) {
+                // Special locations for Quick Pick and Return Calls use Call Assist even though they have LISTING_TYPE_NONE
+                $isCallAssist = true;
+            } elseif (!$location->is_active || ($location->listing_type == Location::LISTING_TYPE_NONE)) {
+                // Inactive/LISTING_TYPE_NONE do not use Call Assist
+                $isCallAssist = false;
+            } else {
+                // Enhanched/Premier use Call Assist
+                $isCallAssist = true;
+            }
+        }
+        // For existing clinics, update the field if it changed
+        // For new clinics, just return the calculated value
+        if (!empty($location->id)) {
+            if ($isCallAssist != $location->is_call_assist) {
+                $location->is_call_assist = $isCallAssist;
+                $this->save($location);
+                $this->CallSources->saveCallSource($location->id);
+            }
+        }
+        return $isCallAssist;
     }
 
     /**
@@ -1180,6 +1250,18 @@ class LocationsTable extends Table
             $this->save($locationEntity);
         }
         $io->out("Found ".count($callSources)." locations to mark is_show.");
+    }
+
+    // Update completeness for all locations. This takes ~30 seconds to run.
+    public function updateAllCompleteness(ConsoleIo $io) {
+        $io->helper('BaseShell')->title('Update completeness');
+        $locations = $this->find('list')->toArray();
+        $progress = $io->helper('Progress')->init(['total'=> count($locations)]);
+        foreach ($locations as $locationId => $locationTitle) {
+            $this->completeness($locationId);
+            $progress->increment()->draw();
+        }
+        $io->out();
     }
 
     public function updateAllFilters(ConsoleIo $io) {
@@ -2094,7 +2176,11 @@ class LocationsTable extends Table
     public function setShow($locationId, $isShow) {
         $location = $this->get($locationId);
         $location->is_show = $isShow;
-        $this->save($location);
+        if (($isShow == true) && ($location->is_junk == true)) {
+            // If a clinic is showing, it should not be marked is_junk
+            $location->is_junk = false;
+        }
+        $this->save($location, ['callback' => false]);
     }
 
     /**
@@ -2307,6 +2393,24 @@ class LocationsTable extends Table
             }
         }
         return $locationIdsNeedCs;
+    }
+
+    /**
+    * Create users for all locations that need one
+    */
+    function createClinicUsers(ConsoleIo $io) {
+        $io->helper('BaseShell')->title("Create clinic users");
+        $locationsWithoutUsers = $this->find()
+            ->leftJoinWith('Users') // Left join the Users association
+            ->where(['Users.id IS NULL']) // Filter where the associated Comment ID is NULL
+            ->all();
+        $progress = $io->helper('Progress')->init(['total'=> count($locationsWithoutUsers)]);
+        foreach ($locationsWithoutUsers as $location) {
+            $this->Users->createClinicUserFromLocationId($location->id);
+            $progress->increment()->draw();
+        }
+        $io->out('User created for '.count($locationsWithoutUsers).' clinics.');
+        $io->out();
     }
 
     /**
@@ -2551,5 +2655,97 @@ class LocationsTable extends Table
             $locationEmail = $this->LocationEmails->newEntity($locationEmailData);
             $this->LocationEmails->save($locationEmail);
         }
+    }
+
+    /**
+    * Calculate the phone status based on what we have currently, vs what we're importing
+    * @param array current import data
+    * @return int 0 = no change, 1 = change, 2 = new
+    */
+    public function calcPhoneStatus($import_data) {
+        if (empty($import_data['id']) || !isset($import_data['phone'])) {
+            return Location::CHANGE_STATUS_NEW;
+        } else {
+            if (!$this->exists(['id'=>$import_data['id']])) {
+                return Location::CHANGE_STATUS_NEW;
+            }
+            $location = $this->get($import_data['id']);
+        }
+        // Ignore format changes
+        $hh_phone = trim(str_replace(array('(', ')','-', ' '), '', $location->phone));
+        $import_phone = trim(str_replace(array('(', ')','-', ' '), '', $import_data['phone']));
+        if ($hh_phone == $import_phone) {
+            return Location::CHANGE_STATUS_NO_DIFFERENCE;
+        }
+        return Location::CHANGE_STATUS_DIFFERENT;
+    }
+
+    /**
+    * Calculate the title status based on what we have currently, vs what we're importing
+    * @param array current import data
+    * @return int 0 = no change, 1 = change, 2 = new
+    */
+    public function calcTitleStatus($import_data) {
+        if (empty($import_data['id']) || !isset($import_data['title'])) {
+            return Location::CHANGE_STATUS_NEW;
+        } else {
+            if (!$this->exists(['id'=>$import_data['id']])) {
+                return Location::CHANGE_STATUS_NEW;
+            }
+            $location = $this->get($import_data['id']);
+        }
+        if ($location->title == $import_data['title']) {
+            return Location::CHANGE_STATUS_NO_DIFFERENCE;
+        }
+        return Location::CHANGE_STATUS_DIFFERENT;
+    }
+
+     /**
+     * Calculate the email status based on what we have currently, vs what we're importing
+     * @param array current import data
+     * @return int 0 = no change, 1 = change, 2 = new
+     */
+    public function calcEmailStatus($import_data) {
+        if (empty($import_data['id']) || !isset($import_data['email'])) {
+            return Location::CHANGE_STATUS_NEW;
+        } else {
+            if (!$this->exists(['id'=>$import_data['id']])) {
+                return Location::CHANGE_STATUS_NEW;
+            }
+            $location = $this->get($import_data['id']);
+        }
+        if ($location->email == $import_data['email']) {
+            return Location::CHANGE_STATUS_NO_DIFFERENCE;
+        }
+        return Location::CHANGE_STATUS_DIFFERENT;
+    }
+
+    /**
+    * Calculate the address status based on what we have currently, vs what we're importing
+    * @param array current import data
+    * @return int 0 = no change, 1 = change, 2 = new
+    */
+    public function calcAddressStatus($import_data) {
+        if (empty($import_data['id'])) {
+            return Location::CHANGE_STATUS_NEW;
+        } else {
+            if (!$this->exists(['id'=>$import_data['id']])) {
+                return Location::CHANGE_STATUS_NEW;
+            }
+            $location = $this->get($import_data['id']);
+        }
+        $expected = $actual = '';
+        foreach (['address','address_2','city','zip','state'] as $field) {
+            if (empty($import_data[$field]) && ($field != 'address_2')) {
+                // All fields except address_2, must have a value
+                return Location::CHANGE_STATUS_DIFFERENT;
+            }
+            $expected .= $location->{$field}.' ';
+            $actual .= $import_data[$field].' ';
+        }
+        if (trim(preg_replace('/\s+/', ' ', $expected)) == trim(preg_replace('/\s+/', ' ', $actual))) {
+            return Location::CHANGE_STATUS_NO_DIFFERENCE;
+        }
+        return Location::CHANGE_STATUS_DIFFERENT;
     }
 }

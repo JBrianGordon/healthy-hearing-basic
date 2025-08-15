@@ -456,8 +456,13 @@ class CallSourcesTable extends Table
                 }
             } else {
                 // Could not find this customer
-                $this->errors[] = $callSource['@'];
-                $retval = false;
+                if (Configure::read('env') == 'prod') {
+                    $this->errors[] = $callSource['@'];
+                    $retval = false;
+                } else {
+                    // On test account, fake success if the customer doesn't exist
+                    $retval = true;
+                }
             }
             if ($deleteThisRecord) {
                 if ($inactivateCustomer) {
@@ -642,13 +647,15 @@ class CallSourcesTable extends Table
     * Remove any special characters from clinic name
     */
     private function cleanName($name){
-        $name = str_replace('&', 'and', $name);
-        $name = htmlentities($name);
-        $name = str_replace('&rsquo;', '\'', $name);
-        $name = str_replace('&nbsp;', ' ', $name);
-        $name = str_replace('&ndash;', '-', $name);
-        $name = str_replace('&ntilde;', 'n', $name);
-        $name = html_entity_decode(trim($name));
+        if (!empty($name)) {
+            $name = str_replace('&', 'and', $name);
+            $name = htmlentities($name);
+            $name = str_replace('&rsquo;', '\'', $name);
+            $name = str_replace('&nbsp;', ' ', $name);
+            $name = str_replace('&ndash;', '-', $name);
+            $name = str_replace('&ntilde;', 'n', $name);
+            $name = html_entity_decode(trim($name));
+        }
         return $name;
     }
 

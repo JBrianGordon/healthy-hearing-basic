@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\ImportStatus;
 
 /**
  * ImportStatus Model
@@ -107,5 +108,19 @@ class ImportStatusTable extends Table
         $rules->add($rules->existsIn('location_id', 'Locations'), ['errorField' => 'location_id']);
 
         return $rules;
+    }
+
+    /**
+    * Count number of tier changes on the specified import date
+    */
+    public function countTierChanges($date){
+        $date = date('Y-m-d', strtotime($date));
+        $count = $this->find('all', array(
+            'conditions' => array(
+                'DATE(ImportStatus.created)' => $date,
+                'ImportStatus.status' => ImportStatus::IMPORT_STATUS_TIER_CHANGED,
+            )
+        ))->count();
+        return $count;
     }
 }

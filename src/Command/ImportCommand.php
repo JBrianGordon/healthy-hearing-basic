@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Model\Entity\Location;
+use App\Model\Entity\ImportStatus;
+use App\Enums\Model\Review\ReviewOrigin;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -51,6 +53,14 @@ class ImportCommand extends Command
     protected $caLocationFile = 'tmp/latestCaLocationImportFile.xml';
     protected $caProviderFile = 'tmp/latestCaProviderImportFile.xml';
 
+    // Credentials for Oticon sftp server
+    protected $oticonServer = [
+        'url' => 'sftp.us.dgs.com',
+        'username' => 'HealthyHearing',
+        'password' => 'm6@BYJ@j[Mkj[n*#'
+    ];
+    protected $oticonFilename = 'tmp/latestOticonImport.csv';
+
     // Used for tracking which locations changed tiers for reporting purposes.
     private $changedTiers = [];
 
@@ -78,9 +88,9 @@ class ImportCommand extends Command
         $parser
             ->setDescription('Import clinic data from specified group')
             ->addArgument('importType', [
-                'help' => 'The type of import to run (YHN, CQP, CA, ...)',
+                'help' => 'The type of import to run (YHN, CQP, CA, OTICON...)',
                 'required' => true,
-                'choices' => ['yhn', 'cqp', 'ca'],
+                'choices' => ['yhn', 'cqp', 'ca', 'oticon'],
             ])
             ->addOption('bypass', [
                 'short' => 'b',
@@ -112,6 +122,8 @@ class ImportCommand extends Command
         $this->Locations = $this->fetchTable('Locations');
         $this->LocationsProviders = $this->fetchTable('LocationsProviders');
         $this->CallSources = $this->fetchTable('CallSources');
+        $this->ImportStatus = $this->fetchTable('ImportStatus');
+        $this->LocationNotes = $this->fetchTable('LocationNotes');
 
         $io->out("Importing clinic data from {$importType}...");
 
@@ -125,11 +137,18 @@ class ImportCommand extends Command
             case 'ca':
                 $this->ca();
                 break;
+            case 'oticon':
+                $this->oticon();
+                break;
             default:
                 $io->error('Invalid import type');
                 break;
         }
     }
+
+    /***************************************************
+     * YHN
+     * *************************************************/
 
     /*
      *  Import YHN XML and parse it into our database.
@@ -907,6 +926,10 @@ class ImportCommand extends Command
         $io->out('Import report email sent to '.implode(', ', $email['to']));
     }
 
+    /***************************************************
+     * CQP
+     * *************************************************/
+
     /*
      *  Import CQPartners XML and parse it into our database.
      */
@@ -1368,6 +1391,10 @@ class ImportCommand extends Command
         $io->out($count." locations are no longer in the CQP import");
     }
 
+    /***************************************************
+     * CA
+     * *************************************************/
+
     /*
      *  Import YHN XML and parse it into our database.
      */
@@ -1701,5 +1728,687 @@ class ImportCommand extends Command
             'new_providers' => $newCount,
         ];
         return $caLogData;
+    }
+
+    /***************************************************
+     * OTICON
+     * *************************************************/
+
+    /**
+    * Run the oticon locations import
+    */
+    function oticon($bypass = false){
+        $io = $this->io;
+        $io->helper('BaseShell')->title("Import from Oticon");
+        if (!Configure::read('isOticonImportEnabled')) {
+            $io->error('Oticon imports are disabled on this server.');
+            exit;
+        }
+        $oticonStart = microtime(true);
+        // Retrieve the Oticon import file
+        if ($this->bypass) {
+            // Read most recent downloaded file
+            $io->out('Bypassing file download. Reading local file: '.$this->oticonFilename);
+            if (!file_exists($this->oticonFilename)) {
+                $io->error('Unable to read file.');
+                exit;
+            }
+        } else {
+            // Download a new file from Oticon and save it in /tmp/
+            $downloadStatus = $this->downloadOticonImportFile();
+            if (!$downloadStatus) {
+                $io->error('Failed to download Oticon file.');
+                exit;
+            }
+        }
+        $io->out("Location Import file: ".$this->oticonFilename);
+        $retval = $this->parseOticonImport();
+
+        $io->out('Import Complete');
+        $io->out("{$retval['insert_count']} Records Inserted");
+        $io->out("{$retval['update_count']} Records Updated");
+        if (!empty($retval['unknown_tier_count_new'])) {
+            $io->error("{$retval['unknown_tier_count_new']} New records have 'Unknown' oticon tier. Using T3.");
+        }
+        if (!empty($retval['unknown_tier_count_existing'])) {
+            $io->error("{$retval['unknown_tier_count_existing']} Existing records have 'Unknown' oticon tier. Using last known tier.");
+        }
+        $io->out("{$retval['error_count']} Errors");
+        if(!empty($retval['errors'])){
+            $io->out('ERRORS:');
+            $io->hr();
+            print_r($retval['errors']);
+            $io->hr();
+        }
+        $this->Locations->calculateListingTypes($io);
+        $this->Locations->createClinicUsers($io);
+        $this->Locations->addCallSourceNumbers($io);
+        $this->Locations->CallSources->endInvalidCallSourceNumbers($io);
+        $this->Locations->noShowLocations($io);
+        $this->Locations->showClinicsWithActiveCS($io);
+        $this->Locations->updateAllFilters($io);
+        $this->Locations->updateAllCompleteness($io);
+
+        // Create reports and send email
+        $this->createOticonReports();
+
+        $io->hr();
+        $io->out('Oticon Import Complete');
+    }
+
+    /**
+    * Download the Oticon import file from shared server
+    */
+    private function downloadOticonImportFile() {
+        $io = $this->io;
+        $server = Configure::read('oticonSharedServer');
+        $io->out("Downloading Oticon import file. This will take a few minutes.");
+        $io->helper('BaseShell')->sftpRetrieveFile(
+            $this->oticonServer['url'],
+            $this->oticonServer['username'],
+            $this->oticonServer['password'],
+            '/DF_SF_to_HH/Prod/HHCSVFeed.csv',
+            $this->oticonFilename
+        );
+        return true;
+    }
+
+    /**
+    * Run the oticon import. grab the tmp file and run with it.
+    * @param xml path file_name to load
+    * @return number of updated locations.
+    */
+    public function parseOticonImport() {
+        $io = $this->io;
+        $importData = csvToArrayWithHeaders($this->oticonFilename);
+        //Exit here if we don't have any data to work with
+        if (empty($importData)) {
+            echo "No File to import.\n";
+            return false;
+        }
+        //Setup return value array
+        $retval = [
+            'insert_count' => 0,
+            'update_count' => 0,
+            'unknown_tier_count_new' => 0,
+            'unknown_tier_count_existing' => 0,
+            'error_count' => 0,
+            'errors' => []
+        ];
+
+        $io->out("Updating locations not in the import file (tier 0).");
+        // Find all locations that are not in the oticon import and make them tier zero.
+        $retval['update_count'] += $this->updateTierZeroLocations($importData);
+
+        $io->out("\nUpdating/adding ".count($importData)." locations from the import file.");
+        //Start the imports one at a time.
+        foreach ($importData as $locationData) {
+            $importLocationData = $this->parseOticonCsv($locationData);
+            // There may be more than one location with the same Oticon id or SF id
+            $locationIds = $this->findIdsByOticonId($importLocationData['id_oticon']);
+            $locationIds = array_merge($locationIds, $this->findIdsBySfId($importLocationData['id_sf']));
+            $locationIds = array_unique($locationIds);
+            if (empty($locationIds)) {
+                $locationIds[0] = null;
+            }
+            // Check for duplicates
+            if (count($locationIds) > 1) {
+                pr('Warning: Found multiple locations that match Oticon ID = '.$importLocationData['id_oticon'].' and/or SalesForce ID='.$importLocationData['id_sf']);
+                pr($locationIds);
+            }
+
+            foreach ($locationIds as $locationId) {
+                $data = $importLocationData;
+                $data['country'] = countryAbbr($data['country']);
+                $isNew = false;
+                $needsCallSourceNumber = false;
+                //Figure out Import Status and Geo Loc if new.
+                if (!empty($locationId)) {
+                    // Existing location
+                    $location = $this->Locations->get($locationId);
+                    //$this->id = $locationId;
+                    $data['id'] = $locationId;
+                    $data['is_active'] = $location->is_active;
+                    $data['is_show'] = $location->is_show;
+                    $data['listing_type'] = $location->listing_type;
+                    $data['is_call_assist'] = $location->is_call_assist;
+                    $data['yhn_tier'] = $location->yhn_tier;
+                    $data['cqp_tier'] = $location->cqp_tier;
+                    $data['is_retail'] = $location->is_retail;
+                    $data['is_listing_type_frozen'] = $location->is_listing_type_frozen;
+                    $data['is_grace_period'] = $location->is_grace_period;
+                    $data['grace_period_end'] = $location->grace_period_end;
+                    $data['is_email_ignore'] = $location->is_email_ignore;
+                    $data['is_address_ignore'] = $location->is_address_ignore;
+                    $data['is_title_ignore'] = $location->is_title_ignore;
+                    $data['is_phone_ignore'] = $location->is_phone_ignore;
+                    $lastOticonTier = $location->oticon_tier;
+                    if (!in_array($data['oticon_tier'], [1, 2, 3])) {
+                        // If tier value is Unknown, keep the last known value and display an error. We should let Vikas know.
+                        pr('Warning: Tier = '.$data['oticon_tier'].' for location '.$locationId.', id_sf='.$data['id_sf']);
+                        $data['oticon_tier'] = $lastOticonTier;
+                        $retval['unknown_tier_count_existing']++;
+                    }
+                    if ($data['oticon_tier'] != $lastOticonTier) {
+                        $data['last_import_status'] = ImportStatus::IMPORT_STATUS_TIER_CHANGED;
+                        if (($data['oticon_tier'] == 3) && (in_array($lastOticonTier, [1,2]))) {
+                            // Location dropped from Oticon T1/T2 to T3 - Set 90 day grace period
+                            $data['is_grace_period'] = true;
+                            $data['grace_period_end'] = date('Y-m-d', strtotime('+ 90 days'));
+                            $noteBody = 'Start of 90 day grace period.';
+                            $this->LocationNotes->add($locationId, $noteBody);
+                        } elseif (in_array($data['oticon_tier'], [1,2])) {
+                            if ($data['is_grace_period']) {
+                                $data['is_grace_period'] = false;
+                                $data['grace_period_end'] = null;
+                                $noteBody = 'End of grace period due to tier change.';
+                                $this->LocationNotes->add($locationId, $noteBody);
+                            }
+                        }
+                    } else {
+                        $data['last_import_status'] = ImportStatus::IMPORT_STATUS_NO_CHANGE;
+                    }
+                    $retval['update_count']++;
+                } else {
+                    // New location
+                    $isNew = true;
+                    unset($data['id']);
+                    $data['is_call_assist'] = false;
+                    $data['is_active'] = true;
+                    $data['is_show'] = false;
+                    $data['listing_type'] = Location::LISTING_TYPE_NONE;
+                    $data['yhn_tier'] = 0;
+                    $data['cqp_tier'] = 0;
+                    $data['is_retail'] = false;
+                    $data['is_grace_period'] = false;
+                    $data['grace_period_end'] = null;
+                    $data['is_listing_type_frozen'] = false;
+                    $data['last_import_status'] = ImportStatus::IMPORT_STATUS_NEW_LOCATION;
+                    $data['priority'] = 'New';
+                    $data['payment'] = '{"2":"0","4":"0","8":"0","16":"0","32":"0","64":"1","128":"1","256":"0"}';
+                    $data['is_email_ignore'] = false;
+                    $data['is_address_ignore'] = false;
+                    $data['is_title_ignore'] = false;
+                    $data['is_phone_ignore'] = false;
+
+                    if (!in_array($data['oticon_tier'], [1, 2, 3])) {
+                        // If tier value is unknown, default to tier 3 and display a warning. Let Vikas know.
+                        $io->error('Warning: Tier = '.$data['oticon_tier'].' for id_sf '.$data['id_sf'].'. Defaulting to tier 3 (no grace).');
+                        $data['oticon_tier'] = 3;
+                        $retval['unknown_tier_count_new']++;
+                    }
+                    $retval['insert_count']++;
+                }
+                // Calculate listing_type and is_call_assist
+                $data['listing_type'] = $this->Locations->calculateListingType($data);
+                $data['is_call_assist'] = $this->Locations->calculateIsCallAssist($data);
+                if ($data['is_active'] && ($data['listing_type'] != Location::LISTING_TYPE_NONE)) {
+                    // Make sure active Basic/Enhanced/Premier clinics have a CallSource number assigned
+                    $csNumberCount = 0;
+                    if (!empty($locationId)) {
+                        $csNumberCount = $this->CallSources->find('all', [
+                            'conditions' => ['location_id' => $locationId]
+                        ])->count();
+                    }
+                    if ($csNumberCount > 1) {
+                        echo "\nWARNING: Location ".$locationId." has multiple CS numbers assigned.\n";
+                    }
+                    $needsCallSourceNumber = ($csNumberCount == 0) ? true : false;
+                    if ($needsCallSourceNumber) {
+                        // Do not show the location until the new number has been assigned.
+                        $data['is_show'] = false;
+                    }
+                }
+                $importStatusData = [
+                    'oticon_tier' => $data['oticon_tier'],
+                    'listing_type' => $data['listing_type'],
+                    'is_active' => $data['is_active'],
+                    'is_show' => $data['is_show'],
+                    'is_grace_period' => $data['is_grace_period'],
+                    'status' => $data['last_import_status'],
+                ];
+
+                //Decide the status of the address and title changes
+                $data['address_status'] = $this->Locations->calcAddressStatus($data);
+                $data['title_status'] = $this->Locations->calcTitleStatus($data);
+                $data['phone_status'] = $this->Locations->calcPhoneStatus($data);
+                $data['email_status'] = $this->Locations->calcEmailStatus($data);
+
+                foreach (['address','phone','title','email'] as $field) {
+                    if ($data['is_' . $field . '_ignore']) {
+                        // If import data matches HH data, clear the ignore field
+                        if ($data[$field . '_status'] == Location::CHANGE_STATUS_NO_DIFFERENCE) {
+                            $data['is_' . $field . '_ignore'] = false;
+                        }
+                        // If oticon data has changed since last import, clear the ignore field
+                        $lastXmlParsed = $this->Locations->parseOticonXml($location->last_xml);
+                        if ($field == 'address') {
+                            $newAddress = $lastAddress = '';
+                            foreach (['address','address_2','city','zip','state'] as $addressField) {
+                                $newAddress .= $data[$addressField].' ';
+                                $lastAddress .= $lastXmlParsed->$addressField??''.' ';
+                            }
+                            $newAddress = trim(preg_replace('/\s+/', ' ', $newAddress));
+                            $lastAddress = trim(preg_replace('/\s+/', ' ', $lastAddress));
+                            if ($newAddress != $lastAddress) {
+                                $data['is_' . $field . '_ignore'] = false;
+                            }
+                        } else {
+                            if ($lastXmlParsed->$field != $data[$field]) {
+                                $data['is_' . $field . '_ignore'] = false;
+                            }
+                        }
+                    }
+                }
+
+                //Save the location data.
+                // If this is an existing location, unset some fields.
+                // For a new import, save all fields.
+                if (!$isNew) {
+                    // The following fields will be updated with what we found in the import (or calculate), nothing else!
+                    // We don't want to automatically overwrite title, address, phone, email, etc...
+                    $fields = [
+                        // imported
+                        'id_oticon', 'id_parent', 'id_sf', 'oticon_tier', 'location_segment', 'entity_segment', 'last_import_status',
+                        // calculated
+                        'id', 'listing_type', 'is_listing_type_frozen', 'last_xml', 'title_status', 'address_status', 'phone_status', 'email_status', 'is_phone_ignore', 'is_address_ignore', 'is_title_ignore', 'is_email_ignore', 'is_show', 'is_grace_period', 'grace_period_end', 'is_call_assist'
+                    ];
+                    $data = array_intersect_key($data, array_flip($fields));
+                    $locationEntity = $this->Locations->get($data['id']);
+                    $this->Locations->patchEntity($locationEntity, $data);
+                } else {
+                    $locationEntity = $this->Locations->newEntity($data);
+                }
+                if ($this->Locations->save($locationEntity)) {
+                    echo '.'; //success output
+                    if ($needsCallSourceNumber) {
+                        // This clinic needs a new or updated CallSource tracking number.
+                        $this->CallSources->saveCallSource($locationEntity->id);
+                    }
+                    if ($isNew) {
+                        // Geocode this Location
+                        $this->Locations->geoLocById($locationEntity->id);
+                    }
+                    $importStatusData['location_id'] = $locationEntity->id;
+                    $importStatusEntity = $this->ImportStatus->newEntity($importStatusData);
+                    $this->ImportStatus->save($importStatusEntity);
+                } else { //Error saving the location, figure out why.
+                    // Failed to save the location
+                    $io->error('Failed to save Location entity');
+                    $errors = print_r($locationEntity->getErrors(), true);
+                    $io->out($errors);
+                    pr($locationEntity);
+                    $retval['error_count']++;
+                    $retval['errors'][$data['id_oticon']] = $errors;
+                    echo 'f'; //failure output
+                }
+            }
+        }
+        echo "\nImport complete.\n";
+        return $retval;
+    }
+
+    /**
+    * Find all locations that do not exist in the import file. Update those locations to Tier 0.
+    * @return boolean success.
+    */
+    private function updateTierZeroLocations($importData) {
+        if (!empty($importData)) {
+            // Find the list of all oticon ids in the import
+            $oticonIds = [];
+            foreach ($importData as $location) {
+                if (isset($location['Id'])) {
+                    $oticonIds[] = $location['Id'];
+                }
+            }
+            // Find all locations not in the import
+            $locations = $this->Locations->find('all', [
+                'conditions' => [
+                    'id_oticon NOT IN' => $oticonIds,
+                ],
+            ])->all();
+            foreach ($locations as $count => $location) {
+                $import_status = ($location->oticon_tier == 0) ? ImportStatus::IMPORT_STATUS_NO_CHANGE : ImportStatus::IMPORT_STATUS_TIER_CHANGED;
+                $locationId = $location->id;
+
+                // Set these fields before we calculate the new listing type
+                $location->oticon_tier = 0;
+                $location->is_grace_period = false;
+                $location->grace_period_end = null;
+                $location->last_import_status = $import_status;
+                if ($this->Locations->save($location)) {
+                    echo '.';
+                    $newListingType = $this->Locations->calculateListingType($location);
+                    $this->Locations->calculateIsCallAssist($location);
+                    $isShow = ($newListingType == Location::LISTING_TYPE_NONE) ? false : $location->is_show;
+                    $importStatusData = [
+                        'location_id' => $locationId,
+                        'status' => $import_status,
+                        'oticon_tier' => 0,
+                        'listing_type' => $newListingType,
+                        'is_active' => $location->is_active,
+                        'is_show' => $isShow,
+                        'is_grace_period' => false,
+                    ];
+                    $importStatusEntity = $this->ImportStatus->newEntity($importStatusData);
+                    $this->ImportStatus->save($importStatusEntity);
+                } else {
+                    echo 'f';
+                    pr('Error: Failed to save location '.$location->id);
+                }
+            }
+            return count($locations);
+        }
+        return false;
+    }
+
+    /**
+    * Parses an array object of a single Location given to us by Oticon
+    * @param array
+    * @return array parsed of Location fields to save. false if unable to parse.
+    */
+    public function parseOticonCsv($data) {
+        if (empty($data)) {
+            return false;
+        }
+        $saveData = [];
+        $saveData['last_xml'] = json_encode($data);
+        foreach ($data as $key => $value) {
+            //Organize Location data
+            $saveData[strtolower($key)] = $value;
+        }
+        // Calculate oticon tier based on segment
+        $saveData['location_segment'] = isset($saveData['locationsegment']) ? $saveData['locationsegment'] : null;
+        if (in_array($saveData['location_segment'], ['A1', 'B1', 'C1', 'D1', 'A2'])) {
+            $oticonTier = 1;
+        } elseif (in_array($saveData['location_segment'], ['B2', 'C2', 'D2', 'A3', 'B3', 'C3', 'D3'])) {
+            $oticonTier = 2;
+        } elseif (in_array($saveData['location_segment'], ['A4', 'B4', 'C4', 'D4'])) {
+            $oticonTier = 3;
+        } else {
+            $oticonTier = 0;
+            pr('Warning. Unknown segment ('.$saveData['location_segment'].') for location '.$saveData['id']);
+        }
+        $saveData['oticon_tier'] = $oticonTier;
+
+        // Clean phone number
+        $saveData['phone'] = trim(str_replace(array('(', ')','-', ' '), '', $saveData['phone']));
+
+        // The import file has whole address in a single field. We need to split out address_2 data.
+        $saveData['address_2'] = '';
+        if (!empty($saveData['address'])) {
+            $pos = stripos($saveData['address'], ' Building');
+            if (empty($pos)) {
+                $pos = stripos($saveData['address'], ' Bldg');
+            }
+            if (empty($pos)) {
+                $pos = stripos($saveData['address'], ' Suite');
+            }
+            if (empty($pos)) {
+                $pos = stripos($saveData['address'], ' Ste');
+            }
+            if (empty($pos)) {
+                $pos = stripos($saveData['address'], ' Unit');
+            }
+            if (empty($pos)) {
+                $pos = stripos($saveData['address'], ' #');
+            }
+            if (!empty($pos)) {
+                $saveData['address_2'] = trim(substr($saveData['address'], $pos));
+                $saveData['address'] = substr($saveData['address'], 0, $pos);
+            }
+        }
+
+        $saveData['id_oticon'] = $saveData['id'];
+        $saveData['id_sf'] = $saveData['sfid'];
+        $saveData['id_parent'] = isset($saveData['parentaccountid']) ? $saveData['parentaccountid'] : null;
+
+        $saveData['city'] = cleanCityName($saveData['city']);
+        $saveData['zip'] = (strlen($saveData['zip']) == 10 && strpos($saveData['zip'],'-') > 0 ? substr($saveData['zip'],0,5) : $saveData['zip']);//99576-0130
+        unset($saveData['id'],
+            $saveData['sfid'],
+            $saveData['created'],
+            $saveData['modified'],
+            $saveData['parentaccountid'],
+            $saveData['locationsegment'],
+            $saveData['tier']);
+
+        return $saveData;
+    }
+
+    /**
+    * Find all location ids that match the Oticon id.
+    */
+    public function findIdsByOticonId($oticonId = '') {
+        if (trim($oticonId)) {
+            $locationList = $this->Locations->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'id',
+                'conditions' => [
+                    'id_oticon' => $oticonId,
+                ],
+            ])->toArray();
+            return $locationList;
+        }
+        return false;
+    }
+
+    /**
+    * Find all location ids that match the Salesforce Id.
+    */
+    public function findIdsBySfId($sf_id = '') {
+        if (trim($sf_id)) {
+            $locationList = $this->Locations->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'id',
+                'conditions' => [
+                    'id_sf' => $sf_id,
+                ],
+            ])->toArray();
+            return $locationList;
+        }
+        return false;
+    }
+
+    /*
+     *  Generate the Oticon Import Reports and send email
+     */
+    function oticonNumbersReport($filename) {
+        if (empty($filename)) {
+            $this->io->error('Error: No filename given in oticonNumbersReport().');
+            return false;
+        }
+        $dirname = dirname($filename);
+        if (!is_dir($dirname)) {
+            mkdir($dirname, 0755, true);
+        }
+        $csvFile = fopen($filename, 'w');
+        fputcsv($csvFile, ["Customer Name","Customer Code","Phone Number","Target Number"]);
+        $month = date("Y-m-01");
+        $numbers = $this->CallSources->find('all', [
+            'conditions' => [
+                'created >=' => $month
+            ]
+        ])->all();
+        foreach ($numbers as $number) {
+            $customerCode = $this->CallSources->getCustomerCode($number->location_id);
+            fputcsv($csvFile, [$number->customer_name, $customerCode, $number->phone_number, $number->target_number]);
+        }
+        fclose($csvFile);
+    }
+
+    function oticonCountReport($filename) {
+        if (empty($filename)) {
+            $this->io->error('Error: No filename given in oticonNumbersReport().');
+            return false;
+        }
+        $dirname = dirname($filename);
+        if (!is_dir($dirname)) {
+            mkdir($dirname, 0755, true);
+        }
+        $locationCount = $this->Locations->find('all', [
+            'conditions' => ['is_active' => 1]
+        ])->count();
+        $providerCount = $this->Providers->find('all', [
+            'conditions' => ['is_active' => 1]
+        ])->count();
+
+        $fileData = "-- Oticon Count Report : ".date('Y-m-d')." --\n\n";
+        $fileData .= "Active Locations: " . $locationCount."\n";
+        $fileData .= "Active Providers: " . $providerCount."\n\n";
+
+        foreach (Location::$listingTypes as $listingType => $listingTypeDescription) {
+            // Don't show listing_type=None stats.
+            if ($listingType == Location::LISTING_TYPE_NONE) {
+                continue;
+            }
+            $listingTypeCount = $this->Locations->find('all', [
+                'conditions' => ['listing_type' => $listingType],
+            ])->count();
+            $listingTypePercentage = number_format(($listingTypeCount / $locationCount) * 100, 2) . '%';
+            $fileData .= "Listing Type ".$listingType.": ".$listingTypeCount." (".$listingTypePercentage.")\n";
+            $fileData .= $this->listingTypeStats($listingType)."\n\n";
+        }
+
+        $fileData .= $this->overallStats();
+        $fileData .= "\n";
+        $fileData .= $this->reviewStats();
+        $fileData .= "\n";
+        $fileData .= $this->callsourceStats();
+        file_put_contents($filename, $fileData);
+    }
+
+    function listingTypeStats($listingType) {
+        $result = '';
+        $stats = [
+            'clinics' => [],
+            'isOticon' => ['oticon_tier >' => 0],
+            'isYHN' => ['yhn_tier >' => 0],
+            'isCQP' => ['cqp_tier >' => 0],
+            'Complete' => ['completeness' => Location::COMPLETENESS_COMPLETE],
+            'BasicInfo' => ['completeness' => Location::COMPLETENESS_BASIC_INFO],
+            'ProfilePic' => ['completeness' => Location::COMPLETENESS_PROFILE_PIC],
+            'Incomplete' => ['completeness' => Location::COMPLETENESS_INCOMPLETE],
+            'url' => ['url !=' => ''],
+            'reviews_approved' => ['reviews_approved >' => 0],
+            '3_reviews' => ['reviews_approved >' => 2]
+        ];
+        foreach ($stats as $key => $statConditions) {
+            $conditions = array_merge(['listing_type' => $listingType], $statConditions);
+            $statValue = $this->Locations->find('all', [
+                'conditions' => $conditions
+            ])->count();
+            if ($key == 'clinics') {
+                $clinics = $statValue;
+                continue;
+            }
+            if (empty($statValue)) {
+                $statValue = 0;
+            }
+            $statPercentage = number_format($statValue / $clinics * 100, 2) . '%';
+            $key = ucfirst(str_replace('_', ' ', $key));
+            $result .= "  " . $key . ": " . $statValue . " (" . $statPercentage . ")\n";
+        }
+        return $result;
+    }
+
+    function overallStats() {
+        $result = "Overall Stats\n";
+        $clinics = $this->Locations->find('all')->count();
+        $result .= "  Total clinics: ".$clinics."\n";
+        $listingTypes = [Location::LISTING_TYPE_PREMIER, Location::LISTING_TYPE_ENHANCED, Location::LISTING_TYPE_BASIC];
+        foreach ($listingTypes as $listingType) {
+            $stats = [
+                $listingType.'/Active/Show' => [
+                    'listing_type' => $listingType,
+                    'is_active' => 1,
+                    'is_show' => 1,
+                ],
+                $listingType.'/Active/No Show' => [
+                    'listing_type' => $listingType,
+                    'is_active' => 1,
+                    'is_show' => 0,
+                ],
+                $listingType.'/Inactive/Show' => [
+                    'listing_type' => $listingType,
+                    'is_active' => 0,
+                    'is_show' => 1,
+                ],
+                $listingType.'/Inactive/No Show' => [
+                    'listing_type' => $listingType,
+                    'is_active' => 0,
+                    'is_show' => 0,
+                ]
+            ];
+            foreach ($stats as $key => $conditions) {
+                $statValue = $this->Locations->find('all', [
+                    'conditions' => $conditions
+                ])->count();
+                if (empty($statValue)) {
+                    $statValue = 0;
+                }
+                $statPercentage = number_format($statValue / $clinics * 100, 2) . '%';
+                $key = ucfirst(str_replace('_', ' ', $key));
+                $result .= "  " . $key . ": " . $statValue . " (" . $statPercentage . ")\n";
+            }
+        }
+        return $result;
+    }
+
+    function reviewStats() {
+        $totalReviews = $this->Locations->Reviews->find('all')->count();
+        $return = "Total Reviews: ".$totalReviews."\n";
+        $origins = ReviewOrigin::getOriginLabelArray();
+        foreach ($origins as $origin => $originLabel) {
+            $originCount = $this->Locations->Reviews->find('all', [
+                'conditions' => ['origin' => $origin]
+            ])->count();
+            $statPercentage = number_format($originCount / $totalReviews * 100, 2) . '%';
+            $return .= "  ".$originLabel .": ".$originCount." (".$statPercentage.")\n";
+        }
+        return $return;
+    }
+
+    function callsourceStats() {
+        $csActive = $this->CallSources->find('all', ['conditions' => ['is_active' => true]])->count();
+        $return = 'Active CallSource Numbers: ' . $csActive . "\n\n";
+        return $return;
+    }
+
+    /*
+     *  Generate the Oticon Import Reports and send email
+     */
+    function createOticonReports() {
+        $io = $this->io;
+        $io->helper('BaseShell')->title('Creating Oticon import report');
+        $date = date("Y-m-d");
+
+        $io->out("Running Numbers.");
+        $csNumbersFilename = "tmp/oticon_imports/callsource_numbers_$date.csv";
+        $this->oticonNumbersReport($csNumbersFilename);
+
+        $io->out("Running Count.");
+        $oticonCountFilename = "tmp/oticon_imports/oticon_count_$date.txt";
+        $this->oticonCountReport($oticonCountFilename);
+
+        $body = 'Oticon Import Data Attached<br><br>';
+        $count = $this->ImportStatus->countTierChanges('today');
+        $body .= "$count locations changed tier.";
+
+        $email = [];
+        $email['body'] = $body;
+        if (Configure::read('env') == 'prod') {
+            $email['to'] = Configure::read('import-email');
+        } else {
+            $email['to'] = Configure::read('developerEmails');
+        }
+        $email['subject'] = 'Oticon Import - '.date('m-d-Y');
+        $email['attachments'] = [
+            $csNumbersFilename,
+            $oticonCountFilename
+        ];
+        // Send email
+        $this->getMailer('Admin')->send('default', [$email]);
+        $io->out('Import report email sent to '.implode(', ', $email['to']));
     }
 }

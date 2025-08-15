@@ -170,12 +170,13 @@ class BaseShellHelper extends Helper
             curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             file_put_contents($localName, curl_exec($curl));
-            if (curl_errno($curl)) {
-                $errorCode = curl_errno($curl);
+            $errorCode = curl_errno($curl);
+            curl_close($curl);
+            if ($errorCode) {
                 $this->_io->error('Curl error: '.$errorCode);
                 $this->_io->error(curl_strerror($errorCode));
+                return false;
             }
-            curl_close($curl);
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
             $this->_io->error('Exception: ' . $e->getMessage());
