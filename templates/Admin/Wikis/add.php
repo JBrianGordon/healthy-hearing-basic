@@ -58,10 +58,9 @@ if (empty($content->id)) {
                         </ul>
                         <div class="tab-content mt20">
                             <div class="tab-pane active" id="details">
-                                <?php
-                                    echo $this->Form->control('body', ['required' => false, 'class' => 'editor', 'label' => false]);
-                                    echo $this->Form->control('short');
-                                ?>
+                                <?= $this->Form->control('body', ['required' => false, 'class' => 'editor', 'label' => false]) ?>
+                                <div class="ck-word-count tar w-100 mb-3"></div>
+                                <?= $this->Form->control('short') ?>
                             </div>
                             <div class="tab-pane" id="admin">
                                 <?php

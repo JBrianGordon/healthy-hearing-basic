@@ -99,8 +99,9 @@ if (empty($content->id)) {
 				                <div class="tab-content">
 				                    <!-- Content Tab -->
 				                    <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
-				                       <?php
-				                            echo $this->Form->control('body', ['label' => false, 'class' => 'editor', 'required' => false]);
+				                       <?= $this->Form->control('body', ['label' => false, 'class' => 'editor', 'required' => false]) ?>
+									   <div class="ck-word-count tar w-100 mb-3"></div>
+									   <?php
 				                            echo $this->Form->control('short');
 				                            echo $this->Form->control('library_share_text');
 				                        ?>
