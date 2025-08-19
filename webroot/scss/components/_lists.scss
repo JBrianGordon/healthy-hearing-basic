@@ -1,17 +1,24 @@
 ul {
-  margin-bottom: 12.5px;
-	
-  &.no-bullets {
-	list-style-type: none!important;
-	padding-left: 0;
-	
-	li {
-		margin-bottom: 0.5em;
+	margin-bottom: 12.5px;
+
+	&.no-bullets {
+		list-style-type: none !important;
+		padding-left: 0;
+
+		li {
+			margin-bottom: 0.5em;
+		}
 	}
-  }
+}
+
+ol[style='list-style-type:decimal-leading-zero;'] {
+	list-style-position: inside;
+	padding-left: 0;
 }
 
 //Custom SCSS for jQuery UI dropdown lists
-.ui-state-active, ul.ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+.ui-state-active,
+ul.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
 	border: 1px solid #fff;
 }

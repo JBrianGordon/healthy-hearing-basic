@@ -681,6 +681,10 @@ pre {
 
 .text-small {
   font-size: calc(20px * 0.87) !important;
+
+  &.ck-button {
+    font-size: 13px !important;
+  }
 }
 
 .lead {
