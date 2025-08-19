@@ -344,6 +344,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 lang: siteLang,
                 serviceId: servId,
                 srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
+            },
+            wordCount: {
+                onUpdate: stats => {
+                    const wordCountElement = document.querySelector('.ck-word-count');
+                    if (wordCountElement) {
+                        wordCountElement.textContent = `Word count: ${stats.words}`;
+                    }
+                }
             }
         }).catch(error => {
             console.error(error);

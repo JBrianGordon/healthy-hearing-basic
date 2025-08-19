@@ -59,10 +59,9 @@ $author_default = false;
 								<div class="tab-content">
 									<br>
 									<div class="tab-pane active" id="Corp">
-										<?php
-											echo $this->Form->control('description', ['class' => 'editor', 'label' => ['style' => 'word-break: auto-phrase;']]);
-											echo $this->Form->control('short');
-										?>
+										<?= $this->Form->control('description', ['class' => 'editor', 'label' => ['style' => 'word-break: auto-phrase;']]) ?>
+										<div class="ck-word-count tar w-100 mb-3"></div>
+										<?= $this->Form->control('short') ?>
 									</div>
 									<div class="tab-pane" id="Admin">
 										<?php
