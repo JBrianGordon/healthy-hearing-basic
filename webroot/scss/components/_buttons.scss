@@ -19,7 +19,7 @@ button.close {
   padding: 6px 17px;
   font-size: 85%;
   border-radius: 3em;
-  box-shadow: rgba(0,0,0,0.15) 0px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px;
   word-wrap: break-word;
   white-space: normal;
   text-transform: uppercase;
@@ -46,34 +46,36 @@ button.close {
     border-color: #adadad;
   }
 
-  &.btn-xs, .btn-group-xs > .btn {
+  &.btn-xs,
+  .btn-group-xs>.btn {
     padding: 3px 6px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 30px;
   }
 
-  &:active, &.active {
+  &:active,
+  &.active {
     color: #333;
-    background-color: #e6e6e6!important;
-    border-color: #adadad!important;
+    background-color: #e6e6e6 !important;
+    border-color: #adadad !important;
   }
 
   &.focus {
-    outline:none;
+    outline: none;
   }
 
   &.top-btn {
     height: 35px;
     width: 35px;
-  
+
     .hh-icon-printer {
       position: relative;
       right: 9px;
       bottom: 2px;
     }
   }
-  
+
 }
 
 // Button variants
@@ -88,8 +90,8 @@ button.close {
 .btn-light {
   @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
 
-  &:hover{
-    color:#fff;
+  &:hover {
+    color: #fff;
   }
 }
 
@@ -106,13 +108,23 @@ button.close {
   background-color: #fff;
   border-color: #ccc;
 
-  &:active, &:first-child:active, &:hover, &:target, &:focus, &:focus-within {
+  &:active,
+  &:first-child:active,
+  &:hover,
+  &:target,
+  &:focus,
+  &:focus-within {
     background-color: #e6e6e6;
     border-color: #adadad;
   }
 }
 
-.btn-lg, .btn-group-lg > .btn {
+.btn-success {
+  background-color: #188150;
+}
+
+.btn-lg,
+.btn-group-lg>.btn {
   padding: 10px 22px;
   font-size: 15px;
   line-height: 1.4;
@@ -120,37 +132,39 @@ button.close {
 }
 
 .btn-group.show {
-  display: inline-block!important;
-  
+  display: inline-block !important;
+
   ul.dropdown-menu.show {
-    transform: none!important;
-    top:100%!important;
+    transform: none !important;
+    top: 100% !important;
   }
 }
 
 .btn-group {
   flex-wrap: wrap;
 
-  &.btn-group-xs > .btn {
+  &.btn-group-xs>.btn {
     padding: 3px 6px;
     font-size: 12px;
     line-height: 1.5;
   }
 
   &.btn-group-vertical {
-    > .btn:not(:first-child){
-      margin-left:0;
+    >.btn:not(:first-child) {
+      margin-left: 0;
     }
   }
-  
-  > .btn:not(:first-child), > .btn-group:not(:first-child) {
+
+  >.btn:not(:first-child),
+  >.btn-group:not(:first-child) {
     margin-left: 0;
   }
 }
 
 .btn-group-vertical {
-  & > .btn:first-child:not(:last-child),
-  & > .btn:last-child:not(:first-child) {
+
+  &>.btn:first-child:not(:last-child),
+  &>.btn:last-child:not(:first-child) {
     border-radius: $border-radius-base;
   }
 }
@@ -169,7 +183,7 @@ button.close {
     }
 
     @media only screen and (min-width: $screen-lg-min) {
-      & + .btn {
+      &+.btn {
         margin-left: 1em;
       }
     }
@@ -177,16 +191,19 @@ button.close {
 }
 
 // Share button styles
-.btn-share, .IN-widget {
+.btn-share,
+.IN-widget {
   background: $brand-primary;
   border-radius: 18px;
   color: $body-bg;
   height: 35px;
-  line-height: 30px!important;
-  padding: 3px 0.5em!important;
+  line-height: 30px !important;
+  padding: 3px 0.5em !important;
   text-transform: none;
 
-  &:hover, &:focus, &:active {
+  &:hover,
+  &:focus,
+  &:active {
     color: $white;
     background-color: $btn-primary-bg;
   }
@@ -195,7 +212,8 @@ button.close {
     font-size: 16px;
     position: relative;
     bottom: 2px;
-    right: 1px;;
+    right: 1px;
+    ;
   }
 
   .badge {
@@ -210,7 +228,10 @@ button.close {
 }
 
 .btn-print {
-  &:hover, &:focus, &:active {
+
+  &:hover,
+  &:focus,
+  &:active {
     color: $white;
     @include button-variant($btn-light-color, $btn-light-bg, $btn-light-border);
   }
@@ -229,29 +250,37 @@ button.close {
     color: $white;
   }
 }
-.btn-twitter { background: $color-twitter; }
-.IN-widget { 
+
+.btn-twitter {
+  background: $color-twitter;
+}
+
+.IN-widget {
   background: $color-linkedin;
-  margin: 13.6px 0 13.6px 13.6px!important;
-  vertical-align: middle!important;
+  margin: 13.6px 0 13.6px 13.6px !important;
+  vertical-align: middle !important;
 
   &:hover {
     background: #006097;
 
-    > span > button {
-      background-color: #006097!important;
+    >span>button {
+      background-color: #006097 !important;
     }
   }
 
   button {
-    font-size: 20px!important;
+    font-size: 20px !important;
   }
 }
-.btn-pinterest { 
-  background: $color-pinterest; 
-  margin-left: 13.6px!important;
+
+.btn-pinterest {
+  background: $color-pinterest;
+  margin-left: 13.6px !important;
 }
-.btn-google-plus { background: $color-google-plus; }
+
+.btn-google-plus {
+  background: $color-google-plus;
+}
 
 // Cookie button styles
 .btn-cookie {

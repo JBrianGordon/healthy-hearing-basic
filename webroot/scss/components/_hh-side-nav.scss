@@ -8,14 +8,14 @@
   width: calc(70px / 1.5);
   z-index: 1;
 
-  > a {
+  >a {
     color: transparent;
     display: block;
     font-size: 0;
     height: $navbar-height;
     padding: 20px 15px;
     text-decoration: none;
-    
+
     span {
       font-size: 24px;
       color: $brand-primary;
@@ -43,28 +43,29 @@
   transform: translateZ(0);
   width: calc(100vw - ($navbar-height / 1.75));
   display: block;
-  
+
   .col-sm-12 {
     .side-nav-links {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      
+
       &.fac-present {
         padding-bottom: 83px;
       }
-  
+
       li {
         border-top: solid 1px #d5d5d5;
         border-bottom: solid 1px #d5d5d5;
         height: 70px;
-  
-        > a, > span {
+
+        >a,
+        >span {
           color: $brand-primary;
           display: inline-block;
           font-size: 128%;
           line-height: $navbar-height;
-          padding-left: 30px;
+          padding-left: 20px;
           width: 100%;
           border-top: 0;
         }
@@ -72,23 +73,25 @@
         &.show {
           height: auto;
         }
-  
-        &:first-child > a, &:first-child > span {
+
+        &:first-child>a,
+        &:first-child>span {
           border-top: none;
         }
-  
-        &:last-child > a, &:last-child > span {
+
+        &:last-child>a,
+        &:last-child>span {
           border-bottom: solid 1px darken($gray-lighter, 10%);
         }
-        
+
         .dropdown-backdrop {
           pointer-events: none;
         }
-        
+
         .dropdown-toggle {
           text-decoration: none;
         }
-        
+
         .text-link {
           padding: 20px 0 0;
           line-height: 30px;
@@ -97,17 +100,17 @@
           width: auto;
           height: 50px;
         }
-        
+
         .dropdown-menu {
           position: relative;
           width: 100%;
           padding: 0;
           box-shadow: none;
           font-size: 16px;
-          
+
           li {
             padding-left: 10px;
-            
+
             a {
               &:hover {
                 background: #fff;
@@ -115,7 +118,7 @@
             }
           }
         }
-        
+
         .caret {
           display: inline-block;
           width: 0;

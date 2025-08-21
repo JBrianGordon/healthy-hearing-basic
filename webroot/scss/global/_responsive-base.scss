@@ -293,6 +293,10 @@ table {
   }
 }
 
+.text-success {
+  color: $brand-success !important;
+}
+
 // Table header sorting styles
 th {
   vertical-align: top;

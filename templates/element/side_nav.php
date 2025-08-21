@@ -18,7 +18,7 @@ use Cake\Core\Configure;
 						<li><a href="/logout" class="bi bi-power"> Logout</a></li>
 					<?php endif; ?>
 				<?php else: ?>
-					<li><a href="/hearing-aids" class="text-success" tabindex="-1">Find a clinic</a></li>
+					<li><a href="/hearing-aids" class="text-link text-success" tabindex="-1">Find a clinic</a></li>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing loss</a>
 						<ul class="dropdown-menu">
@@ -60,21 +60,21 @@ use Cake\Core\Configure;
 						</li>
 					<?php endif; ?>
 					<li>
-						<a href="/help/online-hearing-test" tabindex="-1">Online hearing test</a>
+						<a href="/help/online-hearing-test" class="text-link" tabindex="-1">Online hearing test</a>
 					</li>
 					<?php $aldUrl = (Configure::read('country') == 'CA') ? "/help/hearing-aids/assistive-listening-devices" : "/help/assistive-listening-devices"; ?>
-					<li><a href="<?= $aldUrl ?>">Assistive listening devices</a></li>
+					<li><a href="<?= $aldUrl ?>" class="text-link">Assistive listening devices</a></li>
 					<?php if (Configure::read('showReports')): ?>
-						<li><a href="/report" tabindex="-1">News</a></li>
+						<li><a href="/report" class="text-link" tabindex="-1">News</a></li>
 					<?php endif; ?>
 					<?php if (Configure::read('showNewsletter')): ?>
-						<li><a href="/newsletter" tabindex="-1">Sign up for our newsletter</a></li>
+						<li><a href="/newsletter" class="text-link" tabindex="-1">Sign up for our newsletter</a></li>
 					<?php endif; ?>
 					<?php if (isset($clinicPage) && !$adminAccessAllowed): ?>
-						<li><a href="/login">Login</a></li>
+						<li><a href="/login" class="text-link">Login</a></li>
 					<?php endif; ?>
 					<?php if ($adminAccessAllowed): ?>
-						<li><a href="/admin"><span class="bi bi-gear-fill"></span> Admin</a></li>
+						<li><a href="/admin"><span class="text-link bi bi-gear-fill"></span> Admin</a></li>
 					<?php endif; ?>
 				<?php endif; ?>
 			</ul>
