@@ -18,7 +18,7 @@ use Cake\Core\Configure;
 						<li><a href="/logout" class="bi bi-power"> Logout</a></li>
 					<?php endif; ?>
 				<?php else: ?>
-					<li><a href="/hearing-aids" tabindex="-1">Find a clinic</a></li>
+					<li><a href="/hearing-aids" class="text-success" tabindex="-1">Find a clinic</a></li>
 					<li>
 						<a href="#" tabindex="-1" class="dropdown-toggle side-nav-dropdown">Hearing loss</a>
 						<ul class="dropdown-menu">
