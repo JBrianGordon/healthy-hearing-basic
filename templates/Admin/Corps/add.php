@@ -27,7 +27,7 @@ $author_default = false;
 				<div class="row">
 				    <div class="column-responsive column-80">
 				        <div class="corps form content">
-				            <?= $this->Form->create($corp, ['type' => 'file']) ?>
+				            <?= $this->Form->create($corp, ['type' => 'file', 'id' => 'corpForm']) ?>
 				            <fieldset>
 					            <div class="col-md-3 float-start"></div>
 					            <strong class="col-md-9 mb20 float-end">Note: Creating a new company requires an update to the routes.php file.  Please contact a developer for assistance.</strong>
