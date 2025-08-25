@@ -70,6 +70,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 										</div>
 									</div>
 									<p class="tac block" style="clear:both">Want more details? <a href="/files/pdf/Healthy-Hearing-Memberships.pdf" download="Healthy Hearing Upgrade">Download our membership brochure</a>.</p>
+									<em class="small">*Internal data on Healthy Hearing clinic performance, 2020-2024. Categories (basic, enhanced, premier) are defined by Healthy Hearing for internal benchmarking purposes. Results may not be representative of other providers or external industry data.</em>
 								<?php endif; ?>
 							</div>
 						</div>
