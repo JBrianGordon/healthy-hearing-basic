@@ -13,7 +13,7 @@
         "cakephp/migrations": "^3.2",
         "cakephp/plugin-installer": "^1.3",
         "crabstudio/recaptcha": "^3.0",
-        "dereuromark/cakephp-geo": "^2.2",
+        "dereuromark/cakephp-geo": "^2.3",
         "dereuromark/cakephp-queue": "^6.9",
         "firebase/php-jwt": "^6.10",
         "friendsofcake/bootstrap-ui": "^4.0.0",
@@ -28,7 +28,6 @@
         "middlewares/trailing-slash": "^2.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "muffin/footprint": "^3.0",
-        "php-http/cakephp-adapter": "^0.3.2",
         "php-http/message": "^1.13",
         "riesenia/cakephp-duplicatable": "^4.0"
     },

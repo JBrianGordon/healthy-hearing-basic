@@ -96,10 +96,9 @@ class LocationsTable extends Table
                 'title' => 'ASC',
             ],
         ]);
-
         // The 'lng' field is named 'lon' in our Locations table
         $apiKey = Configure::read('GoogleMaps.WebServicesApiKey');
-        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$apiKey];
+        $geoCoderConfig = ['lng'=>'lon', 'unit'=>'M', 'apiKey'=>$apiKey, 'address' => ['address', 'city', 'state', 'zip']];
         $this->addBehavior('Geo.Geocoder', $geoCoderConfig);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
