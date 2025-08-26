@@ -94,7 +94,6 @@ class WikisTable extends Table
                 'priority' => 'ASC',
                 'name' => 'ASC',
             ],
-            'priority' => 0.8,
         ]);
 
         // $this->addBehavior('Josegonzalez/Upload.Upload', [

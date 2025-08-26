@@ -95,7 +95,6 @@ class LocationsTable extends Table
                 'city' => 'ASC',
                 'title' => 'ASC',
             ],
-            'priority' => 0.8,
         ]);
 
         // The 'lng' field is named 'lon' in our Locations table

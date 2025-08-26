@@ -52,7 +52,6 @@ class StatesTable extends Table
             'order' => [
                 'name' => 'ASC',
             ],
-            'priority' => 0.8,
         ]);
     }
 

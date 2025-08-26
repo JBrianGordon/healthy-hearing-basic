@@ -54,7 +54,6 @@ class CitiesTable extends Table
             'order' => [
                 'city' => 'ASC',
             ],
-            'priority' => 0.8,
         ]);
 
         // Setup search filter using search manager

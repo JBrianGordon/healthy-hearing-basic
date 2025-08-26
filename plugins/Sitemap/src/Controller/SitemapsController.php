@@ -100,10 +100,9 @@ class SitemapsController extends AppController
             $mainSitemapUrlInfo = Configure::read('Sitemap.mainUrls');
         }
 
-        foreach ($mainSitemapUrlInfo as $url => $priority) {
+        foreach ($mainSitemapUrlInfo as $url) {
             $mainSitemapUrls[] = [
                 'loc' => Router::url($url, true),
-                'priority' => $priority,
             ];
         }
 
@@ -135,7 +134,6 @@ class SitemapsController extends AppController
         foreach ($tableItemsForSitemap as $item) {
             $tableSitemapUrls[] = [
                 'loc' => $item['loc'],
-                'priority' => $item['priority'],
             ];
         }
 

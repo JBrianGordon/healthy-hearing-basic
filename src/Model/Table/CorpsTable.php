@@ -79,7 +79,6 @@ class CorpsTable extends Table
             ],
             'fields' => ['id', 'priority', 'slug', 'title'],
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
-            'priority' => 0.7,
         ]);
 
         // Associations

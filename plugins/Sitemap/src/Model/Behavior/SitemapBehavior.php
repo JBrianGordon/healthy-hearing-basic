@@ -22,7 +22,6 @@ class SitemapBehavior extends Behavior
         'conditions' => [],
         'fields' => [],
         'order' => [],
-        'priority' => '0.9',
     ];
 
     public function findForSitemap(Query $query, array $options)
@@ -43,8 +42,6 @@ class SitemapBehavior extends Behavior
                      } else {
                         $row['loc'] = $row->hh_url;
                      }
-
-                    $row['priority'] = $this->_config['priority'];
 
                     return $row;
                 });

@@ -85,7 +85,6 @@ class ContentTable extends Table
             ],
             'fields' => ['id', 'slug'],
             'order' => ['date' => 'DESC'],
-            'priority' => 0.8,
         ]);
 
         // Associations
