@@ -264,14 +264,18 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                     <th class="tar" width="25%">Location ID</th>
                                     <td><?= $location->id ?></td>
                                 </tr>
-                                <tr>
-                                    <th class="tar">SF ID</th>
-                                    <td><?= $location->id_sf ?></td>
-                                </tr>
+                                <!-- Temporarily make oticon_id and sf_id editable #17160 -->
+                                <!--
                                 <tr>
                                     <th class="tar">Oticon ID</th>
                                     <td><?= $location->id_oticon ?></td>
-                                </tr>
+                                </tr>-->
+                                <?php if (empty($location->id_sf)): ?>
+                                    <tr>
+                                        <th class="tar">SF ID</th>
+                                        <td><?= $location->id_sf ?></td>
+                                    </tr>
+                                <?php endif; ?>
                                 <tr>
                                     <th class="tar">YHN ID</th>
                                     <td><?= $location->id_yhn_location ?></td>
@@ -303,6 +307,10 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                             </tbody>
                         </table>
                         <?= $this->Form->control('priority'); ?>
+                        <?= $this->Form->control('id_oticon', ['label' => 'Oticon ID']); ?>
+                        <?php if (!empty($location->id_sf)): ?>
+                            <?= $this->Form->control('id_sf', ['label' => 'SF ID']); ?>
+                        <?php endif; ?>
                         <div class="tabbable">
                             <ul class="nav nav-tabs location-tabs clearfix" role="tablist">
                                 <li class="nav-item">
@@ -1402,6 +1410,9 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                                             <td class="col-md-9"><?= dateTimeCentralToEastern($location->modified) ?></td>
                                         </tr>
                                     </table>
+                                    <?php if (!$location->is_show): ?>
+                                        <button id='deleteBtn' type='button' class='btn btn-danger btn-xs col-md-offset-3 mb20' data-id="<?php echo $id; ?>"><span class="glyphicon glyphicon-trash"></span> Delete Profile</button>
+                                    <?php endif; ?>
                                     <?= $this->Form->control('redirect'); ?>
                                     <?= $this->Form->control('is_retail', [
                                             'label' => 'WDH Retail',
@@ -1500,3 +1511,21 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
         </div>
     </section>
 </div>
+<?php $this->append('bs-modals'); ?>
+    <div id="delete-modal" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <?php echo 'Delete Location '.$id; ?>
+                </div>
+                <div class="modal-body">
+                    <?php echo 'WARNING! Are you sure you want to permanently delete this location? This will also delete all associated data including calls, reviews, providers, and import history.'  ?>
+                </div>
+                <div class="modal-footer">
+                    <?php echo $this->Html->link('Delete Location', ['controller' => 'locations', 'action' => 'delete', $id], ['escape' => false, 'class' => 'btn btn-danger']); ?>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $this->end();?>

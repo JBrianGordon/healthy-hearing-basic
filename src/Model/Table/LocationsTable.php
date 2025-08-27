@@ -116,11 +116,15 @@ class LocationsTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->logo_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->logo_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    } else {
+                        return [];
+                    }
                 }
             ],
         ]);
@@ -584,6 +588,56 @@ class LocationsTable extends Table
         if ($routingFieldChanged) {
             $this->CallSources->saveCallSource($entity->id);
         }
+    }
+
+    /**
+    * Completely delete a location and related data.
+    * @param integer $locationId
+    * @return bool success
+    */
+    public function safeDelete($location, $allowOticon = false) {
+        if (is_numeric($location)) {
+            // Location ID was passed
+            if (!$this->exists(['id'=>$location])) {
+                echo 'Location '.$location.' does not exist';
+                return false;
+            }
+            $location = $this->get($location);
+        } else if (is_array($location)) {
+            // Array was passed. Convert to entity object.
+            $location = $this->newEntity($location);
+        }
+
+        // Don't attempt to delete if it came from the oticon import.
+        if ($location->is_oticon && !$allowOticon) {
+            return false;
+        }
+
+        // Delete any SEO redirects to this url
+        $url = Router::url($location->hh_url);
+        TableRegistry::get('SeoRedirects')->deleteAll([
+            'redirect' => $url
+        ], false);
+
+        // Delete related providers if they belong to ONLY this location
+        $this->LocationsProviders = TableRegistry::get('LocationsProviders');
+        $locationProviders = $this->LocationsProviders->find('all', [
+            'conditions' => ['location_id' => $location->id]
+        ])->all();
+        foreach ($locationProviders as $locationProvider) {
+            $locationProviderCount = $this->LocationsProviders->find('all', [
+                'conditions' => ['provider_id' => $locationProvider->provider_id]
+            ])->count();
+            if ($locationProviderCount == 1) {
+                $provider = $this->Providers->get($locationProvider->provider_id);
+                $this->Providers->delete($provider);
+            }
+        }
+
+        // Attempt a cascading delete
+        $this->delete($location, true);
+
+        return true;
     }
 
     /**
@@ -1105,7 +1159,7 @@ class LocationsTable extends Table
     * @param entity object location or int locationId
     */
     public function calculateListingType($location) {
-        if (is_int($location)) {
+        if (is_numeric($location)) {
             // Location ID was passed
             if (!$this->exists(['id'=>$location])) {
                 echo 'Location '.$location.' does not exist';
@@ -1154,7 +1208,7 @@ class LocationsTable extends Table
     * @param int locationId or object location
     */
     public function calculateIsCallAssist($location) {
-        if (is_int($location)) {
+        if (is_numeric($location)) {
             // Location ID was passed
             if (!$this->exists(['id'=>$location])) {
                 echo 'Location '.$location.' does not exist';

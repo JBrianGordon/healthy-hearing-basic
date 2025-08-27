@@ -34,6 +34,10 @@ class locationsAdminEdit {
       if (target.classList.contains('is-closed-checkbox')) {
         editObj.onClickHoursClosed(target);
       }
+      if (target.id == 'deleteBtn') {
+        let deleteModal = new bootstrap.Modal(document.getElementById('delete-modal'));
+        deleteModal.show();
+      }
     });
 
     const tds = document.querySelectorAll('td.body');
