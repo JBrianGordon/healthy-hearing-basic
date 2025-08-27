@@ -32,16 +32,11 @@ class SitemapBehavior extends Behavior
             ->order($this->_config['order'])
             ->formatResults(function ($results) {
                 return $results->map(function ($row) {
-                    if (is_array($row->hh_url)) {
-                        $row['loc'] = Router::url(
-                            array_merge(
-                                ['plugin' => null, '_full' => true],
-                                $row->hh_url
-                            )
-                        );
-                     } else {
-                        $row['loc'] = $row->hh_url;
-                     }
+                    if (!empty($row->hh_url)) {
+                        $row['loc'] = Router::url($row->hh_url, true);
+                    } else {
+                        $row['loc'] = '';
+                    }
 
                     return $row;
                 });
