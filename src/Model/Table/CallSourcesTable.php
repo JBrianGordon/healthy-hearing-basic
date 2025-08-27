@@ -487,9 +487,11 @@ class CallSourcesTable extends Table
                 }
 
                 // No-show this clinic
-                $locationEntity = $this->Locations->get($locationId);
-                $locationEntity->is_show = false;
-                $this->Locations->save($locationEntity);
+                if ($this->Locations->exists(['id'=>$locationId])) {
+                    $locationEntity = $this->Locations->get($locationId);
+                    $locationEntity->is_show = false;
+                    $this->Locations->save($locationEntity);
+                }
             }
             return $retval;
         } catch (Exception $e) {

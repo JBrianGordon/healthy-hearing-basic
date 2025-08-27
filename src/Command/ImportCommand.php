@@ -2019,28 +2019,35 @@ class ImportCommand extends Command
                 } else {
                     $locationEntity = $this->Locations->newEntity($data);
                 }
-                if ($this->Locations->save($locationEntity)) {
-                    echo '.'; //success output
-                    if ($needsCallSourceNumber) {
-                        // This clinic needs a new or updated CallSource tracking number.
-                        $this->CallSources->saveCallSource($locationEntity->id);
+                try {
+                    if ($this->Locations->save($locationEntity)) {
+                        echo '.'; //success output
+                        if ($needsCallSourceNumber) {
+                            // This clinic needs a new or updated CallSource tracking number.
+                            $this->CallSources->saveCallSource($locationEntity->id);
+                        }
+                        if ($isNew) {
+                            // Geocode this Location
+                            $this->Locations->geoLocById($locationEntity->id);
+                        }
+                        $importStatusData['location_id'] = $locationEntity->id;
+                        $importStatusEntity = $this->ImportStatus->newEntity($importStatusData);
+                        $this->ImportStatus->save($importStatusEntity);
+                    } else { //Error saving the location, figure out why.
+                        // Failed to save the location
+                        $io->error('Failed to save Location entity');
+                        $errors = print_r($locationEntity->getErrors(), true);
+                        $io->out($errors);
+                        pr($locationEntity);
+                        $retval['error_count']++;
+                        $retval['errors'][$data['id_oticon']] = $errors;
+                        echo 'f'; //failure output
                     }
-                    if ($isNew) {
-                        // Geocode this Location
-                        $this->Locations->geoLocById($locationEntity->id);
-                    }
-                    $importStatusData['location_id'] = $locationEntity->id;
-                    $importStatusEntity = $this->ImportStatus->newEntity($importStatusData);
-                    $this->ImportStatus->save($importStatusEntity);
-                } else { //Error saving the location, figure out why.
-                    // Failed to save the location
-                    $io->error('Failed to save Location entity');
-                    $errors = print_r($locationEntity->getErrors(), true);
-                    $io->out($errors);
+                } catch (Exception $e) {
+                    $io->error('Unable to save location');
                     pr($locationEntity);
-                    $retval['error_count']++;
-                    $retval['errors'][$data['id_oticon']] = $errors;
-                    echo 'f'; //failure output
+                    pr($e->getMessage());
+                    $this->abort();
                 }
             }
         }

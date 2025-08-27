@@ -109,6 +109,10 @@ class LocationsController extends BaseAdminController
         if (!$id) {
             return $this->redirect(['action' => 'add']);
         }
+        if (!$this->Locations->exists(['id'=>$id])) {
+            $this->Flash->error('Location '.$id.' does not exist');
+            return $this->redirect(['action' => 'index']);
+        }
         $reviewLimit = empty($this->request->getQuery('loadall')) ? $this->Locations->Reviews->reviewLimit : null;
         $associations = [
             'CallSources',
@@ -239,12 +243,15 @@ class LocationsController extends BaseAdminController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $location = $this->Locations->get($id);
-        if ($this->Locations->delete($location)) {
-            $this->Flash->success(__('The location has been deleted.'));
+        if (empty($id)) {
+            $this->Flash->error('No ID given');
+            return $this->redirect(['action' => 'index']);
+        }
+        //$this->request->allowMethod(['post', 'delete']);
+        if ($this->Locations->safeDelete($id, true)) {
+            $this->Flash->success('Location deleted.');
         } else {
-            $this->Flash->error(__('The location could not be deleted. Please, try again.'));
+            $this->Flash->error('Unable to delete location.');
         }
 
         return $this->redirect(['action' => 'index']);
