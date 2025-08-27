@@ -262,6 +262,9 @@ class LocationsTable extends Table
             ->boolean('badge_home')
             ->boolean('badge_remote')
             ->boolean('badge_mask')
+            ->boolean('badge_hearing_aid_cleaning')
+            ->boolean('badge_oticon_foundation')
+            ->boolean('badge_hearing_simulator')
             ->boolean('badge_spanish')
             ->boolean('badge_french')
             ->boolean('badge_russian')
@@ -940,6 +943,18 @@ class LocationsTable extends Table
             ->boolean('badge_mask')
             ->notEmptyString('badge_mask');
 
+        $validator
+            ->boolean('badge_ear_cleaning')
+            ->notEmptyString('badge_ear_cleaning');
+
+        $validator
+            ->boolean('badge_oticon_foundation')
+            ->notEmptyString('badge_oticon_foundation');
+        
+        $validator
+            ->boolean('badge_hearing_simulator')
+            ->notEmptyString('badge_hearing_simulator');
+        
         $validator
             ->boolean('badge_spanish')
             ->notEmptyString('badge_spanish');

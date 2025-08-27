@@ -131,8 +131,6 @@
 		'class' => ''
 	)); ?>
 </div>
-</div>
-<div class="col col-md-4">
 <div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_asl', array(
 		'div' => false,
@@ -144,6 +142,8 @@
 		'class' => ''
 	)); ?>
 </div>
+</div>
+<div class="col col-md-4">
 <div class="col-sm-12 p0">
 	<?= $this->Form->control('badge_tinnitus', array(
 		'div' => false,
@@ -205,6 +205,28 @@
 		'label' => array(
 			'class' => 'form-label tal',
 			'text' => 'Ear cleaning',
+		),
+		'type' => 'checkbox',
+		'class' => ''
+	)); ?>
+</div>
+<div class="col-sm-12 p0">
+	<?= $this->Form->control('badge_oticon_foundation', array(
+		'div' => false,
+		'label' => array(
+			'class' => 'form-label tal',
+			'text' => 'Oticon Hearing Foundation donor',
+		),
+		'type' => 'checkbox',
+		'class' => ''
+	)); ?>
+</div>
+<div class="col-sm-12 p0">
+	<?= $this->Form->control('badge_hearing_simulator', array(
+		'div' => false,
+		'label' => array(
+			'class' => 'form-label tal',
+			'text' => 'Hearing loss simulator',
 		),
 		'type' => 'checkbox',
 		'class' => ''
