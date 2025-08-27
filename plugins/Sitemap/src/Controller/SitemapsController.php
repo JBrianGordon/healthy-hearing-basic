@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Sitemap\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\XmlView;
@@ -129,13 +130,20 @@ class SitemapsController extends AppController
             $tableToSitemap = $this->fetchTable($table);
         }
 
-        $tableItemsForSitemap = $tableToSitemap->find('forSitemap');
+        $tableSitemapUrls = Cache::read('sitemap_query_' . $table);
+        if ($tableSitemapUrls === null) {
+            $tableItemsForSitemap = $tableToSitemap->find('forSitemap')->all();
+            $tableSitemapUrls = [];
 
-        foreach ($tableItemsForSitemap as $item) {
-            $tableSitemapUrls[] = [
-                'loc' => $item['loc'],
-            ];
+            foreach ($tableItemsForSitemap as $item) {
+                $tableSitemapUrls[] = [
+                    'loc' => $item['loc'],
+                ];
+            }
+
+            Cache::write('sitemap_query_' . $table, $tableSitemapUrls);
         }
+
 
         // Define a custom root node in the generated document.
         $this->viewBuilder()
