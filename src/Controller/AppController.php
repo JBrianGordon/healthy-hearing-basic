@@ -77,6 +77,7 @@ class AppController extends Controller
 
             $this->set('title', $title);
         }
+        $this->set('meta', $this->meta);
     }
 
     public function beforeFilter(EventInterface $event)

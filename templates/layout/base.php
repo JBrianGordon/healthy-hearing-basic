@@ -23,6 +23,14 @@ use App\Model\Entity\Location;
     <!-- AutocompleteJS styling -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
+    <!-- Meta tags -->
+    <?php
+    $metaTags = $this->Seo->metaTags($meta);
+    ?>
+    <?= $metaTags ?>
+
+    <?php /* Display social options
+    TODO: These are currently assigned in the view file, but should be done similar to metaTags */ ?>
     <?= $this->fetch('meta') ?>
 
     <!-- Start VWO Async SmartCode -->

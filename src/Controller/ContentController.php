@@ -141,10 +141,6 @@ class ContentController extends AppController
         //set up and assign the meta tag info
         $request = env('REQUEST_URI');
 
-        $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
-        $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
-        $this->set('seoMetaTags', $seoMetaTags);
-
         if (empty($title)) {
             $title = isset($content->title_head) ? $content->title_head : $this->siteName;
             $env = Configure::read('env');

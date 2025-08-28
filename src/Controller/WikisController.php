@@ -90,10 +90,6 @@ class WikisController extends AppController
             //set up and assign the meta tag info
             $request = env('REQUEST_URI');
 
-            $this->SeoMetaTags = $this->fetchTable('SeoMetaTags');
-            $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
-            $this->set('seoMetaTags', $seoMetaTags);
-            
             if (empty($title)) {
                 $title = isset($wiki->title_head) ? $wiki->title_head : $this->siteName;
 

@@ -11,14 +11,6 @@ $title = empty($seoTitle->title) ? $content->title : $seoTitle->title;
 $subtitle = htmlentities(strip_tags($content->subtitle));
 $altTitle = htmlentities(strip_tags($content->alt_title));
 $altTitle = empty($altTitle) ? $title : $altTitle;
-$description = htmlentities(strip_tags($content->meta_description));
-if (!empty($seoMetaTags)) {
-	foreach ($seoMetaTags as $seoMetaTag) {
-		if ($seoMetaTag->name == 'description') {
-			$description = $seoMetaTag->content;
-		}
-	}
-}
 //$this->Content->setPrint(true);
 
 $this->Breadcrumbs->add([
