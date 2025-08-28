@@ -136,14 +136,17 @@ class SitemapsController extends AppController
             $tableSitemapUrls = [];
 
             foreach ($tableItemsForSitemap as $item) {
-                $tableSitemapUrls[] = [
-                    'loc' => $item['loc'],
-                ];
+                $urlArray['loc'] = $item['loc'];
+
+                if (isset($item['lastmod'])) {
+                    $urlArray['lastmod'] = $item['lastmod'];
+                }
+
+                $tableSitemapUrls[] = $urlArray;
             }
 
             Cache::write('sitemap_query_' . $table, $tableSitemapUrls);
         }
-
 
         // Define a custom root node in the generated document.
         $this->viewBuilder()

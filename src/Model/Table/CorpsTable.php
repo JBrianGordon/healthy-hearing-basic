@@ -77,7 +77,7 @@ class CorpsTable extends Table
             'conditions' => [
                 'is_active' => true,
             ],
-            'fields' => ['id', 'priority', 'slug', 'title'],
+            'fields' => ['id', 'priority', 'slug', 'title', 'last_modified'],
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
         ]);
 

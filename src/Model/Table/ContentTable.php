@@ -83,7 +83,7 @@ class ContentTable extends Table
                 'is_gone' => false,
                 'date <=' => date('Y-m-d'),
             ],
-            'fields' => ['id', 'slug'],
+            'fields' => ['id', 'slug', 'last_modified'],
             'order' => ['date' => 'DESC'],
         ]);
 

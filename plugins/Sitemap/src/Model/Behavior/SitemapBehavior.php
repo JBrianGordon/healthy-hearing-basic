@@ -38,6 +38,11 @@ class SitemapBehavior extends Behavior
                         $row['loc'] = '';
                     }
 
+                    // Check for 'last_modified' field
+                    if ($row->has('last_modified')) {
+                        $row['lastmod'] = $row->get('last_modified')->format('Y-m-d');
+                    }
+
                     return $row;
                 });
             });
