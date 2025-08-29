@@ -32,7 +32,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                 </h4>
 								<ul class="no-bullets mb60 ml20">
 									<?php foreach($wikis as $wiki): ?>
-										<li><a href="/<?= $wiki['slug'] ?>" class="text-link"><?= $wiki['title_h1'] ?></a></li>
+										<li><a href="/help/<?= $wiki['slug'] ?>" class="text-link"><?= $wiki['title_h1'] ?></a></li>
 									<?php endforeach; ?>
 								</ul>
 
