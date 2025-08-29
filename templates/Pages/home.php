@@ -26,9 +26,9 @@ $this->Html->script('dist/common.min', ['block' => true]);
                             <p><?= $content ?></p>
                         </p>
                         <p class="btn-set">
-                            <a href="<?= $this->Clinic->nearMeLink() ?>" class="near-me-link btn btn-default btn-lg">Show clinics near me</a>
-                            <a href="/help/hearing-loss" class="btn btn-default btn-lg">Learn About Hearing Loss</a>
-                            <a href="/help/hearing-aids" class="btn btn-default btn-lg">Learn About Hearing Aids</a>
+                            <a href="<?= $this->Clinic->nearMeLink() ?>" class="near-me-link btn btn-default btn-lg">Show hearing clinics near me</a>
+                            <a href="/help/hearing-loss" class="btn btn-default btn-lg ml0 mb0">Got hearing loss? Learn more</a>
+                            <a href="/help/<?= Configure::read('isCallAssistEnabled') ? '' : 'hearing-loss/'; ?>tinnitus" class="btn btn-default btn-lg ml0">Got tinnitus? Learn more</a>
                         </p>
                     </section>
                     <?php if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$isMobileDevice): ?>
