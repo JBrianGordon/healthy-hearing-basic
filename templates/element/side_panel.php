@@ -88,7 +88,7 @@ $preferredDisplay = ($isMobileDevice) ? ' style="order:2"' : ' style="order:5"';
 		<header class="panel-heading text-center">
 			<h2 class="h4">Find a clinic</h2>
 		</header>
-		<div class="panel-body pt20 pl20 pr20">
+		<div class="panel-body p20">
 			<?= $this->element('locations/search', ['label' => 'Enter city']) ?>
 			<?= $this->element('fac_config_text', ["locationsPage" => false]) ?>
 		</div>
