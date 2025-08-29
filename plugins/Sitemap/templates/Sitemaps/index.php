@@ -61,7 +61,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     </article>
                 </div>
-                <?= $this->element('side_panel', ['controller' => $controller]) ?>
+                <?= $this->element('side_panel') ?>
             </div>
         </div>
     </div>

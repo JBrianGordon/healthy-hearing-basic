@@ -90,6 +90,10 @@ class SitemapsController extends AppController
             'corps',
             $this->getTableLocator()->get('Corps')->find('forSitemap')
         );
+
+        $contentTable = $this->fetchTable('Content');
+        $articles = $contentTable->findLatest(4);
+        $this->set('articles', $articles);
     }
 
     public function main()
