@@ -82,6 +82,7 @@ class ContentTable extends Table
                 'is_active' => true,
                 'is_gone' => false,
                 'date <=' => date('Y-m-d'),
+                'id_draft_parent' => 0,
             ],
             'fields' => ['id', 'slug', 'last_modified'],
             'order' => ['date' => 'DESC'],

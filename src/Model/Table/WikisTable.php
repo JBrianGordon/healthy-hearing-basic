@@ -89,6 +89,7 @@ class WikisTable extends Table
         $this->addBehavior('Sitemap.Sitemap', [
             'conditions' => [
                 'is_active' => true,
+                'id_draft_parent' => 0,
             ],
             'order' => [
                 'priority' => 'ASC',

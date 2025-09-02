@@ -76,6 +76,7 @@ class CorpsTable extends Table
         $this->addBehavior('Sitemap.Sitemap', [
             'conditions' => [
                 'is_active' => true,
+                'id_draft_parent' => 0,
             ],
             'fields' => ['id', 'priority', 'slug', 'title', 'last_modified'],
             'order' => ['priority' => 'ASC', 'title' => 'ASC'],
