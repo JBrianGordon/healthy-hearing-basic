@@ -221,10 +221,6 @@ class WikisTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        // $validator
-        //     ->integer('id')
-        //     ->allowEmptyString('id', null, 'create');
-
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
@@ -235,7 +231,25 @@ class WikisTable extends Table
             ->scalar('slug')
             ->maxLength('slug', 255)
             ->requirePresence('slug', true, 'Slug is a required field')
-            ->notEmptyString('slug', 'Slug cannot be left blank');
+            ->notEmptyString('slug', 'Slug cannot be left blank')
+            ->add('slug', [
+                'validSlugChars' => [
+                    'rule' => ['custom', '/^[a-zA-Z0-9\/-]+$/'],
+                    'message' => 'The slug can only contain alphanumeric characters, hyphens, and forward slashes, and NO spaces.'
+                ]
+            ])
+            ->add('slug', [
+                'validSlugPrefix' => [
+                    'rule' => function ($value, $context) {
+                        if (stripos($value, '/') !== false) {
+                            $value = substr($value, 0, stripos($value, '/'));
+                        }
+                        // Is this a valid slug path?
+                        return in_array($value, Configure::read('wikiCategories'));
+                    },
+                    'message' => "The Help Page slug must begin with 'hearing-loss/' or 'hearing-aids/'"
+                ]
+            ]);
 
         $validator
             ->scalar('body')
@@ -244,18 +258,6 @@ class WikisTable extends Table
 
         $validator
             ->integer('user_id');
-
-        // $validator
-        //     ->scalar('short')
-        //     ->allowEmptyString('short');
-
-        // $validator
-        //     ->boolean('is_active')
-        //     ->notEmptyString('is_active');
-
-        // $validator
-        //     ->integer('id_draft_parent')
-        //     ->notEmptyString('id_draft_parent');
 
         $validator
             ->integer('priority')
@@ -273,54 +275,10 @@ class WikisTable extends Table
             ->requirePresence('title_h1', true, 'Title H1 is a required field')
             ->notEmptyString('title_h1', 'Title H1 cannot be left blank');
 
-        // $validator
-        //     ->scalar('meta_description')
-        //     ->maxLength('meta_description', 255)
-        //     ->allowEmptyString('meta_description');
-
-        // $validator
-        //     ->scalar('facebook_title')
-        //     ->maxLength('facebook_title', 255)
-        //     ->allowEmptyString('facebook_title');
-
-        // $validator
-        //     ->scalar('facebook_image')
-        //     ->maxLength('facebook_image', 255)
-        //     ->notEmptyFile('facebook_image');
-            // ADD MIME TYPE CHECKING
-
-        // $validator
-        //     ->integer('facebook_image_width')
-        //     ->add('facebook_image_width', 'facebookImageGreaterThan800px', [
-        //         'rule' => function ($width) {
-        //             if ($width >= 800) {
-        //                 return true;
-        //             }
-
-        //             return false;
-        //         },
-        //     ]);
-
-            // ->minLength('facebook_image_width', 800, 'Facebook image must be at least 800 px wide');
-
-        // $validator
-        //     ->integer('facebook_image_height')
-        //     ->notEmptyFile('facebook_image_height');
-
-        // $validator
-        //     ->scalar('facebook_image_alt')
-        //     ->maxLength('facebook_image_alt', 255)
-        //     ->requirePresence('facebook_image_alt', true, 'Facebook image alt text is a required field')
-        //     ->notEmptyString('facebook_image_alt', 'Facebook image alt text cannot be left blank');
-
-        // $validator
-        //     ->scalar('facebook_description')
-        //     ->maxLength('facebook_description', 255)
-        //     ->allowEmptyString('facebook_description');
-
-        $validator
-            ->requirePresence('facebook_image_name', 'create')
-            ->notEmptyString('facebook_image_name', 'must have image');
+        $validator // Facebook image only required when Wiki is active / ready to be published
+            ->notEmptyString('facebook_image_name', 'must have image', function ($context) {
+                return !empty($context['data']['is_active']);
+            });
 
         $validator
             ->dateTime('last_modified')
