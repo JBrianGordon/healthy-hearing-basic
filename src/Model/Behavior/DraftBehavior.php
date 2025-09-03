@@ -58,51 +58,7 @@ class DraftBehavior extends Behavior
         // DuplicatableBehavior unsets original entity ID so we set it here
         $draft->id_draft_parent = $id;
 
-        // Replace draft's images from original item
-        // in CKBox with new copies
-        $copiedCkImageInfo = $this->copyCkImages($draft, $ckCategoryId);
-
-        // Update draft's image fields with copied image information
-        foreach ($copiedCkImageInfo as $key => $value) {
-            $draft[$key] = $value;
-        }
-
-        // Skip afterSave() in Model to avoid deleting original item's images
-        return $this->_table->save($draft, ['skipAfterSave' => true]);
-    }
-
-    public function copyCkImages($draft, string $ckCategoryId)
-    {
-        $copiedImages = [];
-        $ckBoxUtility = new CKBoxUtility($ckCategoryId);
-
-        $newImagesInfo = [];
-
-        foreach ($this->_config['ckImageKeys'] as $filename => $fileUrl) {
-            if (isset($draft[$filename])) {
-                $draftFilenameNoExt = pathinfo($draft[$filename], PATHINFO_FILENAME);
-
-                preg_match("/assets\/(.*?)\/file/", $draft[$fileUrl], $matches);
-                $ckBoxImageId = $matches[1];
-                $copied = $ckBoxUtility->copyImage($ckBoxImageId);
-
-                $recentCkItems = $ckBoxUtility->recentItems();
-
-                $filteredItems = array_filter($recentCkItems['items'], function($item) use ($draftFilenameNoExt) {
-                    return strpos($item['name'], $draftFilenameNoExt) !== false;
-                });
-
-                $firstMatch = reset($filteredItems);
-
-                $newFilename = $this->republishFilename($firstMatch['name']);
-                $newFilename = $newFilename . '.' . pathinfo($draft[$filename], PATHINFO_EXTENSION);
-                $renamed = $ckBoxUtility->renameItem($firstMatch['id'], $newFilename);
-
-                $newImagesInfo[$filename] = $newFilename;
-                $newImagesInfo[$fileUrl] = $firstMatch['url'];
-            }
-        }
-        return $newImagesInfo;
+        return $this->_table->save($draft);
     }
 
     // Generate new filenames to replace auto-generated
