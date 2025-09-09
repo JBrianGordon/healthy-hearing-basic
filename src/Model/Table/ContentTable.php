@@ -291,9 +291,10 @@ class ContentTable extends Table
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
 
-        $validator
-            ->requirePresence('facebook_image_name', 'create')
-            ->notEmptyString('facebook_image_name', 'must have image');
+        $validator // Facebook image only required when Content is active / ready to be published
+            ->notEmptyString('facebook_image_name', 'must have image', function ($context) {
+                return !empty($context['data']['is_active']);
+            });
 
         $validator->setProvider('upload', \Josegonzalez\Upload\Validation\ImageValidation::class);
         // $validator->add('facebook_image_name', 'fileAboveMinWidth', [
