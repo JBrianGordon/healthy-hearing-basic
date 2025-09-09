@@ -25,7 +25,7 @@ $meta = '<!--Facebook meta tags-->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="'.$content->facebook_title.'" />
     <meta property="og:description" content="'.$content->facebook_description.'" />
-    <meta property="og:image" content="'.$content->facebook_image.'" />';
+    <meta property="og:image" content="'.$content->facebook_image_url.'" />';
 
 $this->assign('meta', $meta);
 
