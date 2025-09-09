@@ -158,13 +158,15 @@ class CorpsTable extends Table
         //     ->maxLength('facebook_image', 100)
         //     ->allowEmptyFile('facebook_image');
 
-        $validator
-            ->requirePresence('logo_name', 'create')
-            ->notEmptyString('logo_name', 'must have image');
+        $validator // Logo image only required when Corp is active / ready to be published
+            ->notEmptyString('logo_name', 'must have image', function ($context) {
+                return !empty($context['data']['is_active']);
+            });
 
-        $validator
-            ->requirePresence('facebook_image_name', 'create')
-            ->notEmptyString('facebook_image_name', 'must have image');
+        $validator // Facebook image only required when Corp is active / ready to be published
+            ->notEmptyString('facebook_image_name', 'must have image', function ($context) {
+                return !empty($context['data']['is_active']);
+            });
 
         // $validator
         //     ->boolean('is_active')

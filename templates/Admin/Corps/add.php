@@ -64,6 +64,9 @@ $author_default = false;
 										<?= $this->Form->control('short') ?>
 									</div>
 									<div class="tab-pane" id="Admin">
+										<strong class="col-md-offset-3 mb-0">
+											<em class="text-secondary">Manufacturer page URLs are hard-coded in our system. Reach out to a developer for changes.</em>
+										</strong>
 										<?php
 											echo $this->Form->control('slug');
 										?>
