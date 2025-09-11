@@ -76,7 +76,7 @@ class DbImportCommand extends Command
         $success = false;
         // Import database dump file;
         if (!empty($dbFile)) {
-            $success = $this->importDatabase($io, $dbFile, $dbName);
+            $success = $this->importDatabase($io, $dbFile);
         }
         if ($success) {
             $io->success('Import completed successfully.');
