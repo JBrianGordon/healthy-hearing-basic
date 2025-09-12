@@ -1826,11 +1826,8 @@ class LocationsTable extends Table
             'region' => null,
             'city' => null
         ], $options);
-        // Note: the null-coalescing operator doesn't work on hhapp4. All servers must be PHP 7.0+.
-        // $limit = $limit ?? 40;
-        $limit = $limit ? $limit : 40;
-        // $maxRange = $maxRange ?? Configure::read('clinicMaxRange');
-        $maxRange = $maxRange ? $maxRange : Configure::read('clinicMaxRange');
+        $limit ??=  40;
+        $maxRange ??= Configure::read('clinicMaxRange');
         $conditions = array_merge([
             'Locations.is_active' => true,
             'Locations.is_show' => true
@@ -2344,7 +2341,7 @@ class LocationsTable extends Table
         }
 
         // Calculate oticon tier based on segment
-        $save_data->location_segment ?? null;
+        $save_data->location_segment ??= null;
         if (in_array($save_data->location_segment, ['A1', 'B1', 'C1', 'D1', 'A2'])) {
             $oticonTier = 1;
         } elseif (in_array($save_data->location_segment, ['B2', 'C2', 'D2', 'A3', 'B3', 'C3', 'D3'])) {
@@ -2353,7 +2350,7 @@ class LocationsTable extends Table
             $oticonTier = 3;
         } else {
             $oticonTier = 0;
-            $locationId ?? $save_data->id_oticon;
+            $locationId ??= $save_data->id_oticon;
             pr('Warning. Unknown segment ('.$save_data->location_segment.') for location '.$locationId);
         }
         $save_data->oticon_tier = $oticonTier;
@@ -2366,14 +2363,14 @@ class LocationsTable extends Table
         $save_data->phone = trim(str_replace(['(', ')','-', ' '], '', $save_data->phone));
 
         //Address fix if we have an address_2 but no address
-        $save_data->address_2 ?? '';
+        $save_data->address_2 ??= '';
         if (!empty($save_data->address_2) && empty($save_data->address)) {
             $save_data->address = $save_data->address_2;
             $save_data->address_2 = "";
         }
 
-        $save_data->id_parent ?? null;
-        $save_data->title = empty($save_data->title) ? $save_data->subtitle : $save_data->title;
+        $save_data->id_parent ??= null;
+        $save_data->title = $save_data->title ?? $save_data->subtitle ?? '';
         $save_data->city = cleanCityName($save_data->city);
         $save_data->state = $this->stateAbbr($save_data->state);
         $save_data->country = Configure::read('country');

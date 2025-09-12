@@ -1866,7 +1866,6 @@ class ImportCommand extends Command
                 if (!empty($locationId)) {
                     // Existing location
                     $location = $this->Locations->get($locationId);
-                    //$this->id = $locationId;
                     $data['id'] = $locationId;
                     $data['is_active'] = $location->is_active;
                     $data['is_show'] = $location->is_show;
@@ -1986,7 +1985,7 @@ class ImportCommand extends Command
                             $newAddress = $lastAddress = '';
                             foreach (['address','address_2','city','zip','state'] as $addressField) {
                                 $newAddress .= $data[$addressField].' ';
-                                $lastAddress .= $lastXmlParsed->$addressField??''.' ';
+                                $lastAddress .= ($lastXmlParsed->$addressField ?? '').' ';
                             }
                             $newAddress = trim(preg_replace('/\s+/', ' ', $newAddress));
                             $lastAddress = trim(preg_replace('/\s+/', ' ', $lastAddress));
