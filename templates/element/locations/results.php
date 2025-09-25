@@ -56,6 +56,24 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 													<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
 												</h2>
 										<?php endif; ?>
+											<div class="clinicPhone mb5<?= !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?= $locationId ?>">
+													<div class="telephone h2 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
+													<!-- Appointment request -->
+													<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
+														<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
+															<!-- *** TODO: appointment request modal not functioning properly, I think some backend work may be needed: ***-->
+															<button type="button" class="btn btn-lg btn-success apptRequestBtn mb5 pl15 pr15" data-id="<?= $locationId ?>">
+																Request my appointment
+															</button>
+														<?php endif; ?>
+													<?php endif; ?>
+													<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
+														<div>
+															<a href="#" class="btn btn-lg btn-success directBookBtn mb5" style="min-width:250px;" data-bs-toggle="modal" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
+														</div>
+														<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
+													<?php endif; ?>
+											</div>
 											<div class="clearfix"></div>
 											<?php if (!empty($displayOpenClosed)): ?>
 												<div class="hours mb5"><span class="bi bi-clock"></span> <?= $displayOpenClosed ?></div>
@@ -74,24 +92,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 											<?php if (!empty($linkedLocations) && $location->is_iris_plus): ?>
 												<a href="<?= $locationUrl . '#linkedLocationAnchor' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>" class="text-link">More locations available</a>
 											<?php endif; ?>
-											<div class="clinicPhone mb5<?= !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?= $locationId ?>">
-												<div class="telephone h2 bi bi-telephone-fill"> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice]) ?></div>
-												<!-- Appointment request -->
-												<?php if ($isCallAssistEnabled && !$isCallTrackingBypassed): ?>
-													<?php if ($location->is_call_assist && empty($location->direct_book_iframe)): ?>
-														<!-- *** TODO: appointment request modal not functioning properly, I think some backend work may be needed: ***-->
-														<button type="button" class="btn btn-lg btn-success apptRequestBtn mb5" data-id="<?= $locationId ?>">
-															Request my appointment
-														</button>
-													<?php endif; ?>
-												<?php endif; ?>
-												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
-													<div>
-														<a href="#" class="btn btn-lg btn-success directBookBtn mb5" style="min-width:250px;" data-bs-toggle="modal" data-bs-target="#directBookModal-<?= $location->id ?>">Book now!</a>
-													</div>
-													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
-												<?php endif; ?>
-											</div>
 											<?php if (empty($linkedLocations) || !$location->is_iris_plus): ?>
 												<div class="details mb5"><a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location); ?>" class="text-link">View clinic details</a></div>
 											<?php endif; ?>
