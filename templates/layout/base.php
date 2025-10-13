@@ -11,7 +11,7 @@ use App\Model\Entity\Location;
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= empty($title) ? $siteName : $title ?></title>
+    <title><?= empty($title) ? Configure::read('siteName') : $title ?></title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->element('google_tag_manager') ?>
 
@@ -24,10 +24,7 @@ use App\Model\Entity\Location;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
     <!-- Meta tags -->
-    <?php
-    $metaTags = $this->Seo->metaTags($meta);
-    ?>
-    <?= $metaTags ?>
+    <!-- TO-DO: ADD META TAGS -->
 
     <?php /* Display social options
     TODO: These are currently assigned in the view file, but should be done similar to metaTags */ ?>

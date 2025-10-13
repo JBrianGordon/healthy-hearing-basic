@@ -23,7 +23,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 			<div class="col-12" id="navParent">
 				<div class="navbar-header">
 					<a href="/" class="navbar-logo <?= Configure::read('country'); ?>" <?= $logoBorder ?>>
-						<img src="<?= $logo ?>" alt="<?= $siteName ?>" width="198" height="40" />
+						<img src="<?= $logo ?>" alt="<?= Configure::read('siteName') ?>" width="198" height="40" />
 					</a>
 				</div>
 				<div class="nav navbar-right" id="navContainer">
@@ -53,14 +53,14 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							</a>
 						</li>
 						<li data-hh-mega-nav-trigger="hearing-loss-help"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
-							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+							<?= $this->Html->link('<span class="hidden-md hidden-lg">Hearing Loss</span><span class="hidden-sm">Hearing Loss Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 						</li>
 						<li data-hh-mega-nav-trigger="hearing-aid-help"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
-							<?= $this->AuthLink->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+							<?= $this->Html->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 						</li>
 						<?php if (Configure::read('showReports') && !$clinicPageUser): ?>
 							<li>
-								<?= $this->AuthLink->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+								<?= $this->Html->link('News', '/report', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 							</li>
 						<?php endif; ?>
 						<?php if(isset($clinicPage) && empty($user)) : ?>
@@ -84,7 +84,9 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 								</ul>
 							</li>
 						<?php endif; ?>
-						<?= $this->element('header/admin_panel_link') ?>
+						<?php if (isset($user)) : ?>
+							<?= $this->element('header/admin_panel_link') ?>
+						<?php endif; ?>
 						<?php if ($isClinic): ?>
 							<?= $this->element('header/clinic_panel_link') ?>
 						<?php endif; ?>
@@ -115,7 +117,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 					<div data-hh-map></div>
 					<div class="tac mt20 col-md-10 col-md-offset-1">
 						<?= $this->element('locations/search', [
-							'label' => 'Enter city, '.$stateLabel.' or '.$zipShort,
+							'label' => 'Enter city, '. Configure::read('stateLabel') .' or '. Configure::read('zipShort'),
 							'form_id' => 'fapdropdownform',
 							'auto_id' => 'fapdropdownsearchid',
 							'search_id' => 'fapdropdownSearch',

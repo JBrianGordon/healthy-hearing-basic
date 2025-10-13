@@ -18,6 +18,7 @@ namespace App;
 
 use App\Middleware\BeforeLoginMiddleware;
 use App\Middleware\GeoLocSessionMiddleware;
+use App\Middleware\SeoUrlMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -172,6 +173,8 @@ class Application extends BaseApplication
             // but it **may** be a good idea to explicitly record the IP at login to ensure we're
             // capturing it and not one already in the session.
             ->add(new BeforeLoginMiddleware())
+
+            ->add(new SeoUrlMiddleware())
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware

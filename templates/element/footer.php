@@ -6,7 +6,7 @@
 				<ul class="no-bullets">
 					<li><a href="/" class="text-link">Home</a></li>
 					<li><a href="/about" class="text-link">About us</a></li>
-					<li><a href="/contact-us" class="text-link">Contact <?= $siteName ?></a></li>
+					<li><a href="/contact-us" class="text-link">Contact <?= Configure::read('siteName') ?></a></li>
 					<?php if (Configure::read('showFeeds')): ?>
 						<li><a href="/feeds" class="text-link">RSS feeds</a></li>
 					<?php endif; ?>
@@ -39,7 +39,7 @@
 			<div class="col-md-6">
 				<?php if (Configure::read('showNewsletter')): ?>
 					<p class="text-primary text-small">
-					<strong>Get the best of <?= $siteName; ?> delivered to your inbox!</strong>
+					<strong>Get the best of <?= Configure::read('siteName'); ?> delivered to your inbox!</strong>
 					</p>
 					<p>
 					<?= $this->Html->link('Sign up for our newsletter', '/newsletter', ['class' => 'btn btn-primary btn-sm']) ?>
