@@ -170,7 +170,7 @@ function findClosestLocations(originAddress) {
         console.log('getClosestClinics() error:');
         console.error(error);
       });
-    document.querySelector(".afterClinicFind").style.display = "block";
+    document.querySelector("#afterClinicFind")?.classList.remove('hidden');
     patientStateInput.style.removeProperty('border');
     patientCityInput.style.removeProperty('border');
   } else {
@@ -186,10 +186,10 @@ function clickedClinic(clinicDiv) {
   const clinicIndex = clinicDiv.firstElementChild.getAttribute('value');
   chosenClinic = closestClinics[clinicIndex];
 
-  document.querySelector(".locationDistance").innerHTML = chosenClinic.distance.text;
-  document.querySelector(".locationTime").innerHTML = chosenClinic.duration.text;
+  document.querySelector(".locationDistance").innerHTML = chosenClinic.google.distance.text;
+  document.querySelector(".locationTime").innerHTML = chosenClinic.google.duration.text;
 
-  if (chosenClinic.distance.value === undefined || chosenClinic.duration.value === undefined) {
+  if (chosenClinic.google.distance.value === undefined || chosenClinic.google.duration.value === undefined) {
     document.querySelector(".hasDirections").style.display = "none";
   } else {
     document.querySelector(".hasDirections").style.display = "block";
@@ -304,7 +304,7 @@ function createClinicDiv(clinicData, index) {
 
   const clinicTitleParagraph = document.createElement("p");
   clinicTitleParagraph.classList.add(`mt5`, `mb5`, `clinic-${index}-Title`);
-  clinicTitleParagraph.textContent = `${clinicData.title} (${clinicData.distance.text} / ${clinicData.duration.text})`;
+  clinicTitleParagraph.textContent = `${clinicData.title} (${clinicData.google.distance.text} / ${clinicData.google.duration.text})`;
 
   const hrElement = document.createElement("hr");
   hrElement.style.borderTop = "2px solid gray";
@@ -344,10 +344,10 @@ function displayClinicTemplates(data) {
 }
 
 function loadMoreClinics() {
-  const visibleClinics = Array.from(document.querySelectorAll("#closestClinics div:visible"));
-  const nextSetOfClinics = visibleClinics.slice(-1)[0]?.nextElementSibling;
+  const allClinics = Array.from(document.querySelectorAll("#closestClinics div"));
+  const hiddenClinics = allClinics.filter(item => item.offsetParent === null);
 
-  if (!nextSetOfClinics) {
+  if (hiddenClinics.length == 0) {
     let alertMessage;
     if (searchInfo.numZipSearches > 1) {
       alertMessage = "I'm sorry, these are the closest clinics we could find in our directory for the address you provided. Would you like to end the call or check another address?";
@@ -356,16 +356,16 @@ function loadMoreClinics() {
     }
     alert(alertMessage);
   } else {
-    const nextSetOfClinicsSlice = Array.from(nextSetOfClinics.nextElementSibling.children).slice(0, 3);
-    nextSetOfClinicsSlice.forEach(clinic => clinic.style.display = "block");
+    const nextSetOfClinics = hiddenClinics.slice(0, 3);
+    nextSetOfClinics.forEach(clinic => clinic.style.display = "block");
   }
 }
 
 function fixNoDirectionResults() {
   closestClinics.forEach(function(item, i) {
-    if (item.status !== "OK") {
-      item.duration = { text: "Google can't provide directions" };
-      item.distance = { text: "Google can't provide directions" };
+    if (item.google.status !== "OK") {
+      item.google.duration = { text: "Google can't provide directions" };
+      item.google.distance = { text: "Google can't provide directions" };
     }
   });
 }

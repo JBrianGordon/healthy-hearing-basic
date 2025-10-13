@@ -128,7 +128,7 @@ use Cake\Core\Configure;
 		'class' => 'mb20 col-md-offset-3 btn btn-primary btn-sm',
 	])
 	?>
-	<div class="afterClinicFind hidden">
+	<div id="afterClinicFind" class="hidden">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
 				<div id="closestClinics" class="well blue-well">

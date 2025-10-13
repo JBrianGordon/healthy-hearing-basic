@@ -283,7 +283,7 @@ class CaCallGroupsController extends BaseAdminController
     * Display the report of Appt Request Form Metrics based on initial call date
     */
     function requestFormMetrics(){
-        $results = null;
+        $startDate = $endDate = $results = $filters = null;
         $requestData = $this->request->getData();
         if (!empty($requestData)) {
             $startDate = $requestData['start_date'];

@@ -17,6 +17,7 @@ use Cake\Event\EventInterface;
 use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\CaCall;
 use App\Model\Entity\Location;
+use App\Utility\GoogleDistanceMatrixUtility;
 
 /**
  * CaCalls Model
@@ -302,34 +303,29 @@ class CaCallsTable extends Table
             $closestClinics = $this->Locations->findAllByGeoLoc($originLatLon, 20, [], [], $fields, $clinicRange);
             $clinicRange += $clinicRangeDefault;
         }
-        $closestClinics = array_values($closestClinics);
 
         $clinicLatLons = [];
         foreach ($closestClinics as $location) {
             $clinicLatLons[] = $location->lat.','.$location->lon;
         }
 
-        //TODO: SORT THIS LIST OF CLINICS BY DRIVING DISTANCE FROM THE PATIENT
-        // Google Distance Matrix API
-        /*
-        $geoLoc = ConnectionManager::getDataSource('geoloc');
-        $distMatrixResponse = $geoLoc->byDistance(
+        // Use Google Distance Matrix API to sort clinics by driving distance from the patient
+        $distanceMatrixUtility = new GoogleDistanceMatrixUtility();
+        $distMatrixResponse = $distanceMatrixUtility->byDistance(
             implode(',', $originLatLon),
             implode('|', $clinicLatLons)
         );
         $distMatrixDestinations = $distMatrixResponse['google']['rows'][0]['elements'];
-
         foreach ($closestClinics as $key => $clinic) {
             if (isset($distMatrixDestinations[$key])) {
-                $closestClinics[$key] = array_merge(
-                    $clinic,
-                    $distMatrixDestinations[$key]
-                );
+                $clinic->google = $distMatrixDestinations[$key];
+                $closestClinics[$key] = $clinic;
             }
         }
-
-        $closestClinics = Hash::sort($closestClinics, '{n}.duration.value'); // sort by travel time
-        */
+        // Sort by driving duration in ascending order
+        usort($closestClinics, function ($a, $b) {
+            return $a->google['duration']['value'] <=> $b->google['duration']['value'];
+        });
         $closestClinics[] = ['numZipSearches' => $numZipSearches, 'searchRadius' => ($clinicRangeDefault * $numZipSearches)];
         return $closestClinics;
     }
