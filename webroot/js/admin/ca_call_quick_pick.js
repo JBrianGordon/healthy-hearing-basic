@@ -1,3 +1,5 @@
+import '../common/common';
+
 function onPageLoadQuickPick() {
   // Listen for field changes
   document.querySelector('body').addEventListener('change', e => {
@@ -53,7 +55,7 @@ function onPageLoadQuickPick() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   onPageLoadQuickPick();
 });
 
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function triggerChange(element) {
   var selector = document.querySelector(element);
   if (selector !== null) {
-    selector.dispatchEvent(new Event('change', {bubbles: true}));
+    selector.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
@@ -118,16 +120,16 @@ function onChangePatientInfo(isPatient) {
 }
 
 function isHidden(el) {
-    return (el.offsetParent === null);
+  return (el.offsetParent === null);
 }
 
 function updateVisibility(className = 'form_fields') {
-  document.querySelectorAll('.'+className+' input, .'+className+' select').forEach(input => {
+  document.querySelectorAll('.' + className + ' input, .' + className + ' select').forEach(input => {
     // Don't disable inputs with 'hidden' type
     if (input.type !== 'hidden') {
       if (isHidden(input)) {
         // This input is not currently visible - disable it
-        input.setAttribute("disabled","disabled");
+        input.setAttribute("disabled", "disabled");
       } else {
         // Input is visible - enable it
         input.removeAttribute("disabled");
@@ -154,11 +156,11 @@ function findClosestLocations(originAddress) {
 
   if (patientCity.length > 0 && patientState.length > 0) {
     fetch(`/admin/ca-calls/get-closest-clinics/${originAddress}`, {
-        method: "GET",
-        headers: {
-          "Accept": "application/json"
-        }
-      })
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
       .then(response => response.json())
       .then(data => {
         searchInfo = data.pop();
@@ -326,7 +328,7 @@ function displayClinicTemplates(data) {
   const closestClinicsContainer = document.getElementById("closestClinics");
   const fragment = document.createDocumentFragment();
 
-  data.forEach(function(item, index) {
+  data.forEach(function (item, index) {
     const clinicDiv = createClinicDiv(item, index);
     fragment.appendChild(clinicDiv);
   });
@@ -334,8 +336,8 @@ function displayClinicTemplates(data) {
   closestClinicsContainer.appendChild(fragment);
 
   const clinicDivs = document.querySelectorAll("[id^=clinic-div-]");
-  clinicDivs.forEach(function(clinicDiv) {
-    clinicDiv.addEventListener("click", function() {
+  clinicDivs.forEach(function (clinicDiv) {
+    clinicDiv.addEventListener("click", function () {
       clickedClinic(this);
     });
   });
@@ -362,7 +364,7 @@ function loadMoreClinics() {
 }
 
 function fixNoDirectionResults() {
-  closestClinics.forEach(function(item, i) {
+  closestClinics.forEach(function (item, i) {
     if (item.google.status !== "OK") {
       item.google.duration = { text: "Google can't provide directions" };
       item.google.distance = { text: "Google can't provide directions" };

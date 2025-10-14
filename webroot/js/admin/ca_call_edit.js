@@ -1,4 +1,4 @@
-//import '../common/common';
+import '../common/common';
 //import '../jquery/jplayer/jquery.jplayer.min';
 //import '../common/play_media';
 
@@ -38,7 +38,7 @@ const onPageLoad = () => {
 
       //todo: make note required
       if (true) {
-      //if (callGroupNoteValue) {
+        //if (callGroupNoteValue) {
         const callType = document.querySelector('#call-type')?.value;
         const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
         let callDate;
@@ -78,7 +78,7 @@ const onPageLoad = () => {
     }
 
     switch (targetId) {
-      case'spamBtn':
+      case 'spamBtn':
         document.querySelector('#ca-call-group-is-spam').value = true;
         document.querySelector('#CaCallForm').submit();
         break;
@@ -136,7 +136,7 @@ const onPageLoad = () => {
       document.querySelector('#ca-call-group-topic-aid-lost-new').checked = (aidLostChecked && targetValue === 'new');
       document.querySelector('#ca-call-group-topic-warranty-old').checked = (warrantyChecked && targetValue === 'old');
       document.querySelector('#ca-call-group-topic-warranty-new').checked = (warrantyChecked && targetValue === 'new');
-      document.querySelector('#ca-call-group-topic-warranty-new').dispatchEvent(new Event('change', {bubbles: true}));
+      document.querySelector('#ca-call-group-topic-warranty-new').dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     if (targetId === 'is-wrong-number') {
@@ -235,13 +235,13 @@ const onPageLoad = () => {
         break;
       case 'ca-call-group-voicemail-from':
         document.querySelector('#call-type').value = targetValue;
-        document.querySelector('#call-type').dispatchEvent(new Event('change', {bubbles: true}));
+        document.querySelector('#call-type').dispatchEvent(new Event('change', { bubbles: true }));
         break;
       case 'location-search':
         //TODO: Remove this when we fix autocomplete. This is temporary to handle a location id directly typed in.
         if (parseInt(targetValue) > 8119000000) {
           document.querySelector('#ca-call-group-location-id').value = targetValue;
-          document.querySelector('#ca-call-group-location-id').dispatchEvent(new Event('change', {bubbles: true}));
+          document.querySelector('#ca-call-group-location-id').dispatchEvent(new Event('change', { bubbles: true }));
         }
         break;
       default:
@@ -261,28 +261,28 @@ const onPageLoad = () => {
 
   //Strip out default Cake validity inline code, and set up new validity check
   let requiredElements = document.querySelectorAll('input[required], select[required]');
-  requiredElements.forEach( el => {
-      el.removeAttribute('oninvalid');
-      el.removeAttribute('oninput');
+  requiredElements.forEach(el => {
+    el.removeAttribute('oninvalid');
+    el.removeAttribute('oninput');
 
-      let errorMessageP = document.createElement('p');
-      errorMessageP.className = 'error-message col-md-offset-3 pl10';
-      el.parentNode.insertAdjacentElement('afterend', errorMessageP);
+    let errorMessageP = document.createElement('p');
+    errorMessageP.className = 'error-message col-md-offset-3 pl10';
+    el.parentNode.insertAdjacentElement('afterend', errorMessageP);
 
-      el.addEventListener('invalid', function () {
-          this.setCustomValidity('');
-          if (!this.value) {
-              this.setCustomValidity(this.dataset.validityMessage);
-              errorMessageP.textContent = this.dataset.validityMessage || 'Please fill out this field';
-              errorMessageP.style.color = 'red';
-          }
-      });
+    el.addEventListener('invalid', function () {
+      this.setCustomValidity('');
+      if (!this.value) {
+        this.setCustomValidity(this.dataset.validityMessage);
+        errorMessageP.textContent = this.dataset.validityMessage || 'Please fill out this field';
+        errorMessageP.style.color = 'red';
+      }
+    });
 
-      el.addEventListener('input', function () {
-          this.setCustomValidity('');
-          errorMessageP.textContent = '';
-          errorMessageP.style.color = '';
-      });
+    el.addEventListener('input', function () {
+      this.setCustomValidity('');
+      errorMessageP.textContent = '';
+      errorMessageP.style.color = '';
+    });
   });
 }
 
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
  ****/
 
 function triggerChangeEvents(skipElements = []) {
-  const elements = ['#ca-call-group-location-id','#call-type','#ca-call-group-caller-first-name','#ca-call-group-caller-last-name','#ca-call-group-caller-phone','#ca-call-group-is-patient','#is-patient','#ca-call-group-patient-first-name','#ca-call-group-patient-last-name','#ca-call-group-prospect','#ca-call-group-front-desk-name','#ca-call-group-score','#ca-call-group-topic-warranty','#is-wrong-number','#ca-call-group-refused-name'];
+  const elements = ['#ca-call-group-location-id', '#call-type', '#ca-call-group-caller-first-name', '#ca-call-group-caller-last-name', '#ca-call-group-caller-phone', '#ca-call-group-is-patient', '#is-patient', '#ca-call-group-patient-first-name', '#ca-call-group-patient-last-name', '#ca-call-group-prospect', '#ca-call-group-front-desk-name', '#ca-call-group-score', '#ca-call-group-topic-warranty', '#is-wrong-number', '#ca-call-group-refused-name'];
   elements.forEach(element => {
     if (skipElements.indexOf(element) === -1) {
       triggerChange(element);
@@ -318,7 +318,7 @@ function triggerChangeEvents(skipElements = []) {
 function triggerChange(element) {
   var selector = document.querySelector(element);
   if (selector !== null) {
-    selector.dispatchEvent(new Event('change', {bubbles: true}));
+    selector.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
@@ -512,15 +512,15 @@ function onChangeLocationId(locationId) {
           'Accept': 'application/json',
         },
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.title !== undefined) {
-          handleLocationChange(data);
-        } else {
-          console.log('getLocationData failed');
-          console.debug(data);
-        }
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.title !== undefined) {
+            handleLocationChange(data);
+          } else {
+            console.log('getLocationData failed');
+            console.debug(data);
+          }
+        });
     } catch (error) {
       console.log('getLocationData error:');
       console.error(error);
@@ -539,7 +539,7 @@ function handleLocationChange(data) {
   setElementInnerHTML(".locationCovid", data && data['covid'] ? `COVID-19 statement: ${data['covid']}` : '');
   setElementInnerHTML(".locationLandmarks", data && data['landmarks'] ? `Landmarks: ${data['landmarks']}` : '');
   setElementInnerHTML(".andYhn", data && data['isYhn'] === 1 ? 'and Your Hearing Network' : '');
-  
+
   //todo: search
   //const locationSearchInput = document.querySelector("#CaCallLocationSearch");
   //if (!locationSearchInput.value && data) {
@@ -592,45 +592,45 @@ function handleLocationChange(data) {
           "Accept": "application/json"
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        const count = Object.keys(data).length;
-        if (count === 0) {
-          // No followup calls found
-          document.querySelector("#ca-call-group-id").value = '';
-          setElementDisplay('.found-no-calls', 'block');
-          setElementDisplay('.found-multiple-calls', 'none');
-          setElementDisplay('.group-found', 'none');
-          updateVisibility();
-        } else if (count == 1) {
-          // One previous call found. Automatically select it.
-          setElementDisplay('.found-no-calls', 'none');
-          setElementDisplay('.found-multiple-calls', 'none');
-          updateVisibility();
-          const dataKeys = Object.keys(data);
-          const groupId = dataKeys[0];
-          onChangeGroupSearch(groupId);
-        } else {
-          // Found multiple followup calls. User must select one.
-          setElementDisplay('.found-no-calls', 'none');
-          setElementDisplay('.found-multiple-calls', 'block');
-          setElementDisplay('.group-found', 'none');
-          updateVisibility();
-          document.querySelector("#ca-call-group-id").value = '';
-          const callCountElement = document.querySelector("span.callCount");
-          callCountElement.textContent = count;
-          const groupSearchElement = document.querySelector('.group_search');
-          groupSearchElement.innerHTML = '';
-          groupSearchElement.appendChild(new Option('', ''));
-          for (const key in data) {
-            groupSearchElement.appendChild(new Option(data[key], key));
+        .then(response => response.json())
+        .then(data => {
+          const count = Object.keys(data).length;
+          if (count === 0) {
+            // No followup calls found
+            document.querySelector("#ca-call-group-id").value = '';
+            setElementDisplay('.found-no-calls', 'block');
+            setElementDisplay('.found-multiple-calls', 'none');
+            setElementDisplay('.group-found', 'none');
+            updateVisibility();
+          } else if (count == 1) {
+            // One previous call found. Automatically select it.
+            setElementDisplay('.found-no-calls', 'none');
+            setElementDisplay('.found-multiple-calls', 'none');
+            updateVisibility();
+            const dataKeys = Object.keys(data);
+            const groupId = dataKeys[0];
+            onChangeGroupSearch(groupId);
+          } else {
+            // Found multiple followup calls. User must select one.
+            setElementDisplay('.found-no-calls', 'none');
+            setElementDisplay('.found-multiple-calls', 'block');
+            setElementDisplay('.group-found', 'none');
+            updateVisibility();
+            document.querySelector("#ca-call-group-id").value = '';
+            const callCountElement = document.querySelector("span.callCount");
+            callCountElement.textContent = count;
+            const groupSearchElement = document.querySelector('.group_search');
+            groupSearchElement.innerHTML = '';
+            groupSearchElement.appendChild(new Option('', ''));
+            for (const key in data) {
+              groupSearchElement.appendChild(new Option(data[key], key));
+            }
           }
-        }
-      })
-      .catch(error => {
-        console.log('getPreviousCalls() error:');
-        console.error(error);
-      });
+        })
+        .catch(error => {
+          console.log('getPreviousCalls() error:');
+          console.error(error);
+        });
     } else {
       // No location selected
       setElementDisplay('.found-no-calls', 'none');
@@ -646,23 +646,23 @@ function handleLocationChange(data) {
           'Accept': 'application/json',
         },
       })
-      .then(response => response.json())
-      .then(data => {
-        var size = Object.keys(data).length;
-        if (size > 0) {
-          // Found multiple pending calls
-          document.querySelectorAll('.group_search').forEach(groupSearchElement => {
-            groupSearchElement.innerHTML = '';
-            groupSearchElement.appendChild(new Option('', ''));
-            for (const key in data) {
-              groupSearchElement.appendChild(new Option(data[key], key));
-            }
-          });
-        } else {
-          console.log('getPreviousCalls failed');
-          console.debug(data);
-        }
-      });
+        .then(response => response.json())
+        .then(data => {
+          var size = Object.keys(data).length;
+          if (size > 0) {
+            // Found multiple pending calls
+            document.querySelectorAll('.group_search').forEach(groupSearchElement => {
+              groupSearchElement.innerHTML = '';
+              groupSearchElement.appendChild(new Option('', ''));
+              for (const key in data) {
+                groupSearchElement.appendChild(new Option(data[key], key));
+              }
+            });
+          } else {
+            console.log('getPreviousCalls failed');
+            console.debug(data);
+          }
+        });
     } catch (error) {
       console.log('getPreviousCalls error:');
       console.error(error);
@@ -710,7 +710,7 @@ function loadReturnVoicemailForm(type) {
         triggerChange('#ca-call-group-did-they-answer-vm');
       })
       .catch(error => {
-        console.log('Error in '+ajaxUrl);
+        console.log('Error in ' + ajaxUrl);
         console.error(error);
       });
   } else {
@@ -805,7 +805,7 @@ function onChangeProspect(selectedProspect) {
     setElementDisplay('.prospectUnknownTopic', 'none');
     updateVisibility();
     document.querySelector('#ca-call-group-score').value = '';
-    document.querySelector('#ca-call-group-score').dispatchEvent(new Event('change', {bubbles: true}));
+    document.querySelector('#ca-call-group-score').dispatchEvent(new Event('change', { bubbles: true }));
   } else if (calculatedProspect === PROSPECT_UNKNOWN) {
     setElementDisplay('.prospectTopic', 'none');
     setElementDisplay('.nonProspectTopic', 'none');
@@ -833,7 +833,7 @@ function onChangeScore(score) {
   } else if (score === SCORE_TENTATIVE_APPT) {
     // Left a voicemail with clinic - followup in 48 hours to verify if appointment has been set
     setElementDisplay('.appt_date', 'none');
-    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic ("+easternTimezone+")");
+    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic (" + easternTimezone + ")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
       // Next call time should be 48 hours from now
@@ -849,7 +849,7 @@ function onChangeScore(score) {
   } else if (score === SCORE_NOT_REACHED) {
     // Clinic not reached - needs followup to set appt
     setElementDisplay('.appt_date', 'none');
-    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic ("+easternTimezone+")");
+    setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic (" + easternTimezone + ")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
       // Next call time should be 15 minutes from now
@@ -881,21 +881,21 @@ async function onChangeGroupSearch(group_id) {
           'Accept': 'application/json',
         },
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data["lock_error"] === true) {
-          console.log('getCallGroupData failed. Locked.');
-          setElementDisplay('.lock-error', 'block');
-          setElementDisplay('.group-found', 'none');
-          updateVisibility();
-          document.querySelector("span.lockTime").textContent = data["lock_time"];
-          document.querySelector("span.lockedBy").textContent = data["locked_by"];
-          document.querySelector("#ca-call-group-id").value = group_id;
-          document.querySelector("#ca-call-ca-call-group-id").value = group_id;
-        } else {
-          handleCallGroupChange(data);
-        }
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data["lock_error"] === true) {
+            console.log('getCallGroupData failed. Locked.');
+            setElementDisplay('.lock-error', 'block');
+            setElementDisplay('.group-found', 'none');
+            updateVisibility();
+            document.querySelector("span.lockTime").textContent = data["lock_time"];
+            document.querySelector("span.lockedBy").textContent = data["locked_by"];
+            document.querySelector("#ca-call-group-id").value = group_id;
+            document.querySelector("#ca-call-ca-call-group-id").value = group_id;
+          } else {
+            handleCallGroupChange(data);
+          }
+        });
     } catch (error) {
       console.log('getCallGroupData error:');
       console.error(error);
@@ -1049,7 +1049,7 @@ function doWeHaveLocationAndFrontDesk() {
   var doWeHaveLocationAndFrontDesk = false;
   const locationId = document.querySelector("#ca-call-group-location-id");
   const frontDeskName = document.querySelector("#ca-call-group-front-desk-name");
-  
+
   if (locationId && frontDeskName) {
     if ((locationId.value > 0) && frontDeskName.value) {
       doWeHaveLocationAndFrontDesk = true;
@@ -1060,7 +1060,7 @@ function doWeHaveLocationAndFrontDesk() {
   } else {
     setElementDisplay('.have-location-and-front-desk', 'none');
   }
-  
+
   updateVisibility();
 }
 
@@ -1192,16 +1192,16 @@ function setDateField(selector, date) {
 }
 
 function isHidden(el) {
-    return (el.offsetParent === null);
+  return (el.offsetParent === null);
 }
 
 function updateVisibility(className = 'form_fields') {
-  document.querySelectorAll('.'+className+' input, .'+className+' select').forEach(input => {
+  document.querySelectorAll('.' + className + ' input, .' + className + ' select').forEach(input => {
     // Don't disable inputs with 'hidden' type
     if (input.type !== 'hidden') {
       if (isHidden(input)) {
         // This input is not currently visible - disable it
-        input.setAttribute("disabled","disabled");
+        input.setAttribute("disabled", "disabled");
       } else {
         // Input is visible - enable it
         input.removeAttribute("disabled");
@@ -1270,7 +1270,7 @@ function onChangeConsumerConsent(consumerConsent) {
     setElementDisplay('.consumerConsentNo', 'block');
     setElementInnerHTML('span.callTransferInstructions', "[Hang up and score as 'Tentative appointment'.]");
     document.getElementById('ca-call-group-score').value = SCORE_TENTATIVE_APPT;
-    document.getElementById('ca-call-group-score').dispatchEvent(new Event('change', {bubbles: true}));
+    document.getElementById('ca-call-group-score').dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
@@ -1285,7 +1285,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     setElementDisplay('.didClinicAnswerVm', 'none');
     updateVisibility();
     callGroupScore.value = '';
-    callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
   } else if (didClinicAnswer === 'no') {
     setElementDisplay('.didClinicAnswerYes', 'none');
     setElementDisplay('.didClinicAnswerNo', 'block');
@@ -1298,7 +1298,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
       } else {
         callGroupScore.value = SCORE_NOT_REACHED;
       }
-      callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else if (didClinicAnswer === 'vm') {
     // No, but we can leave a voicemail
@@ -1309,7 +1309,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     updateVisibility();
     if (document.getElementById('ca-call-group-prospect').value === PROSPECT_YES) {
       callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else if (didClinicAnswer === 'cr') {
     // caller refused
@@ -1325,7 +1325,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     setElementDisplay('.didClinicAnswerVm', 'none');
     setElementDisplay('.scheduled_call_date', 'block');
     callGroupScore.value = '';
-    callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     updateVisibility();
   }
 }
@@ -1384,7 +1384,7 @@ function onChangeDidTheyAnswerFollowup(answer) {
     } else {
       setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else { // NO
     setElementDisplay('.didTheyAnswerFollowupYes', 'none');
@@ -1423,7 +1423,7 @@ function onChangeDidTheyAnswerFollowup(answer) {
       // Try again in 15 minutes
       nextCallDate.setMinutes(nextCallDate.getMinutes() + 15);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
-      setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach consumer ("+easternTimezone+")");
+      setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach consumer (" + easternTimezone + ")");
     }
   }
   updateVisibility();
@@ -1452,7 +1452,7 @@ function onChangeDidConsumerAnswer(answer) {
     } else {
       setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else if (answer === 'invalid') {
     setElementDisplay('.didConsumerAnswerYes', 'non');
@@ -1461,7 +1461,7 @@ function onChangeDidConsumerAnswer(answer) {
     setElementDisplay('.didConsumerAnswerInvalid', 'block');
     setElementDisplay('.followupForm', 'block');
     callGroupScore.value = SCORE_DISCONNECTED;
-    callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
   } else { // NO
     const prospect = document.querySelector("#ca-call-group-prospect").value;
     setElementDisplay('.didConsumerAnswerYes', 'non');
@@ -1473,7 +1473,7 @@ function onChangeDidConsumerAnswer(answer) {
     } else {
       setElementDisplay('.followupForm', 'block');
       callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
   updateVisibility();
@@ -1492,7 +1492,7 @@ function onChangeDidConsumerAnswer2(answer) {
     setElementDisplay('.didConsumerAnswer2No', 'block');
     setElementDisplay('.followupForm', 'block');
     callGroupScore.value = SCORE_TENTATIVE_APPT;
-    callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
   }
   updateVisibility();
 }
@@ -1521,7 +1521,7 @@ function onChangeDidClinicContactConsumer(answer) {
     setElementDisplay('.didClinicContactConsumerNo', 'block');
     document.querySelector('#ca-call-group-did-they-want-help').value = '';
     callGroupScore.value = SCORE_MISSED_OPPORTUNITY;
-    callGroupScore.dispatchEvent(new Event('change', {bubbles: true}));
+    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT) {
       setElementDisplay('.followupForm', 'block');
     } else { // CALL_TYPE_FOLLOWUP_NO_ANSWER
@@ -1539,7 +1539,7 @@ function onChangeRefusedName() {
     setElementDisplay('.refusedNameYes', 'block');
     if (pageLoadComplete) {
       topicDeclined.checked = true;
-      topicDeclined.dispatchEvent(new Event('change', {bubbles: true}));
+      topicDeclined.dispatchEvent(new Event('change', { bubbles: true }));
     }
     // Don't leave vm at clinic if we don't know caller name
     document.querySelector("#ca-call-group-did-clinic-answer option[value='vm']").remove();
@@ -1548,7 +1548,7 @@ function onChangeRefusedName() {
     setElementDisplay('.refusedNameYes', 'none');
     if (pageLoadComplete) {
       topicDeclined.checked = false;
-      topicDeclined.dispatchEvent(new Event('change', {bubbles: true}));
+      topicDeclined.dispatchEvent(new Event('change', { bubbles: true }));
     }
     if (document.querySelector("#ca-call-group-did-clinic-answer")) {
       if (document.querySelector("#ca-call-group-did-clinic-answer option[value='vm']").length === 0) {
@@ -1568,14 +1568,14 @@ function onChangeDidClinicRefuse() {
     if (pageLoadComplete) {
       isReviewNeeded.checked = true;
       score.value = SCORE_MISSED_OPPORTUNITY;
-      score.dispatchEvent(new Event('change', {bubbles: true}));
+      score.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else {
     setElementDisplay('.didClinicRefuseYes', 'none');
     if (pageLoadComplete) {
       isReviewNeeded.checked = false;
       score.value = SCORE_TENTATIVE_APPT;
-      score.dispatchEvent(new Event('change', {bubbles: true}));
+      score.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
   updateVisibility();
@@ -1584,16 +1584,16 @@ function onChangeDidClinicRefuse() {
 function formatDateTime(date) {
   // Format a date as YYYY-mm-ddTHH:mm
   return date.getFullYear() +
-      '-' + pad(date.getMonth()+1) +
-      '-' + pad(date.getDate()) +
-      'T' + pad(date.getHours()) +
-      ':' + pad(date.getMinutes());
+    '-' + pad(date.getMonth() + 1) +
+    '-' + pad(date.getDate()) +
+    'T' + pad(date.getHours()) +
+    ':' + pad(date.getMinutes());
 }
 
-function pad(num, size=2) {
-    num = num.toString();
-    while (num.length < size) num = "0" + num;
-    return num;
+function pad(num, size = 2) {
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
 }
 
 function setElementInnerHTML(selector, innerHtmlValue) {
