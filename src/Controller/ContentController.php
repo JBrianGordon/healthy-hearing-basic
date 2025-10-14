@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Content Controller
@@ -46,7 +47,7 @@ class ContentController extends AppController
     public function reportIndex()
     {
         if (!Configure::read('showReports')) {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         //if we pass in anything, mark as 301 to root
         // TODO: DO WE NEED THIS?
@@ -111,7 +112,7 @@ class ContentController extends AppController
     public function view($id = null, $slug = null)
     {
         if (!Configure::read('showReports')) {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         if (!is_numeric($id)) {
             // Is there a numeric id within the id string?
@@ -132,7 +133,7 @@ class ContentController extends AppController
                     return $this->redirect($redirect, 301);
                 }
             }
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         if ($content->is_gone) {
             return $this->throw410Gone();

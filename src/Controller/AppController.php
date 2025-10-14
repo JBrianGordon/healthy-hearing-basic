@@ -63,12 +63,11 @@ class AppController extends Controller
     {
         parent::beforeRender($event);
 
-        $SeoTitles = $this->getTableLocator()->get('SeoTitles');
-        $request = $this->request->getRequestTarget();
-        $seoTitle = $SeoTitles->findTitleByUri($request);
+        $seo = $this->request->getAttribute('seo') ?? [];
+        $seoTitle = $seo['title'] ?? null;
 
         if ($seoTitle !== null) {
-            $title = $seoTitle['title'];
+            $title = $seoTitle;
 
             $env = Configure::read('env');
             if ($env != 'prod') {

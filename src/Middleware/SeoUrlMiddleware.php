@@ -9,6 +9,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Exception\GoneException;
+use Cake\Http\Response;
 
 /**
  * SeoUrl middleware
@@ -32,9 +33,33 @@ class SeoUrlMiddleware implements MiddlewareInterface
             ->where(['url' => $path])
             ->first();
 
+        // Check for 410
         if ($seoUrl && $seoUrl->is_410) {
             throw new GoneException();
         }
+
+        // Check for redirect
+        if ($seoUrl->redirect_is_active && isset($seoUrl->redirect_url)) {
+            return (new Response())->withStatus(301)->withHeader('Location', $seoUrl->redirect_url);
+        }
+
+        // Attach SEO data as a namespaced array
+        if ($seoUrl) {
+            $seoData = [];
+
+            if (!empty($seoUrl->seo_title)) {
+                $seoData['title'] = $seoUrl->seo_title;
+            }
+
+            if (!empty($seoUrl->seo_meta_description)) {
+                $seoData['metaDescription'] = $seoUrl->seo_meta_description;
+            }
+
+            if (!empty($seoData)) {
+                $request = $request->withAttribute('seo', $seoData);
+            }
+        }
+
 
         return $handler->handle($request);
     }
