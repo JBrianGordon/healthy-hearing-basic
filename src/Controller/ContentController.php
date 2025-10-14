@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Http\Exception\GoneException;
 use Cake\Http\Exception\NotFoundException;
 
 /**
@@ -136,7 +137,7 @@ class ContentController extends AppController
             throw new NotFoundException();
         }
         if ($content->is_gone) {
-            return $this->throw410Gone();
+            throw new GoneException();
         }
 
         //set up and assign the meta tag info

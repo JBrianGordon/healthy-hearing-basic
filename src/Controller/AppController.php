@@ -228,14 +228,4 @@ class AppController extends Controller
     public function hasRecoveryEmail() {
         return (!empty($this->user->email));
     }
-
-    public function throw410Gone()
-    {
-        $contentTable = TableRegistry::getTableLocator()->get('Content');
-        $articles = $contentTable->findLatest(4);
-        $this->set('articles', $articles);
-    
-        $this->render('/Error/error410');
-        $this->response = $this->response->withStatus(410);
-    }
 }
