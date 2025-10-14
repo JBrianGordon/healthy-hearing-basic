@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 use Cake\Routing\Router;
 use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Corps Controller
@@ -21,7 +22,7 @@ class CorpsController extends AppController
     public function index()
     {
         if (!Configure::read('showManufacturers')) {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         // if ($_SERVER['REQUEST_URI'] != Router::url(['controller'=>'corps','action'=>'index'])) {
         //     // Self-heal url
@@ -67,7 +68,7 @@ class CorpsController extends AppController
     public function view($slug = null)
     {
         if (!Configure::read('showManufacturers')) {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         $corp = $this->Corps->findBySlug($slug);
         $this->Content = $this->fetchTable('Content');

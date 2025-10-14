@@ -14,6 +14,7 @@ use Cake\Utility\Inflector;
 use Cake\Utility\Hash;
 use Cake\ORM\Query;
 use Cake\Cache\Cache;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Locations Controller
@@ -82,7 +83,7 @@ class LocationsController extends AppController
         }
         if (empty($region)) {
             // An invalid state was passed
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         if ($region == 'DC-Dist-Of-Columbia') {
             // Skip the state page for DC
@@ -229,7 +230,7 @@ class LocationsController extends AppController
             $region = $this->Locations->stateRegion($region);
             if (empty($region)) {
                 // An invalid state was passed
-                return $this->throw404NotFound();
+                throw new NotFoundException();
             }
             $state = $this->Locations->parseStateSlug($region);
             $stateNice = $this->Locations->stateFull($state);
@@ -257,8 +258,7 @@ class LocationsController extends AppController
             ])->first();
             if (empty($cityData)) {
                 // No matching city was found
-                //TODO: define throw404NotFound()
-                return $this->throw404NotFound();
+                throw new NotFoundException();
             }
         }
         if (!empty($zip)) {

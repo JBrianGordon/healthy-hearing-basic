@@ -229,16 +229,6 @@ class AppController extends Controller
         return (!empty($this->user->email));
     }
 
-    public function throw404NotFound()
-    {
-        $contentTable = TableRegistry::getTableLocator()->get('Content');
-        $articles = $contentTable->findLatest(4);
-        $this->set('articles', $articles);
-
-        $this->render('/Error/error404');
-        $this->response = $this->response->withStatus(404);
-    }
-
     public function throw410Gone()
     {
         $contentTable = TableRegistry::getTableLocator()->get('Content');

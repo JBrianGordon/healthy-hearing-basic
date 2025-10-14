@@ -123,7 +123,7 @@ class PagesController extends AppController
     public function feeds() {
         // 404 for Canada
         if (!Configure::read('showReports')) {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
 
         $page = $this->Pages->findByTitle('feeds')->first();

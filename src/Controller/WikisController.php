@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Cake\Routing\Router;
 use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Wikis Controller
@@ -114,7 +115,7 @@ class WikisController extends AppController
             $this->socialOptions['article:section'] = 'Hearing Help';
             $this->set('sameAsSocialLinks', Configure::read('sameAsSocialLinks'));
         } else {
-            return $this->throw404NotFound();
+            throw new NotFoundException();
         }
         $this->set('preferredClinicsNearMe', $this->fetchTable('Locations')->findClinicsNearMe(4, true));
     }
