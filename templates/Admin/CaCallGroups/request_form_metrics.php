@@ -2,6 +2,8 @@
 use Cake\Core\Configure;
 $startDate = isset($startDate) ? date('Y-m-d', strtotime($startDate)) : null;
 $endDate = isset($endDate) ? date('Y-m-d', strtotime($endDate)) : null;
+
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
