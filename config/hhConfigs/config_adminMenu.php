@@ -192,25 +192,9 @@ $callTrackingMenu = [
 /*******************************
 * Admin - SEO Tools
 ********************************/
-$seoItems = [];
-$seoItems['Canonicals'] = [
-    'url' => '/admin/seo-canonicals',
-];
-$seoItems['Meta tags'] = [
-    'url' => '/admin/seo-meta-tags',
-];
-$seoItems['Redirects'] = [
-    'url' => '/admin/seo-redirects',
-];
-$seoItems['Status codes'] = [
-    'url' => '/admin/seo-status-codes',
-];
-$seoItems['Titles'] = [
-    'url' => '/admin/seo-titles',
-];
-$seoToolsMenu = [
-    'icon' => 'bi bi-briefcase-fill',
-    'items' => $seoItems,
+$seoUrlsMenu = [
+    'url' => '/admin/seo-urls',
+    'icon' => 'bi bi-motherboard',
 ];
 
 /*******************************
@@ -411,7 +395,7 @@ if (Configure::read('isCallAssistEnabled')) {
     $adminMenu['adminMenu']['Admin']['Call Concierge'] = $callAssistMenu;
 }
 $adminMenu['adminMenu']['Admin']['Call Tracking'] = $callTrackingMenu;
-$adminMenu['adminMenu']['Admin']['SEO Tools'] = $seoToolsMenu;
+$adminMenu['adminMenu']['Admin']['SEO Urls'] = $seoUrlsMenu;
 $adminMenu['adminMenu']['Admin']['Utilities'] = $utilitiesMenu;
 
 //**** IT Admin ****//
