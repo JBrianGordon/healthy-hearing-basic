@@ -33,18 +33,18 @@ class SeoUrlMiddleware implements MiddlewareInterface
             ->where(['url' => $path])
             ->first();
 
-        // Check for 410
-        if ($seoUrl && $seoUrl->is_410) {
-            throw new GoneException();
-        }
-
-        // Check for redirect
-        if ($seoUrl->redirect_is_active && isset($seoUrl->redirect_url)) {
-            return (new Response())->withStatus(301)->withHeader('Location', $seoUrl->redirect_url);
-        }
-
-        // Attach SEO data as a namespaced array
         if ($seoUrl) {
+            // Check for 410
+            if ($seoUrl->is_410) {
+                throw new GoneException();
+            }
+
+            // Check for redirect
+            if ($seoUrl->redirect_is_active && isset($seoUrl->redirect_url)) {
+                return (new Response())->withStatus(301)->withHeader('Location', $seoUrl->redirect_url);
+            }
+
+            // Attach SEO data as a namespaced array
             $seoData = [];
 
             if (!empty($seoUrl->seo_title)) {
