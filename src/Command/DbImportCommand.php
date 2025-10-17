@@ -227,7 +227,7 @@ class DbImportCommand extends Command
         exec('bin/cake populate_locations_users');
 
         $io->out('Run script to copy Cake 2.x zipcodes table data into Cake 4.x zips table...');
-        exec('bin/cake copy_zipcodes_data');
+        $this->executeCommand(CopyZipcodesDataCommand::class);
 
         $io->out('Update admin user roles');
 
