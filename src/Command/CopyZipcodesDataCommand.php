@@ -8,8 +8,6 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 
-ini_set('memory_limit', '1024M');
-
 /**
  * CopyZipcodesData command.
  */
