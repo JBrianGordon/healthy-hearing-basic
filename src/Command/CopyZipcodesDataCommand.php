@@ -49,23 +49,25 @@ class CopyZipcodesDataCommand extends Command
             'total' => count($zipcodesQuery),
         ]);
         foreach ($zipcodesQuery as $zipcode) {
-            if (!$zipsTable->exists(['zip' => $zipcode->zip])) {
-                $copiedZip = $zipsTable->newEntity(
-                    $zipcode->toArray(),
-                    ['validate' => false]
+            $copiedZip = $zipsTable->newEntity(
+                $zipcode->toArray(),
+                ['validate' => false]
+            );
+
+            if ($copiedZip->getErrors()) {
+                $io->out(print_r($copiedZip->getErrors()));
+            }
+
+            if (!$zipsTable->save($copiedZip)) {
+                $io->err(
+                    sprintf(
+                        'Error saving zip record: %s',
+                        $copiedZip->zip
+                    )
                 );
-                if (!$zipsTable->save($copiedZip)) {
-                    $io->out();
-                    $io->err(
-                        sprintf(
-                            'Error saving zip record: %s',
-                            $copiedZip->zip
-                        )
-                    );
-                    $error = json_encode($copiedZip->getErrors(), JSON_PRETTY_PRINT);
-                    $io->out($error);
-                    $io->out();
-                }
+                $error = json_encode($copiedZip->getErrors(), JSON_PRETTY_PRINT);
+                $io->out($error);
+                $io->out();
             }
             $progress->increment(1);
             $progress->draw();

@@ -117,7 +117,7 @@ class DbImportCommand extends Command
 
         // Attempt to scp the db backup from the remote server to our local folder (usually /tmp)
         // TO-DO: TEMPORARY CP/COPY STEP FOR 'DEV' WHILE WE DON'T HAVE LIVE DB BACKUP SERVER
-        if (Configure::read('env') === 'dev') {
+        if (Configure::read('env') === 'dev' || 'local') {
             $cpResult = exec('cp ' . $this->remoteFolder . $dbFile . ' ' . $this->localDir);
         } else {
             $scpResult = exec('scp ' . $this->dbServer . ':' . $this->remoteFolder . $dbFile . ' ' . $this->localDir);
