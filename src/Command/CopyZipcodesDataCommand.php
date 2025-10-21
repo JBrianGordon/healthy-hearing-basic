@@ -38,37 +38,55 @@ class CopyZipcodesDataCommand extends Command
     {
         $io->out('Copying zipcodes data into zips table...');
 
-        $zipcodesTable = $this->fetchTable('zipcodesorig');
-        $zipsTable = $this->fetchTable('zips');
-        $zipcodesQuery = $zipcodesTable->find()->all();
-
-        $progress = $io->helper('Progress');
-        $progress->init([
-            'total' => count($zipcodesQuery),
-        ]);
-        foreach ($zipcodesQuery as $zipcode) {
-            $copiedZip = $zipsTable->newEntity(
-                $zipcode->toArray(),
-                ['validate' => false]
-            );
-
-            if ($copiedZip->getErrors()) {
-                $io->out(print_r($copiedZip->getErrors()));
-            }
-
-            if (!$zipsTable->save($copiedZip)) {
-                $io->err(
-                    sprintf(
-                        'Error saving zip record: %s',
-                        $copiedZip->zip
-                    )
-                );
-                $error = json_encode($copiedZip->getErrors(), JSON_PRETTY_PRINT);
-                $io->out($error);
-                $io->out();
-            }
-            $progress->increment(1);
-            $progress->draw();
+        $connection = $this->fetchTable('zips')->getConnection();
+        $connection->begin();
+        try {
+            $connection->execute("
+                INSERT INTO zips (zip, lat, lon, city, state, areacode, country_code)
+                SELECT zip, lat, lon, city, state, areacode, country_code
+                FROM zipcodesorig
+                ORDER BY zip
+            ");
+            $connection->commit();
+        } catch (\Throwable $e) {
+            $connection->rollback();
+            throw $e;
         }
     }
+
+
+        // ORIGINAL
+
+        // $zipcodesTable = $this->fetchTable('zipcodesorig');
+        // $zipsTable = $this->fetchTable('zips');
+        // $zipcodesQuery = $zipcodesTable->find()->all();
+
+        // $progress = $io->helper('Progress');
+        // $progress->init([
+        //     'total' => count($zipcodesQuery),
+        // ]);
+        // foreach ($zipcodesQuery as $zipcode) {
+        //     $copiedZip = $zipsTable->newEntity(
+        //         $zipcode->toArray(),
+        //         ['validate' => false]
+        //     );
+
+        //     if ($copiedZip->getErrors()) {
+        //         $io->out(print_r($copiedZip->getErrors()));
+        //     }
+
+        //     if (!$zipsTable->save($copiedZip)) {
+        //         $io->err(
+        //             sprintf(
+        //                 'Error saving zip record: %s',
+        //                 $copiedZip->zip
+        //             )
+        //         );
+        //         $error = json_encode($copiedZip->getErrors(), JSON_PRETTY_PRINT);
+        //         $io->out($error);
+        //         $io->out();
+        //     }
+        //     $progress->increment(1);
+        //     $progress->draw();
+        // } 
 }
