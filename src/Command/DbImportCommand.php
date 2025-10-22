@@ -171,8 +171,19 @@ class DbImportCommand extends Command
 
             // Import the database file
             $io->out('Importing file: ' . $unzippedFilename);
-            $importCommand = 'mysql -u ' . $dbConfig['username'] . ' -h ' . $dbConfig['host'] . ' --password=' . $dbConfig['password'] . ' ' . $dbName . ' < ' . $unzippedFilename;
+
+            // Start timing
+            $startTime = time();
+
+            $importCommand = 'mysql --compress -u ' . $dbConfig['username'] . ' -h ' . $dbConfig['host'] . ' --password=' . $dbConfig['password'] . ' ' . $dbName . ' < ' . $unzippedFilename;
             exec($importCommand);
+
+            // End timing
+            $endTime = time();
+            $duration = $endTime - $startTime;
+
+            $io->out("Import completed in " . $duration . " seconds.");
+
         } catch (Exception $e) {
             // Catch the error, so no db info will be exposed to cli
             $io->error('Unable to import database.');
