@@ -103,7 +103,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                         </tr>
                     </table>
                     <div class="form_fields">
-                        <div class="init_have_location" style="display:none;">
+                        <div class="init_have_location hidden">
                             <div class="row">
                                 <div class="col-md-9 offset-md-3">
                                     <div class="well blue-well">
@@ -112,7 +112,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                                 </div>
                             </div>
                         </div>
-                        <div class="init_no_location" style="display:none;">
+                        <div class="init_no_location hidden">
                             <div class="row">
                                 <div class="col-md-9 offset-md-3">
                                     <div class="well blue-well">
@@ -126,7 +126,7 @@ $caCall = empty($caCall) ? array() : $caCall;
                             'label' => 'Wrong number?',
                             'default' => $isWrongNumber
                         ]) ?>
-                        <div class="init_no_location" style="display:none;">
+                        <div class="init_no_location hidden">
                             <div class="valid_number">
                                 <?= $this->Form->control('location_search', [
                                     'label' => 'Clinic search',

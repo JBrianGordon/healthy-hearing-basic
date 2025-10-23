@@ -12,6 +12,7 @@ use App\Model\Entity\CaCall;
 use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
+use DateTime;
 
 /**
  * CaCallGroups Model
@@ -594,8 +595,9 @@ class CaCallGroupsTable extends Table
         if (!empty($locationId)) {
             // Find calls for this clinic only
             $conditions['location_id'] = $locationId;
+            $oneYearAgo = new DateTime('-1 year');
+            $conditions['created >'] = $oneYearAgo;
         }
-        $now = getDateTime('now', 'GMT', 'Y-m-d H:i:s');
         if ($followupOnly) {
             // Find followup calls only
             $conditions['OR'] = [

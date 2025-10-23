@@ -35,10 +35,7 @@ const onPageLoad = () => {
       // The "disconnected" button was clicked
       // Make sure the Notes field is filled in
       const callGroupNoteValue = document.querySelector('[id^=ca-call-group-ca-call-group-note]')?.value.trim();
-
-      //todo: make note required
-      if (true) {
-        //if (callGroupNoteValue) {
+      if (callGroupNoteValue) {
         const callType = document.querySelector('#call-type')?.value;
         const callTypeInboundOptions = [CALL_TYPE_INBOUND, CALL_TYPE_VM_CALLBACK_CLINIC, CALL_TYPE_VM_CALLBACK_CONSUMER, CALL_TYPE_INBOUND_QUICK_PICK];
         let callDate;
@@ -46,14 +43,14 @@ const onPageLoad = () => {
         if (callTypeInboundOptions.includes(callType)) {
           // If a new incoming call or VM follow-up call was disconnected, submit the form without validation.
           // This will just save the call in our database in case they call back.
-          document.querySelector('#ca-call-group-status').value = STATUS_INCOMPLETE;
-          document.querySelector('#ca-call-group-score').value = SCORE_DISCONNECTED;
+          setElementValue('#ca-call-group-status', STATUS_INCOMPLETE);
+          setElementValue('#ca-call-group-score', SCORE_DISCONNECTED);
         }
 
         document.querySelector('#CaCallForm').submit();
       } else {
-        //TODO: Show the note required modal
-        //document.querySelector('#note-required').modal('show');
+        var noteRequiredModal = new bootstrap.Modal(document.getElementById('note-required'));
+        noteRequiredModal.show();
       }
     }
 
@@ -79,7 +76,7 @@ const onPageLoad = () => {
 
     switch (targetId) {
       case 'spamBtn':
-        document.querySelector('#ca-call-group-is-spam').value = true;
+        setElementValue('#ca-call-group-is-spam', true);
         document.querySelector('#CaCallForm').submit();
         break;
       case 'deleteBtn':
@@ -95,9 +92,12 @@ const onPageLoad = () => {
         validateProspect();
         // Calculate status
         calculateStatus();
-        // If topics are hidden, remove the custom validation
-        if (document.querySelector('#ca-call-group-topic-parts').hidden) {
-          document.querySelector('#ca-call-group-topic-parts').setCustomValidity('');
+        var topicPartsElement = document.querySelector('#ca-call-group-topic-parts');
+        if (topicPartsElement) {
+          // If topics are hidden, remove the custom validation
+          if (isHidden(topicPartsElement)) {
+            topicPartsElement.setCustomValidity('');
+          }
         }
         break;
       default:
@@ -118,9 +118,9 @@ const onPageLoad = () => {
 
       // If either of these are checked, show the 'How Old is your Hearing Aid' dialog.
       if (warrantyChecked || aidLostChecked) {
-        document.querySelector('.aid_age_topic').classList.remove('hidden');
+        showElement('.aid_age_topic');
       } else {
-        document.querySelector('.aid_age_topic').classList.add('hidden');
+        hideElement('.aid_age_topic');
       }
 
       // Trigger the change event for the age dialog, to make sure the correct (hidden) checkboxes are checked.
@@ -132,19 +132,18 @@ const onPageLoad = () => {
       const aidLostChecked = document.querySelector('#ca-call-group-topic-aid-lost').checked;
 
       // Set the hidden checkboxes based on what topics are checked and the age of the hearing aid.
-      document.querySelector('#ca-call-group-topic-aid-lost-old').checked = (aidLostChecked && targetValue === 'old');
-      document.querySelector('#ca-call-group-topic-aid-lost-new').checked = (aidLostChecked && targetValue === 'new');
-      document.querySelector('#ca-call-group-topic-warranty-old').checked = (warrantyChecked && targetValue === 'old');
-      document.querySelector('#ca-call-group-topic-warranty-new').checked = (warrantyChecked && targetValue === 'new');
-      document.querySelector('#ca-call-group-topic-warranty-new').dispatchEvent(new Event('change', { bubbles: true }));
+      setElementChecked('#ca-call-group-topic-aid-lost-old', (aidLostChecked && targetValue === 'old'));
+      setElementChecked('#ca-call-group-topic-aid-lost-new', (aidLostChecked && targetValue === 'new'));
+      setElementChecked('#ca-call-group-topic-aid-warranty-old', (warrantyChecked && targetValue === 'old'));
+      setElementChecked('#ca-call-group-topic-aid-warranty-new', (warrantyChecked && targetValue === 'new'));
     }
 
     if (targetId === 'is-wrong-number') {
       const isWrongNumberChecked = document.querySelector('#is-wrong-number').checked;
       if (isWrongNumberChecked) {
-        setElementDisplay('.valid_number', 'none');
+        hideElement('.valid_number');
       } else {
-        setElementDisplay('.valid_number', 'block');
+        showElement('.valid_number');
       }
       updateVisibility();
     }
@@ -156,7 +155,6 @@ const onPageLoad = () => {
     //All other form logic using functions
     switch (targetId) {
       case 'ca-call-group-topic-wants-appt':
-        //todo: Should we check for this in onChangeTopic()?
         onChangeTopicWantsAppt(targetChecked);
         break;
       case 'ca-call-group-wants-hearing-test':
@@ -178,6 +176,9 @@ const onPageLoad = () => {
         break;
       case 'ca-call-group-score':
         onChangeScore(targetValue);
+        break;
+      case 'ca-call-group-status':
+        onChangeStatus(targetValue);
         break;
       case 'group-search':
         onChangeGroupSearch(targetValue);
@@ -234,14 +235,13 @@ const onPageLoad = () => {
         onChangeDidClinicRefuse();
         break;
       case 'ca-call-group-voicemail-from':
-        document.querySelector('#call-type').value = targetValue;
-        document.querySelector('#call-type').dispatchEvent(new Event('change', { bubbles: true }));
+        //todo
+        setElementValue('#call-type', targetValue);
         break;
       case 'location-search':
         //TODO: Remove this when we fix autocomplete. This is temporary to handle a location id directly typed in.
         if (parseInt(targetValue) > 8119000000) {
-          document.querySelector('#ca-call-group-location-id').value = targetValue;
-          document.querySelector('#ca-call-group-location-id').dispatchEvent(new Event('change', { bubbles: true }));
+          setElementValue('#ca-call-group-location-id', targetValue)
         }
         break;
       default:
@@ -258,6 +258,11 @@ const onPageLoad = () => {
       onChangeFrontDeskName(targetValue);
     }
   });
+
+  // When a modal is hidden, blur any active elements to prevent the “Blocked aria-hidden" warning
+  document.querySelector('body').addEventListener('hide.bs.modal', event => {
+      document.activeElement.blur()
+  })
 
   //Strip out default Cake validity inline code, and set up new validity check
   let requiredElements = document.querySelectorAll('input[required], select[required]');
@@ -307,18 +312,18 @@ document.addEventListener('DOMContentLoaded', () => {
  ****/
 
 function triggerChangeEvents(skipElements = []) {
-  const elements = ['#ca-call-group-location-id', '#call-type', '#ca-call-group-caller-first-name', '#ca-call-group-caller-last-name', '#ca-call-group-caller-phone', '#ca-call-group-is-patient', '#is-patient', '#ca-call-group-patient-first-name', '#ca-call-group-patient-last-name', '#ca-call-group-prospect', '#ca-call-group-front-desk-name', '#ca-call-group-score', '#ca-call-group-topic-warranty', '#is-wrong-number', '#ca-call-group-refused-name'];
-  elements.forEach(element => {
-    if (skipElements.indexOf(element) === -1) {
-      triggerChange(element);
+  const selectors = ['#ca-call-group-location-id', '#call-type', '#ca-call-group-caller-first-name', '#ca-call-group-caller-last-name', '#ca-call-group-caller-phone', '#ca-call-group-is-patient', '#is-patient', '#ca-call-group-patient-first-name', '#ca-call-group-patient-last-name', '#ca-call-group-prospect', '#ca-call-group-front-desk-name', '#ca-call-group-score', '#ca-call-group-topic-warranty', '#is-wrong-number', '#ca-call-group-refused-name'];
+  selectors.forEach(selector => {
+    if (skipElements.indexOf(selector) === -1) {
+      triggerChange(selector);
     }
   });
 }
 
-function triggerChange(element) {
-  var selector = document.querySelector(element);
-  if (selector !== null) {
-    selector.dispatchEvent(new Event('change', { bubbles: true }));
+function triggerChange(selector) {
+  var element = document.querySelector(selector);
+  if (element !== null) {
+    element.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
@@ -386,43 +391,43 @@ const calculateStatus = () => {
   } else if (callType === CALL_TYPE_FOLLOWUP_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
     if (Number(document.querySelector("#ca-call-group-clinic-followup-count")?.value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_SET_APPT;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_SET_APPT);
     } else {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
   } else if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
     if (Number(document.querySelector("#ca-call-group-clinic-followup-count")?.value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
-      document.querySelector("#ca-call-group-status").value = STATUS_TENTATIVE_APPT;
+      setElementValue('#ca-call-group-status', STATUS_TENTATIVE_APPT);
     } else {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
   } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST && !IS_CLINIC_LOOKUP_PAGE && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
     // Clinic did not answer followup call
     if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_APPT_REQUEST_FORM);
     } else {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
       document.querySelector("#ca-call-group-patient-followup-count").value = 0;
     }
   } else if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT && !IS_CLINIC_LOOKUP_PAGE) {
     if (document.querySelector("#ca-call-group-did-consumer-answer")?.value === "yes" && document.querySelector("#ca-call-group-did-they-answer-followup")?.value === "no") {
       // Consumer answered but clinic did not. Next attempt will not be direct book.
       if (Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+        setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_APPT_REQUEST_FORM);
       } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+        setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
         document.querySelector("#ca-call-group-patient-followup-count").value = 0;
       }
     } else if (document.querySelector("#ca-call-group-did-consumer-answer").value === "no" && document.querySelector("#ca-call-group-did-they-answer-followup2").value === "no") {
       // Neither consumer nor clinic answered
       if (
         Number(document.querySelector("#ca-call-group-clinic-followup-count").value) < MAX_CLINIC_FOLLOWUP_ATTEMPTS) {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_APPT_REQUEST_FORM;
+        setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_APPT_REQUEST_FORM);
       } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+        setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
         document.querySelector("#ca-call-group-patient-followup-count").value = 0;
       }
     } else {
@@ -432,47 +437,47 @@ const calculateStatus = () => {
     if (document.querySelector("#ca-call-group-did-they-answer-followup").value === "yes") {
       // Patient answered
       if (document.querySelector("#ca-call-group-score").value === SCORE_APPT_SET) {
-        document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
+        setElementValue('#ca-call-group-status', STATUS_APPT_SET);
       } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_MO_NO_ANSWER;
-        document.querySelector("#ca-call-group-score").disabled = false;
-        document.querySelector("#ca-call-group-score").value = SCORE_MISSED_OPPORTUNITY;
+        setElementValue('#ca-call-group-status', STATUS_MO_NO_ANSWER);
+        document.querySelector('#ca-call-group-score').disabled = false;
+        setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
       }
     } else if (document.querySelector("#ca-call-group-did-they-answer-followup").value === "vm") {
       // Left a voicemail
-      document.querySelector("#ca-call-group-status").value = STATUS_MO_NO_ANSWER;
-      document.querySelector("#ca-call-group-score").disabled = false;
-      document.querySelector("#ca-call-group-score").value = SCORE_MISSED_OPPORTUNITY;
+      setElementValue('#ca-call-group-status', STATUS_MO_NO_ANSWER);
+      document.querySelector('#ca-call-group-score').disabled = false;
+      setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
     } else {
       // Patient did not answer
       if (Number(document.querySelector("#ca-call-group-patient-followup-count").value) < MAX_PATIENT_FOLLOWUP_ATTEMPTS) {
-        document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_NO_ANSWER;
+        setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_NO_ANSWER);
       } else {
-        document.querySelector("#ca-call-group-status").value = STATUS_MO_NO_ANSWER;
-        document.querySelector("#ca-call-group-score").disabled = false;
-        document.querySelector("#ca-call-group-score").value = SCORE_MISSED_OPPORTUNITY;
+        setElementValue('#ca-call-group-status', STATUS_MO_NO_ANSWER);
+        document.querySelector('#ca-call-group-score').disabled = false;
+        setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
       }
     }
   } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "vm") {
-    document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+    setElementValue('#ca-call-group-status', STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS);
   } else if (isVoicemailType && (document.querySelector("#ca-call-group-did-they-answer-vm").value === "no" || document.querySelector("#ca-call-group-did-they-answer-vm").value === "")) {
     if (Number(document.querySelector("#ca-call-group-vm-outbound-count").value) < MAX_VM_OUTBOUND_ATTEMPTS) {
-      document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
+      setElementValue('#ca-call-group-status', STATUS_VM_CALLBACK_ATTEMPTED);
     } else {
-      document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS;
+      setElementValue('#ca-call-group-status', STATUS_VM_CALLBACK_TOO_MANY_ATTEMPTS);
     }
   } else if (isVoicemailType && document.querySelector("#ca-call-group-did-they-answer-vm").value === "noAttempt") {
     const vmCount = Number(document.querySelector("#ca-call-group-vm-outbound-count").value);
     document.querySelector("#ca-call-group-vm-outbound-count").value = vmCount - 1;
-    document.querySelector("#ca-call-group-status").value = STATUS_VM_CALLBACK_ATTEMPTED;
+    setElementValue('#ca-call-group-status', STATUS_VM_CALLBACK_ATTEMPTED);
   } else if (callType === CALL_TYPE_VM_CALLBACK_INVALID) {
-    document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
+    setElementValue('#ca-call-group-status', STATUS_WRONG_NUMBER);
   } else if (document.querySelector("#is-wrong-number") && document.querySelector("#is-wrong-number").checked) {
-    document.querySelector("#ca-call-group-status").value = STATUS_WRONG_NUMBER;
+    setElementValue('#ca-call-group-status', STATUS_WRONG_NUMBER);
   } else if (document.querySelector("#ca-call-group-refused-name-again-quick-pick") && document.querySelector("#ca-call-group-refused-name-again-quick-pick").checked) {
-    document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS;
+    setElementValue('#ca-call-group-status', STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS);
   } else if (document.querySelector("#ca-call-group-did-clinic-answer") && document.querySelector("#ca-call-group-did-clinic-answer").value === "cr") {
-    document.querySelector("#ca-call-group-status").value = STATUS_QUICK_PICK_CALLER_REFUSED_HELP;
+    setElementValue('#ca-call-group-status', STATUS_QUICK_PICK_CALLER_REFUSED_HELP);
   } else {
     // Inbound or Followup call
     calculateByScore = true;
@@ -482,20 +487,20 @@ const calculateStatus = () => {
     const score = document.querySelector("#ca-call-group-score").value;
     const prospect = document.querySelector("#ca-call-group-prospect").value;
     if (prospect === PROSPECT_NO) {
-      document.querySelector("#ca-call-group-status").value = STATUS_NON_PROSPECT;
+      setElementValue('#ca-call-group-status', STATUS_NON_PROSPECT);
     } else if (score === SCORE_DISCONNECTED || prospect === PROSPECT_DISCONNECTED) {
-      document.querySelector("#ca-call-group-status").value = STATUS_INCOMPLETE;
-      document.querySelector("#ca-call-group-score").value = SCORE_DISCONNECTED;
+      setElementValue('#ca-call-group-status', STATUS_INCOMPLETE);
+      setElementValue('#ca-call-group-score', SCORE_DISCONNECTED);
     } else if (score === SCORE_NOT_REACHED) {
-      document.querySelector("#ca-call-group-status").value = STATUS_FOLLOWUP_SET_APPT;
+      setElementValue('#ca-call-group-status', STATUS_FOLLOWUP_SET_APPT);
     } else if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
-      document.querySelector("#ca-call-group-status").value = STATUS_APPT_SET;
+      setElementValue('#ca-call-group-status', STATUS_APPT_SET);
     } else if (score === SCORE_TENTATIVE_APPT) {
-      document.querySelector("#ca-call-group-status").value = STATUS_TENTATIVE_APPT;
+      setElementValue('#ca-call-group-status', STATUS_TENTATIVE_APPT);
     } else if (score === SCORE_MISSED_OPPORTUNITY) {
-      document.querySelector("#ca-call-group-status").value = STATUS_MISSED_OPPORTUNITY;
+      setElementValue('#ca-call-group-status', STATUS_MISSED_OPPORTUNITY);
     } else {
-      document.querySelector("#ca-call-group-status").value = STATUS_NEW;
+      setElementValue('#ca-call-group-status', STATUS_NEW);
     }
   }
 }
@@ -592,80 +597,75 @@ function handleLocationChange(data) {
           "Accept": "application/json"
         }
       })
-        .then(response => response.json())
-        .then(data => {
-          const count = Object.keys(data).length;
-          if (count === 0) {
-            // No followup calls found
-            document.querySelector("#ca-call-group-id").value = '';
-            setElementDisplay('.found-no-calls', 'block');
-            setElementDisplay('.found-multiple-calls', 'none');
-            setElementDisplay('.group-found', 'none');
-            updateVisibility();
-          } else if (count == 1) {
-            // One previous call found. Automatically select it.
-            setElementDisplay('.found-no-calls', 'none');
-            setElementDisplay('.found-multiple-calls', 'none');
-            updateVisibility();
-            const dataKeys = Object.keys(data);
-            const groupId = dataKeys[0];
-            onChangeGroupSearch(groupId);
-          } else {
-            // Found multiple followup calls. User must select one.
-            setElementDisplay('.found-no-calls', 'none');
-            setElementDisplay('.found-multiple-calls', 'block');
-            setElementDisplay('.group-found', 'none');
-            updateVisibility();
-            document.querySelector("#ca-call-group-id").value = '';
-            const callCountElement = document.querySelector("span.callCount");
-            callCountElement.textContent = count;
-            const groupSearchElement = document.querySelector('.group_search');
-            groupSearchElement.innerHTML = '';
-            groupSearchElement.appendChild(new Option('', ''));
-            for (const key in data) {
-              groupSearchElement.appendChild(new Option(data[key], key));
-            }
+      .then(response => response.json())
+      .then(data => {
+        const count = Object.keys(data).length;
+        if (count === 0) {
+          // No followup calls found
+          setElementValue('#ca-call-group-id', '');
+          showElement('.found-no-calls');
+          hideElement('.found-multiple-calls');
+          hideElement('.group-found');
+          updateVisibility();
+        } else if (count == 1) {
+          // One previous call found. Automatically select it.
+          hideElement('.found-no-calls');
+          hideElement('.found-multiple-calls');
+          updateVisibility();
+          const dataKeys = Object.keys(data);
+          const groupId = dataKeys[0];
+          onChangeGroupSearch(groupId);
+        } else {
+          // Found multiple followup calls. User must select one.
+          hideElement('.found-no-calls');
+          showElement('.found-multiple-calls');
+          hideElement('.group-found');
+          updateVisibility();
+          setElementValue('#ca-call-group-id', '');
+          setElementTextContent('span.callCount', count);
+          const groupSearchElement = document.querySelector('.group_search');
+          groupSearchElement.innerHTML = '';
+          groupSearchElement.appendChild(new Option('', ''));
+          for (const key in data) {
+            groupSearchElement.appendChild(new Option(data[key], key));
           }
-        })
-        .catch(error => {
-          console.log('getPreviousCalls() error:');
-          console.error(error);
-        });
+        }
+      })
+      .catch(error => {
+        console.log('getPreviousCalls() error:');
+        console.error(error);
+      });
     } else {
       // No location selected
-      setElementDisplay('.found-no-calls', 'none');
-      setElementDisplay('.found-multiple-calls', 'none');
+      hideElement('.found-no-calls');
+      hideElement('.found-multiple-calls');
       updateVisibility();
     }
   } else {
-    const url = `/admin/ca-calls/get-previous-calls/${locationId}`;
-    try {
+    if (locationId) {
+      const url = `/admin/ca-calls/get-previous-calls/${locationId}`;
       fetch(url, {
         method: "GET",
         headers: {
           'Accept': 'application/json',
         },
       })
-        .then(response => response.json())
-        .then(data => {
-          var size = Object.keys(data).length;
-          if (size > 0) {
-            // Found multiple pending calls
-            document.querySelectorAll('.group_search').forEach(groupSearchElement => {
-              groupSearchElement.innerHTML = '';
-              groupSearchElement.appendChild(new Option('', ''));
-              for (const key in data) {
-                groupSearchElement.appendChild(new Option(data[key], key));
-              }
-            });
-          } else {
-            console.log('getPreviousCalls failed');
-            console.debug(data);
-          }
-        });
-    } catch (error) {
-      console.log('getPreviousCalls error:');
-      console.error(error);
+      .then(response => response.json())
+      .then(data => {
+          document.querySelectorAll('.group_search').forEach(groupSearchElement => {
+            // Clear pending calls list
+            groupSearchElement.innerHTML = '';
+            groupSearchElement.appendChild(new Option('', ''));
+            // If any pending calls were found, add them to options
+            for (const key in data) {
+              groupSearchElement.appendChild(new Option(data[key], key));
+            }
+          });
+      })
+      .catch(error => {
+        console.log('getPreviousCalls() error:');
+        console.error(error);
+      });
     }
   }
 }
@@ -703,8 +703,8 @@ function loadReturnVoicemailForm(type) {
       .then(data => {
         console.log('AJAX form loaded successfully: ' + type);
         setElementInnerHTML('#return_vm_ajax_form', data);
-        setElementDisplay('#return_vm_ajax_form', 'block');
-        setElementDisplay('#return_vm_from_invalid', 'none');
+        showElement('#return_vm_ajax_form');
+        hideElement('#return_vm_from_invalid');
         locationAutocomplete();
         triggerChangeEvents(['#call-type']);
         triggerChange('#ca-call-group-did-they-answer-vm');
@@ -715,16 +715,16 @@ function loadReturnVoicemailForm(type) {
       });
   } else {
     setElementInnerHTML('#return_vm_ajax_form', "");
-    setElementDisplay('#return_vm_ajax_form', 'none');
-    setElementDisplay('#return_vm_from_invalid', 'block');
+    hideElement('#return_vm_ajax_form');
+    showElement('#return_vm_from_invalid');
   }
 }
 
 function onChangeIsPatient(isPatient) {
   if (isPatient) {
-    setElementDisplay('.patient-data', 'none');
+    hideElement('.patient-data');
   } else {
-    setElementDisplay('.patient-data', 'block');
+    showElement('.patient-data');
   }
   updateVisibility();
   onChangePatientInfo();
@@ -778,44 +778,43 @@ function onChangeProspect(selectedProspect) {
   }
 
   if (calculatedProspect === PROSPECT_YES) {
-    setElementDisplay('.prospectTopic', 'block');
-    setElementDisplay('.nonProspectTopic', 'none');
-    setElementDisplay('.prospectUnknownTopic', 'none');
-    const wantsAppt = document.querySelector('#ca-call-group-topic-wants-appt').checked;
+    showElement('.prospectTopic');
+    hideElement('.nonProspectTopic');
+    hideElement('.prospectUnknownTopic');
+    const wantsAppt = document.querySelector('#ca-call-group-topic-wants-appt')?.checked;
     const directBookType = document.querySelector("#ca-call-group-direct-book-type")?.value;
     const isDirectBookEarqOrBp = (directBookType === DIRECT_BOOK_BLUEPRINT) || (directBookType === DIRECT_BOOK_EARQ);
     const wantsHearingTest = document.querySelector('#ca-call-group-wants-hearing-test')?.value === '1';
     if (wantsAppt && (directBookType === DIRECT_BOOK_DM) && wantsHearingTest) {
-      setElementDisplay('.directBookDm', 'block');
-      setElementDisplay('.directBookBlueprintEarQ', 'none');
-      setElementDisplay('.nonDirectBook', 'none');
+      showElement('.directBookDm');
+      hideElement('.directBookBlueprintEarQ');
+      hideElement('.nonDirectBook');
     } else if (wantsAppt && isDirectBookEarqOrBp) {
-      setElementDisplay('.directBookDm', 'none');
-      setElementDisplay('.directBookBlueprintEarQ', 'block');
-      setElementDisplay('.nonDirectBook', 'none');
+      hideElement('.directBookDm');
+      showElement('.directBookBlueprintEarQ');
+      hideElement('.nonDirectBook');
     } else {
-      setElementDisplay('.directBookDm', 'none');
-      setElementDisplay('.directBookBlueprintEarQ', 'none');
-      setElementDisplay('.nonDirectBook', 'block');
+      hideElement('.directBookDm');
+      hideElement('.directBookBlueprintEarQ');
+      showElement('.nonDirectBook');
     }
     updateVisibility();
   } else if (calculatedProspect === PROSPECT_NO) {
-    setElementDisplay('.prospectTopic', 'none');
-    setElementDisplay('.nonProspectTopic', 'block');
-    setElementDisplay('.prospectUnknownTopic', 'none');
+    hideElement('.prospectTopic');
+    showElement('.nonProspectTopic');
+    hideElement('.prospectUnknownTopic');
     updateVisibility();
-    document.querySelector('#ca-call-group-score').value = '';
-    document.querySelector('#ca-call-group-score').dispatchEvent(new Event('change', { bubbles: true }));
+    setElementValue('#ca-call-group-score', '');
   } else if (calculatedProspect === PROSPECT_UNKNOWN) {
-    setElementDisplay('.prospectTopic', 'none');
-    setElementDisplay('.nonProspectTopic', 'none');
-    setElementDisplay('.prospectUnknownTopic', 'block');
+    hideElement('.prospectTopic');
+    hideElement('.nonProspectTopic');
+    showElement('.prospectUnknownTopic');
     updateVisibility();
   } else {
     // disconnected - no need to show any further script
-    setElementDisplay('.prospectTopic', 'none');
-    setElementDisplay('.nonProspectTopic', 'none');
-    setElementDisplay('.prospectUnknownTopic', 'none');
+    hideElement('.prospectTopic');
+    hideElement('.nonProspectTopic');
+    hideElement('.prospectUnknownTopic');
     updateVisibility();
   }
 }
@@ -823,8 +822,8 @@ function onChangeProspect(selectedProspect) {
 function onChangeScore(score) {
   if (score === SCORE_APPT_SET || score === SCORE_APPT_SET_DIRECT) {
     // Appointment set
-    setElementDisplay('.appt_date', 'block');
-    setElementDisplay('.scheduled_call_date', 'none');
+    showElement('.appt_date');
+    hideElement('.scheduled_call_date');
     updateVisibility();
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
@@ -832,7 +831,7 @@ function onChangeScore(score) {
     }
   } else if (score === SCORE_TENTATIVE_APPT) {
     // Left a voicemail with clinic - followup in 48 hours to verify if appointment has been set
-    setElementDisplay('.appt_date', 'none');
+    hideElement('.appt_date');
     setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic (" + easternTimezone + ")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
@@ -840,15 +839,15 @@ function onChangeScore(score) {
       const nextCallDate = new Date();
       nextCallDate.setDate(nextCallDate.getDate() + 2);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
-      setElementDisplay('.scheduled_call_date', 'block');
+      showElement('.scheduled_call_date');
     }
     if (IS_CALL_GROUP_EDIT_PAGE) {
-      setElementDisplay('.scheduled_call_date', 'block');
+      showElement('.scheduled_call_date');
     }
     updateVisibility();
   } else if (score === SCORE_NOT_REACHED) {
     // Clinic not reached - needs followup to set appt
-    setElementDisplay('.appt_date', 'none');
+    hideElement('.appt_date');
     setElementInnerHTML('#scheduled-call-date-label', "Next attempt to reach clinic (" + easternTimezone + ")");
     // Do not modify the call date if we are loading the page and call date is already set
     if (pageLoadComplete || !isCallDateSet) {
@@ -856,23 +855,27 @@ function onChangeScore(score) {
       const callDate = new Date();
       callDate.setMinutes(callDate.getMinutes() + 15);
       setDateField('#ca-call-group-scheduled-call-date', callDate);
-      setElementDisplay('.scheduled_call_date', 'block');
+      showElement('.scheduled_call_date');
     }
     if (IS_CALL_GROUP_EDIT_PAGE) {
-      setElementDisplay('.scheduled_call_date', 'block');
+      showElement('.scheduled_call_date');
     }
     updateVisibility();
   } else {
     // Non-prospect/missed opportunity
-    setElementDisplay('.appt_date', 'none');
-    setElementDisplay('.scheduled_call_date', 'none');
+    hideElement('.appt_date');
+    hideElement('.scheduled_call_date');
     // Disable any fields that are required and hidden, or the form will fail to validate.
     updateVisibility();
   }
 }
 
+function onChangeStatus(status) {
+  setElementTextContent('span.status', statuses[status]);
+}
+
 async function onChangeGroupSearch(group_id) {
-  setElementDisplay('.lock-error', 'none');
+  hideElement('.lock-error');
   if (group_id) {
     try {
       fetch(`/admin/ca-calls/get-call-group-data/${group_id}`, {
@@ -885,13 +888,15 @@ async function onChangeGroupSearch(group_id) {
         .then(data => {
           if (data["lock_error"] === true) {
             console.log('getCallGroupData failed. Locked.');
-            setElementDisplay('.lock-error', 'block');
-            setElementDisplay('.group-found', 'none');
+            showElement('.lock-error');
+            hideElement('.group-found');
             updateVisibility();
-            document.querySelector("span.lockTime").textContent = data["lock_time"];
-            document.querySelector("span.lockedBy").textContent = data["locked_by"];
-            document.querySelector("#ca-call-group-id").value = group_id;
-            document.querySelector("#ca-call-ca-call-group-id").value = group_id;
+            setElementTextContent('span.lockTime', data["lock_time"]);
+            setElementTextContent('span.lockedBy', data["locked_by"]);
+            setElementValue('#ca-call-group-id', group_id);
+            setElementValue('#ca-call-ca-call-group-id', group_id);
+          } else if (data["user_error"] === true) {
+            console.error('getCallGroupData error: User ID is null.');
           } else {
             handleCallGroupChange(data);
           }
@@ -907,52 +912,51 @@ async function onChangeGroupSearch(group_id) {
 
 function handleCallGroupChange(data) {
   if (data && data["id"]) {
-    document.querySelector("span.callGroupId").textContent = data["id"];
-    document.querySelector("#ca-call-ca-call-group-id").value = data["id"];
-    document.querySelector("#ca-call-group-id").value = data["id"];
-    document.querySelector("#ca-call-group-status").value = data["status"];
-    document.querySelector("span.status").textContent = statuses[data["status"]];
+    setElementTextContent('span.callGroupId', data['id']);
+    setElementValue('#ca-call-ca-call-group-id', data['id']);
+    setElementValue('#ca-call-group-id', data['id']);
+    setElementValue('#ca-call-group-status', data['status']);
     showGroupFound();
-    document.querySelector("#ca-call-group-caller-first-name").value = data["caller_first_name"];
-    document.querySelector("#ca-call-group-caller-last-name").value = data["caller_last_name"];
-    document.querySelector("#ca-call-group-caller-phone").value = data["caller_phone"];
-    document.querySelector("#ca-call-group-is-patient").checked = data["is_patient"];
-    document.querySelector("#ca-call-group-patient-first-name").value = data["patient_first_name"];
-    document.querySelector("#ca-call-group-patient-last-name").value = data["patient_last_name"];
-    document.querySelector("#ca-call-group-topic-wants-appt").checked = data["topic_wants_appt"];
-    document.querySelector("#ca-call-group-topic-clinic-hours").checked = data["topic_clinic_hours"];
-    document.querySelector("#ca-call-group-topic-insurance").checked = data["topic_insurance"];
-    document.querySelector("#ca-call-group-topic-clinic-inquiry").checked = data["topic_clinic_inquiry"];
-    document.querySelector("#ca-call-group-topic-aid-lost-old").checked = data["topic_aid_lost_old"];
-    document.querySelector("#ca-call-group-topic-aid-lost-new").checked = data["topic_aid_lost_new"];
-    document.querySelector("#ca-call-group-topic-warranty-old").checked = data["topic_warranty_old"];
-    document.querySelector("#ca-call-group-topic-warranty-new").checked = data["topic_warranty_new"];
-    document.querySelector("#ca-call-group-topic-batteries").checked = data["topic_batteries"];
-    document.querySelector("#ca-call-group-topic-parts").checked = data["topic_parts"];
-    document.querySelector("#ca-call-group-topic-cancel-appt").checked = data["topic_cancel_appt"];
-    document.querySelector("#ca-call-group-topic-reschedule-appt").checked = data["topic_reschedule_appt"];
-    document.querySelector("#ca-call-group-topic-appt-followup").checked = data["topic_appt_followup"];
-    document.querySelector("#ca-call-group-topic-medical-records").checked = data["topic_medical_records"];
-    document.querySelector("#ca-call-group-topic-tinnitus").checked = data["topic_tinnitus"];
-    document.querySelector("#ca-call-group-topic-medical-inquiry").checked = data["topic_medical_inquiry"];
-    document.querySelector("#ca-call-group-topic-solicitor").checked = data["topic_solicitor"];
-    document.querySelector("#ca-call-group-topic-personal-call").checked = data["topic_personal_call"];
-    document.querySelector("#ca-call-group-topic-request-fax").checked = data["topic_request_fax"];
-    document.querySelector("#ca-call-group-topic-request-name").checked = data["topic_request_name"];
-    document.querySelector("#ca-call-group-topic-remove-from-list").checked = data["topic_remove_from_list"];
-    document.querySelector("#ca-call-group-topic-foreign-language").checked = data["topic_foreign_language"];
-    document.querySelector("#ca-call-group-topic-other").checked = data["topic_other"];
-    document.querySelector("#ca-call-group-topic-declined").checked = data["topic_declined"];
-    document.querySelector("#ca-call-group-prospect").value = data["prospect"];
+    setElementValue('#ca-call-group-caller-first-name', data['caller_first_name']);
+    setElementValue('#ca-call-group-caller-last-name', data['caller_last_name']);
+    setElementValue('#ca-call-group-caller-phone', data['caller_phone']);
+    setElementChecked('#ca-call-group-is-patient', data['is_patient']);
+    setElementValue('#ca-call-group-patient-first-name', data['patient_first_name']);
+    setElementValue('#ca-call-group-patient-last-name', data['patient_last_name']);
+    setElementChecked('#ca-call-group-topic-wants-appt', data['topic_wants_appt']);
+    setElementChecked('#ca-call-group-topic-clinic-hours', data['topic_clinic_hours']);
+    setElementChecked('#ca-call-group-topic-insurance', data['topic_insurance']);
+    setElementChecked('#ca-call-group-topic-clinic-inquiry', data['topic_clinic_inquiry']);
+    setElementChecked('#ca-call-group-topic-aid-lost-old', data['topic_aid_lost_old']);
+    setElementChecked('#ca-call-group-topic-aid-lost-new', data['topic_aid_lost_new']);
+    setElementChecked('#ca-call-group-topic-warranty-old', data['topic_warranty_old']);
+    setElementChecked('#ca-call-group-topic-warranty-new', data['topic_warranty_new']);
+    setElementChecked('#ca-call-group-topic-batteries', data['topic_batteries']);
+    setElementChecked('#ca-call-group-topic-parts', data['topic_parts']);
+    setElementChecked('#ca-call-group-topic-cancel-appt', data['topic_cancel_appt']);
+    setElementChecked('#ca-call-group-topic-reschedule-appt', data['topic_reschedule_appt']);
+    setElementChecked('#ca-call-group-topic-appt-followup', data['topic_appt_followup']);
+    setElementChecked('#ca-call-group-topic-medical-records', data['topic_medical_records']);
+    setElementChecked('#ca-call-group-topic-tinnitus', data['topic_tinnitus']);
+    setElementChecked('#ca-call-group-topic-medical-inquiry', data['topic_medical_inquiry']);
+    setElementChecked('#ca-call-group-topic-solicitor', data['topic_solicitor']);
+    setElementChecked('#ca-call-group-topic-personal-call', data['topic_personal_call']);
+    setElementChecked('#ca-call-group-topic-request-fax', data['topic_request_fax']);
+    setElementChecked('#ca-call-group-topic-request-name', data['topic_request_name']);
+    setElementChecked('#ca-call-group-topic-remove-from-list', data['topic_remove_from_list']);
+    setElementChecked('#ca-call-group-topic-foreign-language', data['topic_foreign_language']);
+    setElementChecked('#ca-call-group-topic-other', data['topic_other']);
+    setElementChecked('#ca-call-group-topic-declined', data['topic_declined']);
+    setElementValue('#ca-call-group-prospect', data['prospect']);
     if (!IS_CLINIC_LOOKUP_PAGE) {
       // Don't overwrite the front desk name on the clinic lookup page
-      document.querySelector("#ca-call-group-front-desk-name").value = data["front_desk_name"];
+      setElementValue('#ca-call-group-front-desk-name', data['front_desk_name']);
     }
-    document.querySelector("#ca-call-group-score").value = data["score"];
-    document.querySelector("#ca-call-group-is-review-needed").checked = data["is_review_needed"];
-    if (document.querySelector("#ca-call-group-location-id").value != data["location_id"]) {
+    setElementValue('#ca-call-group-score', data['score']);
+    setElementChecked('#ca-call-group-is-review-needed', data['is_review_needed']);
+    if (document.querySelector('#ca-call-group-location-id').value != data['location_id']) {
       // Only trigger a location change if different
-      document.querySelector("#ca-call-group-location-id").value = data["location_id"];
+      setElementValue('#ca-call-group-location-id', data['location_id']);
     }
     setDateField("#ca-call-group-appt-date", data["appt_date"]);
     setDateField("#ca-call-group-scheduled-call-date", data["scheduled_call_date"]);
@@ -962,9 +966,7 @@ function handleCallGroupChange(data) {
 }
 
 function clearAllFields() {
-  document.querySelectorAll("span.callGroupId").forEach((element) => {
-    element.textContent = "";
-  });
+  setElementTextContent('span.callGroupId', '');
 
   const elementsToClear = [
     "#ca-call-ca-call-group-id",
@@ -1014,21 +1016,14 @@ function clearAllFields() {
   ];
 
   checkboxesToUncheck.forEach((element) => {
-    var selector = document.querySelector(element);
-    if (selector) {
-      selector.checked = false;
-    }
+    setElementChecked(element, false);
   });
 
-  document.querySelector("#ca-call-group-status").value = statuses[STATUS_NEW];
-  document.querySelector("span.status").textContent = statuses[STATUS_NEW];
+  setElementValue('#ca-call-group-status', STATUS_NEW);
   showGroupFound();
 
-  document.querySelector("#ca-call-group-prospect").value = PROSPECT_NO;
-  document.querySelector("#ca-call-group-prospect").dispatchEvent(new Event("change"));
-
-  document.querySelector("#ca-call-group-score").value = "";
-  document.querySelector("#ca-call-group-score").dispatchEvent(new Event("change"));
+  setElementValue('#ca-call-group-prospect', PROSPECT_NO);
+  setElementValue('#ca-call-group-score', '');
 
   const locationSearchInput = document.querySelector("#location-search");
   const locationIdInput = document.querySelector("#ca-call-group-location-id");
@@ -1056,9 +1051,9 @@ function doWeHaveLocationAndFrontDesk() {
     }
   }
   if (doWeHaveLocationAndFrontDesk) {
-    setElementDisplay('.have-location-and-front-desk', 'block');
+    showElement('.have-location-and-front-desk');
   } else {
-    setElementDisplay('.have-location-and-front-desk', 'none');
+    hideElement('.have-location-and-front-desk');
   }
 
   updateVisibility();
@@ -1068,11 +1063,11 @@ function doWeHaveLocationInitially() {
   const locationId = document.querySelector("#ca-call-group-location-id");
 
   if (locationId && (parseInt(locationId.value) > 0)) {
-    setElementDisplay('.init_have_location', 'block');
-    setElementDisplay('.init_no_location', 'none');
+    showElement('.init_have_location');
+    hideElement('.init_no_location');
   } else {
-    setElementDisplay('.init_have_location', 'none');
-    setElementDisplay('.init_no_location', 'block');
+    hideElement('.init_have_location');
+    showElement('.init_no_location');
   }
 
   updateVisibility();
@@ -1085,7 +1080,7 @@ function showGroupFound() {
 
   if (groupId && frontDeskName) {
     const groupNotLoaded = groupFoundElement && (groupFoundElement.dataset.groupId !== groupId);
-    const isGroupLocked = document.querySelector(".lock-error") && document.querySelector(".lock-error").style.display === "block";
+    const isGroupLocked = document.querySelector(".lock-error") && !isHidden('.lock-error');
 
     if (groupNotLoaded && !isGroupLocked) {
       groupFoundElement.dataset.groupId = groupId;
@@ -1102,19 +1097,19 @@ function showGroupFound() {
           }
 
           setElementInnerHTML('.group-found', data);
-          setElementDisplay('.group-found', 'block');
+          showElement('.group-found');
           onPageLoad();
           triggerChangeEvents(["#ca-call-group-location-id", "#call-type"]);
           setElementInnerHTML('span.locationTitle', locationTitle);
         });
     }
 
-    setElementDisplay('.group-found-buttons', 'block');
+    showElement('.group-found-buttons');
     updateVisibility();
   } else {
     setElementInnerHTML('.group-found', "");
-    setElementDisplay('.group-found', 'none');
-    setElementDisplay('.group-found-buttons', 'none');
+    hideElement('.group-found');
+    hideElement('.group-found-buttons');
     updateVisibility();
   }
 }
@@ -1128,16 +1123,12 @@ function onChangeApptDate() {
 }
 
 function onChangeCallerFirstName(callerFirstName) {
-  document.querySelectorAll('span.callerFirstName').forEach(element => {
-    element.textContent = callerFirstName;
-  });
+  setElementTextContent('span.callerFirstName', callerFirstName);
   onChangePatientInfo();
 }
 
 function onChangeCallerLastName(callerLastName) {
-  document.querySelectorAll('span.callerLastName').forEach(element => {
-    element.textContent = callerLastName;
-  });
+  setElementTextContent('span.callerLastName', callerLastName);
   onChangePatientInfo();
 }
 
@@ -1148,55 +1139,47 @@ function onChangeCallerPhone(callerPhone) {
   } else if (callerPhone.length === 11) {
     formattedPhone = callerPhone.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '$1-$2-$3-$4');
   }
-  document.querySelectorAll('span.callerPhone').forEach(element => {
-    element.textContent = formattedPhone;
-  });
+  setElementTextContent('span.callerPhone', formattedPhone);
 }
 
 function onChangePatientInfo() {
   const isPatient = document.querySelector('#ca-call-group-is-patient, #is-patient').checked;
   if (isPatient) {
-    setElementDisplay('span.not-self', 'none');
-    setElementDisplay('span.self', 'block');
-    setElementDisplay('span.isNotPatient', 'none');
+    hideElement('span.not-self');
+    showElement('span.self');
+    hideElement('span.isNotPatient');
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
       const callerFirstName = document.querySelector('#ca-call-group-caller-first-name, #caller-first-name').value;
       const callerLastName = document.querySelector('#ca-call-group-caller-last-name, #caller-last-name').value;
-      patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
+      setElementTextContent('span.patientName', callerFirstName + ' ' + callerLastName);
     }
   } else {
-    setElementDisplay('span.isNotPatient', 'block');
+    showElement('span.isNotPatient');
+    showElement('span.not-self');
+    hideElement('span.self');
     const patientNameElement = document.querySelector('span.patientName');
     if (patientNameElement) {
       const patientFirstName = document.querySelector('#ca-call-group-patient-first-name, #patient-first-name').value;
       const patientLastName = document.querySelector('#ca-call-group-patient-last-name, #patient-last-name').value;
-      patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
+      setElementTextContent('span.patientName', patientFirstName + ' ' + patientLastName);
     }
-    setElementDisplay('span.not-self', 'block');
-    setElementDisplay('span.self', 'none');
   }
 }
 
 function onChangeFrontDeskName(frontDeskName) {
-  document.querySelectorAll('span.frontDeskName').forEach(element => {
-    element.textContent = frontDeskName;
-  });
+  setElementTextContent('span.frontDeskName', frontDeskName);
   doWeHaveLocationAndFrontDesk();
   showGroupFound();
 }
 
 function setDateField(selector, date) {
   // TODO: Do we want to round to nearest 15 minutes?
-  document.querySelector(selector).value = formatDateTime(date);
+  setElementValue(selector, formatDateTime(date));
 }
 
-function isHidden(el) {
-  return (el.offsetParent === null);
-}
-
-function updateVisibility(className = 'form_fields') {
-  document.querySelectorAll('.' + className + ' input, .' + className + ' select').forEach(input => {
+export function updateVisibility(className = 'form_fields') {
+  document.querySelectorAll('.' + className + ' input, .' + className + ' select, fieldset input, fieldset select').forEach(input => {
     // Don't disable inputs with 'hidden' type
     if (input.type !== 'hidden') {
       if (isHidden(input)) {
@@ -1252,9 +1235,9 @@ function onChangeTopicWantsAppt(wantsAppt) {
 
   // If wants appt and this is a direct book DM location, show the hearing test question
   if (wantsAppt && isDirectBookDm) {
-    setElementDisplay('.wantsHearingTest', 'block');
+    showElement('.wantsHearingTest');
   } else {
-    setElementDisplay('.wantsHearingTest', 'none');
+    hideElement('.wantsHearingTest');
   }
 
   updateVisibility();
@@ -1262,70 +1245,63 @@ function onChangeTopicWantsAppt(wantsAppt) {
 
 function onChangeConsumerConsent(consumerConsent) {
   if (consumerConsent === 'yes') {
-    setElementDisplay('.consumerConsentYes', 'block');
-    setElementDisplay('.consumerConsentNo', 'none');
+    showElement('.consumerConsentYes');
+    hideElement('.consumerConsentNo');
     setElementInnerHTML('span.callTransferInstructions', "[Mute and listen to appointment info]");
   } else if (consumerConsent === 'no') {
-    setElementDisplay('.consumerConsentYes', 'none');
-    setElementDisplay('.consumerConsentNo', 'block');
+    hideElement('.consumerConsentYes');
+    showElement('.consumerConsentNo');
     setElementInnerHTML('span.callTransferInstructions', "[Hang up and score as 'Tentative appointment'.]");
-    document.getElementById('ca-call-group-score').value = SCORE_TENTATIVE_APPT;
-    document.getElementById('ca-call-group-score').dispatchEvent(new Event('change', { bubbles: true }));
+    setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
   }
 }
 
 function onChangeDidClinicAnswer(didClinicAnswer) {
-  const callGroupScore = document.getElementById('ca-call-group-score');
-
-  setElementDisplay('.prospectOptions', 'block');
+  showElement('.prospectOptions');
 
   if (didClinicAnswer === 'yes') {
-    setElementDisplay('.didClinicAnswerYes', 'block');
-    setElementDisplay('.didClinicAnswerNo', 'none');
-    setElementDisplay('.didClinicAnswerVm', 'none');
+    showElement('.didClinicAnswerYes');
+    hideElement('.didClinicAnswerNo');
+    hideElement('.didClinicAnswerVm');
     updateVisibility();
-    callGroupScore.value = '';
-    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+    setElementValue('#ca-call-group-score', '');
   } else if (didClinicAnswer === 'no') {
-    setElementDisplay('.didClinicAnswerYes', 'none');
-    setElementDisplay('.didClinicAnswerNo', 'block');
-    setElementDisplay('.didClinicAnswerVm', 'none');
+    hideElement('.didClinicAnswerYes');
+    showElement('.didClinicAnswerNo');
+    hideElement('.didClinicAnswerVm');
     updateVisibility();
     const groupProspect = document.getElementById('ca-call-group-prospect').value;
     if (groupProspect === PROSPECT_YES) {
       if (document.getElementById('ca-call-group-refused-name').checked) {
-        callGroupScore.value = SCORE_MISSED_OPPORTUNITY;
+        setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
       } else {
-        callGroupScore.value = SCORE_NOT_REACHED;
+        setElementValue('#ca-call-group-score', SCORE_NOT_REACHED);
       }
-      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else if (didClinicAnswer === 'vm') {
     // No, but we can leave a voicemail
-    setElementDisplay('.didClinicAnswerYes', 'none');
-    setElementDisplay('.didClinicAnswerNo', 'none');
-    setElementDisplay('.didClinicAnswerVm', 'block');
-    setElementDisplay('.followupForm', 'block');
+    hideElement('.didClinicAnswerYes');
+    hideElement('.didClinicAnswerNo');
+    showElement('.didClinicAnswerVm');
+    showElement('.followupForm');
     updateVisibility();
     if (document.getElementById('ca-call-group-prospect').value === PROSPECT_YES) {
-      callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+      setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
     }
   } else if (didClinicAnswer === 'cr') {
     // caller refused
-    callGroupScore.value = SCORE_DISCONNECTED;
-    setElementDisplay('.prospectOptions', 'none');
-    setElementDisplay('.didClinicAnswerYes', 'none');
-    setElementDisplay('.didClinicAnswerNo', 'none');
-    setElementDisplay('.didClinicAnswerVm', 'none');
+    setElementValue('#ca-call-group-score', SCORE_DISCONNECTED);
+    hideElement('.prospectOptions');
+    hideElement('.didClinicAnswerYes');
+    hideElement('.didClinicAnswerNo');
+    hideElement('.didClinicAnswerVm');
     updateVisibility();
   } else {
-    setElementDisplay('.didClinicAnswerYes', 'none');
-    setElementDisplay('.didClinicAnswerNo', 'none');
-    setElementDisplay('.didClinicAnswerVm', 'none');
-    setElementDisplay('.scheduled_call_date', 'block');
-    callGroupScore.value = '';
-    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+    hideElement('.didClinicAnswerYes');
+    hideElement('.didClinicAnswerNo');
+    hideElement('.didClinicAnswerVm');
+    showElement('.scheduled_call_date');
+    setElementValue('#ca-call-group-score', '');
     updateVisibility();
   }
 }
@@ -1334,29 +1310,29 @@ function onChangeDidTheyAnswerVm(didTheyAnswer) {
   const callDate = new Date();
 
   if (didTheyAnswer === 'yes') {
-    setElementDisplay('#didTheyAnswerYes', 'block');
-    setElementDisplay('#didTheyAnswerNo', 'none');
-    setElementDisplay('#didTheyAnswerVm', 'none');
+    showElement('#didTheyAnswerYes');
+    hideElement('#didTheyAnswerNo');
+    hideElement('#didTheyAnswerVm');
     updateVisibility();
   } else if (didTheyAnswer === 'vm') {
-    setElementDisplay('#didTheyAnswerYes', 'none');
-    setElementDisplay('#didTheyAnswerNo', 'none');
-    setElementDisplay('#didTheyAnswerVm', 'block');
+    hideElement('#didTheyAnswerYes');
+    hideElement('#didTheyAnswerNo');
+    showElement('#didTheyAnswerVm');
     updateVisibility();
   } else if (didTheyAnswer === 'noAttempt') {
-    setElementDisplay('#didTheyAnswerYes', 'none');
-    setElementDisplay('#didTheyAnswerNo', 'block');
-    setElementDisplay('#didTheyAnswerNo .scheduled_call_date', 'block');
-    setElementDisplay('#didTheyAnswerVm', 'none');
+    hideElement('#didTheyAnswerYes');
+    showElement('#didTheyAnswerNo');
+    showElement('#didTheyAnswerNo .scheduled_call_date');
+    hideElement('#didTheyAnswerVm');
     updateVisibility();
     // Default next call time to 2 hours from now
     callDate.setMinutes(callDate.getMinutes() + 120);
     setDateField('#NoAnswerScheduledCallDate', callDate);
   } else {
-    setElementDisplay('#didTheyAnswerYes', 'none');
-    setElementDisplay('#didTheyAnswerNo', 'block');
-    setElementDisplay('#didTheyAnswerNo .scheduled_call_date', 'block');
-    setElementDisplay('#didTheyAnswerVm', 'none');
+    hideElement('#didTheyAnswerYes');
+    showElement('#didTheyAnswerNo');
+    showElement('#didTheyAnswerNo .scheduled_call_date');
+    hideElement('#didTheyAnswerVm');
     updateVisibility();
     // Default next call time to 30 minutes from now
     callDate.setMinutes(callDate.getMinutes() + 30);
@@ -1366,32 +1342,30 @@ function onChangeDidTheyAnswerVm(didTheyAnswer) {
 
 function onChangeDidTheyAnswerFollowup(answer) {
   const callType = document.querySelector("#call-type").value;
-  const callGroupScore = document.querySelector('#ca-call-group-score');
 
   if (answer === 'yes') {
-    setElementDisplay('.didTheyAnswerFollowupYes', 'block');
-    setElementDisplay('.didTheyAnswerFollowupNo', 'none');
-    setElementDisplay('.didTheyAnswerFollowupVm', 'none');
-    setElementDisplay('.scheduled_call_date', 'none');
+    showElement('.didTheyAnswerFollowupYes');
+    hideElement('.didTheyAnswerFollowupNo');
+    hideElement('.didTheyAnswerFollowupVm');
+    hideElement('.scheduled_call_date');
   } else if (answer === 'vm') {
     const prospect = document.querySelector("#ca-call-group-prospect").value;
-    setElementDisplay('.didTheyAnswerFollowupYes', 'none');
-    setElementDisplay('.didTheyAnswerFollowupNo', 'none');
-    setElementDisplay('.didTheyAnswerFollowupVm', 'block');
+    hideElement('.didTheyAnswerFollowupYes');
+    hideElement('.didTheyAnswerFollowupNo');
+    showElement('.didTheyAnswerFollowupVm');
     if (callType === CALL_TYPE_FOLLOWUP_NO_ANSWER || prospect === PROSPECT_NO) {
-      setElementDisplay('.followupForm', 'none');
-      setElementDisplay('.scheduled_call_date"', 'none');
+      hideElement('.followupForm');
+      hideElement('.scheduled_call_date"');
     } else {
-      setElementDisplay('.followupForm', 'block');
-      callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+      showElement('.followupForm');
+      setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
     }
   } else { // NO
-    setElementDisplay('.didTheyAnswerFollowupYes', 'none');
-    setElementDisplay('.didTheyAnswerFollowupNo', 'block');
-    setElementDisplay('.didTheyAnswerFollowupVm', 'none');
-    setElementDisplay('.followupForm', 'none');
-    setElementDisplay('.scheduled_call_date', 'block');
+    hideElement('.didTheyAnswerFollowupYes');
+    showElement('.didTheyAnswerFollowupNo');
+    hideElement('.didTheyAnswerFollowupVm');
+    hideElement('.followupForm');
+    showElement('.scheduled_call_date');
     const nextCallDate = new Date();
     if (callType === CALL_TYPE_FOLLOWUP_APPT) {
       let nextCallMinutes = 15;
@@ -1431,124 +1405,111 @@ function onChangeDidTheyAnswerFollowup(answer) {
 
 function onChangeDidConsumerAnswer(answer) {
   const callType = document.querySelector("#call-type").value;
-  const callGroupScore = document.querySelector("#ca-call-group-score");
   const nextCallDate = new Date();
   if (answer === 'yes') {
-    setElementDisplay('.didConsumerAnswerYes', 'block');
-    setElementDisplay('.didConsumerAnswerNo', 'none');
-    setElementDisplay('.didConsumerAnswerVm', 'none');
-    setElementDisplay('.didConsumerAnswerInvalid', 'none');
-    setElementDisplay('.followupForm', 'block');
-    setElementDisplay('.scheduled_call_date', 'none');
+    showElement('.didConsumerAnswerYes');
+    hideElement('.didConsumerAnswerNo');
+    hideElement('.didConsumerAnswerVm');
+    hideElement('.didConsumerAnswerInvalid');
+    showElement('.followupForm');
+    hideElement('.scheduled_call_date');
   } else if (answer === 'vm') {
-    setElementDisplay('.didConsumerAnswerYes', 'non');
-    setElementDisplay('.didConsumerAnswerNo', 'none');
-    setElementDisplay('.didConsumerAnswerVm', 'block');
-    setElementDisplay('.didConsumerAnswerInvalid', 'none');
+    hideElement('.didConsumerAnswerYes');
+    hideElement('.didConsumerAnswerNo');
+    showElement('.didConsumerAnswerVm');
+    hideElement('.didConsumerAnswerInvalid');
     if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST) {
-      setElementDisplay('.scheduled_call_date', 'block');
+      showElement('.scheduled_call_date');
       nextCallDate.setMinutes(nextCallDate.getMinutes() + 240);
       setDateField('#ca-call-group-scheduled-call-date', nextCallDate);
     } else {
-      setElementDisplay('.followupForm', 'block');
-      callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+      showElement('.followupForm');
+      setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
     }
   } else if (answer === 'invalid') {
-    setElementDisplay('.didConsumerAnswerYes', 'non');
-    setElementDisplay('.didConsumerAnswerNo', 'none');
-    setElementDisplay('.didConsumerAnswerVm', 'none');
-    setElementDisplay('.didConsumerAnswerInvalid', 'block');
-    setElementDisplay('.followupForm', 'block');
-    callGroupScore.value = SCORE_DISCONNECTED;
-    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+    hideElement('.didConsumerAnswerYes');
+    hideElement('.didConsumerAnswerNo');
+    hideElement('.didConsumerAnswerVm');
+    showElement('.didConsumerAnswerInvalid');
+    showElement('.followupForm');
+    setElementValue('#ca-call-group-score', SCORE_DISCONNECTED);
   } else { // NO
     const prospect = document.querySelector("#ca-call-group-prospect").value;
-    setElementDisplay('.didConsumerAnswerYes', 'non');
-    setElementDisplay('.didConsumerAnswerNo', 'block');
-    setElementDisplay('.didConsumerAnswerVm', 'none');
-    setElementDisplay('.didConsumerAnswerInvalid', 'none');
+    hideElement('.didConsumerAnswerYes');
+    showElement('.didConsumerAnswerNo');
+    hideElement('.didConsumerAnswerVm');
+    hideElement('.didConsumerAnswerInvalid');
     if (callType === CALL_TYPE_FOLLOWUP_APPT_REQUEST_DIRECT || prospect === PROSPECT_NO) {
-      setElementDisplay('.followupForm', 'none');
+      hideElement('.followupForm');
     } else {
-      setElementDisplay('.followupForm', 'block');
-      callGroupScore.value = SCORE_TENTATIVE_APPT;
-      callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+      showElement('.followupForm');
+      setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
     }
   }
   updateVisibility();
 }
 
 function onChangeDidConsumerAnswer2(answer) {
-  const callGroupScore = document.querySelector("#ca-call-group-score");
-
   if (answer === 'yes') {
-    setElementDisplay('.didConsumerAnswer2Yes', 'block');
-    setElementDisplay('.didConsumerAnswer2No', 'none');
-    setElementDisplay('.followupForm', 'block');
-    setElementDisplay('.scheduled_call_date', 'none');
+    showElement('.didConsumerAnswer2Yes');
+    hideElement('.didConsumerAnswer2No');
+    showElement('.followupForm');
+    hideElement('.scheduled_call_date');
   } else { // NO
-    setElementDisplay('.didConsumerAnswer2Yes', 'none');
-    setElementDisplay('.didConsumerAnswer2No', 'block');
-    setElementDisplay('.followupForm', 'block');
-    callGroupScore.value = SCORE_TENTATIVE_APPT;
-    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+    hideElement('.didConsumerAnswer2Yes');
+    showElement('.didConsumerAnswer2No');
+    showElement('.followupForm');
+    setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
   }
   updateVisibility();
 }
 
 function onChangeDidTheyWantHelp(answer) {
   if (answer === 1) { // YES
-    setElementDisplay('.wantHelpYes', 'block');
-    setElementDisplay('.wantHelpNo', 'none');
+    showElement('.wantHelpYes');
+    hideElement('.wantHelpNo');
   } else { // NO
-    setElementDisplay('.wantHelpYes', 'none');
-    setElementDisplay('.wantHelpNo', 'block');
+    hideElement('.wantHelpYes');
+    showElement('.wantHelpNo');
   }
   updateVisibility();
 }
 
 function onChangeDidClinicContactConsumer(answer) {
   const callType = document.querySelector("#call-type").value;
-  const callGroupScore = document.querySelector("#ca-call-group-score");
 
   if (answer === 1) { // YES
-    setElementDisplay('.didClinicContactConsumerYes', 'block');
-    setElementDisplay('.didClinicContactConsumerNo', 'none');
-    setElementDisplay('.followupForm', 'block');
+    showElement('.didClinicContactConsumerYes');
+    hideElement('.didClinicContactConsumerNo');
+    showElement('.followupForm');
   } else { // NO
-    setElementDisplay('.didClinicContactConsumerYes', 'none');
-    setElementDisplay('.didClinicContactConsumerNo', 'block');
-    document.querySelector('#ca-call-group-did-they-want-help').value = '';
-    callGroupScore.value = SCORE_MISSED_OPPORTUNITY;
-    callGroupScore.dispatchEvent(new Event('change', { bubbles: true }));
+    hideElement('.didClinicContactConsumerYes');
+    showElement('.didClinicContactConsumerNo');
+    setElementValue('#ca-call-group-did-they-want-help', '');
+    setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
     if (callType === CALL_TYPE_FOLLOWUP_TENTATIVE_APPT) {
-      setElementDisplay('.followupForm', 'block');
+      showElement('.followupForm');
     } else { // CALL_TYPE_FOLLOWUP_NO_ANSWER
-      setElementDisplay('.followupForm', 'none');
+      hideElement('.followupForm');
     }
   }
   updateVisibility();
 }
 
 function onChangeRefusedName() {
-  const topicDeclined = document.querySelector('#ca-call-group-topic-declined');
-
   if (document.getElementById('ca-call-group-refused-name').checked) {
-    setElementDisplay('.refusedNameNo', 'none');
-    setElementDisplay('.refusedNameYes', 'block');
+    hideElement('.refusedNameNo');
+    showElement('.refusedNameYes');
     if (pageLoadComplete) {
-      topicDeclined.checked = true;
-      topicDeclined.dispatchEvent(new Event('change', { bubbles: true }));
+      setElementChecked('#ca-call-group-topic-declined', true);
     }
     // Don't leave vm at clinic if we don't know caller name
     document.querySelector("#ca-call-group-did-clinic-answer option[value='vm']").remove();
   } else {
-    setElementDisplay('.refusedNameNo', 'block');
-    setElementDisplay('.refusedNameYes', 'none');
+    showElement('.refusedNameNo');
+    hideElement('.refusedNameYes');
     if (pageLoadComplete) {
-      topicDeclined.checked = false;
-      topicDeclined.dispatchEvent(new Event('change', { bubbles: true }));
+      setElementChecked('#ca-call-group-topic-declined', false);
     }
     if (document.querySelector("#ca-call-group-did-clinic-answer")) {
       if (document.querySelector("#ca-call-group-did-clinic-answer option[value='vm']").length === 0) {
@@ -1560,28 +1521,26 @@ function onChangeRefusedName() {
 }
 
 function onChangeDidClinicRefuse() {
-  const didClinicRefuseYes = document.querySelector(".didClinicRefuseYes");
-  const isReviewNeeded = document.querySelector('#ca-call-group-is-review-needed');
-  const score = document.querySelector('#ca-call-group-score');
   if (document.querySelector('#ca-call-group-did-clinic-refuse').checked) {
-    setElementDisplay('.didClinicRefuseYes', 'block');
+    showElement('.didClinicRefuseYes');
     if (pageLoadComplete) {
-      isReviewNeeded.checked = true;
-      score.value = SCORE_MISSED_OPPORTUNITY;
-      score.dispatchEvent(new Event('change', { bubbles: true }));
+      setElementChecked('#ca-call-group-is-review-needed', true);
+      setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
     }
   } else {
-    setElementDisplay('.didClinicRefuseYes', 'none');
+    hideElement('.didClinicRefuseYes');
     if (pageLoadComplete) {
-      isReviewNeeded.checked = false;
-      score.value = SCORE_TENTATIVE_APPT;
-      score.dispatchEvent(new Event('change', { bubbles: true }));
+      setElementChecked('#ca-call-group-is-review-needed', false);
+      setElementValue('#ca-call-group-score', SCORE_TENTATIVE_APPT);
     }
   }
   updateVisibility();
 }
 
 function formatDateTime(date) {
+  if (date == null) {
+    date = new Date();
+  }
   // Format a date as YYYY-mm-ddTHH:mm
   return date.getFullYear() +
     '-' + pad(date.getMonth() + 1) +
@@ -1596,7 +1555,13 @@ function pad(num, size = 2) {
   return num;
 }
 
-function setElementInnerHTML(selector, innerHtmlValue) {
+function setElementTextContent(selector, textContentValue) {
+  document.querySelectorAll(selector).forEach(element => {
+    element.textContent = textContentValue || '';
+  });
+}
+
+export function setElementInnerHTML(selector, innerHtmlValue) {
   document.querySelectorAll(selector).forEach(element => {
     element.innerHTML = innerHtmlValue || '';
   });
@@ -1608,8 +1573,47 @@ function setElementDisplay(selector, displayValue) {
   });
 }
 
-function setElementValue(selector, value) {
+export function setElementValue(selector, value) {
   document.querySelectorAll(selector).forEach(element => {
-    element.value = value || '';
+    var oldValue = element.value;
+    var newValue = value || '';
+    if (newValue != oldValue) {
+      element.value = newValue;
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+    }
   });
+}
+
+function setElementChecked(selector, checkedValue) {
+  document.querySelectorAll(selector).forEach(element => {
+    var oldCheckedValue = element.checked;
+    var newCheckedValue = checkedValue || false;
+    if (newCheckedValue != oldCheckedValue) {
+      element.checked = newCheckedValue;
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+}
+
+export function showElement(selector) {
+  document.querySelectorAll(selector).forEach(element => {
+    element.classList.remove('hidden');
+  });
+}
+
+export function hideElement(selector) {
+  document.querySelectorAll(selector).forEach(element => {
+    element.classList.add('hidden');
+  });
+}
+
+export function isHidden(el) {
+  if (el) {
+    // Element exists - return true if hidden, false if shown
+    return (el.offsetParent === null);
+  } else {
+    // Couldn't find element
+    console.debug('Warning: isHidden() could not find element ' + el);
+    return true;
+  }
 }

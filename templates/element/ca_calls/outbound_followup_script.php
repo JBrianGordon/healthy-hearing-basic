@@ -14,7 +14,7 @@ echo $this->Form->control('ca_call_group.is_patient', [
 	'style' => 'margin-left:24%;'
 ]);
 ?>
-<div class="patient-data" style="display:none;">
+<div class="patient-data hidden">
 	<?php echo $this->Form->control('ca_call_group.patient_first_name'); ?>
 	<?php echo $this->Form->control('ca_call_group.patient_last_name'); ?>
 </div>
@@ -68,7 +68,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 	'default' => CaCallGroup::PROSPECT_NO,
 ));
 ?>
-<div class="prospectTopic" style="display:none;">
+<div class="prospectTopic hidden">
 	<?php
 	echo $this->Form->control('ca_call_group.score', array(
 		'type' => 'select',
@@ -77,7 +77,7 @@ echo $this->Form->control('ca_call_group.prospect', array(
 	));
 	?>
 </div>
-<div class="appt_date" style="display:none;">
+<div class="appt_date hidden">
 	<?php
 	echo $this->Form->control('ca_call_group.appt_date', array(
 		'class' => 'form-control datepicker inline-date',

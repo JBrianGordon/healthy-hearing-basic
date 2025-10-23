@@ -29,7 +29,7 @@ $noteCount = isset($caCall->ca_call_group->ca_call_group_notes) ? count($caCall-
 			<div class="panel-section expanded">
 				<h2>Return call from clinic</h2>
 				<div class="caCalls index content">
-					<?= $this->Form->create($caCall) ?>
+					<?= $this->Form->create($caCall, ['id' => 'CaCallForm']) ?>
 						<?php
 						echo $this->Form->hidden('id', ['id' => true]);
 						echo $this->Form->hidden('ca_call_group_id', ['id' => true]);
@@ -111,7 +111,7 @@ $noteCount = isset($caCall->ca_call_group->ca_call_group_notes) ? count($caCall-
 							])
 							?>
 							<?= $this->element('ca_calls/lookup_script') ?>
-							<div class="group-found-buttons" style="display:none;">
+							<div class="group-found-buttons hidden">
 								<div class="form-actions tar">
 									<input type="button" tabindex="1" value="Call disconnected / incomplete" class="btn btn-lg btn-default" id="disconnectedBtn">
 									<input type="submit" tabindex="1" value="Save Call" class="btn btn-primary btn-lg" id="submitBtn">

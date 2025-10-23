@@ -52,12 +52,12 @@ if ($copyPage) {
 		'default' => true,
 		'style' => 'margin-left:23%;',
 	])?>
-	<div class="patient-data" style="display:none;">
+	<div class="patient-data hidden">
 		<?= $this->Form->control('ca_call_group.patient_first_name', ['label' => ['class' => 'ml10']]) ?>
 		<?= $this->Form->control('ca_call_group.patient_last_name', ['label' => ['class' => 'ml10']]) ?>
 	</div>
 </div>
-<div class="refusedNameYes" style="display:none;">
+<div class="refusedNameYes hidden">
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -126,7 +126,7 @@ if ($copyPage) {
 ]); ?>
 
 <!-- Hearing Test? -->
-<div class="wantsHearingTest" style="display:none;">
+<div class="wantsHearingTest hidden">
 	<?php if ($showScript): ?>
 		<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -193,8 +193,8 @@ if ($copyPage) {
 ])?>
 
 <!-- Prospects -->
-<div class="prospectTopic" style="display:none;">
-	<div class="nonDirectBook" style="display:none;">
+<div class="prospectTopic hidden">
+	<div class="nonDirectBook hidden">
 		<?php
 		if ($copyPage) {
 			// On the copy page, show script from here on
@@ -223,7 +223,7 @@ if ($copyPage) {
 				'no' => 'No'
 			],
 		]) ?>
-		<div class="consumerConsentYes" style="display:none;">
+		<div class="consumerConsentYes hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-9 offset-md-3">
@@ -234,7 +234,7 @@ if ($copyPage) {
 				</div>
 			<?php endif; ?>
 		</div>
-		<div class="consumerConsentNo" style="display:none;">
+		<div class="consumerConsentNo hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-9 offset-md-3">
@@ -256,7 +256,7 @@ if ($copyPage) {
 			],
 		]) ?>
 		<!-- Clinic answered -->
-		<div class="didClinicAnswerYes" style="display:none;">
+		<div class="didClinicAnswerYes hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-9 offset-md-3">
@@ -286,7 +286,7 @@ if ($copyPage) {
 					</div>
 				<?php endif; ?>
 			</div>
-			<div class="refusedNameYes" style="display:none;">
+			<div class="refusedNameYes hidden">
 				<?php if ($showScript): ?>
 					<div class="row">
 						<div class="col-md-9 offset-md-3">
@@ -302,7 +302,7 @@ if ($copyPage) {
 			</div>
 		</div>
 		<!-- Clinic did not answer -->
-		<div class="didClinicAnswerNo" style="display:none;">
+		<div class="didClinicAnswerNo hidden">
 			<div class="refusedNameNo">
 				<?php if ($showScript): ?>
 					<div class="row">
@@ -315,7 +315,7 @@ if ($copyPage) {
 					</div>
 				<?php endif ?>
 			</div>
-			<div class="refusedNameYes" style="display:none;">
+			<div class="refusedNameYes hidden">
 				<?php if ($showScript): ?>
 					<div class="row">
 						<div class="col-md-9 offset-md-3">
@@ -331,7 +331,7 @@ if ($copyPage) {
 			</div>
 		</div>
 		<!-- Leave a voicemail -->
-		<div class="didClinicAnswerVm" style="display:none;">
+		<div class="didClinicAnswerVm hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-9 offset-md-3">
@@ -362,7 +362,7 @@ if ($copyPage) {
 			<?php endif ?>
 		</div>
 	</div>
-	<div class="directBookDm" style="display:none;">
+	<div class="directBookDm hidden">
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -377,7 +377,7 @@ if ($copyPage) {
 			</div>
 		<?php endif; ?>
 	</div>
-	<div class="directBookBlueprintEarQ" style="display:none;">
+	<div class="directBookBlueprintEarQ hidden">
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -400,7 +400,7 @@ if ($copyPage) {
 </div>
 
 <!-- Prospect Unknown -->
-<div class="prospectUnknownTopic" style="display:none;">
+<div class="prospectUnknownTopic hidden">
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
@@ -421,7 +421,7 @@ if ($copyPage) {
 		],
 	])?>
 	<!-- Clinic answered -->
-	<div class="didClinicAnswerYes" style="display:none;">
+	<div class="didClinicAnswerYes hidden">
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -446,7 +446,7 @@ if ($copyPage) {
 		<?php endif; ?>
 	</div>
 	<!-- Clinic did not answer -->
-	<div class="didClinicAnswerNo" style="display:none;">
+	<div class="didClinicAnswerNo hidden">
 		<?php if ($showScript): ?>
 			<div class="row">
 				<div class="col-md-9 offset-md-3">
@@ -487,7 +487,7 @@ if ($copyPage) {
 		],
 	]) ?>
 	<!-- Clinic answered -->
-	<div class="didClinicAnswerYes" style="display:none;">
+	<div class="didClinicAnswerYes hidden">
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
 				<div class="well blue-well">
@@ -501,11 +501,11 @@ if ($copyPage) {
 		</div>
 	</div>
 	<!-- Clinic did not answer -->
-	<div class="didClinicAnswerNo" style="display:none;">
+	<div class="didClinicAnswerNo hidden">
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
 				<div class="well blue-well">
-					<div class="refusedNameYes" style="display:none;">
+					<div class="refusedNameYes hidden">
 						<i class="text-muted">[Do not leave a message with clinic. Return to caller.]</i><br />
 					</div>
 					Thanks for holding. The appointment desk is unavailable at this time.
@@ -517,7 +517,7 @@ if ($copyPage) {
 		</div>
 	</div>
 	<!-- Leave a voicemail -->
-	<div class="didClinicAnswerVm" style="display:none;">
+	<div class="didClinicAnswerVm hidden">
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
 				<div class="well blue-well">
@@ -534,8 +534,8 @@ if ($copyPage) {
 </div>
 
 <!-- Appointment Date -->
-<div class="appt_date" style="display:none;">
-	<div class="directBook" style="display:none;">
+<div class="appt_date hidden">
+	<div class="directBook hidden">
 		<?= $this->Form->control('ca_call_group.is_bringing_third_party', [
 			'label' => [
 				'class' => 'col col-md-3 control-label ml10',
@@ -559,7 +559,7 @@ if ($copyPage) {
 </div>
 
 <!-- Scheduled Call Date -->
-<div class="scheduled_call_date" style="display:none;">
+<div class="scheduled_call_date hidden">
 	<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 		'type' => 'datetime-local',
 		'min' => '2016-01-01T00:00',

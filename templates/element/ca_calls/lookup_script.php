@@ -4,8 +4,8 @@ This portion of the script is reused in multiple places.
 It is for looking up calls that need followup with a given clinic.
 */
 ?>
-<div class="have-location-and-front-desk" style="display:none;">
-	<div class="found-no-calls" style="display:none;">
+<div class="have-location-and-front-desk hidden">
+	<div class="found-no-calls hidden">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
 				<div class="well blue-well">
@@ -14,7 +14,7 @@ It is for looking up calls that need followup with a given clinic.
 			</div>
 		</div>
 	</div>
-	<div class="found-multiple-calls" style="display:none;">
+	<div class="found-multiple-calls hidden">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
 				<div class="well blue-well">
@@ -37,7 +37,7 @@ It is for looking up calls that need followup with a given clinic.
 			?>
 		</div>
 	</div>
-	<div class="lock-error" style="display:none;">
+	<div class="lock-error hidden">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
 				<div class="well blue-well">

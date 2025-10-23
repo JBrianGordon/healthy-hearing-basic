@@ -145,7 +145,7 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                             'container' => ['class' => 'offset-md-3']
                         ]);
                         ?>
-                        <div class="patient-data" style="display:none;">
+                        <div class="patient-data hidden">
                             <?php echo $this->Form->control('patient_first_name'); ?>
                             <?php echo $this->Form->control('patient_last_name'); ?>
                         </div>
@@ -193,8 +193,8 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                                 'empty' => false
                             ]);
                         ?>
-                        <div class="prospectTopic" style="display:none;">
-                            <div class="nonDirectBook" style="display:none;">
+                        <div class="prospectTopic hidden">
+                            <div class="nonDirectBook hidden">
                                 <?php echo $this->Form->control('front_desk_name'); ?>
                             </div>
                             <?php
@@ -205,10 +205,10 @@ $this->Html->script('dist/ca_call_edit.min', ['block' => true]);
                             ]);
                             ?>
                         </div>
-                        <div class="appt_date" style="display:none;">
+                        <div class="appt_date hidden">
                             <?php echo $this->Form->control('appt_date', ['empty' => true]); ?>
                         </div>
-                        <div class="scheduled_call_date" style="display:none;">
+                        <div class="scheduled_call_date hidden">
                             <?php echo $this->Form->control('scheduled_call_date', ['empty' => true]); ?>
                         </div>
                         <?php

@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 echo $this->element('ca_calls/ca_call_js_variables');
 //echo $this->Admin->addJs('dist/admin_add_outbound.min.js?v='.Configure::read("tagVersion"));
 $this->Html->script('dist/admin_add_outbound.min', ['block' => true]);
+$this->Html->script('dist/ca_call_edit.min', ['block' => true]);
 ?>
 <style>
 	.popover {
@@ -52,7 +53,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 				<h2>New Outbound Call</h2>
 				<div class="caCallGroups index content">
 					<div class = "btn-toolbar">
-						<?= $this->Form->create($caCall, ['class' => 'w-100']) ?>
+						<?= $this->Form->create($caCall, ['id' => 'CaCallForm', 'class' => 'w-100']) ?>
 							<?php
 							echo $this->Form->hidden('id', ['id' => true]);
 							echo $this->Form->hidden('ca_call_group_id', ['id' => true]);
@@ -217,10 +218,10 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'required' => true
 									]);
 									?>
-									<div id="return_vm_ajax_form" style="display:none;">
+									<div id="return_vm_ajax_form hidden">
 
 									</div>
-									<div id="return_vm_from_invalid" style="display:none;">
+									<div id="return_vm_from_invalid hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												No outbound call needed. Please add a note and save.
@@ -261,7 +262,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'required' => true
 									]);
 									?>
-									<div class="didTheyAnswerFollowupYes" style="display:none;">
+									<div class="didTheyAnswerFollowupYes hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -286,7 +287,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 														This is the information they submitted to us:
 													<?php endif; ?>
 													Their name is <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong>.
-													<span class="isNotPatient" style="display:none;">
+													<span class="isNotPatient hidden">
 														They are requesting an appointment on behalf of <strong><span class="patientName"></span></strong>.
 													</span>
 													<?php if ($isFollowupApptRequest): ?>
@@ -310,7 +311,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'label' => 'Did consumer answer?',
 											'required' => true
 										]) ?>
-										<div class="didConsumerAnswerYes" style="display:none;">
+										<div class="didConsumerAnswerYes hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -328,7 +329,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="didConsumerAnswerNo" style="display:none;">
+										<div class="didConsumerAnswerNo hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well mb0">
@@ -357,7 +358,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												'label' => 'Clinic refused to take patient data',
 												'style' => 'margin-left:23%;'
 											]) ?>
-											<div class="didClinicRefuseYes" style="display:none;">
+											<div class="didClinicRefuseYes hidden">
 												<div class="row">
 													<div class="col-md-offset-3 col-md-9">
 														<div class="well blue-well">
@@ -368,7 +369,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="didConsumerAnswerInvalid" style="display:none;">
+										<div class="didConsumerAnswerInvalid hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -380,7 +381,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											</div>
 										</div>
 									</div>
-									<div class="didTheyAnswerFollowupVm" style="display:none;">
+									<div class="didTheyAnswerFollowupVm hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -399,10 +400,10 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										</div>
 									</div>
 									<hr>
-									<div class="followupForm" style="display:none;">
+									<div class="followupForm hidden">
 										<?= $this->element('ca_calls/outbound_followup_script') ?>
 									</div>
-									<div class="scheduled_call_date" style="display:none;">
+									<div class="scheduled_call_date hidden">
 										<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 											'class' => 'form-control datepicker inline-date',
 											'label' => 'Next attempt to reach clinic ('.getEasternTimezone().')',
@@ -451,7 +452,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => 'Did consumer answer?',
 										'required' => true
 									]) ?>
-									<div class="didConsumerAnswerYes" style="display:none;">
+									<div class="didConsumerAnswerYes hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well green-well">
@@ -471,7 +472,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'default' => 1
 										]);
 										?>
-										<div class="directBook" style="display:none;">
+										<div class="directBook hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well green-well">
@@ -480,7 +481,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="nonDirectBook" style="display:none;">
+										<div class="nonDirectBook hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -496,7 +497,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 													'required' => true
 												]);
 												?>
-												<div class="didTheyAnswerFollowupYes" style="display:none;">
+												<div class="didTheyAnswerFollowupYes hidden">
 													<div class="row">
 														<div class="col-md-offset-3 col-md-9">
 															<div class="well blue-well">
@@ -511,7 +512,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 																Thanks <strong><span class="frontDeskName"></span></strong>. Are you ready to take their information?<br>
 																<i class="text-muted">[when yes]</i><br>
 																Their name is <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong>.
-																<span class="isNotPatient" style="display:none;">
+																<span class="isNotPatient hidden">
 																	They are calling on behalf of <strong><span class="patientName"></span></strong>.
 																</span>
 																Their number is <strong><span class="callerPhone"><?= formatPhoneNumber($caCallGroup->caller_phone) ?></span></strong> and their main reason for calling is <strong><span class="callerTopics"></span></strong>.<br>
@@ -531,7 +532,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 														</div>
 													</div>
 												</div>
-												<div class="didTheyAnswerFollowupNo" style="display:none;">
+												<div class="didTheyAnswerFollowupNo hidden">
 													<div class="row">
 														<div class="col-md-offset-3 col-md-9">
 															<div class="well blue-well">
@@ -541,7 +542,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 														</div>
 													</div>
 												</div>
-												<div class="didTheyAnswerFollowupVm" style="display:none;">
+												<div class="didTheyAnswerFollowupVm hidden">
 													<div class="row">
 														<div class="col-md-offset-3 col-md-9">
 															<div class="well blue-well">
@@ -565,7 +566,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											</div>
 										</div>
 									</div>
-									<div class="didConsumerAnswerNo" style="display:none;">
+									<div class="didConsumerAnswerNo hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -581,7 +582,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'required' => true
 										]);
 										?>
-										<div class="didTheyAnswerFollowupYes" style="display:none;">
+										<div class="didTheyAnswerFollowupYes hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -596,7 +597,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 														Thanks <strong><span class="frontDeskName"></span></strong>. Are you ready to take their information?<br>
 														<i class="text-muted">[when yes]</i><br>
 														Their name is <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong>.
-														<span class="isNotPatient" style="display:none;">
+														<span class="isNotPatient hidden">
 															They are calling on behalf of <strong><span class="patientName"></span></strong>.
 														</span>
 														Their number is <strong><span class="callerPhone"><?= formatPhoneNumber($caCallGroup->caller_phone) ?></span></strong> and their main reason for calling is <strong><span class="callerTopics"></span></strong>.<br>
@@ -614,7 +615,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												'label' => 'Did consumer answer?',
 												'required' => true
 											]) ?>
-											<div class="didConsumerAnswer2Yes" style="display:none;">
+											<div class="didConsumerAnswer2Yes hidden">
 												<div class="row">
 													<div class="col-md-offset-3 col-md-9">
 														<div class="well blue-well">
@@ -631,7 +632,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 													</div>
 												</div>
 											</div>
-											<div class="didConsumerAnswer2No" style="display:none;">
+											<div class="didConsumerAnswer2No hidden">
 												<div class="row">
 													<div class="col-md-offset-3 col-md-9">
 														<div class="well blue-well">
@@ -643,7 +644,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="didTheyAnswerFollowupVm" style="display:none;">
+										<div class="didTheyAnswerFollowupVm hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -657,7 +658,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											</div>
 										</div>
 									</div>
-									<div class="didConsumerAnswerInvalid" style="display:none;">
+									<div class="didConsumerAnswerInvalid hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -667,10 +668,10 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										</div>
 									</div>
 									<hr>
-									<div class="followupForm" style="display:none;">
+									<div class="followupForm hidden">
 										<?= $this->element('ca_calls/outbound_followup_script') ?>
 									</div>
-									<div class="scheduled_call_date" style="display:none;">
+									<div class="scheduled_call_date hidden">
 										<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 											'class' => 'form-control datepicker inline-date',
 											'label' => 'Next attempt to reach consumer ('.getEasternTimezone().')',
@@ -709,11 +710,11 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => 'Did clinic answer?',
 										'required' => true
 									]) ?>
-									<div class="didTheyAnswerFollowupYes" style="display:none;">
+									<div class="didTheyAnswerFollowupYes hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
-													Hello, this is <?= $user['first_name'] ?> from Healthy Hearing. I'm calling to followup about a prospective patient. This call is being recorded for quality assurance. We called you on <strong><?= date('M d', strtotime($caCallGroup->created)) ?></strong> with a caller named <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong> who wanted to set an appointment<span class="isNotPatient" style="display:none;">for <strong><span class="patientName"></span></strong></span>, and we left you their contact information. Were you able to reach that caller?
+													Hello, this is <?= $user['first_name'] ?> from Healthy Hearing. I'm calling to followup about a prospective patient. This call is being recorded for quality assurance. We called you on <strong><?= date('M d', strtotime($caCallGroup->created)) ?></strong> with a caller named <strong><span class="callerFirstName"></span> <span class="callerLastName"></span></strong> who wanted to set an appointment<span class="isNotPatient hidden">for <strong><span class="patientName"></span></strong></span>, and we left you their contact information. Were you able to reach that caller?
 												</div>
 												<div class="text-right">
 													<small>
@@ -735,7 +736,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'label' => 'Did they contact the caller?',
 											'required' => true
 										]) ?>
-										<div class="didClinicContactConsumerYes" style="display:none;">
+										<div class="didClinicContactConsumerYes hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -745,7 +746,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="didClinicContactConsumerNo" style="display:none;">
+										<div class="didClinicContactConsumerNo hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -758,7 +759,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										<hr>
 										<?= $this->element('ca_calls/outbound_followup_script') ?>
 									</div>
-									<div class="scheduled_call_date" style="display:none;">
+									<div class="scheduled_call_date hidden">
 										<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 											'class' => 'form-control datepicker inline-date',
 											'interval' => 15,
@@ -780,8 +781,8 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 									]);
 									?>
 									<!-- If clinic already contacted caller and an appointment was set: -->
-									<div class="didClinicContactConsumerYes" style="display:none;">
-										<div class="appt_date" style="display:none;">
+									<div class="didClinicContactConsumerYes hidden">
+										<div class="appt_date hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -807,7 +808,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										'label' => 'Did patient answer?',
 										'required' => true
 									]) ?>
-									<div class="didTheyAnswerFollowupYes" style="display:none;">
+									<div class="didTheyAnswerFollowupYes hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -822,7 +823,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											'label' => 'Did they connect with clinic?',
 											'required' => true
 										]) ?>
-										<div class="didClinicContactConsumerYes" style="display:none;">
+										<div class="didClinicContactConsumerYes hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -832,7 +833,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												</div>
 											</div>
 										</div>
-										<div class="didClinicContactConsumerNo" style="display:none;">
+										<div class="didClinicContactConsumerNo hidden">
 											<div class="row">
 												<div class="col-md-offset-3 col-md-9">
 													<div class="well blue-well">
@@ -846,7 +847,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 												'label' => 'Does patient want help?',
 												'required' => true
 											]) ?>
-											<div class="wantHelpNo" style="display:none;">
+											<div class="wantHelpNo hidden">
 												<div class="row">
 													<div class="col-md-offset-3 col-md-9">
 														<div class="well blue-well">
@@ -855,7 +856,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 													</div>
 												</div>
 											</div>
-											<div class="wantHelpYes" style="display:none;">
+											<div class="wantHelpYes hidden">
 												<div class="row">
 													<div class="col-md-offset-3 col-md-9">
 														<div class="well blue-well">
@@ -867,7 +868,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 											</div>
 										</div>
 									</div>
-									<div class="didTheyAnswerFollowupVm" style="display:none;">
+									<div class="didTheyAnswerFollowupVm hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">
@@ -880,10 +881,10 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										</div>
 									</div>
 									<hr>
-									<div class="followupForm" style="display:none;">
+									<div class="followupForm hidden">
 										<?= $this->element('ca_calls/outbound_followup_script') ?>
 									</div>
-									<div class="scheduled_call_date" style="display:none;">
+									<div class="scheduled_call_date hidden">
 										<?= $this->Form->control('ca_call_group.scheduled_call_date', [
 											'label' => 'Next attempt to reach consumer ('.getEasternTimezone().')',
 											'class' => 'form-control datepicker inline-date',
@@ -910,7 +911,7 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										?>
 									</div>
 									<!--TODO: Does this id need to be renamed now that we don't do surveys? -->
-									<div id="surveyComplete" style="display:none;">
+									<div id="surveyComplete hidden">
 										<div class="row">
 											<div class="col-md-offset-3 col-md-9">
 												<div class="well blue-well">

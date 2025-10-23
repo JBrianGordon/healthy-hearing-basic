@@ -42,7 +42,7 @@ use Cake\Core\Configure;
 	<?php endif; ?>	
 </div>
 <div class="refusedNameNoQuickPick">
-	<?= $this->Form->control('ca_call_group.caller_first_name') ?>
+	<?= $this->Form->control('ca_call_group.caller_first_name', ['autocomplete' => 'autocomplete-off']) ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
@@ -52,7 +52,7 @@ use Cake\Core\Configure;
 			</div>
 		</div>
 	<?php endif; ?>
-	<?= $this->Form->control('ca_call_group.caller_last_name') ?>
+	<?= $this->Form->control('ca_call_group.caller_last_name', ['autocomplete' => 'autocomplete-off']) ?>
 	<?php if ($showScript): ?>
 		<div class="row">
 			<div class="col-md-offset-3 col-md-9">
@@ -64,6 +64,7 @@ use Cake\Core\Configure;
 	<?php endif; ?>
 	<?= $this->Form->control('ca_call_group.caller_phone', [
 		'div' => 'form-group required',
+		'autocomplete' => 'autocomplete-off',
 		'required' => true,
 	])
 	?>
@@ -86,8 +87,8 @@ use Cake\Core\Configure;
 	])
 	?>
 	<div class="patient-data hidden">
-		<?= $this->Form->control('ca_call_group.patient_first_name') ?>
-		<?= $this->Form->control('ca_call_group.patient_last_name') ?>
+		<?= $this->Form->control('ca_call_group.patient_first_name', ['autocomplete' => 'autocomplete-off']) ?>
+		<?= $this->Form->control('ca_call_group.patient_last_name', ['autocomplete' => 'autocomplete-off']) ?>
 	</div>
 
 	<?php if ($showScript): ?>
@@ -99,14 +100,16 @@ use Cake\Core\Configure;
 			</div>
 		</div>
 	<?php endif; ?>
-	<?= $this->Form->control('ca_call_group.patient_address') ?>
-	<?= $this->Form->control('ca_call_group.patient_city') ?>
+	<?= $this->Form->control('ca_call_group.patient_address', ['autocomplete' => 'autocomplete-off']) ?>
+	<?= $this->Form->control('ca_call_group.patient_city', ['autocomplete' => 'autocomplete-off']) ?>
 	<?= $this->Form->control('ca_call_group.patient_state', [
-			'options' => Configure::read('states.US'),
-			'empty' => '(Choose a state)'
+			'type' => 'select',
+			'options' => Configure::read('states'),
+			'empty' => '(Choose a state)',
+			'autocomplete' => 'autocomplete-off'
 		])
 	?>
-	<?= $this->Form->control('ca_call_group.patient_zip') ?>
+	<?= $this->Form->control('ca_call_group.patient_zip', ['autocomplete' => 'autocomplete-off']) ?>
 	<?= $this->Form->control('ca_call_group.patient_full_address', [
 			'readonly' => true
 		]) ?>
@@ -142,7 +145,7 @@ use Cake\Core\Configure;
 		])
 		?>
 		<?php if (isset($previousCalls)): ?>
-			<div id="group-search">
+			<div id="related-call-search">
 				<?= $this->Form->control('group_search', [
 					'class' => 'form-control group_search',
 					'label' => [
@@ -177,7 +180,7 @@ use Cake\Core\Configure;
 
 					<p class="firstClinic">It looks like <strong><span class="locationTitle">[selected clinic]</span></strong> at <strong><span class="scriptLocationAddress">[address]</span></strong> is the closest clinic to you. <span class ="hasDirections">It's <strong><span class="locationDistance"></span> (<span class="locationTime"></span>)</strong> from the address you gave me.</span></p>
 
-					<p class="subsequentClinic" style="display:none;">I understand. The next closest clinic to you in our directory is <strong><span class="locationTitle">[selected clinic]</span></strong> at <strong><span class="scriptLocationAddress">[address]</span></strong>. <span class ="hasDirections">It's <strong><span class="locationDistance"></span> (<span class="locationTime"></span>)</strong> from the address you gave me.</span></p>
+					<p class="subsequentClinic hidden">I understand. The next closest clinic to you in our directory is <strong><span class="locationTitle">[selected clinic]</span></strong> at <strong><span class="scriptLocationAddress">[address]</span></strong>. <span class ="hasDirections">It's <strong><span class="locationDistance"></span> (<span class="locationTime"></span>)</strong> from the address you gave me.</span></p>
 
 					<p>This clinic has <span class="locationRating"></span>. Would you like me to <span class="nonDirectBookQuickPick">call that clinic to</span> set an appointment for a hearing test?</p>
 					<br>
@@ -186,7 +189,7 @@ use Cake\Core\Configure;
 					<em class="directBookQuickPick text-muted">[Direct book appointment in green box below.]</em>
 					<br>
 					<br>
-					<div id="purposeReminder" style="display:none;">
+					<div id="purposeReminder hidden">
 						<em class="text-muted">[If no.]</em>
 						<p>This line is for helping people select a clinic and make an appointment for a hearing test. I can help you do that. Would you like to end this call or continue looking for a clinic?</p>
 					</div>
@@ -212,7 +215,7 @@ use Cake\Core\Configure;
 			'default' => 1
 		])
 		?>
-		<div class="directBookQuickPick" style="display:none;">
+		<div class="directBookQuickPick hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 					<div class="col-md-offset-3 col-md-9">
@@ -251,7 +254,7 @@ use Cake\Core\Configure;
 			])
 			?>
 			<!-- Clinic answered -->
-			<div class="didClinicAnswerYes" style="display:none;">
+			<div class="didClinicAnswerYes hidden">
 				<?php if ($showScript): ?>
 					<div class="row">
 						<div class="col-md-offset-3 col-md-9">
@@ -263,7 +266,7 @@ use Cake\Core\Configure;
 				<?php endif; ?>
 				<?= $this->Form->control(
 					'ca_call_group.front_desk_name', [
-						'autocomplete' => 'off'
+						'autocomplete' => 'autocomplete-off'
 					]
 				)
 				?>
@@ -286,7 +289,7 @@ use Cake\Core\Configure;
 				<?php endif; ?>
 			</div>
 			<!-- Clinic did not answer -->
-			<div class="didClinicAnswerNo" style="display:none;">
+			<div class="didClinicAnswerNo hidden">
 				<?php if ($showScript): ?>
 					<div class="row">
 						<div class="col-md-offset-3 col-md-9">
@@ -301,7 +304,7 @@ use Cake\Core\Configure;
 				<?php endif ?>
 			</div>
 			<!-- Leave a voicemail -->
-			<div class="didClinicAnswerVm" style="display:none;">
+			<div class="didClinicAnswerVm hidden">
 				<?php if ($showScript): ?>
 					<div class="row">
 						<div class="col-md-offset-3 col-md-9">
@@ -331,7 +334,7 @@ use Cake\Core\Configure;
 			</div>
 		</div>
 		<!-- Direct Book Hearing Test? -->
-		<div class="wantsHearingTest" style="display:none;">
+		<div class="wantsHearingTest hidden">
 			<?php if ($showScript): ?>
 				<div class="row">
 						<div class="col-md-offset-3 col-md-9">
@@ -385,8 +388,8 @@ use Cake\Core\Configure;
 		?>
 	</div>
 	<!-- Appointment Date -->
-	<div class="appt_date" style="display:none;">
-		<div class="directBookQuickPick" style="display:none;">
+	<div class="appt_date hidden">
+		<div class="directBookQuickPick hidden">
 			<?= $this->Form->control('ca_call_group.is_bringing_third_party', [
 				'label' => [
 					'class' => 'col col-md-3 control-label',

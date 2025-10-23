@@ -269,6 +269,15 @@ class CaCallsController extends BaseAdminController
         $this->viewBuilder()->setLayout('ajax');
         $this->meta['robots'] = "NOINDEX, FOLLOW";
         $caCallGroup = $this->CaCallGroups->get($callGroupId);
+        if (empty($this->user->id)) {
+            // catch a user timeout error
+            $data = [
+                'user_error' => true,
+            ];
+            $this->set('data', $data);
+            $this->viewBuilder()->setOption('serialize', 'data');
+            return;
+        }
         $lockStatus = $this->CaCalls->CaCallGroups->lock($callGroupId, $this->user->id);
         if ($lockStatus) {
             $data = $caCallGroup;
@@ -303,6 +312,7 @@ class CaCallsController extends BaseAdminController
             $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
         $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
+        $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
         $caCall = $this->CaCalls->newEntity([
             'ca_call_group_id' => $caCallGroupId,
             //'start_time' => getCurrentEasternTime(),
@@ -346,6 +356,7 @@ class CaCallsController extends BaseAdminController
                 }
                 if (($requestData['call_type'] == CaCall::CALL_TYPE_FOLLOWUP_NO_ANSWER) &&
                     ($requestData['ca_call_group']['did_they_want_help'] == 1)) {
+                    //TODO: implement the copy function
                     return $this->redirect(array('controller' => 'ca_calls', 'action' => 'copy', $caCallGroupId));
                 } else {
                     return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
@@ -365,7 +376,7 @@ class CaCallsController extends BaseAdminController
             ],
             ['associated' => ['CaCallGroups']]);
             $caCall->ca_call_group = $caCallGroup;
-            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $caCallGroup->location->direct_book_type, $caCallGroup->wants_hearing_test);
+            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $location->direct_book_type, $caCallGroup->wants_hearing_test);
             if (($callType === false) ||
                 ($caCallGroup->scheduled_call_date->toUnixString() > strtotime(getCurrentEasternTime()))) {
                 // Invalid outbound call
@@ -422,15 +433,15 @@ class CaCallsController extends BaseAdminController
             if (empty($this->request->data['CaCall']['id'])) {
                 // Saving a new call
                 $caCall = $this->CaCalls->newEmptyEntity();
-                $this->CaCalls->patchEntity($caCall, $requestData, [
+                $caCall = $this->CaCalls->patchEntity($caCall, $requestData, [
                     'associated' => ['CaCallGroups']
                 ]);
                 $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
             }
             $checkRules = ($caCall->ca_call_group->status == CaCallGroup::STATUS_INCOMPLETE) ? false : true;
-            if ($this->CaCall->save($this->request->data, ['checkRules' => $checkRules])) {
+            if ($this->CaCalls->save($caCall, ['checkRules' => $checkRules])) {
                 $this->Flash->success('The call has been saved');
-                return $this->redirect('/admin-panel');
+                return $this->redirect('/admin');
             } else {
                 $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
             }
@@ -456,13 +467,17 @@ class CaCallsController extends BaseAdminController
             if (empty($requestData['id'])) {
                 // Saving a new call
                 $caCall = $this->CaCalls->newEmptyEntity();
-                $this->CaCalls->patchEntity($caCall, $requestData, [
-                    'associated' => ['CaCallGroups']
-                ]);
-                $caCall->duration = strtotime(getCurrentEasternTime()) - strtotime($caCall->start_time);
             } else {
                 $caCall = $this->CaCalls->get($requestData['id']);
             }
+            if (!empty($requestData['ca_call_group_id'])) {
+                // This call is associeated with an existing call group
+                $caCall->ca_call_group = $this->CaCallGroups->get($requestData['ca_call_group_id']);
+            }
+            $caCall = $this->CaCalls->patchEntity($caCall, $requestData, [
+                'associated' => ['CaCallGroups', 'CaCallGroups.CaCallGroupNotes']
+            ]);
+            $caCall->duration = strtotime(getCurrentEasternTime()) - $caCall->start_time->timestamp;
             $quickPickStatus = $caCall->ca_call_group->status;
             $isIncompleteRefused = in_array( // Is call INCOMPLETE or REFUSED NAME/ADDRESS CALLS?
                 $quickPickStatus, [
@@ -472,7 +487,7 @@ class CaCallsController extends BaseAdminController
                 ]
             );
             if ($isIncompleteRefused) { // Remove location_id and set PROSPECT_DISCONNECTED
-                $caCall->ca_call_group->location_id = '';
+                $caCall->ca_call_group->location_id = 0;
                 $caCall->ca_call_group->prospect = CaCallGroup::PROSPECT_DISCONNECTED;
             }
             if ($quickPickStatus == CaCallGroup::STATUS_QUICK_PICK_REFUSED_NAME_ADDRESS) {
@@ -480,9 +495,9 @@ class CaCallsController extends BaseAdminController
             }
             $caCall->ca_call_group->topic_wants_appt = '1';
             $checkRules = !$isIncompleteRefused; // Only validate calls that are not INCOMPLETE or REFUSED NAME/ADDRESS
-            if ($this->CaCall->save($caCall, ['checkRules' => $checkRules])) {
+            if ($this->CaCalls->save($caCall, ['checkRules' => $checkRules])) {
                 $this->Flash->success('The call has been saved');
-                return $this->redirect('/admin-panel');
+                return $this->redirect('/admin');
             } else {
                 $this->Flash->error('The call could not be saved. Please, try again.<br><br>'.print_r($caCall->getErrors(), true));
             }
@@ -497,6 +512,9 @@ class CaCallsController extends BaseAdminController
         }
         $this->set('previousCalls', []);
         $this->set('caCall', $caCall);
+        if (empty($this->user)) {
+            $this->Flash->error('Session is expired. Please refresh.');
+        }
     }
 
     /**

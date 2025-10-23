@@ -126,7 +126,7 @@ class AppController extends Controller
         //$this->Configuration->load('HH');
         //$this->fixSubDomain(); //Fix subdomain healthyeharing.com/......
         //$this->addCanonical(); //Add canonical
-        $this->user = $this->request->getSession()->read('Auth');
+        $this->user = $this->getRequest()->getAttribute('identity');
         $userRole = empty($this->user->role) ? '' : $this->user->role;
         $this->isAdmin = ($userRole == 'admin');
         $this->isClinic = ($userRole == 'clinic');

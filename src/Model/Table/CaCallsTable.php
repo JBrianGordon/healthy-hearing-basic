@@ -319,6 +319,12 @@ class CaCallsTable extends Table
         foreach ($closestClinics as $key => $clinic) {
             if (isset($distMatrixDestinations[$key])) {
                 $clinic->google = $distMatrixDestinations[$key];
+                if ($clinic->google['status'] != 'OK') {
+                    $clinic->google['distance']['text'] = "Google can't provide directions";
+                    $clinic->google['distance']['value'] = 0;
+                    $clinic->google['duration']['text'] = "Unknown";
+                    $clinic->google['duration']['value'] = 0;
+                }
                 $closestClinics[$key] = $clinic;
             }
         }

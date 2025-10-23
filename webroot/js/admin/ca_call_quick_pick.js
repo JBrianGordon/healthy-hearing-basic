@@ -1,4 +1,5 @@
 import '../common/common';
+import { setElementInnerHTML, setElementValue, showElement, hideElement, isHidden, updateVisibility } from './ca_call_edit';
 
 function onPageLoadQuickPick() {
   // Listen for field changes
@@ -63,12 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
  * Start of Functions
  ****/
 
-function triggerChange(element) {
-  var selector = document.querySelector(element);
-  if (selector !== null) {
-    selector.dispatchEvent(new Event('change', { bubbles: true }));
-  }
-}
+let closestClinics;
+let chosenClinic;
+let clinicCounter = 0;
+let searchInfo;
 
 function onChangeRefusedNameQuickPick() {
   document.querySelectorAll('.refusedNameYesQuickPick').forEach(element => {
@@ -119,32 +118,8 @@ function onChangePatientInfo(isPatient) {
   }
 }
 
-function isHidden(el) {
-  return (el.offsetParent === null);
-}
-
-function updateVisibility(className = 'form_fields') {
-  document.querySelectorAll('.' + className + ' input, .' + className + ' select').forEach(input => {
-    // Don't disable inputs with 'hidden' type
-    if (input.type !== 'hidden') {
-      if (isHidden(input)) {
-        // This input is not currently visible - disable it
-        input.setAttribute("disabled", "disabled");
-      } else {
-        // Input is visible - enable it
-        input.removeAttribute("disabled");
-      }
-    }
-  });
-}
-
-let closestClinics;
-let chosenClinic;
-let clinicCounter = 0;
-let searchInfo;
-
 function findClosestLocations(originAddress) {
-  document.querySelector("#closestClinics").innerHTML = "";
+  setElementInnerHTML('#closestClinics', '');
 
   closestClinics = [];
   clinicCounter = 0;
@@ -165,7 +140,6 @@ function findClosestLocations(originAddress) {
       .then(data => {
         searchInfo = data.pop();
         closestClinics = data;
-        fixNoDirectionResults();
         displayClinicTemplates(closestClinics);
       })
       .catch(error => {
@@ -178,7 +152,7 @@ function findClosestLocations(originAddress) {
   } else {
     patientStateInput.style.border = "2px solid red";
     patientCityInput.style.border = "2px solid red";
-    alert("Please enter a city and select a state before searching.");
+    alert("Please enter a city and state before searching.");
   }
 }
 
@@ -188,13 +162,13 @@ function clickedClinic(clinicDiv) {
   const clinicIndex = clinicDiv.firstElementChild.getAttribute('value');
   chosenClinic = closestClinics[clinicIndex];
 
-  document.querySelector(".locationDistance").innerHTML = chosenClinic.google.distance.text;
-  document.querySelector(".locationTime").innerHTML = chosenClinic.google.duration.text;
+  setElementInnerHTML('.locationDistance', chosenClinic.google.distance.text);
+  setElementInnerHTML('.locationTime', chosenClinic.google.duration.text);
 
   if (chosenClinic.google.distance.value === undefined || chosenClinic.google.duration.value === undefined) {
-    document.querySelector(".hasDirections").style.display = "none";
+    hideElement('.hasDirections');
   } else {
-    document.querySelector(".hasDirections").style.display = "block";
+    showElement('.hasDirections');
   }
 
   const numReviews = parseInt(chosenClinic.reviews_approved, 10);
@@ -211,7 +185,7 @@ function clickedClinic(clinicDiv) {
       ratingsReviewsText = `an average rating of <strong>${chosenClinic.average_rating} out of 5</strong> stars and <strong>${chosenClinic.reviews_approved}</strong> reviews`;
   }
 
-  document.querySelector(".locationRating").innerHTML = ratingsReviewsText;
+  setElementInnerHTML('.locationRating', ratingsReviewsText);
 
   clinicDiv.style.backgroundColor = "#78afc9";
   const siblings = clinicDiv.parentNode.children;
@@ -222,65 +196,43 @@ function clickedClinic(clinicDiv) {
   }
 
   if (clinicCounter > 1) {
-    document.querySelector(".firstClinic").style.display = "none";
-    document.querySelector(".subsequentClinic").style.display = "block";
+    hideElement('.firstClinic');
+    showElement('.subsequentClinic');
   } else {
-    document.querySelector(".firstClinic").style.display = "block";
-    document.querySelector(".subsequentClinic").style.display = "none";
+    showElement('.firstClinic');
+    hideElement('.subsequentClinic');
   }
 
   const locationId = clinicDiv.querySelector("p[id*='locationId']").innerHTML;
-  const CaCallGroupLocationId = document.querySelector("#ca-call-group-location-id");
-  CaCallGroupLocationId.value = locationId;
-  triggerChange("#ca-call-group-location-id");
+  setElementValue('#ca-call-group-location-id', locationId);
 
   if (clinicCounter % 3 === 0) {
-    document.querySelector("#purposeReminder").style.display = "block";
-    document.querySelector("#ifNoCall").style.display = "none";
+    showElement('#purposeReminder');
+    hideElement('#ifNoCall');
   } else {
-    document.querySelector("#purposeReminder").style.display = "none";
-    document.querySelector("#ifNoCall").style.display = "block";
+    hideElement('#purposeReminder');
+    showElement('#ifNoCall');
   }
 
-  document.querySelector(".scriptLocationAddress").innerHTML =
+  setElementInnerHTML('.scriptLocationAddress',
     chosenClinic.address + ', ' +
     chosenClinic.city + ', ' +
-    chosenClinic.state;
+    chosenClinic.state);
 
   if (chosenClinic.direct_book_type === DIRECT_BOOK_NONE) {
-    document.querySelectorAll('.nonDirectBookQuickPick').forEach(element => {
-      element.style.display = "block";
-    });
-    document.querySelectorAll('.directBookQuickPick').forEach(element => {
-      element.style.display = "none";
-    });
-    document.querySelectorAll('.isDirectBookWorking').forEach(element => {
-      element.style.display = "none";
-    });
+    showElement('.nonDirectBookQuickPick');
+    hideElement('.directBookQuickPick');
+    hideElement('.isDirectBookWorking');
   } else {
-    document.querySelectorAll('.directBookQuickPick').forEach(element => {
-      element.style.display = "block";
-    });
-    document.querySelectorAll('.nonDirectBookQuickPick').forEach(element => {
-      element.style.display = "none";
-    });
-    document.querySelectorAll('.isDirectBookWorking').forEach(element => {
-      element.style.display = "block";
-    });
+    showElement('.directBookQuickPick');
+    hideElement('.nonDirectBookQuickPick');
+    showElement('.isDirectBookWorking');
     if (chosenClinic.direct_book_type === DIRECT_BOOK_DM) {
-      document.querySelectorAll('.directBookDm').forEach(element => {
-        element.style.display = "block";
-      });
-      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => {
-        element.style.display = "none";
-      });
+      showElement('.directBookDm');
+      hideElement('.directBookBlueprintEarQ');
     } else { // Blueprint or EarQ
-      document.querySelectorAll('.directBookDm').forEach(element => {
-        element.style.display = "none";
-      });
-      document.querySelectorAll('.directBookBlueprintEarQ').forEach(element => {
-        element.style.display = "block";
-      });
+      hideElement('.directBookDm');
+      showElement('.directBookBlueprintEarQ');
       const directBookUrl = document.querySelector('#directBookUrl');
       directBookUrl.textContent = chosenClinic.direct_book_url;
       directBookUrl.setAttribute('href', chosenClinic.direct_book_url);
@@ -318,7 +270,7 @@ function createClinicDiv(clinicData, index) {
   clinicDiv.appendChild(hrElement);
 
   if (index > 2) {
-    clinicDiv.style.display = "none";
+    clinicDiv.classList.add('hidden');
   }
 
   return clinicDiv;
@@ -359,7 +311,7 @@ function loadMoreClinics() {
     alert(alertMessage);
   } else {
     const nextSetOfClinics = hiddenClinics.slice(0, 3);
-    nextSetOfClinics.forEach(clinic => clinic.style.display = "block");
+    nextSetOfClinics.forEach(clinic => clinic.classList.remove('hidden'));
   }
 }
 
@@ -373,15 +325,12 @@ function fixNoDirectionResults() {
 }
 
 function onChangeIsDirectBookWorking(answer) {
-  const directBookQuickPickElements = document.querySelectorAll(".directBookQuickPick");
-  const nonDirectBookQuickPickElements = document.querySelectorAll(".nonDirectBookQuickPick");
-
   if (answer == 0) { // NO
-    directBookQuickPickElements.forEach(element => element.style.display = "none");
-    nonDirectBookQuickPickElements.forEach(element => element.style.display = "block");
+    hideElement(".directBookQuickPick");
+    showElement(".nonDirectBookQuickPick");
   } else { // YES
-    directBookQuickPickElements.forEach(element => element.style.display = "block");
-    nonDirectBookQuickPickElements.forEach(element => element.style.display = "none");
+    showElement(".directBookQuickPick");
+    hideElement(".nonDirectBookQuickPick");
   }
   updateVisibility();
 }

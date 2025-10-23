@@ -221,7 +221,7 @@ class LocationsController extends BaseAdminController
                     if ($isPhoneChanged) {
                         $goodFlash .= '<br>CallSource has been updated with new clinic phone number.';
                     }
-                    $this->Flash->success(__('The location has been saved.'));
+                    $this->Flash->success($goodFlash);
                 }
                 return $this->redirect($this->request->referer());
             }

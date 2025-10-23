@@ -25,7 +25,7 @@ $this->Html->script('dist/ca_call_quick_pick.min', ['block' => true]);
 			<div class="panel-section expanded">
 				<h2>Inbound Call - Clinic Quick Pick</h2>
 				<div class="caCalls index content">
-					<?= $this->Form->create($caCall) ?>
+					<?= $this->Form->create($caCall, ['id' => 'CaCallForm', 'autocomplete' => 'off']) ?>
 						<?php
 						echo $this->Form->hidden('ca_call_group_id', ['id' => true]);
 						echo $this->Form->hidden('start_time', ['id' => true]);
