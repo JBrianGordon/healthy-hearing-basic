@@ -32,20 +32,7 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							<a href="" id="desktopSideNavTrigger"><span class="hh-icon-menu"></span>Side Menu</a>
 						</div>
 					</div>
-					<?php if (Configure::read('showReports') && ($isAdmin || $isItAdmin || $isAgent || $isCallSupervisor || $isWriter || $isCsa)): ?>
-						<div class="navbar-search" data-hh-search>
-							<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
-							<div class="search-wrapper" id="searchWrapper">
-							  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
-							  <form id="MegaSearch" action="/search" method="POST">
-								<label for="ContentSearch">Search the site</label>
-							  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
-							  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
-							  </form>
-							</div>
-						</div>
-					<?php endif; ?>
-					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+					<ul class="navbar-nav mb-2 mb-lg-0">
 						<li data-hh-mega-nav-trigger="find-a-professional"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
 							<a id="fap-tab" class="nav-link text-uppercase" href="/hearing-aids">
 								<span class="hidden-md hidden-lg">Clinics</span>
@@ -57,6 +44,9 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 						</li>
 						<li data-hh-mega-nav-trigger="hearing-aid-help"<?= $clinicPageUser ? 'class="hidden"' : '' ?>>
 							<?= $this->Html->link('<span class="hidden-md hidden-lg">Hearing Aids</span><span class="hidden-sm">Hearing Aids Help</span>', '/help', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
+						</li>
+						<li>
+							<?= $this->Html->link('<span class="hidden-md hidden-lg">Hearing Test</span><span class="hidden-sm">Online Hearing Test</span>', '/help/online-hearing-test', ['escape' => false, 'class'=>'nav-link text-uppercase']); ?>
 						</li>
 						<?php if (Configure::read('showReports') && !$clinicPageUser): ?>
 							<li>
@@ -91,6 +81,19 @@ if (!Configure::read('showSocialMediaContentLibrary')) {
 							<?= $this->element('header/clinic_panel_link') ?>
 						<?php endif; ?>
 					</ul>
+					<?php if (Configure::read('showReports') && ($isAdmin || $isItAdmin || $isAgent || $isCallSupervisor || $isWriter || $isCsa)): ?>
+						<div class="navbar-search" data-hh-search>
+							<a href="" class="search-link" id="openSearch" tabindex="-1"><span class="hh-icon-search"></span>Open Side Menu</a>
+							<div class="search-wrapper" id="searchWrapper">
+							  <a href="#" class="close-link" id="closeSearch" tabindex="-1"><span class="hh-icon-cross"></span>Close Side Menu</a>
+							  <form id="MegaSearch" action="/search" method="POST">
+								<label for="ContentSearch">Search the site</label>
+							  	<input type="text" id="ContentSearch" class="search-input" name="data[Content][search]" placeholder="Search the site" tabindex="-1">
+							  	<input type="hidden" name="data[Content][search_id]" value="" id="ContentSearchId">
+							  </form>
+							</div>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
