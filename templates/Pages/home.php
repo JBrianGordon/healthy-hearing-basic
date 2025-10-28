@@ -9,7 +9,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
     <div class="row pt0">
         <div class="backdrop-container">
             <div class="backdrop backdrop-home-gradient backdrop-height"></div>
-            <picture class="backdrop-home">
+            <picture class="backdrop-home p0">
                 <source media="(max-width: 991px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
                 <source media="(min-width:992px)" srcset="/img/home-hero.webp 1x, /img/home-hero-2x.webp 2x">
                 <img class="h-100" src="/img/home-hero.webp" alt="smiling doctor giving a consultation">
@@ -19,7 +19,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
         <div class="container">
             <div class="row">
                 <?php //***TODO: uncomment when flash elements added*** echo $this->element('flashes'); ?>
-                <div class="col-sm-7 col-lg-6 over-backdrop">
+                <div class="col-lg-7 col-xl-6 over-backdrop">
                     <section class="intro-text inverse">
                         <h1 class="hero-headline"><?= Configure::read('heroHeadline') ?></h1>
                         <p class="lead">
@@ -43,47 +43,47 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     <?php endif; ?>
                 </div>
-            </div>
-            <div class="col-sm-5 col-lg-offset-1 over-backdrop pull-right" style="min-height:1350px;float:right">
-                <div class="panel panel-secondary">
-                    <header class="panel-heading text-center">
-                      Find a clinic
-                    </header>
-                    <div class="panel-body">
-                        <div class="panel-section text-center">
-                            <input id="FACHomepagePanel" class="autoCompleteJs">
-                            <p class="btn-set text-center">
-                                <a href="/hearing-aids" class="btn btn-secondary">Browse by <?= $stateLabel ?></a>
-                            </p>
-                        </div>
-                        <div class="panel-section d-none d-sm-block">
-                            <div data-hh-map></div>
-                            <p class="text-center">
-                                <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
-                            </p>
-                        </div>
-                        <?php if (!empty($clinicsNearMe)): ?>
+                <div class="col-lg-5 col-xl-5 over-backdrop pull-right mb30">
+                    <div class="panel panel-secondary">
+                        <header class="panel-heading text-center">
+                        Find a clinic
+                        </header>
+                        <div class="panel-body">
                             <div class="panel-section text-center">
-                                <h2 class="h3">Hearing clinics near me</h2>
-                                <?= $this->element($this->Clinic->nearMe($clinicsNearMe)); ?>
+                                <input id="FACHomepagePanel" class="autoCompleteJs w-100">
+                                <p class="btn-set text-center">
+                                    <a href="/hearing-aids" class="btn btn-secondary">Browse by <?= $stateLabel ?></a>
+                                </p>
                             </div>
-                        <?php endif; ?>
+                            <div class="panel-section d-none d-sm-block">
+                                <div data-hh-map></div>
+                                <p class="text-center">
+                                    <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                </p>
+                            </div>
+                            <?php if (!empty($clinicsNearMe)): ?>
+                                <div class="panel-section text-center">
+                                    <h2 class="h3">Hearing clinics near me</h2>
+                                    <?= $this->element($this->Clinic->nearMe($clinicsNearMe)); ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
+                    <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $isMobileDevice): ?>
+                        <div class="hearing-test">
+                            <br>
+                            <h3>Online hearing test</h3>
+                            <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
+                            <br>
+                            <p>
+                                <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
+                            </p>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $isMobileDevice): ?>
-                    <div class="hearing-test">
-                        <br>
-                        <h3>Online hearing test</h3>
-                        <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
-                        <br>
-                        <p>
-                            <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
-                        </p>
-                    </div>
-                <?php endif; ?>
             </div>
             <?php if (Configure::read('showReports')): ?>
-                <div class="col-sm-7 col-lg-6 mobile-clear">
+                <div class="col-lg-7 col-xl-6 mobile-clear">
                     <div class="panel panel-light">
                         <?php if (!empty($articles)): ?>
                             <header class="panel-heading text-center">
@@ -116,7 +116,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                         </div>
                                     </div>
                                 </section>
-                                <section class="panel-section blog-previews hidden-xs hidden-sm">
+                                <section class="panel-section blog-previews d-none d-lg-block">
                                     <?php for($i = 1; $i <= 3; $i+=2): ?>
                                         <div class="row preview-row d-flex">
                                         <div class="col-md-6 blog-preview">
@@ -143,6 +143,15 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                         </div>
                                         </div>
                                     <?php endfor; ?>
+                                </section>
+                                <section class="panel-section">
+                                    <p class="lead tac">
+                                        <?= $this->Html->link(
+                                            'See all reports', 
+                                            ['controller' => 'Content', 'action' => 'reportIndex'], 
+                                            ['class' => 'text-link']
+                                        ) ?>
+                                    </p>
                                 </section>
                             </div>
                         <?php endif; ?>
