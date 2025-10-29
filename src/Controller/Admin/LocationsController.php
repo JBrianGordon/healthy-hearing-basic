@@ -132,7 +132,7 @@ class LocationsController extends BaseAdminController
         $reviews = $this->Locations->Reviews->find('all', [
             'conditions' => ['location_id' => $id],
             'limit' => $reviewLimit,
-            'sort' => ['Reviews.created' => 'DESC']
+            'order' => ['Reviews.created' => 'DESC']
         ])->all();
         $lastOticonImport = $this->Locations->ImportStatus->find('all', [
             'contain' => [],
