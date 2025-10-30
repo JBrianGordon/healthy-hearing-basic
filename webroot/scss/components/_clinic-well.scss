@@ -78,6 +78,7 @@
     letter-spacing: -0.04em;
     margin-top: 0;
     margin-bottom: 5px;
+    font-size: 3.6rem;
 
     a {
       font-size: 120%;
@@ -255,17 +256,22 @@
   }
 }
 
-@media screen and (max-width: $screen-xs-max){
-	//Hide most google maps controls on mobile
-	.gm-style-iw.gm-style-iw-c, .gm-style-mtc, button.gm-control-active.gm-fullscreen-control, .gm-svpc, .gm-style .gm-style-iw-t::after{
-		display: none;
-	}
+@media screen and (max-width: $screen-xs-max) {
+
+  //Hide most google maps controls on mobile
+  .gm-style-iw.gm-style-iw-c,
+  .gm-style-mtc,
+  button.gm-control-active.gm-fullscreen-control,
+  .gm-svpc,
+  .gm-style .gm-style-iw-t::after {
+    display: none;
+  }
 }
 
 .directions-link {
-	margin: 10px auto 0;
-    display: block;
-    max-width: 220px;
+  margin: 10px auto 0;
+  display: block;
+  max-width: 220px;
 }
 
 #apptRequestPanel {
@@ -348,7 +354,7 @@
       width: 100%;
 
       &.checkbox {
-      	margin-bottom: 0!important;
+        margin-bottom: 0 !important;
       }
     }
 
@@ -444,10 +450,11 @@ iframe[title='recaptcha challenge'] {
 
     &.h4 {
       .bi-telephone-fill {
-        font-size: 18px;
+        font-size: 24px;
       }
     }
   }
+
   .directBookBtn,
   .apptRequestBtn {
     font-size: 20px;
@@ -464,7 +471,7 @@ iframe[title='recaptcha challenge'] {
 .row.provider-bio {
   margin-bottom: 30px;
 
-  .img-responsive{
+  .img-responsive {
     display: block;
     max-width: 100%;
     height: auto;
@@ -496,6 +503,7 @@ iframe[title='recaptcha challenge'] {
   }
 
   .col-md-8 {
+
     .yhn-container.desktop,
     .earq-container.desktop {
       float: right;
@@ -651,6 +659,7 @@ iframe[title='recaptcha challenge'] {
 .linked-location {
   .text-caption {
     color: #555657;
+
     .hh-icon-address {
       color: #555657;
     }
@@ -698,6 +707,7 @@ iframe[title='recaptcha challenge'] {
   padding: 0px;
   margin-left: 0px;
 }
+
 #schedulerHolder {
   display: block;
   width: 100%;
@@ -713,10 +723,11 @@ iframe[title='recaptcha challenge'] {
   font-weight: normal;
   line-height: 1.6;
   text-align: left;
-  
+
   &.bottom {
     min-width: 210px;
   }
+
   &.right {
     min-width: 270px;
   }
@@ -725,10 +736,12 @@ iframe[title='recaptcha challenge'] {
     margin-bottom: 10px;
     display: inline-block;
   }
+
   .popover-content {
     padding-left: 20px;
     min-width: 230px;
   }
+
   .provider-qualifications {
     font-size: 20px;
   }
