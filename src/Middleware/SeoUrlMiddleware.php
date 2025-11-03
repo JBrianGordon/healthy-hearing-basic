@@ -60,7 +60,6 @@ class SeoUrlMiddleware implements MiddlewareInterface
             }
         }
 
-
         return $handler->handle($request);
     }
 }

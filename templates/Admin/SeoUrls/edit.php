@@ -22,7 +22,11 @@
             <div class="panel-section expanded">
                 <!-- TO-DO check for redirect, seo title, etc -->
                     <div class="alert alert-info mb-3" role="alert">
-                        Important information about this feature...
+                        <strong>For the URL below, turning on the <u>410 or redirect</u> features below will turn off features further down the list:</strong>
+                        <ul>
+                            <li>Selecting <em><strong>Active 410</strong></em> overrides any redirect settings and title/meta parameters</li>
+                            <li>Not selecting <em><strong>Active 410</strong></em>, but selecting <em><strong>Active Redirect</strong></em> will override any title/meta parameters</li>
+                        </ul>
                     </div>
                 <div class="wikis form content">
                     <?= $this->Form->create($seoUrl) ?>
