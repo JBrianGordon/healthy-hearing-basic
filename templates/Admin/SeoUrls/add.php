@@ -4,29 +4,54 @@
  * @var \App\Model\Entity\SeoUrl $seoUrl
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Seo Urls'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="seoUrls form content">
-            <?= $this->Form->create($seoUrl) ?>
-            <fieldset>
-                <legend><?= __('Add Seo Url') ?></legend>
-                <?php
-                    echo $this->Form->control('url');
-                    echo $this->Form->control('redirect_url');
-                    echo $this->Form->control('redirect_is_active');
-                    echo $this->Form->control('seo_title');
-                    echo $this->Form->control('seo_meta_description');
-                    echo $this->Form->control('status_code');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
+<header class="col-md-12 mt10">
+    <div class="panel panel-light">
+        <div class="panel-heading">SEO URLs Actions</div>
+        <div class="panel-body p10">
+            <div class="btn-group">
+                <?= $this->Html->link(__(' Browse'), ['action' => 'index'], ['class' => 'btn btn-default bi bi-search']) ?>
+            </div>
         </div>
     </div>
+</header>
+
+<div class="col-md-12">
+    <section class="panel">
+        <div class="panel-body">
+            <div class="panel-section expanded">
+                <div class="alert alert-info mb-3" role="alert">
+                    <strong>For the URL below, turning on the <u>410 or redirect</u> features below will turn off features further down the list:</strong>
+                    <ul>
+                        <li>Selecting <em><strong>Active 410</strong></em> overrides any redirect settings and title/meta parameters</li>
+                        <li>Not selecting <em><strong>Active 410</strong></em>, but selecting <em><strong>Active Redirect</strong></em> will override any title/meta parameters</li>
+                    </ul>
+                </div>
+                <div class="wikis form content">
+                    <?= $this->Form->create($seoUrl) ?>
+                    <fieldset>
+                        <?php
+                            echo '<div class="col-md-9 col-md-offset-3 pl0">';
+                            echo $this->Form->control('is_410', [
+                                'label' => 'Active 410',
+                            ]);
+                            echo '</div>';
+                            echo $this->Form->control('url');
+                            echo $this->Form->control('redirect_url');
+                            echo '<div class="col-md-9 col-md-offset-3 pl0">';
+                            echo $this->Form->control('redirect_is_active', [
+                                'label' => 'Active Redirect',
+                            ]);
+                            echo '</div>';
+                            echo $this->Form->control('seo_title');
+                            echo $this->Form->control('seo_meta_description');
+                        ?>
+                    </fieldset>
+                    <div class="form-actions tar">
+                        <?= $this->Form->button(__('Save SEO URL'), ['class' => 'btn btn-primary btn-lg']) ?>
+                    </div>
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
