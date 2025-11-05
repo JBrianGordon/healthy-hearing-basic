@@ -65,6 +65,7 @@ class SeoUrlsTable extends Table
                 'before' => true,
                 'after' => true,
             ])
+            ->boolean('is_410')
             ->add('q', 'Search.Like', [
                 'before' => true,
                 'after' => true,

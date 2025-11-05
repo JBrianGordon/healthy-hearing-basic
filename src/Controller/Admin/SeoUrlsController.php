@@ -54,7 +54,6 @@ class SeoUrlsController extends BaseAdminController
         unset($fields['id']);
         unset($fields['seo_uri_i_d']);
         $this->set('fields', $fields);
-        // $this->set('fields', $this->SeoUrls->getSchema()->typeMap());
     }
 
     /**
