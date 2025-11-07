@@ -291,7 +291,7 @@ class LocationsTable extends Table
             ])
             ->add('frozen_expiration_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["frozen_expiration <=" => strtotime($args['frozen_expiration_end'])]);
+                    $query->andWhere(["frozen_expiration <=" => strtotime($args['frozen_expiration_end']." 23:59:59")]);
                 }
             ])
             // grace_period_end
@@ -302,7 +302,7 @@ class LocationsTable extends Table
             ])
             ->add('grace_period_end_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["grace_period_end <=" => strtotime($args['grace_period_end_end'])]);
+                    $query->andWhere(["grace_period_end <=" => strtotime($args['grace_period_end_end']." 23:59:59")]);
                 }
             ])
             // content_library_expiration
@@ -313,7 +313,7 @@ class LocationsTable extends Table
             ])
             ->add('content_library_expiration_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["content_library_expiration <=" => strtotime($args['content_library_expiration_end'])]);
+                    $query->andWhere(["content_library_expiration <=" => strtotime($args['content_library_expiration_end']." 23:59:59")]);
                 }
             ])
             // special_announcement_expiration
@@ -324,7 +324,7 @@ class LocationsTable extends Table
             ])
             ->add('special_announcement_expiration_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["special_announcement_expiration <=" => strtotime($args['special_announcement_expiration_end'])]);
+                    $query->andWhere(["special_announcement_expiration <=" => strtotime($args['special_announcement_expiration_end']." 23:59:59")]);
                 }
             ])
             // last_review_date
@@ -335,7 +335,7 @@ class LocationsTable extends Table
             ])
             ->add('last_review_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["last_review_date <=" => strtotime($args['last_review_date_end'])]);
+                    $query->andWhere(["last_review_date <=" => strtotime($args['last_review_date_end']." 23:59:59")]);
                 }
             ])
             // modified
@@ -346,7 +346,7 @@ class LocationsTable extends Table
             ])
             ->add('modified_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["Locations.modified <=" => strtotime($args['modified_end'])]);
+                    $query->andWhere(["Locations.modified <=" => strtotime($args['modified_end']." 23:59:59")]);
                 }
             ])
             // last_contact_date
@@ -357,7 +357,7 @@ class LocationsTable extends Table
             ])
             ->add('last_contact_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["last_contact_date <=" => strtotime($args['last_contact_date_end'])]);
+                    $query->andWhere(["last_contact_date <=" => strtotime($args['last_contact_date_end']." 23:59:59")]);
                 }
             ])
             // last_edit_by_owner_date
@@ -368,7 +368,7 @@ class LocationsTable extends Table
             ])
             ->add('last_edit_by_owner_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end'])]);
+                    $query->andWhere(["last_edit_by_owner_date <=" => strtotime($args['last_edit_by_owner_date_end']." 23:59:59")]);
                 }
             ])
             ->add('has_url', 'Search.Callback', [

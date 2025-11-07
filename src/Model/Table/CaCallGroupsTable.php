@@ -113,7 +113,7 @@ class CaCallGroupsTable extends Table
             ])
             ->add('appt_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["appt_date <=" => $args['appt_date_end']]);
+                    $query->andWhere(["appt_date <=" => $args['appt_date_end']." 23:59:59"]);
                 }
             ])
             // scheduled_call_date
@@ -124,7 +124,7 @@ class CaCallGroupsTable extends Table
             ])
             ->add('scheduled_call_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["scheduled_call_date <=" => $args['scheduled_call_date_end']]);
+                    $query->andWhere(["scheduled_call_date <=" => $args['scheduled_call_date_end']." 23:59:59"]);
                 }
             ])
             // final_score_date
@@ -135,7 +135,7 @@ class CaCallGroupsTable extends Table
             ])
             ->add('final_score_date_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["final_score_date <=" => $args['final_score_date_end']]);
+                    $query->andWhere(["final_score_date <=" => $args['final_score_date_end']." 23:59:59"]);
                 }
             ])
             // created
@@ -146,7 +146,7 @@ class CaCallGroupsTable extends Table
             ])
             ->add('created_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["CaCallGroups.created <=" => $args['created_end']]);
+                    $query->andWhere(["CaCallGroups.created <=" => $args['created_end']." 23:59:59"]);
                 }
             ])
             // modified
@@ -157,7 +157,7 @@ class CaCallGroupsTable extends Table
             ])
             ->add('modified_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["CaCallGroups.modified <=" => $args['modified_end']]);
+                    $query->andWhere(["CaCallGroups.modified <=" => $args['modified_end']." 23:59:59"]);
                 }
             ]);
         $topics = array_merge(array_keys(CaCallGroup::$col1Topics), array_keys(CaCallGroup::$col2Topics));

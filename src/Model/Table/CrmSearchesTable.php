@@ -68,7 +68,7 @@ class CrmSearchesTable extends Table
             ])
             ->add('created_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["created <=" => $args['created_end']]);
+                    $query->andWhere(["created <=" => $args['created_end']." 23:59:59"]);
                 }
             ])
             ->add('modified_start', 'Search.Callback', [
@@ -78,7 +78,7 @@ class CrmSearchesTable extends Table
             ])
             ->add('modified_end', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
-                    $query->andWhere(["modified <=" => $args['modified_end']]);
+                    $query->andWhere(["modified <=" => $args['modified_end']." 23:59:59"]);
                 }
             ]);
     }
