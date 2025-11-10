@@ -170,16 +170,17 @@ class ContentController extends BaseAdminController
             $this->Flash->error(__('The content could not be saved. Please, try again.'));
         }
         $this->set(compact('content'));
+
         if (!empty($content->hh_url)) {
             $seoUrlSlug =  Router::url($this->Content->findForRedirectById($id));
-            $seoRedirect = $this->fetchTable('SeoRedirects')->find('all', [
-                'contain' => ['SeoUris'],
+            $seoUrl = $this->fetchTable('SeoUrls')->find('all', [
                 'conditions' => [
-                    'SeoUris.uri' => $seoUrlSlug
+                    'SeoUrls.url' => $seoUrlSlug
                 ]
             ])->first();
-            $this->set('seoRedirect', $seoRedirect);
+            $this->set('seoUrl', $seoUrl);
         }
+
         $this->set('title', 'Edit Content');
         $this->set('tags', $this->Content->Tags->findTagList());
         $this->set('types', Content::$typeOptions);
