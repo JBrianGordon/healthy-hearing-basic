@@ -219,8 +219,7 @@
       color: $link-color;
 
       @media (min-width: $screen-sm-min) {
-        padding-top: 22.5px;
-        padding-bottom: 22.5px;
+        padding: 22.5px 10px;
       }
     }
   }
