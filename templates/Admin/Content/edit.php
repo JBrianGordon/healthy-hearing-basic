@@ -84,29 +84,72 @@ if (empty($content->id)) {
 			                    echo $this->Form->control('type', ['options' => Content::$typeOptions]);
 			                    echo $this->Form->control('user_id', ['label' => 'Primary Author', 'options' => $authors, 'default' => $author_default, 'empty' => true]);
 								?>
+
 								<span class="col-md-9 col-md-offset-3 ps-0 mt-n4 alert alert-info"><strong class="ps-3">URL:</strong> <?= Router::url($content->hh_url, true) ?></span>
-								<?php if (empty($content->is_active)): ?>
-									<div class="form-group">
-										<label class="col col-md-3 control-label">Redirects To:</label>
-										<div class="col col-md-9" style="padding:8px 12px;">
-											<?php if (!empty($seoRedirect)): ?>
-												<?= Router::url($seoRedirect->redirect, true) ?>
-											<?php else: ?>
-												<?= $this->Html->link('Create Redirect', ['controller'=>'seo', 'admin' => true, 'action' => 'seo_redirects', 'edit']) ?>
-											<?php endif; ?>
-										</div>
+								<div class="form-group">
+									<label class="col col-md-3 control-label">SEO URL:</label>
+									<div class="col col-md-9" style="padding:8px 12px;">
+										<?php $setToInactive = false; ?>
+										<?php if (!empty($seoUrl->is_410)): ?>
+											<?php $setToInactive = true; ?>
+											<?= $this->Html->badge('Active 410', ['class' => 'danger label']); ?>
+											<?=
+												$this->Html->link('- Edit 410', [
+													'controller'=>'seoUrls',
+													'admin' => true,
+													'action' => 'edit',
+													$seoUrl->id
+												], [
+													'target' => '_blank',
+												])
+											?>
+											<div class="text-bg-light p-3 mt-2">Marking this as <code>410 Gone</code> tells clients and search engines the URL is permanently gone. Any <strong>redirect</strong> settings below are not applied.</div>
+											<br>
+										<?php endif; ?>
+										<?php if (!empty($seoUrl->redirect_url)): ?>
+											<?php $setToInactive = true; ?>
+											<?= '<strong>Redirect URL: </strong>' . Router::url($seoUrl->redirect_url, true) ?>
+											<br>
+											<?=
+												$this->Html->badge(
+													$seoUrl->redirect_is_active ? 'Active Redirect' : 'Inactive Redirect',
+													[
+														'class' => $seoUrl->redirect_is_active ? 'success label' : 'danger label',
+													]
+												);
+											?>
+											<?=
+												$this->Html->link('- Edit Redirect', [
+													'controller' => 'seoUrls',
+													'admin' => true,
+													'action' => 'edit',
+													$seoUrl->id
+												], [
+													'target' => '_blank'
+												])
+											?>
+										<?php else: ?>
+											<?=
+												$this->Html->link('Create Redirect', [
+													'controller' => 'seoUrls',
+													'admin' => true,
+													'action' => 'add'
+												], [
+													'target' => '_blank',
+												])
+											?>
+										<?php endif; ?>
 									</div>
-								<?php endif; ?>
+								</div>
 								<?php
 			                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 			                    echo $this->Form->control('is_active', ['type' => 'checkbox']);
+			                    if ($setToInactive) {
+									echo '<div class="text-bg-warning p-3">Set to <strong>INACTIVE</strong> when <code>410</code> or <code>redirect</code> are active.</div>';
+			                    }
 			                    echo '</div>';
 			                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
 			                    echo $this->Form->control('is_library_item', ['type' => 'checkbox']);
-			                    echo '</div>';
-			                    echo '<div class="col-md-9 col-md-offset-3 pl0">';
-			                    echo $this->Form->control('is_gone', ['label' => '410 This Content', 'type' => 'checkbox']);
-			                    echo '<span class="help-block"><strong>Note:</strong> If checked, this content will serve a 410 GONE instead of rendering the content.</span>';
 			                    echo '</div>';
 				                ?>
 				                <ul class="nav nav-tabs mb-3 clearfix" role="tablist">
