@@ -5,13 +5,25 @@
 
 use Cake\Core\Configure;
 use App\Model\Entity\Location;
+
+// Prepend country abbreviations to titles in non-prod environments
+$env = Configure::read('env');
+$country = Configure::read('country');
+$title_for_layout = empty($title) ? Configure::read('siteName') : $title;
+
+if ($env != 'prod') {
+    $title_for_layout = strtoupper($env) . ": " . $title_for_layout;
+    if ($country != 'US') {
+        $title_for_layout = $country . "-" . $title_for_layout;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= Configure::read('htmlLanguage') ?>">
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= empty($title) ? Configure::read('siteName') : $title ?></title>
+    <title><?= $title_for_layout ?></title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->element('google_tag_manager') ?>
 
