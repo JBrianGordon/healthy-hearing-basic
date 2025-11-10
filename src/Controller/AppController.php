@@ -68,12 +68,6 @@ class AppController extends Controller
 
         if ($seoTitle !== null) {
             $title = $seoTitle;
-
-            $env = Configure::read('env');
-            if ($env != 'prod') {
-                $title = $env.': '.$title;
-            }
-
             $this->set('title', $title);
         }
         $this->set('meta', $this->meta);
