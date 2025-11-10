@@ -5,7 +5,7 @@
 
 use Cake\Core\Configure;
 
-$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ($siteName . ' sitemaps page'), 'url' => '/sitemap']]);
+$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ($siteName . ' sitemap page'), 'url' => '/sitemap']]);
 
 $this->Html->script('dist/common.min', ['block' => true]);
 ?>
@@ -25,7 +25,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                     <article class="panel">
                         <div class="panel-body anchor-underline">
                             <div class="panel-section expanded">
-                                <h1 class="text-primary blog-title">Sitemap</h1>
+                                <h1 class="text-primary blog-title"><?= Configure::read('siteName') . ' sitemap' ?></h1>
                                 <p class="lead">Our sitemap page provides top level links to major sections of our website.</p>
                                 <h4>
                                     <a href="/help" class="text-link">Hearing aids and hearing loss information - Find what you need to make good choices about hearing aids.</a>
