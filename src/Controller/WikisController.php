@@ -94,11 +94,6 @@ class WikisController extends AppController
             if (empty($title)) {
                 $title = isset($wiki->title_head) ? $wiki->title_head : $this->siteName;
 
-                $env = Configure::read('env');
-                if (!empty($env) && $env != 'prod') {
-                    $title = $env . ': ' . $title;
-                }
-
                 $this->set('title', $title);
             }
 

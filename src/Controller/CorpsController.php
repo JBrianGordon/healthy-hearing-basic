@@ -45,10 +45,6 @@ class CorpsController extends AppController
         ])->all();
         $title = "Hearing aid and cochlear implant companies";
 
-        $env = Configure::read('env');
-        if (!empty($env) && $env != 'prod') {
-            $title = $env . ': ' . $title;
-        }
         $this->set('title', $title);
         $this->set('corps', $corps);
         $this->set('pageContent', $this->fetchTable('Pages')->getContent('manufacturers'));
@@ -116,11 +112,6 @@ class CorpsController extends AppController
 
         if (empty($title)) {
             $title = isset($corp->title) ? $corp->title : $this->siteName;
-
-            $env = Configure::read('env');
-            if (!empty($env) && $env != 'prod') {
-                $title = $env . ': ' . $title;
-            }
 
             $this->set('title', $title);
         }

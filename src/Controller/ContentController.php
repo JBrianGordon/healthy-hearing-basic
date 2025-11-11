@@ -141,17 +141,6 @@ class ContentController extends AppController
         }
 
         //set up and assign the meta tag info
-        $request = env('REQUEST_URI');
-
-        if (empty($title)) {
-            $title = isset($content->title_head) ? $content->title_head : $this->siteName;
-            $env = Configure::read('env');
-            if ($env != 'prod') {
-                $title = $env . ': ' . $title;
-            }
-        
-            $this->set('title', $title);
-        }
 
         $this->meta['description'] = (isset($this->meta['description']) ? $this->meta['description'] : null);
         $this->meta['description'] = (!empty($content['Content']['meta_description']) ? $content['Content']['meta_description'] : $this->meta['description']);

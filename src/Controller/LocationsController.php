@@ -149,11 +149,6 @@ class LocationsController extends AppController
         if (empty($title)) {
             $title = 'Hearing ' . Configure::read('regionalSpelling.center') . 's in ' . $stateNice;
 
-            $env = Configure::read('env');
-            if (!empty($env) && $env != 'prod') {
-                $title = $env . ': ' . $title;
-            }
-
             $this->set('title', $title);
         }
         $this->set('mobileClinicsInState', $mobileClinicsInState ?: []);
@@ -307,11 +302,6 @@ class LocationsController extends AppController
             $cityName = str_replace('-', ' ', $city);
             $title = 'Hearing ' . Configure::read('regionalSpelling.center') . 's in ' . Inflector::humanize($cityName) . ', ' . $stateAbbr;
 
-            $env = Configure::read('env');
-            if (!empty($env) && $env != 'prod') {
-                $title = $env . ': ' . $title;
-            }
-
             $this->set('title', $title);
         }
 
@@ -432,10 +422,6 @@ class LocationsController extends AppController
 
         //Meta Data
         $title = "{$location->title} in {$location->city}, {$location->state}";
-        $env = Configure::read('env');
-        if (!empty($env) && $env != 'prod') {
-            $title = $env . ': ' . $title;
-        }
         $this->meta['title'] = $title;
         $this->meta['DC.title'] = $title;
         $metaAddress = $location->is_mobile ? "mobile clinic based from" : $location->address.",";
