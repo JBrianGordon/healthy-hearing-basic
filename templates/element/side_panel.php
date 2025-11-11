@@ -18,7 +18,7 @@ if (!empty($locations) && $this->Clinic->isDifferentCountry()) {
 $facOrder = $controller == 'QuizResults' ? ' style="order:1;overflow:visible"' : ' style="order:9;overflow:visible"';
 
 //Set order on recent articles
-$articleOrder = (isset($errorPage) || isset($hideLearnMore)) ? ' style="order:7"' : ' style="order:12"';
+$articleOrder = (isset($errorPage) || (isset($hideLearnMore) && $controller != 'Sitemaps')) ? ' style="order:7"' : ' style="order:12"';
 
 //Set panel order depending on page, using flex
 //Hearing test panel
