@@ -4,6 +4,8 @@
  * @var \App\Model\Entity\Zip $zip
  */
 use Cake\Core\Configure;
+
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

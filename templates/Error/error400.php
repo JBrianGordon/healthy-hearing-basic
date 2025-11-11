@@ -36,6 +36,8 @@ endif;
 
 $errorPage = true;
 $this->assign('title', '410 Gone');
+
+$this->Html->script('dist/common.min', ['block' => true]);
 ?>
 
 <div class="container-fluid site-body blog">

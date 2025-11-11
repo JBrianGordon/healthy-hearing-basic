@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\SeoUrl $seoUrl
  */
+
+$this->Html->script('dist/admin_common.min', ['block' => true]);
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
@@ -26,7 +28,7 @@
                             echo $this->Form->control('url',
                                 [
                                     'placeholder' => '/report/12345-page-to-redirect-from',
-                                ],
+                                ]
                             );
                             echo '<div class="col-md-9 col-md-offset-3 pl0">';
                             echo $this->Form->control('is_410', [
@@ -54,7 +56,7 @@
                             echo $this->Form->control('redirect_url',
                                 [
                                     'placeholder' => '/report/23456-page-to-redirect-to',
-                                ],
+                                ]
                             );
                             echo $this->Form->control('seo_title');
                             echo $this->Form->control('seo_meta_description');
