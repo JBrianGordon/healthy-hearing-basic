@@ -5,6 +5,8 @@
 
 use Cake\Core\Configure;
 
+$hideLearnMore = true;
+
 $this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ($siteName . ' sitemap page'), 'url' => '/sitemap']]);
 
 $this->Html->script('dist/common.min', ['block' => true]);
@@ -61,7 +63,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     </article>
                 </div>
-                <?= $this->element('side_panel') ?>
+                <?= $this->element('side_panel', ['hideLearnMore' => $hideLearnMore]) ?>
             </div>
         </div>
     </div>
