@@ -93,7 +93,7 @@ $topicOptions = [
 							</div>
 						</div>
 						<div class="col col-12 col-sm-4 col-sm-offset-4 mx-auto">
-							<button id="apptRequestSubmitBtn" type="button" class="btn btn-secondary btn-block btn-lg">Submit</button>
+							<button id="apptRequestSubmitBtn" type="button" class="btn btn-success btn-block btn-lg">Submit</button>
 						</div>
 						<div class="g-recaptcha"
 							 data-sitekey="<?= Configure::read('recaptchaPublicKey') ?>"

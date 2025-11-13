@@ -257,7 +257,7 @@ $this->Breadcrumbs->add($location->title);
 													</div>
 												</div>
 												<div class="col-xs-12 col-sm-4 col-sm-offset-4 tac">
-													<button id="apptRequestSubmitBtn" type="submit" class="btn btn-secondary btn-block btn-lg">Submit</button>
+													<button id="apptRequestSubmitBtn" type="submit" class="btn btn-success btn-block btn-lg">Submit</button>
 												</div>
 												<div class="g-recaptcha"
 													 data-sitekey="<?= Configure::read('recaptchaPublicKey'); ?>"
