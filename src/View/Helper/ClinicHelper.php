@@ -597,7 +597,7 @@ class ClinicHelper extends Helper
                         break;
                 }
                 if (trim($time) != "-" && !empty($time) && !$empty) {
-                    $retval .= '<tr><td>'.$daytitle.'</td><td>'.$time.'</td></tr>';
+                    $retval .= '<tr><td class="w-50">'.$daytitle.'</td><td class="w-50">'.$time.'</td></tr>';
                 }
 
             }

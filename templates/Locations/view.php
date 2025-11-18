@@ -48,12 +48,12 @@ $this->Breadcrumbs->add($location->title);
 				<div class="col-lg-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-xs-12 col-md-7 p0"; }?>">
+					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-12 col-lg-7 p0"; }?>">
 						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
 									<div class="row">
-										<div class="<?= Configure::read('country') != 'CA' ? 'col-xs-12' : 'col-md-6'; ?> clinic-info">
+										<div class="<?= Configure::read('country') != 'CA' ? 'col-12' : 'col-md-6'; ?> clinic-info">
 											<?php if ($isAdmin || $isClinic): ?>
 												<div class="btn-group-vertical pull-right pt20">
 													<?php echo $this->Clinic->adminLink($location->id, $isAdmin);?>
@@ -114,7 +114,7 @@ $this->Breadcrumbs->add($location->title);
 							</div>
 							</section>
 							<?php if ($isEnhancedOrPremier): ?>
-								<div id="quickLinkBar" class="col-xs-12 p0">
+								<div id="quickLinkBar" class="col-12 p0">
 									<div class="container">
 										<div id="linkBlock">
 											<ul>
@@ -175,10 +175,10 @@ $this->Breadcrumbs->add($location->title);
 											echo $this->Form->hidden('CaCallGroup.traffic_source', ['value'=>'unknown']);
 											echo $this->Form->hidden('CaCallGroup.traffic_medium', ['value'=>'unknown']);
 											?>
-											<div class='form-fields col-xs-12'>
+											<div class='form-fields col-12'>
 												<div class="form-group required">
 													<label for="CaCallGroupCallerFirstName" class="col w-40 control-label">Patient first name:</label>
-													<div class="col col-md-7 required">
+													<div class="col-12 col-lg-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_first_name', [
 																'placeholder' => 'First name',
 																'required' => true,
@@ -191,7 +191,7 @@ $this->Breadcrumbs->add($location->title);
 												</div>
 												<div class="form-group required">
 													<label for="CaCallGroupCallerLastName" class="col w-40 control-label">Patient last name:</label>
-													<div class="col col-md-7 required">
+													<div class="col-12 col-lg-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_last_name', [
 															'placeholder' => 'Last name',
 															'required' => true,
@@ -203,7 +203,7 @@ $this->Breadcrumbs->add($location->title);
 												</div>
 												<div class="form-group required">
 													<label for="CaCallGroupCallerPhone" class="col w-40 control-label">Phone number:</label>
-													<div class="col col-md-7 required">
+													<div class="col-12 col-lg-7 required">
 														<?= $this->Form->input('CaCallGroup.caller_phone', [
 																'placeholder' => 'Phone number',
 																'required' => true,
@@ -215,7 +215,7 @@ $this->Breadcrumbs->add($location->title);
 												</div>
 												<div class="form-group">
 													<label for="CaCallGroupEmail" class="col w-40 control-label">Email:</label>
-													<div class="col col-md-7">
+													<div class="col-12 col-lg-7">
 														<?= $this->Form->input('CaCallGroup.email', [
 																'type' => 'email',
 																'placeholder' => 'Email address',
@@ -227,7 +227,7 @@ $this->Breadcrumbs->add($location->title);
 												</div>
 												<div class="form-group">
 													<label class="col w-40 control-label pull-left">Reason for appointment<br><small class="help-block">(Check all that apply)</small></label>
-													<div class="col col-md-7">
+													<div class="col-12 col-lg-7">
 														<div class="checkbox">
 															<?php
 																foreach ($topicOptions as $topicKey => $label) {
@@ -248,15 +248,15 @@ $this->Breadcrumbs->add($location->title);
 													</div>
 												</div>
 											</div>
-											<p class="col-xs-12 tac"><small class="tac help-block mb0"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
-											<div class="row col-xs-12">
-												<div class="col-xs-12 col-sm-12">
+											<p class="col-12 tac"><small class="tac help-block mb0"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
+											<div class="row col-12">
+												<div class="col-12">
 													<div id="apptRequestSubmitError" class="alert alert-danger tal" role="alert" style="display:none;">
 														<button type="button" class="close" data-dismiss="alert">x</button>
 														<span id="apptRequestSubmitErrorMessage">Error</span>
 													</div>
 												</div>
-												<div class="col-xs-12 col-sm-4 col-sm-offset-4 tac">
+												<div class="col-12 col-sm-4 col-sm-offset-4 tac">
 													<button id="apptRequestSubmitBtn" type="submit" class="btn btn-success btn-block btn-lg">Submit</button>
 												</div>
 												<div class="g-recaptcha"
@@ -289,7 +289,7 @@ $this->Breadcrumbs->add($location->title);
 						</section>
 					<?php endif; ?>
 					<div class="row" style="clear: both">
-						<div class="col-sm-8">
+						<div class="col-lg-8">
 							<!-- About / Services -->
 							<?php
 								$hours = $this->Clinic->hours($location);
@@ -436,7 +436,7 @@ $this->Breadcrumbs->add($location->title);
 							?>
 						</div>
 				
-						<div class="col-sm-4">
+						<div class="col-lg-4">
 							
 							<!-- Clinic Links -->
 							<?= $location->listing_type == 'Premier' ? $this->element('locations/profile/clinic_links') : null ?>

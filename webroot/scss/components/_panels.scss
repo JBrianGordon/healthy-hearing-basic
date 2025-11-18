@@ -312,7 +312,7 @@
 			padding-top: 0.4em;
 		}
 
-		@media only screen and (min-width: $screen-sm-min) {
+		@media only screen and (min-width: $screen-md-min) {
 			padding: 60px 70px;
 
 			&.basic-info {
@@ -794,7 +794,7 @@
 		}
 
 		#linkBlock {
-			width: 665px;
+			width: 500px;
 			margin: 0 auto;
 			text-align: center;
 			padding: 10px 0;

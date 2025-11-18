@@ -17,7 +17,7 @@ $this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 					<?php if((Configure::read('country') == 'CA' || $isEnhancedOrPremier || $providerKey < 1) && (!empty($provider['title']) || !empty($provider['credentials']) || !empty($provider['thumb_url']) || !empty($provider['description']))) : ?>
 						<div class="row provider-bio">
 							<?php if(!empty($provider->photo_url) || (isset($provider->file->tmp_name) && !empty($provider->file->tmp_name))): ?>
-								<div class="col-md-4">
+								<div class="col-lg-4">
 									<?php
 									$alt = 'Photo of '.htmlentities(strip_tags($provider->first_name.' '.$provider->last_name));
 									if (!empty($provider->credentials)) {
@@ -31,10 +31,10 @@ $this->set('isEnhancedOrPremier', $isEnhancedOrPremier);
 									?>
 								</div>
 							<?php else: ?>
-								<div class="col-md-4 gutter-below hidden-sm hidden-xs">
+								<div class="col-lg-4 gutter-below hidden-sm hidden-xs">
 								</div>
 							<?php endif; ?>
-							<div class="col-md-8 gutter-below">
+							<div class="col-lg-8 gutter-below">
 								<h2 class="provider-name">
 									<?php
 									$providerName = $provider->first_name.' '.$provider->last_name;

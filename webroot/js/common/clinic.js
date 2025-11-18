@@ -221,20 +221,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 	
-	/*** TODO: uncomment once "Open now!"" is pulled in on view: ***
-	const clinicIsOpen = document.querySelector(".hours span").classList.contains("open");
+	const clinicIsOpen = document.querySelector(".hours span.open").classList.contains("open");
 	const currentDate = new Date();
 	const currentDay = currentDate.getDay();
 	const dayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	const dayElement = Array.from(document.querySelectorAll("tr")).find(row =>
-	  row.textContent.includes(dayArray[currentDay])
+		row.textContent.includes(dayArray[currentDay])
 	);
 
-	if (clinicIsOpen) {
-	  dayElement.style.color = "#065903";
-	  dayElement.style.backgroundColor = "#eff5f5";
-	  dayElement.style.fontWeight = "bold";
-	}*/
+	if (clinicIsOpen && dayElement) {
+		const tds = dayElement.querySelectorAll("td");
+		tds.forEach(td => {
+			td.style.color = "#065903";
+			td.style.backgroundColor = "#eff5f5";
+			td.style.fontWeight = "bold";
+		});
+	}
 	
 	const caCallGroupEmail = document.getElementById("CaCallGroupEmail");
 	if(caCallGroupEmail){
