@@ -1,18 +1,19 @@
 import '../common/common';
-import { setElementInnerHTML, setElementValue, showElement, hideElement, isHidden, updateVisibility } from './ca_call_edit';
+import { setElementInnerHTML, setElementValue, setElementChecked, showElement, hideElement, isHidden, updateVisibility } from './ca_call_edit';
 
 function onPageLoadQuickPick() {
   // Listen for field changes
   document.querySelector('body').addEventListener('change', e => {
     const targetId = e.target.id;
     const targetValue = e.target.value;
+    const targetChecked = e.target.checked;
 
     if (targetId === 'ca-call-group-refused-name-quick-pick') {
-      onChangeRefusedNameQuickPick();
+      onChangeRefusedNameQuickPick(targetChecked);
     }
 
     if (targetId === 'ca-call-group-refused-name-again-quick-pick') {
-      onChangeRefusedNameAgainQuickPick();
+      onChangeRefusedNameAgainQuickPick(targetChecked);
     }
 
     if (targetId === 'ca-call-group-is-direct-book-working') {
@@ -69,16 +70,24 @@ let chosenClinic;
 let clinicCounter = 0;
 let searchInfo;
 
-function onChangeRefusedNameQuickPick() {
-  document.querySelectorAll('.refusedNameYesQuickPick').forEach(element => {
-    element.classList.toggle('hidden');
-  });
+function onChangeRefusedNameQuickPick(refusedNameChecked) {
+  if (refusedNameChecked) {
+    showElement('.refusedNameYesQuickPick');
+    setElementChecked('#ca-call-group-refused-name-again-quick-pick', false);
+  } else {
+    setElementChecked('#ca-call-group-refused-name-again-quick-pick', false);
+    hideElement('.refusedNameYesQuickPick');
+  }
 }
 
-function onChangeRefusedNameAgainQuickPick() {
-  document.querySelectorAll('.refusedNameNoQuickPick, .refusedNameYesAgainQuickPick').forEach(element => {
-    element.classList.toggle('hidden');
-  });
+function onChangeRefusedNameAgainQuickPick(refusedNameAgainChecked) {
+  if (refusedNameAgainChecked) {
+    showElement('.refusedNameYesAgainQuickPick');
+    hideElement('.refusedNameNoQuickPick');
+  } else {
+    hideElement('.refusedNameYesAgainQuickPick');
+    showElement('.refusedNameNoQuickPick');
+  }
   updateVisibility();
 }
 

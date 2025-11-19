@@ -1178,8 +1178,12 @@ function setDateField(selector, date) {
   setElementValue(selector, formatDateTime(date));
 }
 
-export function updateVisibility(className = 'form_fields') {
-  document.querySelectorAll('.' + className + ' input, .' + className + ' select, fieldset input, fieldset select').forEach(input => {
+export function updateVisibility(selector = '.form_fields') {
+  var querySelector = selector + ' input, ' + selector + ' select';
+  if (selector == '.form_fields') {
+    querySelector += ', fieldset input, fieldset select';
+  }
+  document.querySelectorAll(querySelector).forEach(input => {
     // Don't disable inputs with 'hidden' type
     if (input.type !== 'hidden') {
       if (isHidden(input)) {
@@ -1272,7 +1276,7 @@ function onChangeDidClinicAnswer(didClinicAnswer) {
     updateVisibility();
     const groupProspect = document.getElementById('ca-call-group-prospect').value;
     if (groupProspect === PROSPECT_YES) {
-      if (document.getElementById('ca-call-group-refused-name').checked) {
+      if (document.getElementById('ca-call-group-refused-name')?.checked || document.getElementById('ca-call-group-refused-name-again-quick-pick')?.checked ) {
         setElementValue('#ca-call-group-score', SCORE_MISSED_OPPORTUNITY);
       } else {
         setElementValue('#ca-call-group-score', SCORE_NOT_REACHED);
@@ -1584,7 +1588,7 @@ export function setElementValue(selector, value) {
   });
 }
 
-function setElementChecked(selector, checkedValue) {
+export function setElementChecked(selector, checkedValue) {
   document.querySelectorAll(selector).forEach(element => {
     var oldCheckedValue = element.checked;
     var newCheckedValue = checkedValue || false;
@@ -1599,12 +1603,14 @@ export function showElement(selector) {
   document.querySelectorAll(selector).forEach(element => {
     element.classList.remove('hidden');
   });
+  updateVisibility(selector);
 }
 
 export function hideElement(selector) {
   document.querySelectorAll(selector).forEach(element => {
     element.classList.add('hidden');
   });
+  updateVisibility(selector);
 }
 
 export function isHidden(el) {

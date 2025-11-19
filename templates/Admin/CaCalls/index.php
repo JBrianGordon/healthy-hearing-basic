@@ -145,9 +145,9 @@ $this->Html->script('dist/ca_call_index.min', ['block' => true]);
 				                        </td>
 				                        <td class="actions p5" nowrap>
 				                            <div class="btn-group-vertical btn-group-xs">
-				                                <?= $this->Html->link('View Group', ['controller' => 'CaCallGroups', 'action' => 'view', $caCall->ca_call_group->id], ['class' => 'btn btn-default']) ?>
-				                                <?= $this->Html->link('Edit Group', ['controller' => 'CaCallGroups', 'action' => 'edit', $caCall->ca_call_group->id], ['class' => 'btn btn-default']) ?>
-				                                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $caCall->id], ['class' => 'btn btn-danger', 'confirm' => __('Are you sure you want to delete # {0}?', $caCall->id)]) ?>
+				                                <?= $this->Html->link('View Group', ['controller' => 'CaCallGroups', 'action' => 'view', $caCall->ca_call_group->id], ['class' => 'btn btn-default btn-xs']) ?>
+				                                <?= $this->Html->link('Edit Group', ['controller' => 'CaCallGroups', 'action' => 'edit', $caCall->ca_call_group->id], ['class' => 'btn btn-default btn-xs']) ?>
+				                                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $caCall->id], ['class' => 'btn btn-danger btn-xs', 'confirm' => __('Are you sure you want to delete # {0}?', $caCall->id)]) ?>
 				                            </div>
 				                        </td>
 				                    </tr>
