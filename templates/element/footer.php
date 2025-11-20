@@ -59,8 +59,8 @@
 
 				<?php if(Configure::read('isCallAssistEnabled')): ?>
 					<!-- TrustBox widget - Micro Review Count -->
-					<div class="trustpilot-widget mt10" data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad" data-businessunit-id="5ea6da5ea36b600001b4ee2c" data-style-height="24px" data-style-width="100%" data-theme="light" data-stars="1,2,3,4,5" data-no-reviews="hide" data-scroll-to-list="true" data-allow-robots="true" data-min-review-count="10">
-					<a href="https://www.trustpilot.com/review/healthyhearing.com" target="_blank" rel="noopener">Trustpilot</a>
+					<div class="trustpilot-widget mt10" data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad" data-businessunit-id="5ea6da5ea36b600001b4ee2c" data-style-height="50px" data-style-width="160px" data-theme="light" data-stars="1,2,3,4,5" data-no-reviews="hide" data-scroll-to-list="true" data-allow-robots="true" data-min-review-count="10">
+						<a href="https://www.trustpilot.com/review/healthyhearing.com" target="_blank" rel="noopener">Trustpilot</a>
 					</div>
 					<!-- End TrustBox widget -->
 				<?php endif; ?>
