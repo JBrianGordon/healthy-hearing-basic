@@ -2,7 +2,7 @@
 <footer class="row site-footer noprint">
 	<div class="container">
 		<div class="row footer-row">
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<ul class="no-bullets">
 					<li><a href="/" class="text-link">Home</a></li>
 					<li><a href="/about" class="text-link">About us</a></li>
@@ -12,7 +12,7 @@
 					<?php endif; ?>
 				</ul>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<ul class="no-bullets">
 					<?php if (Configure::read('showReports')): ?>
 						<li><a href="/report" class="text-link">The <?= Configure::read('siteNameAbbr') ?> report</a></li>
@@ -25,7 +25,7 @@
 					<li><a href="/sitemap" class="text-link">Sitemap</a></li>
 				</ul>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<ul class="no-bullets">
 					<li><a href="<?= $this->Clinic->nearMeLink() ?>" class="text-link action-link">Find a clinic near me</a></li>
 					<li><a href="/help/hearing-loss" class="text-link">Hearing loss help</a></li>
@@ -36,7 +36,7 @@
 					<li><a href="/clinic" class="text-link">For clinics</a></li>
 				</ul>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-3 pl10 pr10">
 				<?php if (Configure::read('showNewsletter')): ?>
 					<p class="text-primary text-small">
 					<strong>Get the best of <?= Configure::read('siteName'); ?> delivered to your inbox!</strong>
@@ -84,19 +84,6 @@
 					<?php endif; ?>
 				</p>
 			</div>
-
-			<?php if (Configure::read('country') == 'US'): ?>
-				<!-- Digital Health Awards -->
-				<div class="dha-block col-md-6">
-					<div class="mobile-row">
-						<a href="https://healthawards.com/dha/" target="_blank"><img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2023.jpg" alt="Digital Health Award winner for 2023" border="0" width="97" height="80" /></a>
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2022.jpg" alt="Digital Health Award winner for Fall 2022" border="0" width="97" height="80" />
-					</div>
-					<div class="mobile-row">
-						<img loading="lazy" style="margin: 5px 0 0 10px;" src="/img/dha_winner_logo_f2021.jpg" alt="Digital Health Award winner for Fall 2021" border="0" width="80" height="80" />
-					</div>
-				</div>
-			<?php endif; ?>
 		</div>
 	</div>
 </footer>
