@@ -1463,6 +1463,9 @@ class LocationsTable extends Table
     * @return string slug of state ST_State_Name
     */
     public function stateSlug($state) {
+        if (empty($state)) {
+            return null;
+        }
         return strtoupper($this->stateAbbr($state)) . "-" . slugify($this->stateFull($state));
     }
 
@@ -1472,6 +1475,9 @@ class LocationsTable extends Table
     * @return string $state_full
     */
     public function state($get,$stateInput) {
+        if (empty($stateInput)) {
+            return null;
+        }
         $stateInput = trim($stateInput);
         $states = Configure::read('states');
         foreach ($states as $state => $stateFull) {

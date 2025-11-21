@@ -22,7 +22,6 @@ class CitiesFixture extends TestFixture
                 'id' => 1,
                 'city' => 'Lorem ipsum dolor sit amet',
                 'state' => '',
-                'zip' => 'Lor',
                 'country' => '',
                 'lon' => 1,
                 'lat' => 1,

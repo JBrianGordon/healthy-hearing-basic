@@ -12,7 +12,6 @@ use Cake\ORM\Locator\LocatorAwareTrait;
  * @property int $id
  * @property string $city
  * @property string $state
- * @property string $zip
  * @property string $country
  * @property float $lon
  * @property float $lat
@@ -39,7 +38,6 @@ class City extends Entity
     protected $_accessible = [
         'city' => true,
         'state' => true,
-        'zip' => true,
         'country' => true,
         'lon' => true,
         'lat' => true,

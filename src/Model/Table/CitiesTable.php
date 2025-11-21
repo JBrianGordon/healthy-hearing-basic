@@ -63,7 +63,6 @@ class CitiesTable extends Table
                 'after' => true,
             ])
             ->value('state')
-            ->value('zip')
             ->value('country')
             ->value('lat')
             ->value('lon')
@@ -103,12 +102,6 @@ class CitiesTable extends Table
             ->maxLength('state', 2)
             ->requirePresence('state', 'create')
             ->notEmptyString('state');
-
-        $validator
-            ->scalar('zip')
-            ->maxLength('zip', 5)
-            ->requirePresence('zip', 'create')
-            ->notEmptyString('zip');
 
         $validator
             ->scalar('country')
