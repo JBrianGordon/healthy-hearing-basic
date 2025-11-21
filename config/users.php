@@ -29,6 +29,14 @@ $config = [
                 ],
             ],
         ],
+        'AuthorizationMiddleware' => [
+            'unauthorizedHandler' => [
+                'className' => 'App\Middleware\UnauthorizedHandler\Custom404AwareHandler',
+                'flash' => [
+                    'message' => 'Please log in to your account.',
+                ],
+            ]
+        ]
     ],
 ];
 
