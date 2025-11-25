@@ -1565,6 +1565,13 @@ class ImportCommand extends Command
         $spacesInExternalId = false;
         $spacesCount=0;
         foreach ($locations['ClinicItem'] as $location) {
+            // Check for unset keys
+            $location['Title'] ??= '';
+            $location['Address2'] ??= '';
+            $location['City'] ??= '';
+            $location['Zip'] ??= '';
+            $location['Phone'] ??= '';
+            $location['is_retail'] ??= 'No';
             $externalId = (string)$location['LocationID'] ? (string)$location['LocationID'] : (string)$location['OticonID'];
             $externalId = filter_var($externalId, FILTER_SANITIZE_SPECIAL_CHARS);
             $externalId = trim(str_replace("&nbsp;", '', htmlentities($externalId)));
@@ -1633,7 +1640,7 @@ class ImportCommand extends Command
                 $saveData['match_type'] = 1;
             } else {
                 $newCount++;
-                if ($location->is_retail == 'Yes') {
+                if ($location['is_retail'] == 'Yes') {
                     $io->out('New retail location = '.$externalId);
                 } else {
                     $io->out('New Oticon location = '.$externalId);
