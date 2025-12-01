@@ -628,6 +628,9 @@ function slugifyRegion($region = null){
 * Slugify a city Wilkes-Barre and Albuquerque
 */
 function slugifyCity($city){
+    if (empty($city)) {
+        return null;
+    }
     $city = cleanCityName($city);
     $city = str_replace(' ', '-', $city);
     $city_parts = explode('-',$city);
@@ -639,6 +642,9 @@ function slugifyCity($city){
     return $city;
 }
 function cleanCityName($city) {
+    if (empty($city)) {
+        return null;
+    }
     // Remove accents
     $city = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $city);
 

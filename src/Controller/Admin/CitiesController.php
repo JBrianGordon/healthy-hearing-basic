@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Cities Controller
@@ -63,7 +64,28 @@ class CitiesController extends BaseAdminController
     {
         $city = $this->Cities->newEmptyEntity();
         if ($this->request->is('post')) {
-            $city = $this->Cities->patchEntity($city, $this->request->getData());
+            $this->Locations = $this->fetchTable('Locations');
+            $data = $this->request->getData();
+            $data['city'] = cleanCityName($data['city']);
+            $data['state'] = $this->Locations->stateAbbr($data['state']);
+            $data['country'] ??= Configure::read('country');
+            // Only call Google API from prod.
+            if (Configure::read('env') == 'prod') {
+                $address = $data['city'].', '.$data['state'].', '.$data['country'];
+                $originGeocode = $this->Locations->geoLocAddress($address);
+                if (!empty($originGeocode[0])) {
+                    $data['lat'] = $originGeocode[0];
+                    $data['lon'] = $originGeocode[1];
+                } else {
+                    $this->Flash->error('The city could not be saved. Unable to get lat/lon from GeoLoc API.');
+                    return false;
+                }
+            } else { // Local/Dev/QA
+                // Save city with a generic lat/lon (37.0, -100.0) to keep the scripts from flagging this city as invalid
+                $data['lat'] = 37.0;
+                $data['lon'] = -99.0;
+            }
+            $city = $this->Cities->patchEntity($city, $data);
             if ($this->Cities->save($city)) {
                 $this->Flash->success(__('The city has been saved.'));
 
