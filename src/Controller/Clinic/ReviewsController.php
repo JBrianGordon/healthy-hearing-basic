@@ -66,9 +66,8 @@ class ReviewsController extends BaseClinicController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $review->set('response', $this->request->getData('response'));
 
-            // Set response_status to RESPONSE_STATUS_RESPONDED if current status is RESPONSE_STATUS_NONE
-            $isCurrentResponseNone = $review->getOriginal('response_status') === ReviewResponseStatus::RESPONSE_STATUS_NONE->value;
-            if ($review->isDirty('response') && $isCurrentResponseNone) {
+            // Set response_status to RESPONSE_STATUS_RESPONDED if response field is changed by clinic
+            if ($review->isDirty('response')) {
                 $review->response_status = ReviewResponseStatus::RESPONSE_STATUS_RESPONDED->value;
             }
 
