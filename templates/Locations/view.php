@@ -48,7 +48,7 @@ $this->Breadcrumbs->add($location->title);
 				<div class="col-lg-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<div class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-12 col-lg-7 p0"; }?>">
+					<div id="basicInfo" class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-12 col-lg-7 p0"; }?>">
 						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
@@ -249,7 +249,7 @@ $this->Breadcrumbs->add($location->title);
 												</div>
 											</div>
 											<p class="col-12 tac"><small class="tac help-block mb0"><?= Configure::read('siteName'); ?> will contact you regarding your request as soon as possible.</small></p>
-											<div class="row col-12">
+											<div class="row col-12 ml0">
 												<div class="col-12">
 													<div id="apptRequestSubmitError" class="alert alert-danger tal" role="alert" style="display:none;">
 														<button type="button" class="close" data-dismiss="alert">x</button>

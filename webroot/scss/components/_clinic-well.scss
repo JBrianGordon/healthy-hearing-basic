@@ -274,6 +274,14 @@
   max-width: 220px;
 }
 
+#basicInfo {
+
+  @media screen and (min-width: $screen-md-min) {
+    float: right;
+    margin-left: 20px;
+  }
+}
+
 #apptRequestPanel {
   float: left;
   margin-left: 0;
@@ -281,7 +289,6 @@
 
   @media screen and (min-width: $screen-md-min) {
     width: 39.5%;
-    margin-left: 20px;
   }
 
   @media screen and (min-width: $screen-lg-min) {
