@@ -55,18 +55,18 @@ $this->Html->script('dist/common.min', ['block' => true]);
                                     <a href="/hearing-aids" class="btn btn-secondary">Browse by <?= $stateLabel ?></a>
                                 </p>
                             </div>
-                            <div class="panel-section d-none d-sm-block">
-                                <div data-hh-map></div>
-                                <p class="text-center">
-                                    <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
-                                </p>
-                            </div>
                             <?php if (!empty($clinicsNearMe)): ?>
                                 <div class="panel-section text-center">
                                     <h2 class="h3">Hearing clinics near me</h2>
                                     <?= $this->element($this->Clinic->nearMe($clinicsNearMe)); ?>
                                 </div>
                             <?php endif; ?>
+                            <div class="panel-section d-none d-sm-block">
+                                <div data-hh-map></div>
+                                <p class="text-center">
+                                    <button class="btn btn-secondary d-none d-md-block m-auto" data-bs-toggle="modal" data-bs-target="#enlargeMap"><span class="hh-icon-plus"></span> Enlarge Map</button>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $isMobileDevice): ?>
