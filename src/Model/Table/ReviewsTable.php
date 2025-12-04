@@ -344,8 +344,10 @@ class ReviewsTable extends Table
 
         $entity->set('sendReviewEmail', false);
 
+        $hasResponseStatusChanged = !($entity->getOriginal('response_status') === $entity->get('response_status'));
+
         // Check if 'status' OR 'response_status' has changed
-        if ($entity->isDirty('status') || $entity->isDirty('response_status')) {
+        if ($entity->isDirty('status') || $hasResponseStatusChanged) {
             // Is status 'Approved' (Published)?
             if (ReviewStatus::APPROVED === ReviewStatus::from($entity->get('status'))) {
                 // Was the 'response_status' changed from RESPONDED -> PUBLISHED
@@ -356,7 +358,7 @@ class ReviewsTable extends Table
                     // A clinic response was approved -> Send response-posted email
                     $entity->set('sendReviewEmail', 'emailReviewResponsePosted');
                 // Another 'response_status' change that doesn't trigger an email will return true
-                } elseif ($entity->getOriginal('response_status') !== $entity->get('response_status')) {
+                } elseif ($hasResponseStatusChanged) {
                     return true;
                 // Status changed to Approved - Send positive review email
                 } else {
