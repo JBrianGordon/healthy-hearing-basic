@@ -72,14 +72,14 @@ class ReviewsController extends BaseClinicController
             }
 
             if ($this->Reviews->save($review)) {
-                $this->Flash->success(__('The review has been saved.'));
+                $this->Flash->success(__('Response saved. It will be published soon.'));
 
                 return $this->redirect([
                     'action' => 'index',
                     $review->location_id,
                 ]);
             }
-            $this->Flash->error(__('The review could not be saved. Please, try again.'));
+            $this->Flash->error(__('Unable to save response. Please try again.'));
         }
 
         $location = $this->Reviews->Locations->get($review->location_id);
