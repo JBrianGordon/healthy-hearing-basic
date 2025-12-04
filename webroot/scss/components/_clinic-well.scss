@@ -296,12 +296,10 @@
   }
 
   &.contracted {
-    transition: 0.5s;
     transform: scale(1);
   }
 
   &.expanded {
-    transition: 0.5s;
     transform: scale(1.1);
   }
 

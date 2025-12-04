@@ -48,7 +48,7 @@ $this->Breadcrumbs->add($location->title);
 				<div class="col-lg-12 page-content">
 				
 					<!-- Basic clinic info -->
-					<div id="basicInfo" class="<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo "col-12 col-lg-7 p0"; }?>">
+					<div id="basicInfo" class="col-12 p0<?php if($isEnhancedOrPremier && Configure::read('country') != 'CA'){ echo " col-lg-7"; }?>">
 						<section class="panel<?php if($isEnhancedOrPremier){ echo " top-panel left-panel mb20"; }?>">
 							<div class="panel-body">
 								<div class="panel-section expanded basic-info">
