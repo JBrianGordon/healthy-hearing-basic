@@ -32,6 +32,12 @@
 			a:not(.btn) {
 				font-size: 20px;
 			}
+
+			figcaption{
+				a:not(.btn) {
+					font-size: 12px;
+				}
+			}
 		}
 
 		#facebook-imageUpload0::placeholder,
