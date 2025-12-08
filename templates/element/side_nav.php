@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 ?>
 <?php if(!$isClinic): ?>
-<div data-hh-side-nav>
+<div class="d-md-none" data-hh-side-nav>
 	<div class="row noprint">
 		<div class="col-sm-12">
 			<ul class="side-nav-links">
