@@ -10,12 +10,12 @@
   width: 100%;
 }
 
-.backdrop-gradient {
-  background-image: linear-gradient(to bottom, $brand-primary 0%, $brand-light 50%, $body-bg 100%);
+.home .backdrop {
+  background: #f9f9f9;
 }
 
-.backdrop-home-gradient {
-  background-image: linear-gradient(to bottom, $brand-primary 0%, $brand-light 100%);
+.backdrop-gradient {
+  background-image: linear-gradient(to bottom, $brand-primary 0%, $brand-light 50%, $body-bg 100%);
 }
 
 .backdrop-opacity {

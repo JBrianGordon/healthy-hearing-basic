@@ -8,19 +8,12 @@ $this->Html->script('dist/common.min', ['block' => true]);
 <div class="container-fluid site-body home">
     <div class="row pt0">
         <div class="backdrop-container">
-            <div class="backdrop backdrop-home-gradient backdrop-height"></div>
-            <picture class="backdrop-home p0">
-                <source media="(max-width: 991px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
-                <source media="(min-width:992px)" srcset="/img/home-hero.webp 1x, /img/home-hero-2x.webp 2x">
-                <img class="h-100" src="/img/home-hero.webp" alt="smiling doctor giving a consultation">
-            </picture>
-            <div class="backdrop backdrop-home-gradient backdrop-opacity backdrop-height"></div>
+            <div class="backdrop backdrop-gradient-home backdrop-height"></div>
         </div>
         <div class="container">
             <div class="row">
-                <?php //***TODO: uncomment when flash elements added*** echo $this->element('flashes'); ?>
                 <div class="col-lg-7 col-xl-6 over-backdrop">
-                    <section class="intro-text inverse">
+                    <section class="intro-text">
                         <h1 class="hero-headline"><?= Configure::read('heroHeadline') ?></h1>
                         <p class="lead">
                             <p><?= $content ?></p>
@@ -70,7 +63,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     </div>
                     <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $isMobileDevice): ?>
-                        <div class="hearing-test">
+                        <div class="hearing-test pb30">
                             <br>
                             <h3>Online hearing test</h3>
                             <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
@@ -83,8 +76,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
                 </div>
             </div>
             <?php if (Configure::read('showReports')): ?>
-                <div class="col-lg-7 col-xl-6 mobile-clear">
-                    <div class="panel panel-light">
+                <div class="col-lg-7 col-xl-6 mobile-clear p0">
+                    <div class="report-panel panel panel-light">
                         <?php if (!empty($articles)): ?>
                             <header class="panel-heading text-center">
                             <h2>The Healthy Hearing Report</h2>

@@ -65,6 +65,12 @@
     }
   }
 
+  .report-panel header {
+    @media only screen and (max-width: $screen-sm-max) {
+      background: $brand-primary;
+    }
+  }
+
   .blog-previews {
     padding: 0;
     position: relative;
