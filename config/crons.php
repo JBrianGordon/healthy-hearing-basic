@@ -1,0 +1,96 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| HEALTHY HEARING - PRODUCTION
+|--------------------------------------------------------------------------
+*/
+
+// -- INTRA-DAY PROCESSES
+
+// * * * * * /var/www/prod18/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/prod/current && bin/cake queue run -q
+// */10 * * * * /var/www/prod18/hh/app/scripts/parse_crm_emails.sh
+// */5 * * * * /var/www/prod18/hh/app/scripts/parse_voicemail.sh
+
+// -- DAILY PROCESSES
+// ----- | (DAILY - Early morning)
+
+// 30 5 * * * /var/www/prod/hh/app/scripts/daily_shells.sh
+// 30 1 * * * cd /var/www/prod18/hh/app && ./cake locations updateMetricsCache
+
+// ----- | (DAILY - Midnight/Night)
+
+// 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
+
+// -- WEEKLY PROCESSES
+
+// 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
+
+// -- MONTHLY PROCESSES
+
+// 0 13 5 * * /var/www/prod18/hh/app/scripts/premier_analytics_shell.sh
+
+/*
+|--------------------------------------------------------------------------
+| DEV4 SERVER - DEV AND QA environments
+|--------------------------------------------------------------------------
+*/
+
+// -- INTRA-DAY PROCESSES
+
+// * * * * * /var/www/dev/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/dev/current && bin/cake queue run -q
+// * * * * * /var/www/ca-dev/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/ca-dev/current && bin/cake queue run -q
+// * * * * * /var/www/qa18/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/qa/current && bin/cake queue run -q
+// * * * * * /var/www/ca-qa18/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/ca-qa/current && bin/cake queue run -q
+
+/*
+|--------------------------------------------------------------------------
+| HEARING DIRECTORY - PRODUCTION
+|--------------------------------------------------------------------------
+*/
+
+// -- INTRA-DAY PROCESSES
+
+// */1 * * * * /var/www/prod18/hh/app/scripts/queue_process.sh
+* * * * *  cd /var/www/prod/current && bin/cake queue run -q
+
+// -- DAILY PROCESSES
+// ----- | (DAILY - Early morning)
+
+// 50 5 * * * /var/www/prod18/hh/app/scripts/daily_shells.sh
+
+// ----- | (DAILY - Midnight/Night)
+
+// 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
+
+// -- WEEKLY PROCESSES
+
+// 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
+
+/*
+|--------------------------------------------------------------------------
+| REDMINE SERVER
+|--------------------------------------------------------------------------
+*/
+
+// -- INTRA-DAY PROCESSES
+
+// */5 * * * * cd /var/www/hh && git remote update --prune
+// */5 * * * * cd /var/www/hh-cake4x && git remote update --prune
+
+/*
+|--------------------------------------------------------------------------
+| HHDB1 - DB BACKUP SERVER
+|--------------------------------------------------------------------------
+*/
+
+// -- DAILY PROCESSES
+
+// 00 2 * * * /root/perconadump_prod.sh
+// 30 2 * * * /root/cadb_dump_prod.sh
+// 0 12 * * * /root/redmine.sh > /tmp/redmine.txt // DOESN'T CURRENTLY WORK
