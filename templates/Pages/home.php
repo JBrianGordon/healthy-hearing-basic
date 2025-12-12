@@ -8,7 +8,7 @@ $this->Html->script('dist/common.min', ['block' => true]);
 <div class="container-fluid site-body home">
     <div class="row pt0">
         <div class="backdrop-container">
-            <div class="backdrop backdrop-gradient-home backdrop-height"></div>
+            <div class="backdrop backdrop-home-gradient backdrop-height"></div>
         </div>
         <div class="container">
             <div class="row">
