@@ -14,21 +14,54 @@
 // */5 * * * * /var/www/prod18/hh/app/scripts/parse_voicemail.sh
 
 // -- DAILY PROCESSES
+// ----------------------------------------------------------------------------------------
 // ----- | (DAILY - Early morning)
+// ------- | 30 5 * * * /var/www/prod/hh/app/scripts/daily_shells.sh
+// -----------------------------------------------------------------
+// ./cake call_sources importLeadscoreReports
+// ./cake ca_calls exportDailyYhnCallData
+// ./cake ca_calls clearOldOutboundCalls
+// ./cake ca_calls importBlueprintAppts
+// ./cake reviews clear_spam
+// ./cake locations endGracePeriods
+// ./cake locations unfreezeListingTypes
+// ./cake locations findExpiredFeatures
+// ./cake locations findListingTypesForOticon
+// ./cake locations findListingTypesForCqp
+// ./cake locations updateReviewCounts
+// ./cake content freezeContent
+// ?? -- GETTING RID OF THIS? -- ./cake util cache_permissions
+// ?? -- HOW WILL WE REPORT ERRORS? -- ./cake mail sendCronEmail "Daily" $FILENAME
 
-// 30 5 * * * /var/www/prod/hh/app/scripts/daily_shells.sh
 // 30 1 * * * cd /var/www/prod18/hh/app && ./cake locations updateMetricsCache
 
 // ----- | (DAILY - Midnight/Night)
-
-// 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
+// ------- | 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
+// ----------------------------------------------------------------------
+// ./cake content set_last_modified
+// ./cake content publishContent
+// ./cake wiki publishWiki
+// ./cake corp publishCorp
+// ./scripts/regenerate_sitemap.sh
+// ./cake locations updateMetrics
+// ./cake locations updateMetricsCache
+// ?? -- GETTING RID OF THIS? -- // ./cake util cache_permissions
+// ?? -- HOW WILL WE REPORT ERRORS? -- // ./cake mail sendCronEmail "Nightly" $FILENAME
 
 // -- WEEKLY PROCESSES
-
-// 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
+// ----------------------------------------------------------------------------------------
+// ------- | 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
+// --------------------------------------------------------------------
+// ./cake city addAndUpdateCities
+// ./cake city addAndUpdateCitiesByRange
+// ./cake city findInvalidCities
+// ./cake locations findDuplicates 1
+// ./cake locations cleanupProviders
+// ?? -- GETTING RID OF THIS? -- ./cake util cache_permissions
+// ?? -- HOW WILL WE REPORT ERRORS? -- ./cake mail sendCronEmail "Weekly" $FILENAME
 
 // -- MONTHLY PROCESSES
-
+// ----------------------------------------------------------------------------------------
 // 0 13 5 * * /var/www/prod18/hh/app/scripts/premier_analytics_shell.sh
 
 /*
