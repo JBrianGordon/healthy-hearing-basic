@@ -43,6 +43,13 @@
 // ./cake wiki publishWiki
 // ./cake corp publishCorp
 // ./scripts/regenerate_sitemap.sh
+# Regenerate query caches for sitemaps
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_City && curl -s https://dev.hhcake.com/sitemap_City.xml > /dev/null
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_Clinic && curl -s https://dev.hhcake.com/sitemap_Clinic.xml > /dev/null
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_Content && curl -s https://dev.hhcake.com/sitemap_Content.xml > /dev/null
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_Corp && curl -s https://dev.hhcake.com/sitemap_Corp.xml > /dev/null
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_Help && curl -s https://dev.hhcake.com/sitemap_Help.xml > /dev/null
+30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_State && curl -s https://dev.hhcake.com/sitemap_State.xml > /dev/null
 // ./cake locations updateMetrics
 // ./cake locations updateMetricsCache
 // ?? -- GETTING RID OF THIS? -- // ./cake util cache_permissions
@@ -73,13 +80,13 @@
 // -- INTRA-DAY PROCESSES
 
 // * * * * * /var/www/dev/hh/app/scripts/queue_process.sh
-* * * * *  cd /var/www/dev/current && bin/cake queue run -q
+* * * * * cd /var/www/dev/current && bin/cake queue run -q
 // * * * * * /var/www/ca-dev/hh/app/scripts/queue_process.sh
-* * * * *  cd /var/www/ca-dev/current && bin/cake queue run -q
+* * * * * cd /var/www/ca-dev/current && bin/cake queue run -q
 // * * * * * /var/www/qa18/hh/app/scripts/queue_process.sh
-* * * * *  cd /var/www/qa/current && bin/cake queue run -q
+* * * * * cd /var/www/qa/current && bin/cake queue run -q
 // * * * * * /var/www/ca-qa18/hh/app/scripts/queue_process.sh
-* * * * *  cd /var/www/ca-qa/current && bin/cake queue run -q
+* * * * * cd /var/www/ca-qa/current && bin/cake queue run -q
 
 /*
 |--------------------------------------------------------------------------
