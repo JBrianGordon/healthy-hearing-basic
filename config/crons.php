@@ -30,6 +30,7 @@
 // ./cake locations findListingTypesForCqp
 // ./cake locations updateReviewCounts
 // ./cake content freezeContent
+30 5 * * * cd /var/www/prod/current && bin/cake editorial freezeContent
 // ?? -- GETTING RID OF THIS? -- ./cake util cache_permissions
 // ?? -- HOW WILL WE REPORT ERRORS? -- ./cake mail sendCronEmail "Daily" $FILENAME
 
@@ -40,8 +41,11 @@
 // ----------------------------------------------------------------------
 // ./cake content set_last_modified
 // ./cake content publishContent
+30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Content
 // ./cake wiki publishWiki
+30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Wikis
 // ./cake corp publishCorp
+30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Corps
 // ./scripts/regenerate_sitemap.sh
 # Regenerate query caches for sitemaps
 30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_City && curl -s https://dev.hhcake.com/sitemap_City.xml > /dev/null
