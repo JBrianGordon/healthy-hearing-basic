@@ -35,6 +35,7 @@
 // ?? -- HOW WILL WE REPORT ERRORS? -- ./cake mail sendCronEmail "Daily" $FILENAME
 
 // 30 1 * * * cd /var/www/prod18/hh/app && ./cake locations updateMetricsCache
+// REMOVED -- COUNTMETRICS WERE REMOVED IN https://redmine.healthyhearing.com/issues/17166
 
 // ----- | (DAILY - Midnight/Night)
 // ------- | 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
@@ -55,7 +56,9 @@
 30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_Help && curl -s https://dev.hhcake.com/sitemap_Help.xml > /dev/null
 30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_State && curl -s https://dev.hhcake.com/sitemap_State.xml > /dev/null
 // ./cake locations updateMetrics
+// REMOVED -- COUNTMETRICS WERE REMOVED IN https://redmine.healthyhearing.com/issues/17166
 // ./cake locations updateMetricsCache
+// REMOVED -- COUNTMETRICS WERE REMOVED IN https://redmine.healthyhearing.com/issues/17166
 // ?? -- GETTING RID OF THIS? -- // ./cake util cache_permissions
 // ?? -- HOW WILL WE REPORT ERRORS? -- // ./cake mail sendCronEmail "Nightly" $FILENAME
 
