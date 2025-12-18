@@ -29,13 +29,22 @@ class GeoLocAddressUtility
 
     public function byAddress($address)
     {
-        $geoLocRaw = $this->provider->geocodeQuery(GeocodeQuery::create($address))->first();
+        $geoLocResult = $this->provider->geocodeQuery(GeocodeQuery::create($address))->first();
 
-        $latLon = [
-            $geoLocRaw->getCoordinates()->getLatitude(),
-            $geoLocRaw->getCoordinates()->getLongitude(),
+        if (empty($geoLocResult->getLocality())) {
+            // Unable to locate this address
+            return false;
+        }
+
+        $geoLocInfo = [
+            'zip' => $geoLocResult->getPostalCode(),
+            'city' => $geoLocResult->getLocality(),
+            'state' => $geoLocResult->getAdminLevels()->first()->getCode(),
+            'country' => $geoLocResult->getCountry()->getCode(),
+            'lat' => $geoLocResult->getCoordinates()->getLatitude(),
+            'lon' => $geoLocResult->getCoordinates()->getLongitude(),
         ];
 
-        return $latLon;
+        return $geoLocInfo;
     }
 }

@@ -66,7 +66,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <th class="p5"><?= $this->Paginator->sort('lon') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('city') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('state', ['label' => ucfirst($stateLabel)]) ?></th>
-				                    <th class="p5"><?= $this->Paginator->sort('areacode') ?></th>
 				                    <th class="p5"><?= $this->Paginator->sort('country_code') ?></th>
 				                    <th class="actions p5"><?= __('Actions') ?></th>
 				                </tr>
@@ -83,7 +82,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 				                    <td class="p5"><?= $this->Number->format($zip->lon) ?></td>
 				                    <td class="p5"><?= h($zip->city) ?></td>
 				                    <td class="p5"><?= h($zip->state) ?></td>
-				                    <td class="p5"><?= h($zip->areacode) ?></td>
 				                    <td class="p5"><?= h($zip->country_code) ?></td>
 				                    <td class="actions p5">
 				                        <div class="btn-group-vertical btn-group-sm">

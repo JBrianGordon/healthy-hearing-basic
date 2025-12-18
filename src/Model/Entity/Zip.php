@@ -13,7 +13,6 @@ use Cake\ORM\Entity;
  * @property float $lon
  * @property string $city
  * @property string $state
- * @property string $areacode
  * @property string|null $country_code
  */
 class Zip extends Entity
@@ -33,7 +32,6 @@ class Zip extends Entity
         'lon' => true,
         'city' => true,
         'state' => true,
-        'areacode' => true,
         'country_code' => true,
     ];
 }

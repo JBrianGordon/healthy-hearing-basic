@@ -54,7 +54,6 @@ class ZipsTable extends Table
             ->value('country_code')
             ->value('lat')
             ->value('lon')
-            ->value('areacode')
             ->add('q', 'Search.Like', [
                 'before' => true,
                 'after' => true,
@@ -81,31 +80,26 @@ class ZipsTable extends Table
 
         $validator
             ->numeric('lat')
-            ->notEmptyString('lat');
+            ->allowEmptyString('lat');
 
         $validator
             ->numeric('lon')
-            ->notEmptyString('lon');
+            ->allowEmptyString('lon');
 
         $validator
             ->scalar('city')
             ->maxLength('city', 64)
-            ->notEmptyString('city');
+            ->allowEmptyString('city');
 
         $validator
             ->scalar('state')
             ->maxLength('state', 2)
-            ->notEmptyString('state');
-
-        $validator
-            ->scalar('areacode')
-            ->maxLength('areacode', 3)
-            ->notEmptyString('areacode');
+            ->allowEmptyString('state');
 
         $validator
             ->scalar('country_code')
             ->maxLength('country_code', 2)
-            ->notEmptyString('country_code');
+            ->allowEmptyString('country_code');
 
         return $validator;
     }

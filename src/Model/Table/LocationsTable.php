@@ -2636,8 +2636,8 @@ class LocationsTable extends Table
         if (!empty($location)) {
             $address = "{$location->address}, {$location->city}, {$location->state} {$location->zip} {$location->country}";
             if ($geoloc = $this->geoLocAddress($address)) {
-                $location->lat = $geoloc[0];
-                $location->lon = $geoloc[1];
+                $location->lat = $geoloc['lat'];
+                $location->lon = $geoloc['lon'];
                 $this->save($location);
                 return true;
             }

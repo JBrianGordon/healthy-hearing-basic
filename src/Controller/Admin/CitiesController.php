@@ -72,10 +72,10 @@ class CitiesController extends BaseAdminController
             // Only call Google API from prod.
             if (Configure::read('env') == 'prod') {
                 $address = $data['city'].', '.$data['state'].', '.$data['country'];
-                $originGeocode = $this->Locations->geoLocAddress($address);
-                if (!empty($originGeocode[0])) {
-                    $data['lat'] = $originGeocode[0];
-                    $data['lon'] = $originGeocode[1];
+                $geoLocAddress = $this->Locations->geoLocAddress($address);
+                if (!empty($geoLocAddress['lat'])) {
+                    $data['lat'] = $geoLocAddress['lat'];
+                    $data['lon'] = $geoLocAddress['lon'];
                 } else {
                     $this->Flash->error('The city could not be saved. Unable to get lat/lon from GeoLoc API.');
                     return false;
