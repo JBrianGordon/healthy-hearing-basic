@@ -25,14 +25,15 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </p>
                     </section>
                     <?php if (Configure::read('showHearingTest') && Configure::read('country') != 'US' && !$isMobileDevice): ?>
-                        <div class="hearing-test">
-                            <br>
-                            <h2>Online hearing test</h2>
-                            <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
-                            <br>
-                            <p>
+                        <div class="panel panel-primary hearing-test p0 mb30">
+                            <header class="panel-heading text-center">Online hearing test</header>
+                            <div class="panel-body">
+                                <br>
+                                <p class="p10">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
+                                <p class="p10">
                                 <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
-                            </p>
+                                </p>
+                            </div>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -63,14 +64,15 @@ $this->Html->script('dist/common.min', ['block' => true]);
                         </div>
                     </div>
                     <?php if ((Configure::read('showHearingTest') && Configure::read('country') == 'US') || $isMobileDevice): ?>
-                        <div class="hearing-test pb30">
-                            <br>
-                            <h3>Online hearing test</h3>
-                            <p>Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
-                            <br>
-                            <p>
+                        <div class="panel panel-primary hearing-test p0">
+                            <header class="panel-heading text-center">Online hearing test</header>
+                            <div class="panel-body">
+                                <br>
+                                <p class="p10">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
+                                <p class="p10">
                                 <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
-                            </p>
+                                </p>
+                            </div>
                         </div>
                     <?php endif; ?>
                 </div>
