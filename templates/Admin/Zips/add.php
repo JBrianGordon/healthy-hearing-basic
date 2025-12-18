@@ -7,6 +7,7 @@ use Cake\Core\Configure;
  */
  
 $this->Html->script('dist/admin_common.min', ['block' => true]);
+$zip ??= null;
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
@@ -28,12 +29,6 @@ $this->Html->script('dist/admin_common.min', ['block' => true]);
 			            <?= $this->Form->create($zip) ?>
 			            <fieldset>
 			                <?= $this->Form->control('zip', ['label' => ucfirst(Configure::read('zipLabel')), 'type'=>'string']) ?>
-							<?= $this->Form->control('lat') ?>
-							<?= $this->Form->control('lon') ?>
-							<?= $this->Form->control('city') ?>
-							<?= $this->Form->control('state', ['label' => ucfirst(Configure::read('stateLabel'))]) ?>
-							<?= $this->Form->control('areacode') ?>
-							<?= $this->Form->control('country_code', ['default' => Configure::read('country')]) ?>
 			            </fieldset>
 			            <div class="form-actions tar">
 			            	<?= $this->Form->button(__('Add ' . Configure::read('zipLabel')), ['class' => 'btn btn-primary btn-lg']) ?>

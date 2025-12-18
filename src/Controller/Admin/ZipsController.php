@@ -64,19 +64,29 @@ class ZipsController extends BaseAdminController
     public function add()
     {
         $zip = $this->Zips->newEmptyEntity();
+        $zipLabel = Configure::read('zipLabel');
 
         if ($this->request->is('post')) {
-            $zip = $this->Zips->patchEntity($zip, $this->request->getData());
-            $zipLabel = Configure::read('zipLabel');
+            $this->Locations = $this->fetchTable('Locations');
+            $data = $this->request->getData();
+            $data['country'] ??= Configure::read('country');
+            $geoloc = $this->Locations->geoLocAddress($data['zip'].', '.$data['country']);
+            if (empty($geoloc['lat']) || empty($geoloc['lon'])) {
+                $this->Flash->error('The '.$zipLabel.' could not be saved. Unable to get lat/lon from GeoLoc API.');
+                return;
+            }
+            $geoloc['city'] = cleanCityName($geoloc['city']);
+            $geoloc['state'] = $this->Locations->stateAbbr($geoloc['state']);
+            $geoloc['country_code'] = $geoloc['country'];
 
+            $zip = $this->Zips->patchEntity($zip, $geoloc);
             if ($this->Zips->save($zip)) {
-                $this->Flash->success(__('The ' . $zipLabel . ' has been saved.'));
-
+                $this->Flash->success('The '.$zipLabel.'  has been saved.');
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The ' . $zipLabel . ' could not be saved. Please, try again.'));
+            $this->Flash->error('The '.$zipLabel.' could not be saved. Please, try again.');
         }
-        $this->set('title', 'Add ' . Configure::read('zipLabel'));
+        $this->set('title', 'Add ' . $zipLabel);
         $this->set(compact('zip'));
     }
 

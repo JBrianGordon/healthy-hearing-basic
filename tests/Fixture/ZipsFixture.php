@@ -30,7 +30,6 @@ class ZipsFixture extends TestFixture
                 'lon' => 1,
                 'city' => '',
                 'state' => '',
-                'areacode' => 'L',
                 'country_code' => 'Lo',
             ],
         ];
