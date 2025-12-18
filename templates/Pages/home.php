@@ -29,8 +29,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
                             <header class="panel-heading text-center">Online hearing test</header>
                             <div class="panel-body">
                                 <br>
-                                <p class="p10">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
-                                <p class="p10">
+                                <p class="pr25 pl25">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
+                                <p class="pb25 pr25 pl25 pt10">
                                 <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
                                 </p>
                             </div>
@@ -68,8 +68,8 @@ $this->Html->script('dist/common.min', ['block' => true]);
                             <header class="panel-heading text-center">Online hearing test</header>
                             <div class="panel-body">
                                 <br>
-                                <p class="p10">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
-                                <p class="p10">
+                                <p class="pl25 pr25">Curious how you’re hearing? Take our simple test to help you assess if you would benefit from a checkup with a hearing healthcare professional! </p>
+                                <p class="pb25 pr25 pl25 pt10">
                                 <a href="/help/online-hearing-test" class="btn btn-primary">Launch online hearing test</a>
                                 </p>
                             </div>
