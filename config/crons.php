@@ -23,6 +23,7 @@
 // PAUSED - In ticket #15221 -- ./cake ca_calls clearOldOutboundCalls
 // ./cake ca_calls importBlueprintAppts (RUNNING ON HHAPP4)
 // ./cake reviews clear_spam
+30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // ./cake locations endGracePeriods
 // ./cake locations unfreezeListingTypes
 // ./cake locations findExpiredFeatures
