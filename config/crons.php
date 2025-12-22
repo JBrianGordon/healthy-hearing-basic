@@ -41,12 +41,13 @@
 // ------- | 30 0 * * * /var/www/prod18/hh/app/scripts/midnight_shells.sh
 // ----------------------------------------------------------------------
 // ./cake content set_last_modified
+30 0 * * * cd /var/www/prod/current && bin/cake editorial setLastModified
 // ./cake content publishContent
-30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Content
+30 0 * * * cd /var/www/prod/current && bin/cake editorial publish Content
 // ./cake wiki publishWiki
-30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Wikis
+30 0 * * * cd /var/www/prod/current && bin/cake editorial publish Wikis
 // ./cake corp publishCorp
-30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Corps
+30 0 * * * cd /var/www/prod/current && bin/cake editorial publish Corps
 // ./scripts/regenerate_sitemap.sh
 # Regenerate query caches for sitemaps
 30 0 * * * cd /var/www/prod/shared/tmp/cache/ && rm -f cake_sitemap_query_City && curl -s https://dev.hhcake.com/sitemap_City.xml > /dev/null
