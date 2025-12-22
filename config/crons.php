@@ -116,6 +116,7 @@
 // PAUSED - In ticket #15221 -- ./cake ca_calls clearOldOutboundCalls
 // HH-ONLY ON HHAPP4 -./cake ca_calls importBlueprintAppts
 // ./cake reviews clear_spam
+30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations endGracePeriods
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations unfreezeListingTypes
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations findExpiredFeatures
