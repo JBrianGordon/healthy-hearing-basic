@@ -25,6 +25,7 @@
 // ./cake reviews clear_spam
 30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // ./cake locations endGracePeriods
+30 5 * * * cd /var/www/prod/current && bin/cake locations endGracePeriods
 // ./cake locations unfreezeListingTypes
 // ./cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
