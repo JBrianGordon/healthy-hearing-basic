@@ -32,7 +32,7 @@
 30 5 * * * cd /var/www/prod/current && bin/cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
 // ./cake locations findListingTypesForCqp
-// ./cake locations updateReviewCounts
+// REMOVED - REVIEWS COUNTER-CACHE PERFORMS THIS FUNCTION // ./cake locations updateReviewCounts
 // ./cake content freezeContent
 30 5 * * * cd /var/www/prod/current && bin/cake editorial freezeContent
 // ?? -- GETTING RID OF THIS? -- ./cake util cache_permissions
