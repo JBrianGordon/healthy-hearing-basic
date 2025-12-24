@@ -27,6 +27,7 @@
 // ./cake locations endGracePeriods
 30 5 * * * cd /var/www/prod/current && bin/cake locations endGracePeriods
 // ./cake locations unfreezeListingTypes
+30 5 * * * cd /var/www/prod/current && bin/cake locations unfreezeListingTypes
 // ./cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
 // ./cake locations findListingTypesForCqp
