@@ -25,11 +25,14 @@
 // ./cake reviews clear_spam
 30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // ./cake locations endGracePeriods
+30 5 * * * cd /var/www/prod/current && bin/cake locations endGracePeriods
 // ./cake locations unfreezeListingTypes
+30 5 * * * cd /var/www/prod/current && bin/cake locations unfreezeListingTypes
 // ./cake locations findExpiredFeatures
+30 5 * * * cd /var/www/prod/current && bin/cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
 // ./cake locations findListingTypesForCqp
-// ./cake locations updateReviewCounts
+// REMOVED - REVIEWS COUNTER-CACHE PERFORMS THIS FUNCTION // ./cake locations updateReviewCounts
 // ./cake content freezeContent
 30 5 * * * cd /var/www/prod/current && bin/cake editorial freezeContent
 // ?? -- GETTING RID OF THIS? -- ./cake util cache_permissions
@@ -116,6 +119,7 @@
 // PAUSED - In ticket #15221 -- ./cake ca_calls clearOldOutboundCalls
 // HH-ONLY ON HHAPP4 -./cake ca_calls importBlueprintAppts
 // ./cake reviews clear_spam
+30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations endGracePeriods
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations unfreezeListingTypes
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations findExpiredFeatures
