@@ -9,9 +9,6 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 
-/**
- * EditorialSetLastModified command.
- */
 class LocationsEndGracePeriodsCommand extends Command
 {
     /**

@@ -9,14 +9,14 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 
-class LocationsUnfreezeListingTypesCommand extends Command
+class LocationsFindExpiredFeaturesCommand extends Command
 {
     /**
      * @inheritDoc
      */
     public static function defaultName(): string
     {
-        return 'locations unfreezeListingTypes';
+        return 'locations findExpiredFeatures';
     }
 
     protected $defaultTable = 'Locations';
@@ -32,7 +32,7 @@ class LocationsUnfreezeListingTypesCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
 
-        $parser->setDescription('Unfreeze clinics with an expired frozen listing type');
+        $parser->setDescription('Find and disable expired upgrade features');
 
         return $parser;
     }
@@ -46,31 +46,28 @@ class LocationsUnfreezeListingTypesCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $io->out('Unfreeze clinics with an expired frozen listing type');
+        $io->out('Find and disable expired upgrade features');
         $io->hr();
 
         if (Configure::read('isTieringEnabled')) {
+            // Find content library expirations
             $locations = $this->Locations->find('all', [
                 'conditions' => [
-                    'is_listing_type_frozen' => true,
-                    'frozen_expiration <' => date('Y-m-d')
+                    'feature_content_library' => true,
+                    'content_library_expiration <' => date('Y-m-d')
                 ],
             ])->all();
             if (!empty($locations)) {
                 foreach ($locations as $location) {
-                    $io->out("Frozen expired for ".$location->id);
-
-                    $location->is_listing_type_frozen = false;
-                    $location->frozen_expiration = null;
+                    $io->out("Content library feature expired for ".$location->id);
+                    $location->feature_content_library = false;
+                    $location->content_library_expiration = null;
                     $this->Locations->save($location);
-                    $this->Locations->calculateListingType($location->id);
-                    $noteBody = 'Listing type no longer frozen (expired).';
+                    $noteBody = 'Content library feature expired.';
                     $this->Locations->LocationNotes->add($location->id, $noteBody);
                 }
-                // End CS numbers for any locations that are no longer shown
-                $this->Locations->CallSources->endInvalidCallSourceNumbers($io);
             }
-            $io->success('Done. Listing types un-frozen for '.count($locations).' locations.');
+            $io->success('Done. Content library feature expired for '.count($locations).' locations.');
         } else {
             $io->out('Skipping. Tiering is disabled.');
         }

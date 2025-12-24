@@ -29,6 +29,7 @@
 // ./cake locations unfreezeListingTypes
 30 5 * * * cd /var/www/prod/current && bin/cake locations unfreezeListingTypes
 // ./cake locations findExpiredFeatures
+30 5 * * * cd /var/www/prod/current && bin/cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
 // ./cake locations findListingTypesForCqp
 // ./cake locations updateReviewCounts
