@@ -8,6 +8,7 @@
 
 	&.home {
 		background: $brand-light;
+
 		.row {
 			display: block;
 		}
@@ -34,7 +35,7 @@
 				font-size: 20px;
 			}
 
-			figcaption{
+			figcaption {
 				a:not(.btn) {
 					font-size: 12px;
 				}
@@ -552,6 +553,12 @@
 
 	&.secondary-fixed-nav {
 		padding-top: $navbar-height + $navbar-inverse-height;
+	}
+
+	figcaption {
+		a {
+			font-size: 16px;
+		}
 	}
 
 	.col-md-5.col-lg-5.col-lg-offset-1.over-backdrop {
