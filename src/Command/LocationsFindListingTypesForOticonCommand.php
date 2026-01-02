@@ -83,14 +83,14 @@ class LocationsFindListingTypesForOticonCommand extends Command
 
         // $localFilename = TMP . 'hh_listing_types.csv';
         // $serverFilename = '/DF_SF_to_HH/Prod/hh_listing_types.csv';
-        // Uncomment when testing on local, dev, qa, etc.
+        // Uncomment when testing on local, dev, qa, etc. AND CHANGE 'ENV' CHECK BELOW
         $localFilename = TMP . 'TEST.csv';
         $serverFilename = '/DF_SF_to_HH/Test/TEST.csv';
 
         $io->helper('BaseShell')->writeFile($data, $localFilename, true);
 
         // Only upload on production environment
-        if (Configure::read('env') === 'local') {
+        if (Configure::read('env') === 'prod') {
             $server = Configure::read('oticonSharedServer');
 
             $success = $io->helper('BaseShell')->sftpCopyFile(
