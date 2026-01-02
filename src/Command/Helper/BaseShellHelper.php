@@ -4,6 +4,7 @@ namespace App\Command\Helper;
 use Cake\Console\Helper;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
+use Exception;
  
 class BaseShellHelper extends Helper
 {
@@ -79,6 +80,7 @@ class BaseShellHelper extends Helper
         $this->_io->out();
         if ($File->write($data)) {
             $this->_io->out("$filename written.");
+            $this->_io->hr();
             return true;
         } else {
             $this->errorAndExit("Unable to write to $filename");
@@ -117,43 +119,80 @@ class BaseShellHelper extends Helper
         exit();
     }
 
+
     /**
-    * Copy a local file to an sftp server
-    */
-    function sftpCopyFile($serverName, $username, $password, $localFilename, $remoteFilename=null, $sshKeyPublic=null, $sshKeyPrivate=null){
+     * Copy a local file to an SFTP server
+     *
+     * @param string $serverName Server hostname or IP
+     * @param string $username SSH username
+     * @param string $localFilename Path to local file
+     * @param string|null $password SSH password (null if using key auth)
+     * @param string|null $remoteFilename Remote path (defaults to local filename)
+     * @param string|null $sshKeyPublic Path to public key file
+     * @param string|null $sshKeyPrivate Path to private key file
+     * @param string|null $keyPassword Password for private key (if encrypted)
+     * @return bool Success status
+     */
+    function sftpCopyFile(
+        string $serverName,
+        string $username,
+        string $localFilename,
+        ?string $password = null,
+        ?string $remoteFilename = null,
+        ?string $sshKeyPublic = null,
+        ?string $sshKeyPrivate = null,
+        ?string $keyPassword = null
+    ): bool {
         if (empty($remoteFilename)) {
             $remoteFilename = $localFilename;
         }
-        $this->_io->info('Copying '.$localFilename.' to '.$serverName.'/'.$remoteFilename);
+
+        $this->_io->info("Copying {$localFilename} to {$serverName}/{$remoteFilename}");
+
         try {
-            //TODO: convert this to curl implementation. See sftpRetrieveFile().
-            die('todo sftpCopyFile');
-            /*
-            $connection = ssh2_connect($serverName);
-            if (!$connection) {
-                $this->_io->error("Failed to connect to ".$serverName);
+            // Verify local file exists
+            if (!file_exists($localFilename) || !is_readable($localFilename)) {
+                $this->_io->error("Local file not found or not readable: {$localFilename}");
                 return false;
             }
-            if (!empty($sshKeyPublic) && !empty($sshKeyPrivate)) {
-                @ssh2_auth_pubkey_file($connection, $username, $sshKeyPublic, $sshKeyPrivate);
-            }
-            if (!ssh2_auth_password($connection, $username, $password)) {
-                $this->_io->error("Failed to login to ".$serverName);
+
+            $sftp = new \phpseclib3\Net\SFTP($serverName);
+
+            // Authenticate
+            $authenticated = false;
+            if (!empty($sshKeyPrivate)) {
+                $key = \phpseclib3\Crypt\PublicKeyLoader::load(
+                    file_get_contents($sshKeyPrivate),
+                    $keyPassword
+                );
+                $authenticated = $sftp->login($username, $key);
+            } elseif (!empty($password)) {
+                $authenticated = $sftp->login($username, $password);
+            } else {
+                $this->_io->error("No authentication method provided");
                 return false;
             }
-            $sftp = ssh2_sftp($connection);
-            $remote_path = "ssh2.sftp://" . intval($sftp) . "/" . $remoteFilename;
-            $resFile = fopen($remote_path, 'w');
-            $srcFile = fopen($localFilename, 'r');
-            $writtenBytes = stream_copy_to_stream($srcFile, $resFile);
-            fclose($resFile);
-            fclose($srcFile);*/
+
+            if (!$authenticated) {
+                $this->_io->error("Failed to authenticate to {$serverName}");
+                return false;
+            }
+
+            // Upload file
+            $result = $sftp->put($remoteFilename, $localFilename, \phpseclib3\Net\SFTP::SOURCE_LOCAL_FILE);
+
+            if (!$result) {
+                $this->_io->error("Failed to upload file to {$serverName}");
+                return false;
+            }
+
+            $this->_io->success("Successfully copied file to {$serverName}/{$remoteFilename}");
+            return true;
+
         } catch (Exception $e) {
-            error_log('Exception: ' . $e->getMessage());
-            $this->_io->error('Exception: ' . $e->getMessage());
+            $this->_io->error("Exception: {$e->getMessage()}");
             return false;
         }
-        return true;
     }
 
     /**
