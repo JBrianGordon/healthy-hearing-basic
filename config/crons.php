@@ -31,7 +31,8 @@
 // ./cake locations findExpiredFeatures
 30 5 * * * cd /var/www/prod/current && bin/cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
-// ./cake locations findListingTypesForCqp
+30 5 * * * cd /var/www/prod/current && bin/cake locations findListingTypesForOticon
+// REMOVED - BOB LIND CONFIRMED THAT CQ NO LONGER USES THIS UPLOAD - ./cake locations findListingTypesForCqp
 // REMOVED - REVIEWS COUNTER-CACHE PERFORMS THIS FUNCTION // ./cake locations updateReviewCounts
 // ./cake content freezeContent
 30 5 * * * cd /var/www/prod/current && bin/cake editorial freezeContent

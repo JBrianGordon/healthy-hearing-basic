@@ -81,11 +81,11 @@ class LocationsFindListingTypesForOticonCommand extends Command
             );
         }
 
-        // $localFilename = TMP . 'hh_listing_types.csv';
-        // $serverFilename = '/DF_SF_to_HH/Prod/hh_listing_types.csv';
+        $localFilename = TMP . 'hh_listing_types.csv';
+        $serverFilename = '/DF_SF_to_HH/Prod/hh_listing_types.csv';
         // Uncomment when testing on local, dev, qa, etc. AND CHANGE 'ENV' CHECK BELOW
-        $localFilename = TMP . 'TEST.csv';
-        $serverFilename = '/DF_SF_to_HH/Test/TEST.csv';
+        // $localFilename = TMP . 'TEST.csv';
+        // $serverFilename = '/DF_SF_to_HH/Test/TEST.csv';
 
         $io->helper('BaseShell')->writeFile($data, $localFilename, true);
 

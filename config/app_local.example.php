@@ -179,4 +179,11 @@ return [
     // CKEditor key and env
     'ckEditorAccessKey' => '_ck_editor_access_key_',
     'ckEditorEnvironmentId' => '_ck_editor_environment_id_',
+
+    // Oticon shared server
+    'oticonSharedServer' => [
+        'server' => '_oticon_shared_server_url_',
+        'username' => '_username_',
+        'password' => '_password_'
+    ],
 ];
