@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import { viteExternalsPlugin } from 'vite-plugin-externals';
+import inject from '@rollup/plugin-inject';
 
 /***TODO: Image optimization may be required for CKEditor 5. Webpack used ImageMinimizerPlugin. May need to install and use vite-plugin-imagemin. */
 
@@ -15,9 +15,9 @@ export default defineConfig({
                 // Add any static file copies you need
             ]
         }),
-        viteExternalsPlugin({
-            //*** TODO:Some day in the distant future, jQuery should be imported on a case by case basis rather than globally here, or even better, removed entirely. */
-            jquery: '$'
+        inject({
+            $: 'jquery',
+            jQuery: 'jquery',
         })
     ],
 
@@ -30,7 +30,7 @@ export default defineConfig({
 
     build: {
         // Output to different directory than Webpack during transition
-        outDir: 'webroot/js/dist-vite',
+        outDir: 'js/dist-vite',
 
         // Emit assets to predictable locations
         assetsDir: '',
@@ -40,7 +40,7 @@ export default defineConfig({
             input: {
                 // Pick your simplest JS file to start
                 // Example: if you have common/test.js
-                test: path.resolve(__dirname, 'webroot/js/common/test.ts')
+                'common': path.resolve(__dirname, 'webroot/js/common/common.ts')
             },
 
             output: {
