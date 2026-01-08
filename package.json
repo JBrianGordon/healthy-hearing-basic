@@ -2,6 +2,9 @@
   "name": "healthy-hearing-website",
   "scripts": {
     "build": "webpack",
+    "build:vite": "vite build",
+    "dev:vite": "vite",
+    "preview:vite": "vite preview",
     "compile-sass": "sass --style=compressed webroot/scss:webroot/css",
     "postinstall": "find node_modules/@ckeditor -name '*.map' -type f -delete"
   },
@@ -47,17 +50,26 @@
     "jquery": "~3.7.1",
     "jquery-ui": "~1.13.2",
     "penthouse": "~2.3.3",
-    "webpack": "~5.88.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "webpack": "^5.104.1",
     "webpack-cli": "~4.10.0"
   },
   "devDependencies": {
+    "@types/node": "~25.0.3",
+    "@vitejs/plugin-react": "~5.1.2",
     "@webspellchecker/wproofreader-ckeditor5": "^2.3.1",
     "css-loader": "~6.8.1",
     "image-minimizer-webpack-plugin": "~3.8.3",
     "imagemin": "~8.0.1",
     "raw-loader": "~4.0.2",
-    "sass": "~1.50.0",
+    "sass": "~1.97.1",
     "style-loader": "~3.3.3",
-    "svgo": "~3.0.2"
+    "svgo": "~3.0.2",
+    "ts-loader": "^9.5.4",
+    "typescript": "~5.9.3",
+    "vite": "~7.3.0",
+    "vite-plugin-externals": "^0.6.2",
+    "vite-plugin-static-copy": "~3.1.4"
   }
 }

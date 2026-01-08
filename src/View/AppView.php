@@ -46,5 +46,6 @@ class AppView extends UIView
         $this->loadHelper('CakeDC/Users.AuthLink');
         $this->loadHelper('CakeDC/Users.User');
         $this->loadHelper('App');
+        $this->loadHelper('Vite');
     }
 }

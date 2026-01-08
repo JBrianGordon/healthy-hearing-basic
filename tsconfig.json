@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
+        /* Linting */
+        "strict": false, // Start loose, tighten later
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": true,
+        /* Path aliases */
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "webroot/js/*"
+            ]
+        }
+    },
+    "include": [
+        "webroot/js/**/*.ts",
+        "webroot/js/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "webroot/js/dist",
+        "webroot/js/dist-vite"
+    ]
+}
