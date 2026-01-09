@@ -18,7 +18,7 @@ class ViteHelper extends Helper
         return '';
     }
 
-    public function script($parentDir = '', $filename)
+    public function script($filename, $parentDir = '')
     {
         $env = Configure::read('env');
         if ($env === 'local') {
