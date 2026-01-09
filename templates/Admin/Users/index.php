@@ -46,7 +46,7 @@ foreach ($fields as $field => $type) {
     }
 }
 
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Vite->script('admin-vite','admin_common');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

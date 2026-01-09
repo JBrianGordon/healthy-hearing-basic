@@ -8,7 +8,7 @@
 
 	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => (Configure::read('siteName') . ' Privacy policy'), 'url' => '/contact-us']]);
 	
-	$this->Html->script('dist/common.min', ['block' => true]);
+	$this->Vite->script('common-vite','common');
 ?>
 <div class="container-fluid site-body fap-cities">
       <div class="row">

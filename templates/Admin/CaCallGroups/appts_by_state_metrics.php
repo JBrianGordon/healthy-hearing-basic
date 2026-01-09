@@ -3,7 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\CsCall[]|\Cake\Collection\CollectionInterface $csCalls
  */
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Vite->script('admin-vite','admin_common');
 
 $startDate = isset($startDate) ? $startDate : null;
 $endDate = isset($endDate) ? $endDate : null;

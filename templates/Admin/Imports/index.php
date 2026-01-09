@@ -6,7 +6,7 @@ use Cake\Core\Configure;
  */
 $queryParams = $this->request->getQueryParams();
 
-$this->Html->script('dist/admin_common.min', ['block' => true]);
+$this->Vite->script('admin-vite','admin_common');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

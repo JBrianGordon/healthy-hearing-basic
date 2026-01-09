@@ -6,8 +6,8 @@ use Cake\Core\Configure;
  * @var \App\Model\Entity\Zip $zip
  */
  
-$this->Html->script('dist/admin_common.min', ['block' => true]);
-$zip ??= null;
+$this->Vite->script('admin-vite','admin_common');
+$zip = $zip ?? null;
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

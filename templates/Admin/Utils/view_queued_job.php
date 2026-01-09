@@ -1,4 +1,4 @@
-<?php $this->Html->script('dist/admin_common.min', ['block' => true]); ?>
+<?php $this->Vite->script('admin-vite','admin_common'); ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
         <div class="panel-heading">Queued Jobs Actions</div>

@@ -18,13 +18,13 @@ class ViteHelper extends Helper
         return '';
     }
 
-    public function script($filename)
+    public function script($parentDir = '', $filename)
     {
         $env = Configure::read('env');
         if ($env === 'local') {
             // Output Vite client and the script
             return $this->viteClient() .
-                $this->_View->Html->script("http://localhost:5173/js/{$filename}.ts", [
+                $this->_View->Html->script("http://localhost:5173/js/{$parentDir}/{$filename}.ts", [
                     'type' => 'module',
                     'block' => true
                 ]);

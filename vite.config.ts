@@ -1,32 +1,45 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import inject from '@rollup/plugin-inject';
 
 /***TODO: Image optimization may be required for CKEditor 5. Webpack used ImageMinimizerPlugin. May need to install and use vite-plugin-imagemin. */
 
+// Function to scan folders for entry points
+function getEntries() {
+    const entries: Record<string, string> = {};
+
+    const scanFolder = (folderPath: string) => {
+        if (!fs.existsSync(folderPath)) return;
+
+        const files = fs.readdirSync(folderPath);
+        files.forEach(file => {
+            if (file.endsWith('.ts') && !file.includes('.min') && file !== '.DS_Store') {
+                const name = file.replace('.ts', '');
+                entries[name] = path.resolve(folderPath, file);
+            }
+        });
+    };
+
+    scanFolder('./webroot/js/admin-vite');
+    scanFolder('./webroot/js/common-vite');
+
+    return entries;
+}
+
 export default defineConfig({
     plugins: [
         react(),
-        // For copying static assets if needed
         viteStaticCopy({
-            targets: [
-                // Add any static file copies you need
-            ]
+            targets: []
         }),
         inject({
             $: 'jquery',
             jQuery: 'jquery',
         })
     ],
-
-    resolve: {
-        alias: {
-            // Your jQuery alias (Vite handles this differently)
-            // Add other aliases as needed
-        }
-    },
 
     build: {
         // Output to different directory than Webpack during transition
@@ -37,11 +50,7 @@ export default defineConfig({
 
         rollupOptions: {
             // Start with ONE entry point for testing
-            input: {
-                // Pick your simplest JS file to start
-                // Example: if you have common/test.js
-                'common': path.resolve(__dirname, 'webroot/js/common-vite/common.ts')
-            },
+            input: getEntries(),
 
             output: {
                 // Match your Webpack naming convention

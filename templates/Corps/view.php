@@ -48,7 +48,7 @@ $manuSchema .= '}</script>';
 
 echo $manuSchema;
 
-$this->Html->script('dist/common.min', ['block' => true]);
+$this->Vite->script('common-vite','common');
 ?>
 <div class="container-fluid site-body blog">
 	<div class="row">

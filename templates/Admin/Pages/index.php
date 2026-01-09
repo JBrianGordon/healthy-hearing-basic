@@ -4,7 +4,7 @@
  * @var iterable<\App\Model\Entity\Page> $pages
  */
  
-$this->Html->script('dist/common.min', ['block' => true]);
+$this->Vite->script('common-vite','common');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
