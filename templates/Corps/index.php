@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Corp[]|\Cake\Collection\CollectionInterface $corps
  */
  
-$this->Vite->script('common-vite','common');
+$this->Vite->script('common','common-vite');
 $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'Hearing aid and cochlear implant companies', 'url' => ''],

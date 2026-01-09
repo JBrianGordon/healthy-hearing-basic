@@ -48,7 +48,7 @@ $manuSchema .= '}</script>';
 
 echo $manuSchema;
 
-$this->Vite->script('common-vite','common');
+$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body blog">
 	<div class="row">

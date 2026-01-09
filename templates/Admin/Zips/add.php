@@ -6,7 +6,7 @@ use Cake\Core\Configure;
  * @var \App\Model\Entity\Zip $zip
  */
  
-$this->Vite->script('admin-vite','admin_common');
+$this->Vite->script('admin_common','admin-vite');
 $zip = $zip ?? null;
 ?>
 <header class="col-md-12 mt10">

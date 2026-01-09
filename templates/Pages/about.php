@@ -8,7 +8,7 @@
 
 	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('About '.Configure::read('siteName')), 'url' => '/contact-us']]);
 	
-	$this->Vite->script('common-vite','common');
+	$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
       <div class="row">

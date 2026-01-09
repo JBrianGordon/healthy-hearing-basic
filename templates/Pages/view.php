@@ -6,7 +6,7 @@
 
 	use Cake\Core\Configure;
 	
-	$this->Vite->script('common-vite','common');
+	$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
   <div class="row">

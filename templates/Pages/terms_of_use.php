@@ -8,7 +8,7 @@
 
 	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => (Configure::read('siteName') . ' Terms of use'), 'url' => '/terms-of-use']]);
 	
-	$this->Vite->script('common-vite','common');
+	$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
   <div class="row">

@@ -1,6 +1,6 @@
 <?php
 use Cake\Core\Configure;
-$this->Vite->script('admin-vite','admin_common');
+$this->Vite->script('admin_common','admin-vite');
 $email = isset($email) ? $email : '';
 ?>
 <header class="col-md-12 mt10">

@@ -117,7 +117,7 @@ $wikiSchema .= '}</script>';
 
 echo $wikiSchema;
 
-$this->Vite->script('common-vite','wiki');
+$this->Vite->script('wiki','common-vite');
 ?>
 <div class="container-fluid site-body content-body secondary p0">
 	<div class="row pt0 pb0">

@@ -4,7 +4,7 @@
  * @var iterable<\App\Model\Entity\Advertisement> $advertisements
  */
 
- $this->Vite->script('admin-vite','admin_common');
+ $this->Vite->script('admin_common','admin-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">

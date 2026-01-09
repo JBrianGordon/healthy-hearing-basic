@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
-$this->Vite->script('common-vite','common');
+$this->Vite->script('common','common-vite');
 ?>
 
 <div class="container-fluid site-body home">

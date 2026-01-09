@@ -41,7 +41,7 @@ foreach ($fields as $field => $type) {
     ];
 }
 
-$this->Vite->script('admin-vite','admin_common');
+$this->Vite->script('admin_common','admin-vite');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

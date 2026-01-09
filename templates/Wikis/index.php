@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Wiki[]|\Cake\Collection\CollectionInterface $wikis
  */
  
-$this->Vite->script('common-vite','wiki');
+$this->Vite->script('wiki','common-vite');
 
 use Cake\Core\Configure;
 
