@@ -15,6 +15,7 @@ webroot/css/*
 webroot/css/admin/responsive-admin.css
 webroot/csvs/*
 webroot/js/dist/*.min.js*
+webroot/js/dist-vite/*
 webroot/debug_kit
 webroot/coverage
 webroot/bootstrap_u_i
