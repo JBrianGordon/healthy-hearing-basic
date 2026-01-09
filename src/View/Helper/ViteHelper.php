@@ -24,7 +24,7 @@ class ViteHelper extends Helper
         if ($env === 'local') {
             // Output Vite client and the script
             return $this->viteClient() .
-                $this->_View->Html->script("http://localhost:5173/js/common/{$filename}.ts", [
+                $this->_View->Html->script("http://localhost:5173/js/{$filename}.ts", [
                     'type' => 'module',
                     'block' => true
                 ]);

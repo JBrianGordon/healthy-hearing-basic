@@ -5,5 +5,3 @@ import '../modules/components/hh-search/hh-search';
 import '../modules/components/hh-side-nav/hh-side-nav';
 import '../modules/components/hh-map/hh-map';
 import '../modules/breadcrumb';
-
-console.log('Vite is truly working!');

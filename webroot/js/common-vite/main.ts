@@ -21,9 +21,10 @@ $(window).ready(function () {
 	}
 	//hide FAC dropdown on keyboard hide on Android
 	if (/(android)/i.test(navigator.userAgent)) {
-		var threeFourthsHeight = $(window).height() * 0.75;
+		var threeFourthsHeight = ($(window).height() as number) * 0.75;
 		$(window).on("resize", function () {
-			if ($(window).height() > threeFourthsHeight) {
+			const windowHeight = $(window).height();
+			if (windowHeight !== undefined && windowHeight > threeFourthsHeight) {
 				$(".ui-menu.ui-autocomplete").hide();
 			}
 		})

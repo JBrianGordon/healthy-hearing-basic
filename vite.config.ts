@@ -40,7 +40,7 @@ export default defineConfig({
             input: {
                 // Pick your simplest JS file to start
                 // Example: if you have common/test.js
-                'common': path.resolve(__dirname, 'webroot/js/common/common.ts')
+                'common': path.resolve(__dirname, 'webroot/js/common-vite/common.ts')
             },
 
             output: {
