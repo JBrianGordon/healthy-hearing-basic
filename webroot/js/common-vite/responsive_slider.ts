@@ -1,5 +1,3 @@
-import 'jquery-ui/ui/effects/effect-slide';
-
 const hhstickypanel = document.getElementById('hh-sticky-panel');
 
 const scrollHandler = (): void => {

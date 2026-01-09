@@ -1,5 +1,20 @@
 import $ from 'jquery';
 
+// Make jQuery globally available (many jQuery UI internals and legacy plugins expect this)
+declare global {
+	interface Window {
+		jQuery: typeof $;
+		$: typeof $;
+	}
+}
+window.jQuery = window.$ = $;
+
+// Import the full jQuery UI bundle (includes all widgets, effects like slide, etc.)
+import 'jquery-ui-dist/jquery-ui';
+
+// Optional: Import the default CSS theme if you're using jQuery UI widgets with styling
+import 'jquery-ui-dist/jquery-ui.css';
+
 // Import Popper (Bootstrap 4 dependency)
 import Popper from 'popper.js';
 
