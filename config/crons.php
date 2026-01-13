@@ -71,6 +71,7 @@
 // ------- | 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
 // --------------------------------------------------------------------
 // ./cake city addAndUpdateCities
+30 6 * * 0 cd /var/www/prod/current && bin/cake city addAndUpdateCities
 // ./cake city addAndUpdateCitiesByRange
 // ./cake city findInvalidCities
 // ./cake locations findDuplicates 1
