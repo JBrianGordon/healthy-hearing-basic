@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Wiki[]|\Cake\Collection\CollectionInterface $wikis
  */
  
-$this->Html->script('dist/wiki.min', ['block' => true]);
+$this->Html->script('dist/common.min', ['block' => true]);
 
 use Cake\Core\Configure;
 
