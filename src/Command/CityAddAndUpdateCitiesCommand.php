@@ -40,7 +40,7 @@ class CityAddAndUpdateCitiesCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
 
-        $parser->setDescription('Generate a spreadsheet of listing types for all active Oticon clinics');
+        $parser->setDescription('Add new cities and update cities near locations');
 
         return $parser;
     }
@@ -112,6 +112,21 @@ class CityAddAndUpdateCitiesCommand extends Command
                         'country' => strtoupper(Configure::read('country', 'US')),
                         'is_near_location' => 1,
                     ]);
+
+                        // Add lat/lon for new city.
+                        try {
+                            $addressGeocoder = new GeoLocAddressUtility();
+                            $addressGeocoderResult = $addressGeocoder->byAddress("{$cityName}, {$stateName}");
+
+                            if (!empty($addressGeocoderResult)) {
+                                $cityEntity->lat = $addressGeocoderResult['lat'];
+                                $cityEntity->lon = $addressGeocoderResult['lon'];
+                            } else {
+                                $io->error("Failed to find lat/lon for city: {$cityName}, {$stateName}");
+                            }
+                        } catch (\Exception $e) {
+                            $io->error("Failed to find lat/lon for city: {$cityName}, {$stateName} - " . $e->getMessage());
+                        }
 
                     if ($citiesTable->save($cityEntity)) {
                         $citiesAdded[] = "{$cityName}, {$stateName}";
