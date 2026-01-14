@@ -19,10 +19,17 @@ return [
         ],
     ],
     // Emails
-    'developerEmails' => ['blemons@healthyhearing.com', 'btalkington@healthyhearing.com'],
+    'developerEmails' => [
+        'blemons@healthyhearing.com',
+        'btalkington@healthyhearing.com'
+    ],
     'itEmails' => ['it@healthyhearing.com'],
     'editorEmails' => ['editor@healthyhearing.com'],
     'adminEmails' => ['hhteam@healthyhearing.com'],
+    'citiesAddedEmail' => [
+        'sjones@healthyhearing.com',
+        'blemons@healthyhearing.com'
+    ],
     // CallSource API
     'callSourceUsername' => 'xmluser_aholdingstest', // dev/test account
     'callSourcePassword' => 'xmlapi1test' // dev/test account

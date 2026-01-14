@@ -31,7 +31,8 @@
 // ./cake locations findExpiredFeatures
 30 5 * * * cd /var/www/prod/current && bin/cake locations findExpiredFeatures
 // ./cake locations findListingTypesForOticon
-// ./cake locations findListingTypesForCqp
+30 5 * * * cd /var/www/prod/current && bin/cake locations findListingTypesForOticon
+// REMOVED - BOB LIND CONFIRMED THAT CQ NO LONGER USES THIS UPLOAD - ./cake locations findListingTypesForCqp
 // REMOVED - REVIEWS COUNTER-CACHE PERFORMS THIS FUNCTION // ./cake locations updateReviewCounts
 // ./cake content freezeContent
 30 5 * * * cd /var/www/prod/current && bin/cake editorial freezeContent
@@ -70,7 +71,9 @@
 // ------- | 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
 // --------------------------------------------------------------------
 // ./cake city addAndUpdateCities
+30 6 * * 0 cd /var/www/prod/current && bin/cake city addAndUpdateCities
 // ./cake city addAndUpdateCitiesByRange
+30 6 * * 0 cd /var/www/prod/current && bin/cake city addAndUpdateCitiesByRange
 // ./cake city findInvalidCities
 // ./cake locations findDuplicates 1
 // ./cake locations cleanupProviders
@@ -154,7 +157,9 @@
 // ------- | 30 6 * * 0 /var/www/prod18/hh/app/scripts/weekly_shells.sh
 // --------------------------------------------------------------------
 // ./cake city addAndUpdateCities
+30 6 * * 0 cd /var/www/prod/current && bin/cake city addAndUpdateCities
 // ./cake city addAndUpdateCitiesByRange
+30 6 * * 0 cd /var/www/prod/current && bin/cake city addAndUpdateCitiesByRange
 // ./cake city findInvalidCities
 // ./cake locations findDuplicates 1
 // ./cake locations cleanupProviders
