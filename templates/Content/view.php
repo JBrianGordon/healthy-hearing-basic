@@ -116,7 +116,7 @@ $contentSchema = '<script type="application/ld+json">{
 
 echo $contentSchema;
  
-$this->Html->script('dist/content.min', ['block' => true]);
+$this->Vite->script('content','common-vite');
 ?>
 
 <div class="container-fluid site-body blog">

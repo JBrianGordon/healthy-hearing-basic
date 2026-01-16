@@ -159,4 +159,4 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $location->id;
     </div>
 </div>
 
-<?= $this->Html->script('/js/dist/review_clinic_index.min.js') ?>
+<?= $this->Vite->script('review_clinic_index','common-vite'); ?>

@@ -5,7 +5,8 @@ $this->Breadcrumbs->add([
 	['title' => 'Home', 'url' => '/'],
     ['title' => 'Find a clinic', 'url' => ''],
 ]);
-$this->Html->script('dist/fac.min.js?v='.Configure::read("tagVersion"), ['block' => true, 'defer' => 'defer']);
+
+$this->Vite->script('fac','common-vite');
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">

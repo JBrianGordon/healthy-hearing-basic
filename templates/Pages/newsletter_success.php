@@ -10,7 +10,7 @@ $this->Breadcrumbs->add([
 
 $articles = false;
 
-$this->Html->script('dist/content.min.js', ['block' => true]);
+$this->Vite->script('content','common-vite');
 ?>
 <div class="container-fluid site-body blog p-sm-0 overflow-hidden">
   <div class="row">
