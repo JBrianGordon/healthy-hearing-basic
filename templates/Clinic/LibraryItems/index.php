@@ -60,17 +60,7 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 													<p class="mb5 mr5">
 														<strong><?= $libraryItem['title'] ?></strong>
 													</p>
-													<?= $this->Share->facebook([
-															'linkOptions' => [
-																'class' => 'btn btn-share btn-facebook',
-																'target' => '_blank',
-																'rel' => 'noopener',
-																'escape' => false
-															],
-															'url' => Router::url($libraryItem['hh_url'], true),
-															'label' => '<span class="hh-icon-facebook"></span> SHARE NOW'
-														])
-													?>
+													<a href="https://www.facebook.com/sharer/sharer.php?u=<?= Router::url($libraryItem['hh_url'], true) ?>" class="btn btn-share btn-facebook" style="font-size:16px" target="_blank" rel="noopener" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600'); return false;"><span class="hh-icon-facebook"></span> SHARE NOW</a>
 													<a href="#" data-bs-toggle="modal" data-bs-target="<?= $modalIdTarget ?>">More options</a>
 												</div>
 											</div>
@@ -102,29 +92,9 @@ $this->Html->script('dist/clinic_library.min', ['block' => true]);
 																<hr class="m10">
 																<strong>Share with your followers:</strong>
 																<br>
-																<?= $this->Share->facebook([
-																		'linkOptions' => [
-																			'class' => 'btn btn-share btn-facebook mb10',
-																			'target' => '_blank',
-																			'rel' => 'noopener',
-																			'escape' => false
-																		],
-																		'url' => Router::url($libraryItem['hh_url'], true),
-																		'label' => '<span class="hh-icon-facebook"></span> Share'
-																	])
-																?>
+																<a href="https://www.facebook.com/sharer/sharer.php?u=<?= Router::url($libraryItem['hh_url'], true) ?>" class="btn btn-share btn-facebook mb10" style="font-size:16px" target="_blank" rel="noopener" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600'); return false;"><span class="hh-icon-facebook"></span> SHARE NOW</a>
 																<br>
-																<?= $this->Share->twitter([
-																		'linkOptions' => [
-																			'class' => 'btn btn-share btn-twitter',
-																			'target' => '_blank',
-																			'rel' => 'noopener',
-																			'escape' => false
-																		],
-																		'url' => Router::url($libraryItem['hh_url'], true),
-																		'label' => '<span class="hh-icon-x"></span> Tweet'
-																	])
-																?>
+																<a href="https://twitter.com/intent/tweet?url=<?= Router::url($libraryItem['hh_url'], true) ?>&text=" class="btn btn-share btn-twitter" target="_blank" rel="noopener" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600'); return false;"><span class="hh-icon-x"></span> Tweet</a>
 																<hr class="m10">
 																<a href="<?= Router::url($libraryItem['hh_url'], true) ?>" class="btn btn-neutral btn-sm" target="_blank">See full article</a>
 															</div>
