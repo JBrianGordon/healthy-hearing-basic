@@ -4,7 +4,7 @@ use Cake\Routing\Router;
 
 $this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Learn about '.Configure::read('siteName')), 'url' => '/contact-us']]);
 
-$this->Html->script('dist/clinic_library.min', ['block' => true]);
+$this->Vite->script('clinic_library','common-vite');
 ?>
 <div class="container-fluid site-body">
     <div class="row">
