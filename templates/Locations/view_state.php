@@ -14,7 +14,7 @@ $this->Breadcrumbs->add([
     ['title' => $stateNice, 'url' => ''],
 ]);
 
-$this->Html->script('/js/dist/cities.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Vite->script('cities','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">

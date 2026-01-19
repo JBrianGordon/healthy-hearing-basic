@@ -10,7 +10,7 @@ use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
 
-$this->Html->script('dist/review_index.min', ['block' => true]);
+$this->Vite->script('admin_common','admin-vite');
 ?>
 <header class="col-sm-12 mt10">
     <div class="panel panel-light">
@@ -101,8 +101,8 @@ $this->Html->script('dist/review_index.min', ['block' => true]);
                                             'type' => 'select',
                                             'options' => array_combine(
                                                 ReviewRating::getRatingValueArray(),
-                                                ReviewRating::getRatingLabelArray(),
-                                            ),
+                                                ReviewRating::getRatingLabelArray()
+                                            )
                                         ]
                                     );
                                     echo $this->Form->control('response');

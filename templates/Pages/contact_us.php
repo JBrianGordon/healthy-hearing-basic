@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 
 $this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Contact '.Configure::read('siteName')), 'url' => '/contact-us']]);
 
-$this->Html->script('dist/contact.min', ['block' => true]);
+$this->Vite->script('contact','common-vite');
 ?>
 <div class="container-fluid site-body blog">
     <div class="row">
