@@ -19,7 +19,7 @@ if (!empty($zip)) {
 	$this->Breadcrumbs->add($zip, '');
 }
 
-$this->Html->script('dist/location_results.min.js?v='.Configure::read("tagVersion"));
+$this->Vite->script('location_results','common-vite');
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">
