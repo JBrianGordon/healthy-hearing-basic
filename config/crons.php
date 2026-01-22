@@ -19,6 +19,7 @@
 // ------- | 30 5 * * * /var/www/prod/hh/app/scripts/daily_shells.sh (RUNNING ON HHAPP4)
 // -----------------------------------------------------------------
 // ./cake call_sources importLeadscoreReports
+30 5 * * * cd /var/www/prod/current && bin/cake calls importLeadscoreReport
 // ./cake ca_calls exportDailyYhnCallData
 // PAUSED - In ticket #15221 -- ./cake ca_calls clearOldOutboundCalls
 // ./cake ca_calls importBlueprintAppts (RUNNING ON HHAPP4)
@@ -118,11 +119,12 @@
 // ------- | 50 5 * * * /var/www/prod18/hh/app/scripts/daily_shells.sh
 // -----------------------------------------------------------------
 // ./cake call_sources importLeadscoreReports
+50 5 * * * cd /var/www/prod/current && bin/cake calls importLeadscoreReport
 // SKIPPED ON CA/HD - CALL ASSIST DISABLED - ./cake ca_calls exportDailyYhnCallData
 // PAUSED - In ticket #15221 -- ./cake ca_calls clearOldOutboundCalls
 // HH-ONLY ON HHAPP4 -./cake ca_calls importBlueprintAppts
 // ./cake reviews clear_spam
-30 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
+50 5 * * * cd /var/www/prod/current && bin/cake reviews deleteAllSpam
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations endGracePeriods
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations unfreezeListingTypes
 // SKIPPED ON CA/HD - TIERING IS DISABLED - ./cake locations findExpiredFeatures
@@ -139,7 +141,7 @@
 // SKIPPED ON CA/HD - REPORTS ARE DISABLED - ./cake content set_last_modified
 // SKIPPED ON CA/HD - REPORTS ARE DISABLED - ./cake content publishContent
 // ./cake wiki publishWiki
-30 5 * * * cd /var/www/prod/current && bin/cake editorial publish Wikis
+30 0 * * * cd /var/www/prod/current && bin/cake editorial publish Wikis
 // SKIPPED ON CA/HD - NO CORP PAGES - ./cake corp publishCorp
 // ./scripts/regenerate_sitemap.sh
 # Regenerate query caches for sitemaps
