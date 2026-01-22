@@ -1,8 +1,8 @@
 import './main';
-import '../modules/components/hh-mega-nav/hh-mega-nav-trigger';
-import '../modules/components/hh-search/hh-search';
-import '../modules/components/hh-side-nav/hh-side-nav';
-import '../modules/components/hh-map/hh-map';
-import '../modules/breadcrumb';
+import '../modules-vite/components/hh-mega-nav-trigger';
+import '../modules-vite/components/hh-search';
+import '../modules-vite/components/hh-side-nav';
+import '../modules-vite/components/hh-map';
+import '../modules-vite/breadcrumb';
 
 console.log('Common Vite TS loaded');

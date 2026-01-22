@@ -1,5 +1,6 @@
 import './common';
-import '../modules/wordcount';
+// Wordcount not currently used on this page
+//import '../modules/wordcount';
 
 // Form submission
 const form = document.querySelector<HTMLFormElement>('form');

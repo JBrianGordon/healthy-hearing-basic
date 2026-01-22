@@ -83,5 +83,6 @@ export default defineConfig({
             // Proxy API calls to your CakePHP backend if needed
             // '/api': 'http://localhost:8000'
         }
-    }
+    },
+    assetsInclude: ['**/*.svg']
 });
