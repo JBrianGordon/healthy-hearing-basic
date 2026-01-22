@@ -7,7 +7,7 @@
 
 	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ('Online hearing test')]]);
 
-	$this->Html->script('dist/online_hearing_test.min', ['block' => true]);
+	$this->Vite->script('online_hearing_test','common-vite');
 ?>
 <div class="container-fluid site-body blog">
   <div class="row">

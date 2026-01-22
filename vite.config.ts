@@ -38,6 +38,12 @@ export default defineConfig({
         inject({
             $: 'jquery',
             jQuery: 'jquery',
+            include: [
+                '**/*.js',
+                '**/*.ts',
+                '**/*.jsx',
+                '**/*.tsx'
+            ]
         })
     ],
 

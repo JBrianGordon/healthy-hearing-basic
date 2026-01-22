@@ -9,12 +9,9 @@ declare global {
 }
 window.jQuery = window.$ = $;
 
-// Import the full jQuery UI bundle (includes all widgets, effects like slide, etc.)
-import 'jquery-ui-dist/jquery-ui';
-
-// Optional: Import the default CSS theme if you're using jQuery UI widgets with styling
+//This import style ensures jquery is attached to window beffore jquery-ui is imported
+import('jquery-ui-dist/jquery-ui');
 import 'jquery-ui-dist/jquery-ui.css';
-
 // Import Popper (Bootstrap 4 dependency)
 import Popper from 'popper.js';
 
@@ -23,9 +20,6 @@ import Popper from 'popper.js';
 
 // Import Bootstrap JS (which includes popover functionality)
 import 'bootstrap';
-
-
-//import 'jquery-ui/ui/widgets/autocomplete';
 
 $(window).ready(function () {
 
