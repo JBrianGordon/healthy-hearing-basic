@@ -1,2 +1,2 @@
 import './ckeditor-clinic';
-import '../admin/ckbox';
+import '../admin-vite/ckbox';

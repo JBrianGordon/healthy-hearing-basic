@@ -15,7 +15,7 @@ $shortReviewUrl = 'www.' . $siteUrl . '/review/'. $shortId[0];
 $locationAd = $location->location_ad;
 $adId = $locationAd->id ?? null;
 
-$this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), ['block' => true]);
+$this->Vite->script('clinic_edit','common-vite');
 ?>
 <meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <!-- Additional ATF CSS, since the css generator can't access our pages behind the login -->
