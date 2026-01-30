@@ -298,7 +298,9 @@ class ImportCommand extends Command
              'Password' => $this->yourHearingNetwork['pass'],
         ];
 
-        $soapClient = new SoapClient($this->yourHearingNetwork['wsdlUrl'], []);
+        $soapClient = new SoapClient($this->yourHearingNetwork['wsdlUrl'], [
+            'user_agent' => 'USER-AGENT'
+        ]); // YHN feed client requires a user agent
         $soapHeader = new SoapHeader($this->yourHearingNetwork['authUrl'], 'Authentication', $auth, false);
         $soapClient->__setSoapHeaders($soapHeader);
 
