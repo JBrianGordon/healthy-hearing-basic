@@ -1,5 +1,5 @@
+import '../common-vite/common';
 import $ from 'jquery';
-import './datepicker';
 
 /*** TODO: check this code again once admin search bar is in place ***/
 
@@ -338,23 +338,3 @@ if (exportModal !== null) {
 		$("#exportModal").hide().removeClass("in");
 	});
 }
-
-export const datepickerFunctions = (): void => {
-	let minDate = '';
-	let maxDate = '';
-
-	const datepickerElement = $('.datepicker');
-
-	if (datepickerElement.attr('minDate')) {
-		minDate = datepickerElement.attr('minDate') || '';
-	}
-	if (datepickerElement.attr('maxDate')) {
-		maxDate = datepickerElement.attr('maxDate') || '';
-	}
-
-	datepickerElement.datepicker({
-		dateFormat: 'yy-mm-dd',
-		minDate: minDate,
-		maxDate: maxDate
-	});
-};

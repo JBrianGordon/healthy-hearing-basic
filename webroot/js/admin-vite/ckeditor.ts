@@ -22,11 +22,10 @@ import {
   Underline,
   WordCount
 } from 'ckeditor5';
-import { CKBox } from '@ckeditor/ckeditor5-ckbox';
 import InsertKeyPoints from './insert_key_points.js';
 import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 
-import '@ckeditor/ckeditor5-theme-lark/theme/theme.css';
+import 'ckeditor5/ckeditor5.css';
 
 interface WordCountStats {
   words: number;
@@ -79,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
         Autoformat,
         Autosave,
         Bold,
-        CKBox,
         CloudServices,
         Essentials,
         FindAndReplace,

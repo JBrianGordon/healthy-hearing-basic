@@ -23,7 +23,6 @@ import {
     WordCount,
 } from 'ckeditor5';
 
-// Import the official CSS (replaces your theme/theme.css import)
 import 'ckeditor5/ckeditor5.css';
 
 // No more manual theme/theme.css — the unified package bundles it correctly
