@@ -57,14 +57,14 @@ class ContentController extends AppController
         //    if (isset($this->request->named['page'])) {
         //        $redirect['page'] = $this->request->named['page'];
         //    }
-        //    $this->redirect($redirect, 301);
+        //    return $this->redirect($redirect, 301);
         //}
         $page = $this->request->getQuery('page');
         $ext = $this->request->getParam('_ext');
         $properUrl = Router::url(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '?'=>['page'=>$page], '_ext'=>$ext]);
         if ($_SERVER['REQUEST_URI'] != $properUrl) {
             // Self heal url. Redirect to proper format.
-            $this->redirect($properUrl, 301);
+            return $this->redirect($properUrl, 301);
         }
         $render = 'report_index';
         if ($ext == 'rss') {
@@ -82,10 +82,10 @@ class ContentController extends AppController
             $reports = $this->paginate('Content', $paginateSettings);
         } catch(Exception $e) {
             // Page number no longer exists. Redirect to page 1.
-            $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
+            return $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
         }
         if (empty($reports)) {
-            $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
+            return $this->redirect(['prefix'=>false, 'controller'=>'content', 'action'=>'report_index', '_ext'=>$ext], 301);
         }
         //Add Title
         $pageDescription = !empty($page) ? "page " . $page . " of " : "";

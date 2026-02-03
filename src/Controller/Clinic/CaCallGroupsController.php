@@ -12,22 +12,31 @@ class CaCallGroupsController extends BaseClinicController
     /**
     * Run the clinic report of calls and profile views
     */
-    function report($username = null){
-        //Force recovery email to be filled out
+    function report($locationId = null)
+    {
+        // Force recovery email to be filled out
         if (!$this->hasRecoveryEmail()) {
             $this->badFlash('You must first fill out your email to continue. ↓');
-            $this->redirect(['controller' => 'users', 'action' => 'account']);
+            return $this->redirect(['controller' => 'users', 'action' => 'account']);
         }
-        
         $requestData = $this->request->getData();
-        
-        // Only allow you to set the oticon_id if we're admin, otherwise we always pull from our username
         if (!$this->isAdmin) {
-            $username = $this->user->username;
+            // Clinic users are only allowed to see reports for 1 location
+            $userLocationId = $this->user->locations[0]->id;
+            if ($locationId != $userLocationId) {
+                return $this->redirect(['controller' => 'CaCallGroups', 'action' => 'report', $userLocationId]);
+            }
+            if (empty($locationId)) {
+                $this->badFlash('Unable to find call reports for this user. No valid location found.');
+                return $this->redirect(['controller' => 'users', 'action' => 'account']);
+            }
         } else {
-            // Only set our username if it wasn't passed in.  This only works for admins.
-            if (empty($username) && !empty($requestData['username'])) {
-                $username = $requestData['username'];
+            // Admin user
+            $selectedLocationId = $requestData['location_id'] ?? null;
+            if (!empty($selectedLocationId)) {
+                if ($locationId != $selectedLocationId) {
+                    return $this->redirect(['controller' => 'CaCallGroups', 'action' => 'report', $selectedLocationId]);
+                }
             }
         }
 
@@ -54,23 +63,29 @@ class CaCallGroupsController extends BaseClinicController
             $startDate   = date("m/d/Y", strtotime('-1 year'));
             $endDate     = date("m/d/Y");
         }
-        $showProfileViews = false; // Initialize as false for initial admin requests missing username
-        
-        if ($this->request->is('post')) {
-            $startDate = $requestData['start_date'];
-            $endDate = $requestData['end_date'];
+        $showProfileViews = false;
+        if (!empty($locationId)) {
             $this->Locations = $this->fetchTable('Locations');
-            $this->CsCalls = $this->fetchTable('CsCalls');
-            $locationId = $this->Locations->findByUsername($username);
-            if (empty($locationId)) {
-                // Admin user will be prompted to enter an oticon id
-                $this->render();
-                return;
+            if (!$this->Locations->exists(['id'=>$locationId])) {
+                $this->Flash->error('Location '.$locationId.' does not exist');
+                return $this->redirect(['action' => 'report']);
             }
             $location = $this->Locations->get($locationId);
             $isCallAssist = $location->is_call_assist;
             $title = $location->title;
             $listingType = $location->listing_type;
+            $this->set(compact('isCallAssist','title','listingType'));
+        }
+        
+        if ($this->request->is('post')) {
+            $this->CsCalls = $this->fetchTable('CsCalls');
+            $startDate = $requestData['start_date'];
+            $endDate = $requestData['end_date'];
+            if (empty($locationId)) {
+                // Admin user will be prompted to enter an oticon id
+                $this->render();
+                return;
+            }
 
             // Get Call Tracking report (based on CallSource LeadScore data)
             $this->set('csReport', $this->CsCalls->getClinicReport($startDate, $endDate, $locationId));
@@ -185,9 +200,9 @@ class CaCallGroupsController extends BaseClinicController
             }
             */
 
-            $this->set(compact('locationId', 'csCalls','isCallAssist','title','listingType'));
+            $this->set(compact('csCalls'));
         }
 
-        $this->set(compact('startDate', 'endDate', 'username', 'showProfileViews'));   
+        $this->set(compact('startDate', 'endDate', 'locationId', 'showProfileViews'));
     }
 }

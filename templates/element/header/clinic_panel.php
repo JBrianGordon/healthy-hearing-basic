@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
+$locationId = $this->Identity->get('locations.0.id');
 
 // $isCqPremier = $listing_type = $featureContentLibrary = $showLibraryLink = false;
 // if (!empty($user['location_id'])) {
@@ -55,7 +56,7 @@ $logo = Configure::read('logo');
                                         'prefix' => 'Clinic',
                                         'controller' => 'Locations',
                                         'action' => 'edit',
-                                        $this->Identity->get('locations.0.id'),
+                                        $locationId,
                                     ],
                                     [
                                         'escape' => false,
@@ -65,8 +66,8 @@ $logo = Configure::read('logo');
                                 ?>
                         </li>
                         <!-- <li><a href="/clinic/locations/edit" class="dropdown-item"><span class="bi bi-globe2"></span> My Profile</a></li> -->
-                        <li><a href="/clinic/ca-call-groups/report" class="dropdown-item"><span class="bi bi-list-task"></span> Reporting</a></li>
-                        <li><a href="/clinic/reviews" class="dropdown-item"><span class="bi bi-star-fill"></span> Reviews</a></li>
+                        <li><a href="/clinic/ca-call-groups/report/<?=$locationId?>" class="dropdown-item"><span class="bi bi-list-task"></span> Reporting</a></li>
+                        <li><a href="/clinic/reviews/index/<?=$locationId?>" class="dropdown-item"><span class="bi bi-star-fill"></span> Reviews</a></li>
                         <!-- TODO: ADD PERMISSION FOR LIBRARY -->
                         <li><a href="/clinic/library" class="dropdown-item"><span class="bi bi-book-fill"></span> Library</a></li>
                         <li><a href="/clinic/pages/faq" class="dropdown-item"><span class="bi bi-question-circle-fill"></span> Help</a></li>

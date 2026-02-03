@@ -178,6 +178,16 @@ return [
             }
         ],
 
+        /*******************************
+        * Clinic - clinic/ca-call-groups/
+        ********************************/
+        [ // Clinics can only access their clinic's review index page
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'CaCallGroups',
+            'action' => 'report',
+        ],
+
 /********************************************
 *************** Public routes ***************
 *********************************************/

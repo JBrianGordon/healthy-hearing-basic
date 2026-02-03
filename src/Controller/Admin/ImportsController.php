@@ -723,7 +723,7 @@ class ImportsController extends BaseAdminController
         } else {
             $this->Flash->success('Existing location '.$locationId.' has been marked as junk');
         }
-        $this->redirect($importIndexReferer);
+        return $this->redirect($importIndexReferer);
     }
 
     public function locationNotJunk($locationId) {
@@ -732,7 +732,7 @@ class ImportsController extends BaseAdminController
         $this->Locations->save($location);
         $this->Flash->success('Location '.$locationId.' has been removed from junk');
         $importIndexReferer = $this->getImportIndexReferer();
-        $this->redirect($importIndexReferer);
+        return $this->redirect($importIndexReferer);
     }
 
     public function ajaxDeleteProvider($providerId) {
