@@ -21,6 +21,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 <!-- Google Tag Manager functions -->
 <script>
+// Fallback for myLog if not defined elsewhere
+window.myLog = window.myLog || function() {};
+
 //List of data pushes pushed in this request
 dataLayer.dataPushes = [];
 dataLayer.hhDebugging = <?= var_export(Configure::read('debug'), true) ?>;

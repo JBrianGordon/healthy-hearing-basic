@@ -60,7 +60,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                     <section class="panel">
                         <div class="panel-body clinicLayout">
                             <div class="panel-section expanded">
-                                <div class="row card-row hidden">
+                                <div class="row card-row" style="display:none">
                                     <div class="review-card">
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>
@@ -84,7 +84,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row card-row hidden">
+                                <div class="row card-row" style="display:none">
                                     <div class="review-card">
                                         <div class="review-border">
                                             <h2 class="text-center">THANK YOU</h2>

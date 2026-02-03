@@ -91,6 +91,21 @@ class EditorialHelper extends Helper
      * @param string $leadingText
      * @return string Imploded list of authors beginning with 'Contributed by' and joined by ' and '
      */
+    public function getAuthorImage($author)
+    {
+        if (!empty($author->image_url)){
+            return '<a class="anchor" href="#about-author-' . strtolower(str_replace(' ', '-', $author->full_name)) . '"><img loading="lazy" src="' .  $author->image_url . '" alt="' . $author->full_name . '" class="about-team float-start mr10" width="80" height="100" /></a>';
+        }
+    }
+
+    /**
+     * Return author information for bylines as a formatted string
+     *
+     * @param \App\Model\Entity\User $primaryAuthor First author
+     * @param \App\Model\Entity\User[] $contributors Contributors
+     * @param string $leadingText
+     * @return string Imploded list of authors beginning with 'Contributed by' and joined by ' and '
+     */
     public function getAuthorsByline($primaryAuthor, $contributors = [], $leadingText='Contributed by')
     {
         $authors = $this->getAuthorsArray($primaryAuthor, $contributors);
