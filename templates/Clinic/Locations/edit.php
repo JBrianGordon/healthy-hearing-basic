@@ -324,11 +324,14 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <span id="aboutUs" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0" id="aboutLabel">About us</h2>
                                         <small>Please limit your description to an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a>, concise paragraph.</small>
+                                        <span class="about-us">
                                         <?php echo $this->Form->control('about_us', ['label' => false, 'class' => 'editor']); 
                                         echo '<span id="upsellMessageAbout" class="text-danger pb20 col-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';?>
+                                        </span>
                                         <span id="services" class="clinic-anchor"></span>
                                         <h2 class="mt20 mb0" id="servicesLabel">Services</h2>
                                         <small>This should be an <a data-toggle="popover" data-bs-trigger="hover" data-container="body" data-bs-placement="right" title="Original content" data-bs-content="Please do not paste copied text from your clinic website into this form. Having the exact same text in two different places has the potential to reduce your search engine rankings.">original</a> list of services your clinic provides.</small>
+                                        <span class="services">
                                         <?php
                                         echo $this->Form->control('services', [
                                             'label' => false,
@@ -336,7 +339,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         ]); 
                                         echo '<span id="upsellMessageServices" class="text-danger pb20 col-12 tar" style="display:none">Want to add more text? Upgrade your profile to remove the character limits. Click <a href="/clinic/pages/faq#upgrades" target="_blank">here</a> to learn more about upgrading.</span>';
                                         ?>
-
+                                        </span>
                                         <span id="hoursOfOperation" class="clinic-anchor"></span>   
                                         <h2 class="mt20 mb10" id="hoursLabel">Hours of operation</h2>
                                         <table class="table table-bordered table-striped white-background">
@@ -488,7 +491,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                             </div>
                                                                         </td>
                                                                         <td class="col-4 mt5 center-both" align="center">
-                                                                            <button type="button" class="btn btn-md btn-danger js-link-delete alignment-content-stretch" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
+                                                                            <button type="button" class="btn btn-xs btn-danger js-link-delete alignment-content-stretch" data-key="<?= $key ?>" data-id="<?= $locationId ?>" data-link="<?= $linkedLocationId ?>">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 <?php endforeach; ?>
@@ -623,8 +626,8 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                                     <span class="help-block col-md-9 col-md-offset-3">Describe your photo in detail. This will be read aloud for the visually impaired. Example: "Inside of [clinic name]", "Outside of [clinic name]", "[clinic name] staff", etc. This is NOT a caption.</span>
                                                                                     <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg</span>
                                                                                 </td>
-                                                                                <td style="width:100px;" class="tac">
-                                                                                    <button type="button" id="btn-photo-delete-<?= $key ?>" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
+                                                                                <td style="min-width:65px;" class="tac">
+                                                                                    <button type="button" id="btn-photo-delete-<?= $key ?>" class="btn btn-xs btn-danger ck-location-photo-delete" data-key="<?= $key ?>" data-location-photo-id="<?= $photo->id ?>">Delete</button>
                                                                                 </td>
                                                                             </tr>
                                                                         <?php endif; ?>
@@ -658,7 +661,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                                             <span class="help-block text-danger" style="display:none;" id="photo-add-error-<?= $key ?>">Photo is invalid. Must be a .jpg or .jpeg and less than 2MB.</span>
                                                                         </td>
                                                                         <td style="width:100px;" align="center">
-                                                                            <button type="button" class="btn btn-md btn-danger ck-location-photo-delete" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>" style="display:none;">Delete</button>
+                                                                            <button type="button" class="btn btn-xs btn-danger ck-location-photo-delete" data-key="<?= $key ?>" id="btn-photo-delete-<?= $key ?>" style="display:none;">Delete</button>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>

@@ -210,6 +210,17 @@
 .clinicLayout {
   background-color: #f9f9f9;
 
+  .panel-section .btn:not(.btn-xs) {
+    font-size: 15px;
+  }
+
+  .about-us,
+  .services {
+    .ck.ck-editor {
+      width: 100%;
+    }
+  }
+
   .basic-info {
     width: 70%;
     float: left;
