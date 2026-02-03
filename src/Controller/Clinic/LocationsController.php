@@ -20,14 +20,20 @@ class LocationsController extends BaseClinicController
      */
     public function edit($id = null)
     {
+        $associations = [
+            'CallSources',
+            'LocationHours',
+            'LocationAds',
+            'LocationPhotos',
+            'Providers',
+            //'LocationNotes' => [
+            //    'sort' => ['LocationNotes.created' => 'DESC']
+            //],
+            //'LocationEmails',
+            //'Users.LoginIps'
+        ];
         $location = $this->Locations->get($id, [
-            'contain' => [
-                'CallSources',
-                'LocationHours',
-                'LocationAds',
-                'LocationPhotos',
-                'Providers'
-            ],
+            'contain' => $associations,
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();

@@ -31,11 +31,11 @@ class CaCallGroupHelper extends Helper {
 
     public function getCallerInfo($call){
         //TODO
-        $retval = $call['CaCallGroup']['caller_first_name'].' '.$call['CaCallGroup']['caller_last_name'].'<br />';
-        if (!$call['CaCallGroup']['is_patient']) {
-            $retval .= 'calling for '.$call['CaCallGroup']['patient_first_name'].' '.$call['CaCallGroup']['patient_last_name'].'<br />';
+        $retval = $call->caller_first_name.' '.$call->caller_last_name.'<br />';
+        if (!$call->is_patient) {
+            $retval .= 'calling for '.$call->patient_first_name.' '.$call->patient_last_name.'<br />';
         }
-        $retval .= formatPhoneNumber($call['CaCallGroup']['caller_phone']);
+        $retval .= formatPhoneNumber($call->caller_phone);
         return $retval;
     }
 

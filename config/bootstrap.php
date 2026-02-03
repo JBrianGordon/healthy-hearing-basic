@@ -787,6 +787,16 @@ function str2datetime($str = 'now') {
 }
 
 /**
+* Calculate the percentage of two numbers to the 2nd degree
+* @param int numerator
+* @param int denominator
+* @return string percentage
+*/
+function percent($num, $denom = 100) {
+    return (!$denom) ? "0%" : round($num / $denom, 4) * 100 . '%';
+}
+
+/**
 * Divide two numbers, but avoids division by zero. Returns 0 if denom=0.
 * @param int numerator
 * @param int denominator

@@ -237,7 +237,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                                     );
                                                 ?>
 
-                                                <a href="/clinic/ca_call_groups/report" class="btn btn-light">Call reports</a>
+                                                <a href="/clinic/ca-call-groups/report/<?= $locationId ?>" class="btn btn-light">Call reports</a>
                                                 <a href="/clinic/pages/faq" class="btn btn-light">FAQ</a>
                                                 <?= $this->Html->link('View my profile', $location->hh_url, ['target' => '_blank', 'class' => 'btn btn-light']) ?>
                                                 <?php if (($location->listing_type == Location::LISTING_TYPE_PREMIER && $location->is_cq_premier == true) || $location->feature_content_library): ?>
@@ -317,7 +317,7 @@ $this->Html->script('dist/clinic_edit.min.js?v='.Configure::read("tagVersion"), 
                                         <h2>Clinic staff</h2>
                                         <?php $count = count($location->providers); ?>
                                         <?php foreach ($location->providers as $key => $provider): ?>
-                                            <?= $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => true, 'isBasicClinic' => $isBasicClinic]) ?>
+                                            <?= $this->element('locations/provider', ['key' => $key, 'provider' => $provider, 'clinic' => true, 'locationId' => $locationId, 'isBasicClinic' => $isBasicClinic]) ?>
                                         <?php endforeach; ?>
                                         <?= $this->element('locations/provider', ['new' => true, 'key' => $count, 'provider' => [], 'clinic' => true, 'isBasicClinic' => $isBasicClinic]) ?>
                                         <hr>
