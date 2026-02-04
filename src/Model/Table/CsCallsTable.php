@@ -262,4 +262,63 @@ class CsCallsTable extends Table
         // Completed report data
         return $reportData;
     }
+
+    /**
+      * Find the report based on data passed in
+      *
+      * @param string start date
+      * @param string end date
+      * @param string location id
+      * @return array of results formatted for easy viewing.
+      */
+    public function getClinicReport($startDate, $endDate, $locationId = null) {
+        $reportData = [];
+        $reportData['start_date'] = $startDate;
+        $reportData['end_date'] = $endDate;
+        $startDate = str2datetime($startDate);
+        $endDate = str2datetime($endDate . " 23:59:59");
+        $conditions = [
+            'start_time >=' => $startDate,
+            'start_time <=' => $endDate,
+        ];
+        if ($locationId) {
+            $conditions['location_id'] = $locationId;
+        }
+        $reportData['all_calls']['total'] = $this->find('all', [
+            'conditions' => $conditions
+        ])->count();
+        $reportData['missed_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect' => CsCall::PROSPECT_UNKNOWN,
+            ], $conditions),
+        ])->count();
+        $reportData['missed_calls']['percent'] = percent($reportData['missed_calls']['total'], $reportData['all_calls']['total']);
+        $reportData['prospect_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect' => CsCall::PROSPECT_YES,
+            ], $conditions),
+        ])->count();
+        $reportData['prospect_calls']['percent'] = percent($reportData['prospect_calls']['total'], $reportData['all_calls']['total']);
+        $reportData['non_prospect_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect' => CsCall::PROSPECT_NO,
+            ], $conditions),
+        ])->count();
+        $reportData['non_prospect_calls']['percent'] = percent($reportData['non_prospect_calls']['total'], $reportData['all_calls']['total']);
+        $reportData['missed_opportunity_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'leadscore' => CsCall::LEADSCORE_MISSED_OPPORTUNITY,
+            ], $conditions),
+        ])->count();
+        $reportData['appointment_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'leadscore' => CsCall::LEADSCORE_APPT_SET,
+            ], $conditions),
+        ])->count();
+        $reportData['unknown_calls']['total'] = $reportData['prospect_calls']['total'] - $reportData['appointment_calls']['total'] - $reportData['missed_opportunity_calls']['total'];
+        $knownOutcomeTotal = $reportData['missed_opportunity_calls']['total'] + $reportData['appointment_calls']['total'];
+        $reportData['missed_opportunity_calls']['percent'] = percent($reportData['missed_opportunity_calls']['total'], $knownOutcomeTotal);
+        $reportData['appointment_calls']['percent'] = percent($reportData['appointment_calls']['total'], $knownOutcomeTotal);
+        return $reportData;
+    }
 }

@@ -166,6 +166,7 @@ $this->Vite->script('content','common-vite');
 								<?php endif; ?>
 								<p class="blog-byline text-caption">
 									<?php if (!empty($content->primary_author) || !empty($content->contributors)): ?>
+										<?= $this->Editorial->getAuthorImage($content->primary_author) ?>
 										<em><?= $this->Editorial->getAuthorsByline($content->primary_author, $content->contributors) ?></em><br>
 										<?= $this->Editorial->displayDate($content) ?>
 									<?php else: ?>

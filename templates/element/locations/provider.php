@@ -101,7 +101,7 @@ use Cake\Core\Configure;
 			<?= $this->Form->control("providers." . $key . ".priority", [
 				'label' => [
 					'text' => 'Order',
-					'class' => 'col-sm-3 control-label'
+					'class' => 'col-sm-3 control-label pl0'
 				],
 				'required' => true,
 				'readonly'=>true,

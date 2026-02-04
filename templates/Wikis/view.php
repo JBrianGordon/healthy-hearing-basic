@@ -158,6 +158,7 @@ $this->Vite->script('wiki','common-vite');
 						?>
 						<h1 class="p0"><?= $wiki->title_h1 ?></h1>
 						<p class="text-caption p0">
+							<?= $this->Editorial->getAuthorImage($wiki->author) ?>
 							<em id="authorLine"><?= $this->Editorial->getAuthorsByline($wiki->author, $wiki->contributors, 'By') ?></em>
 							<?= $this->Editorial->getReviewersByline($wiki->reviewers) ?>
 							<br>Last updated on:

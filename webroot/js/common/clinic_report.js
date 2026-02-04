@@ -7,9 +7,10 @@ $('.datepicker').datepicker();
 // Click the default tab
 const callConciergeTab = document.querySelector('a[href="#callConcierge"]');
 const callTrackingTab = document.querySelector('a[href="#callTracking"]');
-if (callConciergeTab.dataset.default === "true") {
+
+if (callConciergeTab && callConciergeTab.dataset.default === "true") {
   callConciergeTab.click();
-} else {
+} else if (callTrackingTab) {
   callTrackingTab.click();
 }
 

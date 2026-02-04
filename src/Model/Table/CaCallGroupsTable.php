@@ -997,4 +997,81 @@ class CaCallGroupsTable extends Table
         // Completed report data
         return $reportData;
     }
+
+    /**
+      * Find the report based on data passed in
+      *
+      * @param string start date
+      * @param string end date
+      * @param string location id
+      * @return array of results formatted for easy viewing.
+      */
+    public function getClinicReport($startDate, $endDate, $locationId = null) {
+        $reportData = [];
+        $reportData['start_date'] = $startDate;
+        $reportData['end_date'] = $endDate;
+        $startDate = str2datetime($startDate);
+        $endDate = str2datetime($endDate . " 23:59:59");
+        $conditions = [
+            'created >=' => $startDate,
+            'created <=' => $endDate,
+        ];
+        if ($locationId) {
+            $conditions['location_id'] = $locationId;
+        }
+        $reportData['all_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect IN' => [CaCallGroup::PROSPECT_YES, CaCallGroup::PROSPECT_NO]
+            ], $conditions),
+        ])->count();
+        $reportData['prospect_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect' => CaCallGroup::PROSPECT_YES,
+            ], $conditions),
+        ])->count();
+        $reportData['prospect_calls']['percent'] = percent($reportData['prospect_calls']['total'], $reportData['all_calls']['total']);
+        $reportData['non_prospect_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'prospect' => CaCallGroup::PROSPECT_NO,
+            ], $conditions),
+        ])->count();
+        $reportData['non_prospect_calls']['percent'] = percent($reportData['non_prospect_calls']['total'], $reportData['all_calls']['total']);
+        $reportData['missed_opportunity_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'score' => CaCallGroup::SCORE_MISSED_OPPORTUNITY,
+            ], $conditions),
+        ])->count();
+        $reportData['appointment_calls']['total'] = $this->find('all', [
+            'conditions' => array_merge([
+                'score IN' => [CaCallGroup::SCORE_APPT_SET, CaCallGroup::SCORE_APPT_SET_DIRECT],
+            ], $conditions),
+        ])->count();
+        $reportData['unknown_calls']['total'] = $reportData['prospect_calls']['total'] - $reportData['appointment_calls']['total'] - $reportData['missed_opportunity_calls']['total'];
+        $knownOutcomeTotal = $reportData['missed_opportunity_calls']['total'] + $reportData['appointment_calls']['total'];
+        $reportData['missed_opportunity_calls']['percent'] = percent($reportData['missed_opportunity_calls']['total'], $knownOutcomeTotal);
+        $reportData['appointment_calls']['percent'] = percent($reportData['appointment_calls']['total'], $knownOutcomeTotal);
+        return $reportData;
+    }
+
+    /**
+    * Get the result of a specific call group
+    * @param id - Call Group id
+    * @return string result to display
+    */
+    public function getCallResult($caCallGroupId) {
+        $caCallGroup = $this->get($caCallGroupId);
+        $prospect = $caCallGroup->prospect;
+        $result = '';
+        if ($prospect == CaCallGroup::PROSPECT_YES) {
+            $score = $caCallGroup->score;
+            if (array_key_exists($score, CaCallGroup::$scores)) {
+                $result = CaCallGroup::$scores[$score];
+            }
+        } elseif ($prospect == CaCallGroup::PROSPECT_NO) {
+            $result = "Non-prospect";
+        } elseif ($prospect == CaCallGroup::PROSPECT_DISCONNECTED) {
+            $result = "Disconnected/missed call";
+        }
+        return $result;
+    }
 }

@@ -2823,4 +2823,23 @@ class LocationsTable extends Table
         }
         return Location::CHANGE_STATUS_DIFFERENT;
     }
+
+    /**
+    * Calculate the hh_url for this location id
+    */
+    public function getUrl($locationId, $title=null) {
+        $location = $this->get($locationId);
+        if (empty($title)) {
+            $title = $location->title;
+        }
+        $hhUrl = [
+            'admin' => false,
+            'plugin' => false,
+            'controller' => 'locations',
+            'action' => 'view_by_id',
+            'id' => preg_replace('/^'.Location::$oticonPrefix.'/', '', $locationId),
+            'title' => strtolower(slugify($title)),
+        ];
+        return $hhUrl;
+    }
 }
