@@ -222,4 +222,7 @@ class AppController extends Controller
     public function hasRecoveryEmail() {
         return (!empty($this->user->email));
     }
+    public function accountComplete() {
+        return ($this->hasRecoveryEmail());
+    }
 }

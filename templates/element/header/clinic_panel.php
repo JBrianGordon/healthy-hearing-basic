@@ -7,7 +7,7 @@ use Cake\Core\Configure;
 
 $logoBorder = Configure::read('logo_border');
 $logo = Configure::read('logo');
-$locationId = $this->Identity->get('locations.0.id');
+$locationId = $this->Identity->get('locations.0.id') ?? $this->request->getParam('pass')[0] ?? "";
 
 // $isCqPremier = $listing_type = $featureContentLibrary = $showLibraryLink = false;
 // if (!empty($user['location_id'])) {
@@ -72,7 +72,7 @@ $locationId = $this->Identity->get('locations.0.id');
                         <li><a href="/clinic/library" class="dropdown-item"><span class="bi bi-book-fill"></span> Library</a></li>
                         <li><a href="/clinic/pages/faq" class="dropdown-item"><span class="bi bi-question-circle-fill"></span> Help</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a href="/clinic/users/account" class="dropdown-item"><span class="bi bi-person-fill"></span> My Account</a></li>
+                        <li><a href="/clinic/locations/account/<?=$locationId?>" class="dropdown-item"><span class="bi bi-person-fill"></span> My Account</a></li>
                         <li>
                             <?= $this->User->logout(
                                 '<span class="bi bi-power"></span> Logout',

@@ -60,7 +60,7 @@ return [
             'role' => 'clinic',
             'prefix' => 'Clinic',
             'controller' => 'Locations',
-            'action' => 'edit',
+            'action' => ['edit', 'account'],
             'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
                 'table' => 'LocationsUsers',
                 'id' => 'location_id',
