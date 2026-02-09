@@ -31,7 +31,7 @@ class ReviewsController extends BaseClinicController
         // //Force recovery email to be filled out.
         // if (!$this->hasRecoveryEmail()) {
         //     $this->Flash->error('You must first fill out your email to continue. ↓');
-        //     return $this->redirect(['controller' => 'users', 'action' => 'account']);
+        //     return $this->redirect(['controller' => 'locations', 'action' => 'account']);
         // }
 
         $reviews = $this->paginate('Reviews', [

@@ -22,6 +22,6 @@ class LocationEmailsController extends BaseClinicController
         } else {
             $this->Flash->error(__('The email could not be deleted. Please, try again.'));
         }
-        return $this->redirect(['clinic' => true, 'controller' => 'users', 'action' => 'account', $locationId]);
+        return $this->redirect(['clinic' => true, 'controller' => 'locations', 'action' => 'account', $locationId]);
     }
 }
