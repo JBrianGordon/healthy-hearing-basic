@@ -114,6 +114,11 @@ class LocationsController extends BaseClinicController
         ]);
         $isInactiveClinic = (!$location->is_active || !$location->is_show || ($location->listing_type == Location::LISTING_TYPE_NONE));
         if ($this->request->is(['patch', 'post', 'put'])) {
+            foreach ($requestData['location_emails'] as $key => $locationEmail) {
+                if (empty ($locationEmail['email'])) {
+                    unset($requestData['location_emails'][$key]);
+                }
+            }
             $location = $this->Locations->patchEntity($location, $requestData, ['associated'=>['Users', 'LocationEmails']]);
             if ($this->Locations->save($location)) {
                 $this->Flash->success("Account successfully updated.");
