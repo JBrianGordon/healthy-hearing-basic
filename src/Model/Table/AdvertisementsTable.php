@@ -80,21 +80,11 @@ class AdvertisementsTable extends Table
             ],
         ]);
 
-        // $this->hasMany('TagAds', [
-        //     'foreignKey' => 'ad_id',
-        // ]);
-
         $this->belongsToMany('Tags', [
             'joinTable' => 'tag_ads',
             'foreignKey' => 'ad_id',
             'targetForeignKey' => 'tag_id',
         ]);
-
-        // $this->belongsToMany('Tags', [
-        //     'foreignKey' => 'ad_id',
-        //     'targetForeignKey' => 'tag_id',
-        //     'joinTable' => 'tag_ads',
-        // ]);
     }
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
