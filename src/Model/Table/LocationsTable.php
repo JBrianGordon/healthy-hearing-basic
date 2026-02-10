@@ -283,6 +283,26 @@ class LocationsTable extends Table
                 'wildcardOne' => '?',
                 'fields' => ['title', 'subtitle', 'city', 'address', 'address_2', 'zip'],
             ])
+            ->like('title', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('subtitle', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('city', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('address', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('address_2', [
+                'before' => true,
+                'after' => true,
+            ])
             // frozen_expiration
             ->add('frozen_expiration_start', 'Search.Callback', [
                 'callback' => function (\Cake\ORM\Query $query, array $args, \Search\Model\Filter\Base $filter) {
