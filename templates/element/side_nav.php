@@ -8,12 +8,13 @@ use Cake\Core\Configure;
 			<ul class="side-nav-links">
 				<li><span><strong class="invisible">Menu</strong></span></li>
 				<?php if ($isClinic || isset($clinicPage)): ?>
-					<li><a href="/clinic/locations/edit" class="bi bi-globe2"> My Profile</a></li>
-					<li><a href="/clinic/ca-call-groups/report" class="bi bi-list-task"> Reporting</a></li>
-					<li><a href="/clinic/reviews" class="bi bi-star-fill"> Reviews</a></li>
+					<?php $locationId = $user->locations[0]->id ?? null; ?>
+					<li><a href="/clinic/locations/edit/<?= $locationId ?>" class="bi bi-globe2"> My Profile</a></li>
+					<li><a href="/clinic/ca-call-groups/report/<?= $locationId ?>" class="bi bi-list-task"> Reporting</a></li>
+					<li><a href="/clinic/reviews/<?= $locationId ?>" class="bi bi-star-fill"> Reviews</a></li>
 					<li><a href="/clinic/library" class="bi bi-book-fill"> Library</a></li>
 					<li><a href="/clinic/pages/faq" class="bi bi-question-circle-fill"> Help</a></li>
-					<li><a href="/clinic/users/account" class="bi bi-person-fill"> My Account</a></li>
+					<li><a href="/clinic/locations/account/<?= $locationId ?>" class="bi bi-person-fill"> My Account</a></li>
 					<?php if ($isClinic || $adminAccessAllowed) : ?>
 						<li><a href="/logout" class="bi bi-power"> Logout</a></li>
 					<?php endif; ?>

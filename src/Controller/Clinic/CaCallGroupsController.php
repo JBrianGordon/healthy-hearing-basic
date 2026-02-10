@@ -17,7 +17,7 @@ class CaCallGroupsController extends BaseClinicController
         // Force recovery email to be filled out
         if (!$this->hasRecoveryEmail()) {
             $this->badFlash('You must first fill out your email to continue. ↓');
-            return $this->redirect(['controller' => 'users', 'action' => 'account']);
+            return $this->redirect(['controller' => 'locations', 'action' => 'account', $locationId]);
         }
         $requestData = $this->request->getData();
         if (!$this->isAdmin) {
@@ -28,7 +28,7 @@ class CaCallGroupsController extends BaseClinicController
             }
             if (empty($locationId)) {
                 $this->badFlash('Unable to find call reports for this user. No valid location found.');
-                return $this->redirect(['controller' => 'users', 'action' => 'account']);
+                return $this->redirect(['controller' => 'locations', 'action' => 'account', $locationId]);
             }
         } else {
             // Admin user

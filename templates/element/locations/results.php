@@ -122,15 +122,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 										<div class="col-md-6">
 											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
 											<?= $this->Clinic->addressSchemaHidden($location) ?>
-											<div class="address d-block d-sm-none"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
-											<?= $this->Clinic->reviewSchemaHidden($location) ?>
-											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
-												<div class="reviews">
-													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
-														<?= $this->Clinic->basicStarRating($location) ?>
-													</a>
-												</div>
-											<?php endif; ?>
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
 												<div class="telephone h4"><span><span class="bi bi-telephone-fill"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
@@ -140,6 +131,15 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 													<?= $this->element('locations/profile/direct_book_modal', ['iframe' => $location->direct_book_iframe, 'locationId' => $location->id, 'locationTitle' => $location->title]) ?>
 												<?php endif; ?>
 											</div>
+											<div class="address d-block d-sm-none"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
+											<?= $this->Clinic->reviewSchemaHidden($location) ?>
+											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
+												<div class="reviews">
+													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+														<?= $this->Clinic->basicStarRating($location) ?>
+													</a>
+												</div>
+											<?php endif; ?>
 										</div>
 										<div class="col-md-6">
 											<div class="address mt5 d-none d-sm-block"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>

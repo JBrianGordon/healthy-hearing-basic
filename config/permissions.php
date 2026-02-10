@@ -56,16 +56,35 @@ return [
         * Clinic - Clinic/Locations
         ********************************/
         [
-        // Clinics can only access their clinic's location edit page when logged in
+            // Clinics can only access their clinic's location edit page when logged in
             'role' => 'clinic',
             'prefix' => 'Clinic',
             'controller' => 'Locations',
-            'action' => 'edit',
+            'action' => ['edit', 'account'],
             'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
                 'table' => 'LocationsUsers',
                 'id' => 'location_id',
                 'ownerForeignKey' => 'user_id',
             ]),
+        ],
+        [
+            // Clinics can only delete additional emails from their clinic
+            'role' => 'clinic',
+            'prefix' => 'Clinic',
+            'controller' => 'LocationEmails',
+            'action' => 'delete',
+            'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
+                $locationEmailId = $request->getParam('pass.0');
+                $locationEmail = \Cake\ORM\TableRegistry::get('LocationEmails')
+                    ->find('all')
+                    ->where(['id' => $locationEmailId])
+                    ->first();
+                $userLocationId = $user->locations[0]->id;
+                if (!empty($locationEmail->location_id) && !empty($userLocationId)) {
+                    return $userLocationId == $locationEmail->location_id;
+                }
+                return false;
+            }
         ],
 
         /*******************************
