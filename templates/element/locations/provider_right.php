@@ -30,7 +30,7 @@ $locationUrl = Router::url($location->hh_url);
             <p class="clinic-provider-bio mb0"><?= $this->Clinic->truncate(strip_tags($provider->description), 100, "..."); ?></p>
         </div>
         <div class='col-sm-4'>
-            <a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+            <a href="<?= $locationUrl ?>">
                 <?php if(!empty($location->logo_url) && !$isMobileDevice && $location->listing_type == 'Premier'): ?>
                     <div class="logo-container mr10 col-xs-12"><img loading="lazy" class="clinic-logo" src="<?=$location->logo_url?>" alt="<?=$location->title?> logo" width="120" height="40"></div>
                 <?php endif; ?>

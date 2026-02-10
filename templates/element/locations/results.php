@@ -43,7 +43,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 									<div class="row">
 										<?php if(!empty($location->logo_url) && $isMobileDevice && $location->listing_type == 'Premier'): ?>
 											<h2 class="name mt0 mr10 pull-left">
-												<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
+												<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
 											</h2>
 											<div class="logo-container mr10">
 												<img loading="lazy" class="clinic-logo" src="/cloudfiles/clinics/<?= $location->logo_url ?>" alt="<?= $location->title ?> logo" width="180" height="60">
@@ -53,7 +53,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 										<?php else: ?>
 											<div class="col-md-6">
 												<h2 class="name mt0 mr10">
-													<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
+													<?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'escape' => false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small>
 												</h2>
 										<?php endif; ?>
 											<div class="clinicPhone mb5<?= !empty($linkedLocations) ? ' mt10' : ''?>" data-id="<?= $locationId ?>">
@@ -83,17 +83,17 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
 												<div class="reviews">
-													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+													<a href="<?= $locationUrl . '#reviews' ?>"">
 														<?= $this->Clinic->basicStarRating($location) ?>
 													</a>
 												</div>
 											<?php endif; ?>
 											<?php $linkedLocations = $this->Clinic->linkedLocations($location->id); ?>
 											<?php if (!empty($linkedLocations) && $location->is_iris_plus): ?>
-												<a href="<?= $locationUrl . '#linkedLocationAnchor' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>" class="text-link">More locations available</a>
+												<a href="<?= $locationUrl . '#linkedLocationAnchor' ?>" class="text-link">More locations available</a>
 											<?php endif; ?>
 											<?php if (empty($linkedLocations) || !$location->is_iris_plus): ?>
-												<div class="details mb5"><a href="<?= $locationUrl ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location); ?>" class="text-link">View clinic details</a></div>
+												<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link">View clinic details</a></div>
 											<?php endif; ?>
 											<?= $location->listing_type == Location::LISTING_TYPE_PREMIER ? $this->Clinic->getBadges($location) : null ?>
 										</div>
@@ -120,13 +120,13 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 								?>
 									<div class="row">
 										<div class="col-md-6">
-											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'onclick' => $this->Clinic->zipResultsClickEvent($location), 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
+											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
 											<?= $this->Clinic->addressSchemaHidden($location) ?>
 											<div class="address d-block d-sm-none"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
 											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
 												<div class="reviews">
-													<a href="<?= $locationUrl . '#reviews' ?>" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">
+													<a href="<?= $locationUrl . '#reviews' ?>">
 														<?= $this->Clinic->basicStarRating($location) ?>
 													</a>
 												</div>
@@ -143,7 +143,7 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 										</div>
 										<div class="col-md-6">
 											<div class="address mt5 d-none d-sm-block"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
-											<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link" onclick="<?= $this->Clinic->zipResultsClickEvent($location) ?>">View clinic details</a></div>
+											<div class="details mb5"><a href="<?= $locationUrl ?>" class="text-link">View clinic details</a></div>
 										</div>
 									</div>
 								</div>

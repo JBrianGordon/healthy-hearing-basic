@@ -456,7 +456,7 @@ class ClinicHelper extends Helper
                     $category = 'Mobile-Click';
                     break;
             }
-            return "<a href='$link' class='$class' onclick=\"dataLayer.hhTrackEvent('Phone-Call','$category', '1$sPhone', $.Clinic.diff_time());\">". formatPhoneNumber($retval) ."</a>";
+            return "<a href='$link' class='$class'>". formatPhoneNumber($retval) ."</a>";
 
         }
         return formatPhoneNumber($retval);
@@ -887,22 +887,11 @@ class ClinicHelper extends Helper
         $retval = $link . '<br>' . $this->address($location, true);
 
         if ($location->reviews_approved > 0) {
-            $retval .= '<div class="reviews text-small"><a href="' . Router::url($location->hh_url) . '#reviews" style="border:none" onclick="' . $this->zipResultsClickEvent($location) . '">' . $this->basicStarRating($location) . '</a></div>';
+            $retval .= '<div class="reviews text-small"><a href="' . Router::url($location->hh_url) . '#reviews" style="border:none">' . $this->basicStarRating($location) . '</a></div>';
         }
 
         $retval .= $this->Html->tag('p', $this->Html->link('View Details', $location->hh_url, ['class' => 'btn btn-secondary']), ['class' => 'mt10 mb0 text-small']);
         return $retval;
-    }
-
-    /**
-    * Generate the onclick event used for the city/zip results page
-    * @param object Location
-    * @return string
-    */
-    public function zipResultsClickEvent($location = null) {
-        $listingType = !empty($location->listing_type) ? $location->listing_type : Location::LISTING_TYPE_NONE;
-        $clickEvent = "dataLayer.hhTrackEvent('CityPageClicks','" . $listingType . "Click', document.location.pathname, 0, false);";
-        return $clickEvent;
     }
 
     /**
