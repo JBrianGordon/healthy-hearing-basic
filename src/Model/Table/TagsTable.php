@@ -50,8 +50,10 @@ class TagsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('TagAds', [
+        $this->belongsToMany('Advertisements', [
+            'joinTable' => 'tag_ads',
             'foreignKey' => 'tag_id',
+            'targetForeignKey' => 'ad_id',
         ]);
         $this->belongsToMany('Wikis', [
             'joinTable' => 'tag_wikis',

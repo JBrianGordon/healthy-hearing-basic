@@ -38,7 +38,7 @@ $this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
                                         <?= $this->Form->control('dest', ['required' => false]); ?>
                                         <?= $this->Form->control('alt', ['required' => false]); ?>
                                         <?=
-                                            $this->Form->control('src', [
+                                            $this->Form->control('image_name', [
                                                 'id' => 'imageUpload',
                                                 'type' => 'file',
                                                 'required' => false,
