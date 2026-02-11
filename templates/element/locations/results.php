@@ -122,8 +122,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 										<div class="col-md-6">
 											<h3 class="name"><?= $this->Html->link($location->title, $location->hh_url, ['class' => 'text-primary', 'escape'=>false]) ?> <small><?= '(' . $this->Clinic->distance($distance) .')' ?></small></h3>
 											<?= $this->Clinic->addressSchemaHidden($location) ?>
-<<<<<<< HEAD
-=======
 											<div class="address d-block d-sm-none"><span class="hh-icon-address"></span> <?= $this->Text->truncate($this->Clinic->address($location), 59) ?></div>
 											<?= $this->Clinic->reviewSchemaHidden($location) ?>
 											<?php if ($location->reviews_approved > 0 && $isEnhancedOrPremier): ?>
@@ -133,7 +131,6 @@ $this->Html->script('dist/location_results.min', ['block' => true]);
 													</a>
 												</div>
 											<?php endif; ?>
->>>>>>> 17085-locations-crm
 											<div class="clinicPhone" data-id="<?= $locationId ?>">
 												<div class="telephone h4"><span><span class="bi bi-telephone-fill"></span> <?= $this->Clinic->phone($location, ['link' => $isMobileDevice], $isCallTrackingBypassed) ?></span></div>
 												<?php if (in_array($location->direct_book_type, [Location::DIRECT_BOOK_BLUEPRINT, Location::DIRECT_BOOK_EARQ]) && (!empty($location->direct_book_iframe))): ?>
