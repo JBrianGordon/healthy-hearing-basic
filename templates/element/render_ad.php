@@ -6,7 +6,7 @@ if (!empty($ad->id) && $show_ad) {
 	$id = $ad->id;
 	$alt = (!empty($ad->alt) ? $ad->alt : 'hearing aids');
 	// look at actual source
-	$src = $ad->public_url;
+	$src = $ad->image_url;
 	$dest = $ad->dest;
 	// IMG
 	echo ''.
