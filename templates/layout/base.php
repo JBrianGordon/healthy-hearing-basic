@@ -36,15 +36,52 @@ if ($env != 'prod') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
     <!-- Prefetches -->
-    <?= $this->Seo->prefetches(); ?>
+    <?php
+    function renderPrefetches($Seo) {
+        $prefetchOutput = $Seo->prefetches();
+        if (!empty($prefetchOutput)) {
+            echo $prefetchOutput;
+        }
+    }
+    ?>
 
     <!-- Meta tags -->
-    <?php $this->Seo->metaTags(); ?>
-    <?= $this->fetch('meta') ?>
+    <?php
+    function renderMetaTags($Seo, $view) {
+        ob_start();
+        $Seo->metaTags();
+        $metaOutput = ob_get_clean();
+        $metaBlock = $view->fetch('meta');
+        if (empty($metaOutput) && empty($metaBlock)) {
+            // Output default meta tags
+            echo '<meta name="description" content="Read hearing aid clinic reviews for thousands of independent hearing centers in the US, plus updated news and information on hearing aids and hearing loss.">';
+        } else {
+            echo $metaOutput;
+            echo $metaBlock;
+        }
+    }
+    renderMetaTags($this->Seo, $this);
+    ?>
 
     <!-- Social Options -->
-    <?= $this->Seo->socialOptions(); ?>
-    <?= $this->fetch('socialOptions') ?>
+    <?php
+    function renderSocialOptions($Seo, $view) {
+        $socialOutput = $Seo->socialOptions();
+        $socialBlock = $view->fetch('socialOptions');
+        if (empty($socialOutput) && empty($socialBlock)) {
+            // Output default social tags
+            echo '<meta property="og:type" content="website">';
+            echo '<meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '">';
+            echo '<meta property="og:title" content="Hearing aid and hearing clinic directory">';
+            echo '<meta property="og:description" content="Read hearing aid clinic reviews for thousands of independent hearing centers in the US, plus updated news and information on hearing aids and hearing loss.">';
+            echo '<meta property="og:image" content="/img/hh-symbol.png">';
+        } else {
+            echo $socialOutput;
+            echo $socialBlock;
+        }
+    }
+    renderSocialOptions($this->Seo, $this);
+    ?>
 
     <!-- Above the fold CSS -->
     <?php
