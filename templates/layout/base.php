@@ -35,13 +35,17 @@ if ($env != 'prod') {
     <!-- AutocompleteJS styling -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
-    <!-- Meta tags -->
-    <!-- TO-DO: ADD META TAGS -->
+    <!-- Prefetches -->
+    <?= $this->Seo->prefetches(); ?>
 
-    <?php /* Display social options
-    TODO: These are currently assigned in the view file, but should be done similar to metaTags */ ?>
+    <!-- Meta tags -->
+    <?php $this->Seo->metaTags(); ?>
     <?= $this->fetch('meta') ?>
-    
+
+    <!-- Social Options -->
+    <?= $this->Seo->socialOptions(); ?>
+    <?= $this->fetch('socialOptions') ?>
+
     <!-- Above the fold CSS -->
     <?php
         if ($_SERVER['REQUEST_URI'] == '/help/online-hearing-test') {

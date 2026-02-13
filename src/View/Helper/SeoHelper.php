@@ -35,10 +35,11 @@ class SeoHelper extends Helper
     * @param array of name => content meta tags to merge with giving priority to SEO meta tags
     * @return string of meta tags to show.
     */
-    function metaTags($metaData = array()) {
+    function metaTags() {
         $request = env('REQUEST_URI');
         $retval = "";
         $seoMetaTags = $this->SeoMetaTags->findAllTagsByUri($request);
+        $metaData = $this->getView()->get('meta');
         foreach ($seoMetaTags as $tag) {
             if (isset($metaData[$tag->name])) {
                 unset($metaData[$tag->name]);
@@ -50,13 +51,34 @@ class SeoHelper extends Helper
                 $data['name'] = $tag->name;
             }
             $data['content'] = $tag->content;
-            $retval .= $this->Html->meta($data)."\n";
+            $retval .= $this->Html->meta($data, null, ['block'=>true])."\n";
         }
 
         if (!empty($metaData)) {
             foreach ($metaData as $name => $content) {
-                $retval .= $this->Html->meta(array('name' => $name, 'content' => $content))."\n";
+                $retval .= $this->Html->meta(['name' => $name, 'content' => $content], null, ['block'=>true])."\n";
             }
+        }
+        return $retval;
+    }
+
+    function socialOptions() {
+        $retval = "";
+        $socialOptions = $this->getView()->get('socialOptions');
+        foreach ($socialOptions as $name => $content) {
+            $retval .= $this->Html->meta(['property' => $name, 'content' => $content], null, ['block'=>'socialOptions'])."\n";
+        }
+        return $retval;
+    }
+
+    function prefetches() {
+        $retval = "";
+        $prefetches = $this->getView()->get('prefetches');
+        foreach ($prefetches as $content) {
+            $retval .= $this->Html->tag('link', '', [
+                'rel' => 'dns-prefetch',
+                'href' => $content
+            ])."\n";
         }
         return $retval;
     }

@@ -125,11 +125,13 @@ class ContentController extends AppController
             return $this->response = $this->response->withStatus(410);
         }
 
-        $content = $this->Content->findByIdSlug($id, $_SERVER['REQUEST_URI']);
+        $requestUri = $this->request->getPath();
+        $requestHost = $this->request->host();
+        $content = $this->Content->findByIdSlug($id, $requestUri);
 
         if (empty($content)) {
             if ($redirect = $this->Content->findForRedirectById($id)) {
-                if ($_SERVER['REQUEST_URI'] != Router::url($redirect) &&
+                if ($requestUri != Router::url($redirect) &&
                     $this->Content->exists(['id' => $id, 'is_active' => true, 'date <= CURDATE()'])) {
                     return $this->redirect($redirect, 301);
                 }
@@ -141,11 +143,19 @@ class ContentController extends AppController
         }
 
         //set up and assign the meta tag info
-
-        $this->meta['description'] = (isset($this->meta['description']) ? $this->meta['description'] : null);
-        $this->meta['description'] = (!empty($content['Content']['meta_description']) ? $content['Content']['meta_description'] : $this->meta['description']);
+        $this->meta['description'] = $content->meta_description ?? $this->meta['description'] ?? null;
         $this->socialOptions['og:type'] = 'article';
         $this->socialOptions['article:section'] = 'HH Report';
+        $this->socialOptions['og:url'] = "https://' . $requestHost . $requestUri.'";
+        if ($content->facebook_title) {
+            $this->socialOptions['og:title'] = $content->facebook_title;
+        }
+        if ($content->facebook_description) {
+            $this->socialOptions['og:description'] = $content->facebook_description;
+        }
+        if ($content->facebook_image_url) {
+            $this->socialOptions['og:image'] = $content->facebook_image_url;
+        }
 
         //Prefetches
         $this->prefetches[] = '//connect.facebook.com';
