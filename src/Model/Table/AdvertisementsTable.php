@@ -221,7 +221,7 @@ class AdvertisementsTable extends Table
         $genericAds = [];
         foreach ($allAds as $ad) {
             // Don't include ads with an exclusivity tag
-            if (empty($ad->tag_ads)) {
+            if (empty($ad->tags)) {
                 $genericAds[] = $ad;
             }
         }
