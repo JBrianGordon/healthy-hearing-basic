@@ -240,6 +240,8 @@ class AdvertisementsTable extends Table
     * @param $tagIds array of tag ids
     */
     function findAdByTags($tagIds) {
+        // TO-DO?: this looks like it works for now, but we can probably
+        // search by Ads and contain Tags vs how it was done in Cake2
         $allExclusiveAds = [];
         $uniqueAdIds = [];
         foreach ($tagIds as $tagId) {
