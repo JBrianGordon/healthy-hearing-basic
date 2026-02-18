@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\State $state
  */
  
-$this->Html->script('dist/admin_edit_state.min', ['block' => true]);
+ $this->Vite->script('admin_edit_state','admin-vite');
 ?>
 <header class="col-md-12 mt10">
 <div class="panel panel-light">
