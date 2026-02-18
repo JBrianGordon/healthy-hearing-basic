@@ -2,6 +2,8 @@ import './admin_common';
 import './nav_tabs';
 import './ckpackage';
 
+import $ from 'jquery';
+
 // Leaving this largely alone due to use of datepicker
 document.addEventListener('DOMContentLoaded', function (): void {
 

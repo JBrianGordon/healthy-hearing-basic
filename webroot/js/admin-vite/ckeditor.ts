@@ -2,28 +2,47 @@
  * @license Copyright (c) 2014-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
-import { ClassicEditor } from 'ckeditor5';
+import { ClassicEditor, PictureEditing } from 'ckeditor5';
 import {
   Alignment,
   Autoformat,
   Autosave,
+  BlockQuote,
   Bold,
+  CKBox,
   CloudServices,
   Essentials,
   FindAndReplace,
+  Font,
   GeneralHtmlSupport,
+  Heading,
+  Highlight,
+  HorizontalLine,
+  Image,
+  ImageToolbar,
+  ImageUpload,
   Italic,
   Link,
   List,
   ListProperties,
+  MediaEmbed,
   Paragraph,
   PasteFromOffice,
-  StandardEditingMode,
+  RemoveFormat,
+  SourceEditing,
+  SpecialCharacters,
+  Subscript,
+  Superscript,
+  Table,
+  TableToolbar,
+  TableProperties,
+  TableCellProperties,
   Underline,
   WordCount
 } from 'ckeditor5';
-import InsertKeyPoints from './insert_key_points.js';
-import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
+import InsertKeyPoints from './insert_key_points';
+import AddFrenchCharacters from './add_french_characters';
+//***TODO: import this again when wProofreader fixes compatibility issues (check when updating CKEditor version) ***import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 
 import 'ckeditor5/ckeditor5.css';
 
@@ -33,25 +52,6 @@ interface WordCountStats {
 }
 
 const ckTokenUrl = `${window.location.origin}/endpoints/ckeditor-endpoint`;
-
-// Add French characters plugin
-function AddFrenchCharacters(editor: any): void {
-  const specialCharacters = editor.plugins.get('SpecialCharacters');
-  specialCharacters.addItems('French', [
-    { title: 'Cedilla (ç)', character: 'ç' },
-    { title: 'Capital Cedilla (Ç)', character: 'Ç' },
-    { title: 'E Acute (é)', character: 'é' },
-    { title: 'Capital E Acute (É)', character: 'É' },
-    { title: 'E Grave (è)', character: 'è' },
-    { title: 'Capital E Grave (È)', character: 'È' },
-    { title: 'A Circumflex (â)', character: 'â' },
-    { title: 'Capital A Circumflex (Â)', character: 'Â' },
-    { title: 'E Circumflex (ê)', character: 'ê' },
-    { title: 'Capital E Circumflex (Ê)', character: 'Ê' },
-    { title: 'O Circumflex (ô)', character: 'ô' },
-    { title: 'Capital O Circumflex (Ô)', character: 'Ô' }
-  ]);
-}
 
 document.addEventListener('DOMContentLoaded', function () {
   // Get all elements with the "editor" class
@@ -77,24 +77,42 @@ document.addEventListener('DOMContentLoaded', function () {
         Alignment,
         Autoformat,
         Autosave,
+        BlockQuote,
         Bold,
+        CKBox,
         CloudServices,
         Essentials,
         FindAndReplace,
+        Font,
         GeneralHtmlSupport,
+        Heading,
         Highlight,
+        HorizontalLine,
         Image,
+        ImageToolbar,
+        ImageUpload,
         InsertKeyPoints,
         Italic,
         Link,
         List,
         ListProperties,
+        MediaEmbed,
         Paragraph,
         PasteFromOffice,
+        PictureEditing,
+        RemoveFormat,
+        SourceEditing,
+        SpecialCharacters,
         AddFrenchCharacters,
+        Subscript,
+        Superscript,
+        Table,
+        TableToolbar,
+        TableProperties,
+        TableCellProperties,
         Underline,
         WordCount,
-        WProofreader
+        // WProofreader
       ],
       toolbar: {
         items: [
@@ -130,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
           '|',
           'horizontalLine',
           'highlight',
-          'wproofreader'
+          // 'wproofreader'
         ],
         shouldNotGroupWhenFull: true
       },
@@ -265,11 +283,11 @@ document.addEventListener('DOMContentLoaded', function () {
       ckbox: {
         tokenUrl: ckTokenUrl
       },
-      wproofreader: {
-        lang: siteLang,
-        serviceId: servId,
-        srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js'
-      },
+      // wproofreader: {
+      //   serviceId: servId,
+      //   lang: siteLang.toLowerCase().replace('_', '-'),
+      //   autoStartup: true,
+      // },
       wordCount: {
         onUpdate: (stats: WordCountStats) => {
           const wordCountElement = document.querySelector<HTMLElement>('.ck-word-count');

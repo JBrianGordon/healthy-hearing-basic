@@ -9,7 +9,7 @@
 use Cake\I18n\FrozenTime;
 use Cake\Routing\Router;
  
-$this->Html->script('dist/wiki_edit.min', ['block' => true]);
+$this->Vite->script('wiki_edit','admin-vite');
 
 $isDraft = !empty($wiki->id_draft_parent);
 ?>

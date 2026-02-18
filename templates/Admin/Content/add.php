@@ -7,7 +7,7 @@
 use App\Model\Entity\Content;
 use Cake\Routing\Router;
 
-$this->Html->script('dist/content_edit.min', ['block' => true]);
+$this->Vite->script('content_edit','admin-vite');
 
 $author_default = false;
 
