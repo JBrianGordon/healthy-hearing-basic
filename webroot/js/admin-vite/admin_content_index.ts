@@ -1,8 +1,16 @@
 import './admin_common';
 
-const exportBtnClick = () => {
-  const count = parseInt(document.getElementById("count").innerHTML, 10);
-  const exportUrl = document.getElementById("exportUrl").innerHTML;
+const exportBtnClick = (): void => {
+  const countElement = document.getElementById("count");
+  const exportUrlElement = document.getElementById("exportUrl");
+
+  if (!countElement || !exportUrlElement) {
+    console.error("Required elements not found");
+    return;
+  }
+
+  const count = parseInt(countElement.innerHTML, 10);
+  const exportUrl = exportUrlElement.innerHTML;
 
   if (count < 100000) {
     // Small file. Download immediately.
@@ -16,4 +24,8 @@ const exportBtnClick = () => {
   }
 };
 
-document.getElementById("exportBtn").addEventListener("click", exportBtnClick);
+const exportBtn = document.getElementById("exportBtn");
+
+if (exportBtn) {
+  exportBtn.addEventListener("click", exportBtnClick);
+}

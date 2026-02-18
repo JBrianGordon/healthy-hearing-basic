@@ -9,7 +9,7 @@ $searchButton = '
 </a>
 ';
 
-$this->Html->script('dist/admin_location_add.min.js?v='.Configure::read("tagVersion"));
+$this->Vite->script('admin_location_add','admin-vite');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
