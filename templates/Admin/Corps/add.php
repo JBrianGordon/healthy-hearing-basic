@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\Corp $corp
  */
 
-$this->Html->script('dist/corp_edit.min', ['block' => true]);
+ $this->Vite->script('corp_edit','admin-vite');
 
 $author_default = false;
 ?>

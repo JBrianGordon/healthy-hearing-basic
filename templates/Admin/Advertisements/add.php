@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Advertisement $advertisement
  */
 
-$this->Html->script('dist/admin_ad_edit.min', ['block' => true]);
+ $this->Vite->script('admin_ad_edit','admin-vite');
 ?>
 <div class="container-fluid site-body">
     <div class="row">

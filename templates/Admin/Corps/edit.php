@@ -10,7 +10,7 @@ use Cake\I18n\FrozenTime;
 
 $isDraft = !empty($corp->id_draft_parent);
 
-$this->Html->script('dist/corp_edit.min', ['block' => true]);
+$this->Vite->script('corp_edit','admin-vite');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">
