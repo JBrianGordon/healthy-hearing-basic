@@ -35,30 +35,54 @@ if ($env != 'prod') {
     <!-- AutocompleteJS styling -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/css/autoComplete.min.css">
 
+    <!-- Prefetches -->
+    <?php
+    function renderPrefetches($Seo) {
+        $prefetchOutput = $Seo->prefetches();
+        if (!empty($prefetchOutput)) {
+            echo $prefetchOutput;
+        }
+    }
+    ?>
+
     <!-- Meta tags -->
-    <!-- TO-DO: ADD META TAGS -->
+    <?php
+    function renderMetaTags($Seo, $view) {
+        ob_start();
+        $Seo->metaTags();
+        $metaOutput = ob_get_clean();
+        $metaBlock = $view->fetch('meta');
+        if (empty($metaOutput) && empty($metaBlock)) {
+            // Output default meta tags
+            echo '<meta name="description" content="Read hearing aid clinic reviews for thousands of independent hearing centers in the US, plus updated news and information on hearing aids and hearing loss.">';
+        } else {
+            echo $metaOutput;
+            echo $metaBlock;
+        }
+    }
+    renderMetaTags($this->Seo, $this);
+    ?>
 
-    <?php /* Display social options
-    TODO: These are currently assigned in the view file, but should be done similar to metaTags */ ?>
-    <?= $this->fetch('meta') ?>
+    <!-- Social Options -->
+    <?php
+    function renderSocialOptions($Seo, $view) {
+        $socialOutput = $Seo->socialOptions();
+        $socialBlock = $view->fetch('socialOptions');
+        if (empty($socialOutput) && empty($socialBlock)) {
+            // Output default social tags
+            echo '<meta property="og:type" content="website">';
+            echo '<meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '">';
+            echo '<meta property="og:title" content="Hearing aid and hearing clinic directory">';
+            echo '<meta property="og:description" content="Read hearing aid clinic reviews for thousands of independent hearing centers in the US, plus updated news and information on hearing aids and hearing loss.">';
+            echo '<meta property="og:image" content="/img/hh-symbol.png">';
+        } else {
+            echo $socialOutput;
+            echo $socialBlock;
+        }
+    }
+    renderSocialOptions($this->Seo, $this);
+    ?>
 
-    <!-- Start VWO Async SmartCode -->
-    <link rel="preconnect" href="https://dev.visualwebsiteoptimizer.com" />
-    <script type='text/javascript' id='vwoCode'>
-    window._vwo_code=window._vwo_code || (function() {
-    var account_id=351850,
-    version = 1.5,
-    settings_tolerance=2000,
-    library_tolerance=2500,
-    use_existing_jquery=false,
-    is_spa=1,
-    hide_element='body',
-    hide_element_style = 'opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important',
-    /* DO NOT EDIT BELOW THIS LINE */
-    f=false,w=window,d=document,vwoCodeEl=d.querySelector('#vwoCode'),code={use_existing_jquery:function(){return use_existing_jquery},library_tolerance:function(){return library_tolerance},hide_element_style:function(){return'{'+hide_element_style+'}'},finish:function(){if(!f){f=true;var e=d.getElementById('_vis_opt_path_hides');if(e)e.parentNode.removeChild(e)}},finished:function(){return f},load:function(e){var t=d.createElement('script');t.fetchPriority='high';t.src=e;t.type='text/javascript';t.onerror=function(){_vwo_code.finish()};d.getElementsByTagName('head')[0].appendChild(t)},getVersion:function(){return version},getMatchedCookies:function(e){var t=[];if(document.cookie){t=document.cookie.match(e)||[]}return t},getCombinationCookie:function(){var e=code.getMatchedCookies(/(?:^|;)\s?(_vis_opt_exp_\d+_combi=[^;$]*)/gi);e=e.map(function(e){try{var t=decodeURIComponent(e);if(!/_vis_opt_exp_\d+_combi=(?:\d+,?)+\s*$/.test(t)){return''}return t}catch(e){return''}});var i=[];e.forEach(function(e){var t=e.match(/([\d,]+)/g);t&&i.push(t.join('-'))});return i.join('|')},init:function(){if(d.URL.indexOf('__vwo_disable__')>-1)return;w.settings_timer=setTimeout(function(){_vwo_code.finish()},settings_tolerance);var e=d.currentScript,t=d.createElement('style'),i=e&&!e.async?hide_element?hide_element+'{'+hide_element_style+'}':'':code.lA=1,n=d.getElementsByTagName('head')[0];t.setAttribute('id','_vis_opt_path_hides');vwoCodeEl&&t.setAttribute('nonce',vwoCodeEl.nonce);t.setAttribute('type','text/css');if(t.styleSheet)t.styleSheet.cssText=i;else t.appendChild(d.createTextNode(i));n.appendChild(t);var o=this.getCombinationCookie();this.load('https://dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&f='+ +is_spa+'&vn='+version+(o?'&c='+o:''));return settings_timer}};w._vwo_settings_timer = code.init();return code;}());
-    </script>
-    <!-- End VWO Async SmartCode -->
-    
     <!-- Above the fold CSS -->
     <?php
         if ($_SERVER['REQUEST_URI'] == '/help/online-hearing-test') {
@@ -98,6 +122,9 @@ if ($env != 'prod') {
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/autoComplete.min.js"></script>
 </head>
 <body>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=<?=Configure::read('gtmId') ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <?= $this->fetch('header') ?>
     <?= $this->element('side_nav') ?>
     <?= $this->Flash->render() ?>
@@ -113,6 +140,7 @@ if ($env != 'prod') {
         <!-- Regex check to show sticky footer on city or clinic pages only-->
         <?= preg_match('/\/hearing-aids\/([0-9]{5}\-[A-Za-z\-]+|[A-Z]{2}\-[A-Za-z\-]+\/[A-Za-z\-]+)/', $_SERVER['REQUEST_URI']) ? $this->element('sticky_footer') : '' ?>
     </div>
+    <?= $this->element('google_analytics') ?>
 </body>
 <?= $this->fetch('script') ?>
 </html>

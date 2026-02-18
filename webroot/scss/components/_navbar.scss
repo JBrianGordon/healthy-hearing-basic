@@ -84,6 +84,10 @@
         float: right;
       }
     }
+
+    .dropdown-menu.dropdown-menu-end {
+      position: absolute;
+    }
   }
 
   &.navbar-default {

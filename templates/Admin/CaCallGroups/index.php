@@ -40,6 +40,9 @@ foreach ($fields as $field => $type) {
                 $options = CaCallGroup::$prospectOptions;
                 $empty = '(select one)';
                 break;
+            case 'created':
+                $label = 'Initial Call Date';
+                break;
         }
         $advancedSearchFields[] = [
             'field' => $field,

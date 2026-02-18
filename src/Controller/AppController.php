@@ -71,6 +71,8 @@ class AppController extends Controller
             $this->set('title', $title);
         }
         $this->set('meta', $this->meta);
+        $this->set('socialOptions', $this->socialOptions);
+        $this->set('prefetches', $this->prefetches);
     }
 
     public function beforeFilter(EventInterface $event)
@@ -221,5 +223,8 @@ class AppController extends Controller
 
     public function hasRecoveryEmail() {
         return (!empty($this->user->email));
+    }
+    public function accountComplete() {
+        return ($this->hasRecoveryEmail());
     }
 }

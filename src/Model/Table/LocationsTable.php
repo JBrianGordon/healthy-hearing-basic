@@ -281,7 +281,27 @@ class LocationsTable extends Table
                 'comparison' => 'LIKE',
                 'wildcardAny' => '*',
                 'wildcardOne' => '?',
-                'fields' => ['title', 'subtitle', 'city', 'address', 'address_2', 'zip'],
+                'fields' => ['id', 'id_oticon', 'title', 'subtitle', 'city', 'address', 'address_2', 'zip'],
+            ])
+            ->like('title', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('subtitle', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('city', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('address', [
+                'before' => true,
+                'after' => true,
+            ])
+            ->like('address_2', [
+                'before' => true,
+                'after' => true,
             ])
             // frozen_expiration
             ->add('frozen_expiration_start', 'Search.Callback', [

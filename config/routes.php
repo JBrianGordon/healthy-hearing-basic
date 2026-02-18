@@ -194,6 +194,15 @@ return static function (RouteBuilder $routes) {
             'Pages::clinicFaq'
         );
 
+        $clinicBuilder->connect(
+            '/ca-call-groups/report/{location_id}',
+            'CaCallGroups::report'
+        )
+        ->setPass(['location_id'])
+        ->setPatterns([
+            'location_id' => '^81190\d{5}$',
+        ]);
+
         // All routes here will be prefixed with `/clinic`, and
         // have the `'prefix' => 'Clinic'` route element added that
         // will be required when generating URLs for these routes

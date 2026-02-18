@@ -209,7 +209,8 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                 <?= $this->Html->link(__(' Clinic Edit'), ['prefix' => 'Clinic', 'controller' => 'locations', 'action' => 'edit', $location->id], ['class' => 'btn btn-default bi bi-pencil-fill', 'target' => '_blank']) ?>
                 <?= $this->Html->link(__(' Copy Location Data'), ['action' => 'copy', $location->id], ['class' => 'btn btn-default bi bi-clipboard2-check-fill']) ?>
                 <?= $this->Html->link(__(' Calls'), ['prefix' => 'Admin', 'controller' => 'caCalls', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
-                <?= $this->Html->link(__(' Call Call Groups'), ['prefix' => 'Admin', 'controller' => 'caCallGroups', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
+                <?= $this->Html->link(__(' Call Groups'), ['prefix' => 'Admin', 'controller' => 'caCallGroups', 'action' => 'index', $location->id], ['class' => 'btn btn-default bi bi-telephone-fill', 'target' => '_blank']) ?>
+                <?= $this->Html->link(__(' Call Report'), ['prefix' => 'Clinic', 'controller' => 'caCallGroups', 'action' => 'report', $location->id], ['class' => 'btn btn-default bi bi-list-task', 'target' => '_blank']) ?>
             </div>
         </div>
     </div>

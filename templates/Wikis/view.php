@@ -21,15 +21,6 @@ if (!empty($parts[1])) {
 
 $isPreview = isset($isPreview) ? $isPreview : false;
 
-$meta = '<!--Facebook meta tags-->
-    <meta property="og:url" content="https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'].'" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="'.$wiki->facebook_title.'" />
-    <meta property="og:description" content="'.$wiki->facebook_description.'" />
-    <meta property="og:image" content="'.$wiki->facebook_image.'" />';
-
-$this->assign('meta', $meta);
-
 $wikiSchema = '<script type="application/ld+json">{';
 $wikiSchema .= '"@context": "https://schema.org", "@type": "Article", ';
 $wikiSchema .= '"about": {"@type": "Thing", "name": "' . $wiki->tags[0]->ribbon_header . '"},';

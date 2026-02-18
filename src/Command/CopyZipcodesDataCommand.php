@@ -42,8 +42,8 @@ class CopyZipcodesDataCommand extends Command
         $connection->begin();
         try {
             $connection->execute("
-                INSERT INTO zips (zip, lat, lon, city, state, areacode, country_code)
-                SELECT zip, lat, lon, city, state, areacode, country_code
+                INSERT INTO zips (zip, lat, lon, city, state, country_code)
+                SELECT zip, lat, lon, city, state, country_code
                 FROM zipcodesorig
                 ORDER BY zip
             ");

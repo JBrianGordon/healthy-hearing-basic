@@ -2,9 +2,10 @@
 use Cake\Core\Configure;
 use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\Location;
+use App\Model\Entity\CsCall;
 //$this->Html->script('dist/clinic_report.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer', 'block' => true]);
 
-$username ??= null;
+$locationId ??= null;
 $startDate ??= null;
 $endDate ??= null;
 if (!empty($locationId)) {
@@ -50,18 +51,19 @@ $this->Html->script('dist/clinic_report.min', ['block' => true]);
         		<section class="panel">
         			<div class="panel-body">
           			<div class="panel-section expanded">
-
-                        <h1>Reporting</h1>
-
+                        <h1 class="mb0">Call Reports</h1>
+                        <?php if (!empty($title)): ?>
+                            <h3><?= $title ?></h3>
+                        <?php endif; ?>
                         <?= $this->Form->create() ?>
                             <div class="row">
                                 <div class="col col-lg-6">
                                     <?php
-                                    if ($isAdmin) {
-                                        echo $this->Form->control('username', [
-                                            'default' => $username,
+                                    if ($isAdmin && empty($locationId)) {
+                                        echo $this->Form->control('location_id', [
+                                            'default' => $locationId,
                                             'type' => 'text',
-                                            'label' => 'Username',
+                                            'label' => Configure::read('siteNameAbbr').' Location ID',
                                             'required' => true,
                                             'div' => 'form-group required',
                                         ]);
@@ -82,7 +84,7 @@ $this->Html->script('dist/clinic_report.min', ['block' => true]);
                             </div>
                         <?= $this->Form->end() ?>
                         <hr />
-                        <?php if (!empty($locationId)): ?>
+                        <?php if (!empty($csCalls)): ?>
                             <div class="mt20">
                                 <!-- Tab Navigation -->
                                 <ul class="nav nav-tabs clearfix mb20" id="myTab" role="tablist">
@@ -472,12 +474,12 @@ $this->Html->script('dist/clinic_report.min', ['block' => true]);
                                                         <th><?php echo $this->Paginator->sort('CsCall.prospect', 'Call Result') ?></th>
                                                         <th><?php echo $this->Paginator->sort('CsCall.caller_lastname', 'Caller Info') ?></th>
                                                     </tr>
-                                                    <?php foreach($csCalls as $call):   ?>
+                                                    <?php foreach($csCalls as $csCall): ?>
                                                         <tr>
-                                                            <td class="center"><?php echo $this->Time->nice($call['CsCall']['start_time']); ?></td>
+                                                            <td class="center"><?php echo $this->Time->nice($csCall->start_time); ?></td>
                                                             <td class="center">
                                                                 <?php
-                                                                switch ($call['CsCall']['prospect']) {
+                                                                switch ($csCall->prospect) {
                                                                     case CsCall::PROSPECT_UNKNOWN:
                                                                         echo "Missed call";
                                                                         break;
@@ -486,7 +488,7 @@ $this->Html->script('dist/clinic_report.min', ['block' => true]);
                                                                         break;
                                                                     case CsCall::PROSPECT_YES:
                                                                         if ($isLeadscoreEnabled) {
-                                                                            switch ($call['CsCall']['leadscore']) {
+                                                                            switch ($csCall->leadscore) {
                                                                                 case CsCall::LEADSCORE_APPT_SET:
                                                                                     echo "Prospect - Appointment Set";
                                                                                     break;
@@ -505,8 +507,8 @@ $this->Html->script('dist/clinic_report.min', ['block' => true]);
                                                                 ?>
                                                             </td>
                                                             <td class="center">
-                                                                <?php echo $call['CsCall']['caller_firstname'].' '.$call['CsCall']['caller_lastname'].'<br>'; ?>
-                                                                <?php echo formatNumber($call['CsCall']['caller_phone']); ?>
+                                                                <?php echo $csCall->caller_firstname.' '.$csCall->caller_lastname.'<br>'; ?>
+                                                                <?php echo formatPhoneNumber($csCall->caller_phone); ?>
                                                             </td>
                                                         </tr>
                                                     <?php endforeach; ?>

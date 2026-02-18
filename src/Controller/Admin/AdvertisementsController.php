@@ -48,12 +48,6 @@ class AdvertisementsController extends AppController
 
             $requestData = $this->request->getData();
 
-            // Handle tags
-            if (!empty($requestData['tags'])) {
-                $tags = $this->Advertisements->Tags->findOrCreateTags($requestData['tags']);
-                $requestData['tags'] = $tags;
-            }
-
             $advertisement = $this->Advertisements->patchEntity($advertisement, $this->request->getData());
 
             if ($this->Advertisements->save($advertisement)) {

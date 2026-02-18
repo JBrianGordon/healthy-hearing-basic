@@ -53,7 +53,7 @@ class AdvertisementsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'src' => [
+            'image_name' => [
                 'writer' => 'App\Utility\Writer\CkBoxWriter',
                 'filesystem' => [
                     'adapter' => new CKBoxAdapter(Configure::read('CK.advertisements-uploads')),
@@ -67,56 +67,57 @@ class AdvertisementsTable extends Table
                     return $basename . '-' . uniqid() . '.' . $extension;
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
-                    preg_match("/assets\/(.*?)\/file/", $entity->public_url, $matches);
-                    $ckBoxImageId = $matches[1];
-                    return [
-                        $ckBoxImageId,
-                    ];
+                    if (!empty($entity->image_url)) {
+                        preg_match("/assets\/(.*?)\/file/", $entity->image_url, $matches);
+                        $ckBoxImageId = $matches[1];
+                        return [
+                            $ckBoxImageId,
+                        ];
+                    } else {
+                        return [];
+                    }
                 }
             ],
         ]);
 
-        $this->hasMany('TagAds', [
-            'foreignKey' => 'ad_id',
-        ]);
-
         $this->belongsToMany('Tags', [
+            'joinTable' => 'tag_ads',
             'foreignKey' => 'ad_id',
             'targetForeignKey' => 'tag_id',
-            'joinTable' => 'tag_ads',
         ]);
     }
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME), 'default');
+        if ($entity->isDirty('image_name') && $entity->ajax_delete !== true) {
+            $filename = pathinfo($entity->image_name, PATHINFO_FILENAME);
 
-        $publicUrl = $ckBoxUploadData['response']['url'];
+            $ckBoxUploadData = Cache::read('ckBoxUploadImage_' . $filename, 'default');
 
-        if ($publicUrl !== null && is_string($publicUrl)) {
-            $entity->public_url = $ckBoxUploadData['response']['url'];
+            $publicUrl = $ckBoxUploadData['response']['url'];
+
+            if ($publicUrl !== null && is_string($publicUrl)) {
+                $entity->image_url = $ckBoxUploadData['response']['url'];
+            }
+
+            Cache::delete('ckBoxUploadImage_' . $filename);
         }
-
-        Cache::delete('ckBoxUploadImage_' . pathinfo($entity->src, PATHINFO_FILENAME));
     }
 
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $field = 'src';
+        $field = 'image_name';
 
         $original = $entity->getOriginal($field);
+
         if ($entity->{$field} !== $original && $original !== null && is_object($original) === false) {
-            // TO-DO: This was a quick-fix for the image migration process
-            // It might be fine to stay; it might not be needed.
-            if ($entity->getOriginal('public_url') === null) {
-                return;
-            }
-            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('public_url'), $matches);
+            preg_match("/assets\/(.*?)\/file/", $entity->getOriginal('image_url'), $matches);
             $ckBoxImageId = $matches[1];
             $ckBoxUtility = new CKBoxUtility(Configure::read('CK.advertisements-uploads'));
             try {
                 $ckBoxUtility->deleteImage($ckBoxImageId);
             } catch (Exception $e) {
+                // TODO
                 // Ignore exceptions for now
             }
         }
@@ -207,9 +208,10 @@ class AdvertisementsTable extends Table
     * Find an advertisement to display with no exclusivity tags.
     * If more than one found, it will randomly select one. If none are found, returns null.
     */
+    // TO-DO: DOES THIS WORK AS INTENDED?
     function findGenericAd() {
         $allAds = $this->find('all', [
-            'contain' => ['TagAds.Tags'],
+            'contain' => ['Tags'],
             'conditions' => [
                 'is_active' => true,
                 'tag_corps' => false,
@@ -219,7 +221,7 @@ class AdvertisementsTable extends Table
         $genericAds = [];
         foreach ($allAds as $ad) {
             // Don't include ads with an exclusivity tag
-            if (empty($ad->tag_ads)) {
+            if (empty($ad->tags)) {
                 $genericAds[] = $ad;
             }
         }
@@ -238,6 +240,8 @@ class AdvertisementsTable extends Table
     * @param $tagIds array of tag ids
     */
     function findAdByTags($tagIds) {
+        // TO-DO?: this looks like it works for now, but we can probably
+        // search by Ads and contain Tags vs how it was done in Cake2
         $allExclusiveAds = [];
         $uniqueAdIds = [];
         foreach ($tagIds as $tagId) {

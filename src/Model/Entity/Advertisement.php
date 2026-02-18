@@ -12,6 +12,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string $title
+ * @property string|null $image_name
+ * @property string|null $image_url
  * @property string $type
  * @property string $src
  * @property string $public_url
@@ -41,6 +43,8 @@ class Advertisement extends Entity
         'created' => true,
         'modified' => true,
         'title' => true,
+        'image_name' => true,
+        'image_url' => true,
         'type' => true,
         'src' => true,
         'public_url' => true,
@@ -49,6 +53,7 @@ class Advertisement extends Entity
         'height' => true,
         'width' => true,
         'alt' => true,
+        'tags' => true,
         'is_active' => true,
         'tag_corps' => true,
         'tag_basic' => true,

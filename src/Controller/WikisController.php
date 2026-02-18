@@ -49,12 +49,14 @@ class WikisController extends AppController
         if (empty($slug)) {
             return $this->redirect(array('action' => 'index'), 301);
         }
+        $requestUri = $this->request->getPath();
+        $requestHost = $this->request->host();
         // Check for any SEO redirects
         //todo
         //$this->checkRedirect();
         $redirect = $this->Wikis->findRedirectBySlug($slug);
         if ($redirect) {
-            if (Router::url($redirect) != $_SERVER['REQUEST_URI']) {
+            if (Router::url($redirect) != $requestUri) {
                 // Self heal. Redirect to proper url.
                 return $this->redirect($redirect, 301);
             }
@@ -67,7 +69,7 @@ class WikisController extends AppController
         // is_active === 1/true.
         // If false, it redirects to the "parent" wiki, which should mean that the
         // admin-bypass in findBySlug() can't/won't be evaluated.
-        if ($wiki = $this->Wikis->findBySlug($slug, $_SERVER['REQUEST_URI'], $this->isAdmin)) {
+        if ($wiki = $this->Wikis->findBySlug($slug, $requestUri, $this->isAdmin)) {
             //set up contents for sidebar
             $tagIds = array_column($wiki->tags, 'id');
             $this->set('tags', $tagIds);
@@ -88,26 +90,32 @@ class WikisController extends AppController
             $articles = $this->Content->findLatest(4);
             $this->set('articles', $articles);
 
-            //set up and assign the meta tag info
-            $request = env('REQUEST_URI');
-
             if (empty($title)) {
                 $title = isset($wiki->title_head) ? $wiki->title_head : $this->siteName;
-
                 $this->set('title', $title);
             }
 
-            if (!empty($wiki->short)) {
-                $this->meta['description'] = $wiki->short;
+            //set up and assign the meta tag info
+            $this->meta['description'] = $wiki->short ?? $this->meta['description'] ?? null;
+            $this->socialOptions['og:type'] = 'article';
+            $this->socialOptions['article:section'] = 'Hearing Help';
+            $this->socialOptions['og:url'] = "https://' . $requestHost . $requestUri.'";
+            if ($wiki->facebook_title) {
+                $this->socialOptions['og:title'] = $wiki->facebook_title;
             }
+            if ($wiki->facebook_description) {
+                $this->socialOptions['og:description'] = $wiki->facebook_description;
+            }
+            if ($wiki->facebook_image) {
+                $this->socialOptions['og:image'] = $wiki->facebook_image;
+            }
+
             $customVars['type'] = 'wiki';
             $customVars['category|2'] = $this->Wikis->tagsForCustomVar($wiki);
             $customVars['level|3'] = getWordCount($wiki->body);
             $this->set('customVars', $customVars);
             $this->set('isPreview', false);
             $this->set('wiki', $wiki);
-            $this->socialOptions['og:type'] = 'article';
-            $this->socialOptions['article:section'] = 'Hearing Help';
             $this->set('sameAsSocialLinks', Configure::read('sameAsSocialLinks'));
         } else {
             throw new NotFoundException();

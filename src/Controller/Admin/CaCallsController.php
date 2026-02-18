@@ -305,11 +305,11 @@ class CaCallsController extends BaseAdminController
     public function addOutbound($caCallGroupId = null) {
         if (!$caCallGroupId) {
             $this->Flash->error('No Call Group ID given.');
-            $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
+            return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
         if ($this->CaCallGroups->isLocked($caCallGroupId, $this->user->id)) {
             $this->Flash->error('This record is locked.');
-            $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
+            return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
         $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
         $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
@@ -381,7 +381,7 @@ class CaCallsController extends BaseAdminController
                 ($caCallGroup->scheduled_call_date->toUnixString() > strtotime(getCurrentEasternTime()))) {
                 // Invalid outbound call
                 $this->Flash->error('This call is no longer valid.');
-                $this->redirect(['controller' => 'ca_call_groups', 'action' => 'outbound']);
+                return $this->redirect(['controller' => 'ca_call_groups', 'action' => 'outbound']);
             }
             switch ($caCallGroup->status) {
                 case CaCallGroup::STATUS_VM_NEEDS_CALLBACK:

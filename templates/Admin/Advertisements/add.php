@@ -38,7 +38,7 @@
                                         <?= $this->Form->control('dest', ['required' => false]); ?>
                                         <?= $this->Form->control('alt', ['required' => false]); ?>
                                         <?=
-                                            $this->Form->control('src', [
+                                            $this->Form->control('image_name', [
                                                 'id' => 'imageUpload',
                                                 'type' => 'file',
                                                 'required' => false,
@@ -83,7 +83,12 @@
                                                         Select tags to display this ad only on certain report pages that are related to this tag.<br>
                                                         If no tags are selected, it will be considered a "generic ad" and will display on all pages that don't have an exclusive ad.
                                                     </p>
-                                                    <?= $this->Form->control('Wikis.Tags', ['label' => false,'options' => $tags,'multiple' => 'checkbox','escape' => false]) ?>
+                                                    <?= $this->Form->control('tags._ids', [
+                                                        'label' => false,
+                                                        'options' => $tags,
+                                                        'multiple' => 'checkbox',
+                                                        'escape' => false
+                                                    ]) ?>
                                                 </div>
                                             </div>
                                         </div>

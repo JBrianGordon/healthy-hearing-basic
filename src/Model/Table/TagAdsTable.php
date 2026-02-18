@@ -78,7 +78,7 @@ class TagAdsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('ad_id', 'Ads'), ['errorField' => 'ad_id']);
+        $rules->add($rules->existsIn('ad_id', 'Advertisements'), ['errorField' => 'ad_id']);
         $rules->add($rules->existsIn('tag_id', 'Tags'), ['errorField' => 'tag_id']);
 
         return $rules;
