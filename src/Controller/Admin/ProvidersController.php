@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\View\JsonView;
 use App\Utility\CKBoxUtility;
+use Cake\Core\Configure;
 
 /**
  * Providers Controller
@@ -186,8 +187,8 @@ class ProvidersController extends BaseAdminController
 
         $ckBoxImageId = $this->request->getData('ckBoxImageId');
         $providerId = $this->request->getData('providerId');
-
-        $ckBoxUtility = new CKBoxUtility();
+        $this->log(print_r($ckBoxImageId, true));
+        $ckBoxUtility = new CKBoxUtility(Configure::read('CK.providers-uploads'));
         try {
             $ckBoxUtility->deleteImage($ckBoxImageId);
 
