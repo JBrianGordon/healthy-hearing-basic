@@ -312,6 +312,11 @@ $loadAllReviewsAndImports = !empty($this->request->getQuery('loadall'));
                         <?php if (!empty($location->id_sf)): ?>
                             <?= $this->Form->control('id_sf', ['label' => 'SF ID']); ?>
                         <?php endif; ?>
+                        <div class="row mb10">
+                            <div class="col-lg-12">
+                                <input type="submit" value="Save Location" class="btn btn-primary btn-lg pull-right">
+                            </div>
+                        </div>
                         <div class="tabbable">
                             <ul class="nav nav-tabs location-tabs clearfix" role="tablist">
                                 <li class="nav-item">
