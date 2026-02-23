@@ -64,7 +64,7 @@ foreach ($fields as $field => $type) {
     ];
 }
 
-$this->Html->script('dist/admin_index_review.min', ['block' => true]);
+$this->Vite->script('admin_index_review','admin-vite');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

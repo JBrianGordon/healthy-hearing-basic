@@ -83,7 +83,7 @@ $groupedFields = [
     'topics' => $topicFields
 ];
 
-$this->Html->script('dist/ca_call_index.min', ['block' => true]);
+$this->Vite->script('ca_call_index','admin-vite');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

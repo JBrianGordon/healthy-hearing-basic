@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Review[]|\Cake\Collection\CollectionInterface $reviews
  */
 
-$this->Html->script('dist/admin_index_review.min', ['block' => true]);
+ $this->Vite->script('admin_index_review','admin-vite');
 ?>
 <div class="reviews index content">
     <?= $this->Html->link(__('New Review'), ['action' => 'add'], ['class' => 'button float-right']) ?>
