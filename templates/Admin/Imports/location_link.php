@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 
-echo $this->Html->script('dist/admin_location_link.min.js?v='.Configure::read("tagVersion"));
+$this->Vite->script('admin_location_link','admin-vite');
 ?>
 <meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <header class="col-md-12 mt10">

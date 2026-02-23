@@ -1,15 +1,21 @@
 import './admin_common';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const searchBtn = document.getElementById('searchBtn');
-  const importLocationSearch = document.getElementById('search');
-  const searchResults = document.getElementById('searchResults');
+  const searchBtn = document.getElementById('searchBtn') as HTMLButtonElement;
+  const importLocationSearch = document.getElementById('search') as HTMLInputElement;
+  const searchResults = document.getElementById('searchResults') as HTMLElement;
+  const csrfTokenInput = document.querySelector<HTMLInputElement>('input[name="_csrfToken"]');
 
-  searchBtn.addEventListener('click', async function() {
+  if (!searchBtn || !importLocationSearch || !searchResults || !csrfTokenInput) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  searchBtn.addEventListener('click', async function (this: HTMLButtonElement) {
     const button = this;
     const importType = button.dataset.importType;
     const search = importLocationSearch.value;
-    const csrfToken = $('input[name="_csrfToken"]').val();
+    const csrfToken = csrfTokenInput.value;
     button.disabled = true;
 
     try {
@@ -20,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
           'Content-type': 'application/json',
           "X-CSRF-Token": csrfToken
         },
-        body: JSON.stringify({search: search, importType: importType})
+        body: JSON.stringify({ search: search, importType: importType })
       });
 
       if (response.ok) {
@@ -38,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.disabled = false;
   });
 
-  importLocationSearch.addEventListener('keydown', function(e) {
+  importLocationSearch.addEventListener('keydown', function (e: KeyboardEvent) {
     if (e.keyCode === 13) { // Enter key
       searchBtn.click();
       e.preventDefault();

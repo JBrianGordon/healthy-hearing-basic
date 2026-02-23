@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\Provider $provider
  */
 
-$this->Html->script('dist/admin_providers.min', ['block' => true]);
+ $this->Vite->script('admin_providers','admin-vite');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

@@ -1,9 +1,20 @@
 import './admin_common';
 import './ckpackage';
 
+interface LocationItem {
+    id: number;
+    title: string;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const queryInput = document.getElementById('locations-query');
-    const queryResults = document.getElementById('query-results');
+    const queryInput = document.getElementById('locations-query') as HTMLInputElement;
+    const queryResults = document.getElementById('query-results') as HTMLElement;
+    const locationAssociations = document.getElementById('location-association-list') as HTMLElement;
+
+    if (!queryInput || !queryResults || !locationAssociations) {
+        console.error('Required elements not found');
+        return;
+    }
 
     // Perform locations AJAX search on 'keyup' events
     queryInput.addEventListener('keyup', () => {
@@ -18,35 +29,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-type': 'application/x-www-form-urlencoded'
             },
         })
-        .then((response) => response.text())
-        .then((data) => {
+            .then((response) => response.text())
+            .then((data) => {
+                const jsonArray: LocationItem[] = JSON.parse(data);
 
-            const jsonArray = JSON.parse(data);
+                let list = '';
+                jsonArray.forEach(item => {
+                    list += `<li class="location-clickable" data-location-id="${item.id}" data-location-title="${item.title}">${item.title} -- ${item.id}</li>`;
+                });
 
-            let list = '';
-            jsonArray.forEach(item => {
-              list += `<li class="location-clickable" data-location-id="${item.id}" data-location-title="${item.title}">${item.title} -- ${item.id}</li>`;
+                queryResults.innerHTML = `<ul>${list}</ul>`;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-
-            queryResults.innerHTML = `<ul>${list}</ul>`;
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
     });
 
     // 'click' listener for locations query results items
-    queryResults.addEventListener('click', event => {
-        if (event.target.classList.contains('location-clickable')) {
-            const itemId = event.target.getAttribute('data-location-id');
-            const itemTitle = event.target.getAttribute('data-location-title');
-            handleItemClick(itemId, itemTitle);
+    queryResults.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+
+        if (target.classList.contains('location-clickable')) {
+            const itemId = target.getAttribute('data-location-id');
+            const itemTitle = target.getAttribute('data-location-title');
+
+            if (itemId && itemTitle) {
+                handleItemClick(itemId, itemTitle);
+            }
         }
     });
 
     // Add location item to provider's associated locations list
-    function handleItemClick(itemId, itemTitle) {
-        const associationList = document.querySelector('#location-association-list');
+    function handleItemClick(itemId: string, itemTitle: string): void {
+        const associationList = document.querySelector<HTMLElement>('#location-association-list');
+
+        if (!associationList) {
+            console.error('Association list not found');
+            return;
+        }
 
         // Generate a new key that doesn't conflict with existing ones
         const newKey = generateNewKey();
@@ -54,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a new associated location div element
         const newAssociatedLocation = document.createElement('div');
         newAssociatedLocation.classList.add('associated-location', 'col-sm-9', 'p0');
-        newAssociatedLocation.setAttribute('data-location-key', newKey);
+        newAssociatedLocation.setAttribute('data-location-key', newKey.toString());
 
         // Create an input element for the hidden 'location.#.id' field
         const idInput = document.createElement('input');
@@ -67,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.createElement('input');
         name.textContent = `${itemTitle}`;
         name.type = 'text';
-        name.readOnly = 'readonly';
+        name.readOnly = true;
         name.name = itemTitle;
         name.value = itemTitle;
         name.classList.add('d-inline-block', 'form-control', 'mb10');
@@ -77,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteButton.classList.add('delete-location-association', 'btn', 'btn-danger', 'ml20', 'mb10');
         deleteButton.type = 'button';
         deleteButton.textContent = 'Delete';
-        deleteButton.setAttribute('data-location-key', newKey);
+        deleteButton.setAttribute('data-location-key', newKey.toString());
 
         // Append the elements to the new associated location div
         newAssociatedLocation.appendChild(idInput);
@@ -88,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
         associationList.appendChild(newAssociatedLocation);
     }
 
-    function generateNewKey() {
-        const associatedLocationElements = document.querySelectorAll('.associated-location');
+    function generateNewKey(): number {
+        const associatedLocationElements = document.querySelectorAll<HTMLElement>('.associated-location');
 
         // Start with index = 0 if adding first associated location
         if (associatedLocationElements.length === 0) {
@@ -97,7 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const locationKeys = Array.from(associatedLocationElements).map((element) => {
-            return element.getAttribute('data-location-key');
+            const key = element.getAttribute('data-location-key');
+            return key ? parseInt(key, 10) : 0;
         });
 
         // Make new location key 1 larger than highest value
@@ -107,16 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Delete button removes location from associated locations list
-    const locationAssociations = document.getElementById('location-association-list');
-    locationAssociations.addEventListener('click', event => {
-        if (event.target.classList.contains('delete-location-association')) {
-            let locationItem = event.target.closest(".associated-location");
+    locationAssociations.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
 
-            if (locationItem) {
+        if (target.classList.contains('delete-location-association')) {
+            const locationItem = target.closest(".associated-location");
+
+            if (locationItem && locationItem.parentNode) {
                 locationItem.parentNode.removeChild(locationItem);
             }
         }
     });
-
-
 });
