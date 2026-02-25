@@ -11,7 +11,7 @@ use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use Cake\Routing\Router;
 
-$this->Html->script('dist/admin_index_locations.min', ['block' => true]);
+$this->Vite->script('admin_index_locations','admin-vite');
 
 $siteNameAbbr = Configure::read('siteNameAbbr');
 $queryParams = $this->request->getQueryParams();
