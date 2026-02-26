@@ -4,9 +4,8 @@ use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
 echo $this->element('ca_calls/ca_call_js_variables');
-//echo $this->Admin->addJs('dist/admin_add_outbound.min.js?v='.Configure::read("tagVersion"));
 $this->Html->script('dist/admin_add_outbound.min', ['block' => true]);
-$this->Html->script('dist/ca_call_edit.min', ['block' => true]);
+$this->Vite->script('ca_call_edit','admin-vite');
 ?>
 <style>
 	.popover {

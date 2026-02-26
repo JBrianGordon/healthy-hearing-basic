@@ -4,7 +4,7 @@ use \App\Model\Entity\CaCall;
 use \App\Model\Entity\Location;
 use Cake\Core\Configure;
 echo $this->element('ca_calls/ca_call_js_variables');
-$this->Html->script('dist/ca_call_edit.min', ['block' => true]);
+$this->Vite->script('ca_call_edit','admin-vite');
 
 if (isset($caCall->user_id)) {
     $agentName = $this->App->getUserName($caCall->user_id);

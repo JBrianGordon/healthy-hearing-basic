@@ -5,7 +5,7 @@ use App\Model\Entity\Location;
 ?>
 
 <script type="text/javascript">
-	// Global javascript variables for ca_call_edit.js
+	// Global javascript variables for ca_call_edit.ts
 	window.PROSPECT_YES = <?php echo json_encode(CaCallGroup::PROSPECT_YES); ?>;
 	window.PROSPECT_NO = <?php echo json_encode(CaCallGroup::PROSPECT_NO); ?>;
 	window.PROSPECT_UNKNOWN = <?php echo json_encode(CaCallGroup::PROSPECT_UNKNOWN); ?>;
