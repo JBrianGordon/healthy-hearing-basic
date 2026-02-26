@@ -4,8 +4,7 @@ use App\Model\Entity\CaCallGroup;
 use App\Model\Entity\Location;
 use Cake\Core\Configure;
 echo $this->element('ca_calls/ca_call_js_variables');
-$this->Html->script('dist/admin_add_outbound.min', ['block' => true]);
-$this->Vite->script('ca_call_edit','admin-vite');
+$this->Vite->script('admin_add_outbound','admin-vite');
 ?>
 <style>
 	.popover {
