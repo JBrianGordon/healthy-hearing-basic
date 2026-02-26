@@ -1,4 +1,4 @@
-import '../common/common';
+import './admin_common';
 import '../jquery/jplayer/jquery.jplayer.min';
 import '../common-vite/play_media';
 
