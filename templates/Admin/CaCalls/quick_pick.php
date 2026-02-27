@@ -7,7 +7,7 @@ $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
 
 echo $this->element('ca_calls/ca_call_js_variables');
-$this->Html->script('dist/ca_call_quick_pick.min', ['block' => true]);
+$this->Vite->script('ca_call_quick_pick','admin-vite');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

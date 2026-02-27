@@ -7,7 +7,7 @@
     "preview:vite": "vite preview",
     "compile-sass": "sass --style=compressed webroot/scss:webroot/css",
     "postinstall": "find node_modules/@ckeditor -name '*.map' -type f -delete",
-    "generate-atf": "node webroot/js/admin/generate_atf_css.js"
+    "generate-atf": "node webroot/js/generate_atf_css.js"
   },
   "author": "Brian Gordon",
   "description": "Healthy Hearing assets served through Webpack",

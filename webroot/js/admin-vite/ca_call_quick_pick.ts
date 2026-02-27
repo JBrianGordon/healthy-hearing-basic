@@ -1,12 +1,45 @@
-import '../common/common';
-import { setElementInnerHTML, setElementValue, setElementChecked, showElement, hideElement, isHidden, updateVisibility } from './ca_call_edit';
+import './admin_common';
+import { setElementInnerHTML, setElementValue, setElementChecked, showElement, hideElement, updateVisibility } from './ca_call_edit';
 
-function onPageLoadQuickPick() {
+interface ClinicData {
+  id: string;
+  title: string;
+  address: string;
+  city: string;
+  state: string;
+  reviews_approved: string;
+  average_rating: string;
+  direct_book_type: string;
+  direct_book_url?: string;
+  google: {
+    distance: {
+      text: string;
+      value?: number;
+    };
+    duration: {
+      text: string;
+      value?: number;
+    };
+    status: string;
+  };
+}
+
+interface SearchInfo {
+  numZipSearches: number;
+  searchRadius: number;
+}
+
+function onPageLoadQuickPick(): void {
   // Listen for field changes
-  document.querySelector('body').addEventListener('change', e => {
-    const targetId = e.target.id;
-    const targetValue = e.target.value;
-    const targetChecked = e.target.checked;
+  const body = document.querySelector('body');
+
+  if (!body) return;
+
+  body.addEventListener('change', (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    const targetId = target.id;
+    const targetValue = target.value;
+    const targetChecked = target.checked;
 
     if (targetId === 'ca-call-group-refused-name-quick-pick') {
       onChangeRefusedNameQuickPick(targetChecked);
@@ -22,13 +55,17 @@ function onPageLoadQuickPick() {
   });
 
   // Listen for clicks
-  document.querySelector('body').addEventListener('click', e => {
-    const targetId = e.target.id;
-    const targetChecked = e.target.checked;
+  body.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const targetId = target.id;
+    const targetChecked = (target as HTMLInputElement).checked;
 
     // Find closest clinics button
     if (targetId === 'findClosestLocations') {
-      findClosestLocations(document.querySelector('#ca-call-group-patient-full-address').value);
+      const addressInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-full-address');
+      if (addressInput) {
+        findClosestLocations(addressInput.value);
+      }
     }
 
     // Load more clinics button
@@ -41,13 +78,17 @@ function onPageLoadQuickPick() {
     }
   });
 
-  const patientAddressInput = document.querySelector('#ca-call-group-patient-address');
-  const patientCityInput = document.querySelector('#ca-call-group-patient-city');
-  const patientStateInput = document.querySelector('#ca-call-group-patient-state');
-  const patientZipInput = document.querySelector('#ca-call-group-patient-zip');
-  const patientFullAddressInput = document.querySelector('#ca-call-group-patient-full-address');
+  const patientAddressInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-address');
+  const patientCityInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-city');
+  const patientStateInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-state');
+  const patientZipInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-zip');
+  const patientFullAddressInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-full-address');
 
-  const updateFullAddress = () => {
+  if (!patientAddressInput || !patientCityInput || !patientStateInput || !patientZipInput || !patientFullAddressInput) {
+    return;
+  }
+
+  const updateFullAddress = (): void => {
     patientFullAddressInput.value = `${patientAddressInput.value},${patientCityInput.value},${patientStateInput.value},${patientZipInput.value}`;
   };
 
@@ -65,12 +106,12 @@ document.addEventListener('DOMContentLoaded', function () {
  * Start of Functions
  ****/
 
-let closestClinics;
-let chosenClinic;
-let clinicCounter = 0;
-let searchInfo;
+let closestClinics: ClinicData[] = [];
+let chosenClinic: ClinicData | null = null;
+let clinicCounter: number = 0;
+let searchInfo: SearchInfo | null = null;
 
-function onChangeRefusedNameQuickPick(refusedNameChecked) {
+function onChangeRefusedNameQuickPick(refusedNameChecked: boolean): void {
   if (refusedNameChecked) {
     showElement('.refusedNameYesQuickPick');
     setElementChecked('#ca-call-group-refused-name-again-quick-pick', false);
@@ -80,7 +121,7 @@ function onChangeRefusedNameQuickPick(refusedNameChecked) {
   }
 }
 
-function onChangeRefusedNameAgainQuickPick(refusedNameAgainChecked) {
+function onChangeRefusedNameAgainQuickPick(refusedNameAgainChecked: boolean): void {
   if (refusedNameAgainChecked) {
     showElement('.refusedNameYesAgainQuickPick');
     hideElement('.refusedNameNoQuickPick');
@@ -91,51 +132,58 @@ function onChangeRefusedNameAgainQuickPick(refusedNameAgainChecked) {
   updateVisibility();
 }
 
-function onChangePatientInfo(isPatient) {
+function onChangePatientInfo(isPatient: boolean): void {
   if (isPatient) {
-    document.querySelectorAll('span.not-self').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.not-self').forEach(element => {
       element.classList.toggle('hidden');
     });
-    document.querySelectorAll('span.self').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.self').forEach(element => {
       element.classList.toggle('hidden');
     });
-    document.querySelectorAll('span.isNotPatient').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.isNotPatient').forEach(element => {
       element.classList.toggle('hidden');
     });
-    const patientNameElement = document.querySelector('span.patientName');
+    const patientNameElement = document.querySelector<HTMLElement>('span.patientName');
     if (patientNameElement) {
-      const callerFirstName = document.querySelector('#ca-call-group-caller-first-name').value;
-      const callerLastName = document.querySelector('#ca-call-group-caller-last-name').value;
+      const callerFirstNameInput = document.querySelector<HTMLInputElement>('#ca-call-group-caller-first-name');
+      const callerLastNameInput = document.querySelector<HTMLInputElement>('#ca-call-group-caller-last-name');
+      const callerFirstName = callerFirstNameInput?.value || '';
+      const callerLastName = callerLastNameInput?.value || '';
       patientNameElement.textContent = callerFirstName + ' ' + callerLastName;
     }
   } else {
-    document.querySelectorAll('span.isNotPatient').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.isNotPatient').forEach(element => {
       element.classList.toggle('hidden');
     });
-    const patientNameElement = document.querySelector('span.patientName');
+    const patientNameElement = document.querySelector<HTMLElement>('span.patientName');
     if (patientNameElement) {
-      const patientFirstName = document.querySelector('#ca-call-group-patient-first-name').value;
-      const patientLastName = document.querySelector('#ca-call-group-patient-last-name').value;
+      const patientFirstNameInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-first-name');
+      const patientLastNameInput = document.querySelector<HTMLInputElement>('#ca-call-group-patient-last-name');
+      const patientFirstName = patientFirstNameInput?.value || '';
+      const patientLastName = patientLastNameInput?.value || '';
       patientNameElement.textContent = patientFirstName + ' ' + patientLastName;
     }
-    document.querySelectorAll('span.self').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.self').forEach(element => {
       element.classList.toggle('hidden');
     });
-    document.querySelectorAll('span.not-self').forEach(element => {
+    document.querySelectorAll<HTMLElement>('span.not-self').forEach(element => {
       element.classList.toggle('hidden');
     });
   }
 }
 
-function findClosestLocations(originAddress) {
+function findClosestLocations(originAddress: string): void {
   setElementInnerHTML('#closestClinics', '');
 
   closestClinics = [];
   clinicCounter = 0;
 
-  const patientCityInput = document.querySelector("#ca-call-group-patient-city");
+  const patientCityInput = document.querySelector<HTMLInputElement>("#ca-call-group-patient-city");
+  const patientStateInput = document.querySelector<HTMLInputElement>("#ca-call-group-patient-state");
+
+  if (!patientCityInput || !patientStateInput) return;
+
   const patientCity = patientCityInput.value.trim();
-  const patientStateInput = document.querySelector("#ca-call-group-patient-state");
   const patientState = patientStateInput.value.trim();
 
   if (patientCity.length > 0 && patientState.length > 0) {
@@ -146,16 +194,18 @@ function findClosestLocations(originAddress) {
       }
     })
       .then(response => response.json())
-      .then(data => {
-        searchInfo = data.pop();
-        closestClinics = data;
+      .then((data: (ClinicData | SearchInfo)[]) => {
+        searchInfo = data.pop() as SearchInfo;
+        closestClinics = data as ClinicData[];
         displayClinicTemplates(closestClinics);
       })
-      .catch(error => {
+      .catch((error: Error) => {
         console.log('getClosestClinics() error:');
         console.error(error);
       });
-    document.querySelector("#afterClinicFind")?.classList.remove('hidden');
+
+    const afterClinicFind = document.querySelector<HTMLElement>("#afterClinicFind");
+    afterClinicFind?.classList.remove('hidden');
     patientStateInput.style.removeProperty('border');
     patientCityInput.style.removeProperty('border');
   } else {
@@ -165,11 +215,14 @@ function findClosestLocations(originAddress) {
   }
 }
 
-function clickedClinic(clinicDiv) {
+function clickedClinic(clinicDiv: HTMLElement): void {
   clinicCounter++;
 
-  const clinicIndex = clinicDiv.firstElementChild.getAttribute('value');
+  const firstChild = clinicDiv.firstElementChild as HTMLInputElement;
+  const clinicIndex = parseInt(firstChild?.getAttribute('value') || '0', 10);
   chosenClinic = closestClinics[clinicIndex];
+
+  if (!chosenClinic) return;
 
   setElementInnerHTML('.locationDistance', chosenClinic.google.distance.text);
   setElementInnerHTML('.locationTime', chosenClinic.google.duration.text);
@@ -181,7 +234,7 @@ function clickedClinic(clinicDiv) {
   }
 
   const numReviews = parseInt(chosenClinic.reviews_approved, 10);
-  let ratingsReviewsText;
+  let ratingsReviewsText: string;
 
   switch (numReviews) {
     case 0:
@@ -197,10 +250,12 @@ function clickedClinic(clinicDiv) {
   setElementInnerHTML('.locationRating', ratingsReviewsText);
 
   clinicDiv.style.backgroundColor = "#78afc9";
-  const siblings = clinicDiv.parentNode.children;
-  for (let sibling of siblings) {
-    if (sibling !== clinicDiv) {
-      sibling.style.backgroundColor = "transparent";
+  const siblings = clinicDiv.parentNode?.children;
+  if (siblings) {
+    for (let sibling of Array.from(siblings)) {
+      if (sibling !== clinicDiv) {
+        (sibling as HTMLElement).style.backgroundColor = "transparent";
+      }
     }
   }
 
@@ -212,7 +267,8 @@ function clickedClinic(clinicDiv) {
     hideElement('.subsequentClinic');
   }
 
-  const locationId = clinicDiv.querySelector("p[id*='locationId']").innerHTML;
+  const locationIdParagraph = clinicDiv.querySelector<HTMLParagraphElement>("p[id*='locationId']");
+  const locationId = locationIdParagraph?.innerHTML || '';
   setElementValue('#ca-call-group-location-id', locationId);
 
   if (clinicCounter % 3 === 0) {
@@ -242,15 +298,17 @@ function clickedClinic(clinicDiv) {
     } else { // Blueprint or EarQ
       hideElement('.directBookDm');
       showElement('.directBookBlueprintEarQ');
-      const directBookUrl = document.querySelector('#directBookUrl');
-      directBookUrl.textContent = chosenClinic.direct_book_url;
-      directBookUrl.setAttribute('href', chosenClinic.direct_book_url);
+      const directBookUrl = document.querySelector<HTMLAnchorElement>('#directBookUrl');
+      if (directBookUrl && chosenClinic.direct_book_url) {
+        directBookUrl.textContent = chosenClinic.direct_book_url;
+        directBookUrl.setAttribute('href', chosenClinic.direct_book_url);
+      }
     }
   }
   updateVisibility();
 }
 
-function createClinicDiv(clinicData, index) {
+function createClinicDiv(clinicData: ClinicData, index: number): HTMLDivElement {
   const clinicDiv = document.createElement("div");
   clinicDiv.id = `clinic-div-${index}`;
   clinicDiv.classList.add("pl20");
@@ -258,7 +316,7 @@ function createClinicDiv(clinicData, index) {
   const clinicNumberInput = document.createElement("input");
   clinicNumberInput.type = "hidden";
   clinicNumberInput.id = `clinic-${index}-number`;
-  clinicNumberInput.value = index;
+  clinicNumberInput.value = index.toString();
 
   const locationIdParagraph = document.createElement("p");
   locationIdParagraph.hidden = true;
@@ -285,8 +343,11 @@ function createClinicDiv(clinicData, index) {
   return clinicDiv;
 }
 
-function displayClinicTemplates(data) {
+function displayClinicTemplates(data: ClinicData[]): void {
   const closestClinicsContainer = document.getElementById("closestClinics");
+
+  if (!closestClinicsContainer) return;
+
   const fragment = document.createDocumentFragment();
 
   data.forEach(function (item, index) {
@@ -296,26 +357,27 @@ function displayClinicTemplates(data) {
 
   closestClinicsContainer.appendChild(fragment);
 
-  const clinicDivs = document.querySelectorAll("[id^=clinic-div-]");
+  const clinicDivs = document.querySelectorAll<HTMLElement>("[id^=clinic-div-]");
   clinicDivs.forEach(function (clinicDiv) {
-    clinicDiv.addEventListener("click", function () {
+    clinicDiv.addEventListener("click", function (this: HTMLElement) {
       clickedClinic(this);
     });
   });
 
-  clinicDivs[0].click();
+  const firstClinic = clinicDivs[0];
+  firstClinic?.click();
 }
 
-function loadMoreClinics() {
-  const allClinics = Array.from(document.querySelectorAll("#closestClinics div"));
+function loadMoreClinics(): void {
+  const allClinics = Array.from(document.querySelectorAll<HTMLElement>("#closestClinics div"));
   const hiddenClinics = allClinics.filter(item => item.offsetParent === null);
 
-  if (hiddenClinics.length == 0) {
-    let alertMessage;
-    if (searchInfo.numZipSearches > 1) {
+  if (hiddenClinics.length === 0) {
+    let alertMessage: string;
+    if (searchInfo && searchInfo.numZipSearches > 1) {
       alertMessage = "I'm sorry, these are the closest clinics we could find in our directory for the address you provided. Would you like to end the call or check another address?";
     } else {
-      alertMessage = "I'm sorry, we don't have any other clinics in our directory within " + searchInfo.searchRadius + " miles of the address provided. Would you like to end the call or check another address?";
+      alertMessage = `I'm sorry, we don't have any other clinics in our directory within ${searchInfo?.searchRadius} miles of the address provided. Would you like to end the call or check another address?`;
     }
     alert(alertMessage);
   } else {
@@ -324,7 +386,7 @@ function loadMoreClinics() {
   }
 }
 
-function fixNoDirectionResults() {
+function fixNoDirectionResults(): void {
   closestClinics.forEach(function (item, i) {
     if (item.google.status !== "OK") {
       item.google.duration = { text: "Google can't provide directions" };
@@ -333,8 +395,8 @@ function fixNoDirectionResults() {
   });
 }
 
-function onChangeIsDirectBookWorking(answer) {
-  if (answer == 0) { // NO
+function onChangeIsDirectBookWorking(answer: string): void {
+  if (answer === '0') { // NO
     hideElement(".directBookQuickPick");
     showElement(".nonDirectBookQuickPick");
   } else { // YES
