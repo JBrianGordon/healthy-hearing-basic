@@ -249,7 +249,8 @@ class CallSourceUtility
         ];
         // Allow ending campaigns on test account
         $this->allowCsTest();
-        $result = $this->saveCampaign($data, 'false');
+        // NOTE: Ending a campaign was returning an error at one point after the API update and Jason Scinocca asked me to send this command with ReturnResult=false. This seems to be resolved now so I am re-enabling. We can disable the result if we start seeing errors on End Campaign again.
+        $result = $this->saveCampaign($data, 'true');
         $this->disallowCsTest();
         return $result;
     }
