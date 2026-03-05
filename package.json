@@ -3,8 +3,8 @@
   "scripts": {
     "build": "webpack",
     "build:vite": "vite build",
-    "dev:vite": "vite",
-    "preview:vite": "vite preview",
+    "dev": "vite",
+    "preview": "vite preview",
     "compile-sass": "sass --style=compressed webroot/scss:webroot/css",
     "postinstall": "find node_modules/@ckeditor -name '*.map' -type f -delete",
     "generate-atf": "node webroot/js/generate_atf_css.js"
