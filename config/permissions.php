@@ -141,11 +141,11 @@ return [
             'action' => 'clinicFaq',
         ],
 
-        [ // Clinics can only delete Provider images from their clinic
+        [ // Clinics can only delete Providers and Provider images from their clinic
             'role' => 'clinic',
             'prefix' => 'Admin',
             'controller' => 'Providers',
-            'action' => 'deleteProviderImage',
+            'action' => ['deleteProviderFromClinic', 'deleteProviderImage'],
             'allowed' => function ($user, $role, \Cake\Http\ServerRequest $request) {
                 $providerId = $request->getData('providerId');
                 $locationsProvidersRecord = \Cake\ORM\TableRegistry::get('LocationsProviders')

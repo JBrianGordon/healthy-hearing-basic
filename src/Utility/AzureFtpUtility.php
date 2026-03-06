@@ -76,5 +76,6 @@ class AzureFtpUtility
 
 	            return false;
 	        }
+		}
 	}
 }

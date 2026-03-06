@@ -267,7 +267,7 @@ class CallSourcesTable extends Table
                     ];
                     if ($number = $this->createPhoneForCallSource($options, true)) {
                         $callSourceEntity->phone_number = $number;
-                        $callSourceEntity->end_date = '01/01/2025';
+                        $callSourceEntity->end_date = '';
                         // Show location automatically
                         $this->Locations->setShow($locationId, true);
                         return $this->save($callSourceEntity);
@@ -288,7 +288,7 @@ class CallSourcesTable extends Table
                 ];
                 if ($number = $this->createPhoneForCallSource($options, true)) {
                     $callSourceEntity->phone_number = $number;
-                    $callSourceEntity->end_date = '01/01/2025';
+                    $callSourceEntity->end_date = '';
                     // Show location automatically
                     $this->Locations->setShow($locationId, true);
                     return $this->save($callSourceEntity);
@@ -565,14 +565,12 @@ class CallSourcesTable extends Table
             $csCustomerData = $this->Call->findByCustomerCode($customerCode);
             if ($csCustomerData['@status'] == 'OK') {
                 if (isset($csCustomerData['Customer']['Campaign']['@ID'])) {
-                    $endDate = strtotime($csCustomerData['Customer']['Campaign']['EndDate']);
-                    if (($csCustomerData['Customer']['Campaign']['Status'] == 'active') && (($endDate > strtotime('today')) || empty($endDate))) {
+                    if ($csCustomerData['Customer']['Campaign']['Status'] == 'active') {
                         $activeCampaign = $csCustomerData['Customer']['Campaign'];
                     }
                 } elseif (isset($csCustomerData['Customer']['Campaign'][0])) {
                     foreach ($csCustomerData['Customer']['Campaign'] as $campaign) {
-                        $endDate = strtotime($campaign['EndDate']);
-                        if (($campaign['Status'] == 'active') && (($endDate > strtotime('today')) || empty($endDate))) {
+                        if ($campaign['Status'] == 'active') {
                             $activeCampaign = $campaign;
                         } else {
                             // We already have an active campaign and should not have more than one.
