@@ -22,7 +22,7 @@ $id = empty($caCall->id) ? "" : $caCall->id;
 $groupId = empty($caCall->ca_call_group_id) ? "" : $caCall->ca_call_group_id;
 $caCallGroup = $caCall->ca_call_group;
 $directBookType = isset($directBookType) ? $directBookType : Location::DIRECT_BOOK_NONE;
-$status = empty($caCallGroup->status) ? CaCallGroup::STATUS_NEW : $caCallGroup->status;
+$status = empty($caCallGroup->status) ? CaCallGroup::STATUS_INCOMPLETE : $caCallGroup->status;
 $isVoicemailCallback = in_array($status, [CaCallGroup::STATUS_VM_NEEDS_CALLBACK, CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED]);
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isProspect = isset($caCallGroup->prospect) ? ($caCallGroup->prospect == CaCallGroup::PROSPECT_YES) : true;

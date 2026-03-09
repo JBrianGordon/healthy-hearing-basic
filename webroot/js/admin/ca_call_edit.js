@@ -500,7 +500,8 @@ const calculateStatus = () => {
     } else if (score === SCORE_MISSED_OPPORTUNITY) {
       setElementValue('#ca-call-group-status', STATUS_MISSED_OPPORTUNITY);
     } else {
-      setElementValue('#ca-call-group-status', STATUS_NEW);
+      // Score is blank. Mark as incomplete.
+      setElementValue('#ca-call-group-status', STATUS_INCOMPLETE);
     }
   }
 }

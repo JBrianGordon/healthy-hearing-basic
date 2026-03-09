@@ -2,7 +2,7 @@
 use App\Model\Entity\CaCallGroup;
 use Cake\Core\Configure;
 
-$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_NEW : $caCall->ca_call_group->status;
+$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_INCOMPLETE : $caCall->ca_call_group->status;
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
 
