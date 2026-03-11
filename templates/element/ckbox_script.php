@@ -1,1 +1,1 @@
-<script src="https://cdn.ckbox.io/CKBox/2.2.0/ckbox.js"></script>
+<script src="https://cdn.ckbox.io/CKBox/2.11.0/ckbox.js"></script>
