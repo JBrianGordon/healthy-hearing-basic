@@ -11,7 +11,7 @@ $identity = $this->getRequest()->getAttribute('identity');
 $userRole = $identity ? $identity->get('role') : null;
 
 $this->set('title', 'Admin');
-$this->Html->script('dist/common.min.js?v='.Configure::read("tagVersion"), ['defer' => 'defer', 'block' => true]);
+$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
   <div class="row">

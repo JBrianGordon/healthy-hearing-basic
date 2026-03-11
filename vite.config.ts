@@ -76,6 +76,10 @@ export default defineConfig({
         minify: 'esbuild'
     },
 
+    optimizeDeps: {
+        include: ['jquery', 'jquery-ui-dist/jquery-ui']
+    },
+
     root: 'webroot',
     // Development server config
     server: {

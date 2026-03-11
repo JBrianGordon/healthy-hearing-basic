@@ -17,7 +17,7 @@ $this->Breadcrumbs->add([
 ]);
 $this->set('title', 'Login');
 
-$this->Html->script('dist/common.min.js', ['block' => true]);
+$this->Vite->script('common','common-vite');
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">

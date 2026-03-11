@@ -1,6 +1,6 @@
 <?php
 use Cake\Core\Configure;
-$this->Html->script('dist/common.min', ['block' => true]);
+$this->Vite->script('common','common-vite');
 $user = $location->users[0];
 ?>
 
