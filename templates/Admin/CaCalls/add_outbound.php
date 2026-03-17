@@ -20,7 +20,7 @@ $id = empty($caCall->id) ? "" : $caCall->id;
 $groupId = empty($caCall->ca_call_group_id) ? "" : $caCall->ca_call_group_id;
 $caCallGroup = $caCall->ca_call_group;
 $directBookType = isset($directBookType) ? $directBookType : Location::DIRECT_BOOK_NONE;
-$status = empty($caCallGroup->status) ? CaCallGroup::STATUS_NEW : $caCallGroup->status;
+$status = empty($caCallGroup->status) ? CaCallGroup::STATUS_INCOMPLETE : $caCallGroup->status;
 $isVoicemailCallback = in_array($status, [CaCallGroup::STATUS_VM_NEEDS_CALLBACK, CaCallGroup::STATUS_VM_CALLBACK_ATTEMPTED]);
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isProspect = isset($caCallGroup->prospect) ? ($caCallGroup->prospect == CaCallGroup::PROSPECT_YES) : true;
@@ -187,17 +187,14 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										<label class="col col-md-3 control-label">Play voicemail</label>
 										<div class="col-md-9 pt10">
 											<div class="player">
-												<?php
-												if ($recordingUrl != 'Expired' && $recordingUrl != 'N/A') {
-													echo $this->element('play_media', ['media' => [
-														'url' => $recordingUrl,
-														'id' => $id,
-														'duration' => $recordingDuration
-													]]);
-												} else {
-													echo $recordingUrl;
-												}
-												?>
+												<?php if (!empty($recordingUrl) && ($recordingUrl != 'Expired')): ?>
+													<audio controls>
+													  <source src="<?= $recordingUrl ?>" type="audio/wav">
+													  Your browser does not support the audio element.
+													</audio>
+												<?php else: ?>
+													Expired
+												<?php endif; ?>
 											</div>
 										</div>
 									</div>

@@ -9,7 +9,7 @@ if (isset($caCall->user_id)) {
 }
 $id = empty($caCall->id) ? "" : $caCall->id;
 $groupId = empty($caCall->ca_call_group_id) ? "" : $caCall->ca_call_group_id;
-$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_NEW : $caCall->ca_call_group->status;
+$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_INCOMPLETE : $caCall->ca_call_group->status;
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $noteCount = isset($caCall->ca_call_group->ca_call_group_notes) ? count($caCall->ca_call_group->ca_call_group_notes) : 0;
 ?>

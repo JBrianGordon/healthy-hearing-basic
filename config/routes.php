@@ -167,6 +167,15 @@ return static function (RouteBuilder $routes) {
             ]
         );
 
+        // The Genesys call system opens a URL with this format:
+        // https://www.healthyhearing.com/admin/ca_calls/edit/id:xx/caller_phone:xx
+        $adminBuilder->connect(
+            '/ca_calls/edit/id::id/caller_phone::caller_phone', [
+                'controller' => 'CaCalls',
+                'action' => 'edit'
+            ]
+        );
+
         // All routes here will be prefixed with `/admin`, and
         // have the `'prefix' => 'Admin'` route element added that
         // will be required when generating URLs for these routes

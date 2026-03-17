@@ -87,14 +87,28 @@ class CaCallsController extends BaseAdminController
     }
 
     /**
-     * Add method
+     * New Inbound Call
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function inbound()
+    public function edit()
     {
-        // New inbound call via CallSource XML integration
+        // New inbound call via Genesys and CallSource JSON integration
+        // Genesys will open a URL with the following format:
+        // https://www.healthyhearing.com/admin/ca_calls/edit/id:xx/caller_phone:xx
+        // Redirect to our new URL format:
+        // https://www.healthyhearing.com/admin/ca-calls/edit?id=xx&caller_phone=xx
+        // TODO: At some point we should ask the Genesys developers to open the new format
+        if ($this->request->getParam('id')) {
+            return $this->redirect([
+                'action' => 'edit',
+                '?' => ['id'=>$this->request->getParam('id'), 'caller_phone'=>$this->request->getParam('caller_phone')]
+            ]);
+        }
         $locationId = $this->request->getQuery('id');
+        $locationId = is_numeric($locationId) ? $locationId : null;
+        $callerPhone = $this->request->getQuery('caller_phone');
         if ($locationId == CallSource::LOCATION_ID_FROM_CLINIC) {
             // Return call from clinic
             return $this->redirect([
@@ -103,37 +117,17 @@ class CaCallsController extends BaseAdminController
         } elseif ($locationId == CallSource::LOCATION_ID_QUICK_PICK) {
             // Quick Pick
             return $this->redirect([
-                'action' => 'quick_pick'
-            ]);
-        } elseif ($this->CaCalls->CaCallGroups->Locations->get($locationId)) {
-            // This is a new inbound call for a valid location id
-            return $this->redirect([
-                'action' => 'edit',
-                '?' => $this->request->getQueryParams()
+                'action' => 'quick_pick',
+                '?' => ['caller_phone' => $callerPhone]
             ]);
         }
-        // else, this is probably an internal call for the agent's direct extension
-        $this->set('title', 'Inbound Call');
-    }
-
-    /**
-     * New Inbound Call
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit()
-    {
-        $locationId = $this->request->getQuery('id');
-        $callerPhone = $this->request->getQuery('caller_phone');
-        $xmlFileId = $this->request->getQuery('xml_file_id');
         $caCall = $this->CaCalls->newEntity([
             'ca_call_group' => [
                 'location_id' => $locationId,
                 'caller_phone' => $callerPhone,
-                'id_xml_file' => $xmlFileId
             ]
         ]);
+
         $requestData = $this->request->getData();
         if ($this->request->is('post')) {
             if (empty($requestData['id'])) {
@@ -312,7 +306,6 @@ class CaCallsController extends BaseAdminController
             return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
         $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
-        $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
         $caCall = $this->CaCalls->newEntity([
             'ca_call_group_id' => $caCallGroupId,
             //'start_time' => getCurrentEasternTime(),
@@ -376,7 +369,13 @@ class CaCallsController extends BaseAdminController
             ],
             ['associated' => ['CaCallGroups']]);
             $caCall->ca_call_group = $caCallGroup;
-            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $location->direct_book_type, $caCallGroup->wants_hearing_test);
+            if ($this->CaCallGroups->Locations->exists(['id' => $caCallGroup->location_id])) {
+                $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
+                $directBookType = $location->direct_book_type;
+            } else {
+                $directBookType = null;
+            }
+            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $directBookType, $caCallGroup->wants_hearing_test);
             if (($callType === false) ||
                 ($caCallGroup->scheduled_call_date->toUnixString() > strtotime(getCurrentEasternTime()))) {
                 // Invalid outbound call
@@ -416,8 +415,9 @@ class CaCallsController extends BaseAdminController
             'contain' => ['Locations','CaCalls','CaCallGroupNotes'],
             'conditions' => ['CaCallGroups.id' => $caCallGroupId],
         ])->first();
+        $recordingDuration = $caCallGroup->ca_calls[0]->recording_duration ?? $caCallGroup->ca_calls[0]->duration;
         $this->set('recordingUrl', $caCallGroup->ca_calls[0]->recording_url);
-        $this->set('recordingDuration', $caCallGroup->ca_calls[0]->duration);
+        $this->set('recordingDuration', $recordingDuration);
         $this->set('voicemailTime', $caCallGroup->ca_calls[0]->start_time);
         $this->set('voicemailFrom', $caCallGroup->caller_phone);
         $this->set('noteCount', count($caCallGroup->ca_call_group_notes));
@@ -463,6 +463,7 @@ class CaCallsController extends BaseAdminController
     */
     public function quickPick() {
         $requestData = $this->request->getData();
+        $callerPhone = $this->request->getQuery('caller_phone');
         if ($this->request->is('post')) {
             if (empty($requestData['id'])) {
                 // Saving a new call
@@ -505,10 +506,15 @@ class CaCallsController extends BaseAdminController
 
         if (empty($caCall)) {
             // New quick-pick call
-            $caCall = $this->CaCalls->newEmptyEntity();
-            $caCall->start_time = getCurrentEasternTime();
-            $caCall->call_type = CaCall::CALL_TYPE_INBOUND_QUICK_PICK;
-            $caCall->user_id = $this->user->id;
+            $caCall = $this->CaCalls->newEntity([
+                'start_time' => getCurrentEasternTime(),
+                'call_type' => CaCall::CALL_TYPE_INBOUND_QUICK_PICK,
+                'user_id' => $this->user->id,
+                'ca_call_group' => [
+                    'caller_phone' => $callerPhone,
+                    'status' => CaCallGroup::STATUS_INCOMPLETE
+                ]
+            ]);
         }
         $this->set('previousCalls', []);
         $this->set('caCall', $caCall);

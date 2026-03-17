@@ -151,6 +151,7 @@ return [
         'locationAds-uploads' => '_ck_locationAds_category_id_',
         'locationPhotos-uploads' => '_ck_locationPhotos_category_id_',
         'providers-uploads' => '_ck_providers_category_id_',
+        'voicemail-uploads' => '_ck_voicemail_category_id_',
     ],
     // Google Maps API keys
     'GoogleMaps' => [
@@ -186,4 +187,11 @@ return [
         'username' => '_username_',
         'password' => '_password_'
     ],
+
+    // Voicemail email account - hhearingcall@gmail.com
+    'voicemailEmail' => [
+        'hostname' => '_hostname_',
+        'username' => '_username_',
+        'password' => '_password_', //app specific password for 2-step auth
+    ]
 ];

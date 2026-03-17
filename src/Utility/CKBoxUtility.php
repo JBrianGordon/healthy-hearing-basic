@@ -69,7 +69,7 @@ class CKBoxUtility
             'file' => new \CURLStringFile(
                 $contents,
                 $filename,
-                $imageInfo['mime'],
+                $imageInfo['mime']
             )
         );
 
@@ -102,6 +102,57 @@ class CKBoxUtility
         EventManager::instance()->dispatch($event);
 
         return $responseData;
+    }
+
+    /**
+     * Uploads a .wav file to CKBox.
+     *
+     * @param string $filePath Absolute path to the .wav file.
+     * @return array The API response (status, message, url)
+     */
+    function uploadWavFile($filePath) {
+        $jwtToken = $this->generateToken($this->userId, $this->role);
+
+        // Create a CURLFile object to handle the file upload
+        $file = new \CURLFile($filePath, 'audio/wav', basename($filePath));
+
+        // Prepare the multipart form data
+        $postData = [
+            'file' => $file,
+            'categoryId' => $this->categoryId
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $this->apiUrl,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: $jwtToken" // Auth required for all CKBox REST requests
+            ],
+        ]);
+
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error) {
+            $retval = [
+                'status' => 'error',
+                'message' => "Failed to upload wav file. cURL Error: " . $error,
+                'url' => null
+            ];
+        } else {
+            $responseData = json_decode($response, true);
+            $retval = [
+                'status' => 'success',
+                'message' => "WAV file uploaded",
+                'url' => $responseData['url']
+            ];
+        }
+        return $retval;
     }
 
     public function deleteImage($imageId)

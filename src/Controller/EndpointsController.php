@@ -10,7 +10,7 @@ class EndpointsController extends Controller
     public function ckeditorEndpoint()
     {
         $user = $this->request->getSession()->read('Auth');
-        $userRole = ($user && $user['role'] === 'admin') ? 'admin' : 'user';
+        $userRole = ($user && $user['role'] === 'admin') ? 'superadmin' : 'user';
 
         $accessKey = Configure::read('ckEditorAccessKey');
         $environmentId = Configure::read('ckEditorEnvironmentId');

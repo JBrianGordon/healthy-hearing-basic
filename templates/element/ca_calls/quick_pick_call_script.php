@@ -384,6 +384,7 @@ use Cake\Core\Configure;
 			'type' => 'select',
 			'options' => CaCallGroup::$scores,
 			'empty' => true,
+			'required' => true
 		])
 		?>
 	</div>

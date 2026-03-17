@@ -1,6 +1,4 @@
 import '../common/common';
-//import '../jquery/jplayer/jquery.jplayer.min';
-//import '../common/play_media';
 
 var locationTitle = '';
 var locationTimezoneOffset = '';
@@ -500,7 +498,8 @@ const calculateStatus = () => {
     } else if (score === SCORE_MISSED_OPPORTUNITY) {
       setElementValue('#ca-call-group-status', STATUS_MISSED_OPPORTUNITY);
     } else {
-      setElementValue('#ca-call-group-status', STATUS_NEW);
+      // Score is blank. Mark as incomplete.
+      setElementValue('#ca-call-group-status', STATUS_INCOMPLETE);
     }
   }
 }

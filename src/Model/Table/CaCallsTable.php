@@ -169,10 +169,10 @@ class CaCallsTable extends Table
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options) {
         $dateTimeFields = ['start_time'];
         foreach ($dateTimeFields as $key) {
-        if (isset($data[$key]) && is_string($data[$key])) {
-            $data[$key] = date('Y-m-d H:i', strtotime($data[$key]));
+            if (!empty($data[$key]) && is_string($data[$key])) {
+                $data[$key] = date('Y-m-d H:i', strtotime($data[$key]));
+            }
         }
-    }
     }
 
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
@@ -274,8 +274,8 @@ class CaCallsTable extends Table
         $this->Locations = TableRegistry::get('Locations');
         $originGeocode = $this->Locations->geoLocAddress($originAddress);
         $originLatLon = [
-            'lat' => $originGeocode[0],
-            'lon' => $originGeocode[1]
+            'lat' => $originGeocode['lat'],
+            'lon' => $originGeocode['lon']
         ];
 
         if (empty($originLatLon['lat']) || empty($originLatLon['lon'])) {

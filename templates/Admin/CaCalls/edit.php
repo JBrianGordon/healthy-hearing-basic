@@ -10,7 +10,7 @@ if (isset($caCall->user_id)) {
     $agentName = $this->App->getUserName($caCall->user_id);
 }
 $previousCalls = empty($previousCalls) ? array() : $previousCalls;
-$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_NEW : $caCall->ca_call_group->status;
+$status = empty($caCall->ca_call_group->status) ? CaCallGroup::STATUS_INCOMPLETE : $caCall->ca_call_group->status;
 $callType = isset($caCall->call_type) ? $caCall->call_type : '';
 $isWrongNumber = ($status == CaCallGroup::STATUS_WRONG_NUMBER) ? true : false;
 $caCall = empty($caCall) ? array() : $caCall;
