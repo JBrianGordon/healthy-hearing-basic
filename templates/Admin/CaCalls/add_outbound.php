@@ -189,17 +189,14 @@ $noteCount = isset($caCallGroup->ca_call_group_notes) ? count($caCallGroup->ca_c
 										<label class="col col-md-3 control-label">Play voicemail</label>
 										<div class="col-md-9 pt10">
 											<div class="player">
-												<?php
-												if ($recordingUrl != 'Expired' && $recordingUrl != 'N/A') {
-													echo $this->element('play_media', ['media' => [
-														'url' => $recordingUrl,
-														'id' => $id,
-														'duration' => $recordingDuration
-													]]);
-												} else {
-													echo $recordingUrl;
-												}
-												?>
+												<?php if (!empty($recordingUrl) && ($recordingUrl != 'Expired')): ?>
+													<audio controls>
+													  <source src="<?= $recordingUrl ?>" type="audio/wav">
+													  Your browser does not support the audio element.
+													</audio>
+												<?php else: ?>
+													Expired
+												<?php endif; ?>
 											</div>
 										</div>
 									</div>

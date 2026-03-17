@@ -306,7 +306,6 @@ class CaCallsController extends BaseAdminController
             return $this->redirect(array('controller' => 'ca_call_groups', 'action' => 'outbound'));
         }
         $caCallGroup = $this->CaCallGroups->get($caCallGroupId, ['contain' => ['CaCallGroupNotes', 'CaCalls']]);
-        $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
         $caCall = $this->CaCalls->newEntity([
             'ca_call_group_id' => $caCallGroupId,
             //'start_time' => getCurrentEasternTime(),
@@ -370,7 +369,13 @@ class CaCallsController extends BaseAdminController
             ],
             ['associated' => ['CaCallGroups']]);
             $caCall->ca_call_group = $caCallGroup;
-            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $location->direct_book_type, $caCallGroup->wants_hearing_test);
+            if ($this->CaCallGroups->Locations->exists(['id' => $caCallGroup->location_id])) {
+                $location = $this->CaCallGroups->Locations->get($caCallGroup->location_id);
+                $directBookType = $location->direct_book_type;
+            } else {
+                $directBookType = null;
+            }
+            $callType = $this->CaCalls->getCallTypeByStatus($caCallGroup->status, $caCallGroup->score, $directBookType, $caCallGroup->wants_hearing_test);
             if (($callType === false) ||
                 ($caCallGroup->scheduled_call_date->toUnixString() > strtotime(getCurrentEasternTime()))) {
                 // Invalid outbound call
@@ -410,8 +415,9 @@ class CaCallsController extends BaseAdminController
             'contain' => ['Locations','CaCalls','CaCallGroupNotes'],
             'conditions' => ['CaCallGroups.id' => $caCallGroupId],
         ])->first();
+        $recordingDuration = $caCallGroup->ca_calls[0]->recording_duration ?? $caCallGroup->ca_calls[0]->duration;
         $this->set('recordingUrl', $caCallGroup->ca_calls[0]->recording_url);
-        $this->set('recordingDuration', $caCallGroup->ca_calls[0]->duration);
+        $this->set('recordingDuration', $recordingDuration);
         $this->set('voicemailTime', $caCallGroup->ca_calls[0]->start_time);
         $this->set('voicemailFrom', $caCallGroup->caller_phone);
         $this->set('noteCount', count($caCallGroup->ca_call_group_notes));

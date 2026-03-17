@@ -1,6 +1,4 @@
 import '../common/common';
-//import '../jquery/jplayer/jquery.jplayer.min';
-//import '../common/play_media';
 
 var locationTitle = '';
 var locationTimezoneOffset = '';
