@@ -32,12 +32,12 @@ return [
     ],
     // Google tag manager
     'gtmId' => 'GTM-TC3K3WL',
-    // Google Maps API - Development project
-    'GoogleMaps' => [
-        'MapsJsApiKey' => 'AIzaSyCKrxAOnAWOJkqV1qn3vVz7fUfzrQnNemE',
-        'MapsStaticApiKey' => 'AIzaSyA19OSEZ1mrfA4-ReJ3zK_iOsp_gXXhpTo',
-        'WebServicesApiKey' => 'AIzaSyD4eNrfxMTwBPEVAXdhZKMgfVaCdXt8GDQ',
-    ],
+    // Google Maps API - TODO: Get your own personal API's as the HH ones will no longer work
+    // 'GoogleMaps' => [
+    //     'MapsJsApiKey' => '',
+    //     'MapsStaticApiKey' => '',
+    //     'WebServicesApiKey' => '',
+    // ],
     // From email address
     'email' => ['contacthd@hearingdirectory.ca' => 'Hearing Directory'],
     'customer-support-email' => 'contacthd@hearingdirectory.ca',

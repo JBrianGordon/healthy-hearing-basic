@@ -36,6 +36,8 @@ Thumbs.db
 
 # Tool specific files #
 #######################
+# VSC
+*.code-workspace
 # PHPUnit
 .phpunit.result.cache
 # vim

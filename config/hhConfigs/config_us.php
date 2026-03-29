@@ -73,12 +73,12 @@ return [
     'importTag' => 'YHN',
     // Google tag manager
     'gtmId' => 'GTM-P2V6GQ',
-    // Google Maps API - Development project
-    'GoogleMaps' => [
-        'MapsJsApiKey' => 'AIzaSyCKrxAOnAWOJkqV1qn3vVz7fUfzrQnNemE',
-        'MapsStaticApiKey' => 'AIzaSyA19OSEZ1mrfA4-ReJ3zK_iOsp_gXXhpTo',
-        'WebServicesApiKey' => 'AIzaSyD4eNrfxMTwBPEVAXdhZKMgfVaCdXt8GDQ',
-    ],
+    // Google Maps API - TODO: Get your own personal API's as the HH ones will no longer work
+    // 'GoogleMaps' => [
+    //     'MapsJsApiKey' => '',
+    //     'MapsStaticApiKey' => '',
+    //     'WebServicesApiKey' => '',
+    // ],
     // Misc
     'clinicMaxRange' => '60',
     'htmlLanguage' => 'en-US',
