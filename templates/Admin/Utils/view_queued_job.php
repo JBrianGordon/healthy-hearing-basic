@@ -1,4 +1,4 @@
-<?php $this->Vite->script('admin_common','admin-vite'); ?>
+<?php $this->Vite->script('admin_common','admin'); ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">
         <div class="panel-heading">Queued Jobs Actions</div>

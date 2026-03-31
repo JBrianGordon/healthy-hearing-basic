@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 
-$this->Vite->script('admin_location_link','admin-vite');
+$this->Vite->script('admin_location_link','admin');
 ?>
 <meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
 <header class="col-md-12 mt10">

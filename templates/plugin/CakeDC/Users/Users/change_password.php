@@ -11,7 +11,7 @@
 
 use Cake\Core\Configure;
 
-$this->Vite->script('common','common-vite');
+$this->Vite->script('common','common');
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">

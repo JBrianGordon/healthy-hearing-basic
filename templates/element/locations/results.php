@@ -7,7 +7,7 @@ use App\Model\Entity\Location;
 $isCallAssistEnabled = Configure::read('isCallAssistEnabled');
 $isCallTrackingBypassed = isset($isCallTrackingBypassed) ? $isCallTrackingBypassed : TableRegistry::get('Configurations')->isCallTrackingBypassed();
 
-$this->Vite->script('location_results','common-vite');
+$this->Vite->script('location_results','common');
 ?>
 <?php if (count($locations) != 0): ?>
 	<section class="panel panel-primary">

@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\SeoRedirect[]|\Cake\Collection\CollectionInterface $seoRedirects
  */
 
-$this->Vite->script('admin_common','admin-vite');
+$this->Vite->script('admin_common','admin');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

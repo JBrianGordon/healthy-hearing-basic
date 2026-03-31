@@ -12,7 +12,7 @@ $this->Breadcrumbs->add([
 
 $articles = null;
 
-$this->Vite->script('content','common-vite');
+$this->Vite->script('content','common');
 ?>
 <div class="container-fluid site-body blog p-sm-0 overflow-hidden">
   <div class="row">

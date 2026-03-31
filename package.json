@@ -1,8 +1,7 @@
 {
   "name": "healthy-hearing-website",
   "scripts": {
-    "build": "webpack",
-    "build:vite": "vite build",
+    "build": "vite build",
     "dev": "vite",
     "preview": "vite preview",
     "compile-sass": "sass --style=compressed webroot/scss:webroot/css",

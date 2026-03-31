@@ -29,7 +29,7 @@ class ViteHelper extends Helper
                     'block' => true
                 ]);
         } else {
-            return $this->_View->Html->script("/js/dist-vite/{$filename}.min.js", [
+            return $this->_View->Html->script("/js/dist/{$filename}.min.js", [
                 'type' => 'module',
                 'block' => true
             ]);

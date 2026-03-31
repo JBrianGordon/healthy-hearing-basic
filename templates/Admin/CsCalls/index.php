@@ -63,7 +63,7 @@ $fields = array_diff_key($fields, array_flip($ignoreFields));
      ];
  }
 
-$this->Vite->script('admin_common','admin-vite');
+$this->Vite->script('admin_common','admin');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

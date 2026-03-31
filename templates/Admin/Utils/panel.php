@@ -11,7 +11,7 @@ $identity = $this->getRequest()->getAttribute('identity');
 $userRole = $identity ? $identity->get('role') : null;
 
 $this->set('title', 'Admin');
-$this->Vite->script('common','common-vite');
+$this->Vite->script('common','common');
 ?>
 <div class="container-fluid site-body fap-cities">
   <div class="row">

@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\Page $page
  */
  
- $this->Vite->script('admin_edit_pages','admin-vite');
+ $this->Vite->script('admin_edit_pages','admin');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

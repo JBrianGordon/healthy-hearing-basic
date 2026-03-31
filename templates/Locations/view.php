@@ -9,7 +9,7 @@ use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\CaCallGroup;
  
-$this->Vite->script('clinic','common-vite');
+$this->Vite->script('clinic','common');
 ?>
 <?php
 $displayOpenClosed = $this->Clinic->getOpenClosedByLocationId($location->id);

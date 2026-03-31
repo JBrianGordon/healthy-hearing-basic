@@ -71,7 +71,7 @@ foreach ($fields as $field => $type) {
     }
 }
 
-$this->Vite->script('ca_call_index','admin-vite');
+$this->Vite->script('ca_call_index','admin');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

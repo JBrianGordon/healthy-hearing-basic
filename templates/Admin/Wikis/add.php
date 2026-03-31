@@ -8,7 +8,7 @@
 
 use Cake\I18n\FrozenTime;
 
-$this->Vite->script('wiki_edit','admin-vite');
+$this->Vite->script('wiki_edit','admin');
 
 $author_default = false;
 

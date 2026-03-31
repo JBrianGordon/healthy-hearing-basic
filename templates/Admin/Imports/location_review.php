@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 $importType = strtoupper($importLocation->import->type);
 //TODO: CSS
 echo $this->Html->css('admin/imports.css?v='.Configure::read("tagVersion"));
-$this->Vite->script('admin_location_review','admin-vite');
+$this->Vite->script('admin_location_review','admin');
 ?>
 <header class="col-md-12 mt10">
 	<div class="panel panel-light">

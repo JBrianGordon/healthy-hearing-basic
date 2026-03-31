@@ -14,7 +14,7 @@ $this->Breadcrumbs->add([
     ['title' => $stateNice, 'url' => ''],
 ]);
 
-$this->Vite->script('cities','common-vite');
+$this->Vite->script('cities','common');
 ?>
 <div class="container-fluid site-body fap-cities">
 	<div class="row">

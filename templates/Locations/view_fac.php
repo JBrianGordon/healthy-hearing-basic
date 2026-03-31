@@ -6,7 +6,7 @@ $this->Breadcrumbs->add([
     ['title' => 'Find a clinic', 'url' => ''],
 ]);
 
-$this->Vite->script('fac','common-vite');
+$this->Vite->script('fac','common');
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">

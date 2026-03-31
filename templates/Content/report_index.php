@@ -1,7 +1,7 @@
 <?php
 use Cake\Routing\Router;	
 
-$this->Vite->script('content','common-vite');
+$this->Vite->script('content','common');
 $this->Breadcrumbs->add([
     ['title' => 'Home', 'url' => '/'],
     ['title' => 'The Healthy Hearing Report', 'url' => ''],

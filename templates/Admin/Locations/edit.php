@@ -11,7 +11,7 @@ use App\Model\Entity\ImportStatus;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
-$this->Vite->script('admin_edit_locations','admin-vite');
+$this->Vite->script('admin_edit_locations','admin');
 $externalIdLabel = Configure::read('isYhnImportEnabled') ? 'YHN ID' : 'External ID / Retail ID';
 $id = $location->id;
 $locationAd = $location->location_ad;

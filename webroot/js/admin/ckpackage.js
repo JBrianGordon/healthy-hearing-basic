@@ -1,2 +1,0 @@
-import './ckeditor';
-import './ckbox';

@@ -10,7 +10,7 @@ use App\Enums\Model\Review\ReviewResponseStatus;
 use App\Enums\Model\Review\ReviewStatus;
 use Cake\Core\Configure;
 
-$this->Vite->script('admin_common','admin-vite');
+$this->Vite->script('admin_common','admin');
 ?>
 <header class="col-sm-12 mt10">
     <div class="panel panel-light">

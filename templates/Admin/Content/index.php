@@ -55,7 +55,7 @@ foreach ($fields as $field => $type) {
     ];
 }
 
-$this->Vite->script('admin_content_index','admin-vite');
+$this->Vite->script('admin_content_index','admin');
 ?>
 <span id="count" class="d-none"><?= $count ?></span>
 <span id="exportUrl" class="d-none"><?= $exportUrl ?></span>

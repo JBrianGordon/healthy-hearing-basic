@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\State $state
  */
  
- $this->Vite->script('admin_edit_state','admin-vite');
+ $this->Vite->script('admin_edit_state','admin');
 ?>
 <header class="col-md-12 mt10">
 <div class="panel panel-light">

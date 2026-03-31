@@ -37,7 +37,7 @@ endif;
 $errorPage = true;
 $this->assign('title', '410 Gone');
 
-$this->Vite->script('404','common-vite');
+$this->Vite->script('404','common');
 ?>
 
 <div class="container-fluid site-body blog">

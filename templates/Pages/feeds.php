@@ -8,7 +8,7 @@
 
 	$this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => 'RSS Feed', 'url' => '/feeds']]);
 	
-	$this->Vite->script('content','common-vite');
+	$this->Vite->script('content','common');
 ?>
 <div class="container-fluid site-body blog">
       <div class="row">

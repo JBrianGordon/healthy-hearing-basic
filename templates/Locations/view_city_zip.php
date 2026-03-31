@@ -19,7 +19,7 @@ if (!empty($zip)) {
 	$this->Breadcrumbs->add($zip, '');
 }
 
-$this->Vite->script('location_results','common-vite');
+$this->Vite->script('location_results','common');
 ?>
 <div class="container-fluid site-body fap-results">
   <div class="row">

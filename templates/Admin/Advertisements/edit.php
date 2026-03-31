@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Advertisement $advertisement
  */
 
- $this->Vite->script('admin_ad_edit','admin-vite');
+ $this->Vite->script('admin_ad_edit','admin');
 ?>
 <div class="container-fluid site-body">
     <div class="row">

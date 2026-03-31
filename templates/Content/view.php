@@ -107,7 +107,7 @@ $contentSchema = '<script type="application/ld+json">{
 
 echo $contentSchema;
  
-$this->Vite->script('content','common-vite');
+$this->Vite->script('content','common');
 ?>
 
 <div class="container-fluid site-body blog">

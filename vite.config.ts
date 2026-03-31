@@ -23,8 +23,8 @@ function getEntries() {
         });
     };
 
-    scanFolder('./webroot/js/admin-vite');
-    scanFolder('./webroot/js/common-vite');
+    scanFolder('./webroot/js/admin');
+    scanFolder('./webroot/js/common');
 
     return entries;
 }
@@ -49,7 +49,7 @@ export default defineConfig({
 
     build: {
         // Output to different directory than Webpack during transition
-        outDir: 'js/dist-vite',
+        outDir: 'js/dist',
 
         // Emit assets to predictable locations
         assetsDir: '',

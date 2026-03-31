@@ -7,7 +7,7 @@ use \App\Model\Entity\CaCallGroup;
 use \App\Model\Entity\CaCall;
 use Cake\Routing\Router;
 echo $this->element('ca_calls/ca_call_js_variables');
-$this->Vite->script('ca_call_edit','admin-vite');
+$this->Vite->script('ca_call_edit','admin');
 ?>
 <header class="col-md-12 mt10">
     <div class="panel panel-light">

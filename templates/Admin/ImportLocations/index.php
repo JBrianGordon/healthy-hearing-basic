@@ -76,7 +76,7 @@ foreach ($fields as $field => $type) {
     }
 }
 
-$this->Vite->script('admin_index_import','admin-vite');
+$this->Vite->script('admin_index_import','admin');
 ?>
 <div class="container-fluid site-body fap-cities">
     <div class="row">

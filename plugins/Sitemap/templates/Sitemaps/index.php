@@ -9,7 +9,7 @@ $hideLearnMore = true;
 
 $this->Breadcrumbs->add([['title' => 'Home', 'url' => '/'], ['title' => ($siteName . ' sitemap page'), 'url' => '/sitemap']]);
 
-$this->Vite->script('common','common-vite');
+$this->Vite->script('common','common');
 ?>
 <div class="container-fluid site-body blog">
     <div class="row">

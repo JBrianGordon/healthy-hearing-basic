@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\CsCall[]|\Cake\Collection\CollectionInterface $csCalls
  */
 
-$this->Vite->script('admin_common','admin-vite');
+$this->Vite->script('admin_common','admin');
 
 $startDate = isset($startDate) ? $startDate : null;
 $endDate = isset($endDate) ? $endDate : null;

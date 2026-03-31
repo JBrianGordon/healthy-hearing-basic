@@ -5,7 +5,7 @@
  * @var \App\Model\Entity\Corp $corp
  */
 
- $this->Vite->script('corp_edit','admin-vite');
+ $this->Vite->script('corp_edit','admin');
 
 $author_default = false;
 ?>

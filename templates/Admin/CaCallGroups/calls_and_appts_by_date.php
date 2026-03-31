@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\CsCall[]|\Cake\Collection\CollectionInterface $csCalls
  */
 use Cake\Core\Configure;
-$this->Vite->script('ca_call_groups_appts_by_date','admin-vite');
+$this->Vite->script('ca_call_groups_appts_by_date','admin');
 
 $startDate = isset($startDate) ? $startDate : null;
 $endDate = isset($endDate) ? $endDate : null;

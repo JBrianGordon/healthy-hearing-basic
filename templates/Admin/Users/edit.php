@@ -9,7 +9,7 @@
  */
 use App\Model\Entity\User;
  
-$this->Vite->script('admin_edit_user','admin-vite');
+$this->Vite->script('admin_edit_user','admin');
 ?>
 <header class="col-sm-12 mt10">
 	<div class="panel panel-light">

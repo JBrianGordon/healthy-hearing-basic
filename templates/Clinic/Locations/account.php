@@ -1,6 +1,6 @@
 <?php
 use Cake\Core\Configure;
-$this->Vite->script('common','common-vite');
+$this->Vite->script('common','common');
 $user = $location->users[0];
 ?>
 

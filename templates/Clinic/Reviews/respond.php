@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Review $review
  */
 
-$this->Vite->script('common','common-vite');
+$this->Vite->script('common','common');
 use BootstrapUI\View\Helper\FormHelper;
 ?>
 

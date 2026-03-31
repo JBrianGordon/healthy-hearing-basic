@@ -9,7 +9,7 @@ use App\Model\Entity\Content;
 use Cake\Routing\Router;
 use Cake\I18n\FrozenTime;
  
-$this->Vite->script('content_edit','admin-vite');
+$this->Vite->script('content_edit','admin');
 
 $author_default = false;
 $isFrozen = !empty($content->is_frozen);

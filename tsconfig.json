@@ -31,7 +31,7 @@
         "webroot/js/**/*.ts",
         "webroot/js/**/*.tsx",
         "webroot/js/types/*.d.ts",
-        "webroot/js/admin-vite/insert_key_points.ts"
+        "webroot/js/admin/insert_key_points.ts"
     ],
     "exclude": [
         "node_modules",
